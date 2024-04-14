@@ -58,7 +58,11 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Click **Restart Now**
   - Remove the USB stick when prompted and press Enter
 
-## Update Packages
+💡 You cannot SSH to NUC1 at this point.
+
+## Set up System
+These steps are performed while logged in to NUC1
+
 ### First Login
 - Log in with your username and password
 - Answer the prompts to the first-time wizard
@@ -67,11 +71,16 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Choose NO to send information
 - You will be prompted to update the system
   - This is optional; click **Install Now** (and wait) or close out the window
+
 ### Update Packages
+- Log in to NUC1
+- Open the **Terminal** ([tip](https://www.wikihow.com/Open-a-Terminal-Window-in-Ubuntu))
+- Update the system and install packages required for this Lab
+~~~~
+sudo apt update && sudo apt upgrade -y
+sudo apt install xorriso squashfs-tools python3-debian gpg liblz4-tool arp-scan notepadqq python3-pip -y
+~~~~
 
 ### Generate SSH Key
-
-## Create the modified ISO for USB installation of remaining NUCs
-## Create the CIDATA USB stick
-## Create the firmware upgrade USB stick
-## Create SSH management keys
+- `ssh-keygen -o`
+  - Accept default settings and don't enter a passphrase
