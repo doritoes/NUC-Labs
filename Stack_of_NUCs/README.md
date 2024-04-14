@@ -32,12 +32,12 @@ In this step you will test building a NUC using two (2) USB sticks and an automa
 [Create USB Sticks](2_USB_stick_creation.md)
 
 ## Set up NUC 2 - Ansible controller
-In this step you will configure your second NUC, used as the Ansible controller.
+In this step you will configure your second NUC, a server used as the Ansible controller.
 
 [NUC 2](3_NUC_2.md)
 
 ## Set up NUC 3, NUC 4, and more
-In this step you will configure your remaining NUCs in the stack as the Ansible member modes.
+In this step you will configure your remaining NUCs in the stack as more servers, the Ansible member modes.
 
 [NUCs 3-5](4_NUC_3-5.md)
 
