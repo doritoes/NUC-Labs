@@ -7,7 +7,8 @@ Mission:
 - Auto install Ubuntu servers
 - Install and use Ansible to manage our servers
 - Install and run a FAH protein folding cluster
-- Install a Kubernetes cluster
+- Install a Hashtopolis cluster
+- Install a Kubernetes cluster and run a web application
 
 Materials:
 - Wireless router providing DHCP and internet access
