@@ -31,9 +31,15 @@ export MODDED_ISO="${ORIG_ISO::-4}-modded.iso"
 livefs-edit $ORIG_ISO $MODDED_ISO --cp /tmp/grub.cfg new/iso/boot/grub/grub.cfg
 ~~~~
 # Create bootable USB stick from the modified ISO
-🚧 Continue working here
 Use [Balena Etcher](https://www.balena.io/etcher) or [Startup Disk Creator](https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu#1-overview)
 
+## BalenaEtcher
+- Download Etcher for Linux x64 (64-bit) (AppImage)
+- In a terminal, assign executable permissions to the downloaded file
+  - For example, if the file is named `balenaEtcher-1.18.11-x64.AppImage`
+  - Type `sudo chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage`
+- Extract the app image
+- `sudo chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage--appimage-extract`
 
 
 # Create the CIDATA USB stick
