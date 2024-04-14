@@ -84,3 +84,17 @@ sudo apt install xorriso squashfs-tools python3-debian gpg liblz4-tool arp-scan 
 ### Generate SSH Key
 - `ssh-keygen -o`
   - Accept default settings and don't enter a passphrase
+
+# Learn More
+## Finding your the IP address of NUC1
+https://help.ubuntu.com/stable/ubuntu-help/net-findip.html.en
+## Remote access to NUC1
+- https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/
+- https://www.itpro.com/mobile/remote-access/368102/how-to-remote-desktop-into-ubuntu
+  - `sudo apt update && sudo apt install openssh-server -y`
+## Remmina Remote Desktop client
+Installing Remmina on NUC1 is a handy way to connect to your other Lab systems
+- RDP to Windows machines
+- SSH
+- VNC
+- More!
