@@ -20,7 +20,7 @@ sudo python3 -m pip install .
 # Create modified live-server ISO
 - Update the following ORIG_ISO filename to match the actual file you downloaded
 ~~~~
-export ORIG_ISO="ubuntu-22.04.2-live-server-amd64.iso"
+export ORIG_ISO="ubuntu-22.04.4-live-server-amd64.iso"
 mkdir mnt
 mount -o loop ${ORIG_ISO} mnt
 cp --no-preserve=all mnt/boot/grub/grub.cfg /tmp/grub.cfg
