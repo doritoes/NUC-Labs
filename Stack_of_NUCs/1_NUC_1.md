@@ -83,7 +83,7 @@ These steps are performed while logged in to NUC1
 - Update the system and install packages required for this Lab
 ~~~~
 sudo apt update && sudo apt upgrade -y
-sudo apt install xorriso squashfs-tools python3-debian gpg liblz4-tool arp-scan notepadqq python3-pip -y
+sudo apt install xorriso squashfs-tools python3-debian git gpg liblz4-tool arp-scan notepadqq python3-pip -y
 ~~~~
 
 ### Generate SSH Key
