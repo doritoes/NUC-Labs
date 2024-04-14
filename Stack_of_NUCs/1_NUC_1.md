@@ -24,7 +24,7 @@ Software:
 See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 - Download the [latest ISO file](https://ubuntu.com/download/desktop)
 - Create a bootable USB stick from the ISO
-  - 💡[balenaEtcher\(https://etcher.balena.io/#download-etcher) is recommended to create a bootable USB stick from the ISO
+  - 💡[balenaEtcher](https://etcher.balena.io/#download-etcher) is recommended to create a bootable USB stick from the ISO
   - If your workstation is Windows, the Portable version is perfect for the task
   - Click **Flash from file** and select the downloaded ISO file
   - Click **Select target** and select the the USB stick you inserted
