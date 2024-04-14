@@ -16,6 +16,7 @@ Materials:
   - 4 minimum for the Kubernetes portion; 5 recommended, or more are recommended for testing Kubernetes resiliency
   - wifi cards to make it easier to run large stacks of NUCs
   - D34010WYK was used to Lab testing as they are readily available; I used 8GB RAM and 32GB or greater mSATA SSDs
+  - for suggestions on preparing your NUCs for the lab, see https://www.unclenuc.com/lab:preparing_nucs_for_labs
 - USB sticks
   - 3 USB sticks, 8GB or more each
   - Using a pair of sticks for booting and one more for firmware upgrades
