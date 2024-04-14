@@ -32,14 +32,44 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Wait for the flash and verification to complete
   - Safely eject the USB stick (yes, there are two "drives" on the USB stick)
 - Boot the NUC from the bootable USB stick
+  - Connnect to keyboard, mouse and power
+    - Optionally connect to wired network for faster setup
   - Insert the USB stick
   - Reboot or power on the NUC
   - Press F10 at the boot promppt
   - Select the USB stick (USB UEFI)
 - Follow the prompts to install Ubuntu on the NUC
-  - 🚧To be continued
+  - Allow the system to come up to the "Install" screen and click **Install Ubuntu**
+  - Accept the keyboard settings
+  - Configure the wifi connection now (if you are wired, you won't be prompted; set it up later)
+  - There is no wrong answer for the packages screen; accept the defaults or modify as desired
+  - Select **Erase disk and install Ubuntu**
+  - Click **Intall Now**
+  - Click **Continue** and write changes to disk
+  - Accept the zime zone settings
+  - Enter system and user information *you can modify these as desired*
+    - Name: **nuc**
+    - Computer name: **nuc1**
+    - Username: **nuc**
+    - Password: **nuc**
+    - Require password to log in
+    - Continue
+  - Wait patiently for the **Installation Complete** message
+  - Click **Restart Now**
+  - Remove the USB stick when prompted and press Enter
 
 ## Update Packages
+### First Login
+- Log in with your username and password
+- Answer the prompts to the first-time wizard
+  - Skip connecting your online accounts
+  - Skip Ubuntu pro
+  - Choose NO to send information
+- You will be prompted to update the system
+  - This is optional; click **Install Now** (and wait) or close out the window
+### Update Packages
+
+### Generate SSH Key
 
 ## Create the modified ISO for USB installation of remaining NUCs
 ## Create the CIDATA USB stick
