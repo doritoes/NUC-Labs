@@ -2,7 +2,6 @@
 
 This is the first NUC in our ["Stack of NUCs"](https://www.unclenuc.com/lab:stack_of_nucs:start)
 - user-friendly desktop installation
-- workstation to operate the lab and other NUCs from
 - used to create the rest of the environment
   - create modified ISO for the boot USB stick
   - create boot USB stick for the new ISO
@@ -10,6 +9,9 @@ This is the first NUC in our ["Stack of NUCs"](https://www.unclenuc.com/lab:stac
   - create firmware upgrade USB stick
   - create SSH management keys
   - connect to the other NUCs you build
+
+References:
+- https://www.jimangel.io/posts/automate-ubuntu-22-04-lts-bare-metal/
 
 Hardware:
 - Intel NUC model [BOXNUC7i3BNK](https://ark.intel.com/content/www/us/en/ark/products/95069/intel-nuc-kit-nuc7i3bnk.html)
@@ -19,6 +21,9 @@ Hardware:
 
 Software:
 - Ubuntu 22.04 LTS desktop - https://releases.ubuntu.com/jammy/
+
+Purpose:
+- workstation to operate the lab and other NUCs from
 
 ## Install Ubuntu Desktop
 See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
@@ -58,7 +63,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Click **Restart Now**
   - Remove the USB stick when prompted and press Enter
 
-💡 You cannot SSH to NUC1 at this point.
+💡 You cannot SSH to NUC1 at this point. See the *Learn More* section to find links to instructions to enable this.
 
 ## Set up System
 These steps are performed while logged in to NUC1
