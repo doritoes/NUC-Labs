@@ -75,13 +75,42 @@ touch meta-data
 touch user-data
 ~~~~
 - Modify the user-data file on CIDATA
- - You can create the use using a text editor (notepadqq was installed earlier) or use the command line
- - ⚠️ Replace the key(s) in the example with the output from your computer for
+  - You can create the use using a text editor (notepadqq was installed earlier) or use the command line. However you will need root permissions. It might be simplest to use notepadqq to create the file in your home directory then `sudo cp user-data /tmp/cidata/`
+  - ⚠️ Replace the key(s) in the example with the output from your computer for
    - `cat ~/.ssh/id_rsa.pub`
- - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
- - The example file: [user-data](user-data)
-
+  - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
+  - The example file: [user-data](user-data)
+  - Unmount the USB stick
+    - `cd ~`
+    - `sudo umount /dev/sdb`
+- You can now safely remove the USB stick
+  
 ## Create the firmware upgrade USB stick
-## Create SSH management keys
-
-🚧 continue working here
+This step is optional. If you haven't already upgraded the firmware on your NUC to the latest version, here are the steps.
+- Learn about upgrading the firmware
+  - Read https://www.intel.com/content/www/us/en/support/articles/000005636/intel-nuc.html
+  - https://www.unclenuc.com/lab:preparing_nucs_for_labs
+- Download the latest firmware for your NUC
+  - ⚠️ Warning: Asus has over taken over support for some NUC generations
+    - https://www.asus.com/support/faq/1053028/
+  - Extract the .BIO file from the Zip file you download
+  - ⚠️ Beware that several NUC models may use the same .BIO file
+- Unplug all USB sticks from NUC 1
+- Plug in the USB that will be erased and used as the firmware upgrade USB stick
+- Identify the USB stick device name
+  - `lsblk`
+  - Look for "sdb"
+    - "sda" is usually your system drive, don't touch that one!
+    - "sdb" will have the same size as your USB stick
+- Format the USB stick - this example assumes it's "sdb"
+  - Unmount partition that Ubuntu automatically mounted: `sudo umount /dev/sdb1`
+  - Format it:  `sudo mkfs.vfat -I -F 32 -n 'FIRMWARE' /dev/sdb`
+  - Confirm: `ls /dev/disk/by-label/`
+- `mkdir /tmp/firmware`
+- `sudo mount /dev/sdb /tmp/firmware`
+- Copy the .BIO file to the USB stick
+  - Example: `su cp BN0093.bio /tmp/firmware`
+- Unmount the USB stick
+  - `sudo umount /dev/sdb`
+- You can now safely remove the USB stick
+You can now use this USB stick to upgrade the firmware on NUCs that are compatible with the firmware.
