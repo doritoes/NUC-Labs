@@ -30,7 +30,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Click **Select target** and select the the USB stick you inserted
   - Click **Flash!** and allow the command shell to continue
   - Wait for the flash and verification to complete
-  - Safely eject the USB stick
+  - Safely eject the USB stick (yes, there are two "drives" on the USB stick)
 - Boot the NUC from the bootable USB stick
   - Insert the USB stick
   - Reboot or power on the NUC
