@@ -2,7 +2,7 @@
 
 This is the first NUC in our ["Stack of NUCs"](https://www.unclenuc.com/lab:stack_of_nucs:start)
 - user-friendly desktop installation
-- workstation to operate the lab from
+- workstation to operate the lab and other NUCs from
 - used to create the rest of the environment
   - create modified ISO for the boot USB stick
   - create boot USB stick for the new ISO
@@ -20,4 +20,28 @@ Hardware:
 Software:
 - Ubuntu 22.04 LTS desktop - https://releases.ubuntu.com/jammy/
 
-🚧To be continued
+## Install Ubuntu Desktop
+See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
+- Download the [latest ISO file](https://ubuntu.com/download/desktop)
+- Create a bootable USB stick from the ISO
+  - 💡[balenaEtcher\(https://etcher.balena.io/#download-etcher) is recommended to create a bootable USB stick from the ISO
+  - If your workstation is Windows, the Portable version is perfect for the task
+  - Click **Flash from file** and select the downloaded ISO file
+  - Click **Select target** and select the the USB stick you inserted
+  - Click **Flash!** and allow the command shell to continue
+  - Wait for the flash and verification to complete
+  - Safely eject the USB stick
+- Boot the NUC from the bootable USB stick
+  - Insert the USB stick
+  - Reboot or power on the NUC
+  - Press F10 at the boot promppt
+  - Select the USB stick (USB UEFI)
+- Follow the prompts to install Ubuntu on the NUC
+  - 🚧To be continued
+
+## Update Packages
+
+## Create the modified ISO for USB installation of remaining NUCs
+## Create the CIDATA USB stick
+## Create the firmware upgrade USB stick
+## Create SSH management keys
