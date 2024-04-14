@@ -22,7 +22,7 @@ sudo python3 -m pip install .
 ~~~~
 export ORIG_ISO="ubuntu-22.04.4-live-server-amd64.iso"
 mkdir mnt
-mount -o loop ${ORIG_ISO} mnt
+sudo mount -o loop ${ORIG_ISO} mnt
 cp --no-preserve=all mnt/boot/grub/grub.cfg /tmp/grub.cfg
 umount mnt
 sed -i 's/linux	\/casper\/vmlinuz  ---/linux	\/casper\/vmlinuz autoinstall quiet ---/g' /tmp/grub.cfg
