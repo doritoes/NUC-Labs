@@ -29,7 +29,7 @@ sudo umount mnt
 sed -i 's/linux	\/casper\/vmlinuz  ---/linux	\/casper\/vmlinuz autoinstall quiet ---/g' /tmp/grub.cfg
 sed -i 's/timeout=30/timeout=1/g' /tmp/grub.cfg
 export MODDED_ISO="${ORIG_ISO::-4}-modded.iso"
-livefs-edit $ORIG_ISO $MODDED_ISO --cp /tmp/grub.cfg new/iso/boot/grub/grub.cfg
+sudo livefs-edit $ORIG_ISO $MODDED_ISO --cp /tmp/grub.cfg new/iso/boot/grub/grub.cfg
 ~~~~
 
 ## Create bootable USB stick from the modified ISO
