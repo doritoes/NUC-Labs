@@ -3,12 +3,12 @@ Create the modified ISO for USB installation of remaining NUCs. These steps are 
 
 💡 You can open these instructions from NUC1 for your convenience.
 
-# Download Server ISO
+## Download Server ISO
 - Download the latest <ins>live-server</ins> ISO from the [Ubuntu 22.04 releases page](https://releases.ubuntu.com/22.04/)
   - Named similar to ubuntu-22.04.4-live-server-amd64.iso
 - Move the ISO file to your home directory (e.g. /home/ubuntu/)
 
-# Install livefs-editor
+## Install livefs-editor
 - Open the terminal (should be in your home directory by default)
 - Install livefs-editor, which will be used to modify the ISO
 ~~~~
@@ -17,7 +17,8 @@ cd livefs-editor
 sudo python3 -m pip install .
 ~~~~
 - Return to your home directory (`cd ~` or `cd ..`)
-# Create modified live-server ISO
+
+## Create modified live-server ISO
 - Update the following ORIG_ISO filename to match the actual file you downloaded
 ~~~~
 export ORIG_ISO="ubuntu-22.04.4-live-server-amd64.iso"
@@ -30,20 +31,57 @@ sed -i 's/timeout=30/timeout=1/g' /tmp/grub.cfg
 export MODDED_ISO="${ORIG_ISO::-4}-modded.iso"
 livefs-edit $ORIG_ISO $MODDED_ISO --cp /tmp/grub.cfg new/iso/boot/grub/grub.cfg
 ~~~~
-# Create bootable USB stick from the modified ISO
+
+## Create bootable USB stick from the modified ISO
 Use [Balena Etcher](https://www.balena.io/etcher) or [Startup Disk Creator](https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu#1-overview)
 
-## BalenaEtcher
+### BalenaEtcher
+🏗️ Improve this section
 - Download Etcher for Linux x64 (64-bit) (AppImage)
-- In a terminal, assign executable permissions to the downloaded file
+- In a terminal, assign executable permissions to the downloaded file, extract and run it
   - For example, if the file is named `balenaEtcher-1.18.11-x64.AppImage`
-  - Type `sudo chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage`
-- Extract the app image
-- `sudo chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage--appimage-extract`
+  - `sudo chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage`
+  - `sudo Downloads/balenaEtcher-1.18.11-x64.AppImage --appimage-extract`
+  - `Downloads/balenaEtcher-1.18.11-x64.AppImage`
+- Follow the same steps to create a bootable USB stick
 
+### Startup Disk Creator
+⚠️ Warning: In my Lab, the Startup Disk Creator would not recognize the modded ISO image. Just use BalenaEtcher.
+- Insert the USB stick that you are doing to write
+- From the desktop menu, find and start **Startup Disk Creator**
+- Click **Other**, then select the newly created "modded" ISO file
+- Click **Make Startup Disk**
 
-# Create the CIDATA USB stick
-# Create the firmware upgrade USB stick
-# Create SSH management keys
+## Create the CIDATA USB stick
+Create a USB stick named CIDATA as a cloud-init datasource
+- Unplug the bootable USB stick you just created
+- Plug in the USB that will be erased and used as the cloud-init datasource
+- Identify the USB stick device name
+  - `lsblk`
+  - Look for "sdb"
+    - "sda" is usually your system drive, don't touch that one!
+    - "sdb" will have the same size as your USB stick
+- Format the USB stick - this example assumes it's "sdb"
+  - Unmount partition that Ubuntu automatically mounted: `sudo umount /dev/sdb1`
+  - Format it:  `sudo mkfs.vfat -I -F 32 -n 'CIDATA' /dev/sdb`
+  - Confirm: `ls /dev/disk/by-label/`
+- Create `meta-data` and `user-data` files on CIDATA  - this example assumes it's "sdb"
+~~~~
+mkdir /tmp/cidata
+sudo mount /dev/sdb /tmp/cidata
+sudo touch /tmp/cidata/meta-data
+sudo touch /tmp/cidata/user-data
+touch meta-data
+touch user-data
+~~~~
+- Modify the user-data file on CIDATA
+ - You can create the use using a text editor (notepadqq was installed earlier) or use the command line
+ - ⚠️ Replace the key(s) in the example with the output from your computer for
+   - `cat ~/.ssh/id_rsa.pub`
+ - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
+ - The example file: [user-data](user-data)
+
+## Create the firmware upgrade USB stick
+## Create SSH management keys
 
 🚧 continue working here
