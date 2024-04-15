@@ -27,14 +27,40 @@ Software:
 Purpose:
   * Ansible control node
 
-## Modify the CIDATA USB stick for the Ansible Controller
-These steps are performed while logged in to NUC1
-
-## Boot NUC 2 with USB Sticks
+## Test Boot NUC 2 with USB Sticks
 - make sure NUC 2 is powered off
 - connect
   - connect the ethernet port to your lab network (which should have Internet access)
   - keyboard, video and mouse
+- insert both USB sticks
+- power on NUC2
+- press F10 when prompted and select the USB bootable USB stick (“USB UEFI”)
+- wait patiently
+  - if the user-data file is configured to update packages, be aware this requires additional time
+  - if the ISO is older, it may take a while to download and install all the security updates
+- when the NUC powers down the first time, <ins>remove the USB sticks</ins> and power it back on
+- when the NUC powers down the second time, it is ready to deploy
+- power NUC 2 on
+
+## Test SSH Access to NUC2
+- Identify the IP address of NUC2
+  - 🚧**Need to write this section**
+- From the terminal on NUC1
+  - `ssh tux@[IPADDRESS]`
+- You will be able to log in without a password
+
+## Modify the CIDATA USB stick for the Ansible Controller
+These steps are performed while logged in to NUC1
+- Insert the CICDATA USB stick
+- Edit the file **user-data**
+- Paste in the contents of the updated file: [user-data-ansible](user-data-ansible)
+- ⚠️ Replace the key(s) in the example with the output from your computer for
+cat ~/.ssh/id_rsa.pub
+- ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
+- Safely eject the USB stick ([tip](https://help.ubuntu.com/stable/ubuntu-help/files-removedrive.html.en))
+
+## Rebuild NUC 2 with USB Sticks
+- Power off NUC 2 (press and hold the power button until it powers off)
 - insert both USB sticks
 - power on NUC2
 - press F10 when prompted and select the USB bootable USB stick (“USB UEFI”)
@@ -49,7 +75,7 @@ These steps are performed while logged in to NUC1
 
 ## Prepare Ansible
 By default, Ansible default configuration file and inventory file is located at /etc/ansible/ansible.cfg and /etc/ansible/hosts respectively.
-
+- 🚧**Need to FIX this section**
 - From NUC 1, log in to NUC 2 using ssh at the command line
   - `ssh ansible@[IP ADDRESS OF NUC2]` ([tip](https://learn.umh.app/course/connecting-with-ssh/))
 - Generate keys
