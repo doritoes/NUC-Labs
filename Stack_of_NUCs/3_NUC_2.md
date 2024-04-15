@@ -13,11 +13,11 @@ References:
 - https://docs.ansible.com/ansible/latest/getting_started/index.html
 
 Hardware:
-- [[https://www.intel.com/content/www/us/en/products/sku/76978/intel-nuc-kit-d34010wyk/specifications.html|D34010WYK]] - i4-4010U @ 1.70GHz
+- [D34010WYK](https://www.intel.com/content/www/us/en/products/sku/76978/intel-nuc-kit-d34010wyk/specifications.html) - i4-4010U @ 1.70GHz
   - Haswell NUC D34010WYK and D54250WYK: BIOS version 0054 (9/2/2019)
-  - [[https://www.intel.com/content/www/us/en/download/17536/bios-update-wylpt10h.html]]
-  - 8GB RAM
-  - 32GB or more storage
+  - https://www.intel.com/content/www/us/en/download/17536/bios-update-wylpt10h.html
+  - 8 GB RAM
+  - 32 GB or more storage
   - Wireless card
   - About 10 old, but still readily available in used market
 
