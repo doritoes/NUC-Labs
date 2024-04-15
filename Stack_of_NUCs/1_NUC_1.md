@@ -55,8 +55,8 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Enter system and user information *you can modify these as desired*
     - Name: **nuc**
     - Computer name: **nuc1**
-    - Username: **nuc**
-    - Password: **nuc**
+    - Username: **tux**
+    - Password: **tux**
     - Require password to log in
     - Continue
   - Wait patiently for the **Installation Complete** message
