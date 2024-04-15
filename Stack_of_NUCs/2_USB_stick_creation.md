@@ -70,8 +70,6 @@ mkdir /tmp/cidata
 sudo mount /dev/sdb /tmp/cidata
 sudo touch /tmp/cidata/meta-data
 sudo touch /tmp/cidata/user-data
-touch meta-data
-touch user-data
 ~~~~
 - Modify the user-data file on CIDATA
   - You can create the use using a text editor (notepadqq was installed earlier) or use the command line. However you will need root permissions. It might be simplest to use notepadqq to create the file in your home directory then `sudo cp user-data /tmp/cidata/`
