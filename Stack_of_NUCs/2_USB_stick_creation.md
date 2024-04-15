@@ -36,14 +36,13 @@ sudo livefs-edit $ORIG_ISO $MODDED_ISO --cp /tmp/grub.cfg new/iso/boot/grub/grub
 Use [Balena Etcher](https://www.balena.io/etcher) or [Startup Disk Creator](https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu#1-overview)
 
 ### BalenaEtcher
-🏗️ Improve this section
-- Download Etcher for Linux x64 (64-bit) (AppImage)
+- Download [BalenaEtcher](https://etcher.balena.io/#download-etcher) for Linux x64 (64-bit) (AppImage)
 - In a terminal, assign executable permissions to the downloaded file, extract and run it
   - For example, if the file is named `balenaEtcher-1.18.11-x64.AppImage`
-  - `sudo chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage`
-  - `sudo Downloads/balenaEtcher-1.18.11-x64.AppImage --appimage-extract`
+  - `chmod +x Downloads/balenaEtcher-1.18.11-x64.AppImage`
+  - `Downloads/balenaEtcher-1.18.11-x64.AppImage --appimage-extract`
   - `Downloads/balenaEtcher-1.18.11-x64.AppImage`
-- Follow the same steps to create a bootable USB stick
+- Follow the [same steps](1_NUC_1.md#install-ubuntu-desktop) to create a bootable USB stick
 
 ### Startup Disk Creator
 ⚠️ Warning: In my Lab, the Startup Disk Creator would not recognize the modded ISO image. Just use BalenaEtcher.
