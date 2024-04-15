@@ -32,9 +32,9 @@ These steps are performed while logged in to NUC1
 
 ## Boot NUC 2 with USB Sticks
 - make sure NUC 2 is powered off
-- connect the ethernet port to your lab network (which should have Internet access)
-- no video, keyboard, or mouse are required (if everything goes as planned)
-  - connect video if you need to do any troubleshooting
+- connect
+  - connect the ethernet port to your lab network (which should have Internet access)
+  - keyboard, video and mouse
 - insert both USB sticks
 - power on NUC2
 - press F10 when prompted and select the USB bootable USB stick (“USB UEFI”)
@@ -43,6 +43,9 @@ These steps are performed while logged in to NUC1
   - if the ISO is older, it may take a while to download and install all the security updates
 - when the NUC powers down the first time, <ins>remove the USB sticks</ins> and power it back on
 - when the NUC powers down the second time, it is ready to deploy
+  - disconnect the network cable, video, keyboard, and mouse
+- move NUC 2 to a convenient location
+- power NUC 2 on
 
 ## Prepare Ansible
 By default, Ansible default configuration file and inventory file is located at /etc/ansible/ansible.cfg and /etc/ansible/hosts respectively.
