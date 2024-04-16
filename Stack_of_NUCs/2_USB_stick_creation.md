@@ -43,6 +43,7 @@ Use [Balena Etcher](https://www.balena.io/etcher) or [Startup Disk Creator](http
   - `Downloads/balenaEtcher-1.18.11-x64.AppImage --appimage-extract`
   - `Downloads/balenaEtcher-1.18.11-x64.AppImage`
 - Follow the [same steps](1_NUC_1.md#install-ubuntu-desktop) to create a bootable USB stick
+- Safely eject the USB stick ([tip](https://help.ubuntu.com/stable/ubuntu-help/files-removedrive.html.en))
 
 ### Startup Disk Creator
 ⚠️ Warning: In my Lab, the Startup Disk Creator would not recognize the modded ISO image. Just use BalenaEtcher.
@@ -72,11 +73,12 @@ sudo touch /tmp/cidata/meta-data
 sudo touch /tmp/cidata/user-data
 ~~~~
 - Modify the user-data file on CIDATA
-  - You can create the use using a text editor (notepadqq was installed earlier) or use the command line. However you will need root permissions. It might be simplest to use notepadqq to create the file in your home directory then `sudo cp user-data /tmp/cidata/`
-  - ⚠️ Replace the key(s) in the example with the output from your computer for
-   - `cat ~/.ssh/id_rsa.pub`
-  - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
-  - The example file: [user-data](user-data)
+  - Download the example file:[user-data](user-data)
+  - Edit the file using a text editor (notepadqq was installed earlier) to edit `user-data` in your Downloads folder
+    - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
+    - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
+  - Copy the file to the the USB stick
+    - `sudo cp Downloads/user-data /tmp/cidata/user-data`
   - Unmount the USB stick
     - `cd ~`
     - `sudo umount /dev/sdb`
