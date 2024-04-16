@@ -91,7 +91,7 @@ sudo apt install xorriso squashfs-tools python3-debian git gpg libfuse2 liblz4-t
   - Accept default settings and don't enter a passphrase
 
 ## Learn More
-### Finding your the IP address of NUC1
+### Finding the IP address of NUC1
 https://help.ubuntu.com/stable/ubuntu-help/net-findip.html.en
 ### Remote access to NUC1
 - https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/
