@@ -44,7 +44,7 @@ Purpose:
 
 ## Test SSH Access to NUC2
 - Identify the IP address of NUC2
-  - 🚧**Need to write this section**
+  - See [Appendix - Discover IP](Appendix_Discover_IP.md)
 - From the terminal on NUC1
   - `ssh tux@[IPADDRESS]`
 - You will be able to log in without a password
@@ -77,7 +77,7 @@ These steps are performed while logged in to NUC1
 ## Prepare Ansible
 By default, Ansible default configuration file and inventory file is located at /etc/ansible/ansible.cfg and /etc/ansible/hosts respectively.
 - Identify the IP address of NUC2
-  - 🚧**Need to write this section**
+  - See [Appendix - Discover IP](Appendix_Discover_IP.md)
 - From NUC 1, log in to NUC 2 using ssh at the command line
   - `ssh ansible@[IP ADDRESS OF NUC2]` ([tip](https://learn.umh.app/course/connecting-with-ssh/))
 - Generate keys
