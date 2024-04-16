@@ -28,7 +28,7 @@ PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.6 (Ubuntu Linux; protocol 2.0)
 ~~~~
 
-## Option 3 - Connect the wired LAN connection and connect the IP shown at the Console login screen
+## Option 3 - Connect the wired LAN connection and connect to IP shown at the Console login screen
 The NUC's login screen will show the IP address it had when it was built on the LAN network (not wireless).
 
 Pros:
