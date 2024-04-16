@@ -51,19 +51,14 @@ Purpose:
 
 ## Modify the CIDATA USB stick for the Ansible Controller
 These steps are performed while logged in to NUC1
-- Insert the CICDATA USB stick
-  - 🚧 what is the patch to the USB stick now?
+- Insert the CICDATA USB stick into NUC1
+  - The USB stick will mount automatically
 - Modify the user-data file on CIDATA
   - Download the example file: [user-data-ansible](user-data-ansible)
   - Edit the file using a text editor (notepadqq was installed earlier) to edit `user-data-ansible` in your Downloads folder
     - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
     - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
-  - Copy the file to the the USB stick
-    - `sudo cp Downloads/user-data /tmp/cidata/user-data`
-  - Unmount the USB stick
-    - `cd ~`
-    - `sudo umount /dev/sdb`
-- You can now safely remove the USB stick
+- You can now safely remove the USB stick ([tip](https://help.ubuntu.com/stable/ubuntu-help/files-removedrive.html.en))
 
 ## Rebuild NUC 2 with USB Sticks
 - Power off NUC 2 (press and hold the power button until it powers off)
@@ -81,7 +76,8 @@ These steps are performed while logged in to NUC1
 
 ## Prepare Ansible
 By default, Ansible default configuration file and inventory file is located at /etc/ansible/ansible.cfg and /etc/ansible/hosts respectively.
-- 🚧**Need to FIX this section**
+- Identify the IP address of NUC2
+  - 🚧**Need to write this section**
 - From NUC 1, log in to NUC 2 using ssh at the command line
   - `ssh ansible@[IP ADDRESS OF NUC2]` ([tip](https://learn.umh.app/course/connecting-with-ssh/))
 - Generate keys
@@ -108,7 +104,7 @@ EOF
 
 ## Update NUC 2 Ubuntu Packages Remotely
 - Type `exit` to exit back to your NUC 1 session
-- Test running a remove command using SSH
+- Test running a remote command using SSH
 ~~~
 ssh ansible@[IP ADDRESS NUC2] "sudo apt update && sudo apt upgrade -y"
 ~~~
