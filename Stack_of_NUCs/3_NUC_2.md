@@ -52,12 +52,18 @@ Purpose:
 ## Modify the CIDATA USB stick for the Ansible Controller
 These steps are performed while logged in to NUC1
 - Insert the CICDATA USB stick
-- Edit the file **user-data**
-- Paste in the contents of the updated file: [user-data-ansible](user-data-ansible)
-- ⚠️ Replace the key(s) in the example with the output from your computer for
-cat ~/.ssh/id_rsa.pub
-- ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
-- Safely eject the USB stick ([tip](https://help.ubuntu.com/stable/ubuntu-help/files-removedrive.html.en))
+  - 🚧 what is the patch to the USB stick now?
+- Modify the user-data file on CIDATA
+  - Download the example file: [user-data-ansible](user-data-ansible)
+  - Edit the file using a text editor (notepadqq was installed earlier) to edit `user-data-ansible` in your Downloads folder
+    - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
+    - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
+  - Copy the file to the the USB stick
+    - `sudo cp Downloads/user-data /tmp/cidata/user-data`
+  - Unmount the USB stick
+    - `cd ~`
+    - `sudo umount /dev/sdb`
+- You can now safely remove the USB stick
 
 ## Rebuild NUC 2 with USB Sticks
 - Power off NUC 2 (press and hold the power button until it powers off)
