@@ -90,14 +90,14 @@ sudo apt install xorriso squashfs-tools python3-debian git gpg libfuse2 liblz4-t
 - `ssh-keygen -o`
   - Accept default settings and don't enter a passphrase
 
-# Learn More
-## Finding your the IP address of NUC1
+## Learn More
+### Finding your the IP address of NUC1
 https://help.ubuntu.com/stable/ubuntu-help/net-findip.html.en
-## Remote access to NUC1
+### Remote access to NUC1
 - https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/
 - https://www.itpro.com/mobile/remote-access/368102/how-to-remote-desktop-into-ubuntu
   - `sudo apt update && sudo apt install openssh-server -y`
-## Remmina Remote Desktop client
+### Remmina Remote Desktop client
 Remmina comes pre-installed on Ubuntu Desktop. It is handy way to connect to your other Lab systems
 - RDP to Windows machines
 - SSH
