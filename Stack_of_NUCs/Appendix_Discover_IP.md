@@ -11,12 +11,12 @@ From NUC1, install and run nmap
   - `sudo apt install  nmap -y`
 - Determine your Lab network CIDR block
   - For example, `192.168.1.0/241
+- Quick scan:
+  - `nmap -sn [YOUR_NETWORK_CIDR]`
 ~~~~
 Nmap scan report for 192.168.99.68
 Host is up (0.024s latency).
 ~~~~
-- Quick scan:
-  - `nmap -sn [YOUR_NETWORK_CIDR]`
   - Example: `nmap -sn 192.168.1.0/24`
 - Alterative 1: Looking for SSH servers only:
   - `nmap -sV -p22 [YOUR_NETWORK_CIDR]`
@@ -36,9 +36,7 @@ Pros:
 Cons:
 - The IP address on LAN was a DHCP reservation, and might have been reassigned to someone else.
 
-
 ## Option 4 - Run a GUI scanner from NUC1 or from another system in your Lab Network
 Example: https://angryip.org/
 - Pros: Free, multiplatform
 - Cons: requires Java on Linux
-
