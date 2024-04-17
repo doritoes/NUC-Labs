@@ -43,7 +43,7 @@ Use [Balena Etcher](https://www.balena.io/etcher) or [Startup Disk Creator](http
   - `Downloads/balenaEtcher-1.18.11-x64.AppImage --appimage-extract`
   - `Downloads/balenaEtcher-1.18.11-x64.AppImage`
 - Follow the [same steps](1_NUC_1.md#install-ubuntu-desktop) to create a bootable USB stick
-- Safely eject the USB stick ([tip](https://help.ubuntu.com/stable/ubuntu-help/files-removedrive.html.en))
+- Safely eject the USB stick ([tip](Appendix_Safely_Eject.md))
 
 ### Startup Disk Creator
 ⚠️ Warning: In my Lab, the Startup Disk Creator would not recognize the modded ISO image. Just use BalenaEtcher.
@@ -82,7 +82,7 @@ sudo touch /tmp/cidata/user-data
   - Unmount the USB stick
     - `cd ~`
     - `sudo umount /dev/sdb`
-- You can now safely remove the USB stick
+- 
   
 ## Create the firmware upgrade USB stick
 This step is optional. If you haven't already upgraded the firmware on your NUC to the latest version, here are the steps.
@@ -111,5 +111,5 @@ This step is optional. If you haven't already upgraded the firmware on your NUC 
   - Example: `su cp BN0093.bio /tmp/firmware`
 - Unmount the USB stick
   - `sudo umount /dev/sdb`
-- You can now safely remove the USB stick
+- You can now safely remove the USB stick; it is already unmounted and ready to remove
 You can now use this USB stick to upgrade the firmware on NUCs that are compatible with the firmware.
