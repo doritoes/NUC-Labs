@@ -94,6 +94,7 @@ sudo apt install xorriso squashfs-tools python3-debian git gpg libfuse2 liblz4-t
 ### Finding the IP address of NUC1
 https://help.ubuntu.com/stable/ubuntu-help/net-findip.html.en
 ### Remote access to NUC1
+- Remote Desktop and VNC - https://www.youtube.com/watch?v=m5U1PgqfGiA
 - https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/
 - https://www.itpro.com/mobile/remote-access/368102/how-to-remote-desktop-into-ubuntu
   - `sudo apt update && sudo apt install openssh-server -y`
