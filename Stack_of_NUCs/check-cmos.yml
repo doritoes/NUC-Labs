@@ -1,0 +1,14 @@
+---
+- hosts: nodes
+  become: true
+  become_user: root
+  tasks:
+    - name: CMOS battery health
+      lineinfile:
+        path: /proc/driver/rtc
+        line: "batt_status	: okay"
+        state: present
+      check_mode: true
+      register: cmos_battery_ok
+    - name: Set hardware clock
+      command: hwclock -w
