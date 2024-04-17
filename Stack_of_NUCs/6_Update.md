@@ -22,13 +22,22 @@ Let's set the ethernet "wired" network interface to be "optional" on the nodes. 
     - `ansible-playbook -i hosts ethernetoptional.yml`
   
 ## Reboot All Nodes
+### Quick and Dirty
+- Reboot module: `ansible -i hosts all -m reboot`
+  - the command doesn't return until all the nodes are rebooted
+- Remote ad hoc commmand: - `ansible -i hosts all -a "/sbin/reboot"`
+  - connection error, but all are successfully rebooted
+  - eventually get the reset of the connection errors
+  - then the command returns when they are all back up
+
+### Graceful 50% at a time reboot
 This playbook reboots the Nodes 50% at a time, waiting for the first group of servers to come up before rebooting the next group. This is technique that will come in handy in later Labs.
 
 1. Create file `/home/ansible/my-project/reboot-half.yml` with the contents of [reboot-half.yml](reboot-half.yml)
 2. Run the playbook
     - `ansible-playbook -i hosts reboot-half.yml`
 
-Watch the playbook run. If you'd like, try the playbook without the line `serial: "50%"`. It's much faster, but all the NUCs get rebooted simultaneously.
+Watch the playbook run. If you'd like, try the playbook without the line `serial: "50%"`.
 
 ## Update Ubuntu Packages on all Nodes
 This playbook update all the software pages on all the nodes.
