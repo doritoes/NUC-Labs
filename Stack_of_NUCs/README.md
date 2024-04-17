@@ -52,10 +52,10 @@ We will use Ansible playbooks will be to finish configuration and update Ubuntu 
 
 [Update and Configure](6_Update.md)
 
-## CMOS Battery health check
-Next is a playbook to  check the CMOS battery health on the nodes.
+## WiFi and CMOS Battery health check
+Let's check the WiFi strength on the NUCs and do a quick CMOS battery check.
 
-[CMOS Battery Check](7_Battery.md)
+[WiFi and CMOS Battery Check](7_WiFi_and_Battery.md)
 
 ## Folding@Home (FAH)
 This section demonstrates a running a complex workload of a service combined with configuration files.
