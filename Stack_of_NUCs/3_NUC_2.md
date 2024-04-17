@@ -58,7 +58,7 @@ These steps are performed while logged in to NUC1
   - Edit the file using a text editor (notepadqq was installed earlier) to edit `user-data-ansible` in your Downloads folder
     - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
     - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
-- You can now safely remove the USB stick ([tip](https://help.ubuntu.com/stable/ubuntu-help/files-removedrive.html.en))
+- Safely eject the USB stick ([tip](Appendix_Safely_Eject.md))
 
 ## Rebuild NUC 2 with USB Sticks
 - Power off NUC 2 (press and hold the power button until it powers off)
