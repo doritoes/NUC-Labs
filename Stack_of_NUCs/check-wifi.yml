@@ -1,6 +1,6 @@
 ---
 - name: Check wifi strength
-  hosts: clients
+  hosts: hosts
   remote_user: ansible
   become: true
   tasks:
