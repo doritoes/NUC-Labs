@@ -10,8 +10,9 @@ OUTPUT=$1
 IPs=$(sudo arp-scan --localnet --numeric --quiet --ignoredups | grep -E '([a-f0-9]{2}:){5}[a-f0-9]{2}' | awk '{print $1}')
 touch ~/.ssh/known_hosts
 for i in ${IPs}; do
-  # set up SSH management keys
-  ssh-keygen -q -R $i && ssh-keyscan -H $i >> ~/.ssh/known_hosts
-  # identify hosts ansible can access
-  ssh -q -o PasswordAuthentication=No $i "hostname -I" && echo $i && echo $i >> $OUTPUT
+  # set up SSH management keys, replace existing keys
+  ssh-keygen -q -R $i 2>/dev/null
+  ssh-keyscan -H $i >> ~/.ssh/known_hosts 2>/dev/null
+  # identify hosts ansible can access, add to output file
+  ssh -q -o PasswordAuthentication=No -o ChallengeResponseAuthentication=No -o ConnectTimeout=10 $i "hostname -I" && echo $i >> $OUTPUT
 done
