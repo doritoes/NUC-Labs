@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: Install FaH config
+      template:
+        src: /home/ansible/my-project/fah/roles/fahclient/templates/sample-config.xml.j2
+        dest: /etc/fahclient/config.xml
+    - name: Restart FaH
+      systemd:
+        name: FAHClient
+        state: restarted
