@@ -19,5 +19,35 @@ As the number of NUCs gets larger, it's more of a pain to track down the IP addr
   - `bash discover.sh hosts`
   - Wait as the script discovers systems on the local network running an SSH server
     - the more devices on the Lab network, the more devices to discover and try to connect to
-   
-  🚧 To be continued...
+- View the file
+  - `cat hosts`
+  - ⚠️ If you run the script multiple times, you can end up with duplicate lines in the file `hosts`
+- If you need to modify text files, both nano are vi are installed
+
+## Identify Nodes That Weren't Discovered
+What if the hosts file doesn't list all the NUCs? Here is my trick.
+- Power down all the nodes there were discovered
+  - Log in to NUC 2 (ansible controller)
+  - `ansible -i hosts all -a "shutdown -h now"`
+- Pull any NUCs that are still powered on for troubleshooting or re-imaging
+- Power the "good" NUCs back on
+
+Note that the NUCS are somewhat slow to start up at this point. We will be fixing that shortly.
+
+## Learn More
+### Experiment the Ansible Environment
+#### Check Nodes Are Up
+A quick ansible "ping":
+- ` ansible -i hosts all -m ping`
+#### Discover NUC Board Names
+You can view the board names of your NUCs. Just be aware that the board name can be different from the model number on the case.
+- `ansible -i hosts all -msetup -a "filter=*board_name*"`
+### Discovery Using LLDP
+Another way to discover the NUCs on the network quickly and easily is to use lldp.
+
+**NOTE**: lldp is a standards-based neighbor discovery protocol similar to Cisco CDP. It works fine over wired network connections. However, in my experience wireless routers and access points don't support lldp between wireless clients, so I have not included this in the lab.
+
+To use lldp in a wired lab
+- add the lldpd to the list of packages to install using apt
+- install on NUC 1 using sudo apt install lldpd
+- from NUC 1 run lldpcli show neighbors
