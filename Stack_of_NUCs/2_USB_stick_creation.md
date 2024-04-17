@@ -73,7 +73,7 @@ sudo touch /tmp/cidata/meta-data
 sudo touch /tmp/cidata/user-data
 ~~~~
 - Modify the user-data file on CIDATA
-  - Download the example file:[user-data](user-data)
+  - Download the example file: [user-data](user-data)
   - Edit the file using a text editor (notepadqq was installed earlier) to edit `user-data` in your Downloads folder
     - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
     - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
