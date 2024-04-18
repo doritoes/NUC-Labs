@@ -55,10 +55,21 @@ From NUC 1, log in to the Ansible control node, NUC 2
       - if you have a passkey from F@H, enter it here; otherwise leave blank '' 
 - Run the playook
   - `ansible-playbook main.yml`
+You wuold expect the build to be complete here. However I have observed:
+  - two instances of FAH running
+  - the configuration we installed getting overwritten with a default configuration
+
+Therefore we are going to re-apply the configuration and reboot the nodes:
 - Change directory to `/home/ansible/my-project/`
   - `cd ..`
+- Create file /home/ansible/my-project/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](reconfigure-fah.yml)
+- Run the playbook
+  - `ansible-playbook -i fah/inventory reconfigure-fah.yml`
+  - Note: see how the fah directory's inventory file is used
 - Reboot the nodes
-  - `ansible -i hosts all -m reboot`
+  - `ansible -i hosts all -m reboot` 
+
+⚠️ It seems that running the "main.yml" playbook on an already configured system will run multiple copies of FAH and cause the major  problems. Rebooting solves the issue: ''ansible -i hosts all -m reboot''
 
 ## Check FAH node status
 - Change directory to /home/ansible/my-project
@@ -66,25 +77,11 @@ From NUC 1, log in to the Ansible control node, NUC 2
 - Run the playbook
   - `ansible-playbook -i hosts check-fah-status.yml``
 
-⚠️ All the nodes are running FAH and folding, but there are issues!
-- our desired configuration file in /etc/fahclient/config.xml is actually in /var/lib/fahclient/configs/config-[datestamp].xml. The /etc/fahclient/config.xml is a default file without our configuration.
-- Compare the logs in /var/lib/fahclient/logs with /var/lib/fahclient/log.txt
-  - the database lock indicates two copies of FAH are running
-  - Run `ps -ef` to see all the processes and locate the 2 processes
-
-⚠️ It seems that running the playbook on an already configured system will run multiple copies of FAH and cause the major  problems. Rebooting solves the issue: ''ansible -i hosts all -m reboot''
-
 ## Check the config file on each node using ansible
 - Create file /home/ansible/my-project/check-fah-config.yml with the contents of [check-fah-config.yml](check-fah-config.yml)
 - Run the playbook
   - `ansible-playbook -i hosts check-fah-config.yml`
-
-## Reconfigure each node using ansible
-- Create file /home/ansible/my-project/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](reconfigure-fah.yml)
-- Run the playbook
-  - `ansible-playbook -i fah/inventory reconfigure-fah.yml`
-- Check by re-running the check config playbook
-  - `ansible-playbook -i hosts check-fah-config.yml`
+If the configuration is not correct, see the reconfigure.yml playbook above.
 
 ## Add the folding nodes to fahcontrol
 - On NUC 1, open the FAHControl program
