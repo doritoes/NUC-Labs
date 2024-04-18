@@ -20,7 +20,7 @@ References
 The official download [here](https://foldingathome.org/alternative-downloads/?lng=en) does not work with Ubuntu 22.04. The snap store has a snap for FAH but the control application doesn't work.
 
 Use [https://github.com/cdberkstresser/fah-control].
-- Open a shell on [[NUC 1]]
+- Open a terminal window on NUC 1
 - Install packages
   - `sudo apt-get install -y python3-stdeb python3-gi python3-all python3-six debhelper dh-python gir1.2-gtk-3.0`
 - Clone the repo
@@ -39,16 +39,28 @@ From NUC 1, log in to the Ansible control node, NUC 2
   - `git clone --branch support-7-6-21 https://github.com/doritoes/fah.git`
 - Change directory to ''/home/ansible/my-project/fah''
 - Modify file ''/home/ansible/my-project/fah/inventory''
-  - copy your ansible node IPs from the file /home/ansible/my-project/hosts to the [clients] section
+  - `[clients]`
+    - copy your ansible node IPs from the file /home/ansible/my-project/hosts to the [clients] section
+  - `[all:vars]`
     - chost='(IP of Control Node)'
+      - the IP address of NUC, which will run fahcontrol
     - cpass='(control-node-password)'
+      - enter a password here, ex. fahpass24
     - username='(Yourname @ folding@home)'
-    - team='(if you support a team)'
+      - Choose a name to fold under, or use "Anonymous"
+    - team=''
+      - enter a FAH team number if desired
     - passkey='(redacted passkey from folding@home)'
-- ''ansible-playbook main.yml''
+      - if you have a passkey from F@H, enter it here; otherwise leave blank '' 
+- Run the playook
+  - `ansible-playbook main.yml`
   - if you encounter a DNS lookup failure on some or all nodes
      - your wireless router should be setting DNS information as part of DHCP
      - did you disable the DNS stub resolver in earlier steps?
+
+## Check FAH node status
+
+
   - if you cannot connect with the control app and/or you see an error regarding a locked database
     - reboot the node to clear the error
     - it seems running the playbook on an already configured system and run multiple copies of FAH and cause the problem; rebooting solves the issue
