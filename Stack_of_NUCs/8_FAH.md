@@ -81,7 +81,9 @@ From NUC 1, log in to the Ansible control node, NUC 2
 ## Reconfigure each node using ansible
 - Create file /home/ansible/my-project/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](reconfigure-fah.yml)
 - Run the playbook
-  - `ansible-playbook -i hosts reconfigure-fah.yml`
+  - `ansible-playbook -i fah/inventory reconfigure-fah.yml`
+- Check by re-running the check config playbook
+  - `ansible-playbook -i hosts check-fah-config.yml`
 
 ## Add the folding nodes to fahcontrol
 - On NUC 1, open the FAH control program
@@ -94,9 +96,6 @@ If you cannot connect with the control app and/or you see an error regarding a l
 
 
 ## Work with the stack of FAH Clients
-### Check FAH Status
-ansible-playbook check-fah-status.yml
-
 ### Work with FAH Commands
 - Check points per day (PPD) and queue information:
   - `ansible clients -a "FAHClient --send-command ppd"`
@@ -109,13 +108,55 @@ ansible-playbook check-fah-status.yml
   - `ansible clients -a "FAHClient --send-unpause"`
 
 ### Check Queue State
+- Create file /home/ansible/my-project/check-fah-queue.yml with the contents of [check-fah-queue.yml](check-fah-queue.yml)
+- Run the playbook
+  - `ansible-playbook -i check-fah-queue.yml`
+Understanding results:
+- Test fails if queue is empty
+- Status READY if node has paused folding
+- Status RUNNING if node is folding
+
 ### Check Work Unit ETAs
+Show time to completion for the current queue item.
+- Create file /home/ansible/my-project/check-fah-eta.yml with the contents of [check-fah-eta.yml](check-fah-eta.yml)
+- Run the playbook
+  - `ansible-playbook -i check-fah-eta.yml`
+
 ### Check CPU Utilization
+Check the CPU load on the nodes
+- Create file /home/ansible/my-project/check-fah-cpu.yml with the contents of [check-fah-cpu.yml](check-fah-cpu.yml)
+- Run the playbook
+  - `ansible-playbook -i check-fah-cpu.yml`
+
 ### Check Temperature
+1. Install lm-sensors package
+    - Option 1 - Ad Hoc
+      - `ansible -i hosts all -m apt -a "name=lm-tools state=present"1
+    - Option 2 - Playbook
+      - Create file /home/ansible/my-project/lm-sensors with the contents of [lm-sensors.yml](lm-sensors.yml)
+      - Run the playbook
+        - `ansible-playbook -i lm-sensors.yml`
+2. Check Temerature
+    - Ad Hoc
+      - `ansible -i hosts all -a sensors`
+      - `ansible -i hosts all -a sensors -j`
+    - Playbook
+      - Create file /home/ansible/my-project/check-fah-temps.yml with the contents of [check-fah-temps.yml](check-fah-temps.yml)
+      - Run the playbook
+        - `ansible-playbook -i check-fah-temps.yml`
+        - It will fail if the CPU package temperature is over 80C
+
+Learn more about using lm-sensors with Ansible: https://github.com/aisbergg/ansible-role-lm-sensors
 
 ## Remove FAH
-Now we are going to disable the service and uninstall it. In the previous steps there was an optional step to “finish folding”. Bonus points for doing this before you remove FAH.
+Before you remove FAH and move on, why not look at how many points your username earned from Folding?
+- https://stats.foldingathome.org/
+- Search for the name you selected
+- If you want to keep folding, Team NUC is always looking for members
+  - https://stats.foldingathome.org/team/1061684
+  - https://folding.extremeoverclocking.com/team_summary.php?s=&t=1061684
 
+Now we are going to disable the service and uninstall it. In the previous steps there was an optional step to “finish folding”. Bonus points for doing this before you remove FAH.
 - From NUC 1, log in to the Ansible control node, NUC 2
 - Change directory to /home/ansible/my-project
 - Create file /home/ansible/my-project/remove-fah.yml with the contents of [remove-fah.yml](remove-fah.yml)
