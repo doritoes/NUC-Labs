@@ -55,7 +55,8 @@ From NUC 1, log in to the Ansible control node, NUC 2
       - if you have a passkey from F@H, enter it here; otherwise leave blank '' 
 - Run the playook
   - `ansible-playbook main.yml`
-You wuold expect the build to be complete here. However I have observed:
+
+You would expect the build to be complete here. However I have observed:
   - two instances of FAH running
   - the configuration we installed getting overwritten with a default configuration
 
