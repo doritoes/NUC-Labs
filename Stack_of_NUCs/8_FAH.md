@@ -101,19 +101,19 @@ If you cannot connect with the control app and/or you see an error regarding a l
 ## Work with the stack of FAH Clients
 ### Work with FAH Commands
 - Check points per day (PPD) and queue information:
-  - `ansible clients -a "FAHClient --send-command ppd"`
-  - `ansible clients -a "FAHClient --send-command queue-info"`
+  - `ansible -i hosts all -a "FAHClient --send-command ppd"`
+  - `ansible -i hosts all -a "FAHClient --send-command queue-info"`
 - Tell all nodes to finish their work unit then pause
-  - `ansible clients -a "FAHClient --send-command finish"`
+  - `ansible -i hosts all -a "FAHClient --send-command finish"`
   - It's good form to finish the work units that are assigned to you before removing FAH from the nodes
 - Pausing and unpausing folding
-  - `ansible clients -a "FAHClient --send-pause"1
-  - `ansible clients -a "FAHClient --send-unpause"`
+  - `ansible -i hosts all -a "FAHClient --send-pause"`
+  - `ansible -i hosts all -a "FAHClient --send-unpause"`
 
 ### Check Queue State
 - Create file /home/ansible/my-project/check-fah-queue.yml with the contents of [check-fah-queue.yml](check-fah-queue.yml)
 - Run the playbook
-  - `ansible-playbook -i check-fah-queue.yml`
+  - `ansible-playbook -i hosts check-fah-queue.yml`
 Understanding results:
 - Test fails if queue is empty
 - Status READY if node has paused folding
@@ -136,13 +136,13 @@ Check the CPU load on the nodes
     - Option 1 - Ad Hoc
       - `ansible -i hosts all -m apt -a "name=lm-tools state=present"1
     - Option 2 - Playbook
-      - Create file /home/ansible/my-project/lm-sensors with the contents of [lm-sensors.yml](lm-sensors.yml)
+      - Create file /home/ansible/my-project/lm-sensors.yml with the contents of [lm-sensors.yml](lm-sensors.yml)
       - Run the playbook
-        - `ansible-playbook -i lm-sensors.yml`
+        - `ansible-playbook -i hosts lm-sensors.yml`
 2. Check Temerature
     - Ad Hoc
       - `ansible -i hosts all -a sensors`
-      - `ansible -i hosts all -a sensors -j`
+      - `ansible -i hosts all -a "sensors -j"`
     - Playbook
       - Create file /home/ansible/my-project/check-fah-temps.yml with the contents of [check-fah-temps.yml](check-fah-temps.yml)
       - Run the playbook
