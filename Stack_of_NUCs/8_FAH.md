@@ -37,8 +37,8 @@ From NUC 1, log in to the Ansible control node, NUC 2
 - Change directory to /home/ansible/my-project
 -  Clone the client from this repository
   - `git clone --branch support-7-6-21 https://github.com/doritoes/fah.git`
-- Change directory to ''/home/ansible/my-project/fah''
-- Modify file ''/home/ansible/my-project/fah/inventory''
+- Change directory to `/home/ansible/my-project/fah`
+- Modify file `/home/ansible/my-project/fah/inventory`
   - `[clients]`
     - copy your ansible node IPs from the file /home/ansible/my-project/hosts to the [clients] section
   - `[all:vars]`
@@ -54,9 +54,10 @@ From NUC 1, log in to the Ansible control node, NUC 2
       - if you have a passkey from F@H, enter it here; otherwise leave blank '' 
 - Run the playook
   - `ansible-playbook main.yml`
-  - if you encounter a DNS lookup failure on some or all nodes
-     - your wireless router should be setting DNS information as part of DHCP
-     - did you disable the DNS stub resolver in earlier steps?
+- Change directory to `/home/ansible/my-project/`
+  - `cd ..`
+- Reboot the nodes
+  - `ansible -i hosts all -m reboot`
 
 ## Check FAH node status
 - Change directory to /home/ansible/my-project
@@ -69,8 +70,18 @@ From NUC 1, log in to the Ansible control node, NUC 2
 - Compare the logs in /var/lib/fahclient/logs with /var/lib/fahclient/log.txt
   - the database lock indicates two copies of FAH are running
   - Run `ps -ef` to see all the processes and locate the 2 processes
-- 
-It seems that running the playbook on an already configured system will run multiple copies of FAH and cause the major  problems. Rebooting solves the issue: ''ansible -i hosts all -m reboot''
+
+⚠️ It seems that running the playbook on an already configured system will run multiple copies of FAH and cause the major  problems. Rebooting solves the issue: ''ansible -i hosts all -m reboot''
+
+## Check the config file on each node using ansible
+- Create file /home/ansible/my-project/check-fah-config.yml with the contents of [check-fah-config.yml](check-fah-config.yml)
+- Run the playbook
+  - `ansible-playbook -i hosts check-fah-config.yml`
+
+## Reconfigure each node using ansible
+- Create file /home/ansible/my-project/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](reconfigure-fah.yml)
+- Run the playbook
+  - `ansible-playbook -i hosts reconfigure-fah.yml`
 
 ## Add the folding nodes to fahcontrol
 - On NUC 1, open the FAH control program
@@ -79,17 +90,8 @@ It seems that running the playbook on an already configured system will run mult
     - IP address of the client
     - Control password you used configuring FAH
 
-  - if you cannot connect with the control app and/or you see an error regarding a locked database
-    - reboot the node to clear the error
+If you cannot connect with the control app and/or you see an error regarding a locked database, reboot the node to clear the error.
 
-
-troubleshotting
-- Reboot all the clients to ensure the service registers properly and no double processes are running
-  -  ''ansible clients -m reboot''
-  -  If you want to confirm your FAH configuration copied correctly, see the optional section below
-
-
-🚧 To be continued...
 
 ## Work with the stack of FAH Clients
 ### Check FAH Status
