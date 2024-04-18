@@ -7,6 +7,9 @@ Sometimes in my Lab testing I find a NUC that seem slowing or become unresponsiv
 2. Run the playbook
     - `ansible-playbook -i hosts check-wifi.yml`
 
+If all the NUCs are in the same place but one is much weaker than the others
+- check that the antennas are connected to the Wifi card
+- does a different wifi card improve the connection?
 
 ## CMOS Battery Check
 Now we are going to create and run an Ansible playbook to check the CMOS battery health on the nodes. We are using /proc/driver/rtc instead of lm-sensors and sensors because it doesn't show the CMOS battery health on our NUCs.
