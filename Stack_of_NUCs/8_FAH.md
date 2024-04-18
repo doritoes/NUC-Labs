@@ -1,16 +1,17 @@
 # Folding at Home (FAH or F@H)
-Let's kick up the Lab another notch and demostrate running [Folding at Home (FAH)](https://foldingathome.org/] on the worker nodes.
+Let's kick up the Lab another notch and demostrate running [Folding at Home (FAH)](https://foldingathome.org/]) on the worker nodes. I updated the playbook by ajacocks to add the current FAH release and hack up a quick fix.
 
-I updated the playbook by ajacocks to add the current FAH release and hack up a quick fix.
+💡What is Folding At Home? It's a way to donate CPU and/or GPU cycles to help cure diseases. Your computer will simulate protein dynamics, including the process of protein folding.
 
-Please note that the NUCs I am using this lab have only 4 cores, and for some WU's (work units) the client will only use 3 cores. So don't expected to be scoring many points with these small boxes.
+Please note that the NUCs I am using for this lab have only 4 cores, and for some WU's (work units) the client will only use 3 cores. So don't expected to be scoring many points with these small boxes. But more powerful NUCs do well and are power efficient. HOWEVER beware you can lose/wear out your cooling fan. NUCs aren't built for running the cooling fan all the time.
 
 Purpose:
 - Demonstrate a running a complex workload of a service combined with configuration files
 
 Current issues:
-- working on improving terminating all instances when installing the fahclient.service
-- work on improving config.xml file file getting installed correctly
+- working on improving getting FAH to work more directly
+  - can we fix the multiple processes issue?
+  - can we improve the initial config.xml installation?
 
 References
 - https://github.com/ajacocks/fah
@@ -86,14 +87,18 @@ From NUC 1, log in to the Ansible control node, NUC 2
   - `ansible-playbook -i hosts check-fah-config.yml`
 
 ## Add the folding nodes to fahcontrol
-- On NUC 1, open the FAH control program
-  - Add clients one at a time in FAHControl
+- On NUC 1, open the FAHControl program
+  - Open the terminal
+  - `cd fah-control`
+  - `./FAHControl`
+- Addclients one at a time in FAHControl
+  - At the bottom of the "Clients" pane on the left, Click **Add**
     - Any name you want
     - IP address of the client
-    - Control password you used configuring FAH
+    - Control password you used in the **inventory** file on the Ansible console server (NUC2)
+      - `/home/ansible/fah/inventory`
 
 If you cannot connect with the control app and/or you see an error regarding a locked database, reboot the node to clear the error.
-
 
 ## Work with the stack of FAH Clients
 ### Work with FAH Commands
