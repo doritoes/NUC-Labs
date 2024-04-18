@@ -59,21 +59,35 @@ From NUC 1, log in to the Ansible control node, NUC 2
      - did you disable the DNS stub resolver in earlier steps?
 
 ## Check FAH node status
+- Change directory to /home/ansible/my-project
+- Create file /home/ansible/my-project/check-fah-status.yml with the contents of [check-fah-status.yml](check-fah-status.yml)
+- Run the playbook
+  - `ansible-playbook -i hosts check-fah-status.yml``
 
+⚠️ All the nodes are running FAH and folding, but there are issues!
+- our desired configuration file in /etc/fahclient/config.xml is actually in /var/lib/fahclient/configs/config-[datestamp].xml. The /etc/fahclient/config.xml is a default file without our configuration.
+- Compare the logs in /var/lib/fahclient/logs with /var/lib/fahclient/log.txt
+  - the database lock indicates two copies of FAH are running
+  - Run `ps -ef` to see all the processes and locate the 2 processes
+- 
+It seems that running the playbook on an already configured system will run multiple copies of FAH and cause the major  problems. Rebooting solves the issue: ''ansible -i hosts all -m reboot''
 
-  - if you cannot connect with the control app and/or you see an error regarding a locked database
-    - reboot the node to clear the error
-    - it seems running the playbook on an already configured system and run multiple copies of FAH and cause the problem; rebooting solves the issue
-- Reboot all the clients to ensure the service registers properly and no double processes are running
-  -  ''ansible clients -m reboot''
-  -  If you want to confirm your FAH configuration copied correctly, see the optional section below
-
-## Add the folding nodes to fahcontol
+## Add the folding nodes to fahcontrol
 - On NUC 1, open the FAH control program
   - Add clients one at a time in FAHControl
     - Any name you want
     - IP address of the client
     - Control password you used configuring FAH
+
+  - if you cannot connect with the control app and/or you see an error regarding a locked database
+    - reboot the node to clear the error
+
+
+troubleshotting
+- Reboot all the clients to ensure the service registers properly and no double processes are running
+  -  ''ansible clients -m reboot''
+  -  If you want to confirm your FAH configuration copied correctly, see the optional section below
+
 
 🚧 To be continued...
 
@@ -96,3 +110,12 @@ ansible-playbook check-fah-status.yml
 ### Check Work Unit ETAs
 ### Check CPU Utilization
 ### Check Temperature
+
+## Remove FAH
+Now we are going to disable the service and uninstall it. In the previous steps there was an optional step to “finish folding”. Bonus points for doing this before you remove FAH.
+
+- From NUC 1, log in to the Ansible control node, NUC 2
+- Change directory to /home/ansible/my-project
+- Create file /home/ansible/my-project/remove-fah.yml with the contents of [remove-fah.yml](remove-fah.yml)
+- Run the playbook
+  - `ansible-playbook -i hosts remove-fah.yml``
