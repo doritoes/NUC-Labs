@@ -1,0 +1,43 @@
+---
+- hosts: server
+- hosts: agents
+  become: true
+  vars:
+    server_ip: "{{groups['server'].0}}"
+    vouchers: "{{ lookup('file', '/home/ansible/my-project/hashtopolis/vouchers.txt').splitlines() }}"
+  tasks:
+    - name: Install prerequisites
+      apt:
+        pkg:
+          - git
+          - zip
+          - curl
+          - hashcat
+          - python3
+          - python3-psutil
+          - python3-requests
+          - pciutils
+    - name: Pull agent
+      get_url:
+        url: "http://{{ server_ip }}/agents.php?download=1"
+        dest: /home/ansible/
+    - name: Create config file
+      template:
+        src: "/home/ansible/my-project/hashtopolis/config.json.j2"
+        dest: "/home/ansible/config.json"
+    - name: Create systemd unit file
+      copy:
+        src: /home/ansible/my-project/hashtopolis/hashtopolis-agent.service
+        dest: /etc/systemd/system
+        owner: root
+        mode: 644
+
+    - name: Just force systemd to reread configs (2.4 and above)
+      systemd:
+        daemon_reload: true
+
+    - name: Start hashtopolis-agent service
+      systemd:
+        name: hashtopolis-agent
+        enabled: true
+        state: started
