@@ -1,0 +1,160 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Download wordlist common passwords
+      get_url:
+        url: https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-100000.txt
+        dest: /home/ansible/my-project/hashtopolis/10-million-password-list-top-100000.txt
+    - name: Download wordlist rockyou.txt
+      get_url:
+        url: http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
+        dest: /home/ansible/my-project/hashtopolis/rockyou.txt.bz2
+    - name: Download oneruletorulethemall
+      get_url:
+        url: https://raw.githubusercontent.com/NotSoSecure/password_cracking_rules/master/OneRuleToRuleThemAll.rule
+        dest: /home/ansible/my-project/hashtopolis/OneRuleToRuleThemAll.rule
+- hosts: server
+  become: true
+  vars:
+    mysql_root_password: "my_sql_root_password"
+    app_user: "ansible"
+    http_host: "hashtopolis"
+    http_conf: "hashtopolis.conf"
+    http_port: "80"
+    disable_default: true
+    hashtopolis_password: "my_hashtopolis_password"
+  tasks:
+    - name: Install prerequisites
+      apt:
+        pkg:
+          - aptitude
+          - git
+          - phpmyadmin
+ 
+    # Apache Configuration
+    - name: Install LAMP Packages
+      apt:
+        pkg:
+          - apache2
+          - mysql-server
+          - python3-pymysql
+          - php
+          - php-pear
+          - php-mysql
+          - libapache2-mod-php
+    - name: Create document root
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: '0755'
+    - name: Set up Apache virtualhost
+      template:
+        src: "apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}"
+      notify: Reload Apache
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite {{ http_conf }}
+      notify: Reload Apache
+    - name: Disable default Apache site
+      shell: /usr/sbin/a2dissite 000-default.conf
+      when: disable_default
+      notify: Reload Apache
+ 
+    # MySQL Configuration
+    - name: start and enable mysql service
+      service:
+        name: mysql
+        state: started
+        enabled: true
+    - name: manage MySQL root password
+      become: true
+      template:
+        src: /home/ansible/my-project/hashtopolis/.my.cnf.j2
+        dest: /root/.my.cnf
+    - name: Sets the hashtopolis password
+      mysql_user:
+        name: hashtopolis
+        password: "{{ hashtopolis_password }}"
+        priv: "*.*:ALL"
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        state: present
+    - name: Removes all anonymous user accounts
+      mysql_user:
+        name: ''
+        host_all: true
+        state: absent
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+    - name: Removes the MySQL test database
+      mysql_db:
+        name: test
+        state: absent
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+    - name: Create new databases
+      mysql_db:
+        name:
+          - hashtopolis
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+ 
+    # UFW Configuration
+    - name: "UFW - Allow HTTP on port {{ http_port }}"
+      ufw:
+        rule: allow
+        port: "{{ http_port }}"
+        proto: tcp
+ 
+    # PHP Info Page
+    - name: Sets Up PHP Info Page
+      template:
+        src: "info.php.j2"
+        dest: "/var/www/{{ http_host }}/info.php"
+
+    - name: Clone Hashtopolis github repository
+      git:
+        repo: https://github.com/s3inlc/hashtopolis.git
+        dest: /home/ansible/repos/
+        clone: true
+        update: true
+    - name: Copy hastopolis/src/* to /var/www/hashtopolis
+      copy:
+        src: /home/ansible/repos/src/
+        dest: "/var/www/{{ http_host }}/"
+        remote_src: true
+        owner: www-data
+        group: www-data
+
+    - name: Copy wordlist 100k
+      copy:
+        src: /home/ansible/my-project/hashtopolis/10-million-password-list-top-100000.txt
+        dest: /var/www/hashtopolis/import/10-million-password-list-top-100000.txt
+        owner: www-data
+        group: www-data
+    - name: Copy wordlist rockyou.txt
+      copy:
+        src: /home/ansible/my-project/hashtopolis/rockyou.txt.bz2
+        dest: /var/www/hashtopolis/import/rockyou.txt.bz2
+        owner: www-data
+        group: www-data
+    - name: Decompress rockyou.txt
+      command: /usr/bin/bunzip2 /var/www/hashtopolis/import/rockyou.txt.bz2
+    - name: Copy oneruletorulethemall
+      copy:
+        src: /home/ansible/my-project/hashtopolis/OneRuleToRuleThemAll.rule
+        dest: /var/www/hashtopolis/import/OneRuleToRuleThemAll.rule
+        owner: www-data
+        group: www-data
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
