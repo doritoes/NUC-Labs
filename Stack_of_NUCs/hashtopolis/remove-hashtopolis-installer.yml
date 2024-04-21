@@ -1,0 +1,10 @@
+---
+- hosts: server
+  become: true
+  vars:
+    http_host: "hashtopolis"
+  tasks:
+    - name: Remove install directory
+      file:
+        path: "/var/www/{{ http_host }}/install"
+        state: "absent"
