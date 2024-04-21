@@ -26,8 +26,6 @@ References:
 - https://resources.infosecinstitute.com/topic/hashcat-tutorial-beginners/
 - https://infosecscout.com/install-hashcat-on-ubuntu/
 
-🚧 To be continued...
-
 ## Create a project folder for Hashtopolis
 - Log in to NUC 2 again, the ansible controllers (via NUC 1)
 - Create directory `/home/ansible/my-project/hashtopolis` and change to it
