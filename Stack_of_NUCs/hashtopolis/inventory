@@ -1,0 +1,10 @@
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user='ansible'
+ansible_become=true
+ansible_become_method=sudo
+[server]
+# IP address of server
+
+[agents]
+# IP addresses of agents
