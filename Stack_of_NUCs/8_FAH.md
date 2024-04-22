@@ -114,7 +114,7 @@ NOTE that if you pause folding, or it is pausing after finishing folding a unit,
 ### Check Queue State
 - Create file /home/ansible/my-project/fah/check-fah-queue.yml with the contents of [check-fah-queue.yml](fah/check-fah-queue.yml)
 - Run the playbook
-  - `ansible-playbook -i hosts check-fah-queue.yml`
+  - `ansible-playbook check-fah-queue.yml`
 Understanding results:
 - Test fails if queue is empty
 - Status READY if node has paused folding
@@ -122,9 +122,9 @@ Understanding results:
 
 ### Check Work Unit ETAs
 Show time to completion for the current queue item.
-- Create file /home/ansible/my-project/check-fah-eta.yml with the contents of [check-fah-eta.yml](check-fah-eta.yml)
+- Create file /home/ansible/my-project/fan/check-fah-eta.yml with the contents of [check-fah-eta.yml](fah/check-fah-eta.yml)
 - Run the playbook
-  - `ansible-playbook -i check-fah-eta.yml`
+  - `ansible-playbook check-fah-eta.yml`
 
 ### Check CPU Utilization
 Check the CPU load on the nodes
