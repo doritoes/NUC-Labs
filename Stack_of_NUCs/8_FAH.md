@@ -181,4 +181,4 @@ Now we are going to disable the service and uninstall it. In the previous steps 
 - Change directory to /home/ansible/my-project
 - Create file /home/ansible/my-project/remove-fah.yml with the contents of [remove-fah.yml](fah/remove-fah.yml)
 - Run the playbook
-  - `ansible-playbook remove-fah.yml``
+  - `ansible-playbook remove-fah.yml`
