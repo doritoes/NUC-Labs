@@ -42,9 +42,12 @@ References:
   - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
 
 ## Install Hashtopolis Server
-⚠️ might need to add php.ini tweaks to the playbook
-
 The server runs on a LAMP stack. This playbook installs the LAMP stack and git clones the Hashtopolis server application.
+
+⚠️ might need to add php.ini tweaks to the playbook
+- Optionally, customize the default passwords in the playbook `hashtopolis-server.yml`
+  - mysql_root_password
+  - hashtopolis_password
 - Run the playbook
   - `ansible-playbook hashtopolis-server.yml`
 
