@@ -66,7 +66,7 @@ Therefore we are going to re-apply the configuration and reboot the nodes:
   - `ansible-playbook -i inventory reconfigure-fah.yml`
   - Note: see how the fah directory's inventory file is used
 - Reboot the nodes
-  - `ansible -i hosts all -m reboot` 
+  - `ansible all -m reboot` 
 
 ⚠️ It seems that running the "main.yml" playbook on an already configured system will run multiple copies of FAH and cause the major  problems. Rebooting solves the issue: ''ansible -i hosts all -m reboot''
 
