@@ -1,5 +1,5 @@
 ---
-- hosts: nodes
+- hosts: clients
   gather_facts: false
   tasks:
     - name: Get CPU usage
