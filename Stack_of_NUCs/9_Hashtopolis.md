@@ -39,11 +39,12 @@ References:
   - `apache.conf.j2` ([apache.conf.j2](hashtopolis/apache.conf.j2))
   - `info.php.j2` ([info.php.j2](hashtopolis/info.php.j2))
   - `.my.cnf.j2` ([.my.cnf.j2](hashtopolis/.my.cnf.j2))
+  - `hashtopolis-server.yml` ([hashtopolis-server.hml](hashtopolis/hashtopolis-server.yml))
+
 ## Install Hashtopolis Server
 ⚠️ might need to add php.ini tweaks to the playbook
 
 The server runs on a LAMP stack. This playbook installs the LAMP stack and git clones the Hashtopolis server application.
-- Copy `hashtopolis-server.yml` to the project folder ([hashtopolis-server.hml](hashtopolis/hashtopolis-server.yml))
 - Run the playbook
   - `ansible-playbook hashtopolis-server.yml`
 
