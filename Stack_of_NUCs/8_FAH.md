@@ -125,12 +125,16 @@ Show time to completion for the current queue item.
 - Create file /home/ansible/my-project/fan/check-fah-eta.yml with the contents of [check-fah-eta.yml](fah/check-fah-eta.yml)
 - Run the playbook
   - `ansible-playbook check-fah-eta.yml`
+Understanding results:
+- Test fails if queue is empty
+- Test fails if folding is paused
+- Otherwise returns the estimated time remaining to complete the current work unit (WU) in the queue
 
 ### Check CPU Utilization
 Check the CPU load on the nodes
-- Create file /home/ansible/my-project/check-fah-cpu.yml with the contents of [check-fah-cpu.yml](check-fah-cpu.yml)
+- Create file /home/ansible/my-project/fah/check-fah-cpu.yml with the contents of [check-fah-cpu.yml](fah/check-fah-cpu.yml)
 - Run the playbook
-  - `ansible-playbook -i check-fah-cpu.yml`
+  - `ansible-playbook check-fah-cpu.yml`
 
 ### Check Temperature
 1. Install lm-sensors package
