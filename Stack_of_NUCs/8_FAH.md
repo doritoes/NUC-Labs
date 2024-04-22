@@ -79,8 +79,9 @@ Therefore we are going to re-apply the configuration and reboot the nodes:
 ## Check the config file on each node using ansible
 - Create file /home/ansible/my-project/fah/check-fah-config.yml with the contents of [check-fah-config.yml](fah/check-fah-config.yml)
 - Run the playbook
-  - `ansible-playbook -i hosts check-fah-config.yml`
-If the configuration is not correct, see the reconfigure.yml playbook above.
+  - `ansible-playbook check-fah-config.yml`
+
+The configuration will now match your expected settings which you entered in the `inventory` file. If the configuration is not correct, see the reconfigure-fah.yml playbook above.
 
 ## Add the folding nodes to fahcontrol
 - On NUC 1, open the FAHControl program
@@ -99,16 +100,16 @@ If you cannot connect with the control app and/or you see an error regarding a l
 ## Work with the stack of FAH Clients
 ### Work with FAH Commands
 - Check points per day (PPD) and queue information:
-  - `ansible -i hosts all -a "FAHClient --send-command ppd"`
-  - `ansible -i hosts all -a "FAHClient --send-command queue-info"`
+  - `ansible all -a "FAHClient --send-command ppd"`
+  - `ansible all -a "FAHClient --send-command queue-info"`
 - Tell all nodes to finish their work unit then pause
-  - `ansible -i hosts all -a "FAHClient --send-command finish"`
+  - `ansible all -a "FAHClient --send-command finish"`
   - It's good form to finish the work units that are assigned to you before removing FAH from the nodes
 - Pausing and unpausing folding
-  - `ansible -i hosts all -a "FAHClient --send-pause"`
-  - `ansible -i hosts all -a "FAHClient --send-unpause"`
+  - `ansible all -a "FAHClient --send-pause"`
+  - `ansible all -a "FAHClient --send-unpause"`
 
-NOTE that if you pause folding, or it is pausing after finishing folding a unit, some of the playbooks below will error out.
+NOTE that if you pause folding, or it is pausing after finishing folding a unit, some of the playbooks below will error out. There is no data to display.
 
 ### Check Queue State
 - Create file /home/ansible/my-project/fah/check-fah-queue.yml with the contents of [check-fah-queue.yml](fah/check-fah-queue.yml)
