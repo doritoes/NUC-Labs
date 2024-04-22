@@ -63,7 +63,7 @@ You would expect the build to be complete here. However I have observed:
 Therefore we are going to re-apply the configuration and reboot the nodes:
 - Create file /home/ansible/my-project/fah/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](fah/reconfigure-fah.yml)
 - Run the playbook
-  - `ansible-playbook -i inventory reconfigure-fah.yml`
+  - `ansible-playbook reconfigure-fah.yml`
   - Note: see how the fah directory's inventory file is used
 - Reboot the nodes
   - `ansible all -m reboot` 
@@ -108,8 +108,10 @@ If you cannot connect with the control app and/or you see an error regarding a l
   - `ansible -i hosts all -a "FAHClient --send-pause"`
   - `ansible -i hosts all -a "FAHClient --send-unpause"`
 
+NOTE that if you pause folding, or it is pausing after finishing folding a unit, some of the playbooks below will error out.
+
 ### Check Queue State
-- Create file /home/ansible/my-project/check-fah-queue.yml with the contents of [check-fah-queue.yml](check-fah-queue.yml)
+- Create file /home/ansible/my-project/fah/check-fah-queue.yml with the contents of [check-fah-queue.yml](fah/check-fah-queue.yml)
 - Run the playbook
   - `ansible-playbook -i hosts check-fah-queue.yml`
 Understanding results:
