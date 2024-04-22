@@ -136,22 +136,29 @@ Check the CPU load on the nodes
 - Run the playbook
   - `ansible-playbook check-fah-cpu.yml`
 
+Understanding results:
+- CPU information is returned
+  - User CPU (percentage of CPU utilization while executing at the user, or application, level)
+  - System CPU (percentage of CPU utilization while executing at the system, or kernel, level)
+  - Nice CPU (percentage of CPU utilization while executing at the user level with nice priority)
+  - The sum total is the current CPU utilization
+
 ### Check Temperature
 1. Install lm-sensors package
     - Option 1 - Ad Hoc
       - `ansible -i hosts all -m apt -a "name=lm-tools state=present"1
     - Option 2 - Playbook
-      - Create file /home/ansible/my-project/lm-sensors.yml with the contents of [lm-sensors.yml](lm-sensors.yml)
+      - Create file /home/ansible/my-project/fah/lm-sensors.yml with the contents of [lm-sensors.yml](fah lm-sensors.yml)
       - Run the playbook
-        - `ansible-playbook -i hosts lm-sensors.yml`
+        - `ansible-playbook lm-sensors.yml`
 2. Check Temerature
     - Ad Hoc
-      - `ansible -i hosts all -a sensors`
-      - `ansible -i hosts all -a "sensors -j"`
+      - `ansible all -a sensors`
+      - `ansible all -a "sensors -j"`
     - Playbook
-      - Create file /home/ansible/my-project/check-fah-temps.yml with the contents of [check-fah-temps.yml](check-fah-temps.yml)
+      - Create file /home/ansible/my-project/check-fah-temps.yml with the contents of [check-fah-temps.yml](fah/check-fah-temps.yml)
       - Run the playbook
-        - `ansible-playbook -i check-fah-temps.yml`
+        - `ansible-playbook check-fah-temps.yml`
         - It will fail if the CPU package temperature is over 80C
 
 Learn more about using lm-sensors with Ansible: https://github.com/aisbergg/ansible-role-lm-sensors
