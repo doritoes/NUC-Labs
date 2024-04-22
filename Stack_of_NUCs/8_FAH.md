@@ -74,10 +74,10 @@ Therefore we are going to re-apply the configuration and reboot the nodes:
 - Change directory to /home/ansible/my-project
 - Create file /home/ansible/my-project/fah/check-fah-status.yml with the contents of [check-fah-status.yml](fah/check-fah-status.yml)
 - Run the playbook
-  - `ansible-playbook -i hosts check-fah-status.yml`
+  - `ansible-playbook check-fah-status.yml`
 
 ## Check the config file on each node using ansible
-- Create file /home/ansible/my-project/check-fah-config.yml with the contents of [check-fah-config.yml](check-fah-config.yml)
+- Create file /home/ansible/my-project/fah/check-fah-config.yml with the contents of [check-fah-config.yml](fah/check-fah-config.yml)
 - Run the playbook
   - `ansible-playbook -i hosts check-fah-config.yml`
 If the configuration is not correct, see the reconfigure.yml playbook above.
