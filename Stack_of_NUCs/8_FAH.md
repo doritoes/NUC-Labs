@@ -148,7 +148,7 @@ Understanding results:
     - Option 1 - Ad Hoc
       - `ansible -i hosts all -m apt -a "name=lm-tools state=present"1
     - Option 2 - Playbook
-      - Create file /home/ansible/my-project/fah/lm-sensors.yml with the contents of [lm-sensors.yml](fah lm-sensors.yml)
+      - Create file /home/ansible/my-project/fah/lm-sensors.yml with the contents of [lm-sensors.yml](fah/lm-sensors.yml)
       - Run the playbook
         - `ansible-playbook lm-sensors.yml`
 2. Check Temerature
