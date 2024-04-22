@@ -1,6 +1,6 @@
 ---
 - name: Install hashtopolis server
-  hosts: localhost
+  hosts: server
   tasks:
     - name: Download wordlist common passwords
       get_url:
