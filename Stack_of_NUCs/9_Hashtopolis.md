@@ -42,7 +42,7 @@ References:
   - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
 
 ## Install Hashtopolis Server
-The server runs on a LAMP stack. This playbook installs the LAMP stack and git clones the Hashtopolis server application.
+This playbook installs the LAMP stack and uses git clone to install the Hashtopolis server application.
 
 ⚠️ might need to add php.ini tweaks to the playbook
 - Optionally, customize the default passwords in the playbook `hashtopolis-server.yml`
@@ -53,7 +53,8 @@ The server runs on a LAMP stack. This playbook installs the LAMP stack and git c
 
 ## Configure Hashtopolis Server
 - Configure the server using the Web UI
-  - open web browser and point to the server's IP address
+  - open web browser and point to the Hashtopolis server's IP address
+    - *Example: http://192.168.1.100*
   - complete the installation gui to configure the server
     - server hostname: localhost
     - server port: 3306
