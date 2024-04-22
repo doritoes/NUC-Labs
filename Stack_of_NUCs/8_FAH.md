@@ -72,7 +72,7 @@ Therefore we are going to re-apply the configuration and reboot the nodes:
 
 ## Check FAH node status
 - Change directory to /home/ansible/my-project
-- Create file /home/ansible/my-project/check-fah-status.yml with the contents of [check-fah-status.yml](check-fah-status.yml)
+- Create file /home/ansible/my-project/fah/check-fah-status.yml with the contents of [check-fah-status.yml](fah/check-fah-status.yml)
 - Run the playbook
   - `ansible-playbook -i hosts check-fah-status.yml`
 
