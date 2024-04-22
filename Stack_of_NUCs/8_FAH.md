@@ -20,7 +20,7 @@ References
 ## Install the fahcontrol app on NUC 1
 The official download [here](https://foldingathome.org/alternative-downloads/?lng=en) does not work with Ubuntu 22.04. The snap store has a snap for FAH but the control application doesn't work.
 
-Use [https://github.com/cdberkstresser/fah-control].
+Use https://github.com/cdberkstresser/fah-control
 - Open a terminal window on NUC 1
 - Install packages
   - `sudo apt-get install -y python3-stdeb python3-gi python3-all python3-six debhelper dh-python gir1.2-gtk-3.0`
