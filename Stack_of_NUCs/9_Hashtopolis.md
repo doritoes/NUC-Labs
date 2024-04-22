@@ -43,7 +43,7 @@ References:
 ⚠️ might need to add php.ini tweaks to the playbook
 
 The server runs on a LAMP stack. This playbook installs the LAMP stack and git clones the Hashtopolis server application.
-- Copy `hashtopolis-server.yml` to the project folder [hashtopolis-server.hml](hashtopolis/hashtopolis-server.yml)
+- Copy `hashtopolis-server.yml` to the project folder ([hashtopolis-server.hml](hashtopolis/hashtopolis-server.yml))
 - Run the playbook
   - `ansible-playbook hashtopolis-server.yml`
 
