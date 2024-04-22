@@ -131,13 +131,13 @@
     - name: Copy wordlist 100k
       copy:
         src: /home/ansible/my-project/hashtopolis/10-million-password-list-top-100000.txt
-        dest: /var/www/hashtopolis/import/10-million-password-list-top-100000.txt
+        dest: /var/www/{{ http_host }}/import/10-million-password-list-top-100000.txt
         owner: www-data
         group: www-data
     - name: Copy wordlist rockyou.txt
       copy:
         src: /home/ansible/my-project/hashtopolis/rockyou.txt.bz2
-        dest: /var/www/hashtopolis/import/rockyou.txt.bz2
+        dest: /var/www/{{ http_host }}/import/rockyou.txt.bz2
         owner: www-data
         group: www-data
     - name: Decompress rockyou.txt
@@ -145,7 +145,7 @@
     - name: Copy oneruletorulethemall
       copy:
         src: /home/ansible/my-project/hashtopolis/OneRuleToRuleThemAll.rule
-        dest: /var/www/hashtopolis/import/OneRuleToRuleThemAll.rule
+        dest: /var/www/{{ http_host }}/import/OneRuleToRuleThemAll.rule
         owner: www-data
         group: www-data
   handlers:
