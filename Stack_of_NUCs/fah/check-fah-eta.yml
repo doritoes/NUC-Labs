@@ -1,0 +1,13 @@
+---
+- name: Check queue ETA
+  hosts: clients
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: Gather queue information
+      shell: "FAHClient --send-command queue-info"
+      register: fahqueue
+      changed_when: false
+    - name: Queue status
+      debug:
+        msg: "{{(fahqueue.stdout_lines[4:-1] | join | from_json)[0].eta }}"
