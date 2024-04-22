@@ -32,7 +32,7 @@ References:
   - `mkdir hashtopolis`
   - `cd hashtopolis`
 - Create the following files from this repo ([hashtopolis](hashtopolis))
-  - `inventory` (([inventory](hashtopolis/inventory))
+  - `inventory` ([inventory](hashtopolis/inventory))
     - select one of the worker does to be the Hashtopolis server, and put its IP address in the the `[server]` section
     - enter the remaining worker node "agent" IP addresses in0 the `[agents]` section
   - `ansible.cfg`
