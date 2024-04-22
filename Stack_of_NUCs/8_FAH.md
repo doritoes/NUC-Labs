@@ -159,7 +159,12 @@ Understanding results:
       - Create file /home/ansible/my-project/check-fah-temps.yml with the contents of [check-fah-temps.yml](fah/check-fah-temps.yml)
       - Run the playbook
         - `ansible-playbook check-fah-temps.yml`
-        - It will fail if the CPU package temperature is over 80C
+        - It will fail if the CPU package temperature is over 80C (176F)
+Learn more about "how hot is too hot?" by looking at the detailed output from `ansible all -a "sensors -j"`
+- input: current temperature in C
+- max: the maximum seen temperature in C
+- crit: at what point the temperate reaches a critical level
+- to view in Fahrenheight: `ansible all -a "sensors -j -f"`
 
 Learn more about using lm-sensors with Ansible: https://github.com/aisbergg/ansible-role-lm-sensors
 
