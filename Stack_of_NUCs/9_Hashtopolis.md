@@ -39,7 +39,7 @@ References:
   - `apache.conf.j2` ([apache.conf.j2](hashtopolis/apache.conf.j2))
   - `info.php.j2` ([info.php.j2](hashtopolis/info.php.j2))
   - `.my.cnf.j2` ([.my.cnf.j2](hashtopolis/.my.cnf.j2))
-  - `hashtopolis-server.yml` ([hashtopolis-server.hml](hashtopolis/hashtopolis-server.yml))
+  - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
 
 ## Install Hashtopolis Server
 ⚠️ might need to add php.ini tweaks to the playbook
