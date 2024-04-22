@@ -61,11 +61,9 @@ You would expect the build to be complete here. However I have observed:
   - the configuration we installed getting overwritten with a default configuration
 
 Therefore we are going to re-apply the configuration and reboot the nodes:
-- Change directory to `/home/ansible/my-project/`
-  - `cd ..`
-- Create file /home/ansible/my-project/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](reconfigure-fah.yml)
+- Create file /home/ansible/my-project/fah/reconfigure-fah.yml with the contents of [reconfigure-fah.yml](fah/reconfigure-fah.yml)
 - Run the playbook
-  - `ansible-playbook -i fah/inventory reconfigure-fah.yml`
+  - `ansible-playbook -i inventory reconfigure-fah.yml`
   - Note: see how the fah directory's inventory file is used
 - Reboot the nodes
   - `ansible -i hosts all -m reboot` 
