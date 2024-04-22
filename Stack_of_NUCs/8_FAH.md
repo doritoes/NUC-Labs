@@ -179,6 +179,6 @@ Before you remove FAH and move on, why not look at how many points your username
 Now we are going to disable the service and uninstall it. In the previous steps there was an optional step to “finish folding”. Bonus points for doing this before you remove FAH.
 - From NUC 1, log in to the Ansible control node, NUC 2
 - Change directory to /home/ansible/my-project
-- Create file /home/ansible/my-project/remove-fah.yml with the contents of [remove-fah.yml](remove-fah.yml)
+- Create file /home/ansible/my-project/remove-fah.yml with the contents of [remove-fah.yml](fah/remove-fah.yml)
 - Run the playbook
-  - `ansible-playbook -i hosts remove-fah.yml``
+  - `ansible-playbook remove-fah.yml``
