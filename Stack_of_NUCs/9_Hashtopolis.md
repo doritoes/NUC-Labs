@@ -35,10 +35,10 @@ References:
   - `inventory` ([inventory](hashtopolis/inventory))
     - select one of the worker does to be the Hashtopolis server, and put its IP address in the the `[server]` section
     - enter the remaining worker node "agent" IP addresses in0 the `[agents]` section
-  - `ansible.cfg`
-  - `apache.conf.j2`
-  - `info.php.j2`
-  - .my.cnf.j2
+  - `ansible.cfg` ([ansible.cfg](hashtopolis/ansible.cfg))
+  - `apache.conf.j2` ([apache.com.j2](hashtopolis/apache.conf.j2))
+  - `info.php.j2` ([info.php.j2](hashtopolis/info.php.j2))
+  - `.my.cnf.j2` ([.my.cnf.j2](hashtopolis/.my.cnf.j2))
 ## Install Hashtopolis Server
 ⚠️ might need to add php.ini tweaks to the playbook
 
