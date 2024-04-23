@@ -32,7 +32,7 @@
           - aptitude
           - git
           - phpmyadmin
- 
+
     # Apache Configuration
     - name: Install LAMP Packages
       apt:
@@ -62,7 +62,7 @@
       shell: /usr/sbin/a2dissite 000-default.conf
       when: disable_default
       notify: Reload Apache
- 
+
     # MySQL Configuration
     - name: start and enable mysql service
       service:
@@ -102,14 +102,14 @@
         state: present
         login_user: root
         login_password: "{{ mysql_root_password }}"
- 
+
     # UFW Configuration
     - name: "UFW - Allow HTTP on port {{ http_port }}"
       ufw:
         rule: allow
         port: "{{ http_port }}"
         proto: tcp
- 
+
     # PHP Info Page
     - name: Sets Up PHP Info Page
       template:
@@ -127,6 +127,12 @@
         src: /home/ansible/repos/src/
         dest: "/var/www/{{ http_host }}/"
         remote_src: true
+        owner: www-data
+        group: www-data
+    - name: Create config.php file
+      template:
+        src: "conf.php.j2"
+        dest: "/var/www/{{ http_hosts }}/inc/conf.php"
         owner: www-data
         group: www-data
     - name: Create /usr/local/share/hashtopolis directory
