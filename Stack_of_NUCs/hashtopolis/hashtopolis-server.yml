@@ -129,11 +129,12 @@
         remote_src: true
         owner: www-data
         group: www-data
-
-    - name: Create /usr/local/sahare/hashtopolis directory
+    - name: Create /usr/local/share/hashtopolis directory
       file:
         path: /usr/local/share/{{ http_host }}
         state: directory
+        owner: www-data
+        group: www-data
     - name: Create import directory
       file:
         path: /var/www/{{ http_host }}/import
