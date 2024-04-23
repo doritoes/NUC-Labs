@@ -38,6 +38,7 @@ References:
   - `ansible.cfg` ([ansible.cfg](hashtopolis/ansible.cfg))
   - `apache.conf.j2` ([apache.conf.j2](hashtopolis/apache.conf.j2))
   - `info.php.j2` ([info.php.j2](hashtopolis/info.php.j2))
+  - 'conf.php.j2' ([conf.php.j2](hashtopolis/conf.php.j2))
   - `.my.cnf.j2` ([.my.cnf.j2](hashtopolis/.my.cnf.j2))
   - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
 
