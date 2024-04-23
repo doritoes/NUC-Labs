@@ -130,6 +130,10 @@
         owner: www-data
         group: www-data
 
+    - name: Create /usr/local/sahare/hashtopolis directory
+      file:
+        path: /usr/local/share/{{ http_host }}
+        state: directory
     - name: Create import directory
       file:
         path: /var/www/{{ http_host }}/import
