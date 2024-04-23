@@ -139,6 +139,8 @@
       file:
         path: /var/www/{{ http_host }}/import
         state: directory
+        owner: www-data
+        group: www-data
     - name: Copy wordlist 100k
       copy:
         src: /home/ansible/my-project/hashtopolis/10-million-password-list-top-100000.txt
