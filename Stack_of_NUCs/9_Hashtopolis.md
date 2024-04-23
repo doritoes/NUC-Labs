@@ -45,12 +45,20 @@ References:
 This playbook installs the LAMP stack and uses git clone to install the Hashtopolis server application.
 
 ⚠️ might need to add php.ini tweaks to the playbook
+
+⚠️ Need to create conf.php from cong.template.php
+
+⚠️ Need to make /var/www/hashtopolis/import/ writable
+
 - Optionally, customize the default passwords in the playbook `hashtopolis-server.yml`
   - mysql_root_password
   - hashtopolis_password
 - Run the playbook
   - `ansible-playbook hashtopolis-server.yml`
-
+- Confirm the server is up
+  - open web browser and point to the Hashtopolis server's IP address
+    - *Example: http://192.168.1.100/info.php*
+    - *Example: http://192.168.1.00/install/index.php*
 ## Configure Hashtopolis Server
 - Configure the server using the Web UI
   - open web browser and point to the Hashtopolis server's IP address
