@@ -1,5 +1,5 @@
 ---
-- name: Install hashtopolis server
+- name: Download content files
   hosts: localhost
   tasks:
     - name: Download wordlist common passwords
@@ -14,7 +14,8 @@
       get_url:
         url: https://raw.githubusercontent.com/NotSoSecure/password_cracking_rules/master/OneRuleToRuleThemAll.rule
         dest: /home/ansible/my-project/hashtopolis/OneRuleToRuleThemAll.rule
-- hosts: server
+- name: Install hashtopolis server
+  hosts: server
   become: true
   vars:
     mysql_root_password: "my_sql_root_password"
@@ -129,6 +130,10 @@
         owner: www-data
         group: www-data
 
+    - name: Create import directory
+      file:
+        path: /var/www/{{ http_host }}/import
+        state: directory
     - name: Copy wordlist 100k
       copy:
         src: /home/ansible/my-project/hashtopolis/10-million-password-list-top-100000.txt
