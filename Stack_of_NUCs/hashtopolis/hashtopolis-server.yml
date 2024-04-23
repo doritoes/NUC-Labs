@@ -150,6 +150,10 @@
         dest: /var/www/{{ http_host }}/import/rockyou.txt.bz2
         owner: www-data
         group: www-data
+    - name: Remove old rockyou.txt file
+      file:
+        path: /var/www/{{ http_host }}/import/rockyou.txt
+        state: absent
     - name: Decompress rockyou.txt
       command: /usr/bin/bunzip2 /var/www/hashtopolis/import/rockyou.txt.bz2
     - name: Copy oneruletorulethemall
