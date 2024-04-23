@@ -132,7 +132,7 @@
     - name: Create config.php file
       template:
         src: "conf.php.j2"
-        dest: "/var/www/{{ http_hosts }}/inc/conf.php"
+        dest: "/var/www/{{ http_host }}/inc/conf.php"
         owner: www-data
         group: www-data
     - name: Create /usr/local/share/hashtopolis directory
