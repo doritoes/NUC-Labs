@@ -117,6 +117,8 @@ Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon
   - hmmmm sudo apt install intel-opencl-icd
 - http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
 
+🚧Do i need to add install intel-opencl-icd to the hashtopolis-agent.yml file?
+
 Testing: sudo crackers/1/hashcat.bin -a6 -m0 hashlists/1 ?d?d?d?d?d?d?d?d
 
 - Create a j2 template for the agent configuration file, config.json.j2
@@ -133,8 +135,8 @@ ansible-playbook hashtopolis-agent.yml
 If some agents are not coming on-line, check the config.json for a missing voucher. Put in a voucher code and sudo systemctl restart hashtopolis-agent.service
 
 
-## Confirm Agents are Up and Running
-check-agent-service.yml
+## Configure Agents For Cracking
+ansible-playbook check-agent-service.yml
 
 Log in to the Hashtopolis dashboard and view the agents
 
