@@ -139,14 +139,15 @@ If some agents are not coming on-line, check the config.json for a missing vouch
       - sudo apt install pwgen -ypwgen
       - pwgen 5 1
       - pwgen 7 1
-- Put the passwords in a file passwords.txt (example file [here](hashtopolis/passwords.txt)
+- Put the passwords in a file passwords.txt (example passwords.txt file [here](hashtopolis/passwords.txt))
 - Create a list of md5 hashes from these passwords
   - Since we are cracking using very old NUCs here, the weak d5 hash is choice here
   - Create the hashes:
     - `hash-passwords.sh`
     - Creates file `hashes.txt`
-- Sort hashes.txt to hashes-sorted.txt
+- Sort hashes.txt file (important)
   - `sort -o hashes.txt hashes.txt`
+  - Example hashes.txt file [here](hashtopolis/hashes.txt)
 - Upload the hashes.txt file to Hashtopolis
   - Lists > New hashlist
     - Name: hashes.txt
