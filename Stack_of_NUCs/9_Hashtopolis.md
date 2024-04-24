@@ -42,6 +42,7 @@ References:
   - `.my.cnf.j2` ([.my.cnf.j2](hashtopolis/.my.cnf.j2))
   - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
   - `remove-hashtopolis-installer.yml` ([remove-hashtopolis-installer.yml](hashtopolis/remove-hashtopolis-installer.yml))
+  - `remove-hashtopolis.yml` ([remove-hashtopolis.yml](hashtopolis/remove-hashtopolis.yml))
 
 ## Install Hashtopolis Server
 This playbook installs the LAMP stack and uses git clone to install the Hashtopolis server application.
@@ -105,6 +106,12 @@ Hp0kLebl
 ~~~~
 
 ## Install Agents
+- Create the following files from this repo ([hashtopolis](hashtopolis))
+  - `config.json.j2` ([config.json.j2](hashtopolis/config.json.j2))
+  - `hashtopolis-agent.service` ([hashtopolis-agent.service](hashtopolis/hashtopolis-agent.service))
+  - `hashtopolis-agent.yml` ([hashtopolis-agent.yml](hashtopolis/hashtopolis-agent.yml))
+  - `check-agent-service.yml` ([check-agent-service.yml](hashtopolis/check-agent-service.yml))
+
 Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)
 - https://github.com/intel/compute-runtime/releases
   - hmmmm sudo apt install intel-opencl-icd
@@ -119,7 +126,7 @@ Create unit file for the new hashtopolis-agent service
 
 hashtopolis-agent.service
 
-Create playbook to install the agent hashtopolis-agent.ym
+Create playbook to install the agent hashtopolis-agent.yml
 
 ansible-playbook hashtopolis-agent.yml
 
@@ -206,8 +213,6 @@ Edit each agent “Trust” setting by checking the box for “Trust agent with 
 - Create more tasks for longer lengths if you'd like
 - 
 ## Uninstall Hashtopolis
-remove-hashtopolis.yml
-
 ansible-playbook remove-hashtopolis.yml
 
 NOTE After running playbook to remove Hashtoplis, I found that upon reinstalling the server, the Hashtopolis server PHP stopped working. The following are commands to fix that issue.
