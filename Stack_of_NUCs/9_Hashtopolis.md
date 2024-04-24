@@ -182,6 +182,9 @@ If some agents are not coming on-line, check the config.json for a missing vouch
   - Note the progress of "Dispatched/Searched" as it tracks the percentage complete
   - Note the "Cracked" column, showing how many hashes were cracked; click the link to view the cracked hashes
   - Note the speed of of hash-checking in mega hashes per second; md5 is very fast to check and therefore md5 hashing is quite insecure
+  - Click on the task's ID or name to view Task details
+    - Check out the task "virtual prefresentation" and "Task Speed"
+    - Click Dispatched chunks - "Show all" to view progress, and how log it took to complete each chunk (more powerful agents will be faster and take less time)
 - Click **Agents** -> **Agents status**
   - Average device utlization may show Red until enough data is collected
   - Note show each device temperature and average CPU are shown
