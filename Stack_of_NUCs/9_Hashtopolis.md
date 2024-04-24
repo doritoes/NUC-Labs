@@ -108,9 +108,17 @@ Hp0kLebl
 ## Install Agents
 - Create the following files from this repo ([hashtopolis](hashtopolis))
   - `config.json.j2` ([config.json.j2](hashtopolis/config.json.j2))
-  - `hashtopolis-agent.service` ([hashtopolis-agent.service](hashtopolis/hashtopolis-agent.service))
+    - j2 template for the agent configuration file
+    - see more options for this config file at https://github.com/hashtopolis/agent-python
+  - `hashtopolis-agent.service` ([hashtopolis-agent.service](hashtopolis/hashtopolis-agent.service)) (unit file for the new hashtopolis-agent service)
   - `hashtopolis-agent.yml` ([hashtopolis-agent.yml](hashtopolis/hashtopolis-agent.yml))
   - `check-agent-service.yml` ([check-agent-service.yml](hashtopolis/check-agent-service.yml))
+- Run the playbook
+  - `ansible-playbook hashtopolis-agent.yml`
+- Check the agent status
+  - `ansible-playbook check-agent-service.yml`
+
+If some agents are not coming on-line, check the config.json for a missing voucher. Put in a voucher code and sudo systemctl restart hashtopolis-agent.service
 
 Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)
 - https://github.com/intel/compute-runtime/releases
@@ -121,29 +129,11 @@ Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon
 
 Testing: sudo crackers/1/hashcat.bin -a6 -m0 hashlists/1 ?d?d?d?d?d?d?d?d
 
-- Create a j2 template for the agent configuration file, config.json.j2
-- See more options for this config file at https://github.com/hashtopolis/agent-python
-
-Create unit file for the new hashtopolis-agent service
-
-hashtopolis-agent.service
-
-Create playbook to install the agent hashtopolis-agent.yml
-
-ansible-playbook hashtopolis-agent.yml
-
-If some agents are not coming on-line, check the config.json for a missing voucher. Put in a voucher code and sudo systemctl restart hashtopolis-agent.service
-
-
 ## Configure Agents For Cracking
-ansible-playbook check-agent-service.yml
-
-Log in to the Hashtopolis dashboard and view the agents
-
-Edit each agent “Trust” setting by checking the box for “Trust agent with secret data”
+- Log in to the Hashtopolis dashboard and view the agents
+- Edit each agent “Trust” setting by checking the box for “Trust agent with secret data”
 
 ## Create Sample md5 Password Hashes
-
 - Create a list of passwords you want to crack
   - Use a variety of passwords
     - poor passwords
