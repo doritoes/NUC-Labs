@@ -144,7 +144,7 @@ If some agents are not coming on-line, check the config.json for a missing vouch
   - Since we are cracking using very old NUCs here, the weak d5 hash is choice here
   - Create the hashes:
     - `hash-passwords.sh`
-    - Creates file `hashes.txt`
+    - Reads `passwwords.txt` and outputs `hashes.txt`
 - Sort hashes.txt file (important)
   - `sort -o hashes.txt hashes.txt`
   - Example hashes.txt file [here](hashtopolis/hashes.txt)
