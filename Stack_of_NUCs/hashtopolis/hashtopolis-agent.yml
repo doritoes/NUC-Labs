@@ -32,7 +32,7 @@
         owner: root
         mode: 644
 
-    - name: Just force systemd to reread configs (2.4 and above)
+    - name: Force systemd to reread configs (2.4 and above)
       systemd:
         daemon_reload: true
 
