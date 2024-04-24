@@ -159,7 +159,7 @@ If some agents are not coming on-line, check the config.json for a missing vouch
     - Click Create hashlist
   - You can also upload, the file in the browser, copy the file to the servers in the import directy and click import, or donwnload from a URL
   
-## Create Task to Crack the Hashes - Worklist and Rule
+## Create Task to Crack the Hashes - Wordlist and Rule
 - Click **Tasks** > **New Task**
   - Name: **demo**
   - Hashlist: **hashes.txt**
