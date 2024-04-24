@@ -143,38 +143,55 @@ If some agents are not coming on-line, check the config.json for a missing vouch
 - Create a list of md5 hashes from these passwords
   - Since we are cracking using very old NUCs here, the weak d5 hash is choice here
   - Create the hashes:
-    - `hash-passwords.sh`
+    - `sh hash-passwords.sh`
     - Reads `passwwords.txt` and outputs `hashes.txt`
 - Sort hashes.txt file (important)
   - `sort -o hashes.txt hashes.txt`
   - Example hashes.txt file [here](hashtopolis/hashes.txt)
 - Upload the hashes.txt file to Hashtopolis
-  - Lists > New hashlist
-    - Name: hashes.txt
-    - Hashtype: 0 (md5)
+  - Log in to the Hashtopolis dashboard
+  - Click **Lists** then **New hashlist**
+    - Name: **hashes.txt**
+    - Hashtype: **0 (md5)**
     - Hashlist format: Text File
-    - Hash source: Upload
-    - File to upload: Click Choose File, then select the file
+    - Hash source: **Paste**
+    - Input fields: *paste in the contents of hashes.txt*
     - Click Create hashlist
-
-## Create Tasks to Crack the Hashes
-- Tasks > New Task
-  - Name: demo
-  - Hashlist: hashes.txt
+  - You can also upload, the file in the browser, copy the file to the servers in the import directy and click import, or donwnload from a URL
+  
+## Create Task to Crack the Hashes - Worklist and Rule
+- Click **Tasks** > **New Task**
+  - Name: **demo**
+  - Hashlist: **hashes.txt**
   - Command:
-    - Click Rules then check (under T) OneRuleToRuleThemAll.rule
-    - Click Wordlists then check (under T) rockyou.txt
-    - Command should be: “#HL# -r OneRuleToRuleThemAll.rule rockyou.txt”
-  - Priority: leave 10 (greater than 0)
+    - Click Rules then check **OneRuleToRuleThemAll.rule**
+    - Click Wordlists then check (<ins>under T</ins>) **rockyou.txt**
+    - Command should be: `#HL# -r OneRuleToRuleThemAll.rule rockyou.txt`
+  - Priority: **10** (greater than 0)
   - Maximum number of agents: *leave 0*
-  - Task notes: demo
-  - Color: A00000
-  - Click Create Task
+  - Task notes: **demo**
+  - Color: **A00000**
+  - Click **Create Task**
+  - Re-open your task **Demo**
   - Under Assigned agents
-    - For each node click Assign
+    - Node that your agents are assigned to the task, and the ability to *Unassign* agents from the task
     - WARNING if the task assignment fails, modify the agent(s) to be “trusted” with secret data
+
+### Watch the Job Run
+- Click **Tasks** -> **Show Tasks**
+  - Note the progress of "Dispatched/Searched" as it tracks the percentage complete
+  - Note the "Cracked" column, showing how many hashes were cracked; click the link to view the cracked hashes
+  - Note the speed of of hash-checking in mega hashes per second; md5 is very fast to check and therefore md5 hashing is quite insecure
+- Click **Agents** -> **Agents status**
+  - Average device utlization may show Red until enough data is collected
+  - Note show each device temperature and average CPU are shown
+  - Note how different agents are working on different "chunks" of work
+- Click **Chunk activity**
+  - Note the chunk detail and how many hashes were cracked per chunk; ; click the link to view the cracked hashes
+
+### After Job Completes
 - Wait for your job to complete
-  - Click Lists > Cracks to view cracked passwords
+  - Click **Lists** > **Cracks** to view cracked passwords
     - First to be cracked:
       - P@$$w0rd
       - Butterfly123!
@@ -182,38 +199,45 @@ If some agents are not coming on-line, check the config.json for a missing vouch
       - covidsucks
       - sillywombat11
       - Ewug4
-    - Consider what the difference would be without using the rule or with usering the smaller work list
-- Tasks > New Task
-  - Name: brute7
-  - Hashlist: hashes.txt
+    - Consider what the difference would be without using the rule or with using the different wordlists (rockyou.txt vs 10-million-password-list-top-100000.txt)
+
+## Create Tasks to Crack the Hashes - Bruteforce
+- Click **Tasks** > **New Task**
+  - Name: **brute7**
+  - Hashlist: **hashes.txt**
   - Command:
     - `-a3 #HL# ?a?a?a?a?a?a?a`
-  - Priority: 10
-  - Maximum number of agents: leave 0
-  - Task notes: brute force
-  - Color: 00A000
-  - Click Create Task
-- Tasks > New Task
-  - Name: brute8
-  - Hashlist: hashes.txt
+  - Priority: **10**
+  - Maximum number of agents: *leave 0*
+  - Task notes: **brute force**
+  - Color: **00A000**
+  - Click **Create Task**
+- Click **Tasks** > **New Task**
+  - Name: **brute8**
+  - Hashlist: **hashes.txt**
   - Command:
-    = `-a3 #HL# ?a?a?a?a?a?a?a?a`
+    - `-a3 #HL# ?a?a?a?a?a?a?a?a`
   - Priority: 10
- - Maximum number of agents: leave 0
-- Task notes: brute force
-  - Color: 00A000
-  - Click Create Task
-- Create more tasks for longer lengths if you'd like
-- 
+ - Maximum number of agents: *leave 0*
+- Task notes: **brute force**
+  - Color: **00A000**
+  - Click **Create Task**
+- *Create more tasks for longer lengths if you'd like*
+
+### Watch the Jobs Run
+### After the Jobs Complete
+
 ## Uninstall Hashtopolis
-ansible-playbook remove-hashtopolis.yml
+Before you clean up Hashtopolis, take a look under **Learn More** for more hands-one password cracking you can test in the lab.
 
-NOTE After running playbook to remove Hashtoplis, I found that upon reinstalling the server, the Hashtopolis server PHP stopped working. The following are commands to fix that issue.
+When you are ready to clean up:
+- `ansible-playbook remove-hashtopolis.yml`
 
-sudo apt install php-fpm
-sudo a2enmod proxy_fcgi setenvif
-sudo a2enconf php8.1-fpm
-sudo systemctl restart apache2
+**NOTE** After running playbook to remove Hashtoplis, I found that upon reinstalling the server, the Hashtopolis server PHP stopped working. The following are commands to fix that issue.
+- sudo apt install php-fpm
+- sudo a2enmod proxy_fcgi setenvif
+- sudo a2enconf php8.1-fpm
+- sudo systemctl restart apache2
 
 ## Learn More
 Try cracking other Hashes
