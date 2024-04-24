@@ -43,6 +43,7 @@ References:
   - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
   - `remove-hashtopolis-installer.yml` ([remove-hashtopolis-installer.yml](hashtopolis/remove-hashtopolis-installer.yml))
   - `remove-hashtopolis.yml` ([remove-hashtopolis.yml](hashtopolis/remove-hashtopolis.yml))
+  - `hash-passwords.sh` ([hash-passwords.sh](hashtopolis/hash-passwords.sh))
 
 ## Install Hashtopolis Server
 This playbook installs the LAMP stack and uses git clone to install the Hashtopolis server application.
@@ -120,18 +121,13 @@ Hp0kLebl
 
 If some agents are not coming on-line, check the config.json for a missing voucher. Put in a voucher code and sudo systemctl restart hashtopolis-agent.service
 
-Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)
-- https://github.com/intel/compute-runtime/releases
-  - hmmmm sudo apt install intel-opencl-icd
-- http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
-
-🚧Do i need to add install intel-opencl-icd to the hashtopolis-agent.yml file?
-
-Testing: sudo crackers/1/hashcat.bin -a6 -m0 hashlists/1 ?d?d?d?d?d?d?d?d
-
 ## Configure Agents For Cracking
 - Log in to the Hashtopolis dashboard and view the agents
-- Edit each agent “Trust” setting by checking the box for “Trust agent with secret data”
+- Click **Agents** then **Show agents**
+- Edit each agent *Trust* setting
+  - Click on an agent
+  - Click **Show/Hide details**
+  - Next to *Trust** check the box for **Trust agent with secret data**
 
 ## Create Sample md5 Password Hashes
 - Create a list of passwords you want to crack
@@ -143,8 +139,12 @@ Testing: sudo crackers/1/hashcat.bin -a6 -m0 hashlists/1 ?d?d?d?d?d?d?d?d
       - sudo apt install pwgen -ypwgen
       - pwgen 5 1
       - pwgen 7 1
-- Put the passwords in a file passwords.txt
-- Create a list of md5 hashes of these passwords (we are cracking with very old NUCs after all) in the file hashes.txt; run hash-passwords.sh to create hashes.txt
+- Put the passwords in a file passwords.txt (example file [here](hashtopolis/passwords.txt)
+- Create a list of md5 hashes from these passwords
+  - Since we are cracking using very old NUCs here, the weak d5 hash is choice here
+  - Create the hashes:
+    - `hash-passwords.sh`
+    - Creates file `hashes.txt`
 - Sort hashes.txt to hashes-sorted.txt
   - `sort -o hashes.txt hashes.txt`
 - Upload the hashes.txt file to Hashtopolis
@@ -297,3 +297,13 @@ Steps:
       - Enable worklist rockyou.txt
       - Priority: 9
       - Attack command: #HL# rockyou.txt -r OneRuleToRuleThemAll.rule
+
+## Important Notes
+Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)
+- https://github.com/intel/compute-runtime/releases
+  - hmmmm sudo apt install intel-opencl-icd
+- http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
+
+🚧Do i need to add install intel-opencl-icd to the hashtopolis-agent.yml file?
+
+Testing: sudo crackers/1/hashcat.bin -a6 -m0 hashlists/1 ?d?d?d?d?d?d?d?d
