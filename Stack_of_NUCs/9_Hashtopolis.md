@@ -41,15 +41,12 @@ References:
   - 'conf.php.j2' ([conf.php.j2](hashtopolis/conf.php.j2))
   - `.my.cnf.j2` ([.my.cnf.j2](hashtopolis/.my.cnf.j2))
   - `hashtopolis-server.yml` ([hashtopolis-server.yml](hashtopolis/hashtopolis-server.yml))
+  - `remove-hashtopolis-installer.yml` ([remove-hashtopolis-installer.yml](hashtopolis/remove-hashtopolis-installer.yml))
 
 ## Install Hashtopolis Server
 This playbook installs the LAMP stack and uses git clone to install the Hashtopolis server application.
 
-⚠️ might need to add php.ini tweaks to the playbook
-
-⚠️ Need to create conf.php from cong.template.php
-
-⚠️ Need to make /var/www/hashtopolis/import/ writable
+⚠️ might need to add php.ini tweaks to the playbook for performance
 
 - Optionally, customize the default passwords in the playbook `hashtopolis-server.yml`
   - mysql_root_password
@@ -60,41 +57,52 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
   - open web browser and point to the Hashtopolis server's IP address
     - *Example: http://192.168.1.100/info.php*
     - *Example: http://192.168.1.00/install/index.php*
+
 ## Configure Hashtopolis Server
 - Configure the server using the Web UI
   - open web browser and point to the Hashtopolis server's IP address
     - *Example: http://192.168.1.100*
+- You will be redirected to `install/index.php` and be prompted to click `Start Installation of Hashtopolis`
   - complete the installation gui to configure the server
-    - server hostname: localhost
-    - server port: 3306
-    - mysql user: hashtopolis
-    - mysql password: my_hashtopolis_password
-  - create a login account when prompted
-  - Allow voucher reuse
-    - Click Config > Server
-    - Click Server
-    - Check “Vouchers can be used multiple times and will not be deleted automatically.”
-    - Click Save Changes
-- Import word lists
-  - Click Files
-  - Click Wordlists
-  - Under Import files select 10-million-password-list-top-100000.txt and rockyou.txt
-  - Click Import
-- Import rule
-  - Click Files
-  - Click Rules
-  - Under Import files select OneRuleToRuleThemAll.rule
-  - Click Import
-- After configuration is complete, remove the install directory.
-
-ansible-playbook remove-hashtopolis-installer.yml
+  - create a Hashtopolis login account when prompted
+    - Username (the user "admin" is already taken; don't try to use it)
+    - Email Address
+    - Password x2
+   - ⚠️ Currently there is a server error 500 at the end of the wizard, but you can still log in
+- Log in the the Hashtopolis server's IP address using the credentials you provided
+- Apply Configurations
+  - allow voucher reuse
+    - Click **Config** > **Server**
+    - Click **Server**
+    - Check **Vouchers can be used multiple times and will not be deleted automatically.**
+    - Click **Save Changes**
+  - Import word lists
+    - Click **Files** then click **Wordlists**
+    - Under *Import files* select **10-million-password-list-top-100000.txt** and **rockyou.txt**
+    - Click **Import files**
+  - Import rule
+    - Click **Files** then click **Rules**
+    - Under *Import files* select **OneRuleToRuleThemAll.rule**
+    - Click **Import files**
+- After configuration is complete, remove the install directory
+  - Run the playbook
+    - `ansible-playbook hashtopolis-server.yml`
 
 ## Generate Voucher Codes
 - Log in and create enough vouchers for all your worker nodes
-  - Click Agents > New
-  - Under Vouchers, and next to the New voucher button, click Create
+  - Click **Agents** > **New Agent**
+  - Under the *Clients* seciton, find the New voucher button
+  - Click Create
   - Repeat to generate vouchers for all your workers
   - Save these voucher codes to `/home/ansible/my-project/hashtopolis/vouchers.txt`
+
+Example vouchers.txt file:
+~~~~
+Aek5dy7J
+iJZxosk4
+TVxiOIRV
+Hp0kLebl
+~~~~
 
 ## Install Agents
 Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)
