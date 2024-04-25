@@ -53,9 +53,9 @@ Purpose:
 These steps are performed while logged in to NUC1
 - Insert the CICDATA USB stick into NUC1
   - The USB stick will mount automatically
-- Modify the user-data file on CIDATA
+- Modify the user-data file on CIDATA (on the USB stick)
   - Download the example file: [user-data-ansible](user-data-ansible)
-  - Edit the file using a text editor (notepadqq was installed earlier) to edit `user-data-ansible` in your Downloads folder
+  - Replace the contents onf `user-data` on the USB stick with the contents of the example file
     - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
     - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
 - Safely eject the USB stick ([tip](Appendix_Safely_Eject.md))
@@ -80,6 +80,7 @@ By default, Ansible default configuration file and inventory file is located at 
   - See [Appendix - Discover IP](Appendix_Discover_IP.md)
 - From NUC 1, log in to NUC 2 using ssh at the command line
   - `ssh ansible@[IP ADDRESS OF NUC2]` ([tip](https://learn.umh.app/course/connecting-with-ssh/))
+  - be sure you log is as <ins>**ansible**</ins>
 - Generate keys
   - `ssh-keygen -o`
   - press enter to accept defaults for all prompts
