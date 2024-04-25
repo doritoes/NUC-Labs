@@ -82,7 +82,6 @@ sudo touch /tmp/cidata/user-data
   - Unmount the USB stick
     - `cd ~`
     - `sudo umount /dev/sdb`
-- 
   
 ## Create the firmware upgrade USB stick
 This step is optional. If you haven't already upgraded the firmware on your NUC to the latest version, here are the steps.
