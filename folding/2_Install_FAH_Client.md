@@ -6,7 +6,7 @@ References:
 - https://foldingforum.org/viewtopic.php?f=108&t=36824
 
 ## Install Dependencies
-`sudo apt install -y bzip2 dialog apt-utils python-apt`
+`sudo apt install -y bzip2 dialog apt-utils python3-apt`
 
 ## Download the installation package
 `wget https://download.foldingathome.org/releases/public/release/fahclient/debian-testing-64bit/v7.4/fahclient_7.4.4_amd64.deb`
