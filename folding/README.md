@@ -29,17 +29,20 @@ Network:
 Before starting the Lab, you might review [Preparing NUCs for Labs](https://www.unclenuc.com/lab:preparing_nucs_for_labs). The will help you prepare all the NUCs for use.
 
 ### Install Ubuntu Server
-The first step is to install Ubuntu Server 22.04 LTS on the host system.
+The first step is to install Ubuntu Server 22.04 LTS on the NUC.
 
-🚧To be continued
-
-[Setup Host](1_Install_Ubuntu_Server.md)
+[Install Ubuntu Server](1_Install_Ubuntu_Server.md)
 
 ### Install FAH Client
+🚧To be continued
 
 ### Configure FAH Client
+🚧To be continued
 
 ### Set up FAHClient service
+🚧To be continued
 
 ### Review
 Review the technologies and concepts introduced in this lab
+
+🚧To be continued
