@@ -19,7 +19,7 @@ sudo python3 -m pip install .
 - Return to your home directory (`cd ~` or `cd ..`)
 
 ## Create modified live-server ISO
-- Update the following ORIG_ISO filename to match the actual file you downloaded
+- Update the ORIG_ISO filename in the following commands to match the actual file you downloaded
 ~~~~
 export ORIG_ISO="ubuntu-22.04.4-live-server-amd64.iso"
 mkdir mnt
