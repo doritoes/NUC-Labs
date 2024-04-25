@@ -65,6 +65,6 @@ We will now look at deploying different application image, updating the the late
 [Application Configuration](6_Management.md)
 
 ### Review
-Review the technologies and concepts introdcued in this lab, and point in the direction of new experients to try. And of course cleaning up the Lab.
+Review the technologies and concepts introduced in this lab, and point in the direction of new experients to try. And of course cleaning up the Lab.
 
 [Review](7_Review.md)
