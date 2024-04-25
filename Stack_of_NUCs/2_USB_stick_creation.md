@@ -6,7 +6,7 @@ Create the modified ISO for USB installation of remaining NUCs. These steps are 
 ## Download Server ISO
 - Download the latest <ins>live-server</ins> ISO from the [Ubuntu 22.04 releases page](https://releases.ubuntu.com/22.04/)
   - Named similar to ubuntu-22.04.4-live-server-amd64.iso
-- Move the ISO file to your home directory (e.g. /home/ubuntu/)
+- Move the ISO file to your home directory (e.g. /home/tux/)
 
 ## Install livefs-editor
 - Open the terminal (should be in your home directory by default)
