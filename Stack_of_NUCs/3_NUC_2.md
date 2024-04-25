@@ -53,7 +53,7 @@ Purpose:
 These steps are performed while logged in to NUC1
 - Insert the CICDATA USB stick into NUC1
   - The USB stick will mount automatically
-- Modify the user-data file on CIDATA (on the USB stick)
+- Modify the `user-data` file on CIDATA (on the USB stick)
   - Download the example file: [user-data-ansible](user-data-ansible)
   - Replace the contents onf `user-data` on the USB stick with the contents of the example file
     - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
