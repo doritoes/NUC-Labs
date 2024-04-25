@@ -7,6 +7,7 @@ References:
 - https://foldingathome.org/faqs/installation-guides/linux/manual-installation-optional-advanced/terminal-installation-for-debian-mint-ubuntu/
 - https://foldingathome.org/support/faq/installation-guides/linux/uninstall/
 - https://foldingforum.org/viewtopic.php?f=108&t=36824
+- https://foldingathome.org/support/faq/installation-guides/linux/command-line-options/
 
 ## Install Dependencies
 `sudo apt install -y bzip2 dialog apt-utils python3-apt`
