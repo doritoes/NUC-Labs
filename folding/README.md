@@ -43,4 +43,4 @@ The first step is to install Ubuntu Server 22.04 LTS on the NUC.
 [Remove FAH Client](4_Remove_FAH_Client.md)
 
 ### Review
-[Remove FAH Client](5_Review.md) the technologies and concepts introduced in this lab
+[Review](5_Review.md) the technologies and concepts introduced in this lab
