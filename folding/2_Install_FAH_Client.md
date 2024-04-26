@@ -54,25 +54,62 @@ To update this file:
   - `sudo systemctl start FAHClient`
 
 You can view an example of a configuration file at [config.xml](config.xml)
+- You will need to edit this file to put in your own Lab subnet CIDR (to replace 192.168.1.0/24) or just use the IP address of your workstation what will be running FAHControl
+- I recommend you register for a passkey and put it in this file
+  - https://foldingathome.org/support/faq/points/passkey/
+  - Benefit #1 is you earn more points
+- After updating the file, restart the service
+  - `sudo systemctl stop FAHClient`
+  - `sudo systemctl start FAHClient`
+  - If you think the is a leftover process, reboot
 
-I recommend you register for a passkey
-- https://foldingathome.org/support/faq/points/passkey/
-- Benefit #1 is you earn more points
-- Edit the config.xml file and restart FAHClient
-
-## Remote Control
-🚧To be continued...
-
-## Test
-https://foldingathome.org/support/faq/installation-guides/linux/command-line-options/
-
-🚧To be continued...
+## View Activity Locally
+- You can view the log file
+  - `tail /var/lib/fahclient/log.txt`
+  - `sudo journalctl -u FAHClient`
+- You look for isses caused by rebooting without shutting down nicely
+  - `grep INTERRUPTED /var/lib/fahclient/log.txt`
+  - `grep INTERRUPTED /var/lib/fahclient/log*`
+  - If you are overclocking and see these messages, you need to dial back on the overclocking
+- Find your packets-per-day score
+  - `FAHClient --send-command ppd | grep ppd -A1`
+- Look at your folding progress
+  - `FAHClient --send-command queue-info`
+- Look at your CPU utilization
+  - `htop`
+    - press `q` to quit
 
 ## Confirm Running After Reboot
-🚧To be continued...
+Feel free to reboot the system to confirm that FAH is automatically restarting after reboot.
 
+## Controlling Folding Locally
+
+- `FAHClient --send-pause` - pause folding
+- `FAHClient --send-unpause` - unpause folding
+- `FAHClient --send-finish` - finish all current work units, send the results, then exit.
+
+## Remote Control
+- Install the Folding at Home (FAH) software on a computer that has a GUI
+  - https://foldingathome.org/support/faq/installation-guides/
+- Open FAHControl
+- To the left, there is a pane showing *Clients*
+- In the bottom-right corder of this pane, click **Add**
+  - Name: *assign any name you want*
+  - Address: *the IP address of the NUC you configured*
+  - Password: *the password you configured in `config.xml` file*
+- You can now control the FAH client remotely
+- If you have multiple systems folding, note the aggregate points per day estimate at the bottom
+
+If you have having trouble connecting, check:
+- config.xml - `<allow v='192.168.99.1/24'/>` has been updated to your Lab network or IP address
+- config.xml - `<password v='supermassiveblackhole'/>` has been updated to the pasword you used
 
 ## Learn More
+### Track Your Progress
+Here are links to tracks your team's progress (using team NUC number as an example)
+- https://stats.foldingathome.org/team/1061684
+- https://folding.extremeoverclocking.com/team_summary.php?s=&t=1061684
+  
 ### Working with the FAHClient service
 Stop and start service
 - `sudo systemctl stop FAHClient`
