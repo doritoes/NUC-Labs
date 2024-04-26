@@ -13,4 +13,4 @@ Hopefully you will never have to use `dpkg` airectly again! Recently, `apt` got 
 
 ## Next Steps
 - Do you have 4 or 5 NUCs handy? Take a look at the [Stack of NUCs](/Stack_of_NUCs/REAME.md) lab.
-- Do you have a more recent and powerful NUC? Take a look at the [Stack of NUCs](/Kubernetes_App_Lab/README.md) lab.
+- Do you have a more recent and powerful NUC? Take a look at the [Kubernetes_App_Lab](/Kubernetes_App_Lab/README.md).
