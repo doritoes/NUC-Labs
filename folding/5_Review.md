@@ -12,4 +12,5 @@ This lab introduced you to the concept used to boot servers in Oracle VirtualBox
 Hopefully you will never have to use `dpkg` airectly again! Recently, `apt` got the ability to install .deb packages files directly.  Use `apt`, which uses `dpkg` under the hood and handles package depenies for you.
 
 ## Next Steps
-Do you have 4 or 5 NUCs handy? Take a look at the [Stack of NUCs](/Stack_of_NUCs/REAME.md) lab.
+- Do you have 4 or 5 NUCs handy? Take a look at the [Stack of NUCs](/Stack_of_NUCs/REAME.md) lab.
+- Do you have a more recent and powerful NUC? Take a look at the [Stack of NUCs](/Kubernetes_App_Lab/README.md) lab.
