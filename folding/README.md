@@ -34,15 +34,14 @@ The first step is to install Ubuntu Server 22.04 LTS on the NUC.
 [Install Ubuntu Server](1_Install_Ubuntu_Server.md)
 
 ### Install FAH Client
-[Intall FAH Client](2_Install_FAH_Client.md)
+[Install FAH Client](2_Install_FAH_Client.md)
 
-### Configure FAH Client
-🚧To be continued
+### Monitor System Status
+[Monitor NUC](3_Monitor.md)
 
-### Set up FAHClient service
-🚧To be continued
+
+### Remove FAH Client
+[Remove FAH Client](4_Remove_FAH_Client.md)
 
 ### Review
-Review the technologies and concepts introduced in this lab
-
-🚧To be continued
+[Remove FAH Client](5_Review.md) the technologies and concepts introduced in this lab
