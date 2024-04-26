@@ -36,11 +36,24 @@ dpkg: error processing package fahclient (--install):
 Errors were encountered while processing:
  fahclient
 ~~~~
+Enable and disable service
+- `sudo systemctl enable FAHClient`
+- `sudo systemctl disable FAHClient
+Stop and start service
+- `sudo systemctl stop FAHClient`
+- `sudo systemctl start FAHClient`
+
+with full ubuntu server: works but
+~~~~
+Failed to enable unit: Unit /run/systemd/generator.late/FAHClient.service is transient or generated.
+~~~~
 
 ## Remote Control
 🚧To be continued...
 
 ## Test
+https://foldingathome.org/support/faq/installation-guides/linux/command-line-options/
+
 🚧To be continued...
 
 ## Confirm Running After Reboot
