@@ -67,17 +67,11 @@ You can view an example of a configuration file at [config.xml](config.xml)
 - You can view the log file
   - `tail /var/lib/fahclient/log.txt`
   - `sudo journalctl -u FAHClient`
-- You look for isses caused by rebooting without shutting down nicely
-  - `grep INTERRUPTED /var/lib/fahclient/log.txt`
-  - `grep INTERRUPTED /var/lib/fahclient/log*`
-  - If you are overclocking and see these messages, you need to dial back on the overclocking
 - Find your packets-per-day score
   - `FAHClient --send-command ppd | grep ppd -A1`
 - Look at your folding progress
   - `FAHClient --send-command queue-info`
-- Look at your CPU utilization
-  - `htop`
-    - press `q` to quit
+
 
 ## Confirm Running After Reboot
 Feel free to reboot the system to confirm that FAH is automatically restarting after reboot.
@@ -119,9 +113,3 @@ Enable and disable service
 - `sudo systemctl disable FAHClient
 Logs
 - journalctl -u FAHClient
-
-### Uninstall FAH Application
-This section describes how to uninstall V7 FAH application.
-- Please let the current Work Unit finish and upload (using “Finish”)
-- Open a terminal window. Enter the command appropriate for your version of Linux:
-  - `sudo dpkg -P fahclient`
