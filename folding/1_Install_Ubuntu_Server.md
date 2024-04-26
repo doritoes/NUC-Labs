@@ -27,24 +27,22 @@ See the tutorial at https://ubuntu.com/tutorials/install-ubuntu-server#1-overvie
   - Press F10 at the boot promppt
   - Select the USB stick (USB UEFI)
 - Follow the prompts to install Ubuntu on the NUC
-  - using the Minimal installation will save storage space
+  - use the standard Ubuntu server (<ind>do not use Minimal installation</ins> as this will stop FAH from installing)
   - enabling SSH on the server now will save you the step of adding it later
   - once you answer the prompts and select **Erase disk and install Ubuntu**, you are nearly there
   - once installation starts, it will take a while
   - remove the USB stick when prompted and press **Enter**
 
 ## Update Packages
-- Log in
+- Log in locally or remotely
+  - Local console (keyboard/video/mouse)
+  - SSH to the IP address of the NUC
 - Do the usual package update
   - `sudo apt update && sudo apt upgrade -y`
   - enter your password when prompted
 
+## Learning More
 
-
-First Login
-
-Update Packages
-
-Learning More
-Remote access
-`sudo apt update && sudo apt install openssh-server -y`
+### Remote access
+If you did not enable the openSSH server during installation, you can enable it now:
+- `sudo apt update && sudo apt install openssh-server -y`
