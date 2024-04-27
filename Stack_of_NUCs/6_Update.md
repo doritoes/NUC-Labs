@@ -48,4 +48,4 @@ This playbook update all the software pages on all the nodes.
 
 Watch as the playbook updates the apt repo, upgrades packages, and reboots if necessary.
 
-If you run it again, note that no changes where made. Everything was up to date.
+If you run it again, note that no changes were made. Everything was up to date.
