@@ -22,7 +22,7 @@ As the number of NUCs gets larger, it's more of a pain to track down the IP addr
 - View the file
   - `cat hosts`
   - ⚠️ If you run the script multiple times, you can end up with duplicate lines in the file `hosts`
-- If you need to modify text files, both nano are vi are installed
+- If you need to modify text files, text editors `nano` and `vi` are installed
 
 ## Identify Nodes That Weren't Discovered
 What if the hosts file doesn't list all the NUCs? Here is my trick.
