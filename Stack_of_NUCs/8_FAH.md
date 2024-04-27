@@ -146,7 +146,7 @@ Understanding results:
 ### Check Temperature
 1. Install lm-sensors package
     - Option 1 - Ad Hoc
-      - `ansible -i hosts all -m apt -a "name=lm-tools state=present"1
+      - `ansible -i hosts all -m apt -a "name=lm-tools state=present"`
     - Option 2 - Playbook
       - Create file /home/ansible/my-project/fah/lm-sensors.yml with the contents of [lm-sensors.yml](fah/lm-sensors.yml)
       - Run the playbook
