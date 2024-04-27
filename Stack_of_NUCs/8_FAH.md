@@ -165,6 +165,7 @@ Learn more about "how hot is too hot?" by looking at the detailed output from `a
 - max: the maximum seen temperature in C
 - crit: at what point the temperate reaches a critical level
 - to view in Fahrenheight: `ansible all -a "sensors -j -f"`
+- it's not uncommon to see the max temperatore over 80C, but still far short of the critical temperature
 
 Learn more about using lm-sensors with Ansible: https://github.com/aisbergg/ansible-role-lm-sensors
 
