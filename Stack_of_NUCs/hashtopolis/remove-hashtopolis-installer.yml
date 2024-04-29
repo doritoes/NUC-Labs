@@ -10,5 +10,5 @@
         state: "absent"
     - name: Remove php info
       file:
-        path: "/var/www/{{ http_host }}/php.info"
+        path: "/var/www/{{ http_host }}/info.php"
         state: "absent"
