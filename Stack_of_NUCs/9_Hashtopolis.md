@@ -62,8 +62,8 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
 
 ## Configure Hashtopolis Server
 - Configure the server using the Web UI
-  - open web browser and point to the Hashtopolis server's IP address
-    - *Example: http://192.168.1.100*
+  - open web browser and point to the Hashtopolis server's IP address and the path "/install"
+    - *Example: http://192.168.1.100/install*
 - You will be redirected to `install/index.php` and be prompted to click `Start Installation of Hashtopolis`
   - complete the installation gui to configure the server
   - create a Hashtopolis login account when prompted
@@ -71,6 +71,7 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
     - Email Address
     - Password x2
    - ⚠️ Currently there is a server error 500 at the end of the wizard, but you can still log in
+   - install/index.php line 88 is trying to stored the "version" valid ID to table StoredValue when it already exists; may need to be "update" not save
 - Log in the the Hashtopolis server's IP address using the credentials you provided
 - Apply Configurations
   - allow voucher reuse
