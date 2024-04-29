@@ -267,11 +267,13 @@ Before you clean up Hashtopolis, take a look under **Learn More** for more hands
 When you are ready to clean up:
 - `ansible-playbook remove-hashtopolis.yml`
 
-**NOTE** After running the playbook to remove Hashtoplis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are commands to fix that issue.
-- sudo apt install php-fpm
-- sudo a2enmod proxy_fcgi setenvif
-- sudo a2enconf php8.1-fpm
-- sudo systemctl restart apache2
+**NOTE** In the base, after running the playbook to remove Hashtoplis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are the commands to fix that issue. However, this has not been confirmed on Ubuntu 22.04.
+~~~~
+sudo apt install php-fpm
+sudo a2enmod proxy_fcgi setenvif
+sudo a2enconf php8.1-fpm
+sudo systemctl restart apache2
+~~~~
 
 ## Learn More
 Try cracking other Hashes
@@ -403,4 +405,4 @@ In my research, I noted that Intel CPUs require this runtime: “OpenCL Runtime 
 - https://github.com/intel/compute-runtime/releases
   - `sudo apt install intel-opencl-icd`
 - http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
-- - https://www.reddit.com/r/Ubuntu/comments/16974uu/need_help_trying_to_get_hashcat_running_on_ubuntu/
+- https://www.reddit.com/r/Ubuntu/comments/16974uu/need_help_trying_to_get_hashcat_running_on_ubuntu/
