@@ -239,6 +239,21 @@ What do you expect these tasks to crack? Allow a few minutes for the tasks to ge
 - Click **Chunk activity**
 
 ### After the Jobs Complete
+- Wait for your jobs to complete
+  - Click **Lists** > **Cracks** to view cracked passwords
+    - Brute 7:
+      - *none*
+    - Brute 8:
+      - P@$$w0rd
+    - Not cracked
+      - Butterfly123!
+      - January2022
+      - covidsucks
+      - sillywombat11
+      - Ewug4
+- How would knowing the password policy (say, 10+ characters) help you optimize your tasks?
+- Review the linked [Hashcat Cheatsheet](https://cheatsheet.haax.fr/passcracking-hashfiles/hashcat_cheatsheet/)
+  - What techniques could you combine to attack common <ins>passphrases</ins>? For Example, a combination of 3-5 workds works with trailing numbers?
 
 ## Uninstall Hashtopolis
 Before you clean up Hashtopolis, take a look under **Learn More** for more hands-one password cracking you can test in the lab.
@@ -259,11 +274,11 @@ Try cracking other Hashes
 - On NUC 1
   - Create a user account name tryhackme on NUC 1 with a simple password, like `password`
   - Dump the hash for the user tryhackme
-    - `sudo grep tryhackme/etc/shadow | cut -f 2 -d“:”`
+    - `sudo grep tryhackme/etc/shadow | cut -f 2 -d":"`
 - In Hashtopolis
   - Create a hashlist
   - name Unix
-  - paste in the hash (starts with and includes “$6$”)
+  - paste in the hash (starts with and includes "$6$")
     - you can also use the example hash from https://hashcat.net/wiki/doku.php?id=example_hashes
   - hashtype 1800 - sha512crypt, SHA512(UNIX)
   - No check for salted hashes, separator
