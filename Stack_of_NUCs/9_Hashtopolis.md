@@ -336,26 +336,28 @@ Reference: https://hashcat.net/wiki/doku.php?id=example_hashes
 
 Steps:
 1. On the Windows 10 PC
+    - Open a command prompt with elevated permissions
     - Add an account with the a simple password, such as password
-      - net user person /active:yes /add
-      - net localgroup administrators /add person
+      - `net user person /active:yes /add`
+      - `net localgroup administrators /add person`
         - making this user an administrator makes it show up easier to find in the password hash dump
-      - net user person *
+      - `net user person *`
         - set the password to something easy like `password`
     - Extract the SAM and SYSTEM registry hives
-      - Open a shell as Administrator
-        - reg save hklm\sam c:\sam
-        - reg save hklm\system c:\system
+      - Open a command prompt with elevated permissions
+        - `reg save hklm\sam c:\sam`
+        - `reg save hklm\system c:\system`
         - the last parameter is the location to copy the file to
     - Remove the test user you created
-      - net user person /delete
-2. On NUC 1
+      - `net user person /delete`
+3. On NUC 1
     - Copy the SAM and SYSTEM registry hives to NUC 1
+    - DELETE the sam and system files from C:\
     - Install impacket-secretsdump
       - `sudo apt install python3-impacket -y`
     - Dump the system keys and hashes
       - If the files are named "sam" and "system"
-        - `impacket-secretsdump -sam SAM -system SYSTEM LOCAL`
+        - `impacket-secretsdump -sam sam -system system LOCAL`
     - For your test user (i.e. person) there are two hashes
       - one for LM authentication, (deprecated and only populated with a value to ensure the syntax remains constant)
       - other is the NTLM string
@@ -363,24 +365,24 @@ Steps:
         - LM aad3b435b51404eeaad3b435b51404ee = means LM is not being stored
         - NTLM 8846f7eaee8fb117ad06bdd830b7586c
         - Warning 31d6cfe0d16ae931b73c59d7e0c089c0 means a blank password, and means you were not successful pulling the hashes (samdump2 for example, gives this hash)
-3. In Hashtopolis
+4. In Hashtopolis
     - Create new hashlist
       - LM
         - Name: LM
         - Hashtype: 3000 - LM
         - Paste in text, the LM hash from https://hashcat.net/wiki/doku.php?id=example_hashes; the one you dumped will not work
-        - Create
+        - Click **Create hashlist**
       - NTLM
       - Name: NTLM
       - Hashtype: 1000 - NTLM
       - Paste in text, the NTLM hash you dumped plus the one from https://hashcat.net/wiki/doku.php?id=example_hashes
-      - Create
+      - Click **Create hashlist**
     - Create new tasks
       - LM
         - Name: LM
         - Hashlist: LM
         - Enable rule OneRuleToRuleThemAll.rule
-        - Enable worklist rockyou.txt
+        - Enable wordlist (under T) rockyou.txt
         - Priority: 10
         - Attack command: #HL# rockyou.txt -r OneRuleToRuleThemAll.rule
     - NTLM
@@ -392,11 +394,9 @@ Steps:
       - Attack command: #HL# rockyou.txt -r OneRuleToRuleThemAll.rule
 
 ## Important Notes
-Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)
+In my research, I noted that Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later). However, the Lab works for me without installing anything additional. If you run into difficulties, here is where my research left off:
+- https://support.zivid.com/en/latest/getting-started/software-installation/gpu/install-opencl-drivers-ubuntu.html
 - https://github.com/intel/compute-runtime/releases
-  - hmmmm sudo apt install intel-opencl-icd
+  - `sudo apt install intel-opencl-icd`
 - http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz
-
-🚧Do i need to add install intel-opencl-icd to the hashtopolis-agent.yml file?
-
-Testing: sudo crackers/1/hashcat.bin -a6 -m0 hashlists/1 ?d?d?d?d?d?d?d?d
+- - https://www.reddit.com/r/Ubuntu/comments/16974uu/need_help_trying_to_get_hashcat_running_on_ubuntu/
