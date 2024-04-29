@@ -392,6 +392,10 @@ Steps:
       - Enable worklist rockyou.txt
       - Priority: 9
       - Attack command: #HL# rockyou.txt -r OneRuleToRuleThemAll.rule
+5. Delete the `sam` and `system` files from your NUC!
+    - `shred -zu sam`
+    - `shred -zu system`
+    - the `shred` command is used there to overwrite the file contents, zero out the file, the delete it
 
 ## Important Notes
 In my research, I noted that Intel CPUs require this runtime: “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later). However, the Lab works for me without installing anything additional. If you run into difficulties, here is where my research left off:
