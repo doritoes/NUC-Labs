@@ -185,14 +185,14 @@ Allow a few minutes for the tasks to get assigned and started.
   - Note the "Cracked" column, showing how many hashes were cracked; click the link to view the cracked hashes
   - Note the speed of of hash-checking in mega hashes per second; md5 is very fast to check and therefore md5 hashing is quite insecure
   - Click on the task's ID or name to view Task details
-    - Check out the task "virtual prefresentation" and "Task Speed"
+    - Check out the task "visual representation" and "Task Speed"
     - Click Dispatched chunks - "Show all" to view progress, and how log it took to complete each chunk (more powerful agents will be faster and take less time)
 - Click **Agents** -> **Agents status**
   - Average device utlization may show Red until enough data is collected
   - Note show each device temperature and average CPU are shown
   - Note how different agents are working on different "chunks" of work
 - Click **Chunk activity**
-  - Note the chunk detail and how many hashes were cracked per chunk; ; click the link to view the cracked hashes
+  - Note the chunk detail and how many hashes were cracked per chunk; click the link to view the cracked hashes
 
 ### After Job Completes
 - Wait for your job to complete
@@ -230,6 +230,14 @@ Allow a few minutes for the tasks to get assigned and started.
 - *Create more tasks for longer lengths if you'd like*
 
 ### Watch the Jobs Run
+What do you expect these tasks to crack? Allow a few minutes for the tasks to get assigned and started.
+- Click **Tasks** -> **Show Tasks**
+  - Click on the task's ID or name to view Task details
+    - Check out the task "visual representation" and "Task Speed"
+    - Click Dispatched chunks - "Show all" to view progress, and how log it took to complete each chunk (more powerful agents will be faster and take less time)
+- Click **Agents** -> **Agents status**
+- Click **Chunk activity**
+
 ### After the Jobs Complete
 
 ## Uninstall Hashtopolis
