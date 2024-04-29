@@ -95,7 +95,7 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
 - Log in and create enough vouchers for all your worker nodes
   - Click **Agents** > **New Agent**
   - Under the *Clients* seciton, find the New voucher button
-  - Click Create
+  - Click **Create**
   - Repeat to generate vouchers for all your workers
   - Save these voucher codes to `/home/ansible/my-project/hashtopolis/vouchers.txt`
 
