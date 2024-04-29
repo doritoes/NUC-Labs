@@ -89,7 +89,7 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
     - Click **Import files**
 - After configuration is complete, remove the install directory
   - Run the playbook
-    - `ansible-playbook hashtopolis-server.yml`
+    - `ansible-playbook remove-hashtopolis-installer.yml`
 
 ## Generate Voucher Codes
 - Log in and create enough vouchers for all your worker nodes
@@ -120,7 +120,7 @@ Hp0kLebl
 - Check the agent status
   - `ansible-playbook check-agent-service.yml`
 
-If some agents are not coming on-line, check the config.json for a missing voucher. Put in a voucher code and sudo systemctl restart hashtopolis-agent.service
+If some agents are not coming on-line, check the node's `/home/ansible/config.json` file for a missing voucher code. Put in a voucher code and ``sudo systemctl restart hashtopolis-agent.service``
 
 ## Configure Agents For Cracking
 - Log in to the Hashtopolis dashboard and view the agents
@@ -142,7 +142,7 @@ If some agents are not coming on-line, check the config.json for a missing vouch
       - pwgen 7 1
 - Put the passwords in a file passwords.txt (example passwords.txt file [here](hashtopolis/passwords.txt))
 - Create a list of md5 hashes from these passwords
-  - Since we are cracking using very old NUCs here, the weak d5 hash is choice here
+  - Since we are cracking using very old NUCs here, the weak md5 hash is the best choice here
   - Create the hashes:
     - `sh hash-passwords.sh`
     - Reads `passwwords.txt` and outputs `hashes.txt`
@@ -173,12 +173,13 @@ If some agents are not coming on-line, check the config.json for a missing vouch
   - Task notes: **demo**
   - Color: **A00000**
   - Click **Create Task**
-  - Re-open your task **Demo**
+- Re-open your task **Demo**
   - Under Assigned agents
     - Node that your agents are assigned to the task, and the ability to *Unassign* agents from the task
     - WARNING if the task assignment fails, modify the agent(s) to be “trusted” with secret data
 
 ### Watch the Job Run
+Allow a few minutes for the tasks to get assigned and started.
 - Click **Tasks** -> **Show Tasks**
   - Note the progress of "Dispatched/Searched" as it tracks the percentage complete
   - Note the "Cracked" column, showing how many hashes were cracked; click the link to view the cracked hashes
