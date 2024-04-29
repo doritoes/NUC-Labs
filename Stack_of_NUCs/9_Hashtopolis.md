@@ -239,7 +239,9 @@ What do you expect these tasks to crack? Allow a few minutes for the tasks to ge
 - Click **Chunk activity**
 - How are the two jobs with the same priority handled?
   - What happens if you change `brute8` to have a Priority of 8?
-  - What happens if you change `brute8` to have a Max agents of 1?SO the changes take place immediately, or after a chunk is completed?
+  - What happens if you change `brute8` to have a Priority of 15?
+  - What happens if you change `brute8` to have a Max agents of 1?
+  - Do the changes take place immediately, or after a chunk is completed?
   - Note that the default chunk size is set at 600 seconds (time, not amount of data). How does this change your understanding of priortization and queue management?
 
 ### After the Jobs Complete
@@ -275,24 +277,58 @@ When you are ready to clean up:
 Try cracking other Hashes
 
 ### Ubuntu
+Starting in Unbunrtu 22.04 and onward, the hash method changed from `sha512crypt` to `yescrypt`. Hashcat does not support yescrypt at of this writing (April 2024). If the hash starts with $6$, sha512crypt method is used
+If the hash starts with $y$, yescrypt is in use..
+- If you have an Ubuntu 20.04 server, see the directions below for 20.04
+- If you have an Ubuntu 22.04 server, see the steps for creating a sha512crypt has for demonstration purpose
+- You can also find example hashes at https://hashcat.net/wiki/doku.php?id=example_hashes
+    
+#### Ubuntu Server 22.04+ LTS
+- On NUC 1
+  - Create an example shadow file entry
+~~~~
+python -c 'import crypt,getpass; print(getpass.getpass("Name: ")+":"+crypt.crypt(getpass.getpass(),crypt.mksalt(crypt.METHOD_SHA512)))'
+~~~~
+  - Name: **tryhackme**
+  - Password **password**
+  - The username, a colon, and the hash are displayed
+    - `$6$UOvIUOexKsN0YJlA$8Fqs6nx0wpnU8Tgov3Sy.jAOwsPEVzSQxAfr0MGnFIdvgDCIFHQAjTGKfBFsLTQfUsci6.3RzVUhy4c9OorWq1`
+- In Hashtopolis
+  - Create a hashlist
+  - name: Unix
+  - paste in the hash (starts with and includes "$6$")
+  - hashtype 1800 - sha512crypt, SHA512(UNIX)
+  - No check for salted hashes, separator
+  - No check for salt is in hex (only when salted hashes)
+- Create a task
+  - name: unix
+  - hashlist: Unix
+  - wordlist: (under T) rockyou.txt
+  - priority: 5
+  - attack command: `#HL# rockyou.txt`
+  - click **Create task**
+
+
+#### Ubuntu Server 20.04 LTS
 - On NUC 1
   - Create a user account name tryhackme on NUC 1 with a simple password, like `password`
   - Dump the hash for the user tryhackme
     - `sudo grep tryhackme/etc/shadow | cut -f 2 -d":"`
 - In Hashtopolis
   - Create a hashlist
-  - name Unix
+  - name: Unix
   - paste in the hash (starts with and includes "$6$")
     - you can also use the example hash from https://hashcat.net/wiki/doku.php?id=example_hashes
   - hashtype 1800 - sha512crypt, SHA512(UNIX)
   - No check for salted hashes, separator
   - No check for salt is in hex (only when salted hashes)
 - Create a task
-  - name unix
-  - hashlist Unix
-  - worklist rockyou.txt
-  - priority 5
+  - name: unix
+  - hashlist: Unix
+  - workdist: rockyou.txt
+  - priority: 5
   - attack command: `#HL# rockyou.txt`
+  - click **Create task**
 
 ### Windows
 Reference: https://hashcat.net/wiki/doku.php?id=example_hashes
@@ -316,10 +352,10 @@ Steps:
 2. On NUC 1
     - Copy the SAM and SYSTEM registry hives to NUC 1
     - Install impacket-secretsdump
-      - sudo apt install python3-impacket -y
+      - `sudo apt install python3-impacket -y`
     - Dump the system keys and hashes
-      - If the files are named “sam” and “system”
-        - impacket-secretsdump -sam SAM -system SYSTEM LOCAL
+      - If the files are named "sam" and "system"
+        - `impacket-secretsdump -sam SAM -system SYSTEM LOCAL`
     - For your test user (i.e. person) there are two hashes
       - one for LM authentication, (deprecated and only populated with a value to ensure the syntax remains constant)
       - other is the NTLM string
