@@ -237,6 +237,10 @@ What do you expect these tasks to crack? Allow a few minutes for the tasks to ge
     - Click Dispatched chunks - "Show all" to view progress, and how log it took to complete each chunk (more powerful agents will be faster and take less time)
 - Click **Agents** -> **Agents status**
 - Click **Chunk activity**
+- How are the two jobs with the same priority handled?
+  - What happens if you change `brute8` to have a Priority of 8?
+  - What happens if you change `brute8` to have a Max agents of 1?SO the changes take place immediately, or after a chunk is completed?
+  - Note that the default chunk size is set at 600 seconds (time, not amount of data). How does this change your understanding of priortization and queue management?
 
 ### After the Jobs Complete
 - Wait for your jobs to complete
@@ -261,7 +265,7 @@ Before you clean up Hashtopolis, take a look under **Learn More** for more hands
 When you are ready to clean up:
 - `ansible-playbook remove-hashtopolis.yml`
 
-**NOTE** After running playbook to remove Hashtoplis, I found that upon reinstalling the server, the Hashtopolis server PHP stopped working. The following are commands to fix that issue.
+**NOTE** After running the playbook to remove Hashtoplis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are commands to fix that issue.
 - sudo apt install php-fpm
 - sudo a2enmod proxy_fcgi setenvif
 - sudo a2enconf php8.1-fpm
