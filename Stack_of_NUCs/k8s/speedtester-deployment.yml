@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speedtester
+  labels:
+    run: speedtester
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      run: speedtester
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: speedtester
+    spec:
+      containers:
+      - name: speedtester
+        image: docker.io/doritoes/speedtester:latest
+        livenessProbe:
+          httpGet:
+            path: /favicon.ico
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
