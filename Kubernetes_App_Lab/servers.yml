@@ -1,0 +1,66 @@
+---
+Server_List:
+  - Name: controller
+    Deploy: true
+    Configuration:
+      Storage:
+        DiskSize: 61440
+      Compute:
+        MemorySize: 2048
+        CPUs: 2
+      OS:
+        User: ubuntu
+        Password: "virtualbox1!"
+        Hostname: controller
+        IPv4Address: 192.168.99.201/24
+        IPv4Gateway: 192.168.99.254
+        IPv4DNS: 192.168.99.254
+        SearchDomain: lablocal
+  - Name: node1
+    Deploy: true
+    Configuration:
+      Storage:
+        DiskSize: 256000
+      Compute:
+        MemorySize: 2048
+        CPUs: 2
+      OS:
+        User: ubuntu
+        Password: "virtualbox1!"
+        Hostname: node1
+        IPv4Address: 192.168.99.202/24
+        IPv4Gateway: 192.168.99.254
+        IPv4DNS: 192.168.99.254
+        SearchDomain: lablocal
+  - Name: node2
+    Deploy: true
+    Configuration:
+      Storage:
+        DiskSize: 61440
+      Compute:
+        MemorySize: 2048
+        CPUs: 1
+      OS:
+        User: ubuntu
+        Password: "virtualbox1!"
+        Hostname: node2
+        IPv4Address: 192.168.99.203/24
+        IPv4Gateway: 192.168.99.254
+        IPv4DNS: 192.168.99.254
+        SearchDomain: lablocal
+  - Name: node3
+    Deploy: true
+    Configuration:
+      Storage:
+        DiskSize: 61440
+      Compute:
+        MemorySize: 2048
+        CPUs: 1
+      OS:
+        User: ubuntu
+        Password: "virtualbox1!"
+        Hostname: node3
+        IPv4Address: 192.168.99.204/24
+        IPv4Gateway: 192.168.99.254
+        IPv4DNS: 192.168.99.254
+        SearchDomain: lablocal
