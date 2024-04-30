@@ -7,6 +7,7 @@ The first step is to install Ubuntu 22.04 Desktop on the host system. It's a goo
 *See Tutorial: [Install Ubuntu Desktop](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview)*
 
 ## Update and Install Packages
+🚧 Continue here...
 
 *See Tutorial: [Enable SSH](https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/)*
 
