@@ -1,0 +1,52 @@
+#cloud-config
+autoinstall:
+  version: 1
+  ssh:
+    install-server: true
+    allow-pw: false
+  storage:
+    layout:
+      name: lvm
+      match:
+        size: largest
+  network:
+    network:
+      version: 2
+      ethernets:
+        zz-all-en:
+          match:
+            name: "en*"
+          dhcp4: no
+          addresses: [{{ item.Configuration.OS.IPv4Address }}]
+          gateway4: {{ item.Configuration.OS.IPv4Gateway }}
+          nameservers:
+              addresses: [{{ item.Configuration.OS.IPv4DNS }}]
+  user-data:
+    disable_root: true
+    timezone: America/New_York
+    package_upgrade: true
+    packages:
+    - network-manager
+    - lldpd
+    - git
+    - python3-pip
+    - ansible
+    - arp-scan
+    users:
+      - name: {{ Global.username }}
+        primary_group: users
+        groups: sudo
+        lock_passwd: true
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - "{{ Global.ssh_key }}"
+        sudo: ALL=(ALL) NOPASSWD:ALL
+  ansible:
+    install_method: pip
+    package_name: ansible
+    galaxy:
+      actions:
+        - ["ansible-galaxy", "collection", "install", "community.general"]
+  late-commands:
+    - echo "{{ item.Configuration.OS.Hostname }}" > /target/etc/hostname
+    - echo "Ubuntu 22.04 LTS \nIP - $(hostname -I)\n" > /target/etc/issue
