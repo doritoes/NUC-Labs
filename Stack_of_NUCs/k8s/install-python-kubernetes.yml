@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install pip
+      apt:
+        name: python-pip
+    - name: Copy kube-config
+      copy:
+      src: /etc/kubernetes/admin.conf
+      dest
+      remote_src: true
+    - name: Install Kubernetes python package
+      ansible.builtin.pip:
+        name: kubernetes
