@@ -1,0 +1,35 @@
+---
+- hosts: master
+  become_user: ansible
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Deploy speedtester2
+      k8s:
+        state: present
+        definition:
+          api_version: 1
+          kind: Deployment
+          metadata:
+            name: speedtester2
+            labels:
+              run: speedtester2
+          spec:
+            selector:
+              matchLabels:
+                run: speedtester2
+            replicas: 2
+            template:
+              metadata:
+                labels:
+                  run: speedtester2
+              spec:
+                containers:
+                  - name: speedtester2
+                    image: docker.io/doritoes/speedtester:latest
+                    livenessProbe:
+                      httpGet:
+                        path: /favicon.ico
+                        port: 80
+                      initialDelaySeconds: 3
+                      periodSeconds: 3
