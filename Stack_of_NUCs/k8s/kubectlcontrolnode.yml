@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Update APT packages
+      apt:
+        update_cache: true
+
+    - name: Add Kubernetes apt-key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Add Kubernetes' APT repository
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: 'kubernetes'
+
+    - name: Install Kubectl
+      apt:
+        name: kubectl=1.26.*
+        state: present
+        force: true  # allow downgrades
