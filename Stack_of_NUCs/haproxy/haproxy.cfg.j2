@@ -1,0 +1,24 @@
+# ------------------------
+# main frontend which proxys to the backends
+# ------------------------
+frontend main
+    bind *:8080
+    acl url_static  path_beg    -i /static /images /javascript /stylesheets
+    acl url_static  path_end    -i .jpg .gif .png .css .js
+ 
+    use_backend static  if url_static
+    default_backend app
+# ------------------------
+# static backend for serving up images, stylesheets and such
+# ------------------------
+backend static
+    balance roundrobin
+    server  static 127.0.0.1:4331 check
+# ------------------------
+# round robin balancing between the various backends
+# ------------------------
+backend app
+    balance roundrobin
+{% for ip in groups['nodes'] %}
+    server app{{ loop.index}} {{ ip }}:80 check
+{% endfor %}
