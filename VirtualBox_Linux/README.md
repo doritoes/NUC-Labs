@@ -25,8 +25,6 @@ References
 - https://rutgerblom.com/2020/07/27/automated-ubuntu-server-20-04-installation-with-ansible/ ([Gitlab](https://github.com/rutgerblom/ubuntu-autoinstall/blob/default/DeployUbuntu.yml))
 - https://www.pugetsystems.com/labs/hpc/ubuntu-22-04-server-autoinstall-iso/
 
-🚧 Continue working here...
-
 ## Overview
 Before starting the Lab, you might review [Preparing NUCs for Labs](https://www.unclenuc.com/lab:preparing_nucs_for_labs). The will help you prepare the NUC for use.
 
