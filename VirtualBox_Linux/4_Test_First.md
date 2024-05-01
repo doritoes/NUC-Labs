@@ -45,10 +45,76 @@ Even though each node receives its DNS information via DHCP, Ubuntu 22.04 will a
   - `ansible-playbook -i hosts disable_dns_stub.yml`
 
 ## Delete our First VM
-Congratulations on your first VM deployed using Ansible on Virtualbox!
+Congratulations on your first VM deployed using Ansible on Virtualbox! Let's look at using Ansible to remove this first VM.
+
+Exit out of the user `ansible`.
+
+### Simple Playbeook
+- Create playbook `destroy_vm_1.yml` ([destroy_vm_1.yml](destroy_vm_1.yml))
+- Run the playbook
+  - `ansible-playbook -i hosts destroy_vm_1.yml`
+- Note how it fails
+
+### Playbook Attempt 2
+- Create playbook `destroy_vm_2.yml` ([destroy_vm_2.yml](destroy_vm_2.yml))
+- Run the playbook (the VM should be running)
+  - `ansible-playbook -i hosts destroy_vm_2.yml`
+- Note how it fails
+  - VM stops, but not removed
+  - if you run it a second time, it fails on the power off command
+
+💡 What ideas do you have to make the script work? Perhaps shutting down the VM if necessary before removing it? There are many ways.
+
+- Bring the VM back up
+  -  `vboxmanage startvm my_vm`
+  -  if you are using a remote SSH session you can't start a gui session; instead use
+    -  `vboxmanage startvm my_vm –type headless`
+- Instead of the graceful poweroff method above, you can also experiment with
+  - `vboxmanage controlvm my_vm poweroff`
+  - Does this take less time than a graceful shutdown?
+- Research another option
+  - `vboxmanage controlvm my_vm poweroff –type emergencystop`
+  - Why would you only use this option if you didn't care of the VM was corrupted?
+
+### Better Playbooks
+This is a quick and dirty solution, no better than running the commands manually. It does wait a minute "in case it's on".
+- Create playbook `destroy_vm_3.yml` ([destroy_vm_3.yml](destroy_vm_3.yml))
+- Run the playbook (the VM should be running)
+  - `ansible-playbook -i hosts destroy_vm_3.yml`
+
+Using `ignore_errors` can be useful. Test this out and see how removes the VM whether it is “on” or “off”.
+- Create playbook `destroy_vm_4.yml` ([destroy_vm_4.yml](destroy_vm_4.yml))
+- Run the playbook (try with the VM running and again when stopped)
+  - `ansible-playbook -i hosts destroy_vm_4.yml`
+
+The following is a rather vicious one-liner to remove the VM, running or not. The use of &&' (and) and || (or) to handle the error states. The VM is gone whether it was up or down.
+~~~~
+vboxmanage controlvm my_vm poweroff --type emergencystop && vboxmanage unregistervm --delete my_vm || vboxmanage unregistervm --delete my_vm
+~~~~
+However you cannot just put this one-liner into a playbook. Only the first command completes, or if it fails it just exists.
+- Create playbook `destroy_vm_5.yml` ([destroy_vm_5.yml](destroy_vm_5.yml))
+- Run the playbook (try with the VM running and again when stopped)
+  - `ansible-playbook -i hosts destroy_vm_5.yml`
+
+Using the pipe (|) to run multiple commands doesn't solve the issue. If the VM is off, it is deleted successfully. But if it's on, the VM is powered off but not removed.
+- Create playbook `destroy_vm_6.yml` ([destroy_vm_5.yml](destroy_vm_6.yml))
+- Run the playbook (try with the VM running and again when stopped)
+  - `ansible-playbook -i hosts destroy_vm_6.yml`
+
+## Why So Complicated?
+Oracle Virtualbox doesn't have the nice modules for Ansible that VMware vCenter has. The GUI interface is the easiest way to manage virtual machines, but we can do the changes by command line.
+
+Ansible can do the logic we want, but it's not straightforward:
+1. Is the VM powered on? How can we check that with Ansible?
+    - If yes, power if off
+2. Is the VM off now?
+3. Delete the VM
+4. And yes, error handling
+
+`wait_for` is a useful command. You wait for an ssh probe on stop working on the server. Or we could store the VM servers we create in a local table by VM, hostname name and IP. Our scripts could use that data.
 
 ## Learn More
-## Rebooting by Group
+### Rebooting by Group
 Here is an example of a playbook to reboot the servers in the group [servers].
 - `reboot_servers.yml` ([reboot_servers.yml](reboot_servers.yml))
 
