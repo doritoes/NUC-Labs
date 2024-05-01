@@ -48,11 +48,18 @@ The first step is to install Ubuntu 22.04 Desktop on the host system.
 [Test First VM](4_Test_First.md)
 
 ### Deploy our first fleet of VMs
-🚧 Continue building here...
 [Deploy Fleet of VMs](5_Deploy_Fleet.md)
 
+### Deploy a Web Application to our Fleet of VMs
+In this step will deploy a placeholder web application to the servers. If you would like see similar automation using a proper demonstation web app, see [Kubernetes App Lab](/Kubernetes_App_Lab/README.md).
+
+[Deploy Web App](6_Deploy_Web_App.md)
+🚧 Continue building here...
+
 ### Tear Down the Lab
+🚧 Continue building here...
 [Destroy Fleet of VMs](6_Destroy_Fleet.md)
 
 ### Review
+🚧 Continue building here...
 [Review and Next Steps](7_Review.md)
