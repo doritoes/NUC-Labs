@@ -1,0 +1,77 @@
+---
+- hosts: all
+  name: configure_fleet.yml
+  become: true
+  vars_files:
+    - variables_fleet.yml
+    - servers.yml
+  tasks:
+    - name: Look up information by IP
+      when: item.Configuration.OS.IPv4Address.split('/')[0] == inventory_hostname
+      set_fact:
+        matching_system: "{{ item }}"
+      loop: "{{ Server_List }}"
+    - name: Wait for server to be up
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        state: started
+        port: 22
+        delay: 0
+        timeout: 60
+    - name: Extend logical volume
+      command: lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+      when: matching_system.Configuration.Storage.DiskSize > 20470
+    - name: Resize filesystem
+      command: resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+      when: matching_system.Configuration.Storage.DiskSize > 20470
+    - name: Add user
+      user:
+        name: "{{ matching_system.Configuration.OS.User }}"
+        shell: /bin/bash
+        home: "/home/{{ matching_system.Configuration.OS.User }}"
+        password: "{{ matching_system.Configuration.OS.Password | password_hash('sha512') }}"
+        groups: sudo
+        append: true
+    - name: Enable ssh password authentication step 1
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        line: "PasswordAuthentication yes"
+        state: present
+        create: true
+    - name: Enable ssh password authentication step 2
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: '^\s*#+PasswordAuthentication.*$'
+        replace: "PasswordAuthentication yes"
+    - name: Enable ssh password authentication step 3
+      replace:
+        path: /etc/ssh/sshd_config
+        regexp: '^\s*#*KbdInteractiveAuthentication.*$'
+        replace: "KbdInteractiveAuthentication yes"
+    - name: restart ssh
+      service:
+        name: ssh
+        state: restarted
+    - name: Update and upgrade all apt packages
+      apt: update_cache=true force_apt_get=true state=latest
+    - name: Check if reboot is required
+      register: file
+      stat: path=/var/run/reboot-required get_md5=no
+    - name: Reboot the server if required
+      reboot:
+        reboot_timeout: 180
+      when: file.stat.exists == true
+    - name: Disable DNS stub listener
+      ini_file: dest=/etc/systemd/resolved.conf section=Resolve option=DNSStubListener value=no backup=yes
+      tags: configuration
+    - name: Restart NetworkManager
+      systemd:
+        name: NetworkManager
+        state: restarted
+    - name: Restart systemd-resolved
+      systemd:
+        name: systemd-resolved
+        state: restarted
+    - name: daemon-reload
+      systemd:
+        daemon_reload: true
