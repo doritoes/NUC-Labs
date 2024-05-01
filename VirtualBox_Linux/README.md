@@ -40,11 +40,9 @@ The first step is to install Ubuntu 22.04 Desktop on the host system.
 
 [Setup Host](1_Host.md)
 
-### Install Oracle VirtualBox using Ansible
-
-### Customize the user-data File for Unattended Installation
-
 ### Generate Custom Unattended Ubuntu Install ISO
+[Custom ISO](2_Custom_ISO.md)
+
 
 ### Deploy our first Ubuntu VM to Oracle VirtualBox using Ansible
 
