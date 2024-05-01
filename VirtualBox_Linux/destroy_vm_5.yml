@@ -1,0 +1,12 @@
+---
+- hosts: localhost  # Run on the local machine
+  connection: local
+  gather_facts: false
+  vars_files:
+    - variables.yml
+  vars:
+    vm_name: my_vm
+
+  tasks:
+  - name: Shut down VM with this name
+    shell: "{{ Global.vboxmanage_path }} controlvm {{ vm_name }} poweroff --type emergencystop | {{ Global.vboxmanage_path }} unregistervm --delete {{ vm_name }}"
