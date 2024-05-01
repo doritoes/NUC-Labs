@@ -2,6 +2,7 @@
 In this step you will create a playbook to deploy an Ubuntu server using Virtualbox.
 
 ## Create Playbook
+- Create playbook `create_vm.yml` from this repo ([create_vm.yml](create_vm.yml))
 - Run the Playbook
   - `ansible-playbook create_vm.yml`
  
