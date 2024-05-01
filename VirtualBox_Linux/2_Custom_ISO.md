@@ -2,13 +2,13 @@
 A custom “user-data” file is required for an unattended installation of Ubuntu. We will create this template file for use in our Ansible playbook.
 
 ## Create the user-data Template for Unattended Installation
-- Create the jinja template `user-data.j2` from this repo ([user-data.j2](VirtualBox_Linux/user-data.j2))
+- Create the jinja template `user-data.j2` from this repo ([user-data.j2](user-data.j2))
 - Examine the variables used by the template
   - they are enclosed in `{{ }}`
   - the values will come from the `variables.yml` file
 
 ## Create the variables.yml File
-- Create the file `variables.yml` ([variables.yml](VirtualBox_Linux/variables.yml))
+- Create the file `variables.yml` ([variables.yml](variables.yml))
 - <ins>Modify</ins> the file
   - Replace **bridge_interface_name** with the network interface you will bridge the VMs to
     - Linux: use `ip a` command to list interfaces
@@ -20,7 +20,7 @@ A custom “user-data” file is required for an unattended installation of Ubun
   - Set **ssh_key** to the value from the [previous step](1_Host.md#generate-keys-for-management)
     
 ## Generate Custom Unattended Ubuntu Install ISO
-- Create the file `create_custom_iso.yml` ([create_custom_iso](VirtualBox_Linux/create_custom_iso))
+- Create the file `create_custom_iso.yml` ([create_custom_iso](create_custom_iso))
 - Run the playbook
   - `ansible-playbook create_custom_iso.yml --ask-become-pass`
   - provide the sudo password when prompted
