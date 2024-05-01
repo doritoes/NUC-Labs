@@ -20,7 +20,7 @@ A custom “user-data” file is required for an unattended installation of Ubun
   - Set **ssh_key** to the value from the [previous step](1_Host.md#generate-keys-for-management)
     
 ## Generate Custom Unattended Ubuntu Install ISO
-- Create the file `create_custom_iso.yml` ([create_custom_iso](create_custom_iso))
+- Create the file `create_custom_iso.yml` ([create_custom_iso.yml](create_custom_iso.yml))
 - Run the playbook
   - `ansible-playbook create_custom_iso.yml --ask-become-pass`
   - provide the sudo password when prompted
