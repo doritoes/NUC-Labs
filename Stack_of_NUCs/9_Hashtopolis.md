@@ -248,7 +248,7 @@ What do you expect these tasks to crack? Allow a few minutes for the tasks to ge
 - Wait for your jobs to complete
   - Click **Lists** > **Cracks** to view cracked passwords
     - Brute 7:
-      - *none*
+      - ieMuth6
     - Brute 8:
       - P@$$w0rd
     - Not cracked
