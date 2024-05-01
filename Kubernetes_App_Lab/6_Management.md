@@ -17,8 +17,24 @@ Strategies that requires customization or specialized tools:
 References:
 - https://spot.io/resources/kubernetes-autoscaling/5-kubernetes-deployment-strategies-roll-out-like-the-pros/
 
+🚧 Continue work here...
 ## Rolling Deployment
-## Replace Deployment
-## Kubernetes Dashboard
-## Learn More
+### Open a Second Session to Monitor the Process
+### Update the Image in k8s-deployment-web.yml
+### Kick Off the Update
+### Testing and Troubleshooting
+### Rollback
+## Improvements
 
+## Replace Deployment
+### Open a Second Session to Monitor the Process
+### Update Deploy Strategy
+### Kick Off the Update
+## Kubernetes Dashboard
+### Install
+### Create Service Account
+### Launch the Dashboard
+## Learn More
+### Ramped Slow Rollout
+### Best Effort Controlled Rollout
+### Blue-Green Deployments
