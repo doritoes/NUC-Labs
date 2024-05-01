@@ -21,7 +21,7 @@ You should now be able to SSH to your Host.
 *See Tutorial: [Enable SSH](https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-20-04/)*
 
 ## Configure User ansible
-*See Tutorial: [How to Create Users in Linux (useradd command)](https://linuxize.com/post/how-to-create-users-in-linux-using-the-useradd-command/)
+*See Tutorial: [How to Create Users in Linux (useradd command)](https://linuxize.com/post/how-to-create-users-in-linux-using-the-useradd-command/)*
 1. Create the user ansible and grant it sudo permissions. Enter a password for the user when prompted.
 ~~~~
 sudo useradd -m -s /bin/bash ansible
