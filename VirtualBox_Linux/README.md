@@ -48,6 +48,7 @@ The first step is to install Ubuntu 22.04 Desktop on the host system.
 [Test First VM](4_Test_First.md)
 
 ### Deploy our first fleet of VMs
+🚧 Continue building here...
 [Deploy Fleet of VMs](5_Deploy_Fleet.md)
 
 ### Tear Down the Lab
