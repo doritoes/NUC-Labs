@@ -1,0 +1,105 @@
+---
+- hosts: localhost  # Run actions on the local machine
+  name: create_custom_iso.yml
+  connection: local
+  gather_facts: false
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: Package requirements
+      apt:
+        pkg:
+          - p7zip-full
+          - xorriso
+        update_cache: true
+      become: true
+    - name: Create working directory
+      file:
+        path: "{{ Global.workingdir }}"
+        state: directory
+        mode: "755"
+    - name: Download Ubuntu ISO
+      get_url:
+        url: "{{ Global.ubuntu_iso }}"
+        dest: "{{ Global.workingdir }}/jammy-live-server-amd64.iso"
+        force: false
+    - name: Create source files directory
+      file:
+        path: "{{ Global.workingdir }}/source-files"
+        state: directory
+        mode: "755"
+    - name: Extract Ubuntu ISO
+      command: "7z -y x {{ Global.workingdir }}/{{ Global.ubuntu_iso_filename }} -o{{ Global.workingdir }}/source-files"
+      changed_when: false
+    - name: Add write permission to extracted files
+      ansible.builtin.command: "chmod -R +w {{ Global.workingdir }}/source-files"    # Using chmod as Ansible (Python) can't handle the recursion depth on the Ubuntu ISO
+      changed_when: false
+    ## Start workaround issue with Ubuntu autoinstall
+    ## Details of the issue and the workaround: https://askubuntu.com/questions/1394441/ubuntu-20-04-3-autoinstall-with-embedded-user-data-crashing-i-got-workaround
+    - name: Extract the Packages.gz file on Ubuntu ISO
+      ansible.builtin.command: "gunzip -f {{ Global.workingdir }}/source-files/dists/jammy/main/binary-amd64/Packages.gz --keep"
+      changed_when: false
+    ## End workaround issue with Ubuntu autoinstall
+    - name: Ensure BOOT directory not there
+      file: path="{{ Global.workingdir }}/BOOT" state=absent
+    - name: Move [BOOT] out of ISO extraction directory
+      ansible.builtin.command: "mv {{ Global.workingdir }}/source-files/'[BOOT]' {{ Global.workingdir }}/BOOT"
+      changed_when: false
+    - name: Edit grub.cfg to modify menu
+      blockinfile:
+        path: "{{ Global.workingdir }}/source-files/boot/grub/grub.cfg"
+        create: true
+        block: |
+          menuentry "Autoinstall Ubuntu Server" {
+             set gfxpayload=keep
+             linux   /casper/vmlinuz quiet autoinstall ds=nocloud\;s=/cdrom/server/  ---
+             initrd  /casper/initrd
+          }
+        insertbefore: 'menuentry "Try or Install Ubuntu Server" {'
+        state: present
+    - name: Edit grub.cfg to set timeout to 1 second
+      replace:
+        path: "{{ Global.workingdir }}/source-files/boot/grub/grub.cfg"
+        regexp: '^(set timeout=30)$'
+        replace: 'set timeout=5'
+    - name: Create directory to store user-data and meta-data
+      file:
+        path: "{{ Global.workingdir }}/source-files/server"
+        state: directory
+        mode: "755"
+    - name: Create empty meta-data file in directory
+      file:
+        path: "{{ Global.workingdir }}/source-files/server/meta-data"
+        state: touch
+        mode: "755"
+    - name: Copy user-data file to directory using template
+      template:
+        src: ./user-data.j2
+        dest: "{{ Global.workingdir }}/source-files/server/user-data"
+        mode: "755"
+    - name: Create custom ubuntu ISO
+      command: "xorriso -as mkisofs -r \
+               -V 'Ubuntu 22.04 LTS AUTO (EFIBIOS)' \
+               -o ../{{ Global.new_iso_filename }} \
+               --grub2-mbr ../BOOT/1-Boot-NoEmul.img \
+               -partition_offset 16 \
+               --mbr-force-bootable \
+               -append_partition 2 28732ac11ff8d211ba4b00a0c93ec93b ../BOOT/2-Boot-NoEmul.img \
+               -appended_part_as_gpt \
+               -iso_mbr_part_type a2a0d0ebe5b9334487c068b6b72699c7 \
+               -c '/boot.catalog' \
+               -b '/boot/grub/i386-pc/eltorito.img' \
+               -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info \
+               -eltorito-alt-boot \
+               -e '--interval:appended_partition_2:::' \
+               -no-emul-boot \
+               ."
+      args:
+        chdir: "{{ Global.workingdir }}/source-files/"
+      changed_when: false
+    - name: Copy custom ISO
+      copy:
+        src: "{{ Global.workingdir }}/{{Global.new_iso_filename}}"
+        dest: "{{ Installer.new_iso_path }}"
+    - name: Delete working directory
+      file: path="{{ Global.workingdir }}" state=absent
