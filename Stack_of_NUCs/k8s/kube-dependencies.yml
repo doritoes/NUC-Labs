@@ -1,19 +1,31 @@
 ---
-- hosts: all
+- name: Install K8s dependencies
+  hosts: all
   become: true
   tasks:
-    - fail:
+    - name: Check platform
+      fail:
         msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
       when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '22.04'
 
-    - name: Update packages, install packages
+    - name: Update apt-cache and do dist upgrade
       apt:
-        name: curl
-        state: present
-        update_cache: true        
+        update_cache: true
+        upgrade: dist
+        cache_valid_time: 3600
 
-    - name: Reboot and wait for reboot to complete
+    - name: Install packages
+      apt:
+        name: ca-certificates, curl
+        state: present
+        
+    - name: Check if reboot required
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+    - name: Reboot if required
       reboot:
+      when: reboot_required_file.stat.exists == true
 
     - name: Disable SWAP (Kubeadm requirement)
       shell: |
@@ -76,22 +88,22 @@
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         state: present
 
-    - name: Add K8a apt repository
+    - name: Add K8s apt repository
       block:
         - name: get gpg key
-          get_url:
+          ansible.builtin.get_url:
             url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
             dest: /etc/apt/keyrings/kubernetes.asc
         - name: add k8s apt repository
-          apt_repository:
-            repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
             state: present
         - name: apt update
           apt:
             update_cache: yes
-        
-    - name: install K8s
+    - name: Install K8s
       apt:
         name: kubctl, kubelet, kubeadm
+        state: present
     - name: Reboot and wait for reboot to complete
       reboot:
