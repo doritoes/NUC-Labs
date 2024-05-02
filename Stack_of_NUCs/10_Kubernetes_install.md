@@ -18,6 +18,7 @@ References:
 - Log in to NUC2 as user `ansible`
 - Create the `k8s` directory
   - `mkdir /home/ansible/my-project/k8s`
+  - `cd /home/ansible/my-project/k8s`
 - Create the `inventory` file
   - Use the example `inventory` ([inventory](k8s/inventory))
   - Modify it to include the IP address of one of your ansible nodes under `[master]`
