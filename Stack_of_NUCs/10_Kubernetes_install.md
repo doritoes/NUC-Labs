@@ -41,6 +41,17 @@ Install some prerequisites on ALL the Kubernetes nodes
 - Run the playbook
   - `ansible-playbook kube-dependencies.yml`
 
+🚧 Continue work here...
+
+**FAILED STEP**
+~~~~
+Failed to update apt cache:
+The repository 'https://apt.kubernetes.io kubernetes-xenial Release' does not have a Release file.
+Updating from such a repository can't be done securely, and is therefore disabled by default.
+See apt-secure(8) manpage for repository creation and user configuration details.
+https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details."
+~~~~
+
 ## Install Kubernetes Master Node
 Configure kubernetes cluster on master node
 - Create the `master.yml` playbook ([master.yml](k8s/master.yml))
