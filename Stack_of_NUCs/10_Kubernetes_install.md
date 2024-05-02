@@ -43,7 +43,7 @@ Install some prerequisites on ALL the Kubernetes nodes
 
 🚧 Continue work here...
 
-**FAILED STEP**
+**FAILED STEP - Both Lab 1 and Lab 3**
 ~~~~
 Failed to update apt cache:
 The repository 'https://apt.kubernetes.io kubernetes-xenial Release' does not have a Release file.
