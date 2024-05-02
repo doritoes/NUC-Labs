@@ -79,9 +79,9 @@
     - name: Add K8a apt repository
       block:
         - name: get gpg key
-        get_url:
-          url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
-          dest: /etc/apt/keyrings/kubernetes.asc
+          get_url:
+            url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+            dest: /etc/apt/keyrings/kubernetes.asc
         - name: add k8s apt repository
           apt_repository:
             repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
