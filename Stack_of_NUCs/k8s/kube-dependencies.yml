@@ -95,7 +95,7 @@
             url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
             dest: /etc/apt/keyrings/kubernetes.asc
         - name: add k8s apt repository
-          ansible.builtin.apt_repository:
+          apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
             state: present
         - name: apt update
@@ -103,7 +103,7 @@
             update_cache: yes
     - name: Install K8s
       apt:
-        name: kubctl, kubelet, kubeadm
+        name: kubectl, kubelet, kubeadm
         state: present
     - name: Reboot and wait for reboot to complete
       reboot:
