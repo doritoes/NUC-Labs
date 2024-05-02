@@ -5,10 +5,13 @@ Now we are going to use Ansible to install Kubernetes with:
 - one NUC "master node" this we can call NUC 3
 - remaining NUCs as "worker nodes" on which containerized applications will run
 
+⚠️ In 2024 the repo changed and broke a lot of older automation scripts ([link](https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd))
+
 Purpose:
 - Demonstrate a running a complex workload of web applications on Kubernetes
 
 References:
+- https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd
 - [Kubernetes: Up & Running](https://www.goodreads.com/book/show/26759355-kubernetes) by O'Reilly
 - https://github.com/brettplarson/nuctestlab
 - https://www.linuxtechi.com/install-kubernetes-on-ubuntu-22-04/
