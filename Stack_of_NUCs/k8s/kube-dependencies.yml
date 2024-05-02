@@ -83,18 +83,13 @@
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
         filename: "docker-{{ ansible_distribution_release }}"
 
-    - name: Add Kubernetes apt-key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-
     - name: Add K8s apt repository
       block:
-        - name: get gpg key
+        - name: Get K8s GPG key
           ansible.builtin.get_url:
             url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
             dest: /etc/apt/keyrings/kubernetes.asc
-        - name: add k8s apt repository
+        - name: Add K8s apt repository
           apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
             state: present
