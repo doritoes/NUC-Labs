@@ -5,17 +5,19 @@ Now we are going to use Ansible to install Kubernetes with:
 - one NUC "master node" this we can call NUC 3
 - remaining NUCs as "worker nodes" on which containerized applications will run
 
-⚠️ In 2024 the repo changed and broke a lot of older automation scripts ([link](https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd))
+⚠️ In 2024 the repo changed (Google vs community) and broke a lot of older automation scripts ([link](https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd)). This Lab uses the new repo.
+
+Quote: *"This process is evolving and is due to evolve again over the coming year or two. If you are interested, try searching for DEB822."*
 
 Purpose:
 - Demonstrate a running a complex workload of web applications on Kubernetes
 
 References:
-- https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd
+- New way - https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd
+- Legaacy repos - https://github.com/torgeirl/kubernetes-playbooks
 - [Kubernetes: Up & Running](https://www.goodreads.com/book/show/26759355-kubernetes) by O'Reilly
 - https://github.com/brettplarson/nuctestlab
 - https://www.linuxtechi.com/install-kubernetes-on-ubuntu-22-04/
-- https://github.com/torgeirl/kubernetes-playbooks
 
 ## Create a project folder for Kubernetes
 - Log in to NUC2 as user `ansible`
@@ -54,8 +56,6 @@ Updating from such a repository can't be done securely, and is therefore disable
 See apt-secure(8) manpage for repository creation and user configuration details.
 https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details."
 ~~~~
-
-See updated file: https://github.com/torgeirl/kubernetes-playbooks/blob/master/playbooks/kube-dependencies.yml
 
 ## Install Kubernetes Master Node
 Configure kubernetes cluster on master node
