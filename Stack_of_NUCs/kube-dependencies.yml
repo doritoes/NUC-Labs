@@ -1,6 +1,10 @@
 ---
 - hosts: all
   become: true
+  vars:
+    k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key"
+    k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+    k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.28/deb/"
   tasks:
     - fail:
         msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
@@ -69,16 +73,26 @@
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
         filename: "docker-{{ ansible_distribution_release }}"
 
-    - name: Add Kubernetes apt-key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
+    - name: Get Kubernetes package key
+      shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+      args:
+        creates: "{{ k8s_gpgpath }}"
 
-    - name: Add Kubernetes' APT repository
+    - name: Install Kubernetes repository
       apt_repository:
-        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        filename: kubernetes
+        repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
+
+    - name: Install Kubernetes Packages
+      package:
+        name: "{{item}}"
         state: present
-        filename: 'kubernetes'
+        force: yes
+        install_recommends: no
+        update_cache: true
+        loop:
+          - kubernetes-cni
+          - kubelet
 
     - name: Install Containerd
       apt:
@@ -105,17 +119,6 @@
         state: restarted
         enabled: true
         daemon-reload: true
-
-    - name: Install Kubelet
-      apt:
-        name: kubelet=1.26.*
-        state: present
-        update_cache: true
-
-    - name: Install Kubeadm
-      apt:
-        name: kubeadm=1.26.*
-        state: present
 
     - name: Enable the Kubelet service, and enable it persistently
       service:
@@ -154,8 +157,8 @@
 - hosts: master
   become: true
   tasks:
-    - name: Install Kubectl
+    - name: Install kubeadm
       apt:
-        name: kubectl=1.26.*
+        name: kubeadm
         state: present
         force: true  # allow downgrades
