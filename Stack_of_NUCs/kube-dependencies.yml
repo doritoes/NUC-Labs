@@ -71,11 +71,11 @@
 
     - name: Add K8s apt repository
       block:
-        - name: get gpg key
+        - name: Get gpg key
           ansible.builtin.get_url:
             url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
             dest: /etc/apt/keyrings/kubernetes.asc
-        - name: add k8s apt repository
+        - name: Add k8s apt repository
           apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
             state: present
@@ -167,5 +167,5 @@
   tasks:
     - name: Join worker nodes to the cluster
       command: "{{ hostvars[{{ hostvars[groups.master.0].inventory_hostname }}]['kubeadm_output']['stdout_lines'][0] }}"
-      when: "'kubeadm join' in hostvars['master']['kubeadm_output']['stdout']"
+      when: "'kubeadm join' in hostvars[groups.master.0]['kubeadm_output']['stdout']"
                                                                                          
