@@ -25,6 +25,9 @@ References:
   - Include the remaining IP addresses under `[workers]`
 - Create the `ansible.cfg` file ([ansible.cfg](k8s/ansible.cfg))
   - this tells Ansible to use the `inventory` file
+  - `ansible all -m ping`
+  - `ansible master -m ping`
+  - `ansible workers -m ping`
 
 ## Update the hosts files
 - Create the `updatehostsfile.yml` playbook ([updatehostsfile.yml](k8s/updatehostsfile.yml))
