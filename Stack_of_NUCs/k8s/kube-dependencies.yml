@@ -6,9 +6,11 @@
         msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
       when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '22.04'
 
-    - name: Update APT packages
+    - name: Update packages, install packages
       apt:
-        update_cache: true
+        name: curl
+        state: present
+        update_cache: true        
 
     - name: Reboot and wait for reboot to complete
       reboot:
