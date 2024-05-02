@@ -48,14 +48,16 @@ Install some prerequisites on ALL the Kubernetes nodes
 - Run the playbook
   - `ansible-playbook kube-dependencies.yml`
 
-This "fatal" error appeared, but the playbook didn't stop:
-
+⚠️ This "fatal" error appeared, but the playbook didn't stop:
 ~~~~
 TASK [Update apt-cache and do dist upgrade] ****************************************************************************
 fatal: [192.168.99.48]: FAILED! => {"changed": false, "msg": "E:Conflicting values set for option Signed-By regarding source https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /: /usr/share/keyrings/kubernetes-apt-keyring.gpg != /etc/apt/keyrings/kubernetes.asc, E:The list of sources could not be read."}
 ~~~~
 
 ## Install Kubernetes Master Node
+
+⚠️ This playbook also dies. Need to rework the ansible to set up kubernetes cluster.
+
 Configure kubernetes cluster on master node
 - Create the `master.yml` playbook ([master.yml](k8s/master.yml))
 - Run the playbook
