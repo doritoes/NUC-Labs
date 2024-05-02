@@ -267,7 +267,7 @@ Before you clean up Hashtopolis, take a look under **Learn More** for more hands
 When you are ready to clean up:
 - `ansible-playbook remove-hashtopolis.yml`
 
-**NOTE** In the base, after running the playbook to remove Hashtoplis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are the commands to fix that issue. However, this has not been confirmed on Ubuntu 22.04.
+**NOTE** In the Lab, after running the playbook to remove Hashtoplis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are the commands to fix that issue. However, this has not been confirmed on Ubuntu 22.04.
 ~~~~
 sudo apt install php-fpm
 sudo a2enmod proxy_fcgi setenvif
