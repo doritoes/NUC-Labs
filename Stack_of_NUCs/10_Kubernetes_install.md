@@ -14,7 +14,8 @@ Purpose:
 
 References:
 - New way - https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd
-- Legaacy repos - https://github.com/torgeirl/kubernetes-playbooks
+- Step by step: https://shirone.me/posts/set-up-k8s-with-ansible/
+- Legaacy way (old repos) - https://github.com/torgeirl/kubernetes-playbooks
 - [Kubernetes: Up & Running](https://www.goodreads.com/book/show/26759355-kubernetes) by O'Reilly
 - https://github.com/brettplarson/nuctestlab
 - https://www.linuxtechi.com/install-kubernetes-on-ubuntu-22-04/
@@ -46,15 +47,11 @@ Install some prerequisites on ALL the Kubernetes nodes
 - Run the playbook
   - `ansible-playbook kube-dependencies.yml`
 
-🚧 Continue work here...
+This "fatal" error appeared, but the playbook didn't stop:
 
-**FAILED STEP - Both Lab 1 and Lab 3**
 ~~~~
-Failed to update apt cache:
-The repository 'https://apt.kubernetes.io kubernetes-xenial Release' does not have a Release file.
-Updating from such a repository can't be done securely, and is therefore disabled by default.
-See apt-secure(8) manpage for repository creation and user configuration details.
-https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details."
+TASK [Update apt-cache and do dist upgrade] ****************************************************************************
+fatal: [192.168.99.48]: FAILED! => {"changed": false, "msg": "E:Conflicting values set for option Signed-By regarding source https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /: /usr/share/keyrings/kubernetes-apt-keyring.gpg != /etc/apt/keyrings/kubernetes.asc, E:The list of sources could not be read."}
 ~~~~
 
 ## Install Kubernetes Master Node
