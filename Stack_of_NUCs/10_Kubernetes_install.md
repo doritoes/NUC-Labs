@@ -52,6 +52,8 @@ See apt-secure(8) manpage for repository creation and user configuration details
 https://download.docker.com/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details."
 ~~~~
 
+See updated file: https://github.com/torgeirl/kubernetes-playbooks/blob/master/playbooks/kube-dependencies.yml
+
 ## Install Kubernetes Master Node
 Configure kubernetes cluster on master node
 - Create the `master.yml` playbook ([master.yml](k8s/master.yml))
