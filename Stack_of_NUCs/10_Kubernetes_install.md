@@ -77,17 +77,20 @@ Install kubectl on NUC 2 for automation with Kubernetes
   - `kubectl get nodes`
 
 ## Install kubectl on NUC1
-Install kubectl on NUC 1 for remote testing. In this case we will install manually, without Ansible.
-- Create the `kubectlcontrolnode.yml` playbook ([kubectlcontrolnode.yml](k8s/kubectlcontrolnode.yml))
-- Run the playbook
-  - `ansible-playbook kubectlcontrolnode.yml`
+Install kubectl on NUC 1 for remote testing. NUC1 does not have Ansible, so we will install it manually.
+~~~~
+sudo apt update && sudo apt install -y ca-certificates curl
+sudo curl -fsSLo /etc/apt/keyrings/kubernetes-apt-keyring.asc https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | sudo tee -a /etc/apt/sources.list
+sudo apt update && sudo apt install -y kubectl
+~~~~
 - ⚠️ Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
   - `scp -r <MASTER_UP>:/home/ansible/.kube ~/`
 - Test that it is working
   - `kubectl version`
   - `kubectl get nodes`
-
+  
 ## Learn More
 Do some tests with Kubernetes.
 
