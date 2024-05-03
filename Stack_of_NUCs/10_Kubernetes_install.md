@@ -129,7 +129,8 @@ Do some tests with Kubernetes.
     - `kubectl get pods`
 
 ### k9s
-You can experiment running k9s on your Kubernetes master node. 
+You can experiment running k9s on your Kubernetes master node. It's more interesting if you have pods running.
+
 💡 What is [k9s](https://github.com/derailed/k9s/releases)? K9s is a terminal-based UI to interact with your Kubernetes clusters. The aim of this project is to make it easier to navigate, observe and manage your deployed applications in the wild. K9s continually watches Kubernetes for changes and offers subsequent commands to interact with your observed resources.
 
 From the master k8s node:
