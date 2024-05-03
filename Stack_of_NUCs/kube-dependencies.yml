@@ -1,20 +1,22 @@
----
-- hosts: all
-  become: true
+- name: Install Kubernetes dependencies
+  hosts: all
+  become: yes
   tasks:
-    - name: Check platform
+    - name: Check platform version
       fail:
-        msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
+       msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
       when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '22.04'
     - name: Update apt-cache and do dist upgrade
       apt:
         update_cache: true
         upgrade: dist
         cache_valid_time: 3600
-    - name: Install packages
+    - name: install packages
       apt:
-        name: ca-certificates, curl, apt-transport-https
+        name: curl, ca-certificates, apt-transport-https
         state: present
+        update_cache: yes
+
     - name: Check if reboot required
       stat:
         path: /var/run/reboot-required
@@ -22,6 +24,7 @@
     - name: Reboot if required
       reboot:
       when: reboot_required_file.stat.exists == true
+
     - name: Disable SWAP (Kubeadm requirement)
       shell: |
         swapoff -a
@@ -31,11 +34,11 @@
         regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
         replace: '# \1'
 
-    - name: Q-Create an empty file for the Containerd module
+    - name: Create an empty file for the Containerd module
       copy:
         content: ""
         dest: /etc/modules-load.d/containerd.conf
-        force: false
+        force: no
     - name: Configure modules for Containerd
       blockinfile:
         path: /etc/modules-load.d/containerd.conf
@@ -43,12 +46,12 @@
              overlay
              br_netfilter
 
-    - name: Q-Create an empty file for Kubernetes sysctl params
+    - name: Create an empty file for Kubernetes sysctl params
       copy:
         content: ""
         dest: /etc/sysctl.d/99-kubernetes-cri.conf
-        force: false
-    - name: Q-Configure sysctl params for Kubernetes
+        force: no
+    - name: Configure sysctl params for Kubernetes
       lineinfile:
         path: /etc/sysctl.d/99-kubernetes-cri.conf
         line: "{{ item }}"
@@ -56,37 +59,34 @@
         - 'net.bridge.bridge-nf-call-iptables  = 1'
         - 'net.ipv4.ip_forward                 = 1'
         - 'net.bridge.bridge-nf-call-ip6tables = 1'
-
-    - name: Q-Apply sysctl params without reboot
+    - name: Apply sysctl params without reboot
       command: sysctl --system
 
     - name: Add Docker apt-key
-      apt_key:
+      get_url:
         url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
+        dest: /etc/apt/keyrings/docker-apt-keyring.asc
+        mode: '0644'
+        force: true
     - name: Add Docker's APT repository
       apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-        filename: "docker-{{ ansible_distribution_release }}"
-
-    - name: Add K8s apt repository
-      block:
-        - name: Get gpg key
-          ansible.builtin.get_url:
-            url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
-            dest: /etc/apt/keyrings/kubernetes.asc
-        - name: Add k8s apt repository
-          apt_repository:
-            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
-            state: present
-    - name: Install K8s
-      apt:
-        name: kubectl, kubelet, kubeadm
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/docker-apt-keyring.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
         state: present
-    - name: Reboot and wait for reboot to complete
-      reboot:
+        update_cache: yes
 
-    - name: Q-Install Containerd
+    - name: Add Kubernetes apt-key
+      get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+        mode: '0644'
+        force: true
+    - name: Add Kubernetes apt repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+        state: present
+        update_cache: yes
+
+    - name: Install Containerd
       apt:
         name: containerd.io
         state: present
@@ -94,78 +94,44 @@
       file:
         path: /etc/containerd
         state: directory
-    - name: Q-Add Containerd configuration
+    - name: Add Containerd configuration
       shell: /usr/bin/containerd config default > /etc/containerd/config.toml
-    - name: Q-Configuring the systemd cgroup driver for Containerd
+    - name: Configuring the systemd cgroup driver for Containerd
       lineinfile:
         path: /etc/containerd/config.toml
         regexp: '            SystemdCgroup = false'
         line: '            SystemdCgroup = true'
-    - name: Q-Enable the Containerd service and start it
+    - name: enable the Containerd service and start it
       systemd:
         name: containerd
         state: restarted
-        enabled: true
-        daemon-reload: true
+        enabled: yes
+        daemon-reload: yes
 
-    - name: Q-Enable the Kubelet service, and enable it persistently
+    - name: install Kubernetes packages
+      apt:
+        name: kubelet, kubectl, kubeadm
+        state: present
+        update_cache: true
+    - name: enable the Kubelet service, and enable it persistently
       service:
         name: kubelet
-        enabled: true
+        enabled: yes
 
-    - name: Q-Load br_netfilter kernel module
+    - name: load br_netfilter kernel module
       modprobe:
         name: br_netfilter
         state: present
-    - name: Q-Set bridge-nf-call-iptables
+
+    - name: set bridge-nf-call-iptables
       sysctl:
         name: net.bridge.bridge-nf-call-iptables
         value: 1
-    - name: Q-Set ip_forward
+
+    - name: set ip_forward
       sysctl:
         name: net.ipv4.ip_forward
         value: 1
 
-    - name: Q-Check Kubelet args in Kubelet config
-      shell: grep "^Environment=\"KUBELET_EXTRA_ARGS=" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf || true
-      register: check_args
- 
-    - name: Q-Add runtime args in Kubelet config
-      lineinfile:
-        dest: "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
-        line: "Environment=\"KUBELET_EXTRA_ARGS= --runtime-cgroups=/system.slice/containerd.service --container-runtime-endpoint=unix:///run/containerd/containerd.sock\""
-        insertafter: '\[Service\]'
-      when: check_args.stdout == ""
- 
-    - name: Reboot and wait for reboot to complete
+    - name: reboot and wait for reboot to complete
       reboot:
- 
-- name: Configure master
-  hosts: master
-  become: yes
-  tasks:
-    - name: Initialize Kubernetes master
-      command: kubeadm init --pod-network-cidr=10.244.0.0/16
-      register: kubeadm_output
-      ignore_errors: yes
-    - name: Create directory
-      file:
-        path: ~/.kube
-        state: directory
-    - name: Copy file kube config
-      copy:
-        src: /etc/kubernetes/admin.conf
-        dest: ~/.kube/config
-        owner: ansible
-        group: users
-        remote_src: yes
-    - name: Install Calico network plugin
-      command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-      when: "'calico' in kubeadm_output.stdout"
-- hosts: workers
-  become: yes
-  tasks:
-    - name: Join worker nodes to the cluster
-      command: "{{ hostvars[{{ hostvars[groups.master.0].inventory_hostname }}]['kubeadm_output']['stdout_lines'][0] }}"
-      when: "'kubeadm join' in hostvars[groups.master.0]['kubeadm_output']['stdout']"
-                                                                                         
