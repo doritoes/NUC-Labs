@@ -1,5 +1,5 @@
 ---
-- hosts: nodes
+- hosts: workers
   tasks:
     - name: Install haproxy
       package:
