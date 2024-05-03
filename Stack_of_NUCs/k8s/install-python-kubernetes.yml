@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Install python kubernetes packages on nodes
+  hosts: workers
   become: true
   tasks:
     - name: Install pip
@@ -8,8 +9,3 @@
     - name: Install Kubernetes python package
       ansible.builtin.pip:
         name: kubernetes
-    - name: Copy kube-config
-      copy:
-      src: /etc/kubernetes/admin.conf
-      dest: /home/ansible/.kube/config
-      remote_src: true
