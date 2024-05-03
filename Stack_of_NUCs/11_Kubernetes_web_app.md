@@ -18,6 +18,12 @@ References
 - Create the `speedtester-deployment.yml` manifest ([speedtester-deployment.yml](k8s/speedtester-deployment.yml))
 - Apply the deployment definition (in the yml file)
   - `kubectl apply -f speedtester-deployment.yml`
+- View distribution information
+  - `kubectl get pods,deployments`
+  - `kubectl describe deloyments speedtester`
+  - `kubectl get deployment speedtester -o yaml`
+- Increase number of replicas
+- 
 ## Create a Service
 ## Test Access
 ## Learn More
