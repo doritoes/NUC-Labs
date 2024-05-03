@@ -14,9 +14,7 @@ Purpose:
 
 References:
 - New way - https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd
-- Step by step: https://shirone.me/posts/set-up-k8s-with-ansible/
-- https://medium.com/@venkataramarao.n/kubernetes-setup-using-ansible-script-8dd6607745f6
-- Legaacy way (old repos) - https://github.com/torgeirl/kubernetes-playbooks
+- Legacy way (old repos) - https://github.com/torgeirl/kubernetes-playbooks
 - [Kubernetes: Up & Running](https://www.goodreads.com/book/show/26759355-kubernetes) by O'Reilly
 - https://github.com/brettplarson/nuctestlab
 - https://www.linuxtechi.com/install-kubernetes-on-ubuntu-22-04/
