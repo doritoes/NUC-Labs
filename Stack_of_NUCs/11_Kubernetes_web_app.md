@@ -53,7 +53,7 @@ References
   - It's not obvious, but the Nodes now expose the service on port 30080 on their own IP addreses
 
 ## Test Access
-Point your web browser on NUC 1 (or any of your Lab systems) to the IP address of <ins>any node</ins> and the port we selected, port 300080.
+Point your web browser on NUC 1 (or any of your Lab systems) to the IP address of <ins>any node</ins> and the port we selected, port 30080.
 - Example: `http://<IPADDRESSWORKERNODE>:30080`
 - The speed test will now complete (will no longer crash during the upload test)
 - Test every Node IP address
