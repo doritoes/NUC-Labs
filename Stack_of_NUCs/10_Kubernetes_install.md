@@ -103,9 +103,9 @@ Do some tests with Kubernetes.
     - this is the equivalent of `kubectl delete pod speedtester`
 
 ### Create Pod using Pod Manifest
-1. Create the yaml file `speedtest-pod.yml` ([speedtest-pod.yml](k8s/speedtest-pod.yml)), or manifest 
+1. Create the yaml file `speedtester-pod.yml` ([speedtester-pod.yml](k8s/speedtester-pod.yml)), or manifest 
 2. Build the pod by applying the manifest
-    - `kubectl apply -f speedtest-pod.yml`
+    - `kubectl apply -f speedtester-pod.yml`
 3. Examine the pod
     - `kubectl get pods`
     - `kubectl describe pods speedtester`
