@@ -20,11 +20,36 @@ References
   - `kubectl apply -f speedtester-deployment.yml`
 - View distribution information
   - `kubectl get pods,deployments`
-  - `kubectl describe deloyments speedtester`
+  - `kubectl describe deployments speedtester`
   - `kubectl get deployment speedtester -o yaml`
 - Increase number of replicas
-- 
+  - Edit the file `speedtest-deployment.yml`
+  - Modify `replicas: 2` to the number of worker nodes you have, or 4 (whichever is larger)
+  - Reapply the definition
+    - `kubectl apply-f speedtester-deployment.yml`
+  - Watch the activity and changes
+    - `kubectl apply-f speedtester-deployment.yml`
+    - `kubectl get pods -w`
+    - `kubectl get deployments`
+    - `kubectl describe deployments speedtester`
+    - `kubectl get deployment speedtester -o yaml`
 ## Create a Service
+### Using Expose
+- "Expose" the service
+  - `kubectl expose deployment speedtester --port=8080 --name=speedtester-service --target-port=8080`
+- Examine it: `kubectl describe svc speedtester-service`
+  - Notice the type (ClusterIP)
+  - Notice the service is exposed internally, but not from outside
+- Remove it
+  - `kubectl get svc`
+  - `kubectl delete svc speedtester-service`
+### Using a manifest
+- Create the `speedtester-service.yml` manifest ([speedtester-service.yml](k8s/speedtester-service.yml))
+- Apply the service definition (in the yml file)
+  - `kubectl apply -f speedtester-deployment.yml`
+- View results
+  - `kubectl get all`
+  - `kubectl describe svc speedtester-service`
 ## Test Access
 ## Learn More
 ### Managing Kubernetes using Ansible
