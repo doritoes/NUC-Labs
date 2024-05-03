@@ -95,9 +95,9 @@ sudo apt update && sudo apt install -y kubectl
 Do some tests with Kubernetes.
 
 ### Manually Create Pod
-1. `kubectl run speedtester --image=docker.or/doritoes/speedtester:latest
+1. `kubectl run speedtester --image=docker.io/doritoes/speedtester:latest`
 2. `kubect get pods`
-    - Running `kutectl get pods -w` will "watch" the process of the container being created and changing status to `Running`; press control-c to exit
+    - Running `kubectl get pods -w` will "watch" the process of the container being created and changing status to `Running`; press control-c to exit
 3. `kubectl describe pod speedtester`
 4. `kubectl delete pods/speedtester`
     - this is the equivalent of `kubectl delete pod speedtester`
