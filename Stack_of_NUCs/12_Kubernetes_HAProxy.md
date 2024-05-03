@@ -52,6 +52,10 @@ Here we will use HAProxy to distribute load to the worker node IP addreses via t
     - `sudo journalctl -xeu haproxy.service`
 6. Do you see any difference in the speedtest results via HAProxy (port 8080) vs direct to the node (port 30080)?
 
+You <ins>can</ins> optionally remove the NodePort and rely on HAProxy for external access to the application.
+
+**HOWEVER** you will need to update the haproxy.cfg files and restart haproxy every time there is a change to the pods!
+
 ## Learn More
 ### HAProxy and its many uses
 HAProxy is not just for container computing. Read more about it:
