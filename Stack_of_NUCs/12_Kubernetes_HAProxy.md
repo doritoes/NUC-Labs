@@ -6,8 +6,6 @@ Purpose:
 References:
 - https://28gauravkhore.medium.com/how-to-configure-the-haproxy-using-the-ansible-and-also-how-to-configure-haproxy-dynamically-f18a55de3a66
 
-🚧 Continue building here from https://www.unclenuc.com/lab:stack_of_nucs:ansible_playbook_-_install_haproxy
-
 ## Create project folder for HAProxy Configuration and Playbooks
 - From NUC1, log in to the Ansible control node, NUC2 as user `ansible`
 - Log in to NUC2 as user `ansible`
@@ -29,7 +27,7 @@ Here we will use HAProxy to distribute load to the worker node IP addreses via t
 
 ## Test HAProxy
 1. Point your browser to http://<IPANYK8SWORKENODE>:8080/
-2. Test that any of the nodes will service the app from any pod on andy node
+2. Test that any of the nodes will service the app from any pod on any node
     - Change directory to `/home/ansible/my-project/k8s`
     - Edit `speedtester-deployment.yml` and change the number of replicas to **1**
     - `kubectl apply -f speedtester-deployment.yml`
@@ -39,3 +37,7 @@ Here we will use HAProxy to distribute load to the worker node IP addreses via t
 3. Revert the change to `speedtester-deployment.yml` and re-apply it
 
 ## Learn More
+### HAProxy and its many uses
+HAProxy is not just for container computing. Read more about it:
+- https://medium.com/@gsatyasai2008/the-basics-of-haproxy-554c26992836
+- https://www.udemy.com/course/haproxy-a/ (Udemy)
