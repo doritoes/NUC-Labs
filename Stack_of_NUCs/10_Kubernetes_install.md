@@ -48,22 +48,13 @@ Install some prerequisites on ALL the Kubernetes nodes
 - Run the playbook
   - `ansible-playbook kube-dependencies.yml`
 
-⚠️ This "fatal" error appeared, but the playbook didn't stop:
-~~~~
-TASK [Update apt-cache and do dist upgrade] ****************************************************************************
-fatal: [192.168.99.48]: FAILED! => {"changed": false, "msg": "E:Conflicting values set for option Signed-By regarding source https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /: /usr/share/keyrings/kubernetes-apt-keyring.gpg != /etc/apt/keyrings/kubernetes.asc, E:The list of sources could not be read."}
-~~~~
-
 ## Install Kubernetes Master Node
-
-⚠️ This playbook also dies. Need to rework the ansible to set up kubernetes cluster.
-
 Configure kubernetes cluster on master node
 - Create the `master.yml` playbook ([master.yml](k8s/master.yml))
 - Run the playbook
   - `ansible-playbook master.yml`
 - SSH to the master node and verity the master node gets the status of `Ready`
-  - `ssh <MASTER_IP> kubectl get nodes`
+  - `ssh <MASTER_IP> sudo kubectl get nodes`
 
 ## Initialize Kubernetes Worker Nodes
 - Create the `workers.yml` playbook ([workers.yml](k8s/workers.yml))
@@ -71,13 +62,13 @@ Configure kubernetes cluster on master node
 - Run the playbook
   - `ansible-playbook workers.yml`
 - SSH to the master node and verity the that ALL the nodes get the status of `Ready`
-  - `ssh <MASTER_IP> kubectl get nodes`
+  - `ssh <MASTER_IP> sudo kubectl get nodes`
 
 ## Install kubectl on NUC2
 Install kubectl on NUC 2 for automation with Kubernetes
 - Create the `kubectlcontrolnode.yml` playbook ([kubectlcontrolnode.yml](k8s/kubectlcontrolnode.yml))
 - Run the playbook
-  - `ansible-playbook workers.yml`
+  - `ansible-playbook kubectlcontrolnode.yml`
 - ⚠️ Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
   - `scp <MASTER_UP>:/home/ansible/.kube ~/`
