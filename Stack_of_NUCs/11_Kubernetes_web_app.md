@@ -201,7 +201,7 @@ Kill all the current pods but without waiting for confirmation
 
 #### Crash Pods
 Crash the pods by killing the supervisord process
-- [killpod-webservice.yml](k8s/killpod-webservice.yml]
+- [killpod-webservice.yml](k8s/killpod-webservice.yml)
 - `ansible-playbeook killpod-webservice.yml`
 - How is this different from kill the pods?
   - How is the `kubects get pods` output (Age and Restarts) different?
