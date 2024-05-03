@@ -27,14 +27,30 @@ Here we will use HAProxy to distribute load to the worker node IP addreses via t
 
 ## Test HAProxy
 1. Point your browser to http://<IPANYK8SWORKENODE>:8080/
-2. Test that any of the nodes will service the app from any pod on any node
-    - Change directory to `/home/ansible/my-project/k8s`
+2. Test using every worker node IP address
+3. Test with only 1 replica
+    - edit `k8s-deployment-web.yml` to set replicas: **1**
+    - apply it: `kubectl apply -f speedtester-deployment.yml`
+    - confirm number of pods down to 1: `kubectl get pods`
+    - confirm which node it is running on: `kubectl describe pods`
+    - repeat testing of each node IP address to confirm everything still works
+    - in practice, you can set your application's DNS name to "round-robin" to point to one, two, or more worker nodes
+5. Test with more replicas
+    - edit `k8s-deployment-web.yml` to set replicas: **2** (or more!)
+    - apply it: `kubectl apply -f speedtester-deployment.yml`
+    - confirm number of pods has increased: `kubectl get pods`
+    - ssh to a node that lost all it's pods
+      - it has pods again
+      - ⚠️ Uh oh there is a problem!: `sudo journalctl -xeu haproxy.service`
+      - The pod was created with a new IP address that doesn't match the haproxy.cfg file we pushed out.
+      - Since this is a Lab, we can handle the interruption of a regular restart
+        - `ansible-playbook haproxy-install.yml`
+      - ssh to each node and note the status of the HAProxy service
+        - `systemctl status haproxy`
     - Edit `speedtester-deployment.yml` and change the number of replicas to **1**
     - `kubectl apply -f speedtester-deployment.yml`
-    - Use `kubectl get pods` to watch the pods terminated until 1 is left running
-    - Point your browser to each K8s worker node IPs with port 8080
-      - is the app up?
-3. Revert the change to `speedtester-deployment.yml` and re-apply it
+    - `sudo journalctl -xeu haproxy.service`
+6. Do you see any difference in the speedtest results via HAProxy (port 8080) vs direct to the node (port 30080)?
 
 ## Learn More
 ### HAProxy and its many uses
