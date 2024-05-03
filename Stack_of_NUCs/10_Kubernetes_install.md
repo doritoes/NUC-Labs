@@ -7,14 +7,11 @@ Now we are going to use Ansible to install Kubernetes with:
 
 ⚠️ In 2024 the repo changed (Google vs community) and broke a lot of older automation scripts ([link](https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd)). This Lab uses the new repo.
 
-Quote: *"This process is evolving and is due to evolve again over the coming year or two. If you are interested, try searching for DEB822."*
-
 Purpose:
 - Demonstrate a running a complex workload of web applications on Kubernetes
 
 References:
-- New way - https://medium.com/@martin.hodges/installing-kubernetes-from-the-new-k8s-io-repository-using-ansible-8e7319fa97fd
-- Legacy way (old repos) - https://github.com/torgeirl/kubernetes-playbooks
+- https://github.com/torgeirl/kubernetes-playbooks
 - [Kubernetes: Up & Running](https://www.goodreads.com/book/show/26759355-kubernetes) by O'Reilly
 - https://github.com/brettplarson/nuctestlab
 - https://www.linuxtechi.com/install-kubernetes-on-ubuntu-22-04/
@@ -67,7 +64,7 @@ Install kubectl on NUC 2 for automation with Kubernetes
 - Create the `kubectlcontrolnode.yml` playbook ([kubectlcontrolnode.yml](k8s/kubectlcontrolnode.yml))
 - Run the playbook
   - `ansible-playbook kubectlcontrolnode.yml`
-- ⚠️ Running `kubectl version` will fail at this point because you do not have credentials
+- Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
   - `scp -r <MASTER_UP>:/home/ansible/.kube ~/`
 - Test that it is working
@@ -82,7 +79,7 @@ sudo curl -fsSLo /etc/apt/keyrings/kubernetes-apt-keyring.asc https://pkgs.k8s.i
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | sudo tee -a /etc/apt/sources.list
 sudo apt update && sudo apt install -y kubectl
 ~~~~
-- ⚠️ Running `kubectl version` will fail at this point because you do not have credentials
+- Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
   - `scp -r <MASTER_UP>:/home/ansible/.kube ~/`
 - Test that it is working
@@ -165,14 +162,7 @@ References
     - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
   
 ## Learn More
-### kubedoom
-kubedoom is the infamous k8s demonstration where you get to kill k8s pods and watch them respawn
-- https://github.com/storax/kubedoom
-- https://opensource.com/article/21/6/kube-doom
-- https://www.youtube.com/watch?v=NGQhcJMSYDM
-- https://www.youtube.com/watch?v=5uVrsWG1nKI
-
-### kubeinvaders
-kubeinvaders is another chaos tool were you kill k8s pods and watch them reappear
-- https://github.com/lucky-sideburn/KubeInvaders
-- Demo: https://kubeinvaders.platformengineering.it/#
+There are a lot different approaches to installing Kubernetes using Ansible
+- Search GitHub and online for more approaches
+  - One playbook
+  - Roles (multiple playbooks)
