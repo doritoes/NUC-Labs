@@ -60,6 +60,18 @@ Point your web browser on NUC 1 (or any of your Lab systems) to the IP address o
 - Optional: reduce the number of replicas to less than the number of nodes
   - can you still run the speed test from ALL node IP addresses?
 
+## Scaling
+You can quickly scale up or down the number of replicas in your deployment.
+- In one terminal session set up a watch of your pods and deployment status
+  - `watch -d -n 1 'kubectl get pods,deploy`
+- In another session run these command and watch what happens
+  - `kubectl scale deployment/speedtester --replicas=10`
+  - `kubectl scale deployment/speedtester --replicas=2`
+  - `kubectl scale deployment/speedtester --replicas=10`
+  - `kubectl apply-f speedtester-deployment.yml`
+ 
+Note that ad hoc scaling is not a good idea for production: your scaling is not "permanent" unless you update the yml file (manifest).
+
 ## Learn More
 ### Managing Kubernetes using Ansible
 Ansible can be used for managing Kubernetes.
