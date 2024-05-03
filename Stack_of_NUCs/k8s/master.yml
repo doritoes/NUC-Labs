@@ -1,5 +1,6 @@
 ---
-- hosts: master
+- name: Create default kubeadm-config.yaml
+  hosts: master
   become: true
   tasks:
     - name: Create an empty file for Kubeadm configuring
