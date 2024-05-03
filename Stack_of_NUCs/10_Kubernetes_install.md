@@ -111,21 +111,21 @@ Do some tests with Kubernetes.
     - `kubectl describe pods speedtester`
 4. Test connecting to the speedtester application on the pad
     - From NUC1
-      - `kubectl port-forward speedtester 8080:80`
+      - `kubectl port-forward speedtester 8080:8080`
       - browse to http://localhost:8080
-    - NOTE In testing port forwarding tended to break when the upload test started (“error creating error stream for port 8080 → 80: Timeout occurred”)
+    - NOTE In testing port forwarding tended to break when the upload test started (“error creating error stream for port 8080 → 8800: Timeout occurred”)
       - the worker node NUC didn't seem to have any load at all
-        - kubectl exec -stdin -tty speedtester - /bin/bash
-        - htop
+        - `kubectl exec --stdin --tty speedtester -- /bin/sh`
+        - `top`
       - one workaround is to keep relaunching the port-forward command
-        - `while true; do kubectl port-forward speedtester 8080:80; done`
+        - `while true; do kubectl port-forward speedtester 8080:8080; done`
       - later on, we will demonstrate that is is stable when usig a better forwarding mechanism
 5. Manage the pod
     - `kubectl logs speedtester`
     - `kubectl exec speedtester -- date`
     - `kubectl exec speedtester -- uname -a`
 6. Delete the pod
-    - `kubectl delete -f speedtest-pod.yaml`
+    - `kubectl delete -f speedtester-pod.yml`
     - `kubectl get pods`
 
 ### k9s
@@ -158,7 +158,7 @@ References
     - Log in to NUC1
     - `kubectl proxy`
     - UI can <ins>only be used from the machine where the command is executed</ins>
-    - See `kubecpt proxy --help` for more options
+    - See `kubectl proxy --help` for more options
     - From web browser on NUC1 open:
       - http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
     - Authenticate with "Token" and paste in the toekn from the previous step
