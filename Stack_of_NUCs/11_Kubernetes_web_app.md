@@ -65,7 +65,11 @@ Point your web browser on NUC 1 (or any of your Lab systems) to the IP address o
 Ansible can be used for managing Kubernetes.
 - https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html
 
-#### Installing Kubernetes Python Package on Nodes
+#### Installing Kubernetes Python Package
+Learn more about using Python to manage Kubernetes:
+- https://www.velotio.com/engineering-blog/kubernetes-python-client
+
+Installing the python module `kubernetes` using Ansible:
 - Create the `install-python-kubernetes.yml` playbook ([install-python-kubernetes.yml](k8s/install-python-kubernetes.yml))
 - Run the playbook
   - `ansible-playbook install-python-kubernetes.yml`
