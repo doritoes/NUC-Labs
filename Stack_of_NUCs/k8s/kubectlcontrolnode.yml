@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: Install kubectl
+  hosts: localhost
   become: true
   gather_facts: false
   tasks:
@@ -8,18 +9,18 @@
         update_cache: true
 
     - name: Add Kubernetes apt-key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-
-    - name: Add Kubernetes' APT repository
+      get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+        mode: '0644'
+        force: true
+    - name: Add Kubernetes apt repository
       apt_repository:
-        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
         state: present
-        filename: 'kubernetes'
-
+        update_cache: yes
     - name: Install Kubectl
       apt:
-        name: kubectl=1.26.*
+        name: kubectl
         state: present
         force: true  # allow downgrades
