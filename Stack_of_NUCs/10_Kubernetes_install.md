@@ -71,24 +71,19 @@ Install kubectl on NUC 2 for automation with Kubernetes
   - `ansible-playbook kubectlcontrolnode.yml`
 - ⚠️ Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
-  - `scp <MASTER_UP>:/home/ansible/.kube ~/`
+  - `scp -r <MASTER_UP>:/home/ansible/.kube ~/`
 - Test that it is working
   - `kubectl version`
   - `kubectl get nodes`
 
 ## Install kubectl on NUC1
 Install kubectl on NUC 1 for remote testing. In this case we will install manually, without Ansible.
-~~~~
-sudo apt update
-sudo apt install -y ca-certificates curl
-sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt update
-sudo apt install -y kubectl
-~~~~
-⚠️ Running `kubectl version` will fail at this point because you do not have credentials
+- Create the `kubectlcontrolnode.yml` playbook ([kubectlcontrolnode.yml](k8s/kubectlcontrolnode.yml))
+- Run the playbook
+  - `ansible-playbook kubectlcontrolnode.yml`
+- ⚠️ Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
-  - `scp -r tux@<MASTER_UP>:/home/ansible/.kube ~/`
+  - `scp -r <MASTER_UP>:/home/ansible/.kube ~/`
 - Test that it is working
   - `kubectl version`
   - `kubectl get nodes`
