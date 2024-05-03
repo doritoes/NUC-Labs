@@ -9,16 +9,10 @@ frontend main
     use_backend static  if url_static
     default_backend app
 # ------------------------
-# static backend for serving up images, stylesheets and such
-# ------------------------
-backend static
-    balance roundrobin
-    server  static 127.0.0.1:4331 check
-# ------------------------
 # round robin balancing between the various backends
 # ------------------------
 backend app
     balance roundrobin
 {% for ip in groups['nodes'] %}
-    server app{{ loop.index}} {{ ip }}:80 check
+    server app{{ loop.index}} {{ ip }}:8080 check
 {% endfor %}
