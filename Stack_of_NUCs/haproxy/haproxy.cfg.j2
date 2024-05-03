@@ -13,6 +13,6 @@ frontend main
 # ------------------------
 backend app
     balance roundrobin
-{% for ip in groups['nodes'] %}
+{% for ip in groups['workers'] %}
     server app{{ loop.index}} {{ ip }}:8080 check
 {% endfor %}
