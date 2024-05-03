@@ -1,11 +1,11 @@
 ---
 - name: Install python kubernetes packages on nodes
-  hosts: workers
+  hosts: all
   become: true
   tasks:
     - name: Install pip
       apt:
         name: python3-pip
     - name: Install Kubernetes python package
-      ansible.builtin.pip:
+      pip:
         name: kubernetes
