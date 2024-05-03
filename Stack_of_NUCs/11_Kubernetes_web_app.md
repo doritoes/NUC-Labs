@@ -219,3 +219,15 @@ Rebooting nodes
   - When do worker nodes show status *Unknown* on pods before returning to Running
 - Once in a while the random selection hits the master node
   - watch to see what happens then
+
+### kubedoom
+kubedoom is the infamous k8s demonstration where you get to kill k8s pods and watch them respawn
+- https://github.com/storax/kubedoom
+- https://opensource.com/article/21/6/kube-doom
+- https://www.youtube.com/watch?v=NGQhcJMSYDM
+- https://www.youtube.com/watch?v=5uVrsWG1nKI
+
+### kubeinvaders
+kubeinvaders is another chaos tool were you kill k8s pods and watch them reappear
+- https://github.com/lucky-sideburn/KubeInvaders
+- Demo: https://kubeinvaders.platformengineering.it/#
