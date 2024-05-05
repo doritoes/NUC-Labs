@@ -11,7 +11,7 @@ Errors were encountered while processing:
  fahclient
 ~~~~
 Therefore do a normal (<ins>not minimal</ins>) installation of Ubuntu server. I have not been able to track down what package are missing/required.
-- `dpkg-deb -I latest.deb' lists debconf
+- `dpkg-deb -I latest.deb` lists debconf
 - debconf is included in the ubuntu minimal packages
 - To find the answer intall each version (minimal and full) and compare the output of `dpkg -l` from each
 
