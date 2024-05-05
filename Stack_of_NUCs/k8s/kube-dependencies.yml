@@ -14,7 +14,7 @@
         upgrade: dist
         cache_valid_time: 3600
 
-    - name: install packages
+    - name: Install packages
       apt:
         name: curl, ca-certificates, apt-transport-https
         state: present
