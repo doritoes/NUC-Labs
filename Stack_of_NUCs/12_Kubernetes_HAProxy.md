@@ -59,18 +59,14 @@ First we will deploy HAProxy pointing to the nodes
     - `sudo journalctl -xeu haproxy.service`
 6. Do you see any difference in the speedtest results via HAProxy (port 8080) vs direct to the node (port 30080)?
 
-## Test HAProxy - Pods
-Next will redeploy HAProxy pointing to the <ins>pods<ins>. In this use case you could remove the NodePort and rely on HAProxy for external access to the application. There are some <ins>major caveats</ins>.
-
-🚧 WORK HERE...
-
-new template haproxy.cfg.js
-
-re-run ansible-playbook haproxy-install.yml
-
-- Pods are recreated with a new IP address, that doesn't match the haproxy.cfg file we pushed out
-- sudo journalctl -xeu haproxy.service
-- you will need to update the haproxy.cfg files and restart haproxy every time there is a change to the pods!
+## What if - HAProxy - Pods
+What if we wanted to deploy HAProxy to point to <ins>pods</ins> instead of NodePorts?
+- In this use case you could remove the NodePorts and rely on HAProxy for external access to the application
+- There are some <ins>major caveats</ins>!
+  - Pods are recreated with a new IP address, that doesn't match the haproxy.cfg file we pushed out
+  - haproxy service will fail on nodes as the expected Pod IP addresses fail
+    - sudo journalctl -xeu haproxy.service
+  - you will need to update the haproxy.cfg files and restart haproxy every time there is a change to the pods!
 
 ## Learn More
 ### HAProxy and its many uses
