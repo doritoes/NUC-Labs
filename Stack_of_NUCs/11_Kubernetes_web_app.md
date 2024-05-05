@@ -181,7 +181,7 @@ ansible-deployment.yml
                     livenessProbe:
                       httpGet:
                         path: /favicon.ico
-                        port: 80
+                        port: 8080
                       initialDelaySeconds: 3
                       periodSeconds: 3
 ~~~~
