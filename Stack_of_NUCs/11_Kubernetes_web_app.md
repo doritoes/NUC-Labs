@@ -57,7 +57,11 @@ Point your web browser on NUC 1 (or any of your Lab systems) to the IP address o
 - Example: `http://<IPADDRESSWORKERNODE>:30080`
 - The speed test will now complete (will no longer crash during the upload test)
   - **NOTE** Look at the IP address that Speedtester returns; compare this across the different nodes
-  - What does this tell you about the NodePport mechanism?
+    - What does this tell you about the NodePport mechanism?
+    - Confirm by viewing a pod's logs
+      - `kubectl get pods`
+      - `kubectl logs <pod_name>`
+    - If your application needs to know the client's real IP addresses, what options are therre? (Hint: X-Forwarded-For)
 - Test every Node IP address
 - Optional: reduce the number of replicas to less than the number of nodes
   - can you still run the speed test from ALL node IP addresses?
