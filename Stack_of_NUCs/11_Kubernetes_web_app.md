@@ -93,24 +93,6 @@ Installing the python module `kubernetes` using Ansible:
 - Run the playbook
   - `ansible-playbook install-python-kubernetes.yml`
 
-#### Creating Namespaces
-This an example use case from the documentation.
-
-namespace.yml
-~~~~
----
-- hosts: master
-  become_user: ansible
-  tasks:
-    - name: Create namespace
-      k8s:
-        name: my-namespace
-        api_version: v1
-        kind: Namespace
-        state: present
-~~~~
-Run as: `ansible-playbook namespace.yml`
-
 #### Deploy with Ansible
 This section uses the standard set out at https://opensource.com/article/20/9/ansible-modules-kubernetes.
 
@@ -146,6 +128,8 @@ spec:
 ~~~~
 
 Now we move that YAML into a definition element in your Ansible playbook:
+
+⚠️ IMPORTANT! This is failing because missing connection information.
 
 ansible-deployment.yml
 ~~~~
@@ -189,6 +173,24 @@ ansible-deployment.yml
 Run and verify:
 - `ansible-playbook ansible-deployment.yml`
 - `kubectl get pods`
+
+#### Creating Namespaces
+This an example use case from the documentation.
+
+namespace.yml
+~~~~
+---
+- hosts: master
+  become_user: ansible
+  tasks:
+    - name: Create namespace
+      k8s:
+        name: my-namespace
+        api_version: v1
+        kind: Namespace
+        state: present
+~~~~
+Run as: `ansible-playbook namespace.yml`
 
 ### Chaos Testing
 Chaos engineering exercises the resiliency of a service by means of randomly or continually interrupting service.
