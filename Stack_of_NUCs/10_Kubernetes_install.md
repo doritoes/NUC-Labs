@@ -49,7 +49,7 @@ Configure kubernetes cluster on master node
 - Run the playbook
   - `ansible-playbook master.yml`
 - SSH to the master node and verify the master node gets the status of `Ready`
-  - `ssh <MASTER_IP> sudo kubectl get nodes`
+  - `ssh <MASTER_IP> kubectl get nodes`
 
 ## Initialize Kubernetes Worker Nodes
 - Create the `workers.yml` playbook ([workers.yml](k8s/workers.yml))
@@ -57,7 +57,7 @@ Configure kubernetes cluster on master node
 - Run the playbook
   - `ansible-playbook workers.yml`
 - SSH to the master node and verity the that ALL the nodes get the status of `Ready`
-  - `ssh <MASTER_IP> sudo kubectl get nodes`
+  - `ssh <MASTER_IP> kubectl get nodes`
 
 ## Install kubectl on NUC2
 Install kubectl on NUC 2 for automation with Kubernetes
