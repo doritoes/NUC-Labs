@@ -8,4 +8,4 @@
         name: python3-pip
     - name: Install Kubernetes python package
       pip:
-        name: kubernetes
+        name: kubernetes, openshift
