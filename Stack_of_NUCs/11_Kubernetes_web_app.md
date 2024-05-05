@@ -93,82 +93,18 @@ Installing the python module `kubernetes` using Ansible:
 - Run the playbook
   - `ansible-playbook install-python-kubernetes.yml`
 
+NOTE that compatibility issues exist between versions. This playbook specifies a specific version for module `openshift`.
+
 #### Deploy with Ansible
 This section uses the standard set out at https://opensource.com/article/20/9/ansible-modules-kubernetes.
 
 Note the alternative approach at https://shashwotrisal.medium.com/kubernetes-with-ansible-881f32b8c53e, where the YAML files are copied and used.
 
-Example standard deployment file:
-~~~~
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: speedtester
-  labels:
-    run: speedtester
-spec:
-  selector:
-    matchLabels:
-      run: speedtester
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        run: speedtester
-    spec:
-      containers:
-      - name: speedtester
-        image: docker.io/doritoes/speedtester:latest
-        livenessProbe:
-          httpGet:
-            path: /favicon.ico
-            port: 8080
-          initialDelaySeconds: 3
-          periodSeconds: 3
-~~~~
+Compare:
+- Standard deployment file: [speedtester-deployment.yml](k8s/speedtester-deployment.yml)
+- Playbook for same deployment: [ansible-deployment.yml ](k8s/ansible-deployment.yml)
 
-Now we move that YAML into a definition element in your Ansible playbook:
-
-⚠️ IMPORTANT! This is failing because missing connection information.
-
-ansible-deployment.yml
-~~~~
----
-- hosts: master
-  become_user: ansible
-  collections:
-    - kubernetes.core
-  tasks:
-    - name: Deploy speedtester2
-      k8s:
-        state: present
-        definition:
-          api_version: 1
-          kind: Deployment
-          metadata:
-            name: speedtester2
-            labels:
-              run: speedtester2
-          spec:
-            selector:
-              matchLabels:
-                run: speedtester2
-            replicas: 2
-            template:
-              metadata:
-                labels:
-                  run: speedtester2
-              spec:
-                containers:
-                  - name: speedtester2
-                    image: docker.io/doritoes/speedtester:latest
-                    livenessProbe:
-                      httpGet:
-                        path: /favicon.ico
-                        port: 8080
-                      initialDelaySeconds: 3
-                      periodSeconds: 3
-~~~~
+NOTE that the ansible playbbook requires specifying a namespace.
 
 Run and verify:
 - `ansible-playbook ansible-deployment.yml`
@@ -195,12 +131,14 @@ Run as: `ansible-playbook namespace.yml`
 ### Chaos Testing
 Chaos engineering exercises the resiliency of a service by means of randomly or continually interrupting service.
 
-Proper chaos testing: https://opensource.com/article/21/6/chaos-kubernetes-kube-monkey
+Proper chaos testing:
+- https://opensource.com/article/21/6/chaos-kubernetes-kube-monkey
+- https://github.com/krkn-chaos/krkn
 
 Some small scale chase testing is outlined below.
 
 #### Kill Pods
-You can watch what's happening a couple of ways:
+You can watch what is happening a couple of ways:
 - `watch kubectl get pods`
 - `kubectl get pods -w`
 - Open two windows, one to watch what happens while to "break" things in the other window
@@ -217,31 +155,33 @@ done
 
 Kill all the current pods (slow because loop struction is sequential)
 - [deletepod.yml](k8s/deletepod.yml]
-- `ansible-playbeook deletepod.yml`
+- `ansible-playbook deletepod.yml`
 
 Kill all the current pods but without waiting for confirmation
 - [deletepod-async.yml](k8s/deletepod-async.yml]
-- `ansible-playbeook deletepod-async.yml`
+- `ansible-playbook deletepod-async.yml`
 - is it any faster?
 
 #### Crash Pods
 Crash the pods by killing the supervisord process
 - [killpod-webservice.yml](k8s/killpod-webservice.yml)
-- `ansible-playbeook killpod-webservice.yml`
+- `ansible-playbook killpod-webservice.yml`
 - How is this different from kill the pods?
-  - How is the `kubects get pods` output (Age and Restarts) different?
+  - How is the `kubectl get pods` output (Age and Restarts) different?
   - If you run this several times, what status will the pods change to before returning to "Running"?
+  - What is the impact on application availability when we have pod crashes like this?
 
 #### Rebooting Nodes
 Rebooting nodes
 - [randomreboot.yml](k8s/randomreboot.yml)
 - `ansible-playbook randomreboot.yml`
-- `watch kubectl get all,nodes`
+- `watch 'kubectl get deploy,svc,nodes; kubectl get pods -o wide;'`
 - What are does failure look like now?
   - Can you run the speedtest while a node is rebooting?
   - Do you need to change the IP do a different node IP address?
   - How long does it take to deletect the logs pods on the missing node?
   - When do worker nodes show status *Unknown* on pods before returning to Running
+  - Use `kubectl get pods -o wide`
 - Once in a while the random selection hits the master node
   - watch to see what happens then
 
