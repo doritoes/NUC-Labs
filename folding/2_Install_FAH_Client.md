@@ -306,6 +306,6 @@ Stop and start service
 - `sudo systemctl start FAHClient`
 Enable and disable service
 - `sudo systemctl enable FAHClient`
-- `sudo systemctl disable FAHClient
+- `sudo systemctl disable FAHClient`
 Logs
-- journalctl -u FAHClient
+- `journalctl -u FAHClient`
