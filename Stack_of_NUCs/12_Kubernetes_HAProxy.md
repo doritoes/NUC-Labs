@@ -25,18 +25,25 @@ Here we will use HAProxy to distribute load to the worker node IP addreses via t
   - `ansible-playbook haproxy-install.yml`
   - This updates /etc/hosts in the master, workers, and also the Host (see how `localhost` is included)
 
-## Test HAProxy
-1. Point your browser to http://<IPANYK8SWORKENODE>:8080/
+## Test HAProxy - Nodes
+First we will deploy HAProxy pointing to the nodes
+1. Point your browser to `http://<IPANYK8SWORKERNODE>:8080/`
 2. Test using every worker node IP address
 3. Test with only 1 replica
+    - change directory back to `/home/ansible/my-project/k8s/`
     - edit `k8s-deployment-web.yml` to set replicas: **1**
     - apply it: `kubectl apply -f speedtester-deployment.yml`
     - confirm number of pods down to 1: `kubectl get pods`
-    - confirm which node it is running on: `kubectl describe pods`
+    - confirm which node it is running on:
+      - `kubect get pods -o wide`
     - repeat testing of each node IP address to confirm everything still works
+    - reboot that node, and watch what happens you the application
+      - does the pod move to another node?
+      - is the application accessible via a different node? why or why not?
+      - how long does it take until the application starts working again?
     - in practice, you can set your application's DNS name to "round-robin" to point to one, two, or more worker nodes
 5. Test with more replicas
-    - edit `k8s-deployment-web.yml` to set replicas: **2** (or more!)
+    - edit `speedtester-deployment.yml` to set replicas: **2** (or more!)
     - apply it: `kubectl apply -f speedtester-deployment.yml`
     - confirm number of pods has increased: `kubectl get pods`
     - ssh to a node that lost all it's pods
@@ -52,9 +59,18 @@ Here we will use HAProxy to distribute load to the worker node IP addreses via t
     - `sudo journalctl -xeu haproxy.service`
 6. Do you see any difference in the speedtest results via HAProxy (port 8080) vs direct to the node (port 30080)?
 
-You <ins>can</ins> optionally remove the NodePort and rely on HAProxy for external access to the application.
+## Test HAProxy - Pods
+Next will redeploy HAProxy pointing to the <ins>pods<ins>. In this use case you could remove the NodePort and rely on HAProxy for external access to the application. There are some <ins>major caveats</ins>.
 
-**HOWEVER** you will need to update the haproxy.cfg files and restart haproxy every time there is a change to the pods!
+🚧 WORK HERE...
+
+new template haproxy.cfg.js
+
+re-run ansible-playbook haproxy-install.yml
+
+- Pods are recreated with a new IP address, that doesn't match the haproxy.cfg file we pushed out
+- sudo journalctl -xeu haproxy.service
+- you will need to update the haproxy.cfg files and restart haproxy every time there is a change to the pods!
 
 ## Learn More
 ### HAProxy and its many uses
