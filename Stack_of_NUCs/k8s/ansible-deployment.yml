@@ -7,6 +7,7 @@
     - name: Deploy speedtester2
       k8s:
         state: present
+        namespace: default
         definition:
           api_version: 1
           kind: Deployment
