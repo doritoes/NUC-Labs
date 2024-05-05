@@ -48,7 +48,7 @@ Configure kubernetes cluster on master node
 - Create the `master.yml` playbook ([master.yml](k8s/master.yml))
 - Run the playbook
   - `ansible-playbook master.yml`
-- SSH to the master node and verity the master node gets the status of `Ready`
+- SSH to the master node and verify the master node gets the status of `Ready`
   - `ssh <MASTER_IP> sudo kubectl get nodes`
 
 ## Initialize Kubernetes Worker Nodes
