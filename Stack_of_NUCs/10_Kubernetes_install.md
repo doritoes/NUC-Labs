@@ -81,7 +81,7 @@ sudo apt update && sudo apt install -y kubectl
 ~~~~
 - Running `kubectl version` will fail at this point because you do not have credentials
 - Copy credentials
-  - `scp -r <MASTER_UP>:/home/ansible/.kube ~/`
+  - `scp -r <MASTER_IP>:/home/ansible/.kube ~/`
 - Test that it is working
   - `kubectl version`
   - `kubectl get nodes`
