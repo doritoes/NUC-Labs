@@ -147,7 +147,7 @@ spec:
 
 Now we move that YAML into a definition element in your Ansible playbook:
 
-ansible-deployement.yml
+ansible-deployment.yml
 ~~~~
 ---
 - hosts: master
