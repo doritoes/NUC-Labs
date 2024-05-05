@@ -12,7 +12,7 @@ This ansible playbook will fix this problem.
 2. Run the playbook
     - `ansible-playbook -i hosts disable-dns-stub.yml`
 
-  That was easy! Note that the task results in yellow show what was changed. If you run it again, you will see that the changes for the "Disable DNS stub listener" task weren't repeated, as no changes were required. But the restarts of NetworkManager and systemd-resolved are repeated.
+That was easy! Note that the task results in yellow show what was changed. If you run it again, you will see that the changes for the "Disable DNS stub listener" task weren't repeated, as no changes were required. But the restarts of NetworkManager and systemd-resolved are repeated.
 
 ## Faster Bootup Times with WiFi Only
 Let's set the ethernet "wired" network interface to be "optional" on the nodes. Normally they wait for the LAN network to come up. Since these NUCs are Wifi-only, the LAN interface will never come up.
@@ -46,6 +46,6 @@ This playbook update all the software pages on all the nodes.
 2. Run the playbook
     - `ansible-playbook -i hosts update.yml`
 
-Watch as the playbook updates the apt repo, upgrades packages, and reboots if necessary.
+Watch as the playbook updates the apt repo, upgrades packages, and reboots if necessary. If you had any errors resolving the update servers, try again or reboot to make sure the DNS fix is applied.
 
 If you run it again, note that no changes were made. Everything was up to date.
