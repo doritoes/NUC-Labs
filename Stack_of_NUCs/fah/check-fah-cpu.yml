@@ -1,0 +1,19 @@
+---
+- hosts: clients
+  gather_facts: false
+  tasks:
+    - name: Get CPU usage
+      shell: "top -b -n 1"
+      register: top
+      changed_when: false
+    - name: Set CPU usage facts
+      set_fact:
+        user_cpu: "{{ top.stdout_lines[2].split()[1] }}"
+        system_cpu: "{{ top.stdout_lines[2].split()[3] }}"
+        nice_cpu: "{{ top.stdout_lines[2].split()[5] }}"
+    - name: Output CPU usage facts
+      debug:
+        msg:
+          - "User CPU usage: {{ user_cpu }}"
+          - "System CPU usage: {{ system_cpu }}"
+          - "Nice CPU usage: {{ nice_cpu }}"

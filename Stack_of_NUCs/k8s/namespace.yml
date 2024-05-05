@@ -1,0 +1,10 @@
+---
+- hosts: master
+  become_user: ansible
+  tasks:
+    - name: Create namespace
+      k8s:
+        name: my-namespace
+        api_version: v1
+        kind: Namespace
+        state: present

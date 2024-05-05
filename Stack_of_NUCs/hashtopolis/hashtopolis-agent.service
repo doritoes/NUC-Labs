@@ -1,0 +1,15 @@
+[Unit]
+Description=Hashtopolis Agent
+After=network.target
+ 
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ansible/hashtopolis.zip
+Restart=on-failure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=hashtopolis-agent
+WorkingDirectory=/home/ansible
+ 
+[Install]
+WantedBy=multi-user.target

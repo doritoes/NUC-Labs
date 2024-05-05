@@ -1,0 +1,15 @@
+---
+- name: Update etc/hosts file
+  hosts: all, localhost
+  gather_facts: true
+  tasks:
+    - name: Populate all /etc/hosts files
+      tags: etchostsupdate
+      become: true
+      become_user: root
+      lineinfile:
+        path: "/etc/hosts"
+        regexp: '.*{{ item }}$'
+        line: "{{ hostvars[item]['ansible_default_ipv4'].address }}\t{{ hostvars[item]['ansible_hostname'] }}\t{{ hostvars[item]['ansible_hostname'] }}"
+        state: present
+      with_items: '{{ groups.all }}'

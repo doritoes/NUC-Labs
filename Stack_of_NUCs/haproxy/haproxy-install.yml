@@ -1,0 +1,15 @@
+---
+- hosts: workers
+  tasks:
+    - name: Install haproxy
+      package:
+        name: haproxy
+        state: present
+    - name: Configure haproxy.cfg file
+      template:
+        src: "/home/ansible/my-project/haproxy/haproxy.cfg.j2"
+        dest: "/etc/haproxy/haproxy.cfg"
+    - name: "haproxy service start"
+      service:
+        name: haproxy
+        state: restarted
