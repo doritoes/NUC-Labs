@@ -145,7 +145,7 @@ spec:
           periodSeconds: 3
 ~~~~
 
-Now we move that YAML into a definition alement in your Ansible playbook:
+Now we move that YAML into a definition element in your Ansible playbook:
 
 ansible-deployement.yml
 ~~~~
