@@ -56,19 +56,22 @@ References
 Point your web browser on NUC 1 (or any of your Lab systems) to the IP address of <ins>any node</ins> and the port we selected, port 30080.
 - Example: `http://<IPADDRESSWORKERNODE>:30080`
 - The speed test will now complete (will no longer crash during the upload test)
+  - **NOTE** Look at the IP address that Speedtester returns; compare this across the different nodes
+  - What does this tell you about the NodePport mechanism?
 - Test every Node IP address
 - Optional: reduce the number of replicas to less than the number of nodes
   - can you still run the speed test from ALL node IP addresses?
+  - do you get different speed test results?
 
 ## Scaling
 You can quickly scale up or down the number of replicas in your deployment.
 - In one terminal session set up a watch of your pods and deployment status
-  - `watch -d -n 1 'kubectl get pods,deploy`
+  - `watch -d -n 1 'kubectl get pods,deploy'`
 - In another session run these command and watch what happens
   - `kubectl scale deployment/speedtester --replicas=10`
   - `kubectl scale deployment/speedtester --replicas=2`
   - `kubectl scale deployment/speedtester --replicas=10`
-  - `kubectl apply-f speedtester-deployment.yml`
+  - `kubectl apply -f speedtester-deployment.yml`
  
 Note that ad hoc scaling is not a good idea for production: your scaling is not "permanent" unless you update the yml file (manifest).
 
