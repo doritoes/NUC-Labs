@@ -56,7 +56,7 @@ Configure kubernetes cluster on master node
 - Modify the playbook to replace **MASTERIP** with the IP of your master node in <ins> two (2) places</ins>
 - Run the playbook
   - `ansible-playbook workers.yml`
-- SSH to the master node and verity the that ALL the nodes get the status of `Ready`
+- SSH to the master node and verity the that ALL the nodes eventually get the status of `Ready`
   - `ssh <MASTER_IP> kubectl get nodes`
 
 ## Install kubectl on NUC2
