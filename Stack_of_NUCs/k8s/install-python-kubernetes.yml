@@ -1,11 +1,13 @@
 ---
-- name: Install python kubernetes packages on nodes
-  hosts: all
+- name: Install python kubernetes packages on master
+  hosts: master
   become: true
   tasks:
     - name: Install pip
       apt:
         name: python3-pip
-    - name: Install Kubernetes python package
+    - name: Install required packages compatible versions
       pip:
-        name: kubernetes, openshift
+        name:
+          - kubernetes
+          - openshift==0.11.0
