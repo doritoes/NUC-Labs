@@ -9,6 +9,7 @@ Sometimes in my Lab testing I find a NUC that seem slowing or become unresponsiv
 
 If all the NUCs are in the same place but one is much weaker than the others
 - check that the antennas are connected to the Wifi card
+- are the antennas damaged?
 - does a different wifi card improve the connection?
 
 ## CMOS Battery Check
