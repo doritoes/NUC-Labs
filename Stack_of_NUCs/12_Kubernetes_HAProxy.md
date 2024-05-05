@@ -68,6 +68,10 @@ What if we wanted to deploy HAProxy to point to <ins>pods</ins> instead of NodeP
     - sudo journalctl -xeu haproxy.service
   - you will need to update the haproxy.cfg files and restart haproxy every time there is a change to the pods!
 
+## HAProxy and Ingress Controller
+What about better/smart load balancing?
+- https://medium.com/@sujitthombare01/haproxy-smart-way-for-load-balancing-in-kubernetes-c2337f61d90b
+
 ## Learn More
 ### HAProxy and its many uses
 HAProxy is not just for container computing. Read more about it:
