@@ -1,5 +1,5 @@
 # Install FAH Client
-The official instructions generally work with with in important warning.
+The official instructions generally work, with an important warning.
 - https://foldingathome.org/faqs/installation-guides/linux/manual-installation-optional-advanced/terminal-installation-for-debian-mint-ubuntu/
 
 ⚠️ If you install Ubuntu Server with the minimalized package installation, the FAH client installation fails.
@@ -10,7 +10,9 @@ dpkg: error processing package fahclient (--install):
 Errors were encountered while processing:
  fahclient
 ~~~~
-Therefore do a normal (<ins>not minimal</ins>) installation of Ubuntu server. I have not been able to track down what package are missing/required.
+Therefore do a normal (<ins>not minimal</ins>) installation of Ubuntu server. I unsucessfuly tried to find any missing dependencies.
+- `dpkg-deb -I latest.deb` lists debconf, but debconf is included in the ubuntu minimal packages
+- I installed the 187 packages that were missing in "minimal", and the install still failed.
 
 References:
 - https://foldingathome.org/faqs/installation-guides/linux/manual-installation-optional-advanced/terminal-installation-for-debian-mint-ubuntu/
@@ -72,7 +74,6 @@ You can view an example of a configuration file at [config.xml](config.xml)
 - Look at your folding progress
   - `FAHClient --send-command queue-info`
 
-
 ## Confirm Running After Reboot
 Feel free to reboot the system to confirm that FAH is automatically restarting after reboot.
 
@@ -110,6 +111,6 @@ Stop and start service
 - `sudo systemctl start FAHClient`
 Enable and disable service
 - `sudo systemctl enable FAHClient`
-- `sudo systemctl disable FAHClient
+- `sudo systemctl disable FAHClient`
 Logs
-- journalctl -u FAHClient
+- `journalctl -u FAHClient`
