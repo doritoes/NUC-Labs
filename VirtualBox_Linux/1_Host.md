@@ -57,4 +57,4 @@ We are going to use Ansible to install Oracle VirtualBox
     - Enter the password for the user `ansible` when prompted
 
 ## Restart the Host
-Reboot the Host and wait or it to come back up.
+Reboot the Host and wait for it to come back up.
