@@ -1,5 +1,6 @@
 ---
-- hosts: localhost  # Run on the local machine
+- name: Create Oracle Virtualbox VM
+  hosts: localhost  # Run on the local machine
   connection: local
   gather_facts: false
   vars_files:
