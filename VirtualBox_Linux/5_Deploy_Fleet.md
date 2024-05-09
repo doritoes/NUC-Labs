@@ -79,10 +79,11 @@ Overview:
 - Update and upgrade all packages (rebooting as needed)
 - Disable the DNS stub listener to prevent later issues with failed DNS lookups
 
-- Steps:
+Steps:
 - Create a new file `configure_servers.yml` ([configure_servers.yml](configure_servers.yml))
 - Run the playbook
   - `ansible-playbook -i inventory configure_servers.yml`
+
 ## Test Servers
 - Do a quick ansible ping
   - `ansible all -m ping`
