@@ -46,7 +46,7 @@ You will also enter the Name (VM name), Hostname (VM's OS hostname), local sudoe
 
 In the following example the Lab router (192.168.99.254) provides a DNS resolver to clients.
 - Create a new variables.yml file in the home directory (you are the user `ansible` now, so it's in /home/ansible)
-  - Example file: `servers.yml` ([servers.yml](servers.yml])
+  - Example file: `servers.yml` ([servers.yml](servers.yml]))
 - Modify the names, IP addresses, gateways, DNS server, and searchdomain information to match your Lab network
 - Use the default memory, storage, and vCPI infomration or modify to your requirements
 
