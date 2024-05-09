@@ -42,7 +42,7 @@ sudo passwd ansible
     - `ssh-keygen -o`
     - <ins>Do not</ins> enter a passphrase
     - Accept all defaults (press enter)
-3. View the public key ans <ins>save it for a later step</ins>
+3. View the public key and <ins>save it for a later step</ins>
     - `cat ~/.ssh/id_rsa.pub`
     - Looks similar to:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDKwEYxgppj+um+/W8LLxRpwZ2887IJirfJjFBkE30UeCZ0D1JS2RTMn4QEK1EAphByGxnmCruTL36aLMTO0FNH4IW+017/7wNY4JjRzRssZSMqmdjH4nhYV22JDIWh428p93FLsgqM+ud0Mj06KgJfa4BQtSvnR/p/4AXYzFTwzE+kyussIiOi+uT20AXNEIxk4ps39xhLGc6XNFo1xhtGvTZ9+Jx7AanVht090HuRuxNmOTd260mbeBJUKRF57d9tzZ68YRQiokIunkNF2skfJOZEUaIOWUoGGIWPMlEUEC0RhyW+7Ljmp7RbIOZ45CV0MYZEpKx4KQ61/CoMY4wKBCM90SwxJQwM3CZCseqcVnpFYKpFd6dnn0v0XsmINCU+y1RXYLfsOHEhLTm5WK9ERi5yr/1OjKkId+xZrf7D/v2soQdHsc82d+otbTDXzHYPduc2DfstJg5QFCECNrsEPRishAh2Lm2GJ3h0Pj20loyYeKWlUJpbLjd5A5Mnk9E= ansible@labserver
