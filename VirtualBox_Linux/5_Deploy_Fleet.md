@@ -10,7 +10,7 @@ Overview
 
 ## New variables_fleet.yml File
 - Create a new `variables.yml` file in the home directory (you are the user `ansible` now, so it's in /home/ansible)
-  - Example file: `variables_fleet.yml` ([variables_fleet.yml](variables_fleet.yml]))
+  - Example file: `variables_fleet.yml` ([variables_fleet.yml](variables_fleet.yml))
   - Modify  the new `variables_fleet.yml` file as follows:
     - Replace the **ssh_key** value with the one you saved earlier
     - Replace the **bridge_interface_name** value with the interface of your host machine
