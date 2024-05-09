@@ -6,6 +6,8 @@ In this step you will create a playbook to deploy an Ubuntu server using Virtual
 - Run the Playbook
   - `ansible-playbook create_vm.yml`
  
+NOTE This playbook expects you to run it on Ubuntu desktop host an open  a GUI.
+ 
 ## Learn More
 ### Experiement with Oracle Virtualbox commands
 - `vboxmanage list vms`
@@ -15,7 +17,7 @@ In this step you will create a playbook to deploy an Ubuntu server using Virtual
 - `vboxmanage closemedium <UUID>`
 - What happens if you edit `create_vm.yml` and change from '–type gui' to '–type headless'?
 
-Try to add a local password for console login in case the VM is unable to get an IP address for SSH using certificates.
+Inside the VM, try to add a local password for console login in case the VM is unable to get an IP address for SSH using keys.
 
 ### Test on a Windows PC with Virtualbox Installed
 In testing on Windows 11 Pro, some settings we used on Linux crash the installation. Specifically virtualization and nested hardware virtualization.
