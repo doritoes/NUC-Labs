@@ -61,7 +61,7 @@ Congratulations on your first VM deployed using Ansible on Virtualbox! Let's loo
   - `ansible-playbook -i hosts destroy_vm_2.yml`
 - Note how it fails
   - VM stops, but not removed
-  - if you run it a second time, it fails on the power off command
+  - if you run it a second time, it fails on shut down task
 
 💡 What ideas do you have to make the script work? Perhaps shutting down the VM if necessary before removing it? There are many ways.
 
