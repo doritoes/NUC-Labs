@@ -48,7 +48,7 @@ Even though each node receives its DNS information via DHCP, Ubuntu 22.04 will a
 ## Delete our First VM
 Congratulations on your first VM deployed using Ansible on Virtualbox! Let's look at using Ansible to remove this first VM.
 
-### Simple Playbeook
+### Simple Playbook
 - Log back into your Host system as user `ansible`
 - Create playbook `destroy_vm_1.yml` ([destroy_vm_1.yml](destroy_vm_1.yml))
 - Run the playbook
