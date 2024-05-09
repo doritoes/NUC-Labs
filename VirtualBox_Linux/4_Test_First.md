@@ -30,6 +30,7 @@ Still as user `ansible`, run some ad hoc Ansbile commands to test
 - `ansible -i hosts all -m ping`
 - `ansible -i hosts servers -m ping`
 - `ansible -i hosts servers -a "sudo /sbin/reboot"`
+  - this runs the reboot command on the VM
 
 ### Update Ubuntu
 Next we will use a playbook to update the software packages on the new server.
