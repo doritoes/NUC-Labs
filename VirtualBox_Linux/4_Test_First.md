@@ -94,6 +94,7 @@ vboxmanage controlvm my_vm poweroff --type emergencystop && vboxmanage unregiste
 ~~~~
 However you cannot just put this one-liner into a playbook. Only the first command completes, or if it fails it just exists.
 - Recreate the VM as needed: `ansible-playbook -i hosts create_vm.yml`
+  - NOTE the new VM may get a new IP address, so update `hosts` file as needed
 - Create playbook `destroy_vm_5.yml` ([destroy_vm_5.yml](destroy_vm_5.yml))
 - Run the playbook (try with the VM running and again when stopped)
   - `ansible-playbook -i hosts destroy_vm_5.yml`
@@ -120,7 +121,13 @@ Ansible can do the logic we want, but it's not straightforward:
 ### Rebooting by Group
 Here is an example of a playbook to reboot the servers in the group [servers].
 - `reboot_servers.yml` ([reboot_servers.yml](reboot_servers.yml))
+- `ansible -i hosts reboot-servers.yml`
 
 What do you think this playbook will do?
 - Open the VM's console and watch what happens when you run `ansible-playbook -i hosts reboot_servers.yml`
 - When does the reboot task complete?
+
+### When Done
+When you are done experimenting, clean up the VM.
+- `ansible-playbeook -i hosts destroy_vm_4.yml`
+- `vboxmanage list vms` should no longer show any VMs
