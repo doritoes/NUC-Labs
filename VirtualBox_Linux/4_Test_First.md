@@ -3,10 +3,10 @@ In this step we will test the basic connectivity to our new server and practice 
 
 ## Test SSH Access
 - Log in to your host machine and become the user `ansible`
-  - Option 1 - ssh to your host machine as the user `ansible`
-  - Option 2 - log in as usual and run `su - ansible`
-- SSH to the IP address of the new server
-  - `ssh <ip_address>`
+  - Option 1: Log in to the host machine as user `ansible`
+  - Option 2: Log in as usual to the host maching and `su - ansible`
+- SSH to the VM
+  - `ssh ansible@<ip_address>`
   - The IP address is displayed on the VM's console screen when it starts up
   - *See [Appendix - Discover IP](Appendix_Discover_IP.md) for more ways to find the IP address*
 - The login succeeds without entering a password
@@ -15,7 +15,7 @@ In this step we will test the basic connectivity to our new server and practice 
 
 ## Test Ansible to the New Server
 ### Create the Inventory File
-- Become user ansible (i.e., su - ansible)
+- Return to the host machine and user `ansible`
 - Create a simple inventory file named `hosts` in the ansible user's home directory (/home/ansible/)
 - Put the VM's IP address in the file `hosts`, following the template below
 ~~~~
