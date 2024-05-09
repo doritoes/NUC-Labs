@@ -83,6 +83,7 @@ This is a quick and dirty solution, no better than running the commands manually
   - `ansible-playbook -i hosts destroy_vm_3.yml`
 
 Using `ignore_errors` can be useful. Test this out and see how removes the VM whether it is “on” or “off”.
+- Recreate the VM: `ansible-playbook -i hosts create_vm.yml`
 - Create playbook `destroy_vm_4.yml` ([destroy_vm_4.yml](destroy_vm_4.yml))
 - Run the playbook (try with the VM running and again when stopped)
   - `ansible-playbook -i hosts destroy_vm_4.yml`
@@ -97,7 +98,7 @@ However you cannot just put this one-liner into a playbook. Only the first comma
   - `ansible-playbook -i hosts destroy_vm_5.yml`
 
 Using the pipe (|) to run multiple commands doesn't solve the issue. If the VM is off, it is deleted successfully. But if it's on, the VM is powered off but not removed.
-- Create playbook `destroy_vm_6.yml` ([destroy_vm_5.yml](destroy_vm_6.yml))
+- Create playbook `destroy_vm_6.yml` ([destroy_vm_6.yml](destroy_vm_6.yml))
 - Run the playbook (try with the VM running and again when stopped)
   - `ansible-playbook -i hosts destroy_vm_6.yml`
 
