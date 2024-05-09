@@ -1,22 +1,12 @@
 # Deploy Fleet of VMs
-In this step we will give the `ansible` account sudo privileges on our host and use playbooks to deploy and manage servers from an inventory of servers.
+In this step we will use playbooks to deploy and manage servers from an inventory of servers.
 
 Overview
-- Give sudo permissions to user ansible
 - Set up the variables.yml file
 - Set up up the server.yml file with the information about the servers we want
 - Create jinja templates
 - Create playbook to deploy servers
 - Create playbook to update packages on the servers
-
-## Grant sudo Permissions to the ansible User
-- From your regular login account add user `ansible` to the sudo group
-  - `sudo usermod -aG sudo ansible`
-- Test sudo access for `ansible` user
-  - `su - ansible`
-  - `sudo apt update`
-
-💡 For the remainder of the Lab you will be using the `ansible user`. You may conveniently ssh to your Host as `ansible`.
 
 ## New variables_fleet.yml File
 - Create a new `variables.yml` file in the home directory (you are the user `ansible` now, so it's in /home/ansible)
