@@ -82,7 +82,7 @@ Overview:
 - Steps:
 - Create a new file `configure_servers.yml` ([configure_servers.yml](configure_servers.yml))
 - Run the playbook
-  - `ansible-playbook configure_servers.yml`
+  - `ansible-playbook -i inventory configure_servers.yml`
 ## Test Servers
 - Do a quick ansible ping
   - `ansible all -m ping`
