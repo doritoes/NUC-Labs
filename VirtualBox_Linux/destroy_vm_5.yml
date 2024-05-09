@@ -8,5 +8,5 @@
     vm_name: my_vm
 
   tasks:
-  - name: Destroy  VM with this name
+  - name: Destroy VM with this name
     command: "{{ Global.vboxmanage_path }} controlvm {{ vm_name }} poweroff --type emergencystop && {{ Global.vboxmanage_path }} unregistervm --delete {{ vm_name }} || {{ Global.vboxmanage_path }} unregistervm --delete {{ vm_name }}"
