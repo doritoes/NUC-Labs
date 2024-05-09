@@ -36,6 +36,8 @@ sudo passwd ansible
       - `exit`
     - Test connecting to your host from other systems via SSH with the `ansible` user
 
+💡 For the remainder of the Lab you will be using the `ansible` user. You may conveniently ssh to your Host as `ansible`.
+
 ## Generate Keys for Management
 1. Ensure you are logged in as the user `ansible`
 2. Create the keys
