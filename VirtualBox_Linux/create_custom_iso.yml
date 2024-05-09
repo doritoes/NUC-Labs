@@ -99,7 +99,7 @@
       changed_when: false
     - name: Copy custom ISO
       copy:
-        src: "{{ Global.workingdir }}/{{Global.new_iso_filename}}"
+        src: "{{ Global.workingdir }}/{{ Global.new_iso_filename }}"
         dest: "{{ Installer.new_iso_path }}"
     - name: Delete working directory
       file: path="{{ Global.workingdir }}" state=absent
