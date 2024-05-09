@@ -34,5 +34,5 @@ If the boot is crashing, test out different settings (e.g. 2 or more vCPUs).
 Above the login screen the prompt should list the IP address of the server. If there is no IP address, it could not resolve an IP address.
 
 When customizing the playbook, you can use `ansible-lint` to help you find errors
-- `sudo apt install -y ansible-lint`
+- `sudo apt install -y git ansible-lint`
 - `ansible-lint create_custom_iso.yml`
