@@ -85,10 +85,11 @@ Overview:
 - add the ssh keys to the known_hosts file to enable seamless control using Ansible
 
 ## Run the Playbook and Test the VMs
-- Run the playbook: `ansible-playbook build_fleet.yml`
+- Run the playbook: `ansible-playbook -i inventory build_fleet.yml`
   - latest Ubuntu server ISO is downloaded and customized
   - VMs are provisioned and configured
   - VMs boot the automatic installation completes
+  - 💡 open the Oracle VirtualBox GUI on the Host and watch the process if you'd like
 
 Do a quick ansible ping:
 - `ansible -i inventory all -m ping`
@@ -105,21 +106,33 @@ Overview
 
 - Create the file `configure_fleet.yml` ([configure_fleet.yml](configure_fleet.yml))
 - Run the playbook
-  - `ansible-playboook configure_fleet.yml`
+  - `ansible-playbook -i inventory configure_fleet.yml`
 
 ## Test Servers
 Do a quick ansible ping:
 - `ansible -i inventory all -m ping`
 
-You can ssh to the servers and confirm everything is working correctly with the correct amount of resources.
+You can ssh to the servers and confirm everything is working correctly with the correct resources.
+- Check the amount of disk space: `df -h`
+- Check the amount of RAM: `free -h`
+- Check the number of CPUs: `grep processor /proc/cpuinfo | wc -l`
+
+Ad-hoc command to do the same:
+~~~~
+ansible -i inventory all -a "df -h;free -h;grep processor /proc/cpuinfo | wc -l"
+~~~~
 
 # Destroy Servers and Redeploy
 Let's create a playbook to remove all the servers clean up the environment. We will using ansible re-deploy with fresh images.
 
+- Create the file `destroy_fleet.yml` ([destroy_fleet.yml](destroy_fleet.yml))
+- Run the playbook
+  - `ansible-playbook destroy_fleet.yml`
 
-Now remove all the servers and rebuild them:
+Now let's rebuild them:
+- `ansible-playbook -i inventory destroy_fleet.yml`
+- `ansible-playbook -i inventory build_fleet.yml`
+- `ansible-playbook -i inventory configure_fleet.yml`
 
-ansible-playbook destroy_fleet.yml
-ansible-playbook build_fleet.yml
-ansible-playbook -i inventory configure_fleet.yml
-ansible -i inventory all -m ping
+And confirm they are up and running:
+- `ansible -i inventory all -m ping`
