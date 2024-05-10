@@ -8,7 +8,7 @@
     - servers.yml
   tasks:
     - name: Start VM
-      command: "{{ Global.vboxmanage_path }} startvm {{ item.Name }}"
+      command: "{{ Global.vboxmanage_path }} startvm {{ item.Name }} --type headless"
       ignore_errors: true
       when: item.Deploy
       loop: "{{ Server_List }}"
