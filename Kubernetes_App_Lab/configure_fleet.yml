@@ -56,7 +56,7 @@
       apt: update_cache=true force_apt_get=true state=latest
     - name: Check if reboot is required
       register: file
-      stat: path=/var/run/reboot-required get_md5=no
+      stat: path=/var/run/reboot-required get_checksum=no
     - name: Reboot the server if required
       reboot:
         reboot_timeout: 180
