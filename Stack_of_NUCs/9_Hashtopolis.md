@@ -65,7 +65,7 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
   - open web browser and point to the Hashtopolis server's IP address and the path "/install"
     - *Example: http://192.168.1.100/install*
 - You will be redirected to `install/index.php` and be prompted to click `Start Installation of Hashtopolis`
-  - complete the installation gui to configure the server
+  - complete the installation GUI to configure the server
   - create a Hashtopolis login account when prompted
     - Username (the user "admin" is already taken; don't try to use it)
     - Email Address
@@ -94,7 +94,7 @@ This playbook installs the LAMP stack and uses git clone to install the Hashtopo
 ## Generate Voucher Codes
 - Log in and create enough vouchers for all your worker nodes
   - Click **Agents** > **New Agent**
-  - Under the *Clients* seciton, find the New voucher button
+  - Under the *Clients* section, find the New voucher button
   - Click **Create**
   - Repeat to generate vouchers for all your workers
   - Save these voucher codes to `/home/ansible/my-project/hashtopolis/vouchers.txt`
@@ -158,7 +158,7 @@ If some agents are not coming on-line, check the node's `/home/ansible/config.js
     - Hash source: **Paste**
     - Input fields: *paste in the contents of hashes.txt*
     - Click Create hashlist
-  - You can also upload, the file in the browser, copy the file to the servers in the import directy and click import, or donwnload from a URL
+  - You can also upload, the file in the browser, copy the file to the servers in the import directory and click import, or download from a URL
   
 ## Create Task to Crack the Hashes - Wordlist and Rule
 - Click **Tasks** > **New Task**
@@ -188,7 +188,7 @@ Allow a few minutes for the tasks to get assigned and started.
     - Check out the task "visual representation" and "Task Speed"
     - Click Dispatched chunks - "Show all" to view progress, and how log it took to complete each chunk (more powerful agents will be faster and take less time)
 - Click **Agents** -> **Agents status**
-  - Average device utlization may show Red until enough data is collected
+  - Average device utilization may show Red until enough data is collected
   - Note show each device temperature and average CPU are shown
   - Note how different agents are working on different "chunks" of work
 - Click **Chunk activity**
@@ -242,7 +242,7 @@ What do you expect these tasks to crack? Allow a few minutes for the tasks to ge
   - What happens if you change `brute8` to have a Priority of 15?
   - What happens if you change `brute8` to have a Max agents of 1?
   - Do the changes take place immediately, or after a chunk is completed?
-  - Note that the default chunk size is set at 600 seconds (time, not amount of data). How does this change your understanding of priortization and queue management?
+  - Note that the default chunk size is set at 600 seconds (time, not amount of data). How does this change your understanding of prioritization and queue management?
 
 ### After the Jobs Complete
 - Wait for your jobs to complete
@@ -259,7 +259,7 @@ What do you expect these tasks to crack? Allow a few minutes for the tasks to ge
       - Ewug4
 - How would knowing the password policy (say, 10+ characters) help you optimize your tasks?
 - Review the linked [Hashcat Cheatsheet](https://cheatsheet.haax.fr/passcracking-hashfiles/hashcat_cheatsheet/)
-  - What techniques could you combine to attack common <ins>passphrases</ins>? For Example, a combination of 3-5 workds works with trailing numbers?
+  - What techniques could you combine to attack common <ins>passphrases</ins>? For Example, a combination of 3-5 words works with trailing numbers?
 
 ## Uninstall Hashtopolis
 Before you clean up Hashtopolis, take a look under **Learn More** for more hands-one password cracking you can test in the lab.
@@ -279,7 +279,7 @@ sudo systemctl restart apache2
 Try cracking other Hashes
 
 ### Ubuntu
-Starting in Unbunrtu 22.04 and onward, the hash method changed from `sha512crypt` to `yescrypt`. Hashcat does not support yescrypt at of this writing (April 2024). If the hash starts with $6$, sha512crypt method is used
+Starting in Ubuntu 22.04 and onward, the hash method changed from `sha512crypt` to `yescrypt`. Hashcat does not support yescrypt as of this writing (April 2024). If the hash starts with $6$, sha512crypt method is used
 If the hash starts with $y$, yescrypt is in use..
 - If you have an Ubuntu 20.04 server, see the directions below for 20.04
 - If you have an Ubuntu 22.04 server, see the steps for creating a sha512crypt has for demonstration purpose
@@ -327,7 +327,7 @@ python -c 'import crypt,getpass; print(getpass.getpass("Name: ")+":"+crypt.crypt
 - Create a task
   - name: unix
   - hashlist: Unix
-  - workdist: rockyou.txt
+  - worlist: rockyou.txt
   - priority: 5
   - attack command: `#HL# rockyou.txt`
   - click **Create task**
@@ -391,7 +391,7 @@ Steps:
       - Name: LM
       - Hashlist: LM
       - Enable rule OneRuleToRuleThemAll.rule
-      - Enable worklist rockyou.txt
+      - Enable wordlist rockyou.txt
       - Priority: 9
       - Attack command: #HL# rockyou.txt -r OneRuleToRuleThemAll.rule
 5. Delete the `sam` and `system` files from your NUC!
