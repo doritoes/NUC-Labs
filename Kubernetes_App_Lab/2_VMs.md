@@ -89,11 +89,10 @@ Overview:
 - wait for the servers to boot and be configured, and finally come online
 - add the ssh keys to the known_hosts file to enable seamless control using Ansible
 
-`ansible-playboook build_fleet.yml`
+Run the playbook" `ansible-playboook build_fleet.yml`
 
 Do a quick ansible ping:
-
-ansible -i inventory all -m ping
+- `ansible -i inventory all -m ping`
 
 ## Configure Servers
 Now that the servers are built and online, we will configure the local user listed in servers.yml and update all packages. A common issue with Ubuntu 20.04 regarding DNS failed lookups will be fixed.
