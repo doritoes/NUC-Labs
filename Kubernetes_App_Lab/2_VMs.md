@@ -42,7 +42,7 @@ For this level of automation, we need to know the IP addresses of the servers. T
     - CPUs in number of virtual cores
   - Name (VM name)
   - Hostname (VM's OS hostname)
-  - Local suder username and password
+  - Local sudoer username and password
 
 In the example the Lab router (192.168.99.254) provides a DNS resolver to clients.
 
