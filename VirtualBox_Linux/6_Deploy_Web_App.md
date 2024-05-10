@@ -16,7 +16,7 @@ In this step will deploy a placeholder web application to the servers.
 
 ## Test
 - Open each VM IP address in a web browser and confirm you see the standard phpinfo() page, similar to the following
-  - http://<IPADDRESS>
+  - `http://<IPADDRESS>`
 - Create file `/home/ansible/check-fleet.yml` with contents of [check-fleet.yml](check-fleet.yml)
 - Run the playbook
   - `ansible-playbook -i inventory check-fleet.yml`
