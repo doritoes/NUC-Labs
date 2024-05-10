@@ -25,7 +25,7 @@ Let's set the ethernet "wired" network interface to be "optional" on the nodes. 
 ### Quick and Dirty
 - Reboot module: `ansible -i hosts all -m reboot`
   - the command doesn't return until all the nodes are rebooted
-- Remote ad hoc commmand: - `ansible -i hosts all -a "/sbin/reboot"`
+- Remote ad-hoc command: - `ansible -i hosts all -a "/sbin/reboot"`
   - connection error, but all are successfully rebooted
   - eventually get the reset of the connection errors
   - then the command returns when they are all back up
