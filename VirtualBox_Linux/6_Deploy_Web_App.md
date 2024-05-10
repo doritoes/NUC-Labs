@@ -44,11 +44,10 @@ There is only one way to turn them back on, though.
 - Run the playbook
   - `ansible-playbook -i inventory start_fleet.yml`
 
-
 ## Rebuild Specific Servers
 Let's say one of the servers has a problem and we want to rebuild it.
 ### Destroy Specific Servers
-The simplest way is to modify the servers.yml file.
+The simplest way is to modify the `servers.yml` file.
 
 Set **Deploy** to **false** for <ins>the servers you don't want to touch</ins>, and leave Deploy as true for the ones you do. Then later you can set everything back to true. This is usually simpler than creating a new servers.yml file or modifying the scripts to use the new servers.yml file.
 
