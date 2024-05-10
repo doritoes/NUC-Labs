@@ -14,7 +14,7 @@ Overview
   - Modify  the new `variables_fleet.yml` file as follows:
     - Replace the **ssh_key** value with the one you saved earlier
     - Replace the **bridge_interface_name** value with the interface of your host machine
-      - Ex., run ip a and you will find the list of interfaces and IP addresses
+      - Ex., run `ip a` and you will find the list of interfaces and IP addresses
 
 ## Create servers.yml File
 For this level of automation, we need to know the IP addresses of the servers. Therefore instead of relying on DHCP, we will build the servers with static IP addresses.
@@ -48,7 +48,7 @@ In the following example the Lab router (192.168.99.254) provides a DNS resolver
 - Create a new variables.yml file in the home directory (you are the user `ansible` now, so it's in /home/ansible)
   - Example file: `servers.yml` ([servers.yml](servers.yml))
 - Modify the names, IP addresses, gateways, DNS server, and searchdomain information to match your Lab network
-- Use the default memory, storage, and vCPI infomration or modify to your requirements
+- Use the default memory, storage, and vCPU information or modify to your requirements
 
 ## Create fleet-user-data.j2 Jinja File
 Next create the jinja (j2) template used to create the user-data file for each server's automatic installer ISO image.
@@ -97,7 +97,7 @@ Steps:
   - Check the amount of RAM: `free -h`
   - Check the number of CPUs: `grep processor /proc/cpuinfo | wc -l`
 
-💡 Can you write a playbook to display this information? Can you use the moddule "setup" to do the same?
+💡 Can you write a playbook to display this information? Can you use the module "setup" to do the same?
 
 ## Destroy
 Destroy all the VMs using the playbook below. Notice that it removes the working directory and even cleans up the known_hosts and inventory file.
