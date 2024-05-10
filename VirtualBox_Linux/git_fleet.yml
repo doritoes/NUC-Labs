@@ -9,6 +9,6 @@
         update_cache: true
     - name: Git clone project
       git:
-        repo: https://github.com/doritoes/nuc-ansible-lab.git
+        repo: https://github.com/doritoes/NUC-Labs.git
         dest: "{{ lookup('env','HOME') }}/project"
         update: yes
