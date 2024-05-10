@@ -41,7 +41,7 @@ For this level of automation, we need to know the IP addresses of the servers. T
     - MemorySize in MB (1024 = 1GB)
     - CPUs in number of virtual cores
   - Name (VM name)
-  - Hostnmae (VM's OS hostname)
+  - Hostname (VM's OS hostname)
   - Local suder username and password
 
 In the example the Lab router (192.168.99.254) provides a DNS resolver to clients.
