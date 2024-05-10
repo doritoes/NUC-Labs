@@ -71,13 +71,8 @@ Create the jinja (j2) template used to create the user-data file for each server
 You can customize thie template (e.g., the timezone)
 
 ## Create the Playbook to Deploy the VMs in VirtualBox while Managed by Ansible
-
-🚧 Continue here ...
-
-Use `fleet-user-data.yml` ([build_fleet.yml](build_fleet.yml)) as a the example for your `build_fleet` file.
-
-## Run the Playbook and Test the VMs
-The next playbook is the one that will do all the work.
+This playbook is the one that will do all the work.
+- Create the file `build_fleet.yml` ([build_fleet.yml](build_fleet.yml))
 
 Overview:
 - set up working directory
@@ -85,32 +80,37 @@ Overview:
 - create a customer bootable ISO for each server
 - create a VM for each server with the required resources
 - power on the new VMs in headless more
-- add the static IP addresses assigned to the VMs to the inventory file inventory
+- add the static IP addresses assigned to the VMs to the inventory file named `inventory`
 - wait for the servers to boot and be configured, and finally come online
 - add the ssh keys to the known_hosts file to enable seamless control using Ansible
 
-Run the playbook" `ansible-playboook build_fleet.yml`
+## Run the Playbook and Test the VMs
+- Run the playbook: `ansible-playbook build_fleet.yml`
+  - latest Ubuntu server ISO is downloaded and customized
+  - VMs are provisioned and configured
+  - VMs boot the automatic installation completes
 
 Do a quick ansible ping:
 - `ansible -i inventory all -m ping`
+- :!: first attempt failed to configure known_hosts
 
 ## Configure Servers
 Now that the servers are built and online, we will configure the local user listed in servers.yml and update all packages. A common issue with Ubuntu 20.04 regarding DNS failed lookups will be fixed.
 
 Overview
 - Extend the disk partition(s) to use all of the available disk space
-- Enable username & password login and add the local user specified in the servers.yml file
+- Enable username & password login and add the local user specified in the `servers.yml` file
 - Update and upgrade all packages (rebooting as needed)
 - Disable the DNS stub listener to prevent later issues with failed DNS lookups
 
-configure_fleet.yml
-
-`ansible-playboook configure_fleet.yml`
+- Create the file `configure_fleet.yml` ([configure_fleet.yml](configure_fleet.yml))
+- Run the playbook
+  - `ansible-playboook configure_fleet.yml`
 
 ## Test Servers
 Do a quick ansible ping:
+- `ansible -i inventory all -m ping`
 
-ansible -i inventory all -m ping
 You can ssh to the servers and confirm everything is working correctly with the correct amount of resources.
 
 # Destroy Servers and Redeploy
