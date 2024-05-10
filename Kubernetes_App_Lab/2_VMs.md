@@ -6,42 +6,45 @@ We will create this template file for use in our Ansible playbook to Generate Cu
 ## Create file variables.yml
 Create a new `variables.yml` file in the home directory (you are the user ansible now, so it's in /home/ansible).
 
-Example file: `variables.yml` ([variables.yml](variables.yml))
-
-Modify the new `variables.yml` file as follows:
-- Replace the **ssh_key** with the one you saved earlier
-- Replace the **bridge_interface_name** value with the interface of your host machine
-  - Ex., run `ip a` and you will find the list of interfaces and IP addresses
+- Create the file `variables.yml` ([variables.yml](variables.yml))
+  - <ins>Modify</ins> `variables.yml`:
+    - Replace the **ssh_key** value with the one you saved earlier
+    - Replace the **bridge_interface_name** value with the interface of your host machine
+      - Ex., run `ip a` and you will find the list of interfaces and IP addresses
 
 ## Create file servers.yml
 For this level of automation, we need to know the IP addresses of the servers. Therefore instead of relying on DHCP, we will build the servers with static IP addresses.
 
-These static IP addresses:
-- are on the same subnet as your host machine
-- need to be unique (no conflicts); assign IP addresses that are not in your router's DHCP scope/range
-  - This is Linux, so static IP addresses are NOT in the DHCP scope; Windows fixed IP addresses are in the scope range
-- are expressed in CIDR notation for the sake of the autoinstaller
-  - Ex. 192.168.1.25 with the subnet 255.255.255.0 = 192.168.1.25
-  - Ref. https://www.freecodecamp.org/news/subnet-cheat-sheet-24-subnet-mask-30-26-27-29-and-other-ip-address-cidr-network-references/
+- Create the file `servers.yml` ([servers.yml](servers.yml))
+- <ins>Modify</ins> `servers.yml`
+  - Static IP addresses
+    - on the same subnet as your host machine
+    - need to be unique (no conflicts); assign IP addresses that are not in your router's DHCP scope/range
+      - This is Linux, so static IP addresses are NOT in the DHCP scope; Windows fixed IP addresses are in the scope range
+    - are expressed in CIDR notation for the sake of the autoinstaller
+      - Ex. 192.168.1.25 with the subnet 255.255.255.0 = 192.168.1.25
+      - Ref. https://www.freecodecamp.org/news/subnet-cheat-sheet-24-subnet-mask-30-26-27-29-and-other-ip-address-cidr-network-references/
+  - Gateways
+    - Since we are doing static IP addresses you will also need to provide the GW IP
+    - IPv4Gateway: the IP address of your router
+    - on your Host computer run route -n from Terminal/command line to see the gateway IP
+  - IPv4DNS
+    - static IP means specifying DNS servers
+    - on your host computer run `nmcli device show`
+      - shows the IP4.DNS[1] address and the IP4.GATEWAY address
+    - you can always configure the Google DNS IP 8.8.8.8 here
+   - Search domain
+     - should match the domain you configured on your router, if any
+     - Or use lablocal for a safe value
+  - Specify VM resources for each server
+    - DiskSize in MB (10240 = 102240 MB = 10GB)
+    - MemorySize in MB (1024 = 1GB)
+    - CPUs in number of virtual cores
+  - Name (VM name)
+  - Hostnmae (VM's OS hostname)
+  - Local suder username and password
 
-Since we are doing static IP addresses you will also need to provide:
-- IPv4Gateway: the IP address of your router
-  - on your Host computer run route -n from Terminal/command line to see the gateway IP
-- IPv4DNS: a DNS server
-  - on your host computer run `nmcli device show`
-  - shows the IP4.DNS[1] address and the IP4.GATEWAY address
-  - you can always configure the Google DNS IP 8.8.8.8 here
-
-The Search domain should match the domain you configured on your router, if any. Or use lablocal for a safe value.
-
-You will also specify VM resources for each server:
-- DiskSize in MB (10240 = 102240 MB = 10GB)
-- MemorySize in MB (1024 = 1GB)
-- CPUs in number of virtual cores
-
-You will also enter the Name (VM name), Hostname (VM's OS hostname), local sudoer username and password.
-
-In the following example the Lab router (192.168.99.254) provides a DNS resolver to clients.
+In the example the Lab router (192.168.99.254) provides a DNS resolver to clients.
 
 Lab server list
 - 1x Controller
@@ -61,14 +64,16 @@ This consumes 6 of the 8 cores in the NUC host, 8GB of RAM and <500GB storage.
 
 If you have more cores, give 2 cores to each App node and add another App node for 3 total (10 cores + 2 overhead = 12 cores at least).
 
-Use `servers.yml` ([servers.yml](servers.yml)) as a the example for your `server.yml` file.
-
 ## Create jinja template file fleet-user-data.j2
-🚧 Continue here ...
+Create the jinja (j2) template used to create the user-data file for each server's automatic installation ISO image.
+- Create the file `fleet-user-data.j2` ([fleet-user-data.j2](fleet-user-data.j2))
 
-Use `fleet-user-data.yml` ([fleet-user-data.yml](fleet-user-data.yml)) as a the example for your `fleet-user-data.yml` file.
+You can customize thie template (e.g., the timezone)
 
 ## Create the Playbook to Deploy the VMs in VirtualBox while Managed by Ansible
+
+🚧 Continue here ...
+
 Use `fleet-user-data.yml` ([build_fleet.yml](build_fleet.yml)) as a the example for your `build_fleet` file.
 
 ## Run the Playbook and Test the VMs
