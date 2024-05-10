@@ -1,5 +1,5 @@
 # NUC-Labs
-[UncleNuc.com](https://unclenuc.com) Labs are a series of hands-on learning projects that provide exposed to multiple advanced technologoies. The focus is on using automation to build and scale applications and workloads in a low-cost lab environment. The star of the show? The Intel NUC.
+[UncleNuc.com](https://unclenuc.com) Labs are a series of hands-on learning projects that provide exposed to multiple advanced technologies. The focus is on using automation to build and scale applications and workloads in a low-cost lab environment. The star of the show? The Intel NUC.
 
 This repository is for building and managing a NUC lab using Ansible.
 
