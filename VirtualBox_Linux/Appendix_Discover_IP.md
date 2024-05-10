@@ -2,10 +2,10 @@
 Since we cannot log in directly at the console of the server that we built (a feature), it can be challenging to find the IP addresses.
 
 ## Option 1 - Check your Lab Router DHCP Leases
-Your router keeps track of all the devices and their IP addreses. It might even have the name of the device.
+Your router keeps track of all the devices and their IP addresses. It might even have the name of the device.
 
 ## Option 2 - nmap scan
-Intall and run nmap on Host or another system in your Lab network
+Install and run nmap on Host or another system in your Lab network
 
 - Install nmap
   - `sudo apt install  nmap -y`
