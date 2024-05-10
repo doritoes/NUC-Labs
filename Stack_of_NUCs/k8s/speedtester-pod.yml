@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: speedtester
+spec:
+  containers:
+    - image: docker.io/doritoes/speedtester:latest
+      name: speedtester
+      ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP

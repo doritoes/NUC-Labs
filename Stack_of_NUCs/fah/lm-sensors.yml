@@ -1,0 +1,12 @@
+---
+- name: lm-sensors install
+  hosts: clients
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: Install lm-sensors
+      apt:
+        name: lm-sensors
+        update_cache: true
+    - name: Detect sensors
+      ansible.builtin.command: sensors-detect --auto

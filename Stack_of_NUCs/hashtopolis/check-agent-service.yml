@@ -1,0 +1,9 @@
+---
+- hosts: agents
+  tasks:
+    - name: Get Service Status
+      ansible.builtin.systemd:
+        name: "hashtopolis-agent"
+      register: hta_service_status
+    - debug:
+        var: hta_service_status.status.ActiveState
