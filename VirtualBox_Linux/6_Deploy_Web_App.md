@@ -10,23 +10,23 @@ In this step will deploy a placeholder web application to the servers.
 - Create file `/home/ansible/app-conf.j2` with contents of [app-conf.j2](app-conf.j2)
 
 ### Deploy Nginx with PHP and Set up a Test App
-- Create file `/home/ansible/application-fleet.yml` with contents of [application-fleet.yml](application-fleet.yml)
+- Create file `/home/ansible/application_fleet.yml` with contents of [application_fleet.yml](application_fleet.yml)
 - Run the playbook
-  - `ansible-playbook -i inventory application-fleet.yml`
+  - `ansible-playbook -i inventory application_fleet.yml`
 
 ## Test
 - Open each VM IP address in a web browser and confirm you see the standard phpinfo() page, similar to the following
   - `http://<IPADDRESS>`
-- Create file `/home/ansible/check-fleet.yml` with contents of [check-fleet.yml](check-fleet.yml)
+- Create file `/home/ansible/check_fleet.yml` with contents of [check_fleet.yml](check_fleet.yml)
 - Run the playbook
-  - `ansible-playbook -i inventory check-fleet.yml`
+  - `ansible-playbook -i inventory check_fleet.yml`
 
 The playbook confirms a page with HTTP status 200 is returned (but not necessary the contents)
 
 ### Reboot the Servers 50% at a Time
-- Create file `/home/ansible/reboot-half.yml` with contents of [reboot-half.yml](reboot-half.yml)
+- Create file `/home/ansible/reboot-half.yml` with contents of [reboot_half.yml](reboot_half.yml)
 - Run the playbook
-  - `ansible-playbook -i inventory reboot-half.yml`
+  - `ansible-playbook -i inventory reboot_half.yml`
 
 ### Shut the Servers Down Two Ways then Power On
 This first method use's the OS shutdown command.
