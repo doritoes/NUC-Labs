@@ -88,14 +88,14 @@ Steps:
 - Do a quick ansible ping
   - `ansible -i inventory all -m ping`
 - Log in to servers and confirm everything is working with the correct user account & password, CPUs, storage, RAM
-  - ssh to the IP address of the server (password-less login as ansible using key)
-  - ssh to the IP address of the server as the user you specified in servers.yml
-    - Ex. ssh myuser@192.168.99.201
+  - ssh to the IP address of the server (password-less login as `ansible` using key)
+  - ssh to the IP address of the server as the user you specified in `servers.yml`
+    - Ex. `ssh myuser@192.168.99.201`
     - You should be prompted for the password
   - Test sudo access for each user
-  - Check the amount of disk space: df -h
-  - Check the amount of RAM: free -h
-  - Check the number of CPUs: grep processor /proc/cpuinfo | wc -l
+  - Check the amount of disk space: `df -h`
+  - Check the amount of RAM: `free -h`
+  - Check the number of CPUs: `grep processor /proc/cpuinfo | wc -l`
 
 💡 Can you write a playbook to display this information? Can you use the moddule "setup" to do the same?
 
