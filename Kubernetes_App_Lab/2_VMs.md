@@ -1,10 +1,10 @@
 # Deploy VMs
 Deploy virtual machines (VMs) running Linux inside Oracle VirtualBox. We will use a custom "user-data" file with an unattended installation of Ubuntu.
 
-We will create this template file for use in our Ansible playbook to Generate Custom Unattended Ubuntu Install ISO. This will allow us to customize each VM to our requirements.
+We will create this template file for use in our Ansible playbook to Generate Custom Unattended Ubuntu Install ISOs. This will allow us to customize each VM to our requirements.
 
 ## Create file variables.yml
-Create a new variables.yml file in the home directory (you are the user ansible now, so it's in /home/ansible).
+Create a new `variables.yml` file in the home directory (you are the user ansible now, so it's in /home/ansible).
 
 Example file: `variables.yml` ([variables.yml](variables.yml))
 
