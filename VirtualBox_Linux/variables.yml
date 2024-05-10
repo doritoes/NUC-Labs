@@ -1,0 +1,14 @@
+---
+Global:
+  bridge_interface_name: "ens32"
+  username: ansible
+  ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCuG5Fo9fVZ3L2cmViSRZOcnMpvRsSpi7DxAhYxVm57LWRU82zIfxARDozAHa/cRGA3GftJYK6dC6PqY1YMff9mr9IovjE8/0WVe6SLpgeL+EmhufudXtOcepkvEy/Yv7J+1C6dn7vJoC8hnX8uRnGh2glctuoiTKBm6PxwoJqo/9KoRkWEOvyS0tQF9stUcYk+IxR0SD9LT3ttE8RA8SQ28uJKrPO8FID9qzvq4hTKdIVo3i+ugIsmQLzfkUrLrlCGtvzC6Y+TTrqJWaEeNjEts54oAXl/MwZ4UVjPiS5olieCuOcOlxO0abRVd62b4E1sfUk1ZdFmwoNbFvCENvHfAMvRSJG3sJ4no0wffP7RuNDnG0nHEMO4vrjmY+cVbBM4P/m6TvVJvr/u3v6cBGAXIDPODC+iFh8vrVxQKp7S2ClMFEQ2Zkjn+0a9qlOyhSojOBRQaDHkbT3pqY4KMhUmANaNtVsFkjE+OcliOvauDO2+eaCpQrdr8VO0x7BHzWU= ansible@labbox"
+  system_name_prefix: vb-ansible
+  workingdir: "{{ lookup('env','HOME') }}/ubuntu-autoinstall"
+  vboxmanage_path: /usr/bin/vboxmanage
+  ubuntu_iso: https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current/jammy-live-server-amd64.iso
+  ubuntu_iso_filename: jammy-live-server-amd64.iso
+  new_iso_filename: ubuntu-22.04-autoinstall.iso
+  default_disk_size: 40960
+Installer:
+  new_iso_path: "{{ lookup('env','HOME') }}/{{ Global.new_iso_filename }}"

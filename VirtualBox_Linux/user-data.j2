@@ -1,0 +1,45 @@
+#cloud-config
+autoinstall:
+  version: 1
+  ssh:
+    install-server: true
+    # option "allow-pw" defaults to `true` if authorized_keys is empty, `false` otherwise.
+    allow-pw: false
+  storage:
+    layout:
+      name: lvm
+      match:
+        size: largest
+  user-data:
+    disable_root: true
+    timezone: America/New_York
+    package_upgrade: true
+    packages:
+    - network-manager
+    - lldpd
+    - git
+    - python3-pip
+    - ansible
+    - arp-scan
+    users:
+      - name: {{ Global.username }}
+        primary_group: users
+        groups: sudo
+        lock_passwd: true
+        # passwd: "$5$IWwNqL9VUSDoc4Jv$DEUGR.cZQcbz/QvdCOmU13fX5ZW0rANg8LqkAtX3nBA" # changeme
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - "{{ Global.ssh_key }}"
+        sudo: ALL=(ALL) NOPASSWD:ALL
+  ansible:
+    install_method: pip
+    package_name: ansible
+    #run_user: ansible
+    galaxy:
+      actions:
+        - ["ansible-galaxy", "collection", "install", "community.general"]
+  late-commands:
+    # randomly generate the hostname & show the IP at boot
+    - echo "{{ Global.system_name_prefix }}-$(openssl rand -hex 3)" > /target/etc/hostname
+    # dump the IP out at login screen
+    - echo "Ubuntu 22.04 LTS \nIP - $(hostname -I)\n" > /target/etc/issue

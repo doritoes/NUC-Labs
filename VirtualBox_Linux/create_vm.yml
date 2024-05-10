@@ -1,0 +1,75 @@
+---
+- name: Create Oracle Virtualbox VM
+  hosts: localhost  # Run on the local machine
+  connection: local
+  gather_facts: false
+  vars_files:
+    - variables.yml
+  vars:
+    vm_name: my_vm
+
+  tasks:
+  - name: Ensure VirtualBox is installed
+    apt:
+      name: virtualbox
+      state: present
+
+  - name: Remove any old VM with this name
+    command: "{{ Global.vboxmanage_path }} unregistervm --delete {{ vm_name }}"
+    ignore_errors: true
+
+  - name: Ensure the old disk file is gone
+    file: path="{{ vm_name }}.vdi" state=absent
+
+  - name: Create the virtual machine
+    command: "{{ Global.vboxmanage_path }} createvm --name {{ vm_name }} --ostype Ubuntu_64 --register"
+  - name: Create storage
+    command: "{{ Global.vboxmanage_path }} createmedium disk --filename {{ vm_name }}.vdi --size {{ Global.default_disk_size }} --format=VDI"
+  - name: Add IDE controller
+    command: "{{ Global.vboxmanage_path }} storagectl {{ vm_name }} --name IDE --add IDE --controller PIIX4"
+  - name: Attach DVD drive
+    command: "{{ Global.vboxmanage_path }} storageattach {{ vm_name }} --storagectl IDE --port 0 --device 0 --type dvddrive --medium {{ Installer.new_iso_path }}"
+  - name: Add SATA controller
+    command: "{{ Global.vboxmanage_path }} storagectl {{ vm_name }} --name SATA --add SAS --controller LsiLogicSas"
+  - name: Attach drive
+    command: "{{ Global.vboxmanage_path }} storageattach {{ vm_name }} --storagectl SATA --port 0 --device 0 --type hdd --medium {{ vm_name }}.vdi"
+  - name: Boot order
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --boot1 disk --boot2 DVD --boot3 none --boot4 none"
+  - name: Set VM CPU
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --cpus 2"
+  - name: Set VM memory
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --memory 2048"
+  - name: Set VM Video RAM
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --vram 16"
+  - name: Set to vmsvga
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --graphicscontroller vmsvga"
+  - name: Disable virtex
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --hwvirtex on"
+  - name: Disable nested virt
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --nested-hw-virt on"
+  - name: Enable ioapic
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --ioapic on"
+  - name: Disable pae
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --pae off"
+  - name: Enable acpi
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --acpi on"
+  - name: Set paravitprovider
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --paravirtprovider default"
+  - name: Enable nested paging
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --nestedpaging on"
+  - name: Set keyboard PS2
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --keyboard ps2"
+  - name: Set serial uart1
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --uart1 0x03F8 4"
+  - name: Disable serial
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --uartmode1 disconnected"
+  - name: Set serial uarttype1
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --uarttype1 16550A"
+  - name: Set auto MAC address
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --macaddress1 auto"
+  - name: Enable cable connection
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --cableconnected1 on"
+  - name: Configuring a Virtual Network Adapter
+    command: "{{ Global.vboxmanage_path }} modifyvm {{ vm_name }} --nic1 bridged --bridgeadapter1 {{ Global.bridge_interface_name }}"
+  - name: Start the virtual machine
+    command: "{{ Global.vboxmanage_path }} startvm {{ vm_name }} --type gui"

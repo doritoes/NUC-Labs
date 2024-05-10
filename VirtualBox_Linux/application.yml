@@ -1,0 +1,5 @@
+---
+application:
+  Name: test
+  Root: /var/www/html
+  http_port: 80
