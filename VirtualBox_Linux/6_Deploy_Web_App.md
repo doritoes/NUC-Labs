@@ -106,22 +106,3 @@ There are certainly better ways to deploy applications, such as using git.
   - `ansible-playbook -i inventory git_fleet.yml --ask-become`
 
 How could you use ansible and git to deploy an application to the /var/www/html folder?
-
-git_fleet.yaml
-~~~~
----
-- hosts: all
-  become: true
-  tasks:
-    - name: Install Git
-      apt:
-        name: git
-        state: present
-        update_cache: true
-    - name: Git clone project
-      git:
-        repo: https://github.com/doritoes/nuc-ansible-lab.git
-        dest: "{{ lookup('env','HOME') }}/project"
-        update: yes
-~~~~
-
