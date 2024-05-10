@@ -32,7 +32,7 @@ The playbook confirms a page with HTTP status 200 is returned (but not necessary
 This first method use's the OS shutdown command.
 - Create file `/home/ansible/shutdown_fleet.yml` with contents of [shutdown_fleet.yml](shutdown_fleet.yml)
 - Run the playbook
-  - `ansible-playbook -i inventory shutdown_fleet.yml.yml`
+  - `ansible-playbook -i inventory shutdown_fleet.yml`
 
 Sending a power off signal using VirtualBox is a second way to gracefully power off the servers.
 - Create file `/home/ansible/power_off_fleet.yml` with contents of [power_off_fleet.yml](power_off_fleet.yml)
