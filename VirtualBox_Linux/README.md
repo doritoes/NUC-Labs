@@ -51,7 +51,7 @@ The first step is to install Ubuntu 22.04 Desktop on the host system.
 [Deploy Fleet of VMs](5_Deploy_Fleet.md)
 
 ### Deploy a Web Application to our Fleet of VMs
-In this step will deploy a placeholder web application to the servers. If you would like see similar automation using a proper demonstation web app, see [Kubernetes App Lab](/Kubernetes_App_Lab/README.md).
+In this step will deploy a placeholder web application to the servers. If you would like see similar automation using a proper demonstration web app, see [Kubernetes App Lab](/Kubernetes_App_Lab/README.md).
 
 [Deploy Web App](6_Deploy_Web_App.md)
 🚧 Continue building here...
