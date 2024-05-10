@@ -7,8 +7,6 @@ Congratulations on completing this Lab! You successfully used a variety of techn
 - Deploy a fleet of Ubuntu server VMs into Virtualbox using unattended installation
 - Loaded a demonstration web app
 
-[test](/Kubernetes_App_Lab/README.md)
-
 # Learn More
 Would you like to see a more complex deployment of an actual container-based web application on Kubernetes
 - Check out [Kubernetes App Lab](/Kubernetes_App_Lab/README.md)
