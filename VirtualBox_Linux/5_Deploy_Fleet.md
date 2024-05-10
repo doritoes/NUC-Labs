@@ -86,7 +86,7 @@ Steps:
 
 ## Test Servers
 - Do a quick ansible ping
-  - `ansible all -m ping`
+  - `ansible -i inventory all -m ping`
 - Log in to servers and confirm everything is working with the correct user account & password, CPUs, storage, RAM
   - ssh to the IP address of the server (password-less login as ansible using key)
   - ssh to the IP address of the server as the user you specified in servers.yml
