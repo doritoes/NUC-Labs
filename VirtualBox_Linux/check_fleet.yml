@@ -16,4 +16,4 @@
     - name: Print website response (optional)
       debug:
         msg: "Website response: {{ web_status.content }}"
-      when: web_status_conent is defined and web_status.content != ''
+      when: web_status.content is defined and web_status.content != ''
