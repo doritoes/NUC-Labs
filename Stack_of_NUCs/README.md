@@ -80,7 +80,7 @@ Deploy a web application and take on challenging optional/bonus tasks include so
 ## Kubernetes - Test HAProxy
 No Kubernetes lab would be complete without HAProxy.
 
-[Kubenetes HAProxy](12_Kubernetes_HAProxy.md)
+[Kubernetes HAProxy](12_Kubernetes_HAProxy.md)
 
 ## Cleanup and Next Steps
 [Next Steps](13_Next_Steps.md)
