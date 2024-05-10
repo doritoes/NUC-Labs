@@ -62,7 +62,7 @@ Overview:
 - create a VM for each server with the required resources
 - power on the new VMs in headless mode
 - add the static IP addresses assigned to the VMs to the inventory file inventory
-- wait for the servers to boot and be configured, and finally come online
+- wait for the servers to boot and be d, and finally come online
 - add the ssh keys to the known_hosts file to enable seamless control using Ansible
 
 Steps:
@@ -80,9 +80,9 @@ Overview:
 - Disable the DNS stub listener to prevent later issues with failed DNS lookups
 
 Steps:
-- Create a new file `configure_servers.yml` ([configure_servers.yml](configure_servers.yml))
+- Create a new file `configure_fleet.yml` ([configure_fleet.yml](configure_fleet.yml))
 - Run the playbook
-  - `ansible-playbook -i inventory configure_servers.yml`
+  - `ansible-playbook -i inventory configure_fleet.yml`
 
 ## Test Servers
 - Do a quick ansible ping
