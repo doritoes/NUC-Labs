@@ -15,7 +15,7 @@ NOTE This playbook expects you to run it on Ubuntu desktop host an open  a GUI.
 From inside the VM's console (in VirtualBox) try to log in as user `ansible`
 - Does it work?
 
-### Experiement with Oracle Virtualbox commands
+### Experiment with Oracle Virtualbox commands
 - `vboxmanage list vms`
 - `vboxmanage unregistervm <name or ID> –delete`
 - what happens if you don't use `–delete`?
