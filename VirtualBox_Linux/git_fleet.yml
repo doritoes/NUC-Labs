@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+        update_cache: true
+    - name: Git clone project
+      git:
+        repo: https://github.com/doritoes/nuc-ansible-lab.git
+        dest: "{{ lookup('env','HOME') }}/project"
+        update: yes
