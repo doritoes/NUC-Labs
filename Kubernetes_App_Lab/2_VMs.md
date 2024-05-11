@@ -117,9 +117,11 @@ You can ssh to the servers and confirm everything is working correctly with the 
 - Check the amount of RAM: `free -h`
 - Check the number of CPUs: `grep processor /proc/cpuinfo | wc -l`
 
-Ad-hoc command to do the same:
+Ad-hoc commands to do the same:
 ~~~~
-ansible -i inventory all -a "df -h;free -h;grep processor /proc/cpuinfo | wc -l"
+ansible -i inventory all -a "df -h"
+ansible -i inventory all -a "free -h"
+ansible -i inventory all -a "grep processor /proc/cpuinfo"
 ~~~~
 
 # Destroy Servers and Redeploy
