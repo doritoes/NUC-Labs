@@ -28,7 +28,7 @@ Let's create the deployment manifest file for the MySQL server.
 
 The image documentation states that by mounting our mysql.sql ConfigMap to the pod at docker-entrypoint-initdb.d, the SQL script should automatically be processed when the pod deploys and there is no database yet.
 
-However, in testing, we has to do a combination of things to get the configuration done:
+However, in testing, we had to do a combination of things to get the configuration done:
 - add a sleep command to allow the MySQL server to initialize fully; it will not accept any connections until that is complete
 - we can't used the mounted location for our mysql command, so we copy the file from the mount the root, and execute from there
 
