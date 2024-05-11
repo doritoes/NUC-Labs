@@ -152,7 +152,7 @@ Now we will create an ansible playbook to remove:
 - the persistent volume and the volume claim and the service
 
 Steps to remove the MySQL pod:
-- Create `remove-sql.yml` from [remove-sql](remove-sql)
+- Create `remove-sql.yml` from [remove-sql.yml](remove-sql.yml)
 - Examine before: `kubectl get pod,node,deployment,pv,pvc,cm`
 - Run the playbook
   - `ansible-playbook remove-sql.yml`
