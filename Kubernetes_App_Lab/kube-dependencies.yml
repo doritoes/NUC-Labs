@@ -1,17 +1,33 @@
 ---
-- hosts: all
+- name: Install Kubernetes dependencies
+  hosts: all
   become: true
   tasks:
-    - fail:
-        msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
+    - name: Check platform version
+      fail:
+       msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
       when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '22.04'
 
-    - name: Update APT packages
+    - name: Update apt-cache and do dist upgrade
       apt:
         update_cache: true
+        upgrade: dist
+        cache_valid_time: 3600
 
-    - name: Reboot and wait for reboot to complete
+    - name: Install packages
+      apt:
+        name: curl, ca-certificates, apt-transport-https
+        state: present
+        update_cache: true
+
+    - name: Check if reboot required
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+
+    - name: Reboot if required
       reboot:
+      when: reboot_required_file.stat.exists == true
 
     - name: Disable SWAP (Kubeadm requirement)
       shell: |
@@ -27,7 +43,7 @@
       copy:
         content: ""
         dest: /etc/modules-load.d/containerd.conf
-        force: false
+        force: no
 
     - name: Configure modules for Containerd
       blockinfile:
@@ -40,7 +56,7 @@
       copy:
         content: ""
         dest: /etc/sysctl.d/99-kubernetes-cri.conf
-        force: false
+        force: no
 
     - name: Configure sysctl params for Kubernetes
       lineinfile:
@@ -54,31 +70,31 @@
     - name: Apply sysctl params without reboot
       command: sysctl --system
 
-    - name: Install APT Transport HTTPS
-      apt:
-        name: apt-transport-https
-        state: present
-
     - name: Add Docker apt-key
-      apt_key:
+      get_url:
         url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
+        dest: /etc/apt/keyrings/docker-apt-keyring.asc
+        mode: '0644'
+        force: true
 
-    - name: Add Docker's APT repository
+    - name: Add Docker apt repository
       apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-        filename: "docker-{{ ansible_distribution_release }}"
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/etc/apt/keyrings/docker-apt-keyring.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        update_cache: true
 
     - name: Add Kubernetes apt-key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
+      get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
+        mode: '0644'
+        force: true
 
-    - name: Add Kubernetes' APT repository
+    - name: Add Kubernetes apt repository
       apt_repository:
-        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
         state: present
-        filename: 'kubernetes'
+        update_cache: true
 
     - name: Install Containerd
       apt:
@@ -106,16 +122,11 @@
         enabled: true
         daemon-reload: true
 
-    - name: Install Kubelet
+    - name: Install Kubernetes packages
       apt:
-        name: kubelet=1.26.*
+        name: kubelet, kubectl, kubeadm
         state: present
         update_cache: true
-
-    - name: Install Kubeadm
-      apt:
-        name: kubeadm=1.26.*
-        state: present
 
     - name: Enable the Kubelet service, and enable it persistently
       service:
@@ -137,25 +148,5 @@
         name: net.ipv4.ip_forward
         value: 1
 
-    - name: Check Kubelet args in Kubelet config
-      shell: grep "^Environment=\"KUBELET_EXTRA_ARGS=" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf || true
-      register: check_args
- 
-    - name: Add runtime args in Kubelet config
-      lineinfile:
-        dest: "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
-        line: "Environment=\"KUBELET_EXTRA_ARGS= --runtime-cgroups=/system.slice/containerd.service --container-runtime-endpoint=unix:///run/containerd/containerd.sock\""
-        insertafter: '\[Service\]'
-      when: check_args.stdout == ""
- 
-    - name: Reboot and wait for reboot to complete
+    - name: Reboot
       reboot:
- 
-- hosts: master
-  become: true
-  tasks:
-    - name: Install Kubectl
-      apt:
-        name: kubectl=1.26.*
-        state: present
-        force: true  # allow downgrades
