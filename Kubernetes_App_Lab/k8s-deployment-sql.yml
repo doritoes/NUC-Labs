@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      nodeSelector:
+        my-role: sql # restrict scheduling to the node with the label my-role: sql
+      containers:
+      - name: mysql
+        image: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: yourpassword
+        ports:
+        - containerPort: 3306
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/bash", "-c", "cp /docker-entrypoint-initdb.d/mysql.sql / && sleep 10 && /bin/mysql -uroot -pyourpassword -e \"SOURCE /mysql.sql\""]
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-script
+          mountPath: /docker-entrypoint-initdb.d
+        - name: mysql-bind
+          mountPath: /etc/mysql/conf.d/mysqld.cnf
+          subPath: mysqld.cnf
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+      - name: mysql-script
+        configMap:
+          name: mysql-setup-script
+      - name: mysql-bind
+        configMap:
+          name: mysql-bind
