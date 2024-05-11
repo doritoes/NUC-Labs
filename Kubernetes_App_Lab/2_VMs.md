@@ -93,7 +93,6 @@ Overview:
 
 Do a quick ansible ping:
 - `ansible -i inventory all -m ping`
-- :!: first attempt failed to configure known_hosts
 
 ## Configure Servers
 Now that the servers are built and online, we will configure the local user listed in servers.yml and update all packages. A common issue with Ubuntu 20.04 regarding DNS failed lookups will be fixed.
@@ -130,7 +129,6 @@ Let's create a playbook to remove all the servers clean up the environment. We w
   - `ansible-playbook destroy_fleet.yml`
 
 Now let's rebuild them:
-- `ansible-playbook -i inventory destroy_fleet.yml`
 - `ansible-playbook -i inventory build_fleet.yml`
 - `ansible-playbook -i inventory configure_fleet.yml`
 
