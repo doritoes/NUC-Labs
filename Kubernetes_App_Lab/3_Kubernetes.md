@@ -29,7 +29,7 @@ Update the /etc/hosts files on all the nodes with the hostnames. This allows all
 
 - Create `updatehostsfile.yml` from [updatehostsfile.yml](updatehostsfile.yml)
   - instructs Ansible to use the updated `inventory` file 
-- Run the playbook `ansible-playboook updatehostsfile.yml --ask-become`
+- Run the playbook `ansible-playbook updatehostsfile.yml --ask-become`
 
 ## Install Prerequisites
 - Create `kube-dependencies.yml` from [kube-dependencies.yml](kube-dependencies.yml)
@@ -37,14 +37,14 @@ Update the /etc/hosts files on all the nodes with the hostnames. This allows all
 
 ## Install Kubernetes Cluster on Master Node
 - Create `master.yml` from [master.yml](master.yml)
-- Run the playbook `ansible-playboook master.yml`
+- Run the playbook `ansible-playbook master.yml`
 - SSH to the master and verify the master node gets status `Ready`
   - `ssh controller kubectl get nodes`
 
 ## Set up the SQL Node
 - Create `sql.yml` from [sql.yml](sql.yml)
 - <ins>Modify the file</ins> to replace `MASTERIP` with the IP address of your master node in <ins>2 places</ins>
-- Run the playbook `ansible-playboook sql.yml`
+- Run the playbook `ansible-playbook sql.yml`
 
 ## Set up the Worker Nodes
 - Create `workers.yml` from [workers.yml](workers.yml)
