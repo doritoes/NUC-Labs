@@ -62,7 +62,7 @@ Remove the physical volume
 Now we will create a “reservation” for space on the persistent volume and give it a name.
 
 - Create `k8s-pv.yml` from [k8s-pvc.yml](k8s-pvc.yml)
-- We can create the persistent volume clame manually using kubect (but the persistent volume needs to exist)
+- We can create the persistent volume clame manually using kubectl (but the persistent volume needs to exist)
   - Apply the manifest: `kubectl apply -f k8s-pvc.yml`
 
 Examine the output of the following commands
