@@ -145,13 +145,13 @@ INSERT INTO messages (message) VALUES ('Hello, world!');
 SELECT * FROM messages;
 ~~~~
 
-Use `exit` or `quit` to exit.
+Use `exit` or `quit` to exit. Exit again to return to your Host system.
 
 Now we will create an ansible playbook to remove:
 - the deployment and all the pods
 - the persistent volume and the volume claim and the service
 
-Steps to remove the MySQL pod:
+Steps to remove and redeploy the MySQL pod:
 - Create `remove-sql.yml` from [remove-sql.yml](remove-sql.yml)
 - Examine before: `kubectl get pod,node,deployment,pv,pvc,cm`
 - Run the playbook
@@ -165,7 +165,7 @@ Steps to confirm data is still there:
 - Get the new pod name
   - `kubectl get pods`
 - Connnect to the new pod in an interactive session (again, substitute the actual pod name)
-  - `kubectl exec -t <mysql-pod-name> -- bash`
+  - `kubectl exec -it <mysql-pod-name> -- bash`
 - Connect to `mysql` again
   - `mysql -uroot -pyourpassword`
 - Check the output of these commands
