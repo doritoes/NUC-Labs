@@ -115,7 +115,7 @@ Congratulations on your brand new MySQL server! In this step we are going do dem
 ### Login Using mysql Command
 After connecting interactively to the MySQL pod, test logging in from the command line
 - `mysql -uroot -pyourpassword`
-- `mysql -appuer -pmypass`
+- `mysql -uappuser -pmypass`
 
 Take a look at what is there by default: (don't forget the trailing semicolon;)
 - `show grants;`
@@ -127,7 +127,7 @@ Take a look at what is there by default: (don't forget the trailing semicolon;)
 Use `exit` or `quit` to exit.
 
 ### Demonstrating Persistence
-Log back in to the pod and re-launch `mysql`
+Log back in to the pod and re-launch `mysql` as user `root`.
 
 Here we will:
 - create a database
@@ -135,6 +135,8 @@ Here we will:
 - create a table in the database
 - insert a row
 - show the data we inserted
+
+Paste the following commands into MySQL:
 ~~~~
 CREATE DATABASE test;
 USE test;
@@ -142,12 +144,15 @@ CREATE TABLE messages (message VARCHAR(255));
 INSERT INTO messages (message) VALUES ('Hello, world!');
 SELECT * FROM messages;
 ~~~~
+
+Use `exit` or `quit` to exit.
+
 Now we will create an ansible playbook to remove:
 - the deployment and all the pods
 - the persistent volume and the volume claim and the service
 
-Steps to destroy and rebuild MySQL:
-- Create `destroy-sql.yml` from [destroy-sql.yml](destroy-sql.yml)
+Steps to remove the MySQL pod:
+- Create `remove-sql.yml` from [remove-sql](remove-sql)
 - Examine before: `kubectl get pod,node,deployment,pv,pvc,cm`
 - Run the playbook
   - `ansible-playbook remove-sql.yml`
