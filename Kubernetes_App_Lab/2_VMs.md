@@ -103,6 +103,7 @@ Overview
 - Update and upgrade all packages (rebooting as needed)
 - Disable the DNS stub listener to prevent later issues with failed DNS lookups
 
+Steps
 - Create the file `configure_fleet.yml` ([configure_fleet.yml](configure_fleet.yml))
 - Run the playbook
   - `ansible-playbook -i inventory configure_fleet.yml`
