@@ -109,7 +109,7 @@ Congratulations on your brand new MySQL server! In this step we are going do dem
   - `kubectl get pods`
   - It will be named something similar to `mysql-deployment-6b455d9d57-qxd8q`
 - Next, use the pod name to connect interactively
-  - `kubectl exec -t <mysql-pod-name> -- bash`
+  - `kubectl exec -it <mysql-pod-name> -- bash`
   - Example: `kubectl exec -it mysql-deployment-6b455d9d57-qxd8q -- bash`
 
 ### Login Using mysql Command
