@@ -95,7 +95,7 @@ This basic configuration will load balance (round-robin method) across the “wo
 ### TestHAProxy
 - Point your browser to the IP address of any worker node on the HAProxy port we configured
   - `http://<ipaddress_node>:8080`
-- Try using the th IP address of all the worker nodes
+- Try using the IP address of all the worker nodes
 - Reduce the number of replicas to 1
   - Edit `k8s-deployment.yml` to set **replicas: 1**
   - Apply `kubtcutl apply -f k8s-deployment.yml`
