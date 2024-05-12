@@ -97,16 +97,16 @@ This basic configuration will load balance (round-robin method) across the “wo
   - `http://<ipaddress_node>:8080`
 - Try using the IP address of all the worker nodes
 - Reduce the number of replicas to 1
-  - Edit `k8s-deployment.yml` to set **replicas: 1**
-  - Apply `kubtcutl apply -f k8s-deployment.yml`
+  - Edit `k8s-deployment-web.yml` to set **replicas: 1**
+  - Apply `kubtcutl apply -f k8s-deployment-web.yml`
   - `kubectl get pods`
   - `kubectl describe pods`
 - Repeat testing the application on each node IP address
   - The application works from both nodes, even if the pod is running on the node you are accessing!
   - 💡 In practice, you can set your application DNS name to round-robin pointing to one, two or more worker nodes
 - Restore the number of replicas to 2
-  - Edit `k8s-deployment.yml` to set **replicas: 2**
-  - Apply `kubectl apply -f k8s-deployment.yml`
+  - Edit `k8s-deployment-web.yml` to set **replicas: 2**
+  - Apply `kubectl apply -f k8s-deployment-web.yml`
   - `kubetl get pods`
   - `kubectl describe pods`
 - Compare performance between the HAProxy (port 8080) vs direct to the node (port 30080)
