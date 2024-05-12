@@ -1,0 +1,25 @@
+---
+- hosts: workers
+  become: true
+  tasks:
+    - name: Install haproxy
+      package:
+        name: haproxy
+        state: present
+    - name: "Fetch Pod IPs for web deployment"
+      delegate_to: localhost
+      become: false
+      run_once: true
+      shell: kubectl get pods -l app=web -o jsonpath="{.items[*].status.podIP}"
+      register: pod_ips
+    - name: "Store Pod IPs"
+      set_fact:
+        worker_ips: "{{ pod_ips.stdout | split(' ') }}"
+    - name: Configure haproxy.cfg file
+      template:
+        src: "haproxy.cfg.j2"
+        dest: "/etc/haproxy/haproxy.cfg"
+    - name: "haproxy service start"
+      service:
+        name: haproxy
+        state: restarted
