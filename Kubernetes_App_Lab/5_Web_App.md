@@ -26,6 +26,7 @@ We are doing to create 2 pods and have them created on our “worker” nodes. O
 Test the deployment:
 - `kubectl get pods,deploy`
 - `kubectl describe pods`
+- `kubectl get pods -o wide`
   - there should be 2 pods on node2 and node3 (not node1)
 - `kubectl exec -it <podname> – sh`
 - Test web page from Host:
