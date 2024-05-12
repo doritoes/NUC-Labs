@@ -172,11 +172,49 @@ Create a service account and bind the `cluster-admin` role to it
 - `kubectl create clusterrolebinding dashboard-admin -n kubernetes-dashboard  --clusterrole=cluster-admin  --serviceaccount=kubernetes-dashboard:dashboard`
 
 ### Create Token
-🚧 Continue working here...
+`kubectl -n kubernetes-dashboard create token dashboard`
+
+You will use this token in a moment.
 
 ### Launch the Dashboard
+UI can only be accessed from the machine where the command is executed
+- Browse to: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+- Authenticate with “Token” and paste in the token from the previous step
+- This is not at full-featured as using kubectl, but simplify things for you
+- Try deleting pods and watch them get deployed
 
 ## Learn More
 ### Ramped Slow Rollout
+This strategy gradually updates pods, ensuring consistent availability, and offers granular control over rollout speed.
+
+**How it works:** New replicas are created while old ones are removed. You directly control the number of pods updated simultaneously.
+
+**Key difference:** Compared to a standard rolling deployment, you precisely manage the update pace, minimizing risks by updating only a few pods at a time (e.g., 1 or 2).
+
+Configuration:
+- maxSurge: 1 Allows only one pod to be added beyond the desired count during the update
+- maxUnavailable: 0 Ensures zero downtime; no pods are taken offline before new ones are ready
+
+Example: For a 10-pod deployment, this setup guarantees at least 10 pods are always available throughout the update process.
+
 ### Best Effort Controlled Rollout
+This strategy prioritizes update speed over the zero-downtime guarantee of a ramped rollout. It introduces some risk by allowing a configurable percentage of pods to be temporarily unavailable.
+
+**How it works:** Rapidly replaces pods as quickly as possible, while ensuring that the downtime stays within a specified limit.
+
+**Tradeoff:** Offers faster rollout in exchange for some potential downtime. Choose this if time-to-new-features is paramount and your app can handle the defined downtime tolerance
+
+Configuration:
+- maxSurge: 0 A Maintains a constant number of pods, optimizing resource usage during the update
+- maxUnavailable: 20% A percentage defining the acceptable number of unavailable pods during the update
+
 ### Blue-Green Deployments
+The purpose of Blue-Green deployments are:
+- No Downtime: aims to eliminate downtime for updates
+- Testing in Production: 'green' enables real-world testing before exposing users (A/B testing)
+- Beyond Simple Rollouts: introduces the idea of traffic management strategies, contrasting it with basic rolling updates
+
+To do a proper blue-green deployment you need to account for
+- separate clusters
+- database mirroring
+
