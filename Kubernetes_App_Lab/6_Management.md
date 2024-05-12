@@ -110,12 +110,70 @@ If it is not still running, restart the second session watching the pods and dep
     - `image: doritoes/k8s-php-demo-app:green`
 
 ### Kick Off the Update
-🚧Continue building here...
+`kubectl apply -f k8s-deployment-web.yml`
 
+#### Observe the Rollout
+Observe the rollout status:
+- `kubectl rollout status deployment/web-deployment`
+
+After it's done, examine the image that is running.
+- `kubectl describe deployment/web-deployment`
+
+### Testing and Troubleshooting
+Load the web app now (either by nodePort or by updating the HAProxy config)
+- You may need to press F5 or Control F5 to refresh the style sheet-
+- The color of the app should now be orange
+
+### Rollback
+Roll back the update:
+- `kubectl rollout undo deployment/web-deployment`
+
+Observe the rollback:
+- `kubectl rollout status deployment/web-deployment`
+- Watch the status in the other session
+- What method is used for the rollback?
+- View the rollout history
+  - `kubectl rollout history deployment/web-deployment`
+  - Is this history empty? What changed each time you rolled back?
+
+Examine the deployment and see which image is running:
+- `kubectl describe deployment/web-deployment`
+- Load the web app again and Control-F5/reload to refresh the CSS formatting.
+- The color should be back to blue
+
+Try updating `k8s-deployment-web.yml` to update the image:
+- `doritoes/k8s-php-demo-app:blue`
+- `doritoes/k8s-php-demo-app:green`
+- `doritoes/k8s-php-demo-app`
+- `doritoes/k8s-php-demo-app:orange`
+- `doritoes/k8s-php-demo-app:latest`
+- Each time apply using `ansible-playbook deploy-web.yml`
+
+View the rollout history:
+- kubectl rollout history deployment/web-deployment
+
+Pick a revision number and view the details:
+- `kubectl rollout history deployment/web-deployment --revision=<revision-number>`
+
+NOTE on Revision numbering. The reason your revision numbers seem out of order could be due to a few factors:
+- Rollbacks: If you performed rollbacks using kubectl rollout undo, the rolled-back version gets assigned a new, higher revision number.
+- Manual Manifest Change: Manually editing the deployment's pod template using kubectl edit also generates a new revision
+- Failed Deployments: Sometimes, if the deployment process fails, a new revision could be created even if no new pods were successfully launched
 
 ## Kubernetes Dashboard
+The Kubernetes Dashboard is a web-based graphical user interface (GUI) built into Kubernetes. This provides a comprehensive overview of the cluster and facilitates basic tasks.
 ### Install
+Deploy the dashboard
+- `kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
+
 ### Create Service Account
+Create a service account and bind the `cluster-admin` role to it
+- `kubectl create serviceaccount dashboard -n kubernetes-dashboard`
+- `kubectl create clusterrolebinding dashboard-admin -n kubernetes-dashboard  --clusterrole=cluster-admin  --serviceaccount=kubernetes-dashboard:dashboard`
+
+### Create Token
+🚧 Continue working here...
+
 ### Launch the Dashboard
 
 ## Learn More
