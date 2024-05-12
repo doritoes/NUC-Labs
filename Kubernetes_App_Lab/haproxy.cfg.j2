@@ -1,0 +1,17 @@
+# ------------------------
+# main frontend which proxies to the backends
+# ------------------------
+frontend main
+    bind *:8080
+    timeout client 30s 
+    default_backend app
+# ------------------------
+# round robin balancing between the various backends
+# ------------------------
+backend app
+    balance roundrobin
+    timeout connect 5s
+    timeout server 30s
+{% for ip in worker_ips %}
+    server app{{ loop.index}} {{ ip }}:8080 check
+{% endfor %}
