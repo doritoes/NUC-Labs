@@ -14,11 +14,22 @@ There are clearly things to consider to deploy an actual production web applicat
 - Prometheus Node Exporter: explore metrics at the node (system) level; relatively easy to set up, it exposes useful metrics about host machine resources
 - CI/CD Pipelines: Investigate a simple pipeline (Jenkins, GitLab CI, etc) to automate building a container image for your web app and trigger Deployments when code changes.
 
-🚧 Continue work here...
-
 ## Clean Up
-`ansible-playbook destroy_fleet.yml`
+All it takes is a few seconds and the entire environment is erased:
+- `ansible-playbook destroy_fleet.yml`
 
 ## Learn More
 ### SQL Security and sqlmap
 Learn more by installing sqlmap and scan the test application for vulnerabilities.
+🚧 continue writing here
+
+### PDO drivers for SQL
+🚧 continue writing here
+
+
+Discussion about MySQLi vs PDO
+- https://www.geeksforgeeks.org/what-is-the-difference-between-mysql-mysqli-and-pdo/
+- https://phpdelusions.net/pdo/mysqli_comparison
+
+- The main difference between PDO and MySQLi is that PDO is a data-access abstraction layer, while MySQLi is a specific implementation for MySQL
+-  PDO provides an object-oriented approach. MySQLi provides a procedural way
