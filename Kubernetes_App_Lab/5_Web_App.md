@@ -98,16 +98,18 @@ This basic configuration will load balance (round-robin method) across the “wo
 - Try using the IP address of all the worker nodes
 - Reduce the number of replicas to 1
   - Edit `k8s-deployment-web.yml` to set **replicas: 1**
-  - Apply `kubtcutl apply -f k8s-deployment-web.yml`
+  - Apply `kubectl apply -f k8s-deployment-web.yml`
+    - Or, `ansible-playbook deploy-web.yml`
   - `kubectl get pods`
   - `kubectl describe pods`
 - Repeat testing the application on each node IP address
-  - The application works from both nodes, even if the pod is running on the node you are accessing!
+  - The application works from both nodes, even if the pod is NOT running on the node you are accessing!
   - 💡 In practice, you can set your application DNS name to round-robin pointing to one, two or more worker nodes
 - Restore the number of replicas to 2
   - Edit `k8s-deployment-web.yml` to set **replicas: 2**
   - Apply `kubectl apply -f k8s-deployment-web.yml`
   - `kubetl get pods`
+  - `kubectl get pods -o wide`
   - `kubectl describe pods`
 - Compare performance between the HAProxy (port 8080) vs direct to the node (port 30080)
 
@@ -146,7 +148,7 @@ These pods are only rated for a relatively small number of sessions. But let's t
 - https://stackify.com/best-way-to-load-test-a-web-server/
 
 Install `autobench` on your host system:
-- `sudo apt install apache2-utils`
+- `sudo apt install -y apache2-utils`
 
 Here is the basic syntax: `ab -n <number_of_request> -c <concurrency> <url>`
 
@@ -178,7 +180,8 @@ Compare:
 - Remove the `liveness.php file`
   - `rm liveness.php`
 -  Watch how long it takes for the pod to be restart. Examine how the ready counters, status, restarts, and age are affected.
--  What happens if you remove the `readiness.php` file? What happens if you run the command `reboot`?
+-  What happens if you remove the `readiness.php` file?
+-  What happens if you run the command `reboot`? Does this restart the pod or delete it?
 
 ### What If...?
 1. What will happen if your MySQL pod hangs? How will the application pods behave?
@@ -188,7 +191,11 @@ Compare:
     - `ansible-playbook remove-sql.yml`
     - watch the pods restart 5 times; they never become ready
     - in the meantime, can you access the application? what happens when you try to log in?
+    - do you see any difference in accessing via ModePort (30080) vs the HAProxy port (8080)?
     - after 5 restarts notice the status is CrashLoopBackOff
+    - additional restart attempts are tried
+    - note the state where a pod is Running but not Ready; it will accept connections in "Running" state, but is unable to log in
 3. What happens if you re-deploy the mysql distribution?
     - `ansible-playbook deploy-sql.yml`
     -  Do the pods recover automatically?
+    -  What affect would deleting a pod in a "CrashLoopBackOff" status have?
