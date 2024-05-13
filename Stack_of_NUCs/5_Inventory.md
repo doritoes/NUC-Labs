@@ -27,7 +27,7 @@ As the number of NUCs gets larger, it's more of a pain to track down the IP addr
 ## Identify Nodes That Weren't Discovered
 What if the hosts file doesn't list all the NUCs? Here is my trick.
 - Power down all the nodes there were discovered
-  - Log in to NUC 2 (ansible controller)
+  - Log in to NUC 2 (Ansible controller)
   - `ansible -i hosts all -a "shutdown -h now"`
 - Pull any NUCs that are still powered on for troubleshooting or re-imaging
 - Power the "good" NUCs back on
