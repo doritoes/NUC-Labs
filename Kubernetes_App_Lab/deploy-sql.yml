@@ -1,0 +1,65 @@
+---
+- name: Deploy MySQL with persistent volume
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create ConfigMap for database init
+      kubernetes.core.k8s:
+        state: present
+        namespace: default
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: mysql-setup-script
+          data:
+            mysql.sql: |
+              CREATE DATABASE IF NOT EXISTS app_db;
+              CREATE USER IF NOT EXISTS 'appuser'@'%' IDENTIFIED BY 'mypass';
+              GRANT ALL ON *.* to 'appuser'@'%';
+              CREATE USER IF NOT EXISTS 'appuser'@'localhost' IDENTIFIED BY 'mypass';
+              GRANT ALL ON *.* to 'appuser'@'localhost';
+              FLUSH PRIVILEGES;
+              USE app_db;
+              CREATE TABLE IF NOT EXISTS app_user (
+              fname varchar(255),
+              lname varchar(255),
+              email varchar(255) Primary Key,
+              password varchar(64),
+              address varchar(255),
+              contact varchar(15),
+              dob date,
+              login timestamp);
+    - name: Create ConfigMap for binding
+      kubernetes.core.k8s:
+        state: present
+        namespace: default
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: mysql-bind
+          data:
+            mysqld.cnf: |
+              [mysqld]
+              bind-address = 0.0.0.0
+    - name: Create Deployment
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'k8s-deployment-sql.yml') }}"
+        namespace: default
+    - name: Create PersistentVolume
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'k8s-pv.yml') }}"
+        namespace: default
+    - name: Create PersistentVolumeClaim
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'k8s-pvc.yml') }}"
+        namespace: default
+    - name: Create Service
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'k8s-service-sql.yml') }}"
+        namespace: default

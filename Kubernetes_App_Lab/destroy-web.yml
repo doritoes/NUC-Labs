@@ -1,0 +1,15 @@
+---
+- name: Destroy Nginx with PHP-FPM
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Remove Deployment
+      kubernetes.core.k8s:
+        state: absent
+        definition: "{{ lookup('file', 'k8s-deployment-web.yml') }}"
+        namespace: default
+    - name: Remove Service
+      kubernetes.core.k8s:
+        state: absent
+        definition: "{{ lookup('file', 'k8s-service-web.yml') }}"
+        namespace: default

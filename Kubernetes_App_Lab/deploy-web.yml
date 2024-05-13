@@ -1,0 +1,15 @@
+---
+- name: Deploy Nginx with PHP-FPM
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Create Deployment
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'k8s-deployment-web.yml') }}"
+        namespace: default
+    - name: Create Service
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'k8s-service-web.yml') }}"
+        namespace: default

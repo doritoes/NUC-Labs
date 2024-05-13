@@ -1,0 +1,32 @@
+---
+- name: Remove MySQL with persistent volume
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Remove ConfigMap
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: ConfigMap
+        name: mysql-setup-script
+        state: absent
+        namespace: default
+    - name: Remove Deployment
+      kubernetes.core.k8s:
+        state: absent
+        definition: "{{ lookup('file', 'k8s-deployment-sql.yml') }}"
+        namespace: default
+    - name: Remove PersistentVolume
+      kubernetes.core.k8s:
+        state: absent
+        definition: "{{ lookup('file', 'k8s-pv.yml') }}"
+        namespace: default
+    - name: Remove PersistentVolumeClaim
+      kubernetes.core.k8s:
+        state: absent
+        definition: "{{ lookup('file', 'k8s-pvc.yml') }}"
+        namespace: default
+    - name: Remove Service
+      kubernetes.core.k8s:
+        state: absent
+        definition: "{{ lookup('file', 'k8s-service-sql.yml') }}"
+        namespace: default

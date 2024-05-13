@@ -1,0 +1,35 @@
+---
+- hosts: localhost  # Run the task on the control machine
+  connection: local  # Use local connection, as we're not connecting to remote hosts
+  tasks:
+    - name: Install pip
+      apt:
+        name: python3-pip
+    - name: Install required packages compatible versions
+      pip:
+        name:
+          - kubernetes
+          - openshift==0.11.0
+    - name: Label sql node
+      k8s:
+        state: present  # Ensure the label is present
+        definition:
+          apiVersion: v1
+          kind: Node
+          metadata:
+            name: node1
+            labels:
+              my-role: sql
+    - name: Label worker node
+      k8s:
+        state: present  # Ensure the label is present
+        definition:
+          apiVersion: v1
+          kind: Node
+          metadata:
+            name: "{{ item }}"
+            labels:
+              my-role: worker
+      loop:
+        - node2
+        - node3

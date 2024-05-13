@@ -1,0 +1,8 @@
+[master]
+# one host IP address for Kubernetes master
+
+[sql]
+# one host IP address for dedicated SQL node
+
+[workers]
+# remaining IP addresses as nodes running application containers
