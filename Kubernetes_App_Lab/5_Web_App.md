@@ -83,13 +83,13 @@ avoids interrupting active connections
 
 ### Create the haproxy.cfg.j2 Template
 This basic configuration will load balance (round-robin method) across the “worker” nodes on port 8080.
-- You can access the applciation via any node
+- You can access the application via any node
 - The node will pass the traffic to a pod on another node if need be
 - Create `haproxy.cfg.j2` from [haproxy.cfg.j2](haproxy.cfg.j2)
 
 ### Install HAProxy
 - Create `haproxy-install.yml` from [haproxy-install.yml](haproxy-install.yml)
-- Run the playbeoook: `ansible-playbook haproxy-install.yml --ask-become`
+- Run the playbook: `ansible-playbook haproxy-install.yml --ask-become`
   - enter the password for user `ansible` when prompted
 
 ### TestHAProxy
