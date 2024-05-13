@@ -40,7 +40,7 @@ What happened and what didn't happen? Examine the output of the following comman
 - `kubectl get deployments`
 - `kubectl describe deployments`
 
-Our manifest refers to somethhing that doesn't exist yet!
+Our manifest refers to something that doesn't exist yet!
 
 Remove the deployment
 - `kubectl delete -f k8s-deployment-sql.yml`
@@ -62,7 +62,7 @@ Remove the physical volume
 Now we will create a “reservation” for space on the persistent volume and give it a name.
 
 - Create `k8s-pv.yml` from [k8s-pvc.yml](k8s-pvc.yml)
-- We can create the persistent volume clame manually using kubectl (but the persistent volume needs to exist)
+- We can create the persistent volume claim manually using kubectl (but the persistent volume needs to exist)
   - Apply the manifest: `kubectl apply -f k8s-pvc.yml`
 
 Examine the output of the following commands
@@ -164,7 +164,7 @@ Steps to remove and redeploy the MySQL pod:
 Steps to confirm data is still there:
 - Get the new pod name
   - `kubectl get pods`
-- Connnect to the new pod in an interactive session (again, substitute the actual pod name)
+- Connect to the new pod in an interactive session (again, substitute the actual pod name)
   - `kubectl exec -it <mysql-pod-name> -- bash`
 - Connect to `mysql` again
   - `mysql -uroot -pyourpassword`
