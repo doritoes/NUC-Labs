@@ -75,8 +75,6 @@ The following playbook will apply the appropriate labels to the nodes.
 - NOTE that it requires the kubernetes python library and will install it as needed
 - Create `labels.yml` from [labels.yml](labels.yml)
 - Run the playbook `ansible-playboook labels.yml`
-
-Manually
 - List nodes with labels
   - `kubectl get nodes --show-labels`
 - View labels on a node
