@@ -85,7 +85,7 @@ Overview:
 - add the ssh keys to the known_hosts file to enable seamless control using Ansible
 
 ## Run the Playbook and Test the VMs
-- Run the playbook: `ansible-playbook -i inventory build_fleet.yml`
+- Run the playbook: `ansible-playbook build_fleet.yml`
   - latest Ubuntu server ISO is downloaded and customized
   - VMs are provisioned and configured
   - VMs boot the automatic installation completes
