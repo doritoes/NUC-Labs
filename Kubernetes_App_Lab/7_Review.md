@@ -18,14 +18,40 @@ There are clearly things to consider to deploy an actual production web applicat
 All it takes is a few seconds and the entire environment is erased:
 - `ansible-playbook destroy_fleet.yml`
 
+The short and concise steps to rebuild:
+- 🚧 continue writing here
+
 ## Learn More
 ### SQL Security and sqlmap
-Learn more by installing sqlmap and scan the test application for vulnerabilities.
-🚧 continue writing here
+Since we are exposing a SQL database via the web app, it is important to consider security. This is an opportunity to get expericence using the `sqlmap`tool.
+
+For information on installing sqlmap: https://github.com/sqlmapproject/sqlmap
+- `cd ~`
+- `git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev`
+- `cd sqlmap-dev`
+
+Let's run it against out application, pointing to the nodeIP:
+- `python3 sqlmap.py http://<node ip address>:30080/index.php --wizard`
+- `python3 sqlmap.py http://192.168.99.203:30080/index.php --forms --crawl=2`
+
+Now let's do a series of authenticated attacks:
+- Log in to yhour account and learn your PHPSESSIONID cookie (ex., `i8s4i2lbp4b2ot8qftr92bijcl`)
+  - For example use Chrome and F12, network > headers > request headers > cooke > PHPSESSID
+- `python3 sqlmap.py --url http://192.168.99.203:30080/update.php --cookie='PHPSESSID=i8s4i2lbp4b2ot8qftr92bijcl' --dbs --forms crawl=2`
+- `python3 sqlmap.py --url http://192.168.99.203:30080/update.php --cookie='PHPSESSID=i8s4i2lbp4b2ot8qftr92bijcl' --dbs --forms crawl=2 --level 5`
+  - View your account details in the app. Were any changed? This is not intended, but can happen.
+- `python3 sqlmap.py --url http://192.168.99.203:30080/unregister.php --cookie='PHPSESSID=i8s4i2lbp4b2ot8qftr92bijcl' --dbs --forms crawl=2 --level 5`
+
+Look at how a sqlmap attack looks in the logs:
+- `kubectl get pods`
+- `kubectl logs <podname>`
+
+The very simple application does not use index values or direct values to look up information. However, this is not mean the application is immune my SQL injection or XSS.
+
+Why should `index.php` targeted for investigation of XSS?
 
 ### PDO drivers for SQL
 🚧 continue writing here
-
 
 Discussion about MySQLi vs PDO
 - https://www.geeksforgeeks.org/what-is-the-difference-between-mysql-mysqli-and-pdo/
