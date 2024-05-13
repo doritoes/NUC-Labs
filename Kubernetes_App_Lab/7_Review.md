@@ -21,6 +21,7 @@ All it takes is a few seconds and the entire environment is erased:
 The short and concise steps to rebuild:
 - `ansible-playbook destroy_fleet.yml`
 - optionally update `servers.yml`
+- review `k8s-deployment-web.yml` to set the image and replicas as needed
 - `ansible-playbook build_fleet.yml`
 - `ansible-playbook -i inventory configure_fleet.yml`
 - `ansible -i inventory all -m ping`
@@ -48,7 +49,7 @@ The short and concise steps to rebuild:
 
 ## Learn More
 ### SQL Security and sqlmap
-Since we are exposing a SQL database via the web app, it is important to consider security. This is an opportunity to get expericence using the `sqlmap`tool.
+Since we are exposing a SQL database via the web app, it is important to consider security. This is an opportunity to get experience using the `sqlmap`tool.
 
 For information on installing sqlmap: https://github.com/sqlmapproject/sqlmap
 - `cd ~`
@@ -60,8 +61,8 @@ Let's run it against out application, pointing to the nodeIP:
 - `python3 sqlmap.py http://192.168.99.203:30080/index.php --forms --crawl=2`
 
 Now let's do a series of authenticated attacks:
-- Log in to yhour account and learn your PHPSESSIONID cookie (ex., `i8s4i2lbp4b2ot8qftr92bijcl`)
-  - For example use Chrome and F12, network > headers > request headers > cooke > PHPSESSID
+- Log in to your account using a browser and learn your PHPSESSIONID cookie (ex., `i8s4i2lbp4b2ot8qftr92bijcl`)
+  - For example use Chrome and F12, network > headers > request headers > cookie > PHPSESSID
 - `python3 sqlmap.py --url http://192.168.99.203:30080/update.php --cookie='PHPSESSID=i8s4i2lbp4b2ot8qftr92bijcl' --dbs --forms crawl=2`
 - `python3 sqlmap.py --url http://192.168.99.203:30080/update.php --cookie='PHPSESSID=i8s4i2lbp4b2ot8qftr92bijcl' --dbs --forms crawl=2 --level 5`
   - View your account details in the app. Were any changed? This is not intended, but can happen.
