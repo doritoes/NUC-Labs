@@ -31,7 +31,7 @@ Open a second terminal or ssh session.  You will watch the status of your deploy
 ### Kick Off the Update
 This process will perform a one-by-one replacement. Health checks (liveness and readiness) ensure new pods are healthy before taking old ones offline.
 
-#### Option 1 - Run Ansible playboook
+#### Option 1 - Run Ansible playbook
 `ansible-playbook deploy-web.yml`
 
 #### Option 2 - Apply Kubernetes manifest
