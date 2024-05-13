@@ -35,9 +35,9 @@ What if the hosts file doesn't list all the NUCs? Here is my trick.
 Note that the NUCS are somewhat slow to start up at this point. We will be fixing that shortly.
 
 ## Learn More
-### Experiment the Ansible Environment
+### Experiment with the Ansible Environment
 #### Check Nodes Are Up
-A quick ansible "ping":
+A quick Ansible "ping":
 - ` ansible -i hosts all -m ping`
 #### Discover NUC Board Names
 You can view the board names of your NUCs. Just be aware that the board name can be different from the model number on the case.
