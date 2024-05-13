@@ -105,4 +105,4 @@ There are certainly better ways to deploy applications, such as using git.
 - Run the playbook
   - `ansible-playbook -i inventory git_fleet.yml --ask-become`
 
-How could you use ansible and git to deploy an application to the /var/www/html folder?
+How could you use Ansible and Git to deploy an application to the /var/www/html folder?
