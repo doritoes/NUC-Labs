@@ -46,7 +46,7 @@ Even though each node receives its DNS information via DHCP, Ubuntu 22.04 will a
   - `ansible-playbook -i hosts disable_dns_stub.yml`
 
 ## Delete our First VM
-Congratulations on your first VM deployed using Ansible on Virtualbox! Let's look at using Ansible to remove this first VM.
+Congratulations on your first VM deployed using Ansible on VirtualBox! Let's look at using Ansible to remove this first VM.
 
 ### Simple Playbook
 - Log back into your Host system as user `ansible`
@@ -106,7 +106,7 @@ Using the pipe (|) to run multiple commands doesn't solve the issue. If the VM i
   - `ansible-playbook -i hosts destroy_vm_6.yml`
 
 ## Why So Complicated?
-Oracle Virtualbox doesn't have the nice modules for Ansible that VMware vCenter has. The GUI interface is the easiest way to manage virtual machines, but we can do the changes by command line.
+Oracle VirtualBox doesn't have the nice modules for Ansible that VMware vCenter has. The GUI interface is the easiest way to manage virtual machines, but we can do the changes by command line.
 
 Ansible can do the logic we want, but it's not straightforward:
 1. Is the VM powered on? How can we check that with Ansible?
