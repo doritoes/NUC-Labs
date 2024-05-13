@@ -36,6 +36,11 @@ The short and concise steps to rebuild:
   - NOTE update the master IP address if you changed it
 - `ansible-playbook workers.yml`
   - NOTE update the master IP address if you changed it
+- Copy the updated credentials
+  - `scp -r controller:/home/ansible/.kube ~/`
+  - you will be reminded of the SSH key that changed
+    - `ssh-keygen -f "/home/ansible/.ssh/known_hosts" -R "controller"`
+    - `scp -r controller:/home/ansible/.kube ~/`
 - `ansible-playbook labels.yml`
 - `ansible-playbook deploy-sql.yml`
 - `ansible-playbook deploy-web.yml`
@@ -71,7 +76,7 @@ The very simple application does not use index values or direct values to look u
 Why should `index.php` targeted for investigation of XSS?
 
 ### PDO drivers for SQL
-🚧 continue writing here
+This lab does not yet use PDO drivers for SQL. My "want to do" list includes providing an optional detour to testing PDO drivers with MySQL.
 
 Discussion about MySQLi vs PDO
 - https://www.geeksforgeeks.org/what-is-the-difference-between-mysql-mysqli-and-pdo/
