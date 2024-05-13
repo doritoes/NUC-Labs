@@ -1,0 +1,27 @@
+---
+- name: Check wifi strength
+  hosts: nodes
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: Make sure wireless-tools is installed
+      apt:
+        name: wireless-tools
+        state: present
+    - name: Gather wifi strength
+      shell: "iwconfig | grep Quality"
+      register: wifi
+      changed_when: false
+    - name: Display wifi strength
+      debug:
+        msg: "{{ item }}"
+      with_items: "{{ wifi.stdout_lines }}"
+    - name: Calculate wifi strength
+      set_fact:
+        strength: "{{ wifi.stdout | regex_search(regexp, '\\1') }}"
+      vars:
+        regexp: 'Quality=([0-9]+)/70'
+    - name: Show value
+      debug:
+        msg:
+          - "{{ strength[0] }}/70 = {{( ( (strength[0] | int) / 70) * 100 ) | int }}%"

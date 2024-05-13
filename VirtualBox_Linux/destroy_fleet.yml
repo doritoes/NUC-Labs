@@ -1,0 +1,39 @@
+---
+- hosts: localhost  # Run actions on the local machine
+  name: destroy_fleet.yml
+  connection: local
+  gather_facts: false
+  vars_files:
+    - variables_fleet.yml
+    - servers.yml
+  tasks:
+    - name: Shut down VM
+      command: "{{ Global.vboxmanage_path }} controlvm {{ item.Name }} poweroff --type emergency"
+      ignore_errors: true
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Remove VM
+      command: "{{ Global.vboxmanage_path }} unregistervm --delete {{ item.Name }}"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Remove from inventory file
+      lineinfile:
+        path: "{{ Global.inventory_file }}"
+        line: "{{ item.Configuration.OS.IPv4Address.split('/')[0] }}"
+        state: absent
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Remove Ansible controller server directories
+      file:
+        path: "{{ Global.workingdir }}/{{ item.Name }}"
+        state: absent
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Remove Ansible controller fleet working directory
+      file:
+        path: "{{ Global.workingdir }}"
+        state: absent
+    - name: Remove from known_hosts file
+      command: ssh-keygen -f "{{ lookup('env','HOME') }}/.ssh/known_hosts" -R "{{ item.Configuration.OS.IPv4Address.split('/')[0] }}"
+      when: item.Deploy
+      loop: "{{ Server_List }}"

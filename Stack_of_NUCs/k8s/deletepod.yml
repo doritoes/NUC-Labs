@@ -1,0 +1,22 @@
+---
+- name: Delete current pods matching speedtester
+  hosts: master
+  become: true
+  become_user: ansible
+  vars:
+    pod_filter:
+      - speedtester # beginning of the pod name
+  gather_facts: false
+  tasks:
+    - name: Get a list of all pods from the namespace
+      command: kubectl get pods --no-headers -o custom-columns=":metadata.name"
+      register: pod_list
+    - name: Print pod names
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ pod_list.stdout_lines }}"
+      when: item is match(pod_filter|join('|'))
+    - name: Delete matching pods
+      command: kubectl delete pod "{{ item }}"
+      loop: "{{ pod_list.stdout_lines }}"
+      when: item is match(pod_filter|join('|'))

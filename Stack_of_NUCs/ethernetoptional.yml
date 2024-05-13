@@ -1,0 +1,13 @@
+---
+- hosts: nodes
+  become: true
+  become_user: root
+  tasks:
+    - name: Set ethernet interface to optional
+      lineinfile:
+        path: /etc/netplan/00-installer-config.yaml
+        insertafter: "dhcp4: true"
+        line: "      optional: true"
+    - name: Apply netplan
+      command: netplan apply
+      ignore_errors: true

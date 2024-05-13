@@ -1,0 +1,6 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Gracefully shut down server
+      community.general.shutdown:

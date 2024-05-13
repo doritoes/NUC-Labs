@@ -1,0 +1,14 @@
+---
+- hosts: localhost  # Run actions on the local machine
+  name: destroy_fleet.yml
+  connection: local
+  gather_facts: false
+  vars_files:
+    - variables.yml
+    - servers.yml
+  tasks:
+    - name: Shut down VM
+      command: "{{ Global.vboxmanage_path }} controlvm {{ item.Name }} acpipowerbutton"
+      ignore_errors: true
+      when: item.Deploy
+      loop: "{{ Server_List }}"

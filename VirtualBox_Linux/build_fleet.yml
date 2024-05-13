@@ -1,0 +1,206 @@
+---
+- hosts: localhost  # Run actions on the local machine
+  name: build_fleet.yml
+  connection: local
+  gather_facts: false
+  vars_files:
+    - variables_fleet.yml
+    - servers.yml
+  tasks:
+    - name: Create working directory
+      file:
+        path: "{{ Global.workingdir }}"
+        state: directory
+        mode: "755"
+    - name: Download the latest ISO
+      get_url:
+        url: "{{ Global.ubuntu_iso }}"
+        dest: "{{ Global.workingdir }}/jammy-live-server-amd64.iso"
+        force: false
+    - name: Create source files directory
+      file:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/source-files"
+        state: directory
+        mode: "755"
+      loop: "{{ Server_List }}"
+      when: item.Deploy
+    - name: Extract ISO
+      command: "7z -y x {{ Global.workingdir }}/{{ Global.ubuntu_iso_filename }} -o{{ Global.workingdir }}/{{ item.Name }}/source-files"
+      changed_when: false
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Add write permissions to extracted files
+      command: "chmod -R +w {{ Global.workingdir }}/{{ item.Name }}/source-files"    # Using chmod as Ansible (Python) can't handle the recursion depth on the Ubuntu ISO
+      changed_when: false
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    ## Start workaround issue with Ubuntu autoinstall
+    ## Details of the issue and the workaround: https://askubuntu.com/questions/1394441/ubuntu-20-04-3-autoinstall-with-embedded-user-data-crashing-i-got-workaround
+    - name: Extract the Packages.gz file on Ubuntu ISO
+      command: "gunzip -f {{ Global.workingdir }}/{{ item.Name }}/source-files/dists/jammy/main/binary-amd64/Packages.gz --keep"
+      changed_when: false
+    ## End workaround issue with Ubuntu autoinstall
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Rename [BOOT] directory
+      command:  "mv {{ Global.workingdir }}/{{ item.Name }}/source-files/'[BOOT]' {{ Global.workingdir }}/{{ item.Name}}/BOOT"
+      changed_when: false
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Edit grub.cfg to modify menu
+      blockinfile:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/source-files/boot/grub/grub.cfg"
+        create: true
+        block: |
+          menuentry "Autoinstall Ubuntu Server" {
+             set gfxpayload=keep
+             linux   /casper/vmlinuz quiet autoinstall ds=nocloud\;s=/cdrom/server/  ---
+             initrd  /casper/initrd
+          }
+        insertbefore: 'menuentry "Try or Install Ubuntu Server" {'
+        state: present
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Edit grub.cfg to set timeout to 1 second
+      replace:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/source-files/boot/grub/grub.cfg"
+        regexp: '^(set timeout=30)$'
+        replace: 'set timeout=5'
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Create directory to store user-data and meta-data
+      file:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/source-files/server"
+        state: directory
+        mode: "755"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Create empty meta-data file in directory
+      file:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/source-files/server/meta-data"
+        state: touch
+        mode: "755"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Copy user-data file to directory using template
+      template:
+        src: ./fleet-user-data.j2
+        dest: "{{ Global.workingdir }}/{{ item.Name }}/source-files/server/user-data"
+        mode: "755"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Create custom ISO
+      command: "xorriso -as mkisofs -r \
+               -V 'Ubuntu 22.04 LTS AUTO (EFIBIOS)' \
+               -o {{ Global.workingdir }}/{{ item.Name }}/{{ Global.new_iso_filename }} \
+               --grub2-mbr ../BOOT/1-Boot-NoEmul.img \
+               -partition_offset 16 \
+               --mbr-force-bootable \
+               -append_partition 2 28732ac11ff8d211ba4b00a0c93ec93b ../BOOT/2-Boot-NoEmul.img \
+               -appended_part_as_gpt \
+               -iso_mbr_part_type a2a0d0ebe5b9334487c068b6b72699c7 \
+               -c '/boot.catalog' \
+               -b '/boot/grub/i386-pc/eltorito.img' \
+               -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info \
+               -eltorito-alt-boot \
+               -e '--interval:appended_partition_2:::' \
+               -no-emul-boot \
+               ."
+      args:
+        chdir: "{{ Global.workingdir }}/{{ item.Name }}/source-files/"
+      changed_when: false
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Remove BOOT directory
+      file:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/BOOT"
+        state: absent
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Delete source files
+      file:
+        path: "{{ Global.workingdir }}/{{ item.Name }}/source-files"
+        state: absent
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Create VM
+      command: "{{ Global.vboxmanage_path }} createvm --name {{ item.Name }} --ostype Ubuntu_64 --register"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Create VM storage
+      command: "{{ Global.vboxmanage_path }} createmedium disk --filename {{ item.Name }}.vdi --size {{ item.Configuration.Storage.DiskSize }} --format=VDI"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Add IDE controller
+      command: "{{ Global.vboxmanage_path }} storagectl {{ item.Name }} --name IDE --add IDE --controller PIIX4"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Attach DVD drive
+      command: "{{ Global.vboxmanage_path }} storageattach {{ item.Name }} --storagectl IDE --port 0 --device 0 --type dvddrive --medium {{ Global.workingdir }}/{{ item.Name }}/{{ Global.new_iso_filename }}"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Add SATA controller
+      command: "{{ Global.vboxmanage_path }} storagectl {{ item.Name }} --name SATA --add SAS --controller LsiLogicSas"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Attach drive
+      command: "{{ Global.vboxmanage_path }} storageattach {{ item.Name }} --storagectl SATA --port 0 --device 0 --type hdd --medium {{ item.Name }}.vdi"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Boot order
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name }} --boot1 disk --boot2 DVD --boot3 none --boot4 none"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Set VM CPU, RAM, video RAM
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name }} --cpus {{ item.Configuration.Compute.CPUs }} --memory {{ item.Configuration.Compute.MemorySize }} --vram 16"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Settings 1
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name}} --graphicscontroller vmsvga --hwvirtex on --nested-hw-virt on"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Settings 2
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name}} --ioapic on --pae off --acpi on --paravirtprovider default"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Settings 3
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name}} --nestedpaging on --keyboard ps2 --uart1 0x03F8 4"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Settings 4
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name}} --uartmode1 disconnected --uarttype1 16550A --macaddress1 auto --cableconnected1 on"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Network adapter
+      command: "{{ Global.vboxmanage_path }} modifyvm {{ item.Name }} --nic1 bridged --bridgeadapter1 {{ Global.bridge_interface_name }}"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Start the virtual machine
+      command: "{{ Global.vboxmanage_path }} startvm {{ item.Name }} --type headless"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Add to inventory file
+      lineinfile:
+        path: "{{ Global.inventory_file }}"
+        line: "{{ item.Configuration.OS.IPv4Address.split('/')[0] }}"
+        create: true
+        regexp: "^{{ item.Configuration.OS.IPv4Address.split('/')[0] }}$"
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Wait for server availability on port 22
+      wait_for:
+        port: 22
+        host: "{{ item.Configuration.OS.IPv4Address.split('/')[0] }}"
+        state: started
+        delay: 180
+        timeout: 600
+      when: item.Deploy
+      loop: "{{ Server_List }}"
+    - name: Make sure known_hosts exists
+      file:
+        path: "{{ lookup('env','HOME') }}/.ssh/known_hosts"
+        state: touch
+    - name: Add VM to known_hosts
+      shell: ssh-keyscan -H {{ item.Configuration.OS.IPv4Address.split('/')[0] }} >> {{ lookup('env','HOME') }}/.ssh/known_hosts
+      when: item.Deploy
+      loop: "{{ Server_List }}"

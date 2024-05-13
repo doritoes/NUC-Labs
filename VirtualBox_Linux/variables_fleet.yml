@@ -1,0 +1,11 @@
+---
+Global:
+  bridge_interface_name: "enp8s0"
+  username: ansible
+  ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCIlNJecNoDFTVdVqDRGYjxH22Ih1qq5VPhMtRrrECa8BwpICxClbYh0XcLzijaae1sI0j+jBo/BHXyrER010NEyq18ZWNI+NUvg+wF77CfPBFxwla3Xsel8rBgu47RMn4W5g1KHrw9Sy0OzfljKBlXuuRwrzHyT6qoi4Iu3ltySrPj1zMCbybiQCI0A77T6GQpBbxMZBJJNYfAXchNnxLIAW8Q2taXJ+JYbHg0mtL/lp35vwRNgUFOwm8l7YiehlcTybEHGoN+aI/0AWkl1tvEaol8sluKba01hlM4n1JWI+BQewu69l0Lqnoiiob+WvqchjpEw/QwDo2HaB5YAZCNX89QO4DHLyg6KTvsfvQhQ70HcXGfQTatqXlBkKa83ny4Xn3doA036Z+CbpZVbzYF0swpjEXj/GXvZzxILkp2HF2auIjT/HPX5Jecq/VBDqDRbPKyyJjdM4pRiHcCel2JLPzwLhMJHnXKPtiCppxIyrL3PXgh1oY/fhMDN2Bo6sM= autobox@autobox"
+  workingdir: "{{ lookup('env','HOME') }}/ubuntu-autoinstall"
+  inventory_file: "{{ lookup('env','HOME') }}/inventory"
+  vboxmanage_path: /usr/bin/vboxmanage
+  ubuntu_iso: https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current/jammy-live-server-amd64.iso
+  ubuntu_iso_filename: jammy-live-server-amd64.iso
+  new_iso_filename: ubuntu-22.04-autoinstall.iso

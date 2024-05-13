@@ -1,0 +1,11 @@
+---
+- name: reboot_servers.yml
+  hosts: all
+  become: true
+  tasks:
+    - name: Reboot the servers
+      reboot:
+    - name: Wait for servers to come back online
+      wait_for_connection:
+        delay: 10
+        connect_timeout: 120

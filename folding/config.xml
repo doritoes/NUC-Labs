@@ -1,0 +1,24 @@
+<config>
+  <!-- Client Control -->
+  <fold-anon v='false'/>
+  <checkpoint v='3'/>
+  <allow v='192.168.1.0/24'/>
+
+  <!-- Remote Command Server -->
+  <password v='supermassiveblackhole'/>
+
+  <!-- Folding Slot Configuration -->
+  <gpu v='false'/>
+
+  <!-- Slot Control -->
+  <power v='full'/>
+
+  <!-- User Information -->
+  <passkey v=''/>
+  <team v='1061684'/>
+  <user v='yourhandlehere'/>
+
+  <!-- Folding Slots -->
+  <slot id='0' type='CPU'/>
+  <cause v='HIGH_PRIORITY'/>
+</config>

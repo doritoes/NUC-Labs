@@ -1,0 +1,14 @@
+# ------------------------
+# main frontend which proxys to the backends
+# ------------------------
+frontend main
+    bind *:8080
+    default_backend app
+# ------------------------
+# round robin balancing between the various backends
+# ------------------------
+backend app
+    balance roundrobin
+{% for ip in groups['workers'] %}
+    server app{{ loop.index}} {{ ip }}:8080 check
+{% endfor %}
