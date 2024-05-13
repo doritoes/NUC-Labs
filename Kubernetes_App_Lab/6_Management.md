@@ -101,11 +101,8 @@ If it is not still running, restart the second session watching the pods and dep
   - Optionally, you could just modify `k8s-deployment-web.yml` to add a section:
     - `strategy:`
     - `  type: Recreate`
-- Apply the manifest: `kubectl apply -f k8s-replace-web.yml`
-
-- edit `k8s-deployment-web.yml`
-  - modify `image  to use the new image tag
-    - `image: doritoes/k8s-php-demo-app:green`
+    - modify `image`  to use the new image tag
+    - `image: doritoes/k8s-php-demo-app:orange`
 
 ### Kick Off the Update
 `kubectl apply -f k8s-deployment-web.yml`
@@ -148,7 +145,7 @@ Try updating `k8s-deployment-web.yml` to update the image:
 - Each time apply using `ansible-playbook deploy-web.yml`
 
 View the rollout history:
-- kubectl rollout history deployment/web-deployment
+- `kubectl rollout history deployment/web-deployment`
 
 Pick a revision number and view the details:
 - `kubectl rollout history deployment/web-deployment --revision=<revision-number>`
@@ -160,6 +157,7 @@ NOTE on Revision numbering. The reason your revision numbers seem out of order c
 
 ## Kubernetes Dashboard
 The Kubernetes Dashboard is a web-based graphical user interface (GUI) built into Kubernetes. This provides a comprehensive overview of the cluster and facilitates basic tasks.
+
 ### Install
 Deploy the dashboard
 - `kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
@@ -175,7 +173,8 @@ Create a service account and bind the `cluster-admin` role to it
 You will use this token in a moment.
 
 ### Launch the Dashboard
-UI can only be accessed from the machine where the command is executed
+UI can <ins>only be accessed from the machine where the command is executed</ins>
+- `kubectl proxy`
 - Browse to: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 - Authenticate with “Token” and paste in the token from the previous step
 - This is not at full-featured as using kubectl, but simplify things for you
