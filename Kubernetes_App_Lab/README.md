@@ -1,5 +1,5 @@
 # Kubernetes App Lab
-This is an advanced lab that builds on the VirutalBox Linux Lab.
+This is an advanced lab that builds on the VirtualBox Linux Lab.
 
 This lab is sized small to be able to run on a mid-sized NUC with 4 physical CPUs (8 cores). However, it is much more enjoyable to build on a system with more cores (even if it is not a NUC). 16GB RAM and 500GB storage is the recommended minimum.
 
@@ -65,6 +65,6 @@ We will now look at deploying different application image, updating the the late
 [Application Configuration](6_Management.md)
 
 ### Review
-Review the technologies and concepts introduced in this lab, and point in the direction of new experients to try. And of course cleaning up the Lab.
+Review the technologies and concepts introduced in this lab, and point in the direction of new experiments to try. And of course cleaning up the Lab.
 
 [Review](7_Review.md)
