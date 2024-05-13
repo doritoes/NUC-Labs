@@ -19,14 +19,13 @@ Strategies that requires customization or specialized tools:
 References:
 - https://spot.io/resources/kubernetes-autoscaling/5-kubernetes-deployment-strategies-roll-out-like-the-pros/
 
-🚧 Continue work here...
 ## Rolling Deployment
 Open a second terminal or ssh session.  You will watch the status of your deployment here.
-- `watch -d -n 1 'kubectl get pods,deploy'
+- `watch -d -n 1 'kubectl get pods,deploy'`
 
 ### Update the Image in k8s-deployment-web.yml
 - edit `k8s-deployment-web.yml`
-  - modify `image  to use the new image tag
+  - modify `image`  to use the new image tag
     - `image: doritoes/k8s-php-demo-app:green`
 
 ### Kick Off the Update
@@ -44,18 +43,17 @@ Observe the rollout status:
 
 Watch the status in the other session.
 - What can you see happening?
-- What userful information is missing?
+- What useful information is missing?
 
 Examine the deployment and see which image is running:
 - `kubectl describe deployment/web-deployment`
 
 Here are two ways to get the images running on all pods:
 - `kubectl get pods --all-namespaces -o jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{range .spec.containers[*]}{.image}{", "}{end}{end}' | sort`
-- `kubectl get pods -o wide`
 
 ### Testing and Troubleshooting
 Load the web app now (either by nodePort or by updating the HAProxy config)
-- You may need to press F5 or Control F5 to refresh the style sheet-
+- You may need to press F5 or Control F5 to refresh the style-sheet
 - The color of the app should now be green
 
 If the rollout is stalled, use these commands to investigate potential issues:
@@ -73,8 +71,8 @@ Observe the rollback:
 
 Examine the deployment and see which image is running:
 - `kubectl describe deployment/web-deployment`
-- Load the web app again and Control-F5/reload to refresh the CSS formatting.
-- The color should be back to blue
+- load the web app again and Control-F5/reload to refresh the CSS formatting
+- the color should be back to blue
 
 ## Improvements
 You can customize the rolling deployment behavior within your Deployment spec with the `maxSurge` and `maxUnavailable` properties.
