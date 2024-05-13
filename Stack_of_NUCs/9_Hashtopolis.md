@@ -27,7 +27,7 @@ References:
 - https://infosecscout.com/install-hashcat-on-ubuntu/
 
 ## Create a project folder for Hashtopolis
-- Log in to NUC 2 again, the ansible controllers (via NUC 1)
+- Log in to NUC 2 again, the Ansible controller (via NUC 1)
 - Create directory `/home/ansible/my-project/hashtopolis` and change to it
   - `mkdir hashtopolis`
   - `cd hashtopolis`
@@ -267,7 +267,7 @@ Before you clean up Hashtopolis, take a look under **Learn More** for more hands
 When you are ready to clean up:
 - `ansible-playbook remove-hashtopolis.yml`
 
-**NOTE** In the Lab, after running the playbook to remove Hashtoplis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are the commands to fix that issue. However, this has not been confirmed on Ubuntu 22.04.
+**NOTE** In the Lab, after running the playbook to remove Hashtopolis, I found that upon subsequently reinstalling the Hashtopolis server, the Hashtopolis server's PHP stopped working. The following are the commands to fix that issue. However, this has not been confirmed on Ubuntu 22.04.
 ~~~~
 sudo apt install php-fpm
 sudo a2enmod proxy_fcgi setenvif
@@ -364,7 +364,7 @@ Steps:
       - one for LM authentication, (deprecated and only populated with a value to ensure the syntax remains constant)
       - other is the NTLM string
       - For example, for person:
-        - LM aad3b435b51404eeaad3b435b51404ee = means LM is not being stored
+        - LM aad3b435b51404eeaad3b435b51404ee= means LM is not being stored
         - NTLM 8846f7eaee8fb117ad06bdd830b7586c
         - Warning 31d6cfe0d16ae931b73c59d7e0c089c0 means a blank password, and means you were not successful pulling the hashes (samdump2 for example, gives this hash)
 4. In Hashtopolis
