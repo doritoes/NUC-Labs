@@ -2,9 +2,9 @@
 Congratulations on completing this Lab! You successfully used a variety of technologies:
 - Ubuntu desktop
 - Ansible
-- Oracle Virtualbox
+- Oracle VirtualBox
 - Ubuntu Server unattended installation
-- Deploy a fleet of Ubuntu server VMs into Virtualbox using unattended installation
+- Deploy a fleet of Ubuntu server VMs into VirtualBox using unattended installation
 - Loaded a demonstration web app
 
 # Learn More
