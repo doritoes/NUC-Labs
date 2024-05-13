@@ -34,9 +34,9 @@ The short and concise steps to rebuild:
 - `ansible-playbook master.yml`
 - `ansible-playbook sql.yml`
   - NOTE update the master IP address if you changed it
-- `ansible-playboook workers.yml`
+- `ansible-playbook workers.yml`
   - NOTE update the master IP address if you changed it
-- `ansible-playboook labels.yml`
+- `ansible-playbook labels.yml`
 - `ansible-playbook deploy-sql.yml`
 - `ansible-playbook deploy-web.yml`
 - Optionally, `ansible-playbook haproxy-install.yml --ask-become`
