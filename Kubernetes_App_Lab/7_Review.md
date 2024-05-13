@@ -19,7 +19,27 @@ All it takes is a few seconds and the entire environment is erased:
 - `ansible-playbook destroy_fleet.yml`
 
 The short and concise steps to rebuild:
-- 🚧 continue writing here
+- `ansible-playbook destroy_fleet.yml`
+- optionally update `servers.yml`
+- `ansible-playbook build_fleet.yml`
+- `ansible-playbook -i inventory configure_fleet.yml`
+- `ansible -i inventory all -m ping`
+- modify the `inventory` file
+  - assign one IP address to `[master`]
+  - assign one node IP to `[sql]`
+  - assign remaining node IPs to `[workers]`
+  - See [example](inventory)
+- `ansible-playbook updatehostsfile.yml --ask-become`
+- `ansible-playbook kube-dependencies.yml`
+- `ansible-playbook master.yml`
+- `ansible-playbook sql.yml`
+  - NOTE update the master IP address if you changed it
+- `ansible-playboook workers.yml`
+  - NOTE update the master IP address if you changed it
+- `ansible-playboook labels.yml`
+- `ansible-playbook deploy-sql.yml`
+- `ansible-playbook deploy-web.yml`
+- Optionally, `ansible-playbook haproxy-install.yml --ask-become`
 
 ## Learn More
 ### SQL Security and sqlmap
