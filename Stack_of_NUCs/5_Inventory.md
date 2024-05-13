@@ -27,7 +27,7 @@ As the number of NUCs gets larger, it's more of a pain to track down the IP addr
 ## Identify Nodes That Weren't Discovered
 What if the hosts file doesn't list all the NUCs? Here is my trick.
 - Power down all the nodes there were discovered
-  - Log in to NUC 2 (ansible controller)
+  - Log in to NUC 2 (Ansible controller)
   - `ansible -i hosts all -a "shutdown -h now"`
 - Pull any NUCs that are still powered on for troubleshooting or re-imaging
 - Power the "good" NUCs back on
@@ -35,9 +35,9 @@ What if the hosts file doesn't list all the NUCs? Here is my trick.
 Note that the NUCS are somewhat slow to start up at this point. We will be fixing that shortly.
 
 ## Learn More
-### Experiment the Ansible Environment
+### Experiment with the Ansible Environment
 #### Check Nodes Are Up
-A quick ansible "ping":
+A quick Ansible "ping":
 - ` ansible -i hosts all -m ping`
 #### Discover NUC Board Names
 You can view the board names of your NUCs. Just be aware that the board name can be different from the model number on the case.

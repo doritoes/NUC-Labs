@@ -27,7 +27,7 @@ A custom “user-data” file is required for an unattended installation of Ubun
  
 ## Learn More
 ### Testing the ISO
-Now that you have the ISO created, you can test it in Oracle Virtualbox, VMware Workstation, or on ESXi. Boot from the ISO and observe the steps.
+Now that you have the ISO created, you can test it in Oracle VirtualBox, VMware Workstation, or on ESXi. Boot from the ISO and observe the steps.
 
 If the boot is crashing, test out different settings (e.g. 2 or more vCPUs).
 

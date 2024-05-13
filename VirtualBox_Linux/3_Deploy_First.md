@@ -1,5 +1,5 @@
 # Deploy First VM
-In this step you will create a playbook to deploy an Ubuntu server using Virtualbox.
+In this step you will create a playbook to deploy an Ubuntu server using VirtualBox.
 
 ## Create Playbook
 NOTE This playbook expects you to run it on Ubuntu desktop host an open  a GUI.
@@ -7,7 +7,7 @@ NOTE This playbook expects you to run it on Ubuntu desktop host an open  a GUI.
 - Create playbook `create_vm.yml` from this repo ([create_vm.yml](create_vm.yml))
 - Run the Playbook
   - `ansible-playbook create_vm.yml`
-- Watch the server build in the Virtualbox GUI app 
+- Watch the server build in the VirtualBox GUI app 
 
  
 ## Learn More
@@ -15,7 +15,7 @@ NOTE This playbook expects you to run it on Ubuntu desktop host an open  a GUI.
 From inside the VM's console (in VirtualBox) try to log in as user `ansible`
 - Does it work?
 
-### Experiment with Oracle Virtualbox commands
+### Experiment with Oracle VirtualBox commands
 - `vboxmanage list vms`
 - `vboxmanage unregistervm <name or ID> –delete`
 - what happens if you don't use `–delete`?
@@ -23,7 +23,7 @@ From inside the VM's console (in VirtualBox) try to log in as user `ansible`
 - `vboxmanage closemedium <UUID>`
 - What happens if you edit `create_vm.yml` and change from '–type gui' to '–type headless'?
 
-### Test on a Windows PC with Virtualbox Installed
+### Test on a Windows PC with VirtualBox Installed
 In testing on Windows 11 Pro, some settings we used on Linux crash the installation. Specifically virtualization and nested hardware virtualization.
 
 For Windows, use the file `testvm.bat` ([testvm.bat](testvm.bat))

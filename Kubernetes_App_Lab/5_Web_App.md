@@ -3,7 +3,7 @@ We are going to deploy a demonstration web app using an image downloaded from hu
 
 Overview:
 - Nginx and PHP-FPM on Alpine Linux minimalist image from https://github.com/TrafeX/docker-php-nginx
-- This image has the mysqli driver enabled but the PDO driver for mysql is disabled
+- This image has the mysqli driver enabled but the PDO driver for MySQL is disabled
   - PDO is the modern way to interfaces with of the various databases out there with minimal coding changes
   - *See https://www.w3schools.com/php/php_mysql_connect.asp*
 - We created our own image with PDO support: https://github.com/doritoes/docker-php-nginx-app-server
@@ -187,15 +187,15 @@ Compare:
 1. What will happen if your MySQL pod hangs? How will the application pods behave?
     - `kubectl get pods`
     - `kubectl delete pod <name of mysql pod>`
-2. What happens if you remove the mysql deployment?
+2. What happens if you remove the MySQL deployment?
     - `ansible-playbook remove-sql.yml`
     - watch the pods restart 5 times; they never become ready
     - in the meantime, can you access the application? what happens when you try to log in?
-    - do you see any difference in accessing via ModePort (30080) vs the HAProxy port (8080)?
+    - do you see any difference in accessing via NodePort (30080) vs the HAProxy port (8080)?
     - after 5 restarts notice the status is CrashLoopBackOff
     - additional restart attempts are tried
     - note the state where a pod is Running but not Ready; it will accept connections in "Running" state, but is unable to log in
-3. What happens if you re-deploy the mysql distribution?
+3. What happens if you re-deploy the MySQL distribution?
     - `ansible-playbook deploy-sql.yml`
     -  Do the pods recover automatically?
     -  What affect would deleting a pod in a "CrashLoopBackOff" status have?

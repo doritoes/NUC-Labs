@@ -23,7 +23,7 @@ References:
   - `cd /home/ansible/my-project/k8s`
 - Create the `inventory` file
   - Use the example `inventory` ([inventory](k8s/inventory))
-  - Modify it to include the IP address of one of your ansible nodes under `[master]`
+  - Modify it to include the IP address of one of your Ansible nodes under `[master]`
   - Include the remaining IP addresses under `[workers]`
 - Create the `ansible.cfg` file ([ansible.cfg](k8s/ansible.cfg))
   - this tells Ansible to use the `inventory` file

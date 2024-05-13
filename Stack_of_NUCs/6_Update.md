@@ -1,5 +1,5 @@
 # Update and Configure
-In this section we will use ansible playbooks to update our NUCS.
+In this section we will use Ansible playbooks to update our NUCS.
 
 ## Connect to the Ansible Control Node
 From NUC 1, log in to the Ansible control node, NUC 2
@@ -7,7 +7,7 @@ From NUC 1, log in to the Ansible control node, NUC 2
 ## Disable the DNS Stub Resolver
 Even though each node receives its DNS information via DHCP, Ubuntu 22.04 will at times fail to resolve names. Rebooting solves the problem temporarily, but it will come back.
 
-This ansible playbook will fix this problem.
+This Ansible playbook will fix this problem.
 1. Create file `/home/ansible/my-project/disable-dns-stub.yml` with the contents of [disable-dns-stub.yml](disable-dns-stub.yml)
 2. Run the playbook
     - `ansible-playbook -i hosts disable-dns-stub.yml`

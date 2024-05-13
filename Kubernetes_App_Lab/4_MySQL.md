@@ -14,7 +14,7 @@ References:
 ## Create MySQL Deployment
 To deploy MySQL on Kubernetes, we will use a Deployment object, which is a higher-level abstraction that manages a set of replicas of a pod. The pod contains the MySQL container along with any necessary configuration.
 
-At the time of writing the latest mysql image being pulled is version 8.3.0 and runs on Oracle Linux Server 8.9. We will demonstrate using the base image, and mention an alternative image which enables the modern PDO driver.
+At the time of writing the latest MySQL image being pulled is version 8.3.0 and runs on Oracle Linux Server 8.9. We will demonstrate using the base image, and mention an alternative image which enables the modern PDO driver.
 
 There are three Kubernetes component parts we will use
 - Deployment
@@ -147,7 +147,7 @@ SELECT * FROM messages;
 
 Use `exit` or `quit` to exit. Exit again to return to your Host system.
 
-Now we will create an ansible playbook to remove:
+Now we will create an Ansible playbook to remove:
 - the deployment and all the pods
 - the persistent volume and the volume claim and the service
 

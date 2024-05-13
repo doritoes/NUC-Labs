@@ -104,7 +104,7 @@ Compare:
 - Standard deployment file: [speedtester-deployment.yml](k8s/speedtester-deployment.yml)
 - Playbook for same deployment: [ansible-deployment.yml ](k8s/ansible-deployment.yml)
 
-NOTE that the ansible playbook requires specifying a namespace.
+NOTE that the Ansible playbook requires specifying a namespace
 
 Run and verify:
 - `ansible-playbook ansible-deployment.yml`
