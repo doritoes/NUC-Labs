@@ -68,7 +68,7 @@ If you have more cores, give 2 cores to each App node and add another App node f
 Create the jinja (j2) template used to create the user-data file for each server's automatic installation ISO image.
 - Create the file `fleet-user-data.j2` ([fleet-user-data.j2](fleet-user-data.j2))
 
-You can customize thie template (e.g., the timezone)
+You can customize the template (e.g., the timezone)
 
 ## Create the Playbook to Deploy the VMs in VirtualBox while Managed by Ansible
 This playbook is the one that will do all the work.
