@@ -7,7 +7,7 @@ Mission
 - Install VirtualBox using Ansible
 - Customize the user-data for unattended installation
 - Create a custom Ubuntu server ISO that automatically installs
-- Deploy our first Ubuntu VM to OracleBox
+- Deploy our first Ubuntu VM to Oracle VirtualBox
 - Test our first Ubuntu VM
 - Delete our first Ubuntu VM
 - Deploy our first fleet of VMs
@@ -17,9 +17,9 @@ Materials
 - NUC
   - Recommend a more powerful NUC with 16GB RAM and 500GB disk space
     - Most mid-range NUCs have 4 physical CPUs for a total of 8 cores. Most Gen12 and Gen13 NUCs have more cores available.
-  - Yes you can create an VM in VMware and run Oracle Virtualbox…
+  - Yes you can create an VM in VMware and run Oracle VirtualBox…
     - <ins>IF</ins> you enable “Virtualize Intel VT-x/EPT or AMD-V/RVI” under Settings > Processors in VMware
-    - <ins>BUT</ins> However, I had issues the network connectivity on the Oracle guests, both bridging and NATting. Setting the promiscuous mode settings on the Virtualbox guest didn't solve the issue.
+    - <ins>BUT</ins> However, I had issues the network connectivity on the Oracle guests, both bridging and NATting. Setting the promiscuous mode settings on the VirtualBox guest didn't solve the issue.
    
 References
 - https://rutgerblom.com/2020/07/27/automated-ubuntu-server-20-04-installation-with-ansible/ ([Gitlab](https://github.com/rutgerblom/ubuntu-autoinstall/blob/default/DeployUbuntu.yml))
