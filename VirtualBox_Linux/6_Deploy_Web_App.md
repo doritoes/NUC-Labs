@@ -90,7 +90,7 @@ What happens when you re-run `ansible-playbook -i inventory configure_fleet.yml`
 
 What tasks could be moved to the `build_fleet.yml` playbook? Look at `fleet-user-data.j2` file. What additional late-commands would you add?
 
-Alternatively, what error handling could you do in `configure_fleet.yml`? Note that the playbook only resizes filesystems when they are larger than a set amount. This is because trying to resize the default partition is already 10GB and would create an error. How can you inprove this to handle all cases?
+Alternatively, what error handling could you do in `configure_fleet.yml`? Note that the playbook only resizes filesystems when they are larger than a set amount. This is because trying to resize the default partition is already 10GB and would create an error. How can you improve this to handle all cases?
 
 ### Fragile Playbook applications_fleet.yml
 Similarly, `applications_fleet.yml` causes problems when it is run again.

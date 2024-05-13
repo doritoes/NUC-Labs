@@ -18,7 +18,7 @@ References:
 - Test using `ansible all -m ping`
 
 ## Install HAProxy
-Here we will use HAProxy to distribute load to the worker node IP addreses via the service port 30080.
+Here we will use HAProxy to distribute load to the worker node IP addresses via the service port 30080.
 - Create the `haproxy.cfg.j2` file ([haproxy.cfg.j2](haproxy/haproxy.cfg.j2))
 - Create the `haproxy-install.yml` playbook ([haproxy-install.yml](haproxy/haproxy-install.yml))
 - Run the playbook

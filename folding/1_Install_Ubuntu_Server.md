@@ -20,11 +20,11 @@ See the tutorial at https://ubuntu.com/tutorials/install-ubuntu-server#1-overvie
 
 ## Boot from Installation USB stick
 - Boot the NUC from the bootable USB stick
-  - Connnect to keyboard, mouse and power
+  - Connect to keyboard, mouse and power
   - Connect to wired network for faster setup
   - Insert the USB stick
   - Reboot or power on the NUC
-  - Press F10 at the boot promppt
+  - Press F10 at the boot prompt
   - Select the USB stick (USB UEFI)
 - Follow the prompts to install Ubuntu on the NUC
   - use the standard Ubuntu server (<ind>do not use Minimal installation</ins> as this will stop FAH from installing)

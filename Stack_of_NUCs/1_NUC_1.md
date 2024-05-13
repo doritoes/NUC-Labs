@@ -37,11 +37,11 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Wait for the flash and verification to complete
   - Safely eject the USB stick (yes, there are two "drives" on the USB stick) ([tip](Appendix_Safely_Eject.md))
 - Boot the NUC from the bootable USB stick
-  - Connnect to keyboard, mouse and power
+  - Connect to keyboard, mouse and power
     - Optionally connect to wired network for faster setup
   - Insert the USB stick
   - Reboot or power on the NUC
-  - Press F10 at the boot promppt
+  - Press F10 at the boot prompt
   - Select the USB stick (USB UEFI)
 - Follow the prompts to install Ubuntu on the NUC
   - Allow the system to come up to the "Install" screen and click **Install Ubuntu**
@@ -49,9 +49,9 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Configure the wifi connection now (if you are wired, you won't be prompted; set it up later)
   - There is no wrong answer for the packages screen; accept the defaults or modify as desired
   - Select **Erase disk and install Ubuntu**
-  - Click **Intall Now**
+  - Click **Install Now**
   - Click **Continue** and write changes to disk
-  - Accept the zime zone settings
+  - Accept the time zone settings
   - Enter system and user information *you can modify these as desired*
     - Name: **nuc**
     - Computer name: **nuc1**

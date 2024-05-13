@@ -50,18 +50,18 @@ References
 - View results: `kubectl get all`
 - Examine it: `kubectl describe svc speedtester-service`
   - Notice the type (NodePort)
-  - It's not obvious, but the Nodes now expose the service on port 30080 on their own IP addreses
+  - It's not obvious, but the Nodes now expose the service on port 30080 on their own IP addresses
 
 ## Test Access
 Point your web browser on NUC 1 (or any of your Lab systems) to the IP address of <ins>any node</ins> and the port we selected, port 30080.
 - Example: `http://<IPADDRESSWORKERNODE>:30080`
 - The speed test will now complete (will no longer crash during the upload test)
   - **NOTE** Look at the IP address that Speedtester returns; compare this across the different nodes
-    - What does this tell you about the NodePport mechanism?
+    - What does this tell you about the NodePort mechanism?
     - Confirm by viewing a pod's logs
       - `kubectl get pods`
       - `kubectl logs <pod_name>`
-    - If your application needs to know the client's real IP addresses, what options are therre? (Hint: X-Forwarded-For)
+    - If your application needs to know the client's real IP addresses, what options are there? (Hint: X-Forwarded-For)
 - Test every Node IP address
 - Optional: reduce the number of replicas to less than the number of nodes
   - can you still run the speed test from ALL node IP addresses?
@@ -77,7 +77,7 @@ You can quickly scale up or down the number of replicas in your deployment.
   - `kubectl scale deployment/speedtester --replicas=10`
   - `kubectl apply -f speedtester-deployment.yml`
  
-Note that ad hoc scaling is not a good idea for production: your scaling is not "permanent" unless you update the yml file (manifest).
+Note that ad-hoc scaling is not a good idea for production: your scaling is not "permanent" unless you update the yml file (manifest).
 
 ## Learn More
 ### Managing Kubernetes using Ansible
@@ -104,7 +104,7 @@ Compare:
 - Standard deployment file: [speedtester-deployment.yml](k8s/speedtester-deployment.yml)
 - Playbook for same deployment: [ansible-deployment.yml ](k8s/ansible-deployment.yml)
 
-NOTE that the ansible playbbook requires specifying a namespace.
+NOTE that the ansible playbook requires specifying a namespace.
 
 Run and verify:
 - `ansible-playbook ansible-deployment.yml`
@@ -153,7 +153,7 @@ kubectl delete pod $(kubectl get pods -l run=speedtester -o jsonpath='{.items[0]
 done
 ~~~~
 
-Kill all the current pods (slow because loop struction is sequential)
+Kill all the current pods (slow because loop structure is sequential)
 - [deletepod.yml](k8s/deletepod.yml]
 - `ansible-playbook deletepod.yml`
 
@@ -179,7 +179,7 @@ Rebooting nodes
 - What are does failure look like now?
   - Can you run the speedtest while a node is rebooting?
   - Do you need to change the IP do a different node IP address?
-  - How long does it take to deletect the logs pods on the missing node?
+  - How long does it take to detect the lost pods on the missing node?
   - When do worker nodes show status *Unknown* on pods before returning to Running
   - Use `kubectl get pods -o wide`
 - Once in a while the random selection hits the master node

@@ -37,7 +37,7 @@ References:
   - `ansible-playbook updatehostsfile.yml`
   - This updates /etc/hosts in the master, workers, and also the Host (see how `localhost` is included)
 
-## Install Prequisites
+## Install Prerequisites
 Install some prerequisites on ALL the Kubernetes nodes
 - Create the `kube-dependencies.yml` playbook ([kube-dependencies.yml](k8s/kube-dependencies.yml))
 - Run the playbook
@@ -114,7 +114,7 @@ Do some tests with Kubernetes.
         - `top`
       - one workaround is to keep relaunching the port-forward command
         - `while true; do kubectl port-forward speedtester 8080:8080; done`
-      - later on, we will demonstrate that is is stable when usig a better forwarding mechanism
+      - later on, we will demonstrate that is is stable when using a better forwarding mechanism
 5. Manage the pod
     - `kubectl logs speedtester`
     - `kubectl exec speedtester -- date`
@@ -157,7 +157,7 @@ References
     - See `kubectl proxy --help` for more options
     - From web browser on NUC1 open:
       - http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-    - Authenticate with "Token" and paste in the toekn from the previous step
+    - Authenticate with "Token" and paste in the token from the previous step
 5. Expert deploying containerized applications
     - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
   

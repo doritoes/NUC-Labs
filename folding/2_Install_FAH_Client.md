@@ -10,8 +10,8 @@ dpkg: error processing package fahclient (--install):
 Errors were encountered while processing:
  fahclient
 ~~~~
-Therefore do a normal (<ins>not minimal</ins>) installation of Ubuntu server. I unsucessfuly tried to find any missing dependencies.
-- `dpkg-deb -I latest.deb` lists debconf, but debconf is included in the ubuntu minimal packages
+Therefore do a normal (<ins>not minimal</ins>) installation of Ubuntu server. I unsuccessfully tried to find any missing dependencies.
+- `dpkg-deb -I latest.deb` lists debconf, but debconf is included in the Ubuntu minimal packages
 - I installed the 187 packages that were missing in "minimal", and the install still failed.
 
 References:
@@ -88,7 +88,7 @@ Feel free to reboot the system to confirm that FAH is automatically restarting a
   - https://foldingathome.org/support/faq/installation-guides/
 - Open FAHControl
 - To the left, there is a pane showing *Clients*
-- In the bottom-right corder of this pane, click **Add**
+- In the bottom-right corner of this pane, click **Add**
   - Name: *assign any name you want*
   - Address: *the IP address of the NUC you configured*
   - Password: *the password you configured in `config.xml` file*
@@ -97,7 +97,7 @@ Feel free to reboot the system to confirm that FAH is automatically restarting a
 
 If you have having trouble connecting, check:
 - config.xml - `<allow v='192.168.99.1/24'/>` has been updated to your Lab network or IP address
-- config.xml - `<password v='supermassiveblackhole'/>` has been updated to the pasword you used
+- config.xml - `<password v='supermassiveblackhole'/>` has been updated to the password you used
 
 ## Learn More
 ### Track Your Progress

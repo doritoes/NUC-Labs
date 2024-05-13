@@ -89,7 +89,7 @@ This step is optional. If you haven't already upgraded the firmware on your NUC 
   - Read https://www.intel.com/content/www/us/en/support/articles/000005636/intel-nuc.html
   - https://www.unclenuc.com/lab:preparing_nucs_for_labs
 - Download the latest firmware for your NUC
-  - ⚠️ Warning: Asus has over taken over support for some NUC generations
+  - ⚠️ Warning: Asus has taken over support for some NUC generations
     - https://www.asus.com/support/faq/1053028/
   - Extract the .BIO file from the Zip file you download
   - ⚠️ Beware that several NUC models may use the same .BIO file

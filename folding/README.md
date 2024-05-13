@@ -12,7 +12,7 @@ Why fold on a NUC?
 This is a simple Lab that walks you through installing the Folding at Home (FAH or F@H) client and running it as a service. It is ideal to run on a mid-sized NUC such as the 8i5. 8GB RAM and 128GB storage is the recommended minimum.
 
 Mission:
-- Install Unbuntu server on a NUC (minal installation)
+- Install Ubuntu server on a NUC (minimal installation)
 - Install the FAH Client as a service
 
 Materials:

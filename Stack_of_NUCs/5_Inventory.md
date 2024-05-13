@@ -1,7 +1,7 @@
 # Discover NUCs and add to Ansible inventory
 We now have a stack of NUCs booted up and connected to a wireless network. Let's "discover", or add them to the Ansible inventory. This is how Ansible keeps track of the hosts that it will manage.
 
-As the number of NUCs gets larger, it's more of a pain to track down the IP addresses. Then you have to add thoses hosts to the SSH known_hosts file. This script is one way to speed up the process.
+As the number of NUCs gets larger, it's more of a pain to track down the IP addresses. Then you have to add those hosts to the SSH known_hosts file. This script is one way to speed up the process.
 
 ⚠️ If you did some experimentation in the previous step, you may receive warnings about systems that have already been added.
 
@@ -11,7 +11,7 @@ As the number of NUCs gets larger, it's more of a pain to track down the IP addr
   - `scp Downloads/discover.sh ansible@[IP OF NUC2]:~/my-project/`
 
 ## Run the Discover Script on NUC2, the Ansible controller
-- Log in to NUC2, the Anible control node
+- Log in to NUC2, the Ansible control node
   - First, log in to NUC 1
   - From the terminal, enter `ssh ansible@[IP OF NUC2]`
 - Run the script from NUC 2
@@ -48,6 +48,6 @@ Another way to discover the NUCs on the network quickly and easily is to use lld
 **NOTE**: lldp is a standards-based neighbor discovery protocol similar to Cisco CDP. It works fine over wired network connections. However, in my experience wireless routers and access points don't support lldp between wireless clients, so I have not included this in the lab.
 
 To use lldp in a wired lab
-- add the lldpd to the list of packages to install using apt
-- install on NUC 1 using sudo apt install lldpd
-- from NUC 1 run lldpcli show neighbors
+- add lldpd to the list of packages to install using apt
+- install on NUC 1 using `sudo apt install lldpd`
+- from NUC 1 run `lldpcli show neighbors`

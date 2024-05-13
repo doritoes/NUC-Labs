@@ -1,5 +1,5 @@
 # NUC 2
-NUC 2 is the first server in our ["Stack of Nucs"](https://www.unclenuc.com/lab:stack_of_nucs:start)
+NUC 2 is the first server in our ["Stack of NUCs"](https://www.unclenuc.com/lab:stack_of_nucs:start)
 - will be the Ansible control node
 - build using the USB install and autoconfiguration method we tested
 
@@ -51,11 +51,11 @@ Purpose:
 
 ## Modify the CIDATA USB stick for the Ansible Controller
 These steps are performed while logged in to NUC1
-- Insert the CICDATA USB stick into NUC1
+- Insert the CIDATA USB stick into NUC1
   - The USB stick will mount automatically
 - Modify the `user-data` file on CIDATA (on the USB stick)
   - Download the example file: [user-data-ansible](user-data-ansible)
-  - Replace the contents onf `user-data` on the USB stick with the contents of the example file
+  - Replace the contents of `user-data` on the USB stick with the contents of the example file
     - ⚠️ Replace the key(s) in the example with the output from your computer for `cat ~/.ssh/id_rsa.pub`
     - ⚠️ Replace the WiFi SSID name and PASSWORD with your WiFi SSID and passphrase
 - Safely eject the USB stick ([tip](Appendix_Safely_Eject.md))

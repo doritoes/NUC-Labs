@@ -1,5 +1,5 @@
 # Folding at Home (FAH or F@H)
-Let's kick up the Lab another notch and demostrate running [Folding at Home (FAH)](https://foldingathome.org/]) on the worker nodes. I updated the playbook by ajacocks to add the current FAH release and hack up a quick fix.
+Let's kick up the Lab another notch and demonstrate running [Folding at Home (FAH)](https://foldingathome.org/]) on the worker nodes. I updated the playbook by ajacocks to add the current FAH release and hack up a quick fix.
 
 💡What is Folding At Home? It's a way to donate CPU and/or GPU cycles to help cure diseases. Your computer will simulate protein dynamics, including the process of protein folding.
 
@@ -53,7 +53,7 @@ From NUC 1, log in to the Ansible control node, NUC 2
       - enter a FAH team number if desired
     - passkey='(redacted passkey from folding@home)'
       - if you have a passkey from F@H, enter it here; otherwise leave blank '' 
-- Run the playook
+- Run the playbook
   - `ansible-playbook main.yml`
 
 You would expect the build to be complete here. However I have observed:
@@ -88,7 +88,7 @@ The configuration will now match your expected settings which you entered in the
   - Open the terminal
   - `cd fah-control`
   - `./FAHControl`
-- Addclients one at a time in FAHControl
+- Add clients one at a time in FAHControl
   - At the bottom of the "Clients" pane on the left, Click **Add**
     - Any name you want
     - IP address of the client
@@ -145,14 +145,14 @@ Understanding results:
 
 ### Check Temperature
 1. Install lm-sensors package
-    - Option 1 - Ad Hoc
+    - Option 1 - Ad-Hoc
       - `ansible -i hosts all -m apt -a "name=lm-tools state=present"`
     - Option 2 - Playbook
       - Create file /home/ansible/my-project/fah/lm-sensors.yml with the contents of [lm-sensors.yml](fah/lm-sensors.yml)
       - Run the playbook
         - `ansible-playbook lm-sensors.yml`
-2. Check Temerature
-    - Ad Hoc
+2. Check Temperature
+    - Ad-Hoc
       - `ansible all -a sensors`
       - `ansible all -a "sensors -j"`
     - Playbook
@@ -164,8 +164,8 @@ Learn more about "how hot is too hot?" by looking at the detailed output from `a
 - input: current temperature in C
 - max: the maximum seen temperature in C
 - crit: at what point the temperate reaches a critical level
-- to view in Fahrenheight: `ansible all -a "sensors -j -f"`
-- it's not uncommon to see the max temperatore over 80C, but still far short of the critical temperature
+- to view in Fahrenheit: `ansible all -a "sensors -j -f"`
+- it's not uncommon to see the max temperature over 80C, but still far short of the critical temperature
 
 Learn more about using lm-sensors with Ansible: https://github.com/aisbergg/ansible-role-lm-sensors
 

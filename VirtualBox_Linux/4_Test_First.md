@@ -4,7 +4,7 @@ In this step we will test the basic connectivity to our new server and practice 
 ## Test SSH Access
 - Log in to your host machine and become the user `ansible`
   - Option 1: Log in to the host machine as user `ansible`
-  - Option 2: Log in as usual to the host maching and `su - ansible`
+  - Option 2: Log in as usual to the host machine and `su - ansible`
 - SSH to the VM
   - `ssh ansible@<ip_address>`
   - The IP address is displayed on the VM's console screen when it starts up
@@ -26,7 +26,7 @@ In this step we will test the basic connectivity to our new server and practice 
   - `ansible -i hosts all --list-hosts`
 
 ### Confirm the Server is Up
-Still as user `ansible`, run some ad hoc Ansbile commands to test
+Still as user `ansible`, run some ad-hoc Ansible commands to test
 - `ansible -i hosts all -m ping`
 - `ansible -i hosts servers -m ping`
 - `ansible -i hosts servers -a "sudo /sbin/reboot"`
@@ -67,7 +67,7 @@ Congratulations on your first VM deployed using Ansible on Virtualbox! Let's loo
 
 - Bring the VM back up
   -  `vboxmanage startvm my_vm`
-  -  if you are using a remote SSH session you can't start a gui session; instead use
+  -  if you are using a remote SSH session you can't start a GUI session; instead use
     -  `vboxmanage startvm my_vm –type headless`
 - Instead of the graceful poweroff method above, you can also experiment with
   - `vboxmanage controlvm my_vm poweroff`
@@ -115,7 +115,7 @@ Ansible can do the logic we want, but it's not straightforward:
 3. Delete the VM
 4. And yes, error handling
 
-`wait_for` is a useful command. You wait for an ssh probe on stop working on the server. Or we could store the VM servers we create in a local table by VM, hostname name and IP. Our scripts could use that data.
+`wait_for` is a useful command. You wait for an ssh probe on stop working on the server. Or we could store the VM servers we create in a local table by VM, hostname, and IP. Our scripts could use that data.
 
 ## Learn More
 ### Rebooting by Group
