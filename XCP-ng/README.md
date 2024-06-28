@@ -25,7 +25,8 @@ References:
 - https://xcp-ng.org/
 
 # Overview
-## Install Hybervisor on NUC Host
+## Install Hypervisor on NUC Host
+[Install XCP-ng](1_Install.md)
 - Download ISO from https://docs.xcp-ng.org/installation/install-xcp-ng/
 - Create Bootable USB using Etcher
 - Boot from USB (UEFI mode) by pression F10
