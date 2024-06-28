@@ -17,7 +17,9 @@ Mission:
 Materials:
 - Lab router  providing DHCP and internet access
 - NUC
-  - provide specifications
+  - NUC10FNH (BXNUC10i7FNH1) ([specs](https://www.intel.com/content/dam/support/us/en/documents/intel-nuc/NUC10i357FN_TechProdSpec.pdf])
+  - X GB RAM (Y GB max)
+  - 2TB SSD
 - USB sticks
   - 1 USB sticks 8GB or more for installation of XCP-ng
  
@@ -26,10 +28,7 @@ References:
 
 # Overview
 ## Install Hypervisor on NUC Host
-[Install XCP-ng](1_Install.md)
-- Download ISO from https://docs.xcp-ng.org/installation/install-xcp-ng/
-- Create Bootable USB using Etcher
-- Boot from USB (UEFI mode) by pression F10
+[Install XCP-ng](1_Install.md) steps through creating a bootable USB stick and installing the hypervisor and the Xen Orchestrator VP to manage it
 
 ## Install VyOS router
 
