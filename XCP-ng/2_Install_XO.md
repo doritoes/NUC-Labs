@@ -44,5 +44,9 @@ NOTES
     - In my testing I had to upgrade two times
 
 # Build Your Own XO
+The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface
+
+The "Hub" offers older options. We will use Ubuntu 20.04 and upgrade it to 22.04 for this lab.
+
 ## Option 1 - Build on XCP-ng Using XOA and Replace XOA
 ## Option 2 - Build on Another Device (Even a VM on your Laptop running VirtualBox)
