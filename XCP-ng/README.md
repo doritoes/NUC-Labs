@@ -32,13 +32,24 @@ References:
 [Install XCP-ng](1_Install.md) steps through creating a bootable USB stick and installing the hypervisor and the Xen Orchestrator VP to manage it
 
 ## Install VyOS router
+[Install Router](2_Router.md) outlines how to create a router to our backend "LAN".
 
-## Install 
+## Install Ubuntu Desktop VM
+[Install LAN VM](3_LAN_VM.md) configures a VM on the internal LAN
 
 ## Install OPNsense firewall
+[Install OPNsense](4_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
 
 ## Install Windows Servers
+Install Windows servers on the pen-testing network.
 
 ## Install Kali Linux VM
+Install Kali Linux VM on the pen-testing network.
+
+## Convert Pentest Network to TOR Only
+Use OPNsense to only allow access to the Internet over TOR
+
+## Create Ubuntu Desktop FAH VM
+Demonstrate Internet access works over TOR (only)
 
 ## Install Check Point Firewall
