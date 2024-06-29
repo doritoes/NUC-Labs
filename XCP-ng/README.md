@@ -1,5 +1,5 @@
 # XCP-ng Lab
-The mission in this Lab is to set up a virtual Lab environment hosted on a NUC running XCP-ng. This replaces the previous lab running on ESXi, which is not longer an option for home labs after the Broadcom acquisition of VMware.
+The mission in this Lab is to set up a virtual Lab environment hosted on a NUC running XCP-ng. This replaces the previous Lab running on ESXi, which is not longer an option for home labs after the Broadcom acquisition of VMware.
 
 Why it's perfect to the lab:
 - Main goal of XCP-ng is to be a fully integrated and dedicated virtualization platform, without requiring any deep Linux or system knowledge
