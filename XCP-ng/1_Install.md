@@ -10,7 +10,7 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Download ISO from https://docs.xcp-ng.org/installation/install-xcp-ng/
 - Create Bootable USB using [Balena Etcher](https://etcher.balena.io/)
 
-# Intial Intallation
+# Intial Installation
 - Boot from USB (UEFI mode) by pressing F10 on the NUC and selecting the UEFI USB stick image
 - Wait at the boot menu to press enter to start `install`
 - Select your keyboard
