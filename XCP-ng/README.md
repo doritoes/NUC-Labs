@@ -18,7 +18,7 @@ Materials:
 - Lab router  providing DHCP and internet access
 - NUC
   - NUC10FNH (BXNUC10i7FNH1) ([specs](https://www.intel.com/content/dam/support/us/en/documents/intel-nuc/NUC10i357FN_TechProdSpec.pdf))
-  - 32 GB RAM (Y GB max)
+  - 32GB RAM (64GB max)
   - 2TB SSD
 - USB sticks
   - 1 USB sticks 8GB or more for installation of XCP-ng
