@@ -29,16 +29,20 @@ References:
 
 # Overview
 ## Install Hypervisor on NUC Host
-[Install XCP-ng](1_Install.md) steps through creating a bootable USB stick and installing the hypervisor and the Xen Orchestrator VP to manage it
+[Install XCP-ng](1_Install.md) steps through creating a bootable USB stick and installing the hypervisor
+
+
+## Install Xex Orchestrator (XO) to Manage the Host
+[Install XO 2 Ways](2_Install_XO.md) shows how to use the built-in quick deploy and how to build your own fully-featured manager.
 
 ## Install VyOS router
-[Install Router](2_Router.md) outlines how to create a router to our backend "LAN".
+[Install Router](3_Router.md) outlines how to create a router to our backend "LAN".
 
 ## Install Ubuntu Desktop VM
-[Install LAN VM](3_LAN_VM.md) configures a VM on the internal LAN
+[Install LAN VM](4_LAN_VM.md) configures a VM on the internal LAN
 
 ## Install OPNsense firewall
-[Install OPNsense](4_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
+[Install OPNsense](5_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
 
 ## Install Windows Servers
 Install Windows servers on the pen-testing network.
