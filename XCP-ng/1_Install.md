@@ -52,7 +52,7 @@ IMPORTANT Another IP address is used for XO, and your broswer is automatically r
 
 IMPORTANT Another method to install is using the Web UI method: https://vates.tech/deploy
 
-## Configure Xex Orchestra
+# Configure Xex Orchestra
 - Log in as username `admin` and password `labboss`
 - Apply Updates
   - Click XOA from the left menu then click Updates
