@@ -1,5 +1,9 @@
 # Install XCP-ng
-In this Lab we will use XO to manage the environment. Please be aware that XO Lite eists.
+In this Lab we will use XO to manage the environment. Please be aware that XO Lite exists in beta and is coming in the near future.
+
+References: https://www.youtube.com/watch?v=fuS7tSOxcSo
+
+We will start with a the XOA virtual appliances, then build our own XO installation to replace it
 
 # Create Account on xen-orchestra.com
 An account is required to register your Xen Orchestra virtual Appliance (XOA), which you will use to manage the system
@@ -59,6 +63,11 @@ IMPORTANT Another method to install is using the Web UI method: https://vates.te
   - If an upgrade is available, click Upgrade and wait for the upgrade to complete and for XOA to reconnect
     - Click Refresh to connect as needed
     - In my testing I had to upgrade two times
+
+# Deploy Ubuntu Server to Replace XOA
+
+
+# Configure Networking
 - Configure networks
   - Click Home from the left menu then click Hosts
   - Click on the host you configured (i.e., xcp-xg-lab1)
