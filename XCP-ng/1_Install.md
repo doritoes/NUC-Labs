@@ -1,4 +1,5 @@
 # Install XCP-ng
+In this Lab we will use XO to manage the environment. Please be aware that XO Lite eists.
 
 # Create Account on xen-orchestra.com
 An account is required to register your Xen Orchestra virtual Appliance (XOA), which you will use to manage the system
@@ -39,10 +40,34 @@ Configure Xen Orchestra (XO) virtual Appliance (XOA) to manage the system
   - Username: admin
   - Password: labboss
 - Register your XOA
-  - xen-orchestra.com username:
-  - xen-orchestra.com username:
+  - xen-orchestra.com username: use the value you used when registering
+  - xen-orchestra.com username: use the value you used when registering
 - Set the XOA machine password
   - Login: xoa (default)
   - Password: labboss
 - Click DEPLOY
 - Wait as the XOA image is downloaded and the VM deployed
+
+IMPORTANT Another IP address is used for XO, and your broswer is automatically redirected to the log in page
+
+IMPORTANT Another method to install is using the Web UI method: https://vates.tech/deploy
+
+## Configure Xex Orchestra
+- Log in as username `admin` and password `labboss`
+- Apply Updates
+  - Click XOA from the left menu then click Updates
+  - If an upgrade is available, click Upgrade and wait for the upgrade to complete and for XOA to reconnect
+    - Click Refresh to connect as needed
+    - In my testing I had to upgrade two times
+- Configure networks
+  - Click Home from the left menu then click Hosts
+  - Click on the host you configured (i.e., xcp-xg-lab1)
+  - Click the Network tab
+  - Under Private networks click Manage
+  - Click Add a Network
+    - Interface: eth0
+    - Name: Inside
+    - Description: Inside Lab Network
+    - MTU: leave blank (default 1500)
+    - VLAN: 100
+    - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
