@@ -53,3 +53,6 @@ Use OPNsense to only allow access to the Internet over TOR
 Demonstrate Internet access works over TOR (only)
 
 ## Install Check Point Firewall
+
+# Appendices
+- [Appendix - Lab Architecture][Appendix_- Architecture.md]
