@@ -32,7 +32,7 @@ References:
 [Install XCP-ng](1_Install.md) steps through creating a bootable USB stick and installing the hypervisor
 
 
-## Install Xex Orchestrator (XO) to Manage the Host
+## Install Xen Orchestrator (XO) to Manage the Host
 [Install XO 2 Ways](2_Install_XO.md) shows how to use the built-in quick deploy and how to build your own fully-featured manager.
 
 ## Install VyOS router
