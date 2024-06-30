@@ -44,7 +44,9 @@ NOTES
     - In my testing I had to upgrade two times
 
 # Build Your Own XO Server
-The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build own using Ubuntu 22.04.
+The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build own using Ubuntu 22.04 right on this host.
+
+NOTE You can also build set up your XO server elsewhere, such as a VM on your Lab laptop
 
 Overview
 - Create new Ubuntu 20.04 using the Hub template
@@ -112,7 +114,6 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - Set the new hostname: `sudo hostnamectl set-hostname xo-ubuntu`
   - Optionally set the pretty name: `sudhostnamectl set-hostname "XO Ubuntu Server for managing XCP-ng" --pretty`
   - Confirm it has changed: `hostnamectl`
-  - 
 
 ## Option 1 - Build on XCP-ng Using XOA and Replace XOA
 ## Option 2 - Build on Another Device (Even a VM on your Laptop running VirtualBox)
