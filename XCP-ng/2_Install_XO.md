@@ -172,6 +172,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
     - auto start
     - protect from deletion
     - protect from shutdown
+
 ## Remove the XOA
 1. Login again
 2. Home > VMs
@@ -191,3 +192,12 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
     - Example: https://192.168.1.103
 2. Log in with the user you created
 3. If you are able to log in, your XO server is working!
+
+## Install Pool Patches
+1. Log in again
+2. Home > Pools
+3. Click on the host xcp-ng-lab1
+4. Click the Patches tab
+5. Click Install pool patches
+    - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
+    - Click OK
