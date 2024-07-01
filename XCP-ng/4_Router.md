@@ -15,7 +15,7 @@ How to create a router to our backend "LAN"
       - VLAN: 100
       - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI
       - Click snapshots available over NBD connections)
-  - Under the list of PIFs (physical interfaces), for the new Insider interface, click Status and change to Disconnected
+  - Under the list of PIFs (physical interfaces), for the new Inside interface, click Status and change to Disconnected
   - Click Add a Network
       - Interface: eth0
       - Name: Pentesting
@@ -30,5 +30,72 @@ How to create a router to our backend "LAN"
 2. Click Rolling Release
 3. Download the most recent image
 
-# Create VM
-continue writing here
+# Upload the ISO
+If you linked storage to a file share, copy the file there.
+
+Or, if you created local storage, upload the ISO there.
+- From the left menu Click Import > Disk
+- Select the SR from the dropdown, LOCAL-ISO
+- Drag and drop the vyos ISO file in the box
+- Click Import
+
+# Create VyOS VM
+- From the left menu click New > VM
+  - Select the pool
+  - Template: Other install media
+  - Name: VyOS
+  - Description: VyOS router
+  - CPU: 2 vCPU
+  - RAM: 1GB
+  - Topology: Default behavior
+  - Install: ISO/DVD: Select the vyos ISO image
+  - Interfaces: Click Add interface
+    - Network: from the dropdown select the Inside network you created earlier
+  - Disks: Click Add disk
+    - 8GB
+  - Click Show advanced settings
+    - Check Auto power on
+  - Click Create
+- The details for the new VyOS VM are now displayed
+  - Did you get a kernel panic? Try 2 vCPUs not 1
+- Click Console
+- Login as `vyos`/`vyos`
+- `install image`
+- Allow installation to continue with default values
+  - Enter the new password for the `vyos` user
+    - Fun fact, it allows you to set the password to `vyos`
+- When done reboot: `reboot`
+- Log back in with your updated password
+- Configure your router's "Internet" connection (to your Lab network via the host's Ethernet interface)
+  - configure
+  - set interfaces ethernet eth0 address dhcp
+  - set service ssh
+  - commit
+  - save
+  - exit
+- View your router's IP address
+  - `show interfaces ethernet eth0 brief`
+- You can now configure your router from another device in your Lab using SSH to this IP address
+
+# Configure Router
+- ssh to your router and login as user `vyos` and the password you selected
+- enter the configuration below
+```
+configure
+set interfaces ethernet eth0 description 'OUTSIDE'
+set interfaces ethernet eth1 address '192.168.100.254/24'
+set interfaces ethernet eth1 description 'INSIDE'
+set nat source rule 100 outbound-interface name 'eth0'
+set nat source rule 100 source address '192.168.100.0/24'
+set nat srouce rule 100 translation address 'masquerade'
+set system host-name 'router'
+set system name-server '9.9.9.9'
+set system time-zone US/Eastern
+commit
+save
+exit
+```
+- Test internet connetivity
+  - by pinging an IP address: `ping 8.8.8.8`
+  - nslook a DNS name: `nslookup microsoft.com`
+NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
