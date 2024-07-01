@@ -116,6 +116,10 @@ commit
 save
 exit
 ```
+Useful commands:
+- `show dhcp server leases`
+- `clear dhcp-server lease 192.168.100.20`
+  - of course, use the correct IP for the lease you want to clear
 
 ## Optionally Set up DNS forwarder
 VyOS can be set up to be a DNS forwarder, including caching. This allows clients to query the VyOS device for DNS, and it can pass on requests to public DNS servers.
