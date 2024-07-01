@@ -27,8 +27,8 @@ How to create a router to our backend "LAN"
 
 # Download the ISO
 1. Go to https://vyos.io
-2. Click Rolling Rrelease
-3. Download vyos-rolling-latest.iso
+2. Click Rolling Release
+3. Download the most recent image
 
 # Create VM
 continue writing here
