@@ -1,4 +1,4 @@
-# Install XO Three ways
+# Install XO Two Ways
 In a production environment you would use a paid Xen Orchestra (XO) virtual Appliance (VOA) to manage your XCP-ng environment. Your new host comes with a Quick Deploy method to use the XOA.
 
 The XOA comes with a free trial, without which a large amount of functionality is disabled. Vates also provides a method to to build your own XO in a Linux server with all the features enabled except updates.
@@ -43,7 +43,7 @@ NOTES
     - Click Refresh to connect as needed
     - In my testing I had to upgrade two times
 
-# Build Your Own XO Server
+# Build Your Own XO Server on XCP-ng
 The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build own using Ubuntu 22.04 right on this host.
 
 NOTE You can also build set up your XO server elsewhere, such as a VM on your Lab laptop
@@ -115,7 +115,7 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - Optionally set the pretty name: `sudhostnamectl set-hostname "XO Ubuntu Server for managing XCP-ng" --pretty`
   - Confirm it has changed: `hostnamectl`
 
-## Option 1 - Build on XCP-ng Using XOA and Replace XOA
+## Install Xen Orchestra (XO) on the Ubuntu Server
 Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
 
 1. `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
@@ -131,27 +131,60 @@ Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
     - Country: US
     - State: New York
     - Locality: New York
-    - Organization: Lab
-    - Common Name: XO
+    - Organization Name: Lab
+    - Organizational Unit Name: Virtual
+    - Common Name: xo
     - Email address: x@x.x
 9. `sudo ./xo-install.sh`
-    - choose option 1 to kick off install
-    - wait for it to complete
-10. Point brower to the IP
-11. Log in
-    - user: admin@admin.net
-    - pass: admin
-12. Configure the new XO
-    - Add new user to replace admin@admin.net
-      - Settings > Users > Create
-    - Sign out, Sign in as the new user
-    - Remove user admin@admin.net
-    - Settings
-    - Servers
-      - add server
-      - allow unauthorized certificates
-14. delete the old XOA
+    - If you have less than 3GB of memory you need to accept the warning:
+      - WARNING: you have less than 3GB of RAM in your system. Installation might run out of memory.
+    - Choose option 1 to kick off install
+    - Wait for it to complete (updates are much faster; the first installation takes time)
 
 NOTE To update the XO server, run the same xo-install.sh script and select Update
 
-## Option 2 - Build on Another Device (Even a VM on your Laptop running VirtualBox)
+## Configure the XO on Ubuntu
+1. Point brower to the IP
+    - Example: https://192.168.1.103
+2. Log in
+    - user: admin@admin.net
+    - pass: admin
+3. Add new user to replace admin@admin.net
+    - Settings > Users > Create
+    - Sign out, Sign in as the new user
+    - Remove user admin@admin.net
+4. Add the XCP-ng host ("server")
+    - Settings > Servers
+    - Enter information for the host
+      - Label: xcp-ng-lab1
+      - Address:port: the IP address of the host
+      - Username: root
+      - Password: the root password you configured
+      - "Unauthorized certificates" Slider: enable it
+      - Click Connect
+5. Make sure the XO Ubuntu VM is set to
+    - Home > VMs
+    - Click XO-Ubuntu
+    - Click Advanced tab
+      - Auto power on: YES
+      - Protect from accidental deletion: YES
+      - Protect from accidental shutdown: YES
+    - auto start
+    - protect from deletion
+    - protect from shutdown
+## Remove the XOA
+1. Login again
+2. Home > VMs
+3. Check the box for XOA
+4. Click More > Remove
+5. Click OK to confirm
+
+## Reboot the Host
+1. ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
+2. `reboot`
+
+## Log Back In and Confirm
+1. Point brower to the IP
+    - Example: https://192.168.1.103
+2. Log in with the user you created
+3. If you are able to log in, your XO server is working!
