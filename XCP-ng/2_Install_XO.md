@@ -116,4 +116,42 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - Confirm it has changed: `hostnamectl`
 
 ## Option 1 - Build on XCP-ng Using XOA and Replace XOA
+Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
+
+1. `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
+2. `cd XenOrchestraInstallerUpdater`
+3. `cp sample.xo-install.cfg xo-install.cfg`
+4. `vim xo-install.cfg`
+    - change PORT to "443"
+    - uncomment `PATH_TO_HTTPS_CERT` line
+    - uncomment `PATH_TO_HTTPS_KEY` line
+5. `sudo apt-get install openssl`
+6. `sudo mkdir /opt/xo`
+7. `sudo openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out /opt/xo/xo.crt -keyout /opt/xo/xo.key`
+    - Country: US
+    - State: New York
+    - Locality: New York
+    - Organization: Lab
+    - Common Name: XO
+    - Email address: x@x.x
+9. `sudo ./xo-install.sh`
+    - choose option 1 to kick off install
+    - wait for it to complete
+10. Point brower to the IP
+11. Log in
+    - user: admin@admin.net
+    - pass: admin
+12. Configure the new XO
+    - Add new user to replace admin@admin.net
+      - Settings > Users > Create
+    - Sign out, Sign in as the new user
+    - Remove user admin@admin.net
+    - Settings
+    - Servers
+      - add server
+      - allow unauthorized certificates
+14. delete the old XOA
+
+NOTE To update the XO server, run the same xo-install.sh script and select Update
+
 ## Option 2 - Build on Another Device (Even a VM on your Laptop running VirtualBox)
