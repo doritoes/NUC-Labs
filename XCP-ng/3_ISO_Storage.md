@@ -7,7 +7,7 @@ References: https://www.youtube.com/watch?v=vuYvyD0GoBQ
 Your have some options here. If you have a NAS, you can share a folder and optionally enable NFS. Otherwise, create a SMB share (shared folder) on your PC or server.
 
 ## Copy ISOs to File Share
-As of this writing, here the templates in XO, and links to ISOs. And yes, if your OS doesn't have a template choose "Other Install Media"
+As of this writing, here the templates in XO, and links to ISOs. And yes, if your OS doesn't have a template you will choose "Other Install Media".
 - AlmaLinux - https://almalinux.org/get-almalinux/
   - AlmaLinux 8 and 9
   - Be aware there are 3 types of ISO
