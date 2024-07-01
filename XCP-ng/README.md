@@ -57,6 +57,10 @@ Install Windows servers on the pen-testing network.
 ## Install Kali Linux VM
 Install Kali Linux VM on the pen-testing network.
 
+## Create Vulnerable Windows Machine
+
+See http://cyberforensic.net/labs/AutoPatch_Removal.html
+
 ## Convert Pentest Network to TOR Only
 Use OPNsense to only allow access to the Internet over TOR
 
@@ -66,4 +70,4 @@ Demonstrate Internet access works over TOR (only)
 ## Install Check Point Firewall
 
 # Appendices
-- [Appendix - Lab Architecture][Appendix_- Architecture.md]
+- [Appendix - Lab Architecture](Appendix_- Architecture.md)
