@@ -181,7 +181,10 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
 
 ## Reboot the Host
 1. ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
-2. `reboot`
+2. Option 1 - `reboot`
+3. Option 2 -  `xsconsole`
+    - Reboot or Shutdown
+    - Reboot Server
 
 ## Log Back In and Confirm
 1. Point brower to the IP
