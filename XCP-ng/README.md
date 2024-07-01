@@ -14,6 +14,11 @@ Mission:
 - Set up guest VMs
 - Test automation that is available
 
+Out of scope:
+- XCP-ng Center - Windows client
+  - Center is no longer end of life/EOL
+  - https://github.com/xcp-ng/xenadmin
+
 Materials:
 - Lab router  providing DHCP and internet access
 - NUC
