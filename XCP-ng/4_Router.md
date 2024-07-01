@@ -25,4 +25,10 @@ How to create a router to our backend "LAN"
       - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
   - Under the list of PIFs (physical interfaces), for the new Pentesting interface, click Status and change to Disconnected
 
+# Download the ISO
+1. Go to https://vyos.io
+2. Click Rolling Rrelease
+3. Download vyos-rolling-latest.iso
+
 # Create VM
+continue writing here
