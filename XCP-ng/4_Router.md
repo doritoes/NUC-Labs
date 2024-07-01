@@ -78,6 +78,7 @@ Or, if you created local storage, upload the ISO there.
 - You can now configure your router from another device in your Lab using SSH to this IP address
 
 # Configure Router
+IMPORTANT note the version is VyOS 1.5-rolling-2024xxxxxxxx, and the syntax has changed moving to this version.
 - ssh to your router and login as user `vyos` and the password you selected
 - enter the configuration below
 ```
@@ -99,3 +100,33 @@ exit
   - by pinging an IP address: `ping 8.8.8.8`
   - nslook a DNS name: `nslookup microsoft.com`
 NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
+
+## Optionally Configure DHCP on the inside/LAN interface
+```
+configure
+set service dhcp-server shared-network-name vyoslab authoritative
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 subnet-id 100
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option default-router 192.168.100.254
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option name-server 9.9.9.9
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option domain-name lablocal
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 lease 3600
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 start 192.168.100.20
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 stop 192.168.100.240
+commit
+save
+exit
+```
+
+## Optionally Set up DNS forwarder
+VyOS can be set up to be a DNS forwarder, including caching. This allows clients to query the VyOS device for DNS, and it can pass on requests to public DNS servers.
+
+```
+configure
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option name-server 192.168.100.254
+set service dns forwarding system
+set service dns forwarding listen-address '192.168.100.254'
+set service dns forwarding allow-from '192.168.100.0/24'
+commit
+save
+exit
+```
