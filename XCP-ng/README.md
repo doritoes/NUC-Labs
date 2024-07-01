@@ -73,3 +73,16 @@ https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
 # Appendices
 - [Appendix - Lab Architecture](Appendix_- Architecture.md)
+
+# Other Notes
+## Other Install Media
+If no matching template, select Other Install Media
+
+## No Xen tools detected
+After installing a Linux system, you may see this warning. Here are the stops to resolve it
+1. connect guest-tools.iso
+2. sudo mount /dev/cdrom  /media
+3. cd /media/Linux
+4. sudo ./install.sh
+5. Continue
+6. Reboot the VM
