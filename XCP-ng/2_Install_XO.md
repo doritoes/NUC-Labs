@@ -30,7 +30,7 @@ NOTES
 - Wait as the XOA image is downloaded and the VM deployed
 - Your browser is automatically redirected to the login page on the new IP address
 
-## Option 2 - Vates Desploy Page
+## Option 2 - Vates Deploy Page
 - Direct your browser to
   - https://vates.tech/deploy
  
