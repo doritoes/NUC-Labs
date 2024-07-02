@@ -51,7 +51,7 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
   - Windows 8.1 - EOL, not publicly available
   - Windows Server
     - [Microsoft Evaluation Center](https://www.microsoft.com/en-us/evalcenter/)
-    -  Register, then download and install. (Note: This evaluation edition expires in 180 days.) 
+    -  Register, then download and install. (Note: This evaluation edition expires in 180 days) 
     - From top menu click Windows Server > Windows Server and select the desired version
       - Click Download the ISO - <ins>Registration required</ins>
       -  Goes back to Server 2016
