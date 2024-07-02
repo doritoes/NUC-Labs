@@ -225,6 +225,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 11
+IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta.
 - From the left menu click New > VM
   - Select the pool
   - Template: Other Install Media
@@ -247,7 +248,8 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - WARNING You might bet the error: This PC can't run Windows 11
     - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
     - Possible culprits: "Enable TPM 2.0 on your PC"
-    - XCP-ng only supports VTPMs on pools running 8.3 or later
+    - XCP-ng only supports VTPMs on pools running 8.3 or later (8.3 is currently in beta)
+  - NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME
   - Check the box then Next
   - Click Custom: Install Windows only (advanced)
   - Accept the installation on Drive 0
@@ -258,7 +260,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Click Advanced > Convert to template
 - Re-create the VM from the template
   - New VM
-  - Template: win10-lan
+  - Template: win11-lan
   - Interface: Note that it's set to Inside, which is what we want
   - Click Create
 - Log in complete the setup wizard
@@ -286,18 +288,50 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Apply Windows Updates (remotes included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
-- Change the hostname to win-10-lan-ready
+- Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
-- Rename from the VM from win10-lan to win10-lan-ready
-- Convert win10-lan-ready to a template
+- Rename from the VM from win11-lan to win11-lan-ready
+- Convert win11-lan-ready to a template
 - Questions to ponder:
   - What are the differences between the two templates?
   - Does this affect the Activation required timers?
 - Optionally create another VM from each template and experiment
   - How could you use Templates to quickly roll out a number of servers of the same type?
-# Windows 2020 Server
 
+# Windows 2022 Server
+This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM
+- From the left menu click New > VM
+  - Select the pool
+  - Template: Windows Server 2022 (64-bit)
+  - Name: server2022-lan
+  - Description: Windows Server 2022 on LAN network
+  - CPU: 1 vCPU
+  - RAM: 2GB
+  - Topology: Default behavior
+  - Install: ISO/DVD: Select the Windows Server 2022 evaluation iso you uploaded
+  - Interfaces: select Inside from the dropdown
+  - Disks: **40GB** (default 32GB)
+  - Click Create
+- NEED to continue testing here
+- The details for the new VM are now displayed
+- Click Console
+- You will be prompted to press any key to boot from CD to DVD
+  - Press any key
+  - If you missed it, power cycle and try again
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Activate Windows: Click I don't have a product key
+  - Select the OS to install: Windows 10 Pro (feel free to experiment)
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - Accept the installation on Drive 0
+- When the system boots to "Let's start with region. Is this right?"
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
 # Guacamole Server
 
 
