@@ -19,6 +19,8 @@ Out of scope:
   - Center is no longer end of life/EOL
   - https://github.com/xcp-ng/xenadmin
 
+IMPORTANT:
+- You must install XCP-ng 8.3 or later to run Windows 11 (support VTPM)
 Materials:
 - Lab router  providing DHCP and internet access
 - NUC
