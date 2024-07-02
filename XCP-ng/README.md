@@ -21,6 +21,9 @@ Out of scope:
 
 IMPORTANT:
 - You must install XCP-ng 8.3 or later to run Windows 11 (support VTPM)
+  - https://updates.xcp-ng.org/isos/8.3/
+  - Currently in Beta, this may be in scope for you in a Lab environment
+
 Materials:
 - Lab router  providing DHCP and internet access
 - NUC
