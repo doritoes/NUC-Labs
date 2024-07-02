@@ -134,3 +134,10 @@ commit
 save
 exit
 ```
+
+# Xen Tools
+See https://forum.vyos.io/t/how-to-build-your-own-vyos-template-for-xenserver/155/9
+
+So it may be possible to run the Xen tools on the VyOS image. But I was not unable to install the from guest-tools.iso and run the install.sh script in the usuaal way.
+
+"Unknown Linux distribution `vyos'"
