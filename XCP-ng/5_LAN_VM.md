@@ -44,6 +44,20 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
   - Updates
     - `sudo apt update && sudo apt upgrade -y`
   - Internet access
+- Configure sharing your desktop
+  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts
+  - Settings > Sharing
+  - Enable the Sharing slider
+  - Click Remote Desktop
+  - Enable Remote Desktop
+  - Enable Remote Control
+  - Only Enable Legacy VNC Protocol if you must
+  - BEWARE that remote desktop is disabled when the screen is locked
+    - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
+    - there are workarounds
+- Enable SSH access
+  - `sudo apt install openssh-server`
+  - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Power down the VM
 - Take a Snapshot
   - Click New snapshot
