@@ -153,10 +153,152 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
+- From the left menu click New > VM
+  - Select the pool
+  - Template: Windows 10 (64-bit)
+  - Name: win10-lan
+  - Description: Windows 10 on LAN network
+  - CPU: 2 vCPU
+  - RAM: 4GB
+  - Topology: Default behavior
+  - Install: ISO/DVD: Select the Windows 10 iso you uploaded
+  - Interfaces: select Inside from the dropdown
+  - Disks: **128GB** (default 32GB is too small to apply the latest updates)
+  - Click Create
+- The details for the new VM are now displayed
+- Click Console
+- You will be prompted to press any key to boot from CD to DVD
+  - Press any key
+  - If you missed it, power cycle and try again
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Activate Windows: Click I don't have a product key
+  - Select the OS to install: Windows 10 Pro (feel free to experiment)
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - Accept the installation on Drive 0
+- When the system boots to "Let's start with region. Is this right?"
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New VM
+  - Template: win10-lan
+  - Interface: Note that it's set to Inside, which is what we want
+  - Click Create
+- Log in complete the setup wizard
+  - Set region and keyboard layout, skip second keyboard layout
+  - Select Set up for personal use (feel free to experiment)
+  - Click Offline account then click Limited experience
+  - User: lab
+  - Password: select a password
+  - Create security questions for this account: be creative
+  - Click Not now
+  - Privacy: disable all the settings and then click Accept
+  - Experience: be creative and pick one, then click Accept (I shoose Business)
+  - Cortana: Click Not now
+  - Close "Browse the web with the best performing browser on Windows"
+- Install Guest Tools (you may not want to!)
+  - The Windows tools are not inluded on the guest-tools.iso
+  - Reference: https://xcp-ng.org/docs/guests.html#windows
+  - To use the Citrix <ins>drivers</ins>
+    - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
+    - https://support.citrix.com/article/CTX235403
+    - A Citrix account is requried
+  - To use community XCP-ng drivers read the article linked above
+  - The impact of not having the agent:
+    - managment of the OS and advanced features like moving the VM to another pool will not be available
+- Apply Windows Updates (remotes included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+- Change the hostname to win-10-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+- Shut down the Windows VM
+- Rename from the VM from win10-lan to win10-lan-ready
+- Convert win10-lan-ready to a template
+- Questions to ponder:
+  - What are the differences between the two templates?
+  - Does this affect the Activation required timers?
+- Optionally create another VM from each template and experiment
+  - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 11
-
+- From the left menu click New > VM
+  - Select the pool
+  - Template: Other Install Media
+  - Name: win11-lan
+  - Description: Windows 11 on LAN network
+  - CPU: 2 vCPU
+  - RAM: 4GB
+  - Topology: Default behavior
+  - Install: ISO/DVD: Select the Windows 11 iso you uploaded
+  - Interfaces: select Inside from the dropdown
+  - Disks: Add a disk **128GB** (Windows 11 minimum is 64GB; 128GB for lab, 256GB for average user)
+  - Click Create
+- The details for the new VM are now displayed
+- Click Console
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Activate Windows: Click I don't have a product key
+  - Select the OS to install: Windows 11 Pro (feel free to experiment)
+  - WARNING You might bet the error: This PC can't run Windows 11
+    - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
+    - Possible culprits: "Enable TPM 2.0 on your PC"
+    - XCP-ng only supports VTPMs on pools running 8.3 or later
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - Accept the installation on Drive 0
+- When the system boots to "Let's start with region. Is this right?"
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New VM
+  - Template: win10-lan
+  - Interface: Note that it's set to Inside, which is what we want
+  - Click Create
+- Log in complete the setup wizard
+  - Set region and keyboard layout, skip second keyboard layout
+  - Select Set up for personal use (feel free to experiment)
+  - Click Offline account then click Limited experience
+  - User: lab
+  - Password: select a password
+  - Create security questions for this account: be creative
+  - Click Not now
+  - Privacy: disable all the settings and then click Accept
+  - Experience: be creative and pick one, then click Accept (I shoose Business)
+  - Cortana: Click Not now
+  - Close "Browse the web with the best performing browser on Windows"
+- Install Guest Tools (you may not want to!)
+  - The Windows tools are not inluded on the guest-tools.iso
+  - Reference: https://xcp-ng.org/docs/guests.html#windows
+  - To use the Citrix <ins>drivers</ins>
+    - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
+    - https://support.citrix.com/article/CTX235403
+    - A Citrix account is requried
+  - To use community XCP-ng drivers read the article linked above
+  - The impact of not having the agent:
+    - managment of the OS and advanced features like moving the VM to another pool will not be available
+- Apply Windows Updates (remotes included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+- Change the hostname to win-10-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+- Shut down the Windows VM
+- Rename from the VM from win10-lan to win10-lan-ready
+- Convert win10-lan-ready to a template
+- Questions to ponder:
+  - What are the differences between the two templates?
+  - Does this affect the Activation required timers?
+- Optionally create another VM from each template and experiment
+  - How could you use Templates to quickly roll out a number of servers of the same type?
 # Windows 2020 Server
+
+# Guacamole Server
 
 
 
