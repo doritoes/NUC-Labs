@@ -49,6 +49,7 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
   - Click New snapshot
 - Convert to a Template
   - Click Advanced > Convert to template
+- Confirm the Snapshot has been erased (!) It was bound to the VM.
 - Re-create the VM from the template
   - New VM
   - Template: ubuntu-desktop-lan
@@ -79,6 +80,17 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
 - The details for the new VM are now displayed
 - Click Console
 - Follow the Install wizard per usual
+  - READ CAREFULLY the Guided storage configuration
+    - Root / only has 10GB of the 20GB allocated
+    - Option 1 expand root /
+      - Under used devices, locate ubuntu-lv which will be mounted at root /
+      - Select it, and then Edit
+      - Change the Szie to the max value
+    - Option 2
+      - Select the free space, then Create Logical Volume
+      - Adjust the size to use the free space
+      - Adjust the mount point (/home by default)
+      - Choose Create
   - Recommend checking the box Install OpenSSH server
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
@@ -104,9 +116,8 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
 - Test the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y`
+    - accept the messages
 - Power down the VM
-- Take a Snapshot
-  - Click New snapshot
 - Convert to a Template
   - Click Advanced > Convert to template
 - Re-create the VM from the template
@@ -116,7 +127,6 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
   - Interface: Note that it's set to Inside, which is what we want
   - Click Create
 - Log back in examine the system
-  - What happened to the disk storage? Why is it only 10GB?
   - What are the advantages of using DHCP in the lab for these templates?
   - Change hostname
     - View current hostname: `hostnamectl`
@@ -124,6 +134,7 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Optionally create another VM from the same template and experiment
+  - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
 
