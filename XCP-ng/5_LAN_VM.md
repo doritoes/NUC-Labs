@@ -210,7 +210,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - To use community XCP-ng drivers read the article linked above
   - The impact of not having the agent:
     - managment of the OS and advanced features like moving the VM to another pool will not be available
-- Apply Windows Updates (remotes included)
+- Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
 - Change the hostname to win-10-lan-ready
@@ -285,7 +285,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - To use community XCP-ng drivers read the article linked above
   - The impact of not having the agent:
     - managment of the OS and advanced features like moving the VM to another pool will not be available
-- Apply Windows Updates (remotes included)
+- Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
 - Change the hostname to win-11-lan-ready
@@ -313,7 +313,6 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Interfaces: select Inside from the dropdown
   - Disks: **40GB** (default 32GB)
   - Click Create
-- NEED to continue testing here
 - The details for the new VM are now displayed
 - Click Console
 - You will be prompted to press any key to boot from CD to DVD
@@ -322,16 +321,51 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
-  - Activate Windows: Click I don't have a product key
-  - Select the OS to install: Windows 10 Pro (feel free to experiment)
+  - Select the OS to install: Windows Server 2022 Standard Edition Evaluatioh (Desktop Experience)
+    - feel free to experiment
   - Check the box then Next
   - Click Custom: Install Windows only (advanced)
   - Accept the installation on Drive 0
-- When the system boots to "Let's start with region. Is this right?"
+- When the system boots to "Customize settings" and prompts to set the Adnimistrators password
   - Eject the installation ISO
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
 - Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New VM
+  - Template: server2022-lan
+  - Name: server2022-lan-ready
+  - Interface: Note that it's set to Inside, which is what we want
+  - Click Create
+- After booting, set password for Administrator
+- Install Guest Tools (you may not want to!)
+  - The Windows tools are not inluded on the guest-tools.iso
+  - Reference: https://xcp-ng.org/docs/guests.html#windows
+  - To use the Citrix <ins>drivers</ins>
+    - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
+    - https://support.citrix.com/article/CTX235403
+    - A Citrix account is requried
+  - To use community XCP-ng drivers read the article linked above
+  - The impact of not having the agent:
+    - managment of the OS and advanced features like moving the VM to another pool will not be available
+- Login in
+- Apply Windows Updates (remotes included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+- Change the hostname to win-10-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+- Shut down the Windows VM
+- Rename from the VM from win10-lan to win10-lan-ready
+- Convert win10-lan-ready to a template
+- Questions to ponder:
+  - What are the differences between the two Windows server templates?
+  - Does this affect the 180-day evaluation timer?
+  - See the Appendix [Building a Lab Domain Controller](Appendix-Lab_Domain_Controller.md)
+- Optionally create another VM from each template and experiment
+  - How could you use Templates to quickly roll out a number of servers of the same type?
+
+
+
 # Guacamole Server
 
 
