@@ -60,7 +60,7 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
     - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Desktop on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
-- Optionally create another VM from the same template.
+- Optionally create another VM from the same template and experiment
 
 
 # Ubuntu Server
