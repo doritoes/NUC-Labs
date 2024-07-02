@@ -5,6 +5,8 @@ Instuctions are provided for a few different systems you might want to install.
 
 NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
 
+IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
+
 # Ubuntu Desktop
 - From the left menu click New > VM
   - Select the pool
