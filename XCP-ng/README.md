@@ -68,6 +68,8 @@ Use OPNsense to only allow access to the Internet over TOR
 ## Create Ubuntu Desktop FAH VM
 Demonstrate Internet access works over TOR (only)
 
+## Create Guacamole Server
+
 ## Install Check Point Firewall
 https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
