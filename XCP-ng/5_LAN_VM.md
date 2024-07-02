@@ -306,7 +306,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Template: Windows Server 2022 (64-bit)
   - Name: server2022-lan
   - Description: Windows Server 2022 on LAN network
-  - CPU: 1 vCPU
+  - CPU: 1 vCPU (will peg the CPU a lot; if you need better response add a vCPU)
   - RAM: 2GB
   - Topology: Default behavior
   - Install: ISO/DVD: Select the Windows Server 2022 evaluation iso you uploaded
@@ -355,18 +355,107 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM
-- Rename from the VM from win10-lan to win10-lan-ready
+- Make sure the VM is named "win10-lan-ready" in XO
 - Convert win10-lan-ready to a template
+- Now let's prepare the template VM for cloning
+  - must perform generalization to remove the secruity identifier (SID)
+  - create a new VM from the template win10-lan-ready
+    - New VM
+    - Template: server2022-lan
+    - Name: server2022-lan-prep
+    - Click Create
+  - Open the console to server2022-lan-prep and log in
+    - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+  - Convert server2022-lan-prep to template
+  - From now on, create Windows Server VMs from server2022-lan-prep
 - Questions to ponder:
-  - What are the differences between the two Windows server templates?
+  - What are the differences between the three Windows server templates?
+  - What 
   - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each template?
   - See the Appendix [Building a Lab Domain Controller](Appendix-Lab_Domain_Controller.md)
-- Optionally create another VM from each template and experiment
-  - How could you use Templates to quickly roll out a number of servers of the same type?
-
-
+- Optionally create VMs from each template and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
 
 # Guacamole Server
+See https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
 
-
-
+Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
+- Create a Ubuntu server to run Guacamole
+  - New VM
+  - Template: ubuntu-server-lan
+  - Name: guacamole
+  - Description: Guacamole server on LAN network
+  - Click Create
+- Log in to the console on the new guacamole VM
+  - Change hostname
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
+    - Confirm it has changed: `hostnamectl`
+- Install dependencies
+  - `sudo apt update && sudo apt upgrade -y`
+  - `sudo apt install build-essential libcairo2-dev libjpeg-turbo8-dev libpng-dev libtool-bin libossp-uuid-dev libvncserver-dev freerdp2-dev libssh2-1-dev libtelnet-dev libwebsockets-dev libpulse-dev libvorbis-dev libwebp-dev libssl-dev libpango1.0-dev libswscale-dev libavcodec-dev libavutil-dev libavformat-dev`
+- Download Apache Guacamole
+  - official downloads page: https://downloads.apache.org/guacamole/
+    - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
+- Extract and Compile Guacamole
+  - `tar -xzf guacamole-server-1.5.5.tar.gz`
+  - `cd guacamole-server-1.5.5.tar.gz`
+  - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
+  - `make`
+  - `sudo make install`
+  - `sudo ldconfig`
+- Configure Guacamole Server
+  - Create new configuration file `/etc/guacamole/guacd.conf`
+    - Example: `sudo vi /etc/guacamole.conf`
+  - Contents:
+    - `[daemon]`
+    - `pid_file = /var/run/guacd.pid`
+- Start and Enable Guacamole Service
+  - `sudo systemctl daemon-reload`
+  - `sudo systemctl start guacd`
+  - `sudo systemctl enable guacd`
+  - `sudo systemctl status guacd`
+- Install the Guacamole Web App
+  - sudo apt install tomcat9 tomcat9-admin tomcat9-common tomcat9-user -y
+  - sudo wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.4.war
+  - sudo mv guacamole-1.5.4.war /var/lib/tomcat9/webapps/guacamole.war
+- Configure Apache Guacamole Database Authentication
+  - sudo apt install mariadb-server -y
+  - sudo mysql_secure_installation
+  - sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz
+  - sudo tar -xf mysql-connector-java-8.0.26.tar.gz
+  - sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/
+  - sudo wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-jdbc-1.5.4.tar.gz
+  - sudo tar -xf guacamole-auth-jdbc-1.5.4.tar.gz
+  - sudo mv guacamole-auth-jdbc-1.5.4/mysql/guacamole-auth-jdbc-mysql-1.5.4.jar /etc/guacamole/extensions/
+- Create a Guacamole Database and User
+  - sudo mysql -u root -p
+```
+MariaDB [(none)]> CREATE DATABASE guac_db;
+MariaDB [(none)]> CREATE USER 'guac_user'@'localhost' IDENTIFIED BY 'password';
+MariaDB [(none)]> GRANT SELECT,INSERT,UPDATE,DELETE ON guac_db.* TO 'guac_user'@'localhost';
+MariaDB [(none)]> FLUSH PRIVILEGES;
+MariaDB [(none)]> EXIT;
+```
+- Import SQL Schema Files and Create Properties Files For Guacamole
+  - cd guacamole-auth-jdbc-1.5.4/mysql/schema
+  - cat *.sql | mysql -u root -p guac_db
+  - sudo vi /etc/guacamole/guacamole.properties
+```
+# MySQL properties
+mysql-hostname: 127.0.0.1
+mysql-port: 3306
+mysql-database: guac_db
+mysql-username: guac_user
+mysql-password: password
+  - sudo systemctl restart tomcat9 guacd mysql
+```
+- Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
+  - Point the web browser to the IP address of the guacamole server
+  - http://server-ip:8080/guacamole
+  - Login as guacadmin/guacadmin
+- Add Port translation to make the Guacamole server accessible from outside the VyOS router
+  - TODO
