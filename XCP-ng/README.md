@@ -93,3 +93,7 @@ After installing a Linux system, you may see this warning. Here are the stops to
 4. sudo ./install.sh
 5. Continue
 6. Reboot the VM
+
+With Windows it gets more complicated: https://xcp-ng.org/docs/guests.html#windows
+- A VM functions without the XenServer VM Tools for Windows, but performance is hampered when the I/O drivers are not installed.
+- Install XenServer VM Tools for Windows on Windows VMs to be able to perform the following operations: Cleanly shut down, reboot, or suspend a VM.
