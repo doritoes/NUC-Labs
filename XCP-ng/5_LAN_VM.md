@@ -375,11 +375,10 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - What 
   - Does this affect the 180-day evaluation timer?
   - What are the advantages of each template?
-  - See the Appendix [Building a Lab Domain Controller](Appendix-Lab_Domain_Controller.md)
 - Optionally create VMs from each template and experiment
   - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
 
-To convert to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
+To convert a Windows to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
 
 # Guacamole Server
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
