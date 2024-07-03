@@ -490,14 +490,26 @@ mysql-password: password
     - Protocol: RDP
     - Max conns 1
     - Max conns per user 1
-    - Hostname: use the IP address
+    - <ins>Network</ins> Hostname: use the IP address
     - Port: leave blank
     - Username: the username
     - Password: the password
     - Domain: leave blank
     - Security mode: NLA (network level authentication)
     - Disable Authentication: leave default = unchecked
-    - Ignore server certificate: CHECK THIS
+    - Ignore server certificate: **CHECK THIS**
+  - Tips for connection to Ubuntu Desktop
+    - Protocol: RDP
+    - Max conns 1
+    - Max conns per user 1
+    - <ins>Network</ins> Hostname: use the IP address
+    - Port: leave blank
+    - Username: the username
+    - Password: the password
+    - Domain: leave blank
+    - Security mode: leave blank
+    - Disable Authentication: leave default = unchecked
+    - Ignore server certificate: **CHECK THIS**
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
   - set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'
   - set nat destination rule 70 inbound-interface name 'eth0'
@@ -507,7 +519,7 @@ mysql-password: password
   - set nat destination rule 70 protocol 'tcp'
 - From outside the Lab, point your browser to: http://<externalip of vyos router>:8080/guacamole
 - Configure re-direct to the guacamole app
-  - Modify the default root index file: /var/lib/tomcat9/webapps/ROOT/index.html
+  - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
 ```
 <!DOCTYPE html>
 <html lang="en">
