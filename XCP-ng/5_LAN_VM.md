@@ -379,9 +379,15 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
 
 # Guacamole Server
-See https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
-
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
+
+NOTES the instructions techincally worked in the lab, but need major cleanup and consolidation
+
+See references:
+- https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
+- https://dae.me/blog/2698/guacamole-1-4-creation-of-websocket-tunnel-to-guacd-failed/
+
+Steps:
 - Create a Ubuntu server to run Guacamole
   - New VM
   - Template: ubuntu-server-lan
@@ -420,19 +426,30 @@ Now we will configure a Guacamole server to facilitate remote access to the Lab 
   - `sudo systemctl status guacd`
 - Install the Guacamole Web App
   - sudo apt install tomcat9 tomcat9-admin tomcat9-common tomcat9-user -y
-  - sudo wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.4.war
-  - sudo mv guacamole-1.5.4.war /var/lib/tomcat9/webapps/guacamole.war
+  - wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.5.war
+  - sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war
 - Configure Apache Guacamole Database Authentication
   - sudo apt install mariadb-server -y
   - sudo mysql_secure_installation
-  - sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz
-  - sudo tar -xf mysql-connector-java-8.0.26.tar.gz
+    - select a root password and enter it when prompted (i.e., passtoor)
+    - accept default switch to unix_socket Y (need to test)
+    - accept default and change the root password (i.e., passtoor)
+    - accept default and remove anonymous users
+    - accept default and disallow root login remotely
+    - accept default and remote test database and access to it
+    - accept default and reload privilege tables
+  - wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz
+  - tar -xf mysql-connector-java-8.0.26.tar.gz
+  - sudo mkdir -p /etc/guacamole/lib/
+  - sudo mkdir -p /etc/guacamole/extensions/
   - sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/
-  - sudo wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-auth-jdbc-1.5.4.tar.gz
-  - sudo tar -xf guacamole-auth-jdbc-1.5.4.tar.gz
+  - wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz
+  - tar -xf guacamole-auth-jdbc-1.5.4.tar.gz
   - sudo mv guacamole-auth-jdbc-1.5.4/mysql/guacamole-auth-jdbc-mysql-1.5.4.jar /etc/guacamole/extensions/
 - Create a Guacamole Database and User
   - sudo mysql -u root -p
+  - enter the password you created
+  - enter the commands below
 ```
 MariaDB [(none)]> CREATE DATABASE guac_db;
 MariaDB [(none)]> CREATE USER 'guac_user'@'localhost' IDENTIFIED BY 'password';
@@ -443,7 +460,7 @@ MariaDB [(none)]> EXIT;
 - Import SQL Schema Files and Create Properties Files For Guacamole
   - cd guacamole-auth-jdbc-1.5.4/mysql/schema
   - cat *.sql | mysql -u root -p guac_db
-  - sudo vi /etc/guacamole/guacamole.properties
+- sudo vi /etc/guacamole/guacamole.properties
 ```
 # MySQL properties
 mysql-hostname: 127.0.0.1
@@ -453,9 +470,55 @@ mysql-username: guac_user
 mysql-password: password
   - sudo systemctl restart tomcat9 guacd mysql
 ```
+- on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
+  - PubkeyAcceptedKeyTypes +ssh-rsa
+  - HostKeyAlgorithms +ssh-rsa
+  - sudo systemctl restart sshd
+- Create /etc/guacamole/guacd.conf with the following contents
+  - `[server]`
+  - bind_host = 127.0.0.1
+  - bind_port = 4822
+- Modify /etc/guacamole/guacamole.properties to add
+  - `# guacd properties`
+  - guacd-hostname: 127.0.0.1
+  - guacd-port: 4822
+- restart guacd
+  - sysdo systemctl restart guacd
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
   - http://server-ip:8080/guacamole
   - Login as guacadmin/guacadmin
+  - REMEMBER the hotkey to escape a session is control-alt-shift
+  - Tips for connection to Windows 10 / Server 2022
+    - Protocol: RDP
+    - Max conns 1
+    - Max conns per user 1
+    - Hostname: use the IP address
+    - Port: leave blank
+    - Username: the username
+    - Password: the password
+    - Domain: leave blank
+    - Security mode: NLA (network level authentication)
+    - Disable Authentication: leave default = unchecked
+    - Ignore server certificate: CHECK THIS
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
-  - TODO
+  - set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'
+  - set nat destination rule 70 inbound-interface name 'eth0'
+  - set nat destination rule 70 translation address '192.168.100.40'
+  - set nat destination rule 70 destination port 8080
+  - set nat destination rule 70 translation port 8080
+  - set nat destination rule 70 protocol 'tcp'
+- From outside the Lab, point your browser to: http://<externalip of vyos router>:8080/guacamole
+- Modify the default root index file: /var/lib/tomcat9/webapps/ROOT/index.html
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=guacamole" />
+<title>Redirecting...</title>
+</head>
+<body>
+<p><a href="guacamole">Redirect</a></p>
+</body>
+</html>
+```
