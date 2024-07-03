@@ -381,6 +381,8 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 # Guacamole Server
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
 
+TIP The hotkey to escape a guacamole session is control-alt-shift
+
 NOTES the instructions techincally worked in the lab, but need major cleanup and consolidation
 
 See references:
@@ -522,3 +524,5 @@ mysql-password: password
 </body>
 </html>
 ```
+
+To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
