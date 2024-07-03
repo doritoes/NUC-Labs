@@ -80,6 +80,7 @@ https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
 # Appendices
 - [Appendix - Lab Architecture](Appendix-Architecture.md)
+- [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
 
 # Other Notes
 ## Other Install Media
