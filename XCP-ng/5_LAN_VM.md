@@ -511,13 +511,17 @@ mysql-password: password
     - Disable Authentication: leave default = unchecked
     - Ignore server certificate: **CHECK THIS**
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
+  - configure
   - set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'
   - set nat destination rule 70 inbound-interface name 'eth0'
   - set nat destination rule 70 translation address '192.168.100.40'
   - set nat destination rule 70 destination port 8080
   - set nat destination rule 70 translation port 8080
   - set nat destination rule 70 protocol 'tcp'
-- From outside the Lab, point your browser to: http://<externalip of vyos router>:8080/guacamole
+  - commit
+  - save
+  - exist
+- From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
 - Configure re-direct to the guacamole app
   - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
 ```
