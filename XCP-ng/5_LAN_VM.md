@@ -1,7 +1,5 @@
 # Install Lab VM
-Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router.
-
-Instuctions are provided for a few different systems you might want to install, along with a Guacamole server to manage them out without XO.
+Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router. Instuctions are provided for a few different systems you might want to install, along with a Guacamole server to manage them without XO.
 
 NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
 
@@ -446,21 +444,15 @@ Steps:
   - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
   - `tar -xf guacamole-auth-jdbc-1.5.5.tar.gz`
   - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
-- Create a Guacamole Database and User
-  - sudo mysql -u root -p
-  - enter the password you created
-  - enter the commands below
-```
-MariaDB [(none)]> CREATE DATABASE guac_db;
-MariaDB [(none)]> CREATE USER 'guac_user'@'localhost' IDENTIFIED BY 'password';
-MariaDB [(none)]> GRANT SELECT,INSERT,UPDATE,DELETE ON guac_db.* TO 'guac_user'@'localhost';
-MariaDB [(none)]> FLUSH PRIVILEGES;
-MariaDB [(none)]> EXIT;
-```
-- Import SQL Schema Files and Create Properties Files For Guacamole
-  - cd guacamole-auth-jdbc-1.5.4/mysql/schema
-  - cat *.sql | mysql -u root -p guac_db
-- sudo vi /etc/guacamole/guacamole.properties
+- Create a Guacamole Database, User and Scheme
+  - copy create-database.sql
+  - Copy [ceate-database.sql](create-database.sql)
+    - `cat create-database.sql | mysql -u root -p`
+  - Import SQL Schema Files and Create Properties Files For Guacamole
+    - `cd guacamole-auth-jdbc-1.5.4/mysql/schema`
+    - `cat *.sql | mysql -u root -p guac_db`
+- Configure Guacamole properties
+  - sudo vi /etc/guacamole/guacamole.properties
 ```
 # MySQL properties
 mysql-hostname: 127.0.0.1
@@ -468,22 +460,23 @@ mysql-port: 3306
 mysql-database: guac_db
 mysql-username: guac_user
 mysql-password: password
-  - sudo systemctl restart tomcat9 guacd mysql
 ```
-- on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
-  - PubkeyAcceptedKeyTypes +ssh-rsa
-  - HostKeyAlgorithms +ssh-rsa
-  - sudo systemctl restart sshd
+  - `sudo systemctl restart tomcat9 guacd mysql`
+- Configure ssh
+  - on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
+    - `PubkeyAcceptedKeyTypes +ssh-rsa`
+    - `HostKeyAlgorithms +ssh-rsa`
+- `sudo systemctl restart sshd`
 - Create /etc/guacamole/guacd.conf with the following contents
   - `[server]`
-  - bind_host = 127.0.0.1
-  - bind_port = 4822
+  - `bind_host = 127.0.0.1`
+  - `bind_port = 4822`
 - Modify /etc/guacamole/guacamole.properties to add
   - `# guacd properties`
-  - guacd-hostname: 127.0.0.1
-  - guacd-port: 4822
+  - `guacd-hostname: 127.0.0.1`
+  - `guacd-port: 4822`
 - restart guacd
-  - sysdo systemctl restart guacd
+  - `sysdo systemctl restart guacd`
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
   - http://server-ip:8080/guacamole
@@ -509,7 +502,8 @@ mysql-password: password
   - set nat destination rule 70 translation port 8080
   - set nat destination rule 70 protocol 'tcp'
 - From outside the Lab, point your browser to: http://<externalip of vyos router>:8080/guacamole
-- Modify the default root index file: /var/lib/tomcat9/webapps/ROOT/index.html
+- Configure re-direct to the guacamole app
+  - Modify the default root index file: /var/lib/tomcat9/webapps/ROOT/index.html
 ```
 <!DOCTYPE html>
 <html lang="en">
