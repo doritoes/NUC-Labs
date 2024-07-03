@@ -398,7 +398,7 @@ Steps:
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Install dependencies
   - Copy [guac-dependencies.sh](guac-dependencies.sh)
@@ -408,12 +408,13 @@ Steps:
     - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
 - Extract and Compile Guacamole
   - `tar -xzf guacamole-server-1.5.5.tar.gz`
-  - `cd guacamole-server-1.5.5.tar.gz`
+  - `cd guacamole-server-1.5.5`
   - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
   - `make`
   - `sudo make install`
   - `sudo ldconfig`
 - Configure Guacamole Server
+  - `sudo mkdir /etc/guacamole`
   - Create new configuration file `/etc/guacamole/guacd.conf`
     - Example: `sudo vi /etc/guacamole.conf`
   - Contents:
@@ -429,29 +430,28 @@ Steps:
   - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
 - Configure Apache Guacamole Database Authentication
   - `sudo mysql_secure_installation`
-    - select a root password and enter it when prompted (i.e., passtoor)
-    - accept default switch to unix_socket Y
+    - current root password is none (default)
+    - accept default switch to unix_socket **Y**
     - accept default and change the root password (i.e., passtoor)
     - accept default and remove anonymous users
     - accept default and disallow root login remotely
     - accept default and remote test database and access to it
     - accept default and reload privilege tables
   - `wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz`
-  - `tar -xf mysql-connector-java-8.0.26.tar.gz`
-  - `sudo mkdir -p /etc/guacamole/lib/`
-  - `sudo mkdir -p /etc/guacamole/extensions/`
+  - `tar -xzf mysql-connector-java-8.0.26.tar.gz`
+  - `sudo mkdir /etc/guacamole/lib/`
+  - `sudo mkdir /etc/guacamole/extensions/`
   - `sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/`
   - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `tar -xf guacamole-auth-jdbc-1.5.5.tar.gz`
+  - `tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz`
   - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
 - Create a Guacamole Database, User and Scheme
-  - copy create-database.sql
   - Copy [ceate-database.sql](create-database.sql)
     - `cat create-database.sql | mysql -u root -p`
   - Import SQL Schema Files and Create Properties Files For Guacamole
-    - `cd guacamole-auth-jdbc-1.5.4/mysql/schema`
+    - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
     - `cat *.sql | mysql -u root -p guac_db`
-- Configure Guacamole properties
+- Configure Guacamole properties (new file)
   - sudo vi /etc/guacamole/guacamole.properties
 ```
 # MySQL properties
@@ -464,6 +464,7 @@ mysql-password: password
   - `sudo systemctl restart tomcat9 guacd mysql`
 - Configure ssh
   - on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
+    - `sudo vi /etc/ssh/sshd_config`
     - `PubkeyAcceptedKeyTypes +ssh-rsa`
     - `HostKeyAlgorithms +ssh-rsa`
 - `sudo systemctl restart sshd`
@@ -476,7 +477,7 @@ mysql-password: password
   - `guacd-hostname: 127.0.0.1`
   - `guacd-port: 4822`
 - restart guacd
-  - `sysdo systemctl restart guacd`
+  - `sudo systemctl restart guacd`
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
   - http://server-ip:8080/guacamole
