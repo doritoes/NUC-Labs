@@ -50,8 +50,8 @@ References:
 ## Install VyOS router
 [Install Router](4_Router.md) outlines how to create a router to our backend "LAN".
 
-## Install Ubuntu Desktop VM
-[Install LAN VM](5_LAN_VM.md) configures a VM on the internal LAN
+## Install VMs on LAN
+[Install LAN VM](5_LAN_VM.md) configures VMs on the internal LAN
 
 ## Install OPNsense firewall
 [Install OPNsense](6_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
