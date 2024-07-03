@@ -1,7 +1,7 @@
 # Install Lab VM
 Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router.
 
-Instuctions are provided for a few different systems you might want to install.
+Instuctions are provided for a few different systems you might want to install, along with a Guacamole server to manage them out without XO.
 
 NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
 
@@ -403,8 +403,8 @@ Steps:
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Install dependencies
-  - `sudo apt update && sudo apt upgrade -y`
-  - `sudo apt install build-essential libcairo2-dev libjpeg-turbo8-dev libpng-dev libtool-bin libossp-uuid-dev libvncserver-dev freerdp2-dev libssh2-1-dev libtelnet-dev libwebsockets-dev libpulse-dev libvorbis-dev libwebp-dev libssl-dev libpango1.0-dev libswscale-dev libavcodec-dev libavutil-dev libavformat-dev`
+  - Copy [guac-dependencies.sh](guac-dependencies.sh)
+  - `sudo bash guac-dependencies.sh`
 - Download Apache Guacamole
   - official downloads page: https://downloads.apache.org/guacamole/
     - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
@@ -427,27 +427,25 @@ Steps:
   - `sudo systemctl enable guacd`
   - `sudo systemctl status guacd`
 - Install the Guacamole Web App
-  - sudo apt install tomcat9 tomcat9-admin tomcat9-common tomcat9-user -y
-  - wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.5.war
-  - sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war
+  - `wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.5.war`
+  - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
 - Configure Apache Guacamole Database Authentication
-  - sudo apt install mariadb-server -y
-  - sudo mysql_secure_installation
+  - `sudo mysql_secure_installation`
     - select a root password and enter it when prompted (i.e., passtoor)
-    - accept default switch to unix_socket Y (need to test)
+    - accept default switch to unix_socket Y
     - accept default and change the root password (i.e., passtoor)
     - accept default and remove anonymous users
     - accept default and disallow root login remotely
     - accept default and remote test database and access to it
     - accept default and reload privilege tables
-  - wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz
-  - tar -xf mysql-connector-java-8.0.26.tar.gz
-  - sudo mkdir -p /etc/guacamole/lib/
-  - sudo mkdir -p /etc/guacamole/extensions/
-  - sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/
-  - wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz
-  - tar -xf guacamole-auth-jdbc-1.5.4.tar.gz
-  - sudo mv guacamole-auth-jdbc-1.5.4/mysql/guacamole-auth-jdbc-mysql-1.5.4.jar /etc/guacamole/extensions/
+  - `wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz`
+  - `tar -xf mysql-connector-java-8.0.26.tar.gz`
+  - `sudo mkdir -p /etc/guacamole/lib/`
+  - `sudo mkdir -p /etc/guacamole/extensions/`
+  - `sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/`
+  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
+  - `tar -xf guacamole-auth-jdbc-1.5.5.tar.gz`
+  - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
 - Create a Guacamole Database and User
   - sudo mysql -u root -p
   - enter the password you created
