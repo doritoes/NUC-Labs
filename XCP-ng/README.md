@@ -79,7 +79,7 @@ Demonstrate Internet access works over TOR (only)
 https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
 # Appendices
-- [Appendix - Lab Architecture](Appendix_- Architecture.md)
+- [Appendix - Lab Architecture](Appendix-Architecture.md)
 
 # Other Notes
 ## Other Install Media
