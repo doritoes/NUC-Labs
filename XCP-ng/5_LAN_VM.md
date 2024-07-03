@@ -52,11 +52,14 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Enable Remote Desktop
   - Enable Remote Control
   - Only Enable Legacy VNC Protocol if you must
+  - Under authentication, confirm the username <ins>and password</ins>
+    - a random password is set; you might want to change it to something more memorable  
   - BEWARE that remote desktop is disabled when the screen is locked
     - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
     - there are workarounds
 - Enable SSH access
-  - `sudo apt install openssh-server`
+  - `sudo apt install -y openssh-server`
+  - `sudo systemctl status ssh`
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Power down the VM
 - Take a Snapshot
