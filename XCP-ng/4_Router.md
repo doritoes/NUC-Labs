@@ -13,8 +13,7 @@ How to create a router to our backend "LAN"
       - Description: Inside Lab Network
       - MTU: leave blank (default 1500)
       - VLAN: 100
-      - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI
-      - Click snapshots available over NBD connections)
+      - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
   - Under the list of PIFs (physical interfaces), for the new Inside interface, click Status and change to Disconnected
   - Click Add a Network
       - Interface: eth0
