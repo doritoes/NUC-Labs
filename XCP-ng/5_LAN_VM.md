@@ -1,5 +1,5 @@
 # Install Lab VM
-Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router. Instuctions are provided for a few different systems you might want to install, along with a Guacamole server to manage them without XO.
+Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router. Instructions are provided for a few different systems you might want to install, along with a Guacamole server to manage them without XO.
 
 NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
 
@@ -16,7 +16,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Topology: Default behavior
   - Install: ISO/DVD: Select the Ubuntu 22.04 Desktop image you uploaded
   - Interfaces: select Inside from the dropdown
-  - Disks: **20GB** (default 10GB is NOT enough; minimim is 14.8GB)
+  - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
   - Click Create
 - The details for the new VM are now displayed
 - Click Console
@@ -102,7 +102,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Option 1 expand root /
       - Under used devices, locate ubuntu-lv which will be mounted at root /
       - Select it, and then Edit
-      - Change the Szie to the max value
+      - Change the Size to the max value
     - Option 2
       - Select the free space, then Create Logical Volume
       - Adjust the size to use the free space
@@ -198,19 +198,19 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Create security questions for this account: be creative
   - Click Not now
   - Privacy: disable all the settings and then click Accept
-  - Experience: be creative and pick one, then click Accept (I shoose Business)
+  - Experience: be creative and pick one, then click Accept (I choose Business)
   - Cortana: Click Not now
   - Close "Browse the web with the best performing browser on Windows"
 - Install Guest Tools (you may not want to!)
-  - The Windows tools are not inluded on the guest-tools.iso
+  - The Windows tools are not included on the guest-tools.iso
   - Reference: https://xcp-ng.org/docs/guests.html#windows
   - To use the Citrix <ins>drivers</ins>
     - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
     - https://support.citrix.com/article/CTX235403
-    - A Citrix account is requried
+    - A Citrix account is required
   - To use community XCP-ng drivers read the article linked above
   - The impact of not having the agent:
-    - managment of the OS and advanced features like moving the VM to another pool will not be available
+    - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -273,19 +273,19 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - Create security questions for this account: be creative
   - Click Not now
   - Privacy: disable all the settings and then click Accept
-  - Experience: be creative and pick one, then click Accept (I shoose Business)
+  - Experience: be creative and pick one, then click Accept (I choose Business)
   - Cortana: Click Not now
   - Close "Browse the web with the best performing browser on Windows"
 - Install Guest Tools (you may not want to!)
-  - The Windows tools are not inluded on the guest-tools.iso
+  - The Windows tools are not included on the guest-tools.iso
   - Reference: https://xcp-ng.org/docs/guests.html#windows
   - To use the Citrix <ins>drivers</ins>
     - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
     - https://support.citrix.com/article/CTX235403
-    - A Citrix account is requried
+    - A Citrix account is required
   - To use community XCP-ng drivers read the article linked above
   - The impact of not having the agent:
-    - managment of the OS and advanced features like moving the VM to another pool will not be available
+    - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -327,7 +327,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Check the box then Next
   - Click Custom: Install Windows only (advanced)
   - Accept the installation on Drive 0
-- When the system boots to "Customize settings" and prompts to set the Adnimistrators password
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
   - Eject the installation ISO
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
@@ -340,17 +340,17 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Click Create
 - After booting, set password for Administrator
 - Install Guest Tools (you may not want to!)
-  - The Windows tools are not inluded on the guest-tools.iso
+  - The Windows tools are not included on the guest-tools.iso
   - Reference: https://xcp-ng.org/docs/guests.html#windows
   - To use the Citrix <ins>drivers</ins>
     - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
     - https://support.citrix.com/article/CTX235403
-    - A Citrix account is requried
+    - A Citrix account is required
   - To use community XCP-ng drivers read the article linked above
   - The impact of not having the agent:
-    - managment of the OS and advanced features like moving the VM to another pool will not be available
+    - management of the OS and advanced features like moving the VM to another pool will not be available
 - Login in
-- Apply Windows Updates (remotes included)
+- Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
 - Change the hostname to win-10-lan-ready
@@ -359,7 +359,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Make sure the VM is named "win10-lan-ready" in XO
 - Convert win10-lan-ready to a template
 - Now let's prepare the template VM for cloning
-  - must perform generalization to remove the secruity identifier (SID)
+  - must perform generalization to remove the security identifier (SID)
   - create a new VM from the template win10-lan-ready
     - New VM
     - Template: server2022-lan
@@ -384,8 +384,6 @@ To convert a Windows to a Domain Controller, see [Appendix - Convert Windows Ser
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
 
 TIP The hotkey to escape a guacamole session is control-alt-shift
-
-NOTES the instructions techincally worked in the lab, but need major cleanup and consolidation
 
 See references:
 - https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
@@ -450,7 +448,7 @@ Steps:
   - `tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz`
   - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
 - Create a Guacamole Database, User and Scheme
-  - Copy [ceate-database.sql](create-database.sql)
+  - Copy [create-database.sql](create-database.sql)
     - `cat create-database.sql | mysql -u root -p`
   - Import SQL Schema Files and Create Properties Files For Guacamole
     - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
@@ -512,16 +510,16 @@ mysql-password: password
     - Disable Authentication: leave default = unchecked
     - Ignore server certificate: **CHECK THIS**
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
-  - configure
-  - set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'
-  - set nat destination rule 70 inbound-interface name 'eth0'
-  - set nat destination rule 70 translation address '192.168.100.40'
-  - set nat destination rule 70 destination port 8080
-  - set nat destination rule 70 translation port 8080
-  - set nat destination rule 70 protocol 'tcp'
-  - commit
-  - save
-  - exist
+  - `configure`
+  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'`
+  - `set nat destination rule 70 inbound-interface name 'eth0'`
+  - `set nat destination rule 70 translation address '192.168.100.40'`
+  - `set nat destination rule 70 destination port 8080`
+  - `set nat destination rule 70 translation port 8080`
+  - `set nat destination rule 70 protocol 'tcp'`
+  - `commit`
+  - `save`
+  - `exit`
 - From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
 - Configure re-direct to the guacamole app
   - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
