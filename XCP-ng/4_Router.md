@@ -96,9 +96,9 @@ commit
 save
 exit
 ```
-- Test internet connetivity
+- Test internet connectivity
   - by pinging an IP address: `ping 8.8.8.8`
-  - nslook a DNS name: `nslookup microsoft.com`
+  - nslookup a DNS name: `nslookup microsoft.com`
 NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
 
 ## Optionally Configure DHCP on the inside/LAN interface
@@ -138,6 +138,6 @@ exit
 # Xen Tools
 See https://forum.vyos.io/t/how-to-build-your-own-vyos-template-for-xenserver/155/9
 
-So it may be possible to run the Xen tools on the VyOS image. But I was not unable to install the from guest-tools.iso and run the install.sh script in the usuaal way.
+So it may be possible to run the Xen tools on the VyOS image. But I was not unable to install the from guest-tools.iso and run the install.sh script in the usual way.
 
 "Unknown Linux distribution `vyos'"
