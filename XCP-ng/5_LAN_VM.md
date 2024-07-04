@@ -322,7 +322,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
-  - Select the OS to install: Windows Server 2022 Standard Edition Evaluatioh (Desktop Experience)
+  - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
   - Check the box then Next
   - Click Custom: Install Windows only (advanced)
