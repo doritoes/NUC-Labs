@@ -1,5 +1,5 @@
 # Connect ISO Storage
-When we converted from the XOA appliance to the community edition of XO, we "lost" the Hub's pre-populuated templates and ISO management. In this step we will prepare to build our VMs by first creating a place to store the ISO images.
+When we converted from the XOA appliance to the community edition of XO, we "lost" the Hub's pre-populated templates and ISO management. In this step we will prepare to build our VMs by first creating a place to store the ISO images.
 
 References: https://www.youtube.com/watch?v=vuYvyD0GoBQ
 # File Share
@@ -17,7 +17,7 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
   - CentOS Stream 8 EOL: 2024-05-31
   - CentOS Stream 9 EOL: 2027-05-31
 - CoreOS - https://fedoraproject.org/coreos/download?stream=stable
-  - Fedora CoreOS has 3 release streams; use Stabe Live DVD iso
+  - Fedora CoreOS has 3 release streams; use Stable Live DVD iso
 - Debian - https://www.debian.org/download - https://www.debian.org/CD/ - https://www.debian.org/releases/
   - Debian 12 Cloud-init (Hub)
   - Debian Bookworm 12
@@ -36,7 +36,7 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
 - Rocky Linux - https://rockylinux.org/download
   - Rocky Linux 8, 9
   - open source Linux designed to be compatible with RHEL
-- SUSE Enteprise Linux - https://www.suse.com/products/
+- SUSE Enterprise Linux - https://www.suse.com/products/
 - Scientific Linux 7
   - SL is EOL, and Alma was chosen in its stead
 - Ubuntu https://ubuntu.com/download
@@ -78,7 +78,7 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
         - Click Create
 
 
-# Local ISO Respository on XO Server
+# Local ISO Repository on XO Server
 We will also demonstrate storing .iso files on the XCP-ng host, which you might want to avoid--it uses up storage on our host.
 
 See references: https://xcp-ng.org/blog/2022/05/05/how-to-create-a-local-iso-repository-in-xcp-ng/
