@@ -21,15 +21,15 @@ IMPORTANT Always use a fixed or static IP for a domain controller.
 - Close the Server Manager promotion for Azure Arc
 - Close the Server Manager
 - Install Guest Tools (you may not want to!)
-  - The Windows tools are not inluded on the guest-tools.iso
+  - The Windows tools are not included on the guest-tools.iso
   - Reference: https://xcp-ng.org/docs/guests.html#windows
   - To use the Citrix <ins>drivers</ins>
     - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
     - https://support.citrix.com/article/CTX235403
-    - A Citrix account is requried
+    - A Citrix account is required
   - To use community XCP-ng drivers read the article linked above
   - The impact of not having the agent:
-    - managment of the OS and advanced features like moving the VM to another pool will not be available
+    - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboot if needed)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -118,7 +118,7 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-
   - Under the Computer Name tab click Change
   - Under Member of, click Domain, enter the domain xcpng.lab and then click OK
     - User name: Administrator
-    - Password: the passwork you set on the domain controller
+    - Password: the password you set on the domain controller
   - Click OK on the Computer Name/Domain Changes dialog box
   - Under About click Rename your PC and rename it server1
   - Restart the computer
