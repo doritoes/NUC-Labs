@@ -7,7 +7,7 @@ In this Lab you will get to experience both processes. We will start with the XO
 
 NOTES
 - The XO server, whether the XOA virtual appliance or a separate server, will have its own IP address
-- Another managment solution, XOLite is in beta
+- Another management solution, XOLite is in beta
 
 # Getting Started with Quick Deploy and XOA
 ## Option 1 - Quick Deploy
@@ -59,9 +59,9 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
 
 - Log in to the XOA web page/portal
 - Click Hub from menu on the left
-- Under **Ubuntu 20.02** click **Install** to install the image
-  - wait for the tasks to complete; monitoring process by clicking **Tasks** in the left menue
-- Under **Ubuntu 20.02** click **Create**
+- Under **Ubuntu 20.04** click **Install** to install the image
+  - wait for the tasks to complete; monitoring process by clicking **Tasks** in the left menu
+- Under **Ubuntu 20.04** click **Create**
     - Click OK to accept the pool (there is only one)
     - Name: XO-Ubuntu
     - Description: XO on Ubuntu
@@ -94,7 +94,7 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - shut down the VM
     - use the Web GUI to Stop it, or the console command `sudo poweroff`
   - On the VM's **Disks** tab click on the disk size `6 GiB` and enter `20` press enter
-  - 6GB is not enough to do the distirbution upgrade, much less run XO
+  - 6GB is not enough to do the distribution upgrade, much less run XO
 - Start the VM (click the Start icon in the Web GUI)
 - Perform a release upgrade
   - Open the VM's Console
@@ -108,7 +108,7 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
 - Verify upgrade
   - ssh to the VM
   - `cat /etc/os-release`
-  - confirm the version is now 222.04 LTS (Jammy Jellyfish)
+  - confirm the version is now 22.04 LTS (Jammy Jellyfish)
 - Change hostname
   - View current hostname: `hostnamectl`
   - Set the new hostname: `sudo hostnamectl set-hostname xo-ubuntu`
@@ -144,7 +144,7 @@ Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
 NOTE To update the XO server, run the same xo-install.sh script and select Update
 
 ## Configure the XO on Ubuntu
-1. Point brower to the IP
+1. Point browser to the IP
     - Example: https://192.168.1.103
 2. Log in
     - user: admin@admin.net
@@ -188,7 +188,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
     - Reboot Server
 
 ## Log Back In and Confirm
-1. Point brower to the IP
+1. Point browser to the IP
     - Example: https://192.168.1.103
 2. Log in with the user you created
 3. If you are able to log in, your XO server is working!
