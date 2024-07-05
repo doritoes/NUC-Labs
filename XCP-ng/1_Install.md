@@ -20,7 +20,10 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Select your keyboard
 - Select OK to continue
 - Accept the EULA
-- Access the storage
+- Accept the storage
+  - LVM is block storage that is faster, but is "thick provisioned"
+  - EXT is file storage that is slower, but is "thin provisioned"
+  - The default is LVM, but choosing EXT means you can "overallocate" storage if you have a small storage drive
 - Type of source: Local Media
 - Verification: Verify media or don't, it's your choice
 - Select and enter the root password (6+ characters)
