@@ -54,7 +54,7 @@ Or, if you created local storage, upload the ISO there.
   - Topology: Default behavior
   - Install: ISO/DVD: Select the OPNsense ISO image
   - First Interfaces:
-    - Network: from the dropdown select the Host pool network
+    - Network: from the dropdown select the pool-wide hot network (eth0)
   - Second Interface: Click Add interface
     - Network: from the dropdown select the Pentesting network you created earlier
   - Disks: Click Add disk
