@@ -149,4 +149,6 @@ Here is how to fix it:
 - `sudo sytemctl start xe-guest-utilties`
 - `sudo sytemctl enable xe-guest-utilties`
 
+If it's not sticking for you (lose it on reboot) try doing a "configure", "commit", "save", "exit" cycle after making the above changes.
+
 If you want to remove the tools: `sudo apt purge -y vyos-xe-guest-utilities`
