@@ -66,17 +66,17 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
     - Select storage type:
       - ISO SR - SMB ISO
         - This is a file share on your NAS or your PC
-        - Enter the UNC (example \\server\sharename\)
+        - Enter the UNC (example `\\server\sharename\`)
           - If DNS isn't resolving, use the IP address of the server
         - Enter username and password
         - Click Create
       - ISO SR - NFS ISO
         - This is an NFS mount your NAS or a server
-        - Enter the server IP
-        - Click the magnifying glass (populate the path dropdown)
-        - select the path (will auto populate)
+        - Server: enter the NAS server IP
+        - NFS version: default NFS version
+        - <ins>Click the magnifying glass</ins> (populate the path dropdown)
+        - Select the path from the dropdown (will auto populate)
         - Click Create
-
 
 # Local ISO Repository on XO Server
 We will also demonstrate storing .iso files on the XCP-ng host, which you might want to avoid--it uses up storage on our host.
@@ -93,5 +93,5 @@ See references: https://xcp-ng.org/blog/2022/05/05/how-to-create-a-local-iso-rep
       - Path: /media
     - Click Create
 3. From left menu, click Import > Disk
-4. Select your freshly crated ISOs SR
-5. Drag and drop your ISOs to upload them to the XO
+4. Select your freshly created ISOs SR
+5. Drag and drop your ISOs to upload them to the XO, click Import
