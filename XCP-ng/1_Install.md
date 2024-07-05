@@ -6,7 +6,7 @@ References: https://www.youtube.com/watch?v=fuS7tSOxcSo
 We will start with a the XOA virtual appliances, then build our own XO installation to replace it
 
 # Create Account on xen-orchestra.com
-An account is required to register your Xen Orchestra virtual Appliance (XOA), which you will use to manage the system
+An account is required to register your Xen Orchestra virtual Appliance (XOA), which you will initally use to manage the system
 - this is a "Vates" community account, as vates.tech manages the XCP-ng product
 - https://xen-orchestra.com/#!/signup
 
