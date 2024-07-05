@@ -71,11 +71,10 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
     - RAM: 2GB (default, same as VOA)
     - You cannot change the disk size; we will increase is shortly
     - Select **Custom config**
-      - In "User config" add the line:
-        - `password: changeme`
+      - In "User config" section:
+        - add the line: `password: changeme`
     - Click Show advanced settings
-      - Add check to Auto power on
-      - Add check to Destroy cloud config drive after first boot :?:
+      - Add check to **Auto power** on (this is important)
   - Click Create
 - Apply updates for 20.04
   - Open the VM's Console
