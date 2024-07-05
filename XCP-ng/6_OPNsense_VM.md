@@ -54,7 +54,7 @@ Or, if you created local storage, upload the ISO there.
   - Topology: Default behavior
   - Install: ISO/DVD: Select the OPNsense ISO image
   - First Interfaces:
-    - Network: from the dropdown select the Inside network
+    - Network: from the dropdown select the Host pool network
   - Second Interface: Click Add interface
     - Network: from the dropdown select the Pentesting network you created earlier
   - Disks: Click Add disk
@@ -111,9 +111,33 @@ Or, if you created local storage, upload the ISO there.
     - Generate a new slef-signed web GUI certificate: No
     - Restore web GUI access defaults: No
 - Create a VM on the Pentesting network
+  - Unbuntu Desktop or Windows 10 is perfect
 - Initial firewall configuration
   - From VM's browser, log in to firewall https://192.168.101.254
-  - System > Firmware - check for updates
-  - Install guest utilities
+  - Follow the Wizard
+    - General information
+      - Hostname: pentestfw
+      - Domain: xcpng.lab
+      - Primary DNS Server: 8.8.8.8 (we want unfilted DNS for this network)
+      - Secondary DNS Server: 8.8.4.4
+      - <ins>Uncheck</ins> Override DNS
+      - Click Next
+    - Time server information
+      - Leave the default time server
+      - Optionally adjust the Timezone
+      - Click Next
+    - Configure WAN Interface
+      - Review the information, default values are OK
+      - Click Next
+    - Configure LAN Interface
+      - Review and click Next
+    - Set Root Password
+      - Click Next to keep the existing password
+    - Click Reload
+  - Update OPNsense
+    - Click System > Firmware > Status
+    - Click Check for Updates
+    - Apply all updates including Plugins and Packages
+  - Install Xen guest utilities
     - Plugins
       - os-xen - click + to install
