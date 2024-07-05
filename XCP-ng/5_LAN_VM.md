@@ -7,43 +7,50 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 
 # Ubuntu Desktop
 - From the left menu click New > VM
-  - Select the pool
-  - Template: Ubuntu Jammy Jellyfish 22.04
-  - Name: ubuntu-desktop-lan
-  - Description: Ubuntu desktop on LAN network
-  - CPU: 1 vCPU
-  - RAM: 2GB
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Name: **ubuntu-desktop-lan**
+  - Description: **Ubuntu desktop on LAN network**
+  - CPU: **1 vCPU**
+  - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: Select the Ubuntu 22.04 Desktop image you uploaded
-  - Interfaces: select Inside from the dropdown
+  - Install: ISO/DVD: *Select the Ubuntu 22.04 Desktop image you uploaded*
+  - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
   - Click Create
 - The details for the new VM are now displayed
 - Click Console
 - Follow the Install wizard per usual
-- To remove the installation media, click the Eject icon
-- Press Enter to Reboot
+  - To remove the installation media, click the Eject icon
+  - Press Enter to Reboot
+- Log in to the console and completing the first time wizard
+  - Skip, Skip, No, Next, Done
+  - Optionally let the Software Updater "Install Now"; we will be doing that again from the command line later
+  - However, you will need to let it finish before we can install the guest tools
 - Install guest tools
   - Connect the guest-tools.iso (select it from the dropdown)
     - it will be automatically mounted at /media in a folder that is the user name
     - if the user name is `lab`, the directory is `/media/lab`
-  - Open terminal
-  - `cd /media`
-  - `ls`
-  - "cd" to the user's folder (i.e. "cd lab")
-  - `ls`
-  - You will see the "XCP-ng Tools" folder
-  - `cd XCP[tab]` then press enter (to auto-complete the name since it has a space in it)
-  - `sudo Linux/install.sh`
-    - you are prompted to enter your password
-    - you are prompted accept the change
-    - you are reminded to reboot
-  - `sudo reboot`
-  - Eject guest-tools.iso
+  - Open Terminal
+  - Navigate to the correct directory
+    - `cd /media`
+    - `ls`
+    - "cd" to the user's folder (i.e. `cd lab`)
+    - `ls`
+    - You will see the "XCP-ng Tools" folder
+    - `cd XCP[tab]` then press enter (to auto-complete the name since it has a space in it)
+  - Run the installer
+    - `sudo Linux/install.sh`
+      - you maybe be prompted to enter your password
+      - you are prompted accept the change
+      - you are reminded to reboot
+    - `sudo reboot`
+    - Eject guest-tools.iso
+    - Back in XO, the General tab will show the management tools are detected
 - Test the VM
   - Updates
-    - `sudo apt update && sudo apt upgrade -y`
-  - Internet access
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+  - Internet access using Firefox
 - Configure sharing your desktop
   - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts
   - Settings > Sharing
@@ -63,17 +70,27 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Power down the VM
 - Take a Snapshot
-  - Click New snapshot
+  - This is to demonstrate how to take a snapshot and what happens to snapshots when you convert a VM to a template
+  - Home > VMs
+  -   - Click the small X to remove the filter, showing ALL VMs including those shut down
+  - Click `ubuntu-desktop-lan`
+  - Click the Snapshots tab
+  - Click **New snapshot**
 - Convert to a Template
-  - Click Advanced > Convert to template
-- Confirm the Snapshot has been erased (!) It was bound to the VM.
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm that this can't be undone
+  - Notice the VM is now gone from the list
+  - Notie that no Snapshots can be recovered
 - Re-create the VM from the template
-  - New VM
-  - Template: ubuntu-desktop-lan
-  - Interface: Note that it's set to Inside, which is what we want
+  - New > VM
+  - Pool: **xcp-ng-lab1**
+  - Template: **ubuntu-desktop-lan**
+  - Leave name and description with their template values
+  - Interface: Note that it's set to **Inside**, which is what we want
   - Click Create
-- Log back in examine the system
+- Click on the Console tab and Log back in examine the system
   - What are the advantages of using DHCP in the lab for these templates?
+  - Are the guest tools detected?
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
@@ -82,41 +99,40 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Optionally create another VM from the same template and experiment
 
 # Ubuntu Server
-- From the left menu click New > VM
-  - Select the pool
-  - Template: Ubuntu Jammy Jellyfish 22.04
-  - Name: ubuntu-server-lan
-  - Description: Ubuntu server on LAN network
-  - CPU: 1 vCPU
-  - RAM: 2GB
+- From the left menu click **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
+  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Name: **ubuntu-server-lan**
+  - Description: **Ubuntu server on LAN network**
+  - CPU: **1 vCPU**
+  - RAM: **2GB**
   - Topology: Default behavior
   - Install: ISO/DVD: Select the Ubuntu 22.04 Server image you uploaded
-  - Interfaces: select Inside from the dropdown
+  - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
   - Click Create
 - The details for the new VM are now displayed
-- Click Console
-- Follow the Install wizard per usual
+- Click the Console tab and follow the Install wizard per usual
   - READ CAREFULLY the Guided storage configuration
-    - Root / only has 10GB of the 20GB allocated
-    - Option 1 expand root /
-      - Under used devices, locate ubuntu-lv which will be mounted at root /
-      - Select it, and then Edit
-      - Change the Size to the max value
-    - Option 2
-      - Select the free space, then Create Logical Volume
-      - Adjust the size to use the free space
-      - Adjust the mount point (/home by default)
-      - Choose Create
+    - Root / only has **10GB** of the **20GB** allocated
+    - Solutions (if in doubt, use Option 1; Option 2 is popular for /var, /var/log, /opt, or /home)
+      - Option 1 expand root /
+        - Under used devices, locate ubuntu-lv which will be mounted at root /
+        - Select it, and then Edit
+        - Change the Size to the max value
+      - Option 2
+        - Select the free space, then Create Logical Volume
+        - Adjust the size to use the free space
+        - Adjust the mount point (/home by default)
+    - Choose Create
   - Recommend checking the box Install OpenSSH server
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
-- Check the system
-  - df -h
-  - Is the disk size correct?
+- Log in and check the system using Terminal
+  - Is the disk size correct? `df -h`
 - Install guest tools
   - Connect the guest-tools.iso (select it from the dropdown)
-  - Open terminal
+  - Open Terminal
   - Mount the iso
     - `sudo mount /dev/cdrom /media`
     - `cd /media/Linux`
@@ -133,18 +149,19 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Test the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y`
-    - accept the messages
+    - accept the messages (default values OK)
 - Power down the VM
+  - 'sudo reboot' or use the XO stop icon
 - Convert to a Template
-  - Click Advanced > Convert to template
+  - Click Advanced tab > Convert to template
 - Re-create the VM from the template
   - New VM
-  - Template: ubuntu-server-lan
-  - Install settings: note that you can add a custom configuration if desired
-  - Interface: Note that it's set to Inside, which is what we want
-  - Click Create
-- Log back in examine the system
-  - What are the advantages of using DHCP in the lab for these templates?
+  - Pool: **xcg-ng-lab1**
+  - Template: **ubuntu-server-lan**
+  - Interface: Note that it's set to **Inside**, which is what we want
+  - Click **Create**
+- Log in at the console and examine the system
+  - What are the advantages of using DHCP in the lab for these templates? What is the downside for servers?
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname server-lan`
@@ -154,41 +171,43 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
-- From the left menu click New > VM
-  - Select the pool
-  - Template: Windows 10 (64-bit)
-  - Name: win10-lan
-  - Description: Windows 10 on LAN network
-  - CPU: 2 vCPU
-  - RAM: 4GB
+- From the left menu click **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
+  - Template: **Windows 10 (64-bit)**
+  - Name: **win10-lan**
+  - Description: **Windows 10 on LAN network**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: Select the Windows 10 iso you uploaded
+  - Install: ISO/DVD: *Select the Windows 10 iso you uploaded*
   - Interfaces: select Inside from the dropdown
   - Disks: **128GB** (default 32GB is too small to apply the latest updates)
-  - Click Create
+  - Click **Create**
 - The details for the new VM are now displayed
 - Click Console
-- You will be prompted to press any key to boot from CD to DVD
-  - Press any key
+- You will be prompted to press any key to boot from CD or DVD
+  - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
-  - Click Install now
-  - Activate Windows: Click I don't have a product key
-  - Select the OS to install: Windows 10 Pro (feel free to experiment)
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
+  - Click **Install now**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
+  - Check the box then click **Next**
+  - Click Custom: **Install Windows only (advanced)**
+  - Accept the installation on Drive 0, click **Next**
+  - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
-  - Eject the installation ISO
-  - Shift-F10 to open command prompt
-  - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
+  - **Eject** the installation ISO
+  - **Shift-F10** to open command prompt
+    - `shutdown /t 0 /s`
+    - type this exactly, spacing matters
+- Click **Advanced** tab > **Convert to template**
 - Re-create the VM from the template
   - New VM
   - Template: win10-lan
-  - Interface: Note that it's set to Inside, which is what we want
   - Click Create
+  - Rename from the VM from win10-lan to win10-lan-ready
 - Log in complete the setup wizard
   - Set region and keyboard layout, skip second keyboard layout
   - Select Set up for personal use (feel free to experiment)
