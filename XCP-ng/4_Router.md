@@ -102,7 +102,11 @@ exit
 
 NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
 
-## Optionally Configure DHCP on the inside/LAN interface
+## Configure DHCP on the inside/LAN interface
+We use DHCP for this Lab. You can skip this if you plan on using all static IP addresses.
+
+Note that IP addresses .1 to .19 and .241 to .253 are available to use for static IP addresses.
+
 ```
 configure
 set service dhcp-server shared-network-name vyoslab authoritative
