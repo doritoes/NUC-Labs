@@ -53,44 +53,67 @@ Or, if you created local storage, upload the ISO there.
   - RAM: 2GB
   - Topology: Default behavior
   - Install: ISO/DVD: Select the OPNsense ISO image
-  - Interfaces: Click Add interface
-    - Network: from the dropdown select the Inside network you created earlier
-  - Interfaces: Click Add interface
+  - First Interfaces:
+    - Network: from the dropdown select the Inside network
+  - Second Interface: Click Add interface
     - Network: from the dropdown select the Pentesting network you created earlier
   - Disks: Click Add disk
-    - 100GB (if you are thin provisioning like on NFS storage, nothing to worry about; if you are thick provisioning, you can go smaller)
+    - Add 20GB disk
   - Click Show advanced settings
     - Check Auto power on
   - Click Create
 - The details for the new VyOS VM are now displayed
-- Click Console
-
-disable TX checksum offload on the virtual xen interfaces of the VM
-  - advanced settings: for each adapter, disable TX checksumming
- 
-can we disable the parallel and port? maybe serial port too?
+- Click the Network tab
+  - Next to each interface is a small settings icon with a blue background
+  - For every interface click the icon then disable TX checksumming
+- Click Console and watch as the system boots
 
 # Configure OPNsense
 - Log in as installer/opnsense
 - Select the keymapp
 - Install (ZFS); it is the best choice for the Lab
-  - uses slight more RAM
+  - stripe - no redundancy (for our Lab this is fine)
+  - uses slightly more RAM
   - much more stable under power failure or hard reboots
 - Accept the disk to install on
+  - You need to check the box (use space bar)
 - Accept recommended swap partition
-- Select Yes to continue
+- Select Yes to continue and wait patiently
 - Select a root password when prompted
 - Select Complete Install
-- Eject the ISO when prompted
+- Eject the ISO
 - Wait for the system to boot
 - Log in as root with the selected password (default is opnsense)
-- set up interfaces LAN on pentesting network
-- set up interfaces WAN on the host's network (DHCP)
-- Log in using Web browser
-  - how in this lab??
-- System > Firmware - check for updates
-- Install guest utilities
-  - Plugins
-    - os-xen - click + to install
-- Configure DHCP on pentesting network
-
+- Option 1) Assign interfaces
+  - LAGGs: No
+  - VLANs: No
+  - WAN interface: xn0
+  - LAN interface: xn1
+  - Optional (OPT1): just press enter
+  - Confirm
+- Option 2) Set interface IP address
+  - Configure LAN
+    - DHCP: No
+    - IPv4 address: 192.168.101.254
+    - Subnet mask CIDR: 24
+    - Press enter to confirm no upstream gateway on the LAN interface
+    - IPv6: No two times, and press enter to confirm no IPv6 address
+    - Enable DHCP server on LAN: Yes
+    - Client address start: 192.168.101.20
+    - Client address end: 192.168.101.250
+    - Change web GUI protocol to http: No
+    - Generate new self-signed web GUI certificate: Yes
+    - Restore web GUI access defaults: No
+  - Configure WAN
+    - DHCP: Yes
+    - IPv6: No, and press enter to confirm no IPv6 address
+    - Change web GUI protocol to HTTP: No
+    - Generate a new slef-signed web GUI certificate: No
+    - Restore web GUI access defaults: No
+- Create a VM on the Pentesting network
+- Initial firewall configuration
+  - From VM's browser, log in to firewall https://192.168.101.254
+  - System > Firmware - check for updates
+  - Install guest utilities
+    - Plugins
+      - os-xen - click + to install
