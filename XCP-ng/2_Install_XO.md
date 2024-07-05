@@ -73,6 +73,7 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
     - Select **Custom config**
       - In "User config" section:
         - add the line: `password: changeme`
+        - you can optionally set the hostname here; be aware the "%" is index value, starting with "0"; if you uncomment the hostname line the hostname will be set to the "name" of the VM in XO with a zero after it (e.g., XO-Ubuntu0)
     - Click Show advanced settings
       - Add check to **Auto power** on (this is important)
   - Click Create
@@ -103,11 +104,11 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - `sudo do-release-upgrade`
   - Enter `y` to continue when prompted
   - Select `Yes` to allow service restarts
-  - You will be prompted to keep existing settings (N) or use the maintainer's settings (Y); generally either choose Y to all or N to all; my initial test is Y to all
+  - You will be prompted to keep existing settings (N) or use the maintainer's settings (Y); for the new system generally you want the maintainer's version, but there is no real argument of one over the over
   - Approve removing obsolete packages
   - Approve rebooting the system
 - Verify upgrade
-  - ssh to the VM
+  - Log in from the console
   - `cat /etc/os-release`
   - confirm the version is now 22.04 LTS (Jammy Jellyfish)
 - Change hostname
@@ -126,7 +127,7 @@ Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
     - change PORT to "443"
     - uncomment `PATH_TO_HTTPS_CERT` line
     - uncomment `PATH_TO_HTTPS_KEY` line
-5. `sudo apt-get install openssl`
+5. `sudo apt update && sudo apt install -y openssl`
 6. `sudo mkdir /opt/xo`
 7. `sudo openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out /opt/xo/xo.crt -keyout /opt/xo/xo.key`
     - Country: US
@@ -139,20 +140,26 @@ Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
 9. `sudo ./xo-install.sh`
     - If you have less than 3GB of memory you need to accept the warning:
       - WARNING: you have less than 3GB of RAM in your system. Installation might run out of memory.
+      - In my testing this did not break the installation; it's possible to increase the VM's RAM if desired
     - Choose option 1 to kick off install
     - Wait for it to complete (updates are much faster; the first installation takes time)
+10. Get the IP address of the VM: `ip a` or `hostname -i`
 
-NOTE To update the XO server, run the same xo-install.sh script and select Update
+NOTE To update the XO server, run the same xo-install.sh script and select "2. Update".
 
 ## Configure the XO on Ubuntu
 1. Point browser to the IP
     - Example: https://192.168.1.103
+    - Accept the warnings for the self-signed certificate
 2. Log in
     - user: admin@admin.net
     - pass: admin
 3. Add new user to replace admin@admin.net
     - Settings > Users > Create
-    - Sign out, Sign in as the new user
+      - Name: admin
+      - Permissions: Admin
+      - Select a password
+    - Click Sign out then sign in as the new user `admin`
     - Remove user admin@admin.net
 4. Add the XCP-ng host ("server")
     - Settings > Servers
@@ -163,19 +170,16 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
       - Password: the root password you configured
       - "Unauthorized certificates" Slider: enable it
       - Click Connect
-5. Make sure the XO Ubuntu VM is set to
+5. Make sure the XO Ubuntu VM is configured to stay up and prevent accidental deletion
     - Home > VMs
     - Click XO-Ubuntu
     - Click Advanced tab
       - Auto power on: YES
       - Protect from accidental deletion: YES
       - Protect from accidental shutdown: YES
-    - auto start
-    - protect from deletion
-    - protect from shutdown
 
 ## Remove the XOA
-1. Login again
+1. Login again to XO
 2. Home > VMs
 3. Check the box for XOA
 4. Click More > Remove
@@ -188,15 +192,17 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
     - Reboot or Shutdown
     - Reboot Server
 
+IMPORTANT Note how long it can take for the host and then the guest to come up. Don't panic too early.
+
 ## Log Back In and Confirm
-1. Point browser to the IP
+1. Point browser to the XO IP
     - Example: https://192.168.1.103
 2. Log in with the user you created
 3. If you are able to log in, your XO server is working!
 
 ## Install Pool Patches
-This is how the host system is updated. The XOA free version does not allow you to apply patches to the host!
-1. Log in again
+This is how the host system (XCP-ng) is updated. The XOA free version does not allow you to apply patches to the host! This is one of the main reasons to run our own XO on Ubuntu.
+1. Log in to XO again
 2. Home > Pools
 3. Click on the host xcp-ng-lab1
 4. Click the Patches tab
