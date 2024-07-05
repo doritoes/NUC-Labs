@@ -38,10 +38,10 @@ NOTES
 - Point your browser to the IP address of the XOA
 - Log in as username `admin` and password `labboss`
 - Apply Updates
-  - Click XOA from the left menu then click Updates
-  - If an upgrade is available, click Upgrade and wait for the upgrade to complete and for XOA to reconnect
-    - Click Refresh to connect as needed
-    - In my testing I had to upgrade two times
+  - From the left menu Click XOA > Updates
+  - If an upgrade is available, click Upgrade and wait for the upgrade to complete
+    - If it remains Disconnected for too long, try clicing Refresh to re-connect
+  - In Lab testing I had to upgrade two times
 
 # Build Your Own XO Server on XCP-ng
 The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build own using Ubuntu 22.04 right on this host.
@@ -194,6 +194,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select Updat
 3. If you are able to log in, your XO server is working!
 
 ## Install Pool Patches
+This is how the host system is updated. The XOA free version does not allow you to apply patches to the host!
 1. Log in again
 2. Home > Pools
 3. Click on the host xcp-ng-lab1
