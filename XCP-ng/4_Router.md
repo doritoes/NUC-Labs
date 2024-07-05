@@ -3,20 +3,22 @@ How to create a router to our backend "LAN"
 
 # Configure Networking
 - Log in to XO
-- Click Home from the left menu then click Hosts
+- From the left menu click **Home** > **Hosts**
 - Click on the host you configured (i.e., xcp-ng-lab1)
-- Click the Network tab
-- Under Private networks click Manage
-  - Click Add a Network
-    - Interface: eth0
-    - Name: Inside
-    - Description: Inside Lab Network
+- Click the **Network** tab
+- Under Private networks click **Manage**
+  - Click **Add a Network**
+    - Interface: **eth0** (pool-wide network)
+    - Name: **Inside**
+    - Description: **Inside Lab Network**
     - MTU: leave blank (default 1500)
-    - VLAN: 100
-    - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
-- Under the list of PIFs (physical interfaces), for the new Inside interface, click Status and change to Disconnected
+    - VLAN: **100**
+    - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
+    - Click **Create network**
+- Refresh the page or renavigate to the host's Network tab
+- On the PIF for the Inside network, click on the word "Connected" to change it to Disconnected
 
-NOTE in this lab we will use the following VLANs for "inside" networks, not trunked on the outside uplink
+NOTE in this lab we will use the following VLAN numbers for "internal" networks, not to be trunked on the host's uplink
 - 100 = inside LAN
 - 200 = pentesting network
 
@@ -38,14 +40,14 @@ Or, if you created local storage, upload the ISO there.
 # Create VyOS VM
 - From the left menu click New > VM
   - Select the pool **xcp-ng-lab1**
-  - Template: Other **install media**
+  - Template: **Other install media**
   - Name: **VyOS**
   - Description: **VyOS router**
   - CPU: **2 vCPU**
   - RAM: **1GB**
   - Topology: **Default behavior**
   - Install: ISO/DVD: *Select the vyos ISO image you uploaded earlier*
-  - Interfaces: Click **Add interface**
+  - Interfaces: Click **Add interface** to add a second interface
     - Network: from the dropdown select the **Inside** network you created earlier
   - Disks: Click Add disk
     - **8GB**
@@ -53,7 +55,7 @@ Or, if you created local storage, upload the ISO there.
     - Check **Auto power on**
   - Click **Create**
 - The details for the new VyOS VM are now displayed
-  - Did you get a kernel panic? Try 2 vCPUs not 1
+  - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
 - Click Console to access the console command line
 - Login as `vyos`/`vyos`
 - `install image`
@@ -61,14 +63,15 @@ Or, if you created local storage, upload the ISO there.
   - Enter the new password for the `vyos` user
     - Fun fact, it allows you to set the password to `vyos`
 - When done reboot: `reboot`
+- Eject the VyOS iso
 - Log back in with your updated password
-- Configure your router's "Internet" connection (to your Lab network via the host's Ethernet interface)
-  - configure
-  - set interfaces ethernet eth0 address dhcp
-  - set service ssh
-  - commit
-  - save
-  - exit
+- Configure your router's "Internet" connection (to your Lab network via the host's ethernet interface)
+  - `configure`
+  - `set interfaces ethernet eth0 address dhcp`
+  - `set service ssh`
+  - `commit`
+  - `save`
+  - `exit`
 - View your router's IP address
   - `show interfaces ethernet eth0 brief`
 - You can now configure your router from another device in your Lab using SSH to this IP address
@@ -95,6 +98,7 @@ exit
 - Test internet connectivity
   - by pinging an IP address: `ping 8.8.8.8`
   - nslookup a DNS name: `nslookup microsoft.com`
+  - if it's not working, `route` and see if the default route is missing; reboot and try again.
 
 NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
 
@@ -133,8 +137,12 @@ exit
 ```
 
 # Xen Tools
-See https://forum.vyos.io/t/how-to-build-your-own-vyos-template-for-xenserver/155/9
+The VyOS image comes with vyos-xe-guest-utilities. However, it doesn't seem to work anymore.
 
-So it may be possible to run the Xen tools on the VyOS image. But I was not unable to install the from guest-tools.iso and run the install.sh script in the usual way.
+Here is how to fix it:
+- `cd /etc/systemd/system/`
+- `sudo chmod +x /etc/systemd/system/xe-guest-utilities.service`
+- `sudo sytemctl start xe-guest-utilties`
+- `sudo sytemctl enable xe-guest-utilties`
 
-"Unknown Linux distribution `vyos'"
+If you want to remove the tools: `sudo apt purge -y vyos-xe-guest-utilities`
