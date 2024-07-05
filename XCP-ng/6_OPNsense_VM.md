@@ -7,6 +7,7 @@ References:
 - https://xcp-ng.org/docs/networking.html#vlans
 
 # Configure Networking
+- Log in to Xen Orchestra (XO)
 - Configure networks
   - Click Home from the left menu then click Hosts
   - Click on the host you configured (i.e., xcp-xg-lab1)
