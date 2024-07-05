@@ -179,6 +179,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select "2. U
       - Protect from accidental shutdown: YES
 
 ## Remove the XOA
+You may choose to keep the XOA virtual appliance if you have enough CPU cores and RAM for the extra overhead. For this Lab I am removing it:
 1. Login again to XO
 2. Home > VMs
 3. Check the box for XOA
