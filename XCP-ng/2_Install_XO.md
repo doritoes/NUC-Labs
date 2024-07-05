@@ -60,7 +60,9 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
 - Log in to the XOA web page/portal
 - Click Hub from menu on the left
 - Under **Ubuntu 20.04** click **Install** to install the image
-  - wait for the tasks to complete; monitor the process by clicking **Tasks** in the left menu
+  - wait for the tasks to complete
+    - monitor the process by clicking **Tasks** in the left menu
+    - note the Pool taks and the XO tasks being performed
 - Under **Ubuntu 20.04** click **Create**
     - Click OK to accept the pool (there is only one)
     - Name: XO-Ubuntu
