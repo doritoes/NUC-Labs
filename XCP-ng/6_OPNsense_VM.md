@@ -205,3 +205,6 @@ Steps:
     - This will redirect you to the centralized configuration sytem
     - Configure and start Folding!
     - Remember the VM has to be halted to add more vCPUs
+    - WARNING this is the point in my Lab where the host started powering itself down
+      - very strange, the host NUC just powered off
+      - powering back on, with only the XO server, VyOS router, and OPNsense firewall auto starting, it powers itself back off (the VM I just edited was not running; it was in Halted state)
