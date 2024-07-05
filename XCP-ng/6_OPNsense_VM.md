@@ -138,7 +138,16 @@ Or, if you created local storage, upload the ISO there.
   - Update OPNsense
     - Click System > Firmware > Status
     - Click Check for Updates
-    - Apply all updates including Plugins and Packages
+    - Read and accept the information provided
+    - Scroll to the bottom of the Updates tab and click Update
+    - Wait for updates and the reboot
+    - Log back in and check if there are any more updates
   - Install Xen guest utilities
     - Plugins
       - os-xen - click + to install
+      - Reboot (Power > Reboot?
+    - In XO, look at the opnsense VM general tab. The management agent is now detected.
+- Configure Firewall Rules
+  - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
+    - Explanation: By default RFC1928 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
+- Configure TOR for Internet
