@@ -4,7 +4,7 @@ How to create a router to our backend "LAN"
 # Configure Networking
 - Configure networks
   - Click Home from the left menu then click Hosts
-  - Click on the host you configured (i.e., xcp-xg-lab1)
+  - Click on the host you configured (i.e., xcp-ng-lab1)
   - Click the Network tab
   - Under Private networks click Manage
     - Click Add a Network
