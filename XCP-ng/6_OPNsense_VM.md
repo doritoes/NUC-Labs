@@ -150,4 +150,58 @@ Or, if you created local storage, upload the ISO there.
 - Configure Firewall Rules
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
     - Explanation: By default RFC1928 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-- Configure TOR for Internet
+
+# Configure TOR
+References:
+- https://docs.opnsense.org/manual/how-tos/tor.html
+- https://www.youtube.com/watch?v=4K2YuWp2GB4
+- https://cybernomad.online/dark-web-building-a-tor-gateway-7a7dfa45884f
+
+Steps:
+- From VM's browser, check the public IP address without TOR
+- Log in to firewall https://192.168.101.254
+- System > Firmware > Plugins
+  - os-tor - click + to install
+- Refresh the page
+- Services > Tor
+- Click Configuration
+  - General Tab
+    - Enable: Yes
+    - Listen Interfaces: LAN
+    - Enable Advanced Mode
+      - Check Enable Transparent Proxy
+      - Confirm SOCKS port number: 9050
+      - Confirm Control Port: 9051
+      - Confirm Transparent port: 9040
+      - Confirm Transparent DNS port: 9053
+  - Click Save
+- Firewall > LAN
+  - Add top rule Allow LAN net to This Firewall IP for TCP/IP DNS
+  - Add following rule DENY to ANY for TCP/IP DNS
+  - Click Apply Changes
+- Firewall > NAT > Port Forward
+  - Add rule
+    - Interface: LAN
+    - TCP/IP Version: IPv4
+    - Protocol: TCP (TOR rejects UDP packets except for DNS requests)
+    - Source: default usually sufficient; everything on the LAN interface
+    - Destination: ANY
+    - Destination Port: ANY
+    - Redirect Target IP: Single Host or Network: 127.0.0.1
+    - Redirect Target Port: 9040 (this is the Transparent TOR port)
+    - Click Apply Changes
+- Using your browser connect to https://check.torproject.org
+  - You should see "Congratulations. This browser is configured to use Tor."
+
+# Test TOR access
+- Try updating your VM's OS
+- Test Folding at Home (https://foldingathome.org/start-folding/)
+  - Windows is straightforward
+  - Ubuntu desktop
+    - download the .deb file
+    - open the .deb file and select Software Install
+    - Click Install and enter your password
+    - Point your browser to http://127.0.0.1:7396
+    - This will redirect you to the centralized configuration sytem
+    - Configure and start Folding!
+    - Remember the VM has to be halted to add more vCPUs
