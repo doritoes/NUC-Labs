@@ -2,32 +2,29 @@
 How to create a router to our backend "LAN"
 
 # Configure Networking
-- Configure networks
-  - Click Home from the left menu then click Hosts
-  - Click on the host you configured (i.e., xcp-ng-lab1)
-  - Click the Network tab
-  - Under Private networks click Manage
-    - Click Add a Network
-      - Interface: eth0
-      - Name: Inside
-      - Description: Inside Lab Network
-      - MTU: leave blank (default 1500)
-      - VLAN: 100
-      - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
-  - Under the list of PIFs (physical interfaces), for the new Inside interface, click Status and change to Disconnected
+- Log in to XO
+- Click Home from the left menu then click Hosts
+- Click on the host you configured (i.e., xcp-ng-lab1)
+- Click the Network tab
+- Under Private networks click Manage
   - Click Add a Network
-      - Interface: eth0
-      - Name: Pentesting
-      - Description: Pentesting Network
-      - MTU: leave blank (default 1500)
-      - VLAN: 200
-      - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
-  - Under the list of PIFs (physical interfaces), for the new Pentesting interface, click Status and change to Disconnected
+    - Interface: eth0
+    - Name: Inside
+    - Description: Inside Lab Network
+    - MTU: leave blank (default 1500)
+    - VLAN: 100
+    - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
+- Under the list of PIFs (physical interfaces), for the new Inside interface, click Status and change to Disconnected
+
+NOTE in this lab we will use the following VLANs for "inside" networks, not trunked on the outside uplink
+- 100 = inside LAN
+- 200 = pentesting network
 
 # Download the ISO
 1. Go to https://vyos.io
 2. Click Rolling Release
-3. Download the most recent image
+  - the free version is limited to the Rolling Release
+4. Download the most recent image
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
@@ -40,24 +37,24 @@ Or, if you created local storage, upload the ISO there.
 
 # Create VyOS VM
 - From the left menu click New > VM
-  - Select the pool
-  - Template: Other install media
-  - Name: VyOS
-  - Description: VyOS router
-  - CPU: 2 vCPU
-  - RAM: 1GB
-  - Topology: Default behavior
-  - Install: ISO/DVD: Select the vyos ISO image
-  - Interfaces: Click Add interface
-    - Network: from the dropdown select the Inside network you created earlier
+  - Select the pool **xcp-ng-lab1**
+  - Template: Other **install media**
+  - Name: **VyOS**
+  - Description: **VyOS router**
+  - CPU: **2 vCPU**
+  - RAM: **1GB**
+  - Topology: **Default behavior**
+  - Install: ISO/DVD: *Select the vyos ISO image you uploaded earlier*
+  - Interfaces: Click **Add interface**
+    - Network: from the dropdown select the **Inside** network you created earlier
   - Disks: Click Add disk
-    - 8GB
-  - Click Show advanced settings
-    - Check Auto power on
-  - Click Create
+    - **8GB**
+  - Click **Show advanced settings**
+    - Check **Auto power on**
+  - Click **Create**
 - The details for the new VyOS VM are now displayed
   - Did you get a kernel panic? Try 2 vCPUs not 1
-- Click Console
+- Click Console to access the console command line
 - Login as `vyos`/`vyos`
 - `install image`
 - Allow installation to continue with default values
@@ -77,8 +74,8 @@ Or, if you created local storage, upload the ISO there.
 - You can now configure your router from another device in your Lab using SSH to this IP address
 
 # Configure Router
-IMPORTANT note the version is VyOS 1.5-rolling-2024xxxxxxxx, and the syntax has changed moving to this version.
-- ssh to your router and login as user `vyos` and the password you selected
+IMPORTANT note the version is VyOS 1.5-rolling-2024xxxxxxxx, and the syntax has changed from previous versions you may be familiar with.
+- ssh to the router and login as user `vyos` and the password you selected
 - enter the configuration below
 ```
 configure
@@ -98,6 +95,7 @@ exit
 - Test internet connectivity
   - by pinging an IP address: `ping 8.8.8.8`
   - nslookup a DNS name: `nslookup microsoft.com`
+
 NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
 
 ## Optionally Configure DHCP on the inside/LAN interface
