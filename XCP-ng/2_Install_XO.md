@@ -26,14 +26,32 @@ NOTES
 - Set the XOA machine password
   - Login: `xoa` (default)
   - Password: `labboss`
-- Click DEPLOY
+- Click **DEPLOY**
 - Wait as the XOA image is downloaded and the VM deployed
 - Your browser is automatically redirected to the login page on the new IP address
 
 ## Option 2 - Vates Deploy Page
 - Direct your browser to
   - https://vates.tech/deploy
- 
+- Click **Got it, let's go!**
+- Enter primary host information
+  - Primary host: *IP address of the host, xcp-ng-lab1*
+  - Login: **root**
+  - Password: *enter the password you set earlier*
+- Click **Continue**
+- Confiure storage and network
+  - Default storage and DHCP for the lab
+  - Click **Continue**
+- Create accounts
+  - XOA ADMIN ACCOUNT
+    - Login: `admin`
+    - Password: `labboss`
+  - XOA SSH ACCOUNT
+    - Login: `xoa` (default)
+    - Password: `labboss`
+ - Click **Deploy**
+ - Wait *patiently* as the XOA deployment completes
+
 ## Log In and Apply Updates
 - Point your browser to the IP address of the XOA
 - Log in as username `admin` and password `labboss`
