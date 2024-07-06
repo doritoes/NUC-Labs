@@ -62,7 +62,7 @@ NOTES
   - From the left menu Click XOA > Updates
   - If an upgrade is available, click Upgrade and wait for the upgrade to complete
     - If it remains Disconnected for too long, try clicing Refresh to re-connect
-  - In Lab testing I had to upgrade two times
+  - In Lab testing there were two updates to apply; the second update required refresh the <ins>entire page</ins> afterwards
 
 # Build Your Own XO Server on XCP-ng
 The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build our own XO server using Ubuntu 22.04 right on this host.
@@ -84,51 +84,49 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
 - Under **Ubuntu 20.04** click **Install** to install the image
   - wait for the tasks to complete
     - monitor the process by clicking **Tasks** in the left menu
-    - note the Pool taks and the XO tasks being performed
+    - note the Pool tasks and the XO tasks being performed
 - Under **Ubuntu 20.04** click **Create**
-    - Click OK to accept the pool (there is only one)
+    - Click OK to accept the pool **xcp-ng-lab1** (there is only one)
     - Name: XO-Ubuntu
     - Description: XO on Ubuntu
     - vCPU's: 2 (default, same as VOA)
     - RAM: 2GB (default, same as VOA)
-    - You cannot change the disk size; we will increase is shortly
+    - You cannot change the disk size; we will increase it shortly
     - Select **Custom config**
       - In "User config" section:
         - add the line: `password: changeme`
         - you can optionally set the hostname here; be aware the "%" is index value, starting with "0"; if you uncomment the hostname line the hostname will be set to the "name" of the VM in XO with a zero after it (e.g., XO-Ubuntu0)
     - Click Show advanced settings
-      - Add check to **Auto power** on (this is important)
+      - Add check to **Auto power on** (this is important)
   - Click Create
 - Apply updates for 20.04
-  - Open the VM's Console
+  - Open the VM's Console (click the Console tab)
   - Log in as `ubuntu`/`changeme`
   - You will be prompted to change your password
   - `sudo apt update && sudo apt upgrade -y`
     - if you are prompted about updating a configuration file, select Y (update to the maintainer's version)
 - Remove vm-tools
-  - `sudo apt remove open-vm-tools -y`
+  - `sudo apt remove -y open-vm-tools
   - `sudo rm -r /etc/vmware-tools`
   - `sudo rm /etc/systemd/system/open-vm-tools.service`
   - `sudo rm /etc/systemd/system/vmtoolsd.service`
   - `sudo rm -r /etc/systemd/system/open-vm-tools.service.requires`
-  - `sudo apt autoremove`
-- Reboot
-  - `sudo reboot`
+  - `sudo apt autoremove -y`
+- Shut down the VM
+  - `sudo poweroff`
 - Increase storage to 20GB
-  - shut down the VM
-    - use the Web GUI to Stop it, or the console command `sudo poweroff`
   - On the VM's **Disks** tab click on the disk size `6 GiB` and enter `20` press enter
   - 6GB is not enough to do the distribution upgrade, much less run XO
 - Start the VM (click the Start icon in the Web GUI)
-- Perform a release upgrade
+- Perform a release upgrade (from 20.20 to 22.04 or whatever the latest version is)
   - Open the VM's Console
   - Log in as user `ubuntu` and the password you selected
   - `sudo do-release-upgrade`
-  - Enter `y` to continue when prompted
-  - Select `Yes` to allow service restarts
-  - You will be prompted to keep existing settings (N) or use the maintainer's settings (Y); for the new system generally you want the maintainer's version, but there is no real argument of one over the over
-  - Approve removing obsolete packages
-  - Approve rebooting the system
+    - Enter `y` to continue when prompted
+    - Select `Yes` to allow service restarts
+    - You will be prompted to keep existing settings (N) or use the maintainer's settings (Y); for the new system generally you want the maintainer's version, but there is no real argument of one over the over
+    - Approve removing obsolete packages
+    - Approve rebooting the system
 - Verify upgrade
   - Log in from the console
   - `cat /etc/os-release`
@@ -138,6 +136,23 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - Set the new hostname: `sudo hostnamectl set-hostname xo-ubuntu`
   - Optionally set the pretty name: `sudhostnamectl set-hostname "XO Ubuntu Server for managing XCP-ng" --pretty`
   - Confirm it has changed: `hostnamectl`
+- Install guest tools
+  - Connect the guest-tools.iso ("Select disk(s)...", select it from the dropdown)
+  - Open Terminal
+  - Mount the iso
+    - `sudo mount /dev/cdrom /media`
+    - `cd /media/Linux`
+  - Install the tools
+    - `sudo ./install.sh`
+    - you are prompted to enter your password
+    - you are prompted accept the change
+    - you are reminded to reboot
+  - Unmount the ISO
+    - `cd ~`
+    - `sudo umount /media`
+  - `sudo reboot`
+  - Eject guest-tools.iso
+  - Back in XO, the General tab will show the management tools are detected
 
 ## Install Xen Orchestra (XO) on the Ubuntu Server
 Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
