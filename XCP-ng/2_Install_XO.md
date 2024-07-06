@@ -51,6 +51,9 @@ NOTES
     - Password: `labboss`
  - Click **Deploy**
  - Wait *patiently* as the XOA deployment completes
+ - When *XOA deployment successful!* is displayed
+   - Click **Access XOA** to be redirected to the IP address of the XOA
+ - You will need to register the XOA separately; you will be "reminded" constantly to do this 
 
 ## Log In and Apply Updates
 - Point your browser to the IP address of the XOA
@@ -62,7 +65,7 @@ NOTES
   - In Lab testing I had to upgrade two times
 
 # Build Your Own XO Server on XCP-ng
-The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build own using Ubuntu 22.04 right on this host.
+The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build our own XO server using Ubuntu 22.04 right on this host.
 
 NOTE You can also build set up your XO server elsewhere, such as a VM on your Lab laptop
 
@@ -71,6 +74,7 @@ Overview
 - Add more disk space
 - Upgrade to Ubuntu 22.04
 - Install XO
+- Remove XOA
 
 ## Create New Ubuntu Server Using Hub
 The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 22.04 for this lab.
