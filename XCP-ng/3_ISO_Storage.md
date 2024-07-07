@@ -59,10 +59,10 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
 
 ## Connect XCP-ng to File Share
 1. Log in to XO
-2. From the left menu, click New > Storage
-    - Host: xcp-ng-lab1
-    - Name: ISO
-    - Description: installation media
+2. From the left menu, click **New** > **Storage**
+    - Host: **xcp-ng-lab1**
+    - Name: **ISO**
+    - Description: **installation media**
     - Select storage type:
       - ISO SR - SMB ISO
         - This is a file share on your NAS or your PC
@@ -71,9 +71,9 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
         - Enter username and password
         - Click Create
       - ISO SR - NFS ISO
-        - This is an NFS mount your NAS or a server
-        - Server: enter the NAS server IP
-        - NFS version: default NFS version
+        - This is an NFS mount your NAS or a server - remember your NFS server needs to know the client IP
+        - Server: **enter the NAS server IP**
+        - NFS version: *default NFS version*
         - <ins>Click the magnifying glass</ins> (populate the path dropdown)
         - Select the path from the dropdown (will auto populate)
         - Click Create
@@ -84,14 +84,14 @@ We will also demonstrate storing .iso files on the XCP-ng host, which you might 
 See references: https://xcp-ng.org/blog/2022/05/05/how-to-create-a-local-iso-repository-in-xcp-ng/
 
 1. Log in to XO
-2. From the left menu, click New > Storage
-    - Host: xcp-ng-lab1
-    - Name: LOCAL-ISO
-    - Description: installation media
+2. From the left menu, click **New** > **Storage**
+    - Host: **xcp-ng-lab1**
+    - Name: **LOCAL-ISO**
+    - Description: **installation media**
     - Select storage type:
-      - ISO SR - Local
-      - Path: /media
-    - Click Create
-3. From left menu, click Import > Disk
+      - **ISO SR - Local**
+      - Path: **/media**
+    - Click **Create**
+3. From left menu, click **Import** > **Disk**
 4. Select your freshly created ISOs SR
-5. Drag and drop your ISOs to upload them to the XO, click Import
+5. Drag and drop your ISOs to upload them to the XO, click **Import**
