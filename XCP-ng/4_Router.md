@@ -100,7 +100,7 @@ exit
   - nslookup a DNS name: `nslookup microsoft.com`
   - if it's not working, `route` and see if the default route is missing; reboot and try again.
 
-NOTE feel free to customize/change inside LAB subnet, the DNS server IP, time zone, etc.
+NOTE feel free to customize/change the inside LAB subnet, the DNS server IP, time zone, etc.
 
 ## Configure DHCP on the inside/LAN interface
 We use DHCP for this Lab. You can skip this if you plan on using all static IP addresses.
