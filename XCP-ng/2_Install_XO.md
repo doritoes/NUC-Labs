@@ -12,7 +12,7 @@ NOTES
 # Getting Started with Quick Deploy and XOA
 ## Option 1 - Quick Deploy
 - Point your browser to the IP address of the NUC
-  - Example: https://192.168.99.100
+  - Example: https://192.168.1.100
 - Under management tools, click Quick Deploy under Xen Orchestra
 - Login with the root password you set earlier
 - Leave the network settings at their defaults to use DHCP (later set up a DHCP reservation)
@@ -130,7 +130,7 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
 - Verify upgrade
   - Log in from the console
   - `cat /etc/os-release`
-  - confirm the version is now 22.04 LTS (Jammy Jellyfish)
+  - confirm the version is now 22.04 LTS (Jammy Jellyfish), or whatever the latest version is
 - Change hostname
   - View current hostname: `hostnamectl`
   - Set the new hostname: `sudo hostnamectl set-hostname xo-ubuntu`
@@ -138,13 +138,14 @@ The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 2
   - Confirm it has changed: `hostnamectl`
 - Install guest tools
   - Connect the guest-tools.iso ("Select disk(s)...", select it from the dropdown)
+    - if you have having trouble with a half-connected cdrom/dvd, power off the VM, eject the iso, and try again
   - Open Terminal
   - Mount the iso
     - `sudo mount /dev/cdrom /media`
     - `cd /media/Linux`
   - Install the tools
     - `sudo ./install.sh`
-    - you are prompted to enter your password
+    - you may be prompted to enter your password
     - you are prompted accept the change
     - you are reminded to reboot
   - Unmount the ISO
