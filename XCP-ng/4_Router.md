@@ -38,7 +38,7 @@ Or, if you created local storage, upload the ISO there.
 - Click Import
 
 # Create VyOS VM
-- From the left menu click New > VM
+- From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Other install media**
   - Name: **VyOS**
@@ -46,7 +46,7 @@ Or, if you created local storage, upload the ISO there.
   - CPU: **2 vCPU**
   - RAM: **1GB**
   - Topology: **Default behavior**
-  - Install: ISO/DVD: *Select the vyos ISO image you uploaded earlier*
+  - Install: ISO/DVD: *Select the VyOS ISO image you uploaded earlier*
   - Interfaces: Click **Add interface** to add a second interface
     - Network: from the dropdown select the **Inside** network you created earlier
   - Disks: Click Add disk
@@ -56,7 +56,7 @@ Or, if you created local storage, upload the ISO there.
   - Click **Create**
 - The details for the new VyOS VM are now displayed
   - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
-- Click Console to access the console command line
+- Click `Console` tab to access the console command line
 - Login as `vyos`/`vyos`
 - `install image`
 - Allow installation to continue with default values
@@ -65,7 +65,7 @@ Or, if you created local storage, upload the ISO there.
 - When done reboot: `reboot`
 - Eject the VyOS iso
 - Log back in with your updated password
-- Configure your router's "Internet" connection (to your Lab network via the host's ethernet interface)
+- Configure your router's "Internet" connection (vyosyour Lab network via the host's ethernet interface)
   - `configure`
   - `set interfaces ethernet eth0 address dhcp`
   - `set service ssh`
@@ -74,11 +74,11 @@ Or, if you created local storage, upload the ISO there.
   - `exit`
 - View your router's IP address
   - `show interfaces ethernet eth0 brief`
-- You can now configure your router from another device in your Lab using SSH to this IP address
+- You can now configure your router from another device in your Lab; SSH to this IP address
 
 # Configure Router
 IMPORTANT note the version is VyOS 1.5-rolling-2024xxxxxxxx, and the syntax has changed from previous versions you may be familiar with.
-- ssh to the router and login as user `vyos` and the password you selected
+- ssh to the router and login as user `vyos` with the password you selected
 - enter the configuration below
 ```
 configure
@@ -87,7 +87,7 @@ set interfaces ethernet eth1 address '192.168.100.254/24'
 set interfaces ethernet eth1 description 'INSIDE'
 set nat source rule 100 outbound-interface name 'eth0'
 set nat source rule 100 source address '192.168.100.0/24'
-set nat srouce rule 100 translation address 'masquerade'
+set nat source rule 100 translation address 'masquerade'
 set system host-name 'router'
 set system name-server '9.9.9.9'
 set system time-zone US/Eastern
@@ -141,14 +141,11 @@ exit
 ```
 
 # Xen Tools
-The VyOS image comes with vyos-xe-guest-utilities. However, it doesn't seem to work anymore.
+The VyOS image comes with vyos-xe-guest-utilities.
 
-Here is how to fix it:
-- `cd /etc/systemd/system/`
-- `sudo chmod +x /etc/systemd/system/xe-guest-utilities.service`
-- `sudo sytemctl start xe-guest-utilties`
+Here is how to enable it:
+- `sudo sytemctl start xe-guest-utilities`
 - `sudo sytemctl enable xe-guest-utilties`
+- `sudo sytemctl status xe-guest-utilties`
 
-If it's not sticking for you (lose it on reboot) try doing a "configure", "commit", "save", "exit" cycle after making the above changes.
-
-If you want to remove the tools: `sudo apt purge -y vyos-xe-guest-utilities`
+If you have a permissions issue, check the permissions on `/etc/systemd/system/xe-guest-utilities.service`
