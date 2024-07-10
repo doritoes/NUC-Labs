@@ -17,9 +17,9 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Install: ISO/DVD: *Select the Ubuntu 22.04 Desktop image you uploaded*
   - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
-  - Click Create
+  - Click **Create**
 - The details for the new VM are now displayed
-- Click Console
+- Click **Console** tab
 - Follow the Install wizard per usual
   - To remove the installation media, click the Eject icon
   - Press Enter to Reboot
