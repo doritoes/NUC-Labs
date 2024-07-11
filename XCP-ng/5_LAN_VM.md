@@ -107,7 +107,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - CPU: **1 vCPU**
   - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: Select the Ubuntu 22.04 Server image you uploaded
+  - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
   - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
   - Click Create
