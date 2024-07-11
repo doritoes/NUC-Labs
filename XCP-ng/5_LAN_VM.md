@@ -138,7 +138,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - `cd /media/Linux`
   - Install the tools
     - `sudo ./install.sh`
-    - you are prompted to enter your password
+    - you may be prompted to enter your password
     - you are prompted accept the change
     - you are reminded to reboot
   - Unmount the ISO
@@ -148,20 +148,22 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Eject guest-tools.iso
 - Test the VM
   - Updates
-    - `sudo apt update && sudo apt upgrade -y`
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y    `
     - accept the messages (default values OK)
 - Power down the VM
-  - 'sudo reboot' or use the XO stop icon
+  - 'sudo poweroff' or use the XO stop icon
 - Convert to a Template
   - Click Advanced tab > Convert to template
 - Re-create the VM from the template
-  - New VM
+  - New > VM
   - Pool: **xcg-ng-lab1**
   - Template: **ubuntu-server-lan**
+  - Name: **server-lan**
+  - Description: **Ubuntu serer on LAN network**
   - Interface: Note that it's set to **Inside**, which is what we want
   - Click **Create**
 - Log in at the console and examine the system
-  - What are the advantages of using DHCP in the lab for these templates? What is the downside for servers?
+  - What are the advantages of using DHCP in the lab for these templates? What is the downside of DHCP for servers?
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname server-lan`
@@ -180,8 +182,8 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - RAM: **4GB**
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows 10 iso you uploaded*
-  - Interfaces: select Inside from the dropdown
-  - Disks: **128GB** (default 32GB is too small to apply the latest updates)
+  - Interfaces: select **Inside** from the dropdown
+  - Disks: **128GB** (default 32GB is too small to apply the latest Windows updates)
   - Click **Create**
 - The details for the new VM are now displayed
 - Click Console
@@ -194,7 +196,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Activate Windows: Click **I don't have a product key**
   - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
   - Check the box then click **Next**
-  - Click Custom: **Install Windows only (advanced)**
+  - Click **Custom: Install Windows only (advanced)**
   - Accept the installation on Drive 0, click **Next**
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
@@ -204,22 +206,29 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - type this exactly, spacing matters
 - Click **Advanced** tab > **Convert to template**
 - Re-create the VM from the template
-  - New VM
+  - New > VM
   - Template: win10-lan
-  - Click Create
-  - Rename from the VM from win10-lan to win10-lan-ready
+  - Name: Rename from the VM from win10-lan to win10-lan-ready
+  - Description: leave the same
+  - Click **Create**
 - Log in complete the setup wizard
   - Set region and keyboard layout, skip second keyboard layout
-  - Select Set up for personal use (feel free to experiment)
-  - Click Offline account then click Limited experience
-  - User: lab
+  - Select **Set up for personal use** (feel free to experiment)
+  - Click **Offline account** then click **Limited experience**
+  - User: **lab**
   - Password: select a password
   - Create security questions for this account: be creative
-  - Click Not now
-  - Privacy: disable all the settings and then click Accept
-  - Experience: be creative and pick one, then click Accept (I choose Business)
-  - Cortana: Click Not now
-  - Close "Browse the web with the best performing browser on Windows"
+  - Click **Not now**
+  - Privacy: *disable all the settings* and then click **Accept**
+  - Experience: be creative and pick one, then click **Accept* (I chose Business)
+  - Cortana: Click **Not now**
+  - At the screen "Browse the web with the best performing browser on Windows"
+    - Click **Continue**
+    - Click **Start without your data**
+    - <ins>Uncheck</ins> bring over your data and continue
+    - Click **Continue without this data**
+    - <ins>Uncheck</ins> Make your Microsoft experience more useful and continue
+    - Flick Finish
 - Install Guest Tools (you may not want to!)
   - The Windows tools are not included on the guest-tools.iso
   - Reference: https://xcp-ng.org/docs/guests.html#windows
@@ -231,35 +240,34 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboots included)
-- Enable RDP
+- Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
+  - Slide to enable and Confirm
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
-- Rename from the VM from win10-lan to win10-lan-ready
 - Convert win10-lan-ready to a template
 - Questions to ponder:
   - What are the differences between the two templates?
   - Does this affect the Activation required timers?
 - Optionally create another VM from each template and experiment
-  - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta.
+IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. These instructions have not been tested and are assumed to be <ins>incorrect and out of data<ins>/
 - From the left menu click New > VM
-  - Select the pool
-  - Template: Other Install Media
-  - Name: win11-lan
-  - Description: Windows 11 on LAN network
-  - CPU: 2 vCPU
-  - RAM: 4GB
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Other Install Media**
+  - Name: **win11-lan**
+  - Description: **Windows 11 on LAN network**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: Select the Windows 11 iso you uploaded
-  - Interfaces: select Inside from the dropdown
+  - Install: ISO/DVD: *Select the Windows 11 iso you uploaded*
+  - Interfaces: select **Inside** from the dropdown
   - Disks: Add a disk **128GB** (Windows 11 minimum is 64GB; 128GB for lab, 256GB for average user)
-  - Click Create
+  - Click **Create**
 - The details for the new VM are now displayed
-- Click Console
+- Click **Console** tab
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
@@ -269,7 +277,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
     - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
     - Possible culprits: "Enable TPM 2.0 on your PC"
     - XCP-ng only supports VTPMs on pools running 8.3 or later (8.3 is currently in beta)
-  - NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME
+  - **NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME**
   - Check the box then Next
   - Click Custom: Install Windows only (advanced)
   - Accept the installation on Drive 0
@@ -279,21 +287,22 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - `shutdown /t 0 /s`
 - Click Advanced > Convert to template
 - Re-create the VM from the template
-  - New VM
-  - Template: win11-lan
-  - Interface: Note that it's set to Inside, which is what we want
-  - Click Create
+  - New > VM
+  - Template: **win11-lan**
+  - Name: **win11-lan-ready**
+  - Interface: Note that it's set to **Inside**, which is what we want
+  - Click **Create**
 - Log in complete the setup wizard
   - Set region and keyboard layout, skip second keyboard layout
   - Select Set up for personal use (feel free to experiment)
-  - Click Offline account then click Limited experience
-  - User: lab
-  - Password: select a password
+  - Click **Offline account** then click **Limited experience**
+  - User: **lab**
+  - Password: *select a password*
   - Create security questions for this account: be creative
-  - Click Not now
-  - Privacy: disable all the settings and then click Accept
-  - Experience: be creative and pick one, then click Accept (I choose Business)
-  - Cortana: Click Not now
+  - Click **Not now**
+  - Privacy: disable all the settings and then click **Accept**
+  - Experience: be creative and pick one, then click **Accept** (I chose Business)
+  - Cortana: **Click Not now**
   - Close "Browse the web with the best performing browser on Windows"
 - Install Guest Tools (you may not want to!)
   - The Windows tools are not included on the guest-tools.iso
@@ -309,7 +318,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 - Enable RDP
   - Start > Settings > System > Remote Desktop
 - Change the hostname to win-11-lan-ready
-  - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+  - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
 - Rename from the VM from win11-lan to win11-lan-ready
 - Convert win11-lan-ready to a template
@@ -320,7 +329,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 2022 Server
-This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM
+This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
 - From the left menu click New > VM
   - Select the pool
   - Template: Windows Server 2022 (64-bit)
@@ -336,7 +345,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - The details for the new VM are now displayed
 - Click Console
 - You will be prompted to press any key to boot from CD to DVD
-  - Press any key
+  - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
@@ -410,11 +419,11 @@ See references:
 
 Steps:
 - Create a Ubuntu server to run Guacamole
-  - New VM
-  - Template: ubuntu-server-lan
-  - Name: guacamole
-  - Description: Guacamole server on LAN network
-  - Click Create
+  - New > VM
+  - Template: **ubuntu-server-lan**
+  - Name: **guacamole**
+  - Description: *Guacamole server on LAN network*
+  - Click **Create**
 - Log in to the console on the new guacamole VM
   - Change hostname
     - View current hostname: `hostnamectl`
