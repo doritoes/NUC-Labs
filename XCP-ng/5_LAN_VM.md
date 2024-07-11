@@ -80,7 +80,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm that this can't be undone
   - Notice the VM is now gone from the list
-  - Notie that no Snapshots can be recovered
+  - Notice that no Snapshots can be recovered after its removed
 - Re-create the VM from the template
   - New > VM
   - Pool: **xcp-ng-lab1**
