@@ -25,8 +25,8 @@ References:
 ```
 - Restart Apache Tomcat
   - `sudo systemctl restart tomcat9`
-- Connect on to the guacamole changing the port to 8443
-  - Example: `https://<IPADDRESS>:8443`
+- Connect on to guacamole, changing the port to 8443
+  - Example: `https://<IPADDRESS>:8443/guacamole`
 
 NOTE If you created port forwarding on the Lab router to be able to access the guacamole from outside, you will need to add or modify it for port 8443.
 
@@ -36,7 +36,7 @@ NOTE If you created port forwarding on the Lab router to be able to access the g
 ~~~
 <security-constraint>
 <web-resource-collection>
-<web-resource-name>Protected Context</web-resource-name>
+<web-resource-name>Protected Content</web-resource-name>
 <url-pattern>/*</url-pattern>
 </web-resource-collection>
 <!-- auth-constraint goes here if you requre authentication -->
