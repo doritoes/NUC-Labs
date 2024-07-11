@@ -543,6 +543,7 @@ mysql-password: password
     - Disable Authentication: leave default = unchecked
     - Ignore server certificate: **CHECK THIS**
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
+  - NOTE Modify the 192.168.100.40 address to the IP address of the guacamole server
   - `configure`
   - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'`
   - `set nat destination rule 70 inbound-interface name 'eth0'`
