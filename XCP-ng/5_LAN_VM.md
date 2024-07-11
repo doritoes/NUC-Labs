@@ -382,23 +382,24 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
-  - Slide to Enable Remote Desktop and acces the message
+  - Slide to Enable Remote Desktop then accept the message
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM
 - Convert server2022-lan-ready to a template
 - Now let's prepare the template VM for cloning
   - must perform generalization to remove the security identifier (SID)
+  - allows us to rapidly clone more servers
   - create a new VM from the template win10-lan-ready
     - New > VM
     - Template: server2022-lan-ready
     - Name: server2022-lan-prep
-    - Click Create
+    - Click **Create**
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
   - Convert server2022-lan-prep to template
-  - From now on, create Windows Server VMs from server2022-lan-prep
+  - From now on, create Windows Server VMs from themplate server2022-lan-prep
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
   - Does this affect the 180-day evaluation timer?
