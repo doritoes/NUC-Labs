@@ -478,10 +478,13 @@ Steps:
   - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
 - Create a Guacamole Database, User and Scheme
   - Copy [create-database.sql](create-database.sql)
-    - `cat create-database.sql | mysql -u root -p`
+    - `cat create-database.sql | sudo mysql`
+    - Old way (not Unix sockets): `cat create-database.sql | mysql -u root -p`
   - Import SQL Schema Files and Create Properties Files For Guacamole
     - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
-    - `cat *.sql | mysql -u root -p guac_db`
+    - `cat *.sql | sudo mysql -p guac_db`
+    - press enter (no password) when prompted for the password
+    - Old way (not Unix sockets) : `cat *.sql | mysql -u root -p guac_db`
 - Configure Guacamole properties (new file)
   - sudo vi /etc/guacamole/guacamole.properties
 ```
@@ -511,8 +514,9 @@ mysql-password: password
   - `sudo systemctl restart guacd`
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
-  - http://server-ip:8080/guacamole
-  - Login as guacadmin/guacadmin
+  - `http://server-ip:8080/guacamole`
+    - If your connection is being directed to https, it will be "Unable to connect". See [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+  - Login as `guacadmin`/`guacadmin`
   - REMEMBER the hotkey to escape a session is control-alt-shift
   - Tips for connection to Windows 10 / Server 2022
     - Protocol: RDP
