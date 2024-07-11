@@ -1,22 +1,23 @@
 # Convert Windows Server to Domain Controller
 NOTE A Windows Server evaluation version configured as a domain controller <ins>cannot be licensed and converted to production</ins>.
 
-IMPORTANT Always use a fixed or static IP for a domain controller.
+IMPORTANT <ins>Always</ins> use a fixed or static IP for a domain controller.
 
 # Create the Server VM
-- From the left menu click New > VM
-  - Select the pool
-  - Template: server2022-lan-prep
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **server2022-lan-prep**
   - Name: server2022dc
   - Description: Domain controller on LAN network
   - CPU: **2** vCPU
   - RAM: **4**GB
   - Topology: Default behavior
-  - Click Create
+  - Click **Create**
 - The details for the new VM are now displayed
-- Click Console
-- Answer the language and local messages
+Click **Console** tab
+- Answer the language and locale messages
 - Select a password for the local Administrator
+- Log in
 - Accept the network discovery message
 - Close the Server Manager promotion for Azure Arc
 - Close the Server Manager
@@ -31,18 +32,17 @@ IMPORTANT Always use a fixed or static IP for a domain controller.
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboot if needed)
-- Enable RDP
-  - Start > Settings > System > Remote Desktop
-- Change the hostname to win-10-lan-ready
+- Change the hostname to server2022dc
   - From administrative powershell
     - `Rename-Computer -NewName server2022dc`
     - `Restart-Computer`
 
 # Configure Network Settings to be Static
-Set the static IP address and point DNS settings to itself (it's a domain controller).
-- Open an administrative powershell
-  - `New-NetIPAddress -IPAddress 192.168.100.10 -DefaultGateway 192.168.100.254 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-  - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIncex -ServerAddresses 192.168.100.10`
+- Log in
+- Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
+  - Open an administrative powershell
+    - `New-NetIPAddress -IPAddress 192.168.100.10 -DefaultGateway 192.168.100.254 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIncex -ServerAddresses 192.168.100.10`
 
 # Configure as Domain Controller
 - Open an administrative powershell
