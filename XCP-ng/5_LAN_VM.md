@@ -457,7 +457,7 @@ Steps:
   - `sudo systemctl enable guacd`
   - `sudo systemctl status guacd`
 - Install the Guacamole Web App
-  - `wget https://downloads.apache.org/guacamole/1.5.4/binary/guacamole-1.5.5.war`
+  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war`
   - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
 - Configure Apache Guacamole Database Authentication
   - `sudo mysql_secure_installation`
