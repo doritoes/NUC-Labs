@@ -73,26 +73,25 @@ References:
 
 Steps:
 - Create OUs
-- New-ADOrganizationalUnit -Name "Corp" -Path "DC=xcpng,DC=lab"
-- New-ADOrganizationalUnit -Name "Support" -Path "OU=Corp,DC=yourdomain,DC=com"
-- New-ADOrganizationalUnit -Name "Development" -Path "OU=Corp,DC=yourdomain,DC=com"
-- New-ADOrganizationalUnit -Name "Sales" -Path "OU=Corp,DC=yourdomain,DC=com"
-- New-ADOrganizationalUnit -Name "Marketing" -Path "OU=Corp,DC=yourdomain,DC=com"
-- New-ADOrganizationalUnit -Name "Finance" -Path "OU=Corp,DC=yourdomain,DC=com"
+  - New-ADOrganizationalUnit -Name "Corp" -Path "DC=xcpng,DC=lab"
+  - New-ADOrganizationalUnit -Name "Support" -Path "OU=Corp,DC=yourdomain,DC=com"
+  - New-ADOrganizationalUnit -Name "Development" -Path "OU=Corp,DC=yourdomain,DC=com"
+  - New-ADOrganizationalUnit -Name "Sales" -Path "OU=Corp,DC=yourdomain,DC=com"
+  - New-ADOrganizationalUnit -Name "Marketing" -Path "OU=Corp,DC=yourdomain,DC=com"
+  - New-ADOrganizationalUnit -Name "Finance" -Path "OU=Corp,DC=yourdomain,DC=com"
 - Copy the [domain_users.csv](domain_users.csv) file to `C:\domain_users.csv`
-  - the CSV file must be in STF-8 encoding
-- Copy the [domain_users.csv](domain_users.ps1) file to `C:\domain_users.ps1`
-- From powershell:
-  - `$import_users = Import-CSV -Path c:\domain_users.csv`
-  -` $import_users | ForEach-Object {New-ADUser -Name $($_.First + " " + $_.Last) -GivenName $_.First -Surname $_.Last -Department $_.Department -State $_.State -EmployeeID $_.EmployeeID -DisplayName $($_.First + " " + $_.Last) -Office $_.OfficeName -UserPrincipalName $_.UserPrincipalName -SamAccountName $_.samAccountName -AccountPassword $(ConvertTo-SecureString $_.Password -AsPlainText -Force) -City $_.City -StreetAddress $_.Address -Title $_.Title -Company $_.Company -EMailAddress $_.Email -Path $_.OU -Enabled $True}`
-
-add users to groups
-
-add the tech group to dhcp adminstrators, etc.?
-
-add elevated account
+  - the CSV file must be in UTF-8 encoding
+- Copy the [domain_users.ps1](domain_users.ps1) file to `C:\domain_users.ps1`
+- Run the script
+  - `powershell.exe -File C:\domain_users.ps1 -ExecutionPolicy Bypass`
+- Add the network manager's second (elevated) account domain permissions
+  - `Add-ADGroupMember -Identity "Domain Admins" -Members "Juliette.Larocco2"`
+- Make "Support" users account operators
+  - Copy the [access.ps1](access.ps1) file to `C:\access.ps1`
+  - `powershell.exe -File C:\access.ps1 -ExecutionPolicy Bypass`
 
 # Next Steps
+## DHCP Server
 Converting from DHCP by the router to using the domain controller for DHCP is out of the scope of this lab. It's a worthy challenge, however.
 
 ## Join Windows Systems to the Domain
