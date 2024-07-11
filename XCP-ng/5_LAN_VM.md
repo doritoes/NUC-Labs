@@ -6,7 +6,7 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
 IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
 
 # Ubuntu Desktop
-- From the left menu click New > VM
+- From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Ubuntu Jammy Jellyfish 22.04**
   - Name: **ubuntu-desktop-lan**
@@ -330,21 +330,21 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
-- From the left menu click New > VM
-  - Select the pool
-  - Template: Windows Server 2022 (64-bit)
-  - Name: server2022-lan
-  - Description: Windows Server 2022 on LAN network
-  - CPU: 1 vCPU (will peg the CPU a lot; if you need better response add a vCPU)
-  - RAM: 2GB
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Windows Server 2022 (64-bit)**
+  - Name: **server2022-lan**
+  - Description: **Windows Server 2022 on LAN network**
+  - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
+  - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: Select the Windows Server 2022 evaluation iso you uploaded
-  - Interfaces: select Inside from the dropdown
+  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
+  - Interfaces: select *Inside* from the dropdown
   - Disks: **40GB** (default 32GB)
-  - Click Create
+  - Click **Create**
 - The details for the new VM are now displayed
-- Click Console
-- You will be prompted to press any key to boot from CD to DVD
+- Click **Console** tab
+- You will be prompted to Press any key to boot from CD to DVD
   - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
@@ -361,11 +361,10 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - `shutdown /t 0 /s`
 - Click Advanced > Convert to template
 - Re-create the VM from the template
-  - New VM
+  - New > VM
   - Template: server2022-lan
   - Name: server2022-lan-ready
-  - Interface: Note that it's set to Inside, which is what we want
-  - Click Create
+  - Click **Create**
 - After booting, set password for Administrator
 - Install Guest Tools (you may not want to!)
   - The Windows tools are not included on the guest-tools.iso
@@ -378,19 +377,21 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Login in
+  - The small keyboard icon allowss you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
-- Change the hostname to win-10-lan-ready
+  - Slide to Enable Remote Desktop and acces the message
+- Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM
-- Make sure the VM is named "win10-lan-ready" in XO
-- Convert win10-lan-ready to a template
+- Convert server2022-lan-ready to a template
 - Now let's prepare the template VM for cloning
   - must perform generalization to remove the security identifier (SID)
   - create a new VM from the template win10-lan-ready
-    - New VM
-    - Template: server2022-lan
+    - New > VM
+    - Template: server2022-lan-ready
     - Name: server2022-lan-prep
     - Click Create
   - Open the console to server2022-lan-prep and log in
@@ -400,13 +401,12 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - From now on, create Windows Server VMs from server2022-lan-prep
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
-  - What 
   - Does this affect the 180-day evaluation timer?
   - What are the advantages of each template?
 - Optionally create VMs from each template and experiment
   - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
 
-To convert a Windows to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
+To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
 
 # Guacamole Server
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
