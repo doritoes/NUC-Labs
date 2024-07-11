@@ -1,4 +1,4 @@
-# Install Lab VM
+# Install LAN  VM
 Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router. Instructions are provided for a few different systems you might want to install, along with a Guacamole server to manage them without XO.
 
 NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
