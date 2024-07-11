@@ -23,9 +23,9 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Follow the Install wizard per usual
   - To remove the installation media, click the Eject icon
   - Press Enter to Reboot
-- Log in to the console and completing the first time wizard
+- Log in to the console and complete the first time wizard
   - Skip, Skip, No, Next, Done
-  - Optionally let the Software Updater "Install Now"; we will be doing that again from the command line later
+- Optionally let the Software Updater "Install Now"; we will be doing updates later from the command line later
   - However, you will need to let it finish before we can install the guest tools
 - Install guest tools
   - Connect the guest-tools.iso (select it from the dropdown)
