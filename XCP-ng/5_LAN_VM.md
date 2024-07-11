@@ -87,7 +87,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Template: **ubuntu-desktop-lan**
   - Leave name and description with their template values
   - Interface: Note that it's set to **Inside**, which is what we want
-  - Click Create
+  - Click **Create**
 - Click on the Console tab and Log back in examine the system
   - What are the advantages of using DHCP in the lab for these templates?
   - Are the guest tools detected?
@@ -110,7 +110,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
   - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
-  - Click Create
+  - Click **Create**
 - The details for the new VM are now displayed
 - Click the Console tab and follow the Install wizard per usual
   - READ CAREFULLY the Guided storage configuration
