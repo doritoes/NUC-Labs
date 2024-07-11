@@ -66,6 +66,32 @@ Click **Console** tab
   - `Add-DnsServerResourceRecordA -Name "router" -ZoneName "xncpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.254" -TimeToLive 01:00:00`
   - `Add-DnsServerResourceRecordPtr -Name "254" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "router.xcpng.lab"
 
+# Create Users in the Domain
+References:
+- https://blog.netwrix.com/2018/06/07/how-to-create-new-active-directory-users-with-powershell/
+- https://www.fakepersongenerator.com/
+
+Steps:
+- Create OUs
+- New-ADOrganizationalUnit -Name "Corp" -Path "DC=xcpng,DC=lab"
+- New-ADOrganizationalUnit -Name "Support" -Path "OU=Corp,DC=yourdomain,DC=com"
+- New-ADOrganizationalUnit -Name "Development" -Path "OU=Corp,DC=yourdomain,DC=com"
+- New-ADOrganizationalUnit -Name "Sales" -Path "OU=Corp,DC=yourdomain,DC=com"
+- New-ADOrganizationalUnit -Name "Marketing" -Path "OU=Corp,DC=yourdomain,DC=com"
+- New-ADOrganizationalUnit -Name "Finance" -Path "OU=Corp,DC=yourdomain,DC=com"
+- Copy the [domain_users.csv](domain_users.csv) file to `C:\domain_users.csv`
+  - the CSV file must be in STF-8 encoding
+- Copy the [domain_users.csv](domain_users.ps1) file to `C:\domain_users.ps1`
+- From powershell:
+  - `$import_users = Import-CSV -Path c:\domain_users.csv`
+  -` $import_users | ForEach-Object {New-ADUser -Name $($_.First + " " + $_.Last) -GivenName $_.First -Surname $_.Last -Department $_.Department -State $_.State -EmployeeID $_.EmployeeID -DisplayName $($_.First + " " + $_.Last) -Office $_.OfficeName -UserPrincipalName $_.UserPrincipalName -SamAccountName $_.samAccountName -AccountPassword $(ConvertTo-SecureString $_.Password -AsPlainText -Force) -City $_.City -StreetAddress $_.Address -Title $_.Title -Company $_.Company -EMailAddress $_.Email -Path $_.OU -Enabled $True}`
+
+add users to groups
+
+add the tech group to dhcp adminstrators, etc.?
+
+add elevated account
+
 # Next Steps
 Converting from DHCP by the router to using the domain controller for DHCP is out of the scope of this lab. It's a worthy challenge, however.
 
