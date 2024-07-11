@@ -47,4 +47,4 @@ NOTE If you created port forwarding on the Lab router to be able to access the g
 ~~~
 - `sudo systemctl restart tomcat9`
 - Clear your browser's cookies and cache to remove any cached redirects
-- Confirm the redirect from port http and 8080 to https and port 8443 is working
+- Confirm the redirect is working from http and port 8080 to https and port 8443
