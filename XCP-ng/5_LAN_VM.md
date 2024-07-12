@@ -409,6 +409,8 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 
 To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
 
+To configure a Domain File Server, see [Appendix - Create Windows File Server](Appendix-Windows_File_Server.md)
+
 # Guacamole Server
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
 
