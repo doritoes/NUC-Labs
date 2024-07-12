@@ -111,7 +111,7 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-
   - Scroll down and under Related settings, click Rename this PC (advanced)
   - Click Network ID
     - This comuter is part of a business network ...
-    - My company users a network with a domain
+    - My company user a network with a domain
     - Username: Administrator
     - Password: the domain controller's user "Administrator" password
     - Domain name: XCPNG.LAB
