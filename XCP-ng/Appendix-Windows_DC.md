@@ -63,7 +63,7 @@ Click **Console** tab
 
 # Create DNS records
 - Open an administrative powershell
-  - `Add-DnsServerResourceRecordA -Name "router" -ZoneName "xncpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.254" -TimeToLive 01:00:00`
+  - `Add-DnsServerResourceRecordA -Name "router" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.254" -TimeToLive 01:00:00`
   - `Add-DnsServerResourceRecordPtr -Name "254" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "router.xcpng.lab"
 
 # Create Users in the Domain
@@ -110,7 +110,7 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-
   - Start > Settings > System > About
   - Scroll down and under Related settings, click Rename this PC (advanced)
   - Click Network ID
-    - This comuter is part of a business network [...]
+    - This comuter is part of a business network ...
     - My company users a network with a domain
     - Username: Administrator
     - Password: the domain controller's user "Administrator" password
