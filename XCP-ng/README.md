@@ -58,24 +58,15 @@ References:
 ## Install OPNsense firewall
 [Install OPNsense](6_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
 
-## Install Windows Servers
-Install Windows servers on the pen-testing network.
-
-## Install Kali Linux VM
+## Set Up Pen Testing Lab
+### Install Kali Linux VM
 Install Kali Linux VM on the pen-testing network.
 
-## Create Vulnerable Windows Machine
+### Create Vulnerable Windows Machine
 See http://cyberforensic.net/labs/AutoPatch_Removal.html
 
-## Create Vulnerable Linux Machine
+### Create Vulnerable Linux Machine
 See https://www.netspi.com/blog/technical-blog/network-pentesting/linux-hacking-case-studies-part-5-building-a-vulnerable-linux-server/
-## Convert Pentest Network to TOR Only
-Use OPNsense to only allow access to the Internet over TOR
-
-## Create Ubuntu Desktop FAH VM
-Demonstrate Internet access works over TOR (only)
-
-## Create Guacamole Server
 
 ## Install Check Point Firewall
 https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
