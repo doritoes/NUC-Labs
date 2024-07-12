@@ -96,7 +96,10 @@ Converting from DHCP by the router to using the domain controller for DHCP is ou
 
 ## Join Windows Systems to the Domain
 https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-a-computer-to-a-domain
-
+- Make sure the computer has the name you want
+  - Rename using the the GUI or the usual powershell commmands
+    - `Rename-Computer -NewName tingtings`
+    - `Restart-Computer`
 - Windows 10 system
   - Open Network & Settings
   - Under Ethernet click Properties
@@ -115,8 +118,8 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-
     - Username: Administrator
     - Password: the domain controller's user "Administrator" password
     - Domain name: XCPNG.LAB
-    - If the computer doesn't have an account? Add the name and domain again
-    - Enter the credentials of the account with permissions to join the domain
+    - If the computer doesn't have an account you will be prompted to enter the computer name and domain again
+    - Next, enter the credentials of the account with permissions to join the domain
       - User name: Administrator
       - Password: the domain controller's user "Administrator" password
       - Domain name: XCPNG.LAB
@@ -125,6 +128,18 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-
   - Restart the computer
   - Log in as the domain Administrator account
   - DNS won't work correctly in this state. Either configure the domain controller to do DHCP and intergrate with DNS, or set static IPs on your workstations and add them using the powershell or the administratives tools
+  - Optionally install RSAT: Remote Access Management Tools
+    - Manage Optional Features
+    - Add a Feature
+    - Search for RSAT
+    - Select all the features you want
+    - Click Add
+    - Click Start then type MMC
+      - Some of the MMC snapins are listed
+    - Open MMC (Start > Run for example)
+      - File > Add/Remove Snap-in
+      - Add snap-ins you desire (e.g. Active Directory Users and Computers)
+    - Start > Remote Access Management
 - Windows Server
   - Open Network & Settings
   - Under Ethernet click Properties
