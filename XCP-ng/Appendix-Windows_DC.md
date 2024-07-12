@@ -159,7 +159,7 @@ https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-
     - Change to Use the following DNS server addresses: 192.168.100.10
     - Close the windows
   - Meanwhile, run this on the domain controller:
-    -  `Add-DnsServerResourceRecordA -Name "server1" -ZoneName "xncpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.11" -TimeToLive 01:00:00`
+    -  `Add-DnsServerResourceRecordA -Name "server1" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.11" -TimeToLive 01:00:00`
   - `Add-DnsServerResourceRecordPtr -Name "11" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "server1.xcpng.lab"
   - Start > Settings > System > About
   - Scroll down and under Related settings, click Rename this PC (advanced)
