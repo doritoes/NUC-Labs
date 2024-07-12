@@ -71,90 +71,9 @@ Since we are using the router's DHCP server, not Windows DHCP, we will create DN
 
 # Create a File Shares
 Overview:
-- icacls command sets permissions on the E: drive.
-- New-SmbShare creates the network share named "SharedFolder".
-- New-PSDrive creates a persistent mapped drive letter (G:) for the share.
-- -Persist makes the mapping survive reboots.
-- -Force overwrites an existing drive mapping (if any).
-- -Path specifies the network share path.
+- Create folders on E:
+- Secure each folder
+- Create network shares
+- Map network drives
 
-### Create Folders for Each Share
-- On the E: drives create folders for each share
-~~~
-$folderNames = @("Marketing", "Finance", "Development", "IT", "Public")
-$rootPath = "E:\"
-# Loop through each subdirectory name and create them
-foreach ($folderName in $folderNames) {
-  $subPath = Join-Path -Path $rootPath -ChildPath $folderName
-  New-Item -Path $subPath -ItemType Directory
-}
-
-### Create G: Drive for Public
-1. Grant Share Permissions
-~~~
-Install-WindowsFeature -Name RSAT-AD-Powershell
-Import-Module -Name 
-# Get existing ACL (optional)
-$acl = Get-Acl E:\Public
-# Create access control entry (ACE) for Everyone with Full Control
-$identity = (Get-ADGroup -Identity "Domain Users").DistinguishedName  # Get Domain Users distinguished name
-$ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "Allow")
-# Add the ACE to the existing ACL (or create a new one if not retrieved)
-if ($acl) {
-  $acl.AddAccessRule($ace)
-} else {
-  $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "Allow")
-}
-# Set the new ACL on the folder
-Set-Acl E:\Public -AclObject $acl
-~~~ 
-    - `icacls E:\Public /grant Everyone:(OI)(CI)F`
-    - Grant Full Control to Everyone
-2. Create Share
-    - `New-SmbShare -Name "SharedFolder" -Path E:\ -Force`
-    - Create share even if it exists
-3. Persistently Map G: drive for uers
-    - `mapshareddrive.ps1`
-```
-New-PSDrive -Name G -Persist -Force -Path "\\fileserver.xcpng.lab\SharedFolder"
-```
-    - run the script
-
-
-### Create H: Drive for Marketing
-
-### Create I: Drive for Finance
-
-### Create J: Drive for Development
-To create a share for a specific OU
-1. Grant Share Permissions
-~~~
-icacls E:\Development /grant "Domain Users:(OI)(CI)RX"  # Grant Read & Execute to Domain Users (temporary for access)
-icacls E:\Development /grant "xcpng.lab\Development Users:(OI)(CI)F"  # Grant Full Control to Development OU users
-~~~
-    - We grant temporary Read & Execute permissions to "Domain Users" to allow initial access for assigning permissions.
-    - We then grant "Full Control" permissions to the "Development Users" group within the "xcpng.lab" domain.
-2. Remove temporary permissions
-~~~
-icacls E:\Development /remove "Domain Users:(OI)(CI)RX" 
-~~~
-
-3. Persistently Map G: drive for uers
-    - `mapshareddrive.ps1`
-```
-New-PSDrive -Name G -Persist -Force -Path "\\fileserver.xcpng.lab\SharedFolder"
-```
-    - run the script
-
-### Create K: Drive for IT
-
-
-
-
-# Create a Shared Drive
-
-# Create DNS records
-- Open an administrative powershell
-  - `Add-DnsServerResourceRecordA -Name "router" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.254" -TimeToLive 01:00:00`
-  - `Add-DnsServerResourceRecordPtr -Name "254" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "router.xcpng.lab"
-
+[shared_drives.ps1](shared_drives.ps1)
