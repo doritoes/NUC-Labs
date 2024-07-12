@@ -24,7 +24,7 @@ New-SmbShare -Name "Public" -Path E:\Public
 
 # Marketing Folder - H Drive
 $groupName = "MarketingGroup"
-$groupOU = "OU=Corp,DC=xcpng,DC=lab"
+$groupOU = "OU=Marketing,OU=Corp,DC=xcpng,DC=lab"
 $groupPath = "$groupName,$groupOU"
 try {
     Get-ADGroup -Identity $groupPath
@@ -34,11 +34,12 @@ try {
     Write-Host "Group $groupName created."
 }
 $ouPath = "OU=Marketing,OU=Corp,DC=xcpng,DC=lab"
-$groupPath = "MarketingGroup,OU=Corp,DC=xcpng,DC=lab"
-Get-ADUser -Filter * -SearchBase $ouPath | Add-ADGroupMember -Identity $groupPath
+$groupPath = "MarketingGroup,OU=Marketing,OU=Corp,DC=xcpng,DC=lab"
+$usersToAdd = Get-ADUser -Filter * -SearchBase $ouPath | Select-Object -ExpandProperty SamAccountName
+Add-ADGroupMember -Identity $groupName -Members $usersToAdd
 
 $acl = Get-Acl E:\Marketing
-$identity = (Get-ADGroup -Identity "MarketingGroup,OU=Corp,DC=xcpng,DC=lab").Sid
+$identity = (Get-ADGroup -Identity "MarketingGroup").Sid
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "InheritOnly","Allow")
 if ($acl) {
   $acl.AddAccessRule($ace)
@@ -48,6 +49,7 @@ if ($acl) {
 Set-Acl E:\Marketing -AclObject $acl
 New-SmbShare -Name "Marketing" -Path E:\Marketing
 
+%%%%%%%%% Continue revising here %%%%%%%%%
 # Finance Folder - I Drive
 $acl = Get-Acl E:\Finance
 $identity = (Get-ADGroup -Identity "OU=Finance,OU=Corp,DC=xcpng,DC=lab").Sid
