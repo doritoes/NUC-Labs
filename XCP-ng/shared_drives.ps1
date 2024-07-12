@@ -20,14 +20,25 @@ if ($acl) {
   $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "InheritOnly","Allow")
 }
 Set-Acl E:\Public -AclObject $acl
-
-# Create share even if it exists
-New-SmbShare -Name "SharedFolder" -Path E:\Public -Force`
-New-PSDrive -Name G -Persist -Force -Path "\\fileserver.xcpng.lab\Public"
+New-SmbShare -Name "Public" -Path E:\Public
 
 # Marketing Folder - H Drive
+$groupName = "MarketingGroup"
+$groupOU = "OU=Corp,DC=xcpng,DC=lab"
+$groupPath = "$groupName,$groupOU"
+try {
+    Get-ADGroup -Identity $groupPath
+    Write-Host "Group $groupName already exists."
+} catch {
+    New-ADGroup -Name $groupName -GroupScope Global -SamAccountName $groupName -Path $groupOU
+    Write-Host "Group $groupName created."
+}
+$ouPath = "OU=Marketing,OU=Corp,DC=xcpng,DC=lab"
+$groupPath = "MarketingGroup,OU=Corp,DC=xcpng,DC=lab"
+Get-ADUser -Filter * -SearchBase $ouPath | Add-ADGroupMember -Identity $groupPath
+
 $acl = Get-Acl E:\Marketing
-$identity = (Get-ADGroup -Identity "OU=Marketing,OU=Corp,DC=xcpng,DC=lab").Sid
+$identity = (Get-ADGroup -Identity "MarketingGroup,OU=Corp,DC=xcpng,DC=lab").Sid
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "InheritOnly","Allow")
 if ($acl) {
   $acl.AddAccessRule($ace)
@@ -35,11 +46,7 @@ if ($acl) {
   $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "InheritOnly","Allow")
 }
 Set-Acl E:\Marketing -AclObject $acl
-
-# Create share even if it exists
-New-SmbShare -Name "Marketing" -Path E:\Marketing -Force`
-New-PSDrive -Name H -Persist -Force -Path "\\fileserver.xcpng.lab\Marketing"
-
+New-SmbShare -Name "Marketing" -Path E:\Marketing
 
 # Finance Folder - I Drive
 $acl = Get-Acl E:\Finance
@@ -51,10 +58,7 @@ if ($acl) {
   $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "InheritOnly","Allow")
 }
 Set-Acl E:\Finance -AclObject $acl
-
-# Create share even if it exists
-New-SmbShare -Name "Finance" -Path E:\Finance -Force`
-New-PSDrive -Name I -Persist -Force -Path "\\fileserver.xcpng.lab\Finance"
+New-SmbShare -Name "Finance" -Path E:\Finance
 
 # Development Folder - J Drive
 $acl = Get-Acl E:\Development
@@ -66,7 +70,5 @@ if ($acl) {
   $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "InheritOnly","Allow")
 }
 Set-Acl E:\Development -AclObject $acl
-
-# Create share even if it exists
 New-SmbShare -Name "Development" -Path E:\Development -Force`
-New-PSDrive -Name I -Persist -Force -Path "\\fileserver.xcpng.lab\Development"
+
