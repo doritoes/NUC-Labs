@@ -77,3 +77,5 @@ Overview:
 - Map network drives
 
 [shared_drives.ps1](shared_drives.ps1)
+
+`powershell.exe -File C:\shared_drives.ps1 -ExecutionPolicy Bypass`
