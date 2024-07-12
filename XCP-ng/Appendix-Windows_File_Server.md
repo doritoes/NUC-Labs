@@ -59,7 +59,7 @@ Since we are using the router's DHCP server, not Windows DHCP, we will create DN
 - Log in to the domain controller
 - Open an administative powershell prompt
   - `Add-DnsServerResourceRecordA -Name "fileserver" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.11" -TimeToLive 01:00:00`
-  - `Add-DnsServerResourceRecordPtr -Name "11" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "fileserver.xcpng.lab"
+  - `Add-DnsServerResourceRecordPtr -Name "11" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "fileserver.xcpng.lab"`
 
 # Configure the Second Disk
 - Start > Create and format hard disk partitions
@@ -79,16 +79,36 @@ Overview:
 - -Path specifies the network share path.
 
 ### Create Folders for Each Share
-- On the E: drives create folders named
-  - Marketing
-  - Finance
-  - Development
-  - IT
-  - Public
+- On the E: drives create folders for each share
+~~~
+$folderNames = @("Marketing", "Finance", "Development", "IT", "Public")
+$rootPath = "E:\"
+# Loop through each subdirectory name and create them
+foreach ($folderName in $folderNames) {
+  $subPath = Join-Path -Path $rootPath -ChildPath $folderName
+  New-Item -Path $subPath -ItemType Directory
+}
 
 ### Create G: Drive for Public
 1. Grant Share Permissions
-    - `icacls E:\ /grant Everyone:(OI)(CI)F`
+~~~
+Install-WindowsFeature -Name RSAT-AD-Powershell
+Import-Module -Name 
+# Get existing ACL (optional)
+$acl = Get-Acl E:\Public
+# Create access control entry (ACE) for Everyone with Full Control
+$identity = (Get-ADGroup -Identity "Domain Users").DistinguishedName  # Get Domain Users distinguished name
+$ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "Allow")
+# Add the ACE to the existing ACL (or create a new one if not retrieved)
+if ($acl) {
+  $acl.AddAccessRule($ace)
+} else {
+  $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "Allow")
+}
+# Set the new ACL on the folder
+Set-Acl E:\Public -AclObject $acl
+~~~ 
+    - `icacls E:\Public /grant Everyone:(OI)(CI)F`
     - Grant Full Control to Everyone
 2. Create Share
     - `New-SmbShare -Name "SharedFolder" -Path E:\ -Force`
