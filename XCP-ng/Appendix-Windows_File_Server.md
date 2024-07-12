@@ -1,4 +1,4 @@
-# Addendix - Create Windows File Server
+# Appendix - Create Windows File Server
 
 IMPORTANT <ins>Always</ins> use a fixed or static IP for an imortant server like a file server
 
