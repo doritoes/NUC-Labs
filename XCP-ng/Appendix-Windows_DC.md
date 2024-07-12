@@ -89,6 +89,14 @@ Steps:
 - Make "Support" users account operators
   - Copy the [access.ps1](access.ps1) file to `C:\access.ps1`
   - `powershell.exe -File C:\access.ps1 -ExecutionPolicy Bypass`
+- Make "Support" and "Development" users members of "Remote Desktop Users" group
+  - [rdp_users.ps1](rdp_users.ps1)
+- Important: By default RDP access is limited to the Administrators group
+  - You also need to open gpmc.msc on the domain controller and edit the Default Domain Policy object
+  - Navigate to Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\User Rights Assignment\Allow logon through Remote Desktop Services
+    - Enable the policy
+    - Add the group Remote Desktop Users group and/or a user to the list
+    - Allow time for the policy to applied and distributed
 
 # Next Steps
 ## DHCP Server
