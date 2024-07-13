@@ -9,18 +9,20 @@ References:
 # Configure Networking
 - Log in to Xen Orchestra (XO)
 - Configure networks
-  - Click Home from the left menu then click Hosts
-  - Click on the host you configured (i.e., xcp-xg-lab1)
-  - Click the Network tab
-  - Under Private networks click Manage
-    - Click Add a Network
-      - Interface: eth0
-      - Name: Pentesting
-      - Description: Inside Pentesting Network
-      - MTU: leave blank (default 1500)
-      - VLAN: 200
-      - NBD: No NBD Connection (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
-    - Under the list of PIFs (physical interfaes), for the new Pentesting interface, click Status and change to Disconnected
+  - From the left menu click **Home** > **Hosts**
+  - Click on the host you configured (i.e., **xcp-ng-lab1**)
+  - Click the **Network** tab
+  - Under Private networks click **Manage**
+    - Click **Add a Network**
+      - Interface: **eth0**
+      - Name: **Pentesting**
+      - Description: **Inside Pentesting Network**
+      - MTU: *leave blank* (default 1500)
+      - VLAN: **200**
+      - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
+      - Click **Create network**
+    - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
+    - Under the list of PIFs (physical interfaes), find the new Pentesting interface, click **Status** to  disconnect it from your the eth0 interface
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
@@ -45,46 +47,46 @@ Or, if you created local storage, upload the ISO there.
 - Click Import
 
 # Create OPNsense VM
-- From the left menu click New > VM
-  - Select the pool
-  - Template: Other install media
-  - Name: opnsense
-  - Description: opnsense pentesting lab firewall
-  - CPU: 4 vCPU
-  - RAM: 2GB
-  - Topology: Default behavior
-  - Install: ISO/DVD: Select the OPNsense ISO image
+- From the left menu click **New** > **VM**
+  - Select the pool **xcgp-ng-lab1**
+  - Template: **Other install media**
+  - Name: **opnsense**
+  - Description: *opnsense pentesting lab firewall*
+  - CPU: **4 vCPU**
+  - RAM: **2GB**
+  - Topology: *Default behavior*
+  - Install: ISO/DVD: Select the OPNsense ISO image you uploaded
   - First Interfaces:
-    - Network: from the dropdown select the pool-wide hot network (eth0)
-  - Second Interface: Click Add interface
-    - Network: from the dropdown select the Pentesting network you created earlier
-  - Disks: Click Add disk
-    - Add 20GB disk
-  - Click Show advanced settings
-    - Check Auto power on
-  - Click Create
+    - Network: from the dropdown select the **pool-wide host network (eth0)**
+  - Second Interface: Click **Add interface**
+    - Network: from the dropdown select the **Pentesting** network you created earlier
+  - Disks: Click **Add disk**
+    - Add **20GB** disk
+  - Click **Show advanced settings**
+    - Check **Auto power on**
+  - Click **Create**
 - The details for the new VyOS VM are now displayed
-- Click the Network tab
+- Click the **Network** tab
   - Next to each interface is a small settings icon with a blue background
-  - For every interface click the icon then disable TX checksumming
-- Click Console and watch as the system boots
+  - For every interface click the icon then <ins>disable TX checksumming</ins>
+- Click **Console** tab and watch as the system boots
 
 # Configure OPNsense
-- Log in as installer/opnsense
-- Select the keymapp
-- Install (ZFS); it is the best choice for the Lab
+- Log in as `installer`/`opnsense`
+- Select the keymap
+- **Install (ZFS)** - it is the best choice for the Lab
   - stripe - no redundancy (for our Lab this is fine)
-  - uses slightly more RAM
+  - uses slightly more RAM for the ARC (adaptive replacement cache) process
   - much more stable under power failure or hard reboots
 - Accept the disk to install on
   - You need to check the box (use space bar)
-- Accept recommended swap partition
-- Select Yes to continue and wait patiently
+  - Accept erasing the disk
+- Accept recommended swap partition if prompted
 - Select a root password when prompted
 - Select Complete Install
-- Eject the ISO
+- Eject the ISO (click the icon on Console tab)
 - Wait for the system to boot
-- Log in as root with the selected password (default is opnsense)
+- Log in as root with the selected password (default password is `opnsense`)
 - Option 1) Assign interfaces
   - LAGGs: No
   - VLANs: No
