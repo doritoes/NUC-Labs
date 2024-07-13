@@ -86,7 +86,7 @@ Or, if you created local storage, upload the ISO there.
 - Select Complete Install
 - Eject the ISO (click the icon on Console tab)
 - Wait for the system to boot
-- Log in as root with the selected password (default password is `opnsense`)
+- Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) Assign interfaces
   - LAGGs: No
   - VLANs: No
