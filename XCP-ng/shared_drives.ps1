@@ -26,7 +26,6 @@ foreach ($folderName in $folderNames) {
 
 #### Public Folder - G Drive
 $acl = Get-Acl E:\Public
-$acl = $acl | Where-Object {$_.AccountName -ne "Everyone" -or ($_.AccountName -eq "Everyone" -and $_.AccessRight -ne "Read")}
 $identity = (Get-ADGroup -Identity "Domain Users").Sid
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
 if ($acl) {
@@ -37,8 +36,9 @@ if ($acl) {
 Set-Acl E:\Public -AclObject $acl
 New-SmbShare -Name "Public" -Path E:\Public
 Grant-SmbShareAccess -Name "Public" -AccountName "Domain Users" -AccessRight Full -Force
+Revoke-SMBShareAccess -Name "Public" -AccountName "Everyone" -Force
 
-# Marketing Folder - H Drive
+#### Marketing Folder - H Drive
 $groupName = "MarketingGroup"
 $groupOU = "OU=Marketing,OU=Corp,DC=xcpng,DC=lab"
 $groupPath = "$groupName,$groupOU"
@@ -55,7 +55,7 @@ $usersToAdd = Get-ADUser -Filter * -SearchBase $ouPath | Select-Object -ExpandPr
 Add-ADGroupMember -Identity $groupName -Members $usersToAdd
 
 $acl = Get-Acl E:\Marketing
-$identity = (Get-ADGroup -Identity "MarketingGroup").Sid
+$identity = (Get-ADGroup -Identity $groupName).Sid
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
 if ($acl) {
   $acl.AddAccessRule($ace)
@@ -64,7 +64,8 @@ if ($acl) {
 }
 Set-Acl E:\Marketing -AclObject $acl
 New-SmbShare -Name "Marketing" -Path E:\Marketing
-Grant-SmbShareAccess -Name "Marketing" -AccountName "MarketingGroup" -AccessRight Full -Force
+Grant-SmbShareAccess -Name "Marketing" -AccountName $groupName -AccessRight Full -Force
+Revoke-SMBShareAccess -Name "Public" -AccountName "Everyone" -Force
 
 #### Finance Folder - I Drive
 $groupName = "FinanceGroup"
@@ -82,14 +83,18 @@ $groupPath = "FinanceGroup,OU=Finance,OU=Corp,DC=xcpng,DC=lab"
 $usersToAdd = Get-ADUser -Filter * -SearchBase $ouPath | Select-Object -ExpandProperty SamAccountName
 Add-ADGroupMember -Identity $groupName -Members $usersToAdd
 
+$acl = Get-Acl E:\Finance
 $identity = (Get-ADGroup -Identity "FinanceGroup").Sid
-$acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
+$ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
+if ($acl) {
+  $acl.AddAccessRule($ace)
+} else {
+  $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
+}
 Set-Acl E:\Finance -AclObject $acl
 New-SmbShare -Name "Finance" -Path E:\Finance
-# Grant-SmbShareAccess -Name "Finance" -AccountName "FinanceGroup" -AccessRight Full -Force
-# Block-SmbShareAccess -Name "Finance" -AccountName "Everyone" -Force
-# Deny all access for ITGroup and other groups?
-
+Grant-SmbShareAccess -Name "Finance" -AccountName $groupName -AccessRight Full -Force
+Revoke-SMBShareAccess -Name "Public" -AccountName "Everyone" -Force
 
 #### Development Folder - J Drive
 $groupName = "DevelopmentGroup"
@@ -107,17 +112,21 @@ $groupPath = "DevelopmentGroup,OU=Development,OU=Corp,DC=xcpng,DC=lab"
 $usersToAdd = Get-ADUser -Filter * -SearchBase $ouPath | Select-Object -ExpandProperty SamAccountName
 Add-ADGroupMember -Identity $groupName -Members $usersToAdd
 
+$acl = Get-Acl E:\Development
 $identity = (Get-ADGroup -Identity "DevelopmentGroup").Sid
-$acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
+$ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
+if ($acl) {
+  $acl.AddAccessRule($ace)
+} else {
+  $acl = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
+}
 Set-Acl E:\Development -AclObject $acl
 New-SmbShare -Name "Development" -Path E:\Development
-# Grant-SmbShareAccess -Name "Development" -AccountName "FinanceGroup" -AccessRight Full -Force
-# Block-SmbShareAccess -Name "Development" -AccountName "Everyone" -Force
-# Deny all access for ITGroup and other groups?
+Grant-SmbShareAccess -Name "Development" -AccountName "DevelopmentGroup" -AccessRight Full -Force
+Revoke-SMBShareAccess -Name "Development" -AccountName "Everyone" -Force
 
 #### IT Folder - K Drive
-$acl = Get-Acl E:\Public
-$acl = $acl | Where-Object {$_.AccountName -ne "Everyone" -or ($_.AccountName -eq "Everyone" -and $_.AccessRight -ne "Read")}
+$acl = Get-Acl E:\IT
 
 $groupName = "ITGroup"
 $groupOU = "OU=Support,OU=Corp,DC=xcpng,DC=lab"
@@ -129,6 +138,10 @@ try {
     New-ADGroup -Name $groupName -GroupScope Global -SamAccountName $groupName -Path $groupOU
     Write-Host "Group $groupName created."
 }
+$ouPath = "OU=Support,OU=Corp,DC=xcpng,DC=lab"
+$groupPath = "ITGroup,OU=Development,OU=Corp,DC=xcpng,DC=lab"
+$usersToAdd = Get-ADUser -Filter * -SearchBase $ouPath | Select-Object -ExpandProperty SamAccountName
+Add-ADGroupMember -Identity $groupName -Members $usersToAdd
 
 $ace = New-Object System.Security.AccessControl.FileSystemAccessRule ($identity, "FullControl", "ContainerInherit,ObjectInherit", "None","Allow")
 if ($acl) {
@@ -138,5 +151,6 @@ if ($acl) {
 }
 Set-Acl E:\Public -AclObject $acl
 New-SmbShare -Name "IT" -Path E:\IT
-# Grant-SmbShareAccess -Name "IT" -AccountName "Support" -AccessRight Full -Force
-# Block-SmbShareAccess -Name "IT" -AccountName "Everyone" -Force
+Grant-SmbShareAccess -Name "IT" -AccountName "ITGroup" -AccessRight Full -Force
+Grant-SmbShareAccess -Name "IT" -AccountName "Domain Users" -AccessRight Full -Force
+Revoke-SMBShareAccess -Name "IT" -AccountName "Everyone" -Force
