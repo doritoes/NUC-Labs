@@ -15,13 +15,6 @@ Import-Module -Name ActiveDirectory
 # try replacing ACL with ACL on developer, finanace, marketing
 ######
 
-function Add-NTFSPermission($path, $identity, $rights) {
-    $acl = Get-Acl $path
-    $rule = New-Object System.Security.AccessControl.FileSystemAccessRule $identity, $rights, "Deny"
-    $acl.SetAccessRule($rule)
-    Set-Acl $path $acl
-}
-
 # Create Folders on E:\
 $folderNames = @("Marketing", "Finance", "Development", "IT", "Public")
 $rootPath = "E:\"
