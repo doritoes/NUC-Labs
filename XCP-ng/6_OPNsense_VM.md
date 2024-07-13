@@ -87,71 +87,78 @@ Or, if you created local storage, upload the ISO there.
 - Eject the ISO (click the icon on Console tab)
 - Wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
-- Option 1) Assign interfaces
-  - LAGGs: No
-  - VLANs: No
-  - WAN interface: xn0
-  - LAN interface: xn1
+- Option 1) **Assign interfaces**
+  - LAGGs: **No**
+  - VLANs: **No**
+  - WAN interface: **xn0**
+  - LAN interface: **xn1**
   - Optional (OPT1): just press enter
   - Confirm
-- Option 2) Set interface IP address
-  - Configure LAN
-    - DHCP: No
-    - IPv4 address: 192.168.101.254
-    - Subnet mask CIDR: 24
+- Option 2) **Set interface IP address**
+  - Configure **LAN**
+    - DHCP: **No**
+    - IPv4 address: **192.168.101.254**
+    - Subnet mask CIDR: **24**
     - Press enter to confirm no upstream gateway on the LAN interface
     - IPv6: No two times, and press enter to confirm no IPv6 address
-    - Enable DHCP server on LAN: Yes
-    - Client address start: 192.168.101.20
-    - Client address end: 192.168.101.250
-    - Change web GUI protocol to http: No
-    - Generate new self-signed web GUI certificate: Yes
+    - Enable DHCP server on LAN: **Yes**
+    - Client address start: **192.168.101.20**
+    - Client address end: **192.168.101.250**
+    - Change web GUI protocol to http: **No**
+    - Generate new self-signed web GUI certificate: **Yes**
     - Restore web GUI access defaults: No
-  - Configure WAN
-    - DHCP: Yes
+  - Configure **WAN**
+    - DHCP: **Yes**
     - IPv6: No, and press enter to confirm no IPv6 address
-    - Change web GUI protocol to HTTP: No
-    - Generate a new slef-signed web GUI certificate: No
-    - Restore web GUI access defaults: No
+    - Change web GUI protocol to HTTP: **No**
+    - Generate a new slef-signed web GUI certificate: **No**
+    - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
   - Unbuntu Desktop or Windows 10 is perfect
+  - From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
+  - Name: **pentest-workstation*
+  - <ins>Change</ins> the Interface to **Pentesting**
+  - Click **Create**
 - Initial firewall configuration
   - From VM's browser, log in to firewall https://192.168.101.254
+    - User `root` and password you selected
   - Follow the Wizard
     - General information
-      - Hostname: pentestfw
-      - Domain: xcpng.lab
-      - Primary DNS Server: 8.8.8.8 (we want unfilted DNS for this network)
-      - Secondary DNS Server: 8.8.4.4
+      - Hostname: *pentestfw**
+      - Domain: **xcpng.lab**
+      - Primary DNS Server: **8.8.8.8** (we want unfilted DNS for this network)
+      - Secondary DNS Server: **8.8.4.4**
       - <ins>Uncheck</ins> Override DNS
-      - Click Next
+      - Click **Next**
     - Time server information
       - Leave the default time server
       - Optionally adjust the Timezone
-      - Click Next
+      - Click **Next**
     - Configure WAN Interface
       - Review the information, default values are OK
-      - Click Next
+      - Click **Next**
     - Configure LAN Interface
-      - Review and click Next
+      - Review and click *Next**
     - Set Root Password
-      - Click Next to keep the existing password
-    - Click Reload
+      - Click **Next** to keep the existing password
+    - Click **Reload**
   - Update OPNsense
-    - Click System > Firmware > Status
-    - Click Check for Updates
+    - Click **System** > **Firmware** > **Status**
+    - Click **Check for Updates**
     - Read and accept the information provided
-    - Scroll to the bottom of the Updates tab and click Update
+    - Scroll to the bottom of the Updates tab and click **Update**
     - Wait for updates and the reboot
     - Log back in and check if there are any more updates
   - Install Xen guest utilities
-    - Plugins
-      - os-xen - click + to install
-      - Reboot (Power > Reboot?
-    - In XO, look at the opnsense VM general tab. The management agent is now detected.
+    - Sytem > Firmware > Plugins
+      - os-xen - click "+" to install
+      - Reboot (Power > Reboot?)
+    - In XO, look at the opnsense VM general tab; management agent is now detected
 - Configure Firewall Rules
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
-    - Explanation: By default RFC1928 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
+    - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
 
 # Configure TOR
 References:
@@ -163,9 +170,9 @@ Steps:
 - From VM's browser, check the public IP address without TOR
 - Log in to firewall https://192.168.101.254
 - System > Firmware > Plugins
-  - os-tor - click + to install
+  - os-tor - click "+" to install
 - Refresh the page
-- Services > Tor
+- Click **Services** > **Tor** > **Configuration**
 - Click Configuration
   - General Tab
     - Enable: Yes
@@ -176,8 +183,8 @@ Steps:
       - Confirm Control Port: 9051
       - Confirm Transparent port: 9040
       - Confirm Transparent DNS port: 9053
-  - Click Save
-- Firewall > LAN
+  - Click **Save**
+- **Firewall** > **Rules** > **LAN**
   - Add top rule Allow LAN net to This Firewall IP for TCP/IP DNS
   - Add following rule DENY to ANY for TCP/IP DNS
   - Click Apply Changes
