@@ -70,12 +70,38 @@ Since we are using the router's DHCP server, not Windows DHCP, we will create DN
   - Follow the wizard and set the volume label to **NETDRIVE**
 
 # Create a File Shares
+Since you already created the users in the Domain Controller (DC), we can now focus on setting up the file shares.
+
 Overview:
 - Create folders on E:
 - Secure each folder
 - Create network shares
 - Map network drives
 
-[shared_drives.ps1](shared_drives.ps1)
+Steps:
+- Copy [shared_drives.ps1](shared_drives.ps1) to C:\
+- Open administrative powershell shell
+- `powershell.exe -File C:\shared_drives.ps1 -ExecutionPolicy Bypass`
 
-`powershell.exe -File C:\shared_drives.ps1 -ExecutionPolicy Bypass`
+# Increasing File Share Size
+- Power off the file server `fileserver`
+- Open XO and select the VM fileserver
+- Click Disks tab
+- Change the second disk from 100GB to 200GB
+- Power on the VM
+- Log in as the domain administrator or local administrator
+- Start > Create and format hard disk partitions
+- Notice Disk 1 now has 100GB of unallocated space
+- Right-click NETDRIVE (E:) and then Click Extend Volume
+- Follow the prompts
+
+# Using NAS Storage (SLOW)
+- New > Storage
+- Host: **xcp=ng-lab1**
+- Storage Name: **Slow Storage**
+- Description: **Slow NAS storage**
+- Select Storage Type:
+  - Under VDI SR you will find options
+    - NFS, SMB, iSCSI, etc
+    - My Lab testing focused on NFS storage
+- My Lab is only using 1Gb links, though the NUC and NAS support 2.5Gb link, so I'm only using this storage for data disks, not boot disks
