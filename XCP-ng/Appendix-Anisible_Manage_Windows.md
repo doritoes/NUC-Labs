@@ -7,16 +7,16 @@ Requirements:
 - PowerShell 5.1 or newer
   - $PSVersionTable.PSVersion
   - Windows Server 2022 has PS 5.1
-  - Script to upgarde these: https://github.com/jborean93/ansible-windows/blob/master/scripts/Upgrade-PowerShell.ps1
+  - Script to upgrade these: https://github.com/jborean93/ansible-windows/blob/master/scripts/Upgrade-PowerShell.ps1
 - .NET 4.0 or newer
 
 Important details:
-- The best way to use Ansible is a domain evenironment with everything configured using GPO (group policy objects)
-- In this lab we will use a quick setup on indivudual machines
+- The best way to use Ansible is a domain environment with everything configured using GPO (group policy objects)
+- In this lab we will use a quick setup on individual machines
 
 # Install Ansible on Linux
 For this Lab we can install Ansible on a Desktop or Server.
-- `sudo apt update && sodo apt install -y ansible`
+- `sudo apt update && sudo apt install -y ansible`
 
 # WinRM Method
 This is a quick example for setting up a single device. No GPO is used
