@@ -70,7 +70,7 @@ Or, if you created local storage, upload the ISO there.
 - The details for the new VyOS VM are now displayed
 - Click the **Network** tab
   - Next to each interface is a small settings icon with a blue background
-  - For every interface click the icon then <ins>disable TX checksumming</ins>
+  - For every interface click the gear icon then <ins>disable TX checksumming</ins>
 - Click **Console** tab and watch as the system boots
 
 # Configure OPNsense
