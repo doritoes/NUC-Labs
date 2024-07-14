@@ -1,7 +1,7 @@
 # Install OPNsense firewall
 OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
 
-IMPORTANT Be sure to <ins>disable TX checksumming</ins> onthe network interfaces connected to the firewall as noted below.
+IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
 References:
 - https://www.youtube.com/watch?v=KecQ4AZ-RBo
@@ -24,7 +24,7 @@ References:
       - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
       - Click **Create network**
     - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-    - Under the list of PIFs (physical interfaes), find the new Pentesting interface, click **Status** to  disconnect it from your the eth0 interface
+    - Under the list of PIFs (physical interfaces), find the new Pentesting interface, click **Status** to  disconnect it from your the eth0 interface
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
@@ -112,10 +112,10 @@ Or, if you created local storage, upload the ISO there.
     - DHCP: **Yes**
     - IPv6: No, and press enter to confirm no IPv6 address
     - Change web GUI protocol to HTTP: **No**
-    - Generate a new slef-signed web GUI certificate: **No**
+    - Generate a new self-signed web GUI certificate: **No**
     - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
-  - Unbuntu Desktop or Windows 10 is perfect
+  - Ubuntu Desktop or Windows 10 is perfect
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
@@ -129,7 +129,7 @@ Or, if you created local storage, upload the ISO there.
     - General information
       - Hostname: *pentestfw**
       - Domain: **xcpng.lab**
-      - Primary DNS Server: **8.8.8.8** (we want unfilted DNS for this network)
+      - Primary DNS Server: **8.8.8.8** (we want unfiltered DNS for this network)
       - Secondary DNS Server: **8.8.4.4**
       - <ins>Uncheck</ins> Override DNS
       - Click **Next**
@@ -153,7 +153,7 @@ Or, if you created local storage, upload the ISO there.
     - Wait for updates and the reboot
     - Log back in and check if there are any more updates
   - Install Xen guest utilities
-    - Sytem > Firmware > Plugins
+    - System > Firmware > Plugins
       - os-xen - click "+" to install
       - Reboot (Power > Reboot > Yes)
     - In XO, look at the opnsense VM general tab; management agent is now detected
@@ -206,7 +206,7 @@ Steps:
       - Click the arrow icon to the right of the first rule to move it to the top
     -  Allow LAN net to This Firewall IP for TCP/IP DNS
   -  Add a second rule just below it
-    - Action: Blick
+    - Action: Block
     - Quick: Checked
     - Interface: LAN
     - Direction: in
@@ -248,17 +248,18 @@ Steps:
   - You should see "Congratulations. This browser is configured to use Tor."
   - Having issues connecting to the Internet?
     - If may take a moment for the Tor circuits to be build
-      - Services > Tor > Diagnostis > Circuits
+      - Services > Tor > Diagnostics > Circuits
     - Is DNS working from the command line, but you don't have web access?
       - check the NAT: Port Forward rule <ins>carefully<ins>
       - check Tor configuration
     - restart Tor: Lobby > Dashboard > Under services, find the restart button next to tor
 
 # Test TOR access
+- From VM's browser, check the public IP address <ins>with</ins> TOR
+  - http://ipchicken.com
 - Try updating your VM's OS
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
-
 
 # Confirm privacy
 TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
