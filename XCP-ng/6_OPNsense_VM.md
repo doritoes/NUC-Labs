@@ -119,7 +119,7 @@ Or, if you created local storage, upload the ISO there.
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
-  - Name: **pentest-workstation*
+  - Name: **pentest-workstation**
   - <ins>Change</ins> the Interface to **Pentesting**
   - Click **Create**
 - Initial firewall configuration
