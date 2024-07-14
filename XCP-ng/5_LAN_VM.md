@@ -159,7 +159,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Pool: **xcg-ng-lab1**
   - Template: **ubuntu-server-lan**
   - Name: **server-lan**
-  - Description: **Ubuntu serer on LAN network**
+  - Description: **Ubuntu server on LAN network**
   - Interface: Note that it's set to **Inside**, which is what we want
   - Click **Create**
 - Log in at the console and examine the system
@@ -317,7 +317,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
-- Change the hostname to win-11-lan-ready
+- Change the hostname to win11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
 - Rename from the VM from win11-lan to win11-lan-ready
@@ -377,7 +377,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Login in
-  - The small keyboard icon allowss you to send a Ctrl-Alt-Delete
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
   - Yes, allow the server to be discovered by other hosts on the network
 - Apply Windows Updates (reboots included)
 - Enable RDP
@@ -399,7 +399,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
   - Convert server2022-lan-prep to template
-  - From now on, create Windows Server VMs from themplate server2022-lan-prep
+  - From now on, create Windows Server VMs from the template server2022-lan-prep
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
   - Does this affect the 180-day evaluation timer?
