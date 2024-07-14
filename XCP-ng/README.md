@@ -30,7 +30,7 @@ Materials:
   - NUC10FNH (BXNUC10i7FNH1) ([specs](https://www.intel.com/content/dam/support/us/en/documents/intel-nuc/NUC10i357FN_TechProdSpec.pdf))
   - 32GB RAM (64GB max)
   - 2TB SSD
-  - TIP From BIOS disable the SDHC card slot, since XCP doesn't have drivers for it
+  - TIP From BIOS disable the SDHC card slot, since XCP-ng doesn't have drivers for it
   - TIP Running a hypervisor and the NUC might be a reason to disable the feature to disable the "Fan off when cool" feature; by default the fan will stop for temperatures under 40C
 - USB sticks
   - 1 USB stick 8GB or more for installation of XCP-ng
