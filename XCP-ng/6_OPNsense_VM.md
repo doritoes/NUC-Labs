@@ -1,5 +1,7 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via ToR.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor.
+
+IMPORTANT Be sure to <ins>disable TX checksumming</ins> the network interfaces connected to the firewall as noted below.
 
 References:
 - https://www.youtube.com/watch?v=KecQ4AZ-RBo
