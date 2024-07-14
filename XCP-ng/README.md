@@ -58,6 +58,8 @@ References:
 ## Install OPNsense firewall
 [Install OPNsense](6_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
 
+IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted.
+
 ## Set Up Pen Testing Lab
 ### Install Kali Linux VM
 Install Kali Linux VM on the pen-testing network.
