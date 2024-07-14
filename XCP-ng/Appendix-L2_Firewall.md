@@ -1,9 +1,14 @@
 # Appendix - L2 Firewall
 OPNsense supports a "transparent bridge", which is elsewhere called a Layer 2 (L2) firewall. A Layer 2 firewall does not perform routing nor NAT. It is deployed betweek two devices on the same LAN, filtering traffic without creating different subnets.
 
-However, attempts to reproduce the tutorial were not immediately successful.
+💣However, attempts to reproduce the tutorial were not immediately successful.
+- Need to try a new approach based on https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
-Reference: https://docs.opnsense.org/manual/how-tos/transparent_bridge.html
+References:
+- https://docs.opnsense.org/manual/how-tos/transparent_bridge.html
+- https://www.zenarmor.com/docs/network-security-tutorials/how-to-configure-transparent-filtering-bridge-on-opnsense
+
+See also: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
 Warnings:
 - L2 firewall not compatible with traffic shaping
@@ -197,6 +202,7 @@ Concerns:
 - The documenation has the user set the PC to the subnet that the managment IP is on
   - this allows managment of the firewall, but did allow access to the Internet
 - Setting the IP address statically on the VM to match what the DHCP server would have given me did not work either. Traffic over the bridge didn't work.
+- A related How-To gives clues on how it might work: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
 # Next Steps
 Once the bridge is working, tune the firewall rules on [bridge] interface
