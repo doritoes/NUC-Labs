@@ -39,7 +39,7 @@ NOTES
   - Login: **root**
   - Password: *enter the password you set earlier*
 - Click **Continue**
-- Confiure storage and network
+- Configure storage and network
   - Default storage and DHCP for the lab
   - Click **Continue**
 - Create accounts
@@ -61,7 +61,7 @@ NOTES
 - Apply Updates
   - From the left menu Click XOA > Updates
   - If an upgrade is available, click Upgrade and wait for the upgrade to complete
-    - If it remains Disconnected for too long, try clicing Refresh to re-connect
+    - If it remains Disconnected for too long, try clicking Refresh to re-connect
   - In Lab testing there were two updates to apply; the second update required refresh the <ins>entire page</ins> afterwards
 
 # Build Your Own XO Server on XCP-ng
@@ -79,6 +79,7 @@ Overview
 ## Create New Ubuntu Server Using Hub
 The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 22.04 for this lab.
 
+Steps:
 - Log in to the XOA web page/portal
 - Click Hub from menu on the left
 - Under **Ubuntu 20.04** click **Install** to install the image
