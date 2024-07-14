@@ -1,5 +1,5 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
 
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> onthe network interfaces connected to the firewall as noted below.
 
@@ -160,12 +160,14 @@ Or, if you created local storage, upload the ISO there.
 - Configure Firewall Rules
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
+  - Optionally change the IPv6 allow rule from Pass to Block
 
 # Configure TOR
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
 - https://cybernomad.online/dark-web-building-a-tor-gateway-7a7dfa45884f
 - https://www.youtube.com/watch?v=4K2YuWp2GB4
+- https://forum.opnsense.org/index.php?topic=15097.0
 
 Steps:
 - From VM's browser, check the public IP address without TOR
@@ -256,3 +258,8 @@ Steps:
 - Try updating your VM's OS
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
+
+
+# Confirm privacy
+TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
+
