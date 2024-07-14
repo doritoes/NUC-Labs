@@ -1,7 +1,7 @@
 # Install OPNsense firewall
 OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor.
 
-IMPORTANT Be sure to <ins>disable TX checksumming</ins> the network interfaces connected to the firewall as noted below.
+IMPORTANT Be sure to <ins>disable TX checksumming</ins> onthe network interfaces connected to the firewall as noted below.
 
 References:
 - https://www.youtube.com/watch?v=KecQ4AZ-RBo
@@ -57,7 +57,7 @@ Or, if you created local storage, upload the ISO there.
   - CPU: **4 vCPU**
   - RAM: **2GB**
   - Topology: *Default behavior*
-  - Install: ISO/DVD: Select the OPNsense ISO image you uploaded
+  - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interfaces:
     - Network: from the dropdown select the **pool-wide host network (eth0)**
   - Second Interface: Click **Add interface**
@@ -83,7 +83,6 @@ Or, if you created local storage, upload the ISO there.
 - Accept the disk to install on
   - You need to check the box (use space bar)
   - Accept erasing the disk
-- Accept recommended swap partition if prompted
 - Select a root password when prompted
 - Select Complete Install
 - Eject the ISO (click the icon on Console tab)
@@ -94,7 +93,7 @@ Or, if you created local storage, upload the ISO there.
   - VLANs: **No**
   - WAN interface: **xn0**
   - LAN interface: **xn1**
-  - Optional (OPT1): just press enter
+  - Optional (OPT1): *just press enter*
   - Confirm
 - Option 2) **Set interface IP address**
   - Configure **LAN**
@@ -150,13 +149,13 @@ Or, if you created local storage, upload the ISO there.
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
     - Read and accept the information provided
-    - Scroll to the bottom of the Updates tab and click **Update**
+    - Scroll to the bottom of the Updates tab and click **Update** and accept the update
     - Wait for updates and the reboot
     - Log back in and check if there are any more updates
   - Install Xen guest utilities
     - Sytem > Firmware > Plugins
       - os-xen - click "+" to install
-      - Reboot (Power > Reboot?)
+      - Reboot (Power > Reboot > Yes)
     - In XO, look at the opnsense VM general tab; management agent is now detected
 - Configure Firewall Rules
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
@@ -165,57 +164,95 @@ Or, if you created local storage, upload the ISO there.
 # Configure TOR
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
-- https://www.youtube.com/watch?v=4K2YuWp2GB4
 - https://cybernomad.online/dark-web-building-a-tor-gateway-7a7dfa45884f
+- https://www.youtube.com/watch?v=4K2YuWp2GB4
 
 Steps:
 - From VM's browser, check the public IP address without TOR
+  - http://ipchicken.com
 - Log in to firewall https://192.168.101.254
 - System > Firmware > Plugins
   - os-tor - click "+" to install
 - Refresh the page
 - Click **Services** > **Tor** > **Configuration**
-- Click Configuration
   - General Tab
     - Enable: Yes
     - Listen Interfaces: LAN
     - Enable Advanced Mode
-      - Check Enable Transparent Proxy
+      - Check **Enable Transparent Proxy**
       - Confirm SOCKS port number: 9050
       - Confirm Control Port: 9051
       - Confirm Transparent port: 9040
       - Confirm Transparent DNS port: 9053
   - Click **Save**
 - **Firewall** > **Rules** > **LAN**
-  - Add top rule Allow LAN net to This Firewall IP for TCP/IP DNS
-  - Add following rule DENY to ANY for TCP/IP DNS
-  - Click Apply Changes
-- Firewall > NAT > Port Forward
-  - Add rule
+  - Add rule to top of policy
+    - Action: Pass
+    - Quick: Checked
     - Interface: LAN
+    - Direction: in
     - TCP/IP Version: IPv4
-    - Protocol: TCP (TOR rejects UDP packets except for DNS requests)
-    - Source: default usually sufficient; everything on the LAN interface
-    - Destination: ANY
-    - Destination Port: ANY
-    - Redirect Target IP: Single Host or Network: 127.0.0.1
-    - Redirect Target Port: 9040 (this is the Transparent TOR port)
-    - Click Apply Changes
+    - Protocol: TCP/UDP
+    - Source: LAN net
+    - Destination: This Firewall
+    - Destination port range: From 53 to 53 (DNS)
+    - Log: This is not recommended for this Lab, but enable if you wish
+    - Description: Allow DNS to firewall
+    - Click Save
+    - Move the new rule to the top if necessary
+      - Put a Check next to new rule Allow DNS to Firewall
+      - Click the arrow icon to the right of the first rule to move it to the top
+    -  Allow LAN net to This Firewall IP for TCP/IP DNS
+  -  Add a second rule just below it
+    - Action: Blick
+    - Quick: Checked
+    - Interface: LAN
+    - Direction: in
+    - TCP/IP Version: IPv4
+    - Protocol: TCP/UDP
+    - Source: LAN net
+    - Destination: any
+    - Destination port range: From 53 to 53 (DNS)
+    - Log: This is not recommended for this Lab, but enable if you wish
+    - Description: Deny unsanctioned DNS
+    - Click Save
+    - Move the new rule below the first rule if necessary
+      - Put a Check next to new rule Deny unsanctioned DNS
+      - Click the arrow icon to the right of the <ins>second</ins> rule to move it to the second position
+    -  Allow LAN net to This Firewall IP for TCP/IP DNS
+  - Click Apply Changes
+- **Firewall** > **NAT** > **Port Forward**
+  - Add rule
+    - Click the "+" to add a rule
+    - Interface: **LAN** (be sure you ONLY select LAN)
+    - TCP/IP Version: **IPv4**
+    - Protocol: **TCP** (TOR rejects UDP packets except for DNS requests)
+    - Source: **LAN net**
+    - Source port range: **any**
+    - Destination: **ANY**
+    - Destination Port: **ANY**
+    - Redirect Target IP: Single Host or Network: **127.0.0.1**
+    - Redirect Target Port: (other) **9040** (this is the Transparent TOR port)
+    - Log: This is not recommended for this Lab, but enable if you wish
+    - Description: **Port forward to Tor**
+    - Filter rule association:
+      - (default) add associated filter rule, didn't work
+      - trying None
+    - Click **Save**
+    - Click **Apply changes**
+- Reboot the firewall
+  - Power > Reboot > confirm
 - Using your browser connect to https://check.torproject.org
   - You should see "Congratulations. This browser is configured to use Tor."
+  - Having issues connecting to the Internet?
+    - If may take a moment for the Tor circuits to be build
+      - Services > Tor > Diagnostis > Circuits
+    - Is DNS working from the command line, but you don't have web access?
+      - check the NAT: Port Forward rule <ins>carefully<ins>
+      - check Tor configuration
+    - restart Tor: Lobby > Dashboard > Under services, find the restart button next to tor
 
 # Test TOR access
 - Try updating your VM's OS
-- Test Folding at Home (https://foldingathome.org/start-folding/)
-  - Windows is straightforward
-  - Ubuntu desktop
-    - download the .deb file
-    - open the .deb file and select Software Install
-    - Click Install and enter your password
-    - Point your browser to http://127.0.0.1:7396
-    - This will redirect you to the centralized configuration sytem
-    - Configure and start Folding!
-    - Remember the VM has to be halted to add more vCPUs
-    - WARNING this is the point in my Lab where the host started powering itself down
-      - very strange, the host NUC just powered off
-      - powering back on, with only the XO server, VyOS router, and OPNsense firewall auto starting, it powers itself back off (the VM I just edited was not running; it was in Halted state)
+  - `sudo apt update && sudo apt upgrade -y`
+  - Note that everything is slower over Tor
