@@ -6,7 +6,7 @@ References: https://www.youtube.com/watch?v=fuS7tSOxcSo
 We will start with a the XOA virtual appliances, then build our own XO installation to replace it
 
 # Create Account on xen-orchestra.com
-An account is required to register your Xen Orchestra virtual Appliance (XOA), which you will initally use to manage the system
+An account is required to register your Xen Orchestra virtual Appliance (XOA), which you will initially use to manage the system
 - this is a "Vates" community account, as vates.tech manages the XCP-ng product
 - https://xen-orchestra.com/#!/signup
 
@@ -14,7 +14,7 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Download ISO from https://docs.xcp-ng.org/installation/install-xcp-ng/
 - Create Bootable USB using [Balena Etcher](https://etcher.balena.io/)
 
-# Intial Installation
+# Initial Installation
 - Boot from USB (UEFI mode) by pressing F10 on the NUC and selecting the UEFI USB stick image
 - Wait at the boot menu to press enter to start `install`
 - Select your keyboard
@@ -31,7 +31,7 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Select a hostname (e.g., xcp-ng-lab1)
 - Use DHCP for DNS
 - Select region and city
-- Set NTP to pool.ntp.org (if your router supports NTP options, set can configure the router and XCP-np to share that information)
+- Set NTP to pool.ntp.org (if your router supports NTP options, set can configure the router and XCP-ng to share that information)
 - Install Supplemental Packs: NO
 - Remove the USB stick when prompted
 - Wait as the system reboots
