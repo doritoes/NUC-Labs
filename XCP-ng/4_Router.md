@@ -116,7 +116,7 @@ set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 opti
 set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option domain-name lablocal
 set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 lease 3600
 set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 start 192.168.100.20
-set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 stop 192.168.100.240
+set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 stop 192.168.100.250
 commit
 save
 exit
