@@ -1,6 +1,6 @@
 # Appendix - Create Windows File Server
 
-IMPORTANT <ins>Always</ins> use a fixed or static IP for an imortant server like a file server
+IMPORTANT <ins>Always</ins> use a fixed or static IP for an important server like a file server
 
 # Create the Server VM
 - From the left menu click **New** > **VM**
@@ -57,13 +57,13 @@ Click **Console** tab
 # Create DNS Records
 Since we are using the router's DHCP server, not Windows DHCP, we will create DNS records manually.
 - Log in to the domain controller
-- Open an administative powershell prompt
+- Open an administrative powershell prompt
   - `Add-DnsServerResourceRecordA -Name "fileserver" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "192.168.100.11" -TimeToLive 01:00:00`
   - `Add-DnsServerResourceRecordPtr -Name "11" -ZoneName "100.168.192.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "fileserver.xcpng.lab"`
 
 # Configure the Second Disk
 - Start > Create and format hard disk partitions
-- You wil be prompted to intialze the disk (Disk 1)
+- You will be prompted to initialize the disk (Disk 1)
   - Accept GPT (GUID Partition Table)
   - Click OK
 - Right-click Disk 1 and then click **New Simple Volume**
@@ -97,7 +97,7 @@ Steps:
 
 # Using NAS Storage (SLOW)
 - New > Storage
-- Host: **xcp=ng-lab1**
+- Host: **xcp-ng-lab1**
 - Storage Name: **Slow Storage**
 - Description: **Slow NAS storage**
 - Select Storage Type:
