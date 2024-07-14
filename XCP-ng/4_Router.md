@@ -65,7 +65,7 @@ Or, if you created local storage, upload the ISO there.
 - When done reboot: `reboot`
 - Eject the VyOS iso
 - Log back in with your updated password
-- Configure your router's "Internet" connection (vyosyour Lab network via the host's ethernet interface)
+- Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
   - `configure`
   - `set interfaces ethernet eth0 address dhcp`
   - `set service ssh`
