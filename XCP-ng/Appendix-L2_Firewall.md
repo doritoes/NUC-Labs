@@ -161,6 +161,9 @@ Overview:
   - Services > ISC DHCPv4 > LAN
   - **Uncheck** Enable DHCP server on the LAN interface
   - Click **Save**
+- Add firewall rules to the WAN interface
+  - the tutorial says to add Any/any/allow rules on LAN/WAN
+  - the tutorial also says these are ignored, and only the bridge rules are parsed
 - Add firewall rules to the Bridge interface
   - Firewall > Rules > bridge
   - Click "+" to add a rule
@@ -184,15 +187,18 @@ Overview:
 # Testing
 In lab testing this did NOT work. DHCP does not work to pass through the IP address from outside the L2 firewall.
 
+What works:
+- Setting your VM IP address to an IP on the managment subnet (i.e. 192.168.200.100) allows you to manage the firewall (but not traverse the bridge)
+  - Set VP IP to 192.168.200.100/24 (no gateway will help you here)
+  - Example: https://192.168.200.1
+
 Concerns:
-- The documentation has conflicting information: a second author modified the tutorial to dispute some of the settings
+- The documentation has conflicting information: a second author modified the tutorial to dispute some of the settings (e.g., "So you can skip this step" in two places)
 - The documenation has the user set the PC to the subnet that the managment IP is on
   - this allows managment of the firewall, but did allow access to the Internet
 - Setting the IP address statically on the VM to match what the DHCP server would have given me did not work either. Traffic over the bridge didn't work.
 
-
-
-- Point your browser to the IP address you configured for management
-  - Example: https://192.168.200.1
-- Tune the firewall rules on [bridge]
-  - Now you can start testing and add rules to block traffic
+# Next Steps
+Once the bridge is working, tune the firewall rules on [bridge] interface
+- review logs of allowed traffic
+- add rules to block and allow traffic as desired
