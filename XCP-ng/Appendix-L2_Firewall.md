@@ -181,7 +181,7 @@ Overview:
     - Destination: **any**
     - Log: *enable logging to allow you to see the traffic and decide on how to tune the rules*
     - Description: **default allow rule**
-- Set LAN and WAN interface type to 'None'
+- Set LAN and WAN interface type to `None`
   - Interfaces > [LAN]
     - IPv4 Configuration Type: **None**
     - Click **Save**
