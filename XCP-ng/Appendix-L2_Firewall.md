@@ -3,6 +3,7 @@ OPNsense supports a "transparent bridge", which is elsewhere called a Layer 2 (L
 
 💣However, attempts to reproduce the tutorial were not immediately successful.
 - Need to try a new approach based on https://docs.opnsense.org/manual/how-tos/lan_bridge.html
+  - 
 
 References:
 - https://docs.opnsense.org/manual/how-tos/transparent_bridge.html
@@ -12,7 +13,7 @@ See also: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
 Warnings:
 - L2 firewall not compatible with traffic shaping
-- Most L2 firewalls cannot do IPS; this bears confirmation
+- Most L2 firewalls cannot do IPS; needs confirmation for OPNsense
 
 Overview:
 - Start from a default installation on a virtual device with 2 interfaces
