@@ -168,6 +168,7 @@ References:
 - https://cybernomad.online/dark-web-building-a-tor-gateway-7a7dfa45884f
 - https://www.youtube.com/watch?v=4K2YuWp2GB4
 - https://forum.opnsense.org/index.php?topic=15097.0
+- https://docs.huihoo.com/m0n0wall/opnsense/manual/how-tos/tor.html
 
 Steps:
 - From VM's browser, check the public IP address without TOR
