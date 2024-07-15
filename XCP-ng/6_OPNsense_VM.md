@@ -128,7 +128,7 @@ Or, if you created local storage, upload the ISO there.
     - User `root` and password you selected
   - Follow the Wizard
     - General information
-      - Hostname: *pentestfw**
+      - Hostname: **pentestfw**
       - Domain: **xcpng.lab**
       - Primary DNS Server: **8.8.8.8** (we want unfiltered DNS for this network)
       - Secondary DNS Server: **8.8.4.4**
@@ -162,6 +162,9 @@ Or, if you created local storage, upload the ISO there.
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
   - Optionally change the IPv6 allow rule from Pass to Block
+
+# Deploy Pentest Lab VMs
+continue writing
 
 # Configure TOR
 References:
