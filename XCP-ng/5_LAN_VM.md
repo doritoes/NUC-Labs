@@ -229,14 +229,15 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Click **Continue without this data**
     - <ins>Uncheck</ins> Make your Microsoft experience more useful and continue
     - Flick Finish
-- Install Guest Tools (you may not want to!)
+- Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
-  - Reference: https://xcp-ng.org/docs/guests.html#windows
-  - To use the Citrix <ins>drivers</ins>
-    - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
-    - https://support.citrix.com/article/CTX235403
-    - A Citrix account is required
-  - To use community XCP-ng drivers read the article linked above
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboots included)
@@ -304,14 +305,15 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - Experience: be creative and pick one, then click **Accept** (I chose Business)
   - Cortana: **Click Not now**
   - Close "Browse the web with the best performing browser on Windows"
-- Install Guest Tools (you may not want to!)
+- Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
-  - Reference: https://xcp-ng.org/docs/guests.html#windows
-  - To use the Citrix <ins>drivers</ins>
-    - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
-    - https://support.citrix.com/article/CTX235403
-    - A Citrix account is required
-  - To use community XCP-ng drivers read the article linked above
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Apply Windows Updates (reboots included)
@@ -366,14 +368,15 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Name: server2022-lan-ready
   - Click **Create**
 - After booting, set password for Administrator
-- Install Guest Tools (you may not want to!)
+- Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
-  - Reference: https://xcp-ng.org/docs/guests.html#windows
-  - To use the Citrix <ins>drivers</ins>
-    - In XO, set the advanced parameter to "Windows Update tools" to ON. This will install the device drivers automatically at next reboot. BUT the management agent still needs to be installed from the Citrix tools installer.
-    - https://support.citrix.com/article/CTX235403
-    - A Citrix account is required
-  - To use community XCP-ng drivers read the article linked above
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
 - Login in
