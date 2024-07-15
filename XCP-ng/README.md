@@ -63,6 +63,10 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 ## Set Up Pen Testing Lab
 ### Install Kali Linux VM
 Install Kali Linux VM on the pen-testing network.
+- Other Media
+- 2GB RAM minimum, 4GB recommended, heavy usage 8GB or more
+- 20GB minimum, 60GB recommended
+- investigate promisuous mode to make Kali useful
 
 ### Create Vulnerable Windows Machine
 See http://cyberforensic.net/labs/AutoPatch_Removal.html
@@ -70,12 +74,23 @@ See http://cyberforensic.net/labs/AutoPatch_Removal.html
 ### Create Vulnerable Linux Machine
 See https://www.netspi.com/blog/technical-blog/network-pentesting/linux-hacking-case-studies-part-5-building-a-vulnerable-linux-server/
 
+## Secure Internet by Switching OPNsense to Tor
+🌱 having issues, move content from [here](6_OPNsense_VM.md)) to separate page
+
+## Pentesting Examples
+need to develope content
+
 ## Install Check Point Firewall
 https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
 # Appendices
 - [Appendix - Lab Architecture](Appendix-Architecture.md)
 - [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
+- [Appendix - Active Directory Notes](Appendix-Active_Directory_Notes.md)
+- [Appendix - Ansible Manage Windows](Appendix-Ansible_Manange_Windows.md)
+- [Appendix - Windows Domain Controller](Appendix-Windows_DC.md)
+- [Appendix - Windows Files Server](Windows_File_Server.md)
+- 🌱 [Appendix - Layer 2 Firewall](Appendix-L2_Firewall.md)
 
 # Other Notes
 ## Other Install Media
