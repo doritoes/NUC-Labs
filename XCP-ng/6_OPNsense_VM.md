@@ -7,6 +7,7 @@ References:
 - https://www.youtube.com/watch?v=KecQ4AZ-RBo
 - https://docs.xcp-ng.org/guides/pfsense/
 - https://xcp-ng.org/docs/networking.html#vlans
+- https://community.spiceworks.com/t/opnsense-transparent-bridge-between-isp-and-fortigate/946090/8
 
 # Configure Networking
 - Log in to Xen Orchestra (XO)
