@@ -85,7 +85,7 @@ Or, if you created local storage, upload the ISO there.
   - Accept erasing the disk
 - Select a root password when prompted
 - Select Complete Install
-- Eject the ISO (click the icon on Console tab)
+- Eject the ISO once the reboot starts (click the icon on Console tab)
 - Wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) **Assign interfaces**
