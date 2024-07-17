@@ -216,6 +216,8 @@ Kali Linux is a popular distribution for pentesting.
 Here are some systems to create on the Pentesting network
 - Up-to-Date systems
   - Windows 10/11
+    - Optionally, deliberately make it vulnerable
+      - https://medium.com/@bmatth21/how-to-setup-windows-10-vm-lab-for-hacking-608592d550f2
   - Windows Server 2022
     - Optionally set up a domain, file server, workstations, etc.
   - Ubuntu Desktop or Server
@@ -241,7 +243,6 @@ It is always best practice to operate in an isolated Pentesting network. If you 
 1. On the OPNsesne firewall block all traffic from 192.168.101.0/24 (LAN Net)
 2. Block DNS traffic from 192.168.101.0/24 to the firewall
     - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
-    - 
 ## Configure TOR
 **WARNING** This is currently not working!
 
@@ -352,3 +353,63 @@ Steps:
 ### Confirm privacy
 TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
 
+# Ready for Pentesting
+This Lab does not provide complete step-by-step pentesting examples. However, there here is a basic sequence of testing you can do.
+
+## Discovery
+### netdiscover
+netdiscover as a tool for active and passive ARP reconnaissance. it sends ARP requests and analyzes responses to identify active devices. Can potentially identify the device vendor (OUI lookup)
+
+`sudo netdiscover`
+
+### nmap
+nmap is a powerful network scanner with a robust set of tools and scripts. Beyond MAC address, it can identify open and closed ports. This information can ube used for service identification and identifying vulnerable sevices.
+
+- `nmap -sn 192.168.101.0/24`
+- `nmap -A 192.168.101.0/24`
+- Linux and SSH
+  - `nmap -p 22 -sS 192.168.101.0/24`
+  - `nmap -p 22 -sV 192.168.101.0/24`
+
+- Windows machines and SMB
+  - nmap --script smb-info.nse -p 445 <target>
+  - nmap --script smb-os-info.nse -p 445 <target>
+  - enum4linux <target> [options]
+
+## Finding Vulnerabilities
+### Nikto
+Nikto is a web server scanner that looks for harmful files and checks for outdated software.
+
+`nikto -h <target_IP>`
+
+Lots of output, focus on
+- Overview
+- Server Information
+- Look for keywords suspicious, outdated, vulnerable
+
+### OpenVAS
+Get it working
+
+scan a target ip with vuln scan template like "Full OpenVAS Security Check"
+
+Focus on High and Medium; see software information and potential exploits (CVEs)
+
+Look for exploitable CVEs and if public available exploits exist
+
+
+  - Looks harmful files, checks for outdated software
+- OpenVAS
+  - Scanner, open source framework for vuln scanning and keeping track of those vulns
+- SQLmap
+  - Database scanner looks for exploits within SQL injection issue
+- Nessus
+  - Tenable commercial product, not free anymore; fee personal use
+  - Scan vulns, default passwords, misconfiguration options
+
+Attack tools
+- Responder - fake server; does relaying; deals with POP IMAP SMTP SQL queries MLMNR, NBT; recover usernames and passwords
+- Metasploit - validate and launch exploits (paid version provides GUI)
+- ettercap - ARP poisoning
+
+Misellaneous tools
+- Searchsploit - enables search database of exploits/archive; see if a system may be vulnerable to a specific exploit
