@@ -232,6 +232,7 @@ Here are some systems to create on the Pentesting network
 
 This is your opportunity to update software packages and patch everything before we lock down the Pentesting network
 
+You can use this opportunity to enable Web servers like IIS (Windows), Apache, or Nginx. You might install MySQL or MS-SQL. A LAMP stack is good quick test environment.
 
 # Isolate the Pentesting Lab
 It is always best practice to operate in an isolated Pentesting network. If you must access the internet, take precautions:
@@ -354,13 +355,15 @@ Steps:
 TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
 
 # Ready for Pentesting
-This Lab does not provide complete step-by-step pentesting examples. However, there here is a basic sequence of testing you can do.
+This Lab does not provide complete step-by-step pentesting examples. However, here is a basic sequence of testing you can do.
 
 ## Discovery
 ### netdiscover
 netdiscover as a tool for active and passive ARP reconnaissance. it sends ARP requests and analyzes responses to identify active devices. Can potentially identify the device vendor (OUI lookup)
 
 `sudo netdiscover`
+
+WARNING If you don't isolate the subnet, this will discover your Lab (outside the pentesting network)!
 
 ### nmap
 nmap is a powerful network scanner with a robust set of tools and scripts. Beyond MAC address, it can identify open and closed ports. This information can ube used for service identification and identifying vulnerable sevices.
