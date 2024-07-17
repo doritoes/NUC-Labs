@@ -371,48 +371,67 @@ nmap is a powerful network scanner with a robust set of tools and scripts. Beyon
 - `nmap -sn 192.168.101.0/24`
 - `nmap -A 192.168.101.0/24`
 - Linux and SSH
-  - `nmap -p 22 -sS 192.168.101.0/24`
+  - `sudo nmap -p 22 -sS 192.168.101.0/24`
   - `nmap -p 22 -sV 192.168.101.0/24`
 
 - Windows machines and SMB
-  - nmap --script smb-info.nse -p 445 <target>
-  - nmap --script smb-os-info.nse -p 445 <target>
-  - enum4linux <target> [options]
+  - nmap scripts (`/usr/share/nmap/scripts`)
+    - Win10 often doesn't respond to ping, add -Pn as needed
+    - You will discover more things after you create a file share on the target Windows sysetm
+      - Use "Optional features" (more Windows features) to enable "SMB 1.0/CIFS server" and "Internet Information Services"
+    - `nmap --script smb-system-info.nse <target>`
+    - `nmap --script smb-os-discovery.nse <target>`
+    - `nmap --script smb2-capabilities.nse <target>`
+    - `nmap --script smb-enum-shares.nse <target>`
+    - `nmap --script smb-security-mode.nse <target>`
+  - `enum4linux - [cheat sheet](https://highon.coffee/blog/enum4linux-cheat-sheet/)
+    - `enum4linux 192.168.101.22`
+    - Using credentials
+      - `enum4linux -u lab -p lab -a 192.168.101.22`
 
 ## Finding Vulnerabilities
 ### Nikto
 Nikto is a web server scanner that looks for harmful files and checks for outdated software.
-
-`nikto -h <target_IP>`
-
+- `nikto -h <target_IP>`
 Lots of output, focus on
 - Overview
 - Server Information
 - Look for keywords suspicious, outdated, vulnerable
 
 ### OpenVAS
-Get it working
+Reference: https://hassen-hannachi.medium.com/installing-openvas-on-kali-linux-a54baeaf806a
 
-scan a target ip with vuln scan template like "Full OpenVAS Security Check"
+- Setup
+  - `sudo apt update && sudo apt upgrade -y`
+  - `sudo apt install -y gvm`
+  - `sudo gvm-setup`
+    - Wait patiently for this to complete (it takes a lot time to download all the data)
+    - Note the admin account name and password
+      - Reset password: `sudo gvmd --user=admin --new-password=passwd`
+  - Create user
+    - sudo runuser -u _gvm — gvmd — create-user=admin2 — new-password=12345
+  - Change password existing user:
+    - `sudo runuser -u _gvm — gvmd — user=admin — new-password=new_password`
+  - Verify installation: `sudo gvm-check-setup`
+- Starting and Stopping
+  - OpenVAS uses a LOT of resources, so only start when needed, and stop when done
+  - `sudo gvm-start`
+  - `sudo gvm-stop`
+- Logging in
+  - https://localhost:9392
+  - use the username and password set earlier
+- First Scan
+  - Scans > Taks > purple magic wand
+  - scan a target ip with vuln scan template like "Full OpenVAS Security Check"
 
-Focus on High and Medium; see software information and potential exploits (CVEs)
+Using the results:
+- Focus on High and Medium; see software information and potential exploits (CVEs)
+- Look for exploitable CVEs and if public available exploits exist
 
-Look for exploitable CVEs and if public available exploits exist
-
-
-  - Looks harmful files, checks for outdated software
-- OpenVAS
-  - Scanner, open source framework for vuln scanning and keeping track of those vulns
-- SQLmap
-  - Database scanner looks for exploits within SQL injection issue
-- Nessus
-  - Tenable commercial product, not free anymore; fee personal use
-  - Scan vulns, default passwords, misconfiguration options
-
-Attack tools
+## Attack and exploit tools
 - Responder - fake server; does relaying; deals with POP IMAP SMTP SQL queries MLMNR, NBT; recover usernames and passwords
 - Metasploit - validate and launch exploits (paid version provides GUI)
 - ettercap - ARP poisoning
 
-Misellaneous tools
+## Misellaneous tools
 - Searchsploit - enables search database of exploits/archive; see if a system may be vulnerable to a specific exploit
