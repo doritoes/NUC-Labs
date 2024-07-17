@@ -48,6 +48,7 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
   - Ubuntu Focal Fossa 20.04
   - Ubuntu Jammy Jellyfish 22.04
   - Ubuntu Xenial Xerus 16.04
+  - Back to 14.04 is available for pentesting purposes (target)
 - Windows
   - Windows 10 - https://www.microsoft.com/en-us/software-download/windows10 and https://www.tenforums.com/tutorials/9230-download-windows-10-iso-file.html
   - Windows 11 - no template, but see here: https://www.microsoft.com/software-download/windows11
