@@ -68,7 +68,7 @@ Or, if you created local storage, upload the ISO there.
   - Click **Show advanced settings**
     - Check **Auto power on**
   - Click **Create**
-- The details for the new VyOS VM are now displayed
+- The details for the new OPNsene VM are now displayed
 - Click the **Network** tab
   - Next to each interface is a small settings icon with a blue background
   - For every interface click the gear icon then <ins>disable TX checksumming</ins>
@@ -108,7 +108,7 @@ Or, if you created local storage, upload the ISO there.
     - Client address end: **192.168.101.250**
     - Change web GUI protocol to http: **No**
     - Generate new self-signed web GUI certificate: **Yes**
-    - Restore web GUI access defaults: No
+    - Restore web GUI access defaults: **No**
   - Configure **WAN**
     - DHCP: **Yes**
     - IPv6: No, and press enter to confirm no IPv6 address
@@ -116,7 +116,7 @@ Or, if you created local storage, upload the ISO there.
     - Generate a new self-signed web GUI certificate: **No**
     - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
-  - Ubuntu Desktop or Windows 10 is perfect
+  - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
@@ -147,11 +147,12 @@ Or, if you created local storage, upload the ISO there.
       - Click **Next** to keep the existing password
     - Click **Reload**
   - Update OPNsense
+    - Log back in
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
     - Read and accept the information provided
-    - Scroll to the bottom of the Updates tab and click **Update** and accept the update
-    - Wait for updates and the reboot
+    - Scroll to the bottom of the Updates tab and click **Update** then accept the update and reboot
+    - Wait for updates and the reboot to complete
     - Log back in and check if there are any more updates
   - Install Xen guest utilities
     - System > Firmware > Plugins
@@ -159,14 +160,96 @@ Or, if you created local storage, upload the ISO there.
       - Reboot (Power > Reboot > Yes)
     - In XO, look at the opnsense VM general tab; management agent is now detected
 - Configure Firewall Rules
+  - Firewall > Rules
+    - Clicking the interface (LAN, WAN, Loopbck) or "Floating" allows you to view the default rules
+  - Firewall > NAT
+    - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Optionally change the IPv6 allow rule from Pass to Block
+  - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
 
 # Deploy Pentest Lab VMs
-continue writing
+NOTE At this point all systems in the pentesting network have access to the Internet through your regular Lab Internet. Before doing any "live file" testing, take one of the following steps:
+- Disable/block/prevent traffic from the pentesing network outside of the isolated subnet
+- Secure the connection to the Internet using a VPN
+- Anonymize the Internet connection using Tor
 
-# Configure TOR
+## Deploy Kali Linux Host
+Kali Linux is a popular distribution for pentesting.
+
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: *Other install media*
+  - Name: **kali**
+  - Description: **Kali Linux on pentesting network**
+  - CPU: **1vCPU** or more for heavier workloads
+  - RAM: **2GB minimum**, 4GB or more recommended (much more if you are running virtual machines on Kali)
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Kali iso you uploaded*
+  - Interfaces: select **Pentesting** from the dropdown
+  - Disks: Add a disk **20GB** (minimum), more if you will be working with large data objects
+  - Click **Create**
+- Click **Console** tab
+- Follow the installation wizard
+  - Select **Graphical Install**
+  - Select country, local, keyboard layout
+  - Hostname: kali
+  - Domain name: xcpng.lab
+  - Full name: kali (feel free to customize)
+  - Username: kali
+  - Password: *select a password*
+  - Select timezone
+  - Accept Guided partition, use entire disk
+  - Confirm the disk to be used
+  - Accept all files in one partition for this Lab
+  - Click Continue and then approve writing the changes to disk
+  - Accept the default desktop and packages (feel free to customize)
+  - Accept installing the GRUB boot loader, and select the device
+  - When prompted, eject the installation iso and click Continue to reboot
+- Log in
+- Update software packages
+  - `sudo apt update && sudo apt upgrade -y`
+  - To upgrade to the latest Kali version:
+    - `sudo apt full-upgrade -y`
+
+## Deploy more VMs
+Here are some systems to create on the Pentesting network
+- Up-to-Date systems
+  - Windows 10/11
+  - Windows Server 2022
+    - Optionally set up a domain, file server, workstations, etc.
+  - Ubuntu Desktop or Server
+  - Other distros like FreeBSD
+- Out-of-Date systems
+  - some downright dangerous with critical unpatched vulnerabilities and should only be added AFTER you secure/isolate the pentesting lab
+  - Windows 7
+  - Windows XP ☠️
+  - Older versions of Ubuntu
+    - https://ubuntu.com/security/notices and select a release to see the vulnerabilities
+    - OpenSSH are good examples of vulnerabilities you will find
+
+This is your opportunity to update software packages and patch everything before we lock down the Pentesting network
+
+
+# Isolate the Pentesting Lab
+It is always best practice to operate in an isolated Pentesting network. If you must access the internet, take precautions:
+- Malicious traffic escaping the environment may expose you to prosecution and penalties
+- Your ISP may find you in violation of their acceptable use policy
+- Your activity is easily attributed to you and may draw attention from very anti-social netizens
+
+## Disable Internet and DNS
+1. On the OPNsesne firewall block all traffic from 192.168.101.0/24 (LAN Net)
+2. Block DNS traffic from 192.168.101.0/24 to the firewall
+    - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
+    - 
+## Configure TOR
+**WARNING** This is currently not working!
+
+This provides some anonymity, if done correctly.
+- Configure the firewall to transparently proxy Internet traffic over Tor
+- Be careful to <ins>configure DNS correctly</ins> to forward over Tr so your DNS traffic is not leaked
+- You many choose to configure the firewall to instead use a proxy service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
+
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
 - https://cybernomad.online/dark-web-building-a-tor-gateway-7a7dfa45884f
@@ -175,7 +258,7 @@ References:
 - https://docs.huihoo.com/m0n0wall/opnsense/manual/how-tos/tor.html
 
 Steps:
-- From VM's browser, check the public IP address without TOR
+- From VM's browser, check the current public IP address, without TOR
   - http://ipchicken.com
 - Log in to firewall https://192.168.101.254
 - System > Firmware > Plugins
@@ -259,13 +342,13 @@ Steps:
       - check Tor configuration
     - restart Tor: Lobby > Dashboard > Under services, find the restart button next to tor
 
-# Test TOR access
+### Test TOR access
 - From VM's browser, check the public IP address <ins>with</ins> TOR
   - http://ipchicken.com
 - Try updating your VM's OS
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
 
-# Confirm privacy
+### Confirm privacy
 TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
 
