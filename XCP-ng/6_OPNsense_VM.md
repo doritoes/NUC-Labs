@@ -174,7 +174,7 @@ NOTE At this point all systems in the pentesting network have access to the Inte
 - Secure the connection to the Internet using a VPN
 - Anonymize the Internet connection using Tor
 
-## Deploy Kali Linux Host
+## Deploy Kali Linux Guest
 Kali Linux is a popular distribution for pentesting.
 
 - From the left menu click **New** > **VM**
@@ -377,9 +377,9 @@ WARNING If you don't isolate the subnet, this will discover your Lab (outside th
 
 ### nmap
 nmap is a powerful network scanner with a robust set of tools and scripts. Beyond MAC address, it can identify open and closed ports. This information can ube used for service identification and identifying vulnerable sevices.
-
 - `nmap -sn 192.168.101.0/24`
 - `nmap -A 192.168.101.0/24`
+
 - Linux and SSH
   - `sudo nmap -p 22 -sS 192.168.101.0/24`
   - `nmap -p 22 -sV 192.168.101.0/24`
@@ -394,10 +394,13 @@ nmap is a powerful network scanner with a robust set of tools and scripts. Beyon
     - `nmap --script smb2-capabilities.nse <target>`
     - `nmap --script smb-enum-shares.nse <target>`
     - `nmap --script smb-security-mode.nse <target>`
-  - `enum4linux - [cheat sheet](https://highon.coffee/blog/enum4linux-cheat-sheet/)
-    - `enum4linux 192.168.101.22`
-    - Using credentials
-      - `enum4linux -u lab -p lab -a 192.168.101.22`
+
+### enum4linux
+enum4linux enumerates SMB share information
+- `enum4linux - [cheat sheet](https://highon.coffee/blog/enum4linux-cheat-sheet/)
+  - `enum4linux 192.168.101.22`
+  - Using credentials
+    - `enum4linux -u lab -p lab -a 192.168.101.22`
 
 ## Finding Vulnerabilities
 ### Nikto
@@ -415,8 +418,8 @@ Reference: https://hassen-hannachi.medium.com/installing-openvas-on-kali-linux-a
   - `sudo apt update && sudo apt upgrade -y`
   - `sudo apt install -y gvm`
   - `sudo gvm-setup`
-    - Wait patiently for this to complete (it takes a lot time to download all the data)
-    - Note the admin account name and password
+    - Wait patiently for this to complete (it takes a <ins>long time</ins> to download all the data)
+    - Note the admin account name and password (it's a long randomly generated password)
       - Reset password: `sudo gvmd --user=admin --new-password=passwd`
   - Create user
     - `sudo runuser -u _gvm -- gvmd --create-user=admin2`
@@ -429,7 +432,7 @@ Reference: https://hassen-hannachi.medium.com/installing-openvas-on-kali-linux-a
 - Logging in
   - start gvm
   - https://localhost:9392
-  - use the username and password set earlier
+  - Log in using the username and password set earlier
 - First Scan
   - Scans > Tasks > Magic want - Task Wizard
   - Enter IP to scan right away
