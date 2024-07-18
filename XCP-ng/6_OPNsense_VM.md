@@ -59,7 +59,7 @@ Or, if you created local storage, upload the ISO there.
   - RAM: **2GB**
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
-  - First Interfaces:
+  - First Interface:
     - Network: from the dropdown select the **pool-wide host network (eth0)**
   - Second Interface: Click **Add interface**
     - Network: from the dropdown select the **Pentesting** network you created earlier
