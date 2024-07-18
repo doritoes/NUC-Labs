@@ -61,7 +61,7 @@ References:
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted.
 
 ## Set Up Pen Testing Lab
-[Set Up Lab](7_Pentesting_Lab.md)
+[Set Up Lab](7_Pentesting_Lab.md) will take you into setting up Kali Linux and OpenVAS for the first time
 
 ## Install Check Point Firewall
 https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
