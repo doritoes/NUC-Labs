@@ -187,23 +187,24 @@ Kali Linux is a popular distribution for pentesting.
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Kali iso you uploaded*
   - Interfaces: select **Pentesting** from the dropdown
-  - Disks: Add a disk **20GB** (minimum), more if you will be working with large data objects
+  - Disks: Add a disk **60GB** (20GB minimum; OpenVAS takes a lot more space; even more if you will be working with large data objects
   - Click **Create**
 - Click **Console** tab
 - Follow the installation wizard
   - Select **Graphical Install**
-  - Select country, local, keyboard layout
-  - Hostname: kali
-  - Domain name: xcpng.lab
-  - Full name: kali (feel free to customize)
-  - Username: kali
+  - Select language, location, keyboard layout
+  - Hostname: **kali**
+  - Domain name: **xcpng.lab**
+  - Full name: **kali** (feel free to customize)
+  - Username: **kali**
   - Password: *select a password*
   - Select timezone
-  - Accept Guided partition, use entire disk
+  - Accept Guided partition, use entire disk and set up LVM
   - Confirm the disk to be used
   - Accept all files in one partition for this Lab
-  - Click Continue and then approve writing the changes to disk
+  - Approve making the change, approve the size, approve writing the changes to disk
   - Accept the default desktop and packages (feel free to customize)
+  - Wait patiently as packages copied unpacked and installed
   - Accept installing the GRUB boot loader, and select the device
   - When prompted, eject the installation iso and click Continue to reboot
 - Log in
@@ -211,6 +212,8 @@ Kali Linux is a popular distribution for pentesting.
   - `sudo apt update && sudo apt upgrade -y`
   - To upgrade to the latest Kali version:
     - `sudo apt full-upgrade -y`
+- Install guest tools
+  - Connect the guest-tools.iso 
 
 ## Deploy more VMs
 Here are some systems to create on the Pentesting network
@@ -409,19 +412,21 @@ Reference: https://hassen-hannachi.medium.com/installing-openvas-on-kali-linux-a
     - Note the admin account name and password
       - Reset password: `sudo gvmd --user=admin --new-password=passwd`
   - Create user
-    - sudo runuser -u _gvm — gvmd — create-user=admin2 — new-password=12345
-  - Change password existing user:
-    - `sudo runuser -u _gvm — gvmd — user=admin — new-password=new_password`
+    - `sudo runuser -u _gvm -- gvmd --create-user=admin2`
+    - `sudo runuser -u _gvm -- gvmd --user=admin2 --new-password=new_password`
   - Verify installation: `sudo gvm-check-setup`
 - Starting and Stopping
-  - OpenVAS uses a LOT of resources, so only start when needed, and stop when done
+  - OpenVAS uses a LOT of resources, so only start OpenVAS when needed, and stop it when done
   - `sudo gvm-start`
   - `sudo gvm-stop`
 - Logging in
+  - start gvm
   - https://localhost:9392
   - use the username and password set earlier
 - First Scan
-  - Scans > Taks > purple magic wand
+  - Scans > Tasks > Magic want - Task Wizard
+  - Enter IP to scan right away
+    - Failed to find config 'daba56c8-73ec-11df-a475-002264764cea'
   - scan a target ip with vuln scan template like "Full OpenVAS Security Check"
 
 Using the results:
