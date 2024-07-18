@@ -213,7 +213,14 @@ Kali Linux is a popular distribution for pentesting.
   - To upgrade to the latest Kali version:
     - `sudo apt full-upgrade -y`
 - Install guest tools
-  - Connect the guest-tools.iso 
+  - The guest-tools.iso method wasn't working
+  - Download the tools
+    - https://www.xenserver.com/downloads
+    - Download XenServer tools for Linux
+    - tar xzvf LinuxGuestTools-8.4.0-1.tar.gz
+    - cd LinuxGuestTools-8.4.0-1
+  - Kali is based on Debian, this release on is on bookworm
+  - `sudo ./install.sh -d debian -m bookworm`
 
 ## Deploy more VMs
 Here are some systems to create on the Pentesting network
