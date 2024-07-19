@@ -64,7 +64,7 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 [Set Up Lab](7_Pentesting_Lab.md) will take you into setting up Kali Linux and OpenVAS for the first time
 
 ## Install Check Point Firewall
-https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
+[Install Check Point](8_Checkpoint.md) steps you through setting up a lab for testing the Check Point security gateway product.
 
 # Appendices
 - [Appendix - Lab Architecture](Appendix-Architecture.md)
