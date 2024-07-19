@@ -19,8 +19,12 @@ How to create a router to our backend "LAN"
 - On the PIF for the Inside network, click on the word "Connected" to change it to Disconnected
 
 NOTE in this lab we will use the following VLAN numbers for "internal" networks, not to be trunked on the host's uplink
-- 100 = inside LAN
-- 200 = pentesting network
+- 100 = inside LAN (192.168.100.0/24)
+- 200 = pentesting network (192.168.101.0/24)
+- 300 = Check Point Inside (10.1.1.0/24)
+- 400 = Check Point DMZ (192.168.102.0/24)
+- 500 = Check Point Management (192.168.103.0/24)
+- 600 = Check Point Sync (192.168.104.0/24)
 
 # Download the ISO
 1. Go to https://vyos.io
