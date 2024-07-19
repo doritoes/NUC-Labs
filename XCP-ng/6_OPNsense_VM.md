@@ -142,7 +142,7 @@ Or, if you created local storage, upload the ISO there.
       - Review the information, default values are OK
       - Click **Next**
     - Configure LAN Interface
-      - Review and click *Next**
+      - Review and click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
     - Click **Reload**
