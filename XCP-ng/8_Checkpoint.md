@@ -78,7 +78,9 @@ For this lab we are using [R81.20](https://support.checkpoint.com/results/sk/sk1
   - Check Point has begun blocking SmartConsole client downloas if you don't have
     - an account
     - a "software subscription" to download the file (my private account has CCSE and CCSM but it can't download the client any more
-  - We will cover the workarounds using the WebConsole
+  - We will cover the workarounds
+    - Use the link from within the SMS Web GUI
+    - Use the web version of SmartConsole
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
@@ -222,14 +224,111 @@ Steps:
 - Click **Convert to template**
 
 # Create Check Point Management Server (SMS)
-
-# Configure SMS
+Steps:
+- From the left menu click **New** > **VM**
+  - Select the pool **xcgp-ng-lab1**
+  - Template: **checkpoint-template**
+  - Name: **checkpoint-sms**
+  - Description: **R81.20 Check Point SMS**
+  - CPU: **6 vCPU** minimum or **8** if you can
+    - Will increase to 6 or 8 for the SMS (managment server) later
+    - A standalone gateway might run ok with 2 cores in some cases
+  - RAM: **4GB** minimum, or 8GB if you can
+  - Interfaces: Remove all interfaces except Check Point Management
+  - Click **Create**
+- Log in the console
+- Configure hostname and IP address
+  - `set hostname SMS`
+  - `set interface eth0 ipv4-address 192.168.103.4 mask-length 24`
+  - `set interface eth0 comments "Management"`
+  - `set interface eth0 state on`
+  - `save config`
 
 # Create Firewalls
+Steps:
+- Create Gateway 1 (GW1)
+  - From the left menu click **New** > **VM**
+    - Select the pool **xcgp-ng-lab1**
+    - Template: **checkpoint-template**
+    - Name: **checkpoint-gw1**
+    - Description: **R81.20 Check Point Gateway 1**
+    - CPU: **2 vCPU** minimum or **4** if you can
+    - RAM: **4GB**
+    - Click **Create**
+  - Log in the console
+  - Configure hostname and IP address
+    - `set hostname GW1`
+    - `set interface eth3 ipv4-address 192.168.103.2 mask-length 24`
+    - `set interface eth3 comments "Managment"`
+    - `save config`
+  - You can now ping the SMS: `ping 192.168.103.4`
+- Create Gateway 2 (GW2)
+  - From the left menu click **New** > **VM**
+    - Select the pool **xcgp-ng-lab1**
+    - Template: **checkpoint-template**
+    - Name: **checkpoint-gw2**
+    - Description: **R81.20 Check Point Gateway 2**
+    - CPU: **2 vCPU** minimum or **4** if you can
+    - RAM: **4GB**
+    - Click **Create**
+  - Log in the console
+  - Configure hostname and IP address
+    - `set hostname GW2`
+    - `set interface eth3 ipv4-address 192.168.103.3 mask-length 24`
+    - `set interface eth3 comments "Managment"`
+    - `save config`
+  - You can now ping the SMS: `ping 192.168.103.4`
 
-# Create Cluster
+# Set up SMS
+- On the Windows workstation, point browser to https://192.168.103.4
+- Complete First Time Configuration Wizard (FTCW)
+  - Continue with R81.20 configuration
+  - Accept the eth0 configuration
+    - Add Default gateway 192.168.103.1
+  - Host Name: SMS
+  - Domain Name: xcpng.lab
+  - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
+  - Secondary DNS Server: 1.1.1.1
+  - Select Use Network Time Protocol (NTP) and select a time zone
+  - Select **Security Gateway and/or Security Management**
+  - Leave Security Management selected
+  - <ins>Uncheck</ins> Security Gateway
+  - Leave Security Managment set to Primary
+  - Define a new administrator
+    - Administrator: **cpadmin**
+    - Password: *select a password*
+  - Leave **Any IP Address** can log in for now
+    - Will secure to the internal network or perhaps specific administrator IP addresses
+  - Click Finish
+- You are now logged in to the Web GUI
+- Next to *Manage Software Blades using SmartConsole* click **Download Now**
+
+# Connect to the SMS
+- Install the SmartConsole you downloaded from the Web GUI on the Windows 10 workstation
+  - Check the box and click **Install**
+- Login
+  - Username: cpadmin
+  - Password: *the password you selected*
+  - Server Name or IP Address: **192.168.103.4**
+  - Accept the server fingerprint
+  - SmartConsole will update itself; click **Relaunch Now**
+
+Alternate method: https://support.checkpoint.com/results/sk/sk170314
+- Point your browser to https://192.168.103.4/smartconsole
+- This is the web version of SmartConsole
+- In our Lab testing, Web SmartConsole did not work at this point
+  - Once the managment server can get to the Internet it can update and install Web SmartConsole
+
+# Set up Firewalls
+GW1
+- On the Windows workstation, point browser to https://192.168.103.2
+
+GW2
+- On the Windows workstation, point browser to https://192.168.103.2
 
 # Create Initial Policy
+
+
 
 # Add DMZ Server
 
