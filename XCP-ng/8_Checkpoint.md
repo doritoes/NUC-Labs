@@ -89,6 +89,44 @@ Or, if you created local storage, upload the ISO there.
 - Drag and drop the vyos ISO file in the box
 - Click Import
 
+# Create Windows Workstation
+This Windows 10 workstation will be used to build  the environment and later manage it.
+
+- From the left menu click **New** > **VM**
+  - Select the pool **xcgp-ng-lab1**
+  - Template: **win10-lab-ready**
+  - Name: **checkpoint-console**
+  - Description: **R81.20 Check Point SmartConsole**
+  - First Interface:
+    - Network: from the dropdown select the **Pool-wide network associated with eth0**
+    - This will allow us to download files and packages all allow setting up the Check Point managment network
+    - We will move the Windows workstation to the Check Point Inside network later
+  - Second Interface:
+    - Click **Add Interface**
+    - Network: from the dropdown select the **Check Point Management**
+    - This is the managment network for the Check Point appliances
+  - Click **Create**
+- The details for the new Check Point VM are now displayed
+- Click the **Console** tab
+- Change the IP address of the second interface to a static IP 192.168.103.100/24
+  - Start > Settings > Newtork & internet
+  - From the left menu click Ethernet
+  - Click Change adapter options
+  - Right-click Ethernet 2 and click Properties
+  - Click Internet Protocol Version 4 (TCP/IPv4) and then click Properties
+  - Select **Use the following IP address**
+    - IP address: 192.168.103.100
+    - Subnet mask: 255.255.255.0
+    - Gateway: blank
+    - Preferred DNS: blank
+    - Alternate DNS: blank
+    - Click OK and then click Close
+- Download and install Winscp: https://winscp.net/eng/download.php
+  - Typical installation with default settings suites our purposes
+- Download Guest tools for Linux
+  - Download from https://www.xenserver.com/downloads
+  - XenServer VM Tools for Linux > Download XenServer VM Tools for Linux
+
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
 - https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_RN/Content/Topics-RN/Open-Server-Hardware-Requirements.htm
@@ -98,7 +136,7 @@ Steps:
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **R81.20 checkpoint template**
+  - Description: **R81.20 Check Point Template**
   - CPU: **4 vCPU**
     - Will increase to 6 or 8 for the SMS (managment server) later
     - A standalone gateway might run ok with 2 cores in some cases
@@ -106,7 +144,7 @@ Steps:
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface:
-    - Network: from the dropdown select the **pool-wide host network (eth0)**
+    - Network: from the dropdown select the **pool-wide network associated with eth0**
     - This is the "Internet" for the Lab
   - Second Interface: Click **Add interface**
     - Network: from the dropdown select the **Check Point Inside** network you created earlier
@@ -127,7 +165,7 @@ Steps:
 
 # Base Configuration
 ## Boot from ISO
-- At the boot menu, select Install Gaua
+- At the boot menu, select **Install Gaia on this system**
 - Accept the installation message **OK**
 - Confirm the keyboard type
 - Accept the default partitions sizing for 128GB drive
@@ -139,7 +177,7 @@ Steps:
   - Choose **OK**
 - Select a passsword for the "admin" account
 - Select a password for <ins>maintenance mode "admin" user</ins>
-- Select eth3 as the management port
+- Select **eth3** as the management port
   - IP address: **192.168.103.254"
   - Netmask: **255.255.255.0**
   - Default gateway: **blank**
@@ -148,40 +186,48 @@ Steps:
 - Confirm you want to continue with formatting the drive **OK**
 - When the message `Installation complete.` message appears
   - Press enter
-  - Wait for the system to reboot, then eject the ISO
-
-Notes:
-- 300 = Check Point Inside (10.1.1.0/24)
-- 400 = Check Point DMZ (192.168.102.0/24)
-- 500 = Check Point Management (192.168.103.0/24)
-- 600 = Check Point Sync (192.168.104.0/24)
-
-
-## Install Guest Tools
-Can't mount the guest-tool.iso at this point
+  - Wait for the system to start to reboot, then eject the ISO
 
 ## Set the Hostname
+- Log in from the Console
 - `set hostname CPTEMPLATE`
 - `save config`
+
+## Install Guest Tools
+- Set the user shell to bash
+  - `set expert-password`
+    - select a password for "expert mode"
+  - `expert`
+    - enter the password when prompted
+  - `chsh -s /bin/bash admin`
+- From the Windows machine point WinSCP to the device:
+  - 192.168.103.254
+  - Username: admin
+  - Password: the password you selected
+  - Accept the warnings
+  - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
+  - Close WinSCO
+- Revert to clish shell
+  - `chsh -s /etc/cli.sh admin`
+- Install guest tools
+  - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
+  - `cd LinuxGuestTools-8.4.0-1`
+  - ./install -d rhel -m el7`
+
+## Halt the system
 - `halt`
-- `y`
 
 ## Convert to Template
-- The checkpoint-template VM is halted
 - Click the **Advanced** tab
 - Click **Convert to template**
 
-# Create Windows Workstation
-start on management interface
+# Create Check Point Management Server (SMS)
 
-swing to internal
-
-Install SmartConsole
-
-
-# Create Managment Server
+# Configure SMS
 
 # Create Firewalls
+
+# Create Cluster
 
 # Create Initial Policy
 
