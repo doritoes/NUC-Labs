@@ -250,7 +250,7 @@ Steps:
     - Template: **checkpoint-template**
     - Name: **checkpoint-gw1**
     - Description: **R81.20 Check Point Gateway 1**
-    - CPU: **2 vCPU** minimum or **4** if you can
+    - CPU: **4 vCPU**
     - RAM: **4GB**
     - Click **Create**
   - Log in the console
@@ -258,6 +258,7 @@ Steps:
     - `set hostname GW1`
     - `set interface eth3 ipv4-address 192.168.103.2 mask-length 24`
     - `set interface eth3 comments "Management"`
+    - `set interface eth3 state on`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 - Create Gateway 2 (GW2)
@@ -266,7 +267,7 @@ Steps:
     - Template: **checkpoint-template**
     - Name: **checkpoint-gw2**
     - Description: **R81.20 Check Point Gateway 2**
-    - CPU: **2 vCPU** minimum or **4** if you can
+    - CPU: **4 vCPU**
     - RAM: **4GB**
     - Click **Create**
   - Log in the console
@@ -274,30 +275,33 @@ Steps:
     - `set hostname GW2`
     - `set interface eth3 ipv4-address 192.168.103.3 mask-length 24`
     - `set interface eth3 comments "Management"`
+    - `set interface eth3 state on`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 
 # Set up SMS
 - On the Windows workstation, point browser to https://192.168.103.4
+- Log in as `admin` and the password you selected
 - Complete First Time Configuration Wizard (FTCW)
   - Continue with R81.20 configuration
-  - Accept the eth0 configuration
-    - Add Default gateway 192.168.103.1
-  - Host Name: SMS
-  - Domain Name: xcpng.lab
+  - Accept the Managment connection configuration
+    - Add Default gateway **192.168.103.1**
+  - Host Name: **SMS**
+  - Domain Name: **xcpng.lab**
   - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
   - Secondary DNS Server: 1.1.1.1
   - Select Use Network Time Protocol (NTP) and select a time zone
   - Select **Security Gateway and/or Security Management**
-  - Leave Security Management selected
+  - Leave **Security Management** selected
   - <ins>Uncheck</ins> Security Gateway
-  - Leave Security Management set to Primary
-  - Define a new administrator
+  - Leave Security Management set to **Primary**
+  - Select **Define a new administrator**
     - Administrator: **cpadmin**
     - Password: *select a password*
   - Leave **Any IP Address** can log in for now
-    - Will secure to the internal network or perhaps specific administrator IP addresses
-  - Click Finish
+    - Will secure to the internal network or perhaps specific administrator IP addresses later
+  - Click **Finish**
+  - Wait patiently as the configuration is applied
 - You are now logged in to the Web GUI
 - Next to *Manage Software Blades using SmartConsole* click **Download Now**
 
