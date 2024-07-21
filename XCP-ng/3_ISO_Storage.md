@@ -29,7 +29,7 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
   - Gooroom Platform is a Linux distribution and basic operating system (OS) developed in South Korea to support cloud-based work environments for public institutions.
 - Kali Linux - https://www.kali.org/get-kali/#kali-platforms
   - Kali Linux
-  - Kalie Purple Linux
+  - Kali Purple Linux
 - NeoKylin Linux Server 7 - based on RHEL
 - Oracle Linux - https://yum.oracle.com/oracle-linux-isos.html
 - Oracle Linux 7, 8, 9
