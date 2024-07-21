@@ -472,6 +472,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - When I click Initialize, it takes very long initializing the cluster member, then errors out
     - SIC Status for GW1: Unknown. Could not Establish TCP connection with 192.168.103.3. Please make sure that TCP connectivity is allowed from Security Management Server to IP  192.168.103.3, Port 18191
     - Failed to retrive the operating system version. (Untrusted host) Please make sure Check Point Services are running on GW1, and trust has been established.
+  - Make sure you increased the RAM for the SMS to a minimum of 6GB, 8GB if you can
 
 # Create Initial Policy
 
