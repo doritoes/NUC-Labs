@@ -325,12 +325,14 @@ Steps:
   - SmartConsole will update itself; click **Relaunch Now**
 
 NOTE The SMS takes some time to start all the management processes after a reboot
+- Check on SMS: `api status`
 
 Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - Point your browser to https://192.168.103.4/smartconsole
 - This is the web version of SmartConsole
 - In our Lab testing, Web SmartConsole did not work at this point
   - Once the management server can get to the Internet it can update and install Web SmartConsole
+  - Web SmartConsole apparently runs in a Docker container
 
 # Set up Firewalls
 ## GW1
@@ -362,7 +364,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Acccept the Reboot
   - Log back in
   - Configure interfaces
-    - From the left menu click Network Management: **Network Interfaces**
+    - From the left menu click Network Management > **Network Interfaces**
     - Edit **eth1**
       - Enable: **Checked**
       - Comment: **Inside**
@@ -384,6 +386,11 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
         - IPv4 address: **192.168.104.2**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
+  - Edit the Default Route
+    - From the left menu click Network Management > **IPv4 Satatic Routes**
+    - Click **Add Gateway** > **IP Address**
+    - Enter the default gateway for your Lab network
+    - Click **OK**
 
 ## GW2
 - On the Windows workstation, point browser to https://192.168.103.3
@@ -435,6 +442,11 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
         - IPv4 address: **192.168.104.3**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
+  - Edit the Default Route
+    - From the left menu click Network Management > **IPv4 Satatic Routes**
+    - Click **Add Gateway** > **IP Address**
+    - Enter the default gateway for your Lab network
+    - Click **OK**
 
 # Create Firewall Cluster
 ## Testing Connectivity
@@ -470,27 +482,137 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
     - Activation Key: `xcplab123!` and confirm it
     - Click **Initialize**
     - Click **OK**
+  - Configure Cluster Topology
+    - 192.168.104.0/255.255.255.0 = Cluster Synchronization Primary
+    - 192.168.103.0/255.255.255.0 = Representing a cluster interface **192.168.103.1** **255.255.255.0**
+      - management interfaces can be a cluster or non-monitored private interfaces; for this Lab setup a clustered interace is used
+    - 192.168.102.0/255.255.255.0 = Representing a cluster interface **192.168.102.1** **255.255.255.0**
+    - 10.1.1.0/255.255.255.0 = Representing a cluster interface **10.1.1.1** **255.255.255.0**
+    - Your Lab network = Representing a cluster interface withe cluster IP address you selected and your Lab's subnet mask
+    - Click Finish
+- Double-Click the new **Gateway_Cluster** you created
+  - From the tree on the left, click **Network Management**
+  - Click **Get Interfaces** > **Get Interfaces Without Topology**
+  - Edit eth0
+    - Under Topology click Modify
+    - Leads To: **Override** > **Internet**
+    - Security Zone: **According to topology: ExternalZone**
+    - Click **OK** and **OK**
+  - Edit eth1
+   - Under Topology click Modify
+    - Security Zone: **According to topology: InternalZone**
+    - Click **OK** and **OK**
+  - Edit eth2
+    - Under Topology click Modify
+    - Leads To: **Override** > **This Network (Internal)** **Network defined by the interface IP and Net Mask**
+    - Check **Interface leads to DMS**
+    - Security Zone: **According to topology: DMZZone**
+    - Click **OK** and **OK**
+  - Edit eth3
+   - Under Topology click Modify
+    - Security Zone: **According to topology: InternalZone**
+    - Click **OK** and **OK**
+  - Edit eth4
+   - Under Topology click Modify
+    - Security Zone: **According to topology: InternalZone**
+    - Click **OK** and **OK**
+- Re-open **Gateway_Cluster**
+- General Properites
+  - Uncheck IPSec VPN for this lab (feel free to leave it on a experiment)
+  - Check Application Control
+  - Check URL Filtering
+  - Check Monitoring
+- NAT
+  - Check Hide internal networks behind the Gateway's external IP
+    - This is acceptable for this Lab and cases where there are less that 50 hosts behind the firewall
+  - Click **OK**
+- Network Managment
+  - To calculate the network topology from routes
+    - Click Get Interfaces > Get Interfaces With Topology
+- Click **Publish**
 
-## Issues
-- Why is adding the cluster members failing?
-  - When I click Initialize, it takes very long initializing the cluster member, then errors out
-    - SIC Status for GW1: Unknown. Could not Establish TCP connection with 192.168.103.3. Please make sure that TCP connectivity is allowed from Security Management Server to IP  192.168.103.3, Port 18191
-    - Failed to retrive the operating system version. (Untrusted host) Please make sure Check Point Services are running on GW1, and trust has been established.
-  - Make sure you increased the RAM for the SMS to a minimum of 6GB, 8GB if you can
+# Create Network and Host Objects
+- On the Windows VM log in to Smart Console
+- From the menu on the left, click **Command Line**
+- Paste in the following text
+~~~
+add host name "SmartConsole" ip-address "192.168.103.100"
+add network name "Inside_Network" subnet "10.1.1.0" subnet-mask "255.255.255.0" color "Blue"
+add network name "DMZ_Network" subnet "192.168.102.0" subnet-mask "255.255.255.0" color "Red"
+add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.0"
+~~~
 
 # Create Initial Policy
-- Create subnet objece
-  - Inside
-  - 10.1.1.0/24
-- Create rule
-  - Source: Inside
-  - Destination: *Any
+- Click the Check Point menu button at top left then click **Manage Polices and Layers**
+- Click the New icon under Policies
+  - Name: **AccessPolicy**
+  - Click **OK**
+  - Click **Close**
+- From the left menu click **Security Policies**
+- If not already selected, click on the policy **AccessPolicy** or click on "+" and open it
+- Add first rule (at top) - Managment
+  - Name: Management rule
+  - Source: SmartConsole (192.168.103.100)
+  - Destinations: GW1 and GW2
+  - Services: https and ssh_version_2
+  - Action: Accept
+  - Track: Log
+- Add second rule - Stealth
+  - Name: Stealth rule
+  - Source: *Any
+  - Destinations: GW1 and GW2
+  - Services: *Any
+  - Action: Drop
+  - Track: Log
+- Add third rule - Outbound Web Traffic
+  - Name: Outbound Web Traffic
+  - Source: Inside_Network
+  - Destinations: ExternalZone
   - Services: http and https
-  - Allow
+  - Action: Accept
+  - Track: Log
+- Add fourth rule - Inside to DMZ
+  - Name: Outbound Web Traffic
+  - Source: InternalZone
+  - Destinations: DMZZone
+  - Services: http and https
+  - Action: Accept
+  - Track: Log
+- Add fifth rule - Internal Zone to External DNS
+  - Name: Internal Zone to External DNS
+  - Source: InternalZone
+  - Destinations: ExternalZone
+  - Services: dns (service group)
+  - Action: Accept
+  - Track: Log
+  - NOTE This is not secure and only for use in a Lab environment
+    - Configure an internal DNS server (i.e., Domain Controller)
+    - Configure DHCP server and provide the internal DNS server to all hosts on Inside_Netwrork
+    - Lock down this rule to only source from the DNS server
+- Add sixth rule - Check Point Updates
+  - Name: Check Point Updates
+  - Source: Mgmt_Network
+  - Destination: *Any (will change this rule to use the an updatable object for Check Point)
+  - Services: https
+  - Action: Accept
+  - Track: Log
+- Modify the last "Cleanup rule" Track from None to Log
+- Click **Publish**
+- Click **Install Policy** and install **AccessPolicy**
 
+# Testing
+- From the left menu click **Logs & Monitor**
+- From the ribbon, click **Logs**
+- From the Windows VM, open a public web page such as https://ipchicken.com
 # Add DMZ Server
 
 # Testing
+
+# Advanced Notes
+Lab users not familiar with Check Point may wonder about these
+
+- Does the Check Point management interface provide management/data plan separation?
+  - Not by default. Management Data Plane Separation (MDPS) must be enabled and has requirements - https://support.checkpoint.com/results/sk/sk138672
 
 # Ideas for Advanced Labs
 - Create Windows domain and workstations, and use Identity collector to control access by identity
