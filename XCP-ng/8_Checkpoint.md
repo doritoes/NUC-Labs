@@ -140,9 +140,9 @@ Steps:
   - Name: **checkpoint-template**
   - Description: **R81.20 Check Point Template**
   - CPU: **4 vCPU**
-    - Will increase to 6 or 8 for the SMS (management server) later
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
+    - SMS reqires more; we will increase this later
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface:
@@ -230,10 +230,8 @@ Steps:
   - Template: **checkpoint-template**
   - Name: **checkpoint-sms**
   - Description: **R81.20 Check Point SMS**
-  - CPU: **6 vCPU** minimum or **8** if you can
-    - Will increase to 6 or 8 for the SMS (management server) later
-    - A standalone gateway might run ok with 2 cores in some cases
-  - RAM: **4GB** minimum, or 8GB if you can
+  - CPU: **4 vCPU**
+  - RAM: **6GB** minimum in a Lab; do 8GB if you can
   - Interfaces: Remove all interfaces except Check Point Management
   - Click **Create**
 - Log in the console
