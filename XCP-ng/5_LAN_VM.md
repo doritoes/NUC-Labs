@@ -576,3 +576,19 @@ mysql-password: password
 ```
 
 To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+
+
+# Important Notes
+How to Set the Screen Size for Windows UEFI VMS on XCP-ng
+- Modify the VM advanced settings to increase Video RAM from 8MB to 16MB
+- Open the console of the virtual machine.
+- Start the virtual machine.
+- As soon as possible, keep continuously pressing F2 until the UEFI setup screen appears.
+- Open **Device Manager**
+- Open **OVMF Platform Configuration**
+- Select **Change Preferred**
+- Select the preferred resolution you want (1600x900 for example)
+- Select **Commit Changes and Exit**
+- Press **Esc**
+- Select **Reset**
+- Check Windows Display settings and note the display resolution has changed
