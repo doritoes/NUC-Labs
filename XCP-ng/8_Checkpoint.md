@@ -349,7 +349,11 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
     - Edit **eth0**
       - Enable: **Checked**
       - Comment: **Internet**
-      - IPv4: Select **Obtain IPV4 address automatically**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address: *Select an IP address from your Lab network*
+        - Subnet mask: *Use the same mask as your Lab network*
+        - NOTE It is not recommended to use DHCP on the external interface
+          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
       - Click **OK**
     - Edit **eth1**
       - Enable: **Checked**
@@ -362,14 +366,14 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
       - Enable: **Checked**
       - Comment: **DMZ**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address:
+        - IPv4 address: **192.169.102.2**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
     - Edit **eth4**
       - Enable: **Checked**
       - Comment: **Sync**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address:
+        - IPv4 address: **192.168.104.2**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
 
@@ -396,8 +400,81 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
     - `xcplab123!`
   - Click Finish and Yes to start the process
   - Acccept the Reboot
+  - Log back in
+  - Configure interafaces
+    - From the left menu click Network Management: **Network Interfaces**
+    - Edit **eth0**
+      - Enable: **Checked**
+      - Comment: **Internet**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address: *Select an IP address from your Lab network*
+        - Subnet mask: *Use the same mask as your Lab network*
+        - NOTE It is not recommended to use DHCP on the external interface
+          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
+      - Click **OK**
+    - Edit **eth1**
+      - Enable: **Checked**
+      - Comment: **Inside**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address: **10.1.1.3**
+        - Subnet mask: **255.255.255.0**
+      - Click **OK**
+    - Edit **eth2**
+      - Enable: **Checked**
+      - Comment: **DMZ**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address: **192.169.102.3**
+        - Subnet mask: **255.255.255.0**
+      - Click **OK**
+    - Edit **eth4**
+      - Enable: **Checked**
+      - Comment: **Sync**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address: **192.168.104.3**
+        - Subnet mask: **255.255.255.0**
+      - Click **OK**
 
 # Create Firewall Cluster
+## Testing Connectivity
+- From the Windows workstation try to ping the firewalls (from command line)
+  - `ping 192.168.103.2`
+  - `ping 192.168.103.3`
+- Now try to connect to TCP port 18191 (required for communication) using powershell
+  - `tnc -p 18191 192.168.103.2`
+  - `tnc -p 18191 192.168.103.3`
+- Try to ping the SMS
+  - `ping 192.168.103.4`
+- If you want to ping the Windows 10 machine you will need to allow ping in the Windows Firewall
+- Note that you can't ping the firewall gateways. If you run the command `fw unload local`, they become pingable because the firewall policy "InitialPolicy" is removed.
+
+## Create Cluster Object
+- On the Windows workstation, Log in to SmartConsole again
+- From the left menu, click **Gateways & Servers** (the default view when using SmartConsole for the first time)
+- The **New*** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
+- Click **New**  > **Cluster** > **Cluster**
+- Click **Wizard Mode**
+  - Cluster Name: Gateway_Cluster
+  - Cluster IPv4 Address: *select an IP address from your Lab network* (the external cluster IP and the "real" external IP addresses of the cluster members are all on the same subnet)
+  - Leave cluster settings at the default (ClusterXL and High Availability)
+  - Click **Add** > **New Cluster Member** to add the first firewall, GW1
+    - Name: **GW1**
+    - IPv4 Address: **192.168.103.2** (the management IP)
+    - Activation Key: `xcplab123!` and confirm it
+    - Click **Initialize**
+    - Click **OK**
+  - Click **Add** > **New Cluster Member** to add the second firewall, GW2
+    - Name: **GW1**
+    - IPv4 Address: **192.168.103.2** (the management IP)
+    - Activation Key: `xcplab123!` and confirm it
+    - Click **Initialize**
+    - Click **OK**
+
+## Issues
+- Why is adding the cluster members failing?
+  - When I click Initialize, it takes very long initializing the cluster member, then errors out
+    - SIC Status for GW1: Unknown. Could not Establish TCP connection with 192.168.103.3. Please make sure that TCP connectivity is allowed from Security Management Server to IP  192.168.103.3, Port 18191
+    - Failed to retrive the operating system version. (Untrusted host) Please make sure Check Point Services are running on GW1, and trust has been established.
+
 # Create Initial Policy
 
 
