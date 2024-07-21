@@ -320,12 +320,84 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Once the managment server can get to the Internet it can update and install Web SmartConsole
 
 # Set up Firewalls
-GW1
+## GW1
 - On the Windows workstation, point browser to https://192.168.103.2
+- Complete First Time Configuration Wizard (FTCW)
+  - Continue with R81.20 configuration
+  - Accept the eth3 configuration (Managment)
+    - Add Default gateway **192.168.103.1**
+  - Configure Internet connection
+      - Set interface to **eth0**
+    - Configure IPv4: **Off** for now
+  - Host Name: GW1
+  - Domain Name: xcpng.lab
+  - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
+  - Secondary DNS Server: 1.1.1.1
+  - Select Use Network Time Protocol (NTP) and select a time zone
+  - Select **Security Gateway and/or Security Management**
+  - Leave Security Gateway selected
+  - <ins>Uncheck</ins> Security Management
+  - Leave Security Managment set to Primary
+  - Select **Unit is part of a cluster** and leave type as **ClusterXL**
+  - Enter an Activation key
+    - `xcplab123!`
+  - Click Finish and Yes to start the process
+  - Acccept the Reboot
+  - Log back in
+  - Configure interafaces
+    - From the left menu click Network Management: **Network Interfaces**
+    - Edit **eth0**
+      - Enable: **Checked**
+      - Comment: **Internet**
+      - IPv4: Select **Obtain IPV4 address automatically**
+      - Click **OK**
+    - Edit **eth1**
+      - Enable: **Checked**
+      - Comment: **Inside**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address: **10.1.1.2**
+        - Subnet mask: **255.255.255.0**
+      - Click **OK**
+    - Edit **eth2**
+      - Enable: **Checked**
+      - Comment: **DMZ**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address:
+        - Subnet mask: **255.255.255.0**
+      - Click **OK**
+    - Edit **eth4**
+      - Enable: **Checked**
+      - Comment: **Sync**
+      - IPv4: Select **Use the following IPv4 address**
+        - IPv4 address:
+        - Subnet mask: **255.255.255.0**
+      - Click **OK**
 
-GW2
-- On the Windows workstation, point browser to https://192.168.103.2
+## GW2
+- On the Windows workstation, point browser to https://192.168.103.3
+- Complete First Time Configuration Wizard (FTCW)
+  - Continue with R81.20 configuration
+  - Accept the eth3 configuration (Managment)
+    - Add Default gateway **192.168.103.1**
+  - Configure Internet connection
+      - Set interface to **eth0**
+    - Configure IPv4: **Off** for now
+  - Host Name: GW1
+  - Domain Name: xcpng.lab
+  - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
+  - Secondary DNS Server: 1.1.1.1
+  - Select Use Network Time Protocol (NTP) and select a time zone
+  - Select **Security Gateway and/or Security Management**
+  - Leave Security Gateway selected
+  - <ins>Uncheck</ins> Security Management
+  - Leave Security Managment set to Primary
+  - Select **Unit is part of a cluster** and leave type as **ClusterXL**
+  - Enter an Activation key
+    - `xcplab123!`
+  - Click Finish and Yes to start the process
+  - Acccept the Reboot
 
+# Create Firewall Cluster
 # Create Initial Policy
 
 
