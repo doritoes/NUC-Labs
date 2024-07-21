@@ -253,6 +253,10 @@ Steps:
     - CPU: **4 vCPU**
     - RAM: **4GB**
     - Click **Create**
+  - Disable TX Checksumming
+    - Click the Network tab
+    - Each interface has a blue gear icon to the right
+    - For each interface, click the blue gear, click to disable TX checksumming, and click OK
   - Log in the console
   - Configure hostname and IP address
     - `set hostname GW1`
@@ -270,6 +274,10 @@ Steps:
     - CPU: **4 vCPU**
     - RAM: **4GB**
     - Click **Create**
+  - Disable TX Checksumming
+    - Click the Network tab
+    - Each interface has a blue gear icon to the right
+    - For each interface, click the blue gear, click to disable TX checksumming, and click OK
   - Log in the console
   - Configure hostname and IP address
     - `set hostname GW2`
@@ -302,6 +310,7 @@ Steps:
     - Will secure to the internal network or perhaps specific administrator IP addresses later
   - Click **Finish**
   - Wait patiently as the configuration is applied
+  - When Configuration completed successfully is displayed, click **OK**
 - You are now logged in to the Web GUI
 - Next to *Manage Software Blades using SmartConsole* click **Download Now**
 
@@ -309,11 +318,13 @@ Steps:
 - Install the SmartConsole you downloaded from the Web GUI on the Windows 10 workstation
   - Check the box and click **Install**
 - Login
-  - Username: cpadmin
+  - Username: **cpadmin**
   - Password: *the password you selected*
   - Server Name or IP Address: **192.168.103.4**
   - Accept the server fingerprint
   - SmartConsole will update itself; click **Relaunch Now**
+
+NOTE The SMS takes some time to start all the management processes after a reboot
 
 Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - Point your browser to https://192.168.103.4/smartconsole
@@ -326,11 +337,15 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - On the Windows workstation, point browser to https://192.168.103.2
 - Complete First Time Configuration Wizard (FTCW)
   - Continue with R81.20 configuration
-  - Accept the eth3 configuration (Management)
-    - Add Default gateway **192.168.103.1**
+  - Accept the Management Connection configuration (eth3)
+    - Leave Default gateway blank
   - Configure Internet connection
-      - Set interface to **eth0**
-    - Configure IPv4: **Off** for now
+    - Set interface to **eth0**
+    - Configure IPv4: **Manually**
+      - IPv4 address: *Select an IP address from your Lab network*
+      - Subnet mask: *Use the same mask as your Lab network*
+      - NOTE It is not recommended to use DHCP on the external interface
+          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
   - Host Name: GW1
   - Domain Name: xcpng.lab
   - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
@@ -346,17 +361,8 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Click Finish and Yes to start the process
   - Acccept the Reboot
   - Log back in
-  - Configure interafaces
+  - Configure interfaces
     - From the left menu click Network Management: **Network Interfaces**
-    - Edit **eth0**
-      - Enable: **Checked**
-      - Comment: **Internet**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: *Select an IP address from your Lab network*
-        - Subnet mask: *Use the same mask as your Lab network*
-        - NOTE It is not recommended to use DHCP on the external interface
-          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
-      - Click **OK**
     - Edit **eth1**
       - Enable: **Checked**
       - Comment: **Inside**
@@ -368,7 +374,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
       - Enable: **Checked**
       - Comment: **DMZ**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.169.102.2**
+        - IPv4 address: **192.168.102.2**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
     - Edit **eth4**
@@ -384,11 +390,15 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - Complete First Time Configuration Wizard (FTCW)
   - Continue with R81.20 configuration
   - Accept the eth3 configuration (Management)
-    - Add Default gateway **192.168.103.1**
+    - Leave Default gateway blank
   - Configure Internet connection
-      - Set interface to **eth0**
-    - Configure IPv4: **Off** for now
-  - Host Name: GW1
+    - Set interface to **eth0**
+    - Configure IPv4: **Manually**
+      - IPv4 address: *Select an IP address from your Lab network*
+      - Subnet mask: *Use the same mask as your Lab network*
+      - NOTE It is not recommended to use DHCP on the external interface
+          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
+  - Host Name: GW2
   - Domain Name: xcpng.lab
   - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
   - Secondary DNS Server: 1.1.1.1
@@ -403,17 +413,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Click Finish and Yes to start the process
   - Acccept the Reboot
   - Log back in
-  - Configure interafaces
-    - From the left menu click Network Management: **Network Interfaces**
-    - Edit **eth0**
-      - Enable: **Checked**
-      - Comment: **Internet**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: *Select an IP address from your Lab network*
-        - Subnet mask: *Use the same mask as your Lab network*
-        - NOTE It is not recommended to use DHCP on the external interface
-          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
-      - Click **OK**
+   - From the left menu click Network Management: **Network Interfaces**
     - Edit **eth1**
       - Enable: **Checked**
       - Comment: **Inside**
@@ -425,7 +425,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
       - Enable: **Checked**
       - Comment: **DMZ**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.169.102.3**
+        - IPv4 address: **192.168.102.3**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
     - Edit **eth4**
@@ -455,7 +455,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - The **New*** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
 - Click **New**  > **Cluster** > **Cluster**
 - Click **Wizard Mode**
-  - Cluster Name: Gateway_Cluster
+  - Cluster Name: **Gateway_Cluster**
   - Cluster IPv4 Address: *select an IP address from your Lab network* (the external cluster IP and the "real" external IP addresses of the cluster members are all on the same subnet)
   - Leave cluster settings at the default (ClusterXL and High Availability)
   - Click **Add** > **New Cluster Member** to add the first firewall, GW1
@@ -479,8 +479,14 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Make sure you increased the RAM for the SMS to a minimum of 6GB, 8GB if you can
 
 # Create Initial Policy
-
-
+- Create subnet objece
+  - Inside
+  - 10.1.1.0/24
+- Create rule
+  - Source: Inside
+  - Destination: *Any
+  - Services: http and https
+  - Allow
 
 # Add DMZ Server
 
