@@ -1,7 +1,7 @@
 # Install Check Point Firewall
 The Check Point security gateway is a fully-featured firewall. For testing purposes, a virtual firewall running an evaluation license is a great place to engineer and validate architectures and designs.
 
-I strongly recommend reading the book **Check Point Firewall Administration R81.10+**. The author uses Oracle VirtualBox to build a lab environment.
+I strongly recommend reading the book **Check Point Firewall Administration R81.10+**. The author uses Oracle VirtualBox to build a lab environment. You can adapt the lab to run on XCP-ng.
 - https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
 This section will walk you thorugh setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
