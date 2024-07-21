@@ -101,12 +101,12 @@ This Windows 10 workstation will be used to build  the environment and later man
   - Description: **R81.20 Check Point SmartConsole**
   - First Interface:
     - Network: from the dropdown select the **Pool-wide network associated with eth0**
-    - This will allow us to download files and packages all allow setting up the Check Point managment network
+    - This will allow us to download files and packages all allow setting up the Check Point management network
     - We will move the Windows workstation to the Check Point Inside network later
   - Second Interface:
     - Click **Add Interface**
     - Network: from the dropdown select the **Check Point Management**
-    - This is the managment network for the Check Point appliances
+    - This is the management network for the Check Point appliances
   - Click **Create**
 - The details for the new Check Point VM are now displayed
 - Click the **Console** tab
@@ -140,7 +140,7 @@ Steps:
   - Name: **checkpoint-template**
   - Description: **R81.20 Check Point Template**
   - CPU: **4 vCPU**
-    - Will increase to 6 or 8 for the SMS (managment server) later
+    - Will increase to 6 or 8 for the SMS (management server) later
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
   - Topology: *Default behavior*
@@ -231,7 +231,7 @@ Steps:
   - Name: **checkpoint-sms**
   - Description: **R81.20 Check Point SMS**
   - CPU: **6 vCPU** minimum or **8** if you can
-    - Will increase to 6 or 8 for the SMS (managment server) later
+    - Will increase to 6 or 8 for the SMS (management server) later
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB** minimum, or 8GB if you can
   - Interfaces: Remove all interfaces except Check Point Management
@@ -259,7 +259,7 @@ Steps:
   - Configure hostname and IP address
     - `set hostname GW1`
     - `set interface eth3 ipv4-address 192.168.103.2 mask-length 24`
-    - `set interface eth3 comments "Managment"`
+    - `set interface eth3 comments "Management"`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 - Create Gateway 2 (GW2)
@@ -275,7 +275,7 @@ Steps:
   - Configure hostname and IP address
     - `set hostname GW2`
     - `set interface eth3 ipv4-address 192.168.103.3 mask-length 24`
-    - `set interface eth3 comments "Managment"`
+    - `set interface eth3 comments "Management"`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 
@@ -293,7 +293,7 @@ Steps:
   - Select **Security Gateway and/or Security Management**
   - Leave Security Management selected
   - <ins>Uncheck</ins> Security Gateway
-  - Leave Security Managment set to Primary
+  - Leave Security Management set to Primary
   - Define a new administrator
     - Administrator: **cpadmin**
     - Password: *select a password*
@@ -317,14 +317,14 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - Point your browser to https://192.168.103.4/smartconsole
 - This is the web version of SmartConsole
 - In our Lab testing, Web SmartConsole did not work at this point
-  - Once the managment server can get to the Internet it can update and install Web SmartConsole
+  - Once the management server can get to the Internet it can update and install Web SmartConsole
 
 # Set up Firewalls
 ## GW1
 - On the Windows workstation, point browser to https://192.168.103.2
 - Complete First Time Configuration Wizard (FTCW)
   - Continue with R81.20 configuration
-  - Accept the eth3 configuration (Managment)
+  - Accept the eth3 configuration (Management)
     - Add Default gateway **192.168.103.1**
   - Configure Internet connection
       - Set interface to **eth0**
@@ -337,7 +337,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Select **Security Gateway and/or Security Management**
   - Leave Security Gateway selected
   - <ins>Uncheck</ins> Security Management
-  - Leave Security Managment set to Primary
+  - Leave Security Management set to Primary
   - Select **Unit is part of a cluster** and leave type as **ClusterXL**
   - Enter an Activation key
     - `xcplab123!`
@@ -381,7 +381,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - On the Windows workstation, point browser to https://192.168.103.3
 - Complete First Time Configuration Wizard (FTCW)
   - Continue with R81.20 configuration
-  - Accept the eth3 configuration (Managment)
+  - Accept the eth3 configuration (Management)
     - Add Default gateway **192.168.103.1**
   - Configure Internet connection
       - Set interface to **eth0**
@@ -394,7 +394,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Select **Security Gateway and/or Security Management**
   - Leave Security Gateway selected
   - <ins>Uncheck</ins> Security Management
-  - Leave Security Managment set to Primary
+  - Leave Security Management set to Primary
   - Select **Unit is part of a cluster** and leave type as **ClusterXL**
   - Enter an Activation key
     - `xcplab123!`
