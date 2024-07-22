@@ -164,7 +164,7 @@ Or, if you created local storage, upload the ISO there.
     - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
     - This allows you to view the default NAT rule under Outbound
-  - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
+  - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
 
