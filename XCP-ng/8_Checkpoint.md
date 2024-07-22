@@ -4,7 +4,7 @@ The Check Point security gateway is a fully-featured firewall. For testing purpo
 I strongly recommend reading the book **Check Point Firewall Administration R81.10+**. The author uses Oracle VirtualBox to build a lab environment. You can adapt the lab to run on XCP-ng.
 - https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
-This section will walk you thorugh setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
+This section will walk you through setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
 
 IMPORTANT NOTES
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below.
@@ -71,11 +71,11 @@ IMPORTANT NOTES
 # Download the ISO and SmartConsole Client
 For this lab we are using [R81.20](https://support.checkpoint.com/results/sk/sk173903)
 
-- Download Check Point R81.20 Gaia Fhesh Install iso
+- Download Check Point R81.20 Gaia Fresh Install iso
   - https://support.checkpoint.com/results/download/124397
 - Download the R81.20 SmartConsole package
   - https://sc1.checkpoint.com/documents/Jumbo_HFA/R81.20_SC/R81.20/R81.20_Downloads.htm
-  - Check Point has begun blocking SmartConsole client downloas if you don't have
+  - Check Point has begun blocking SmartConsole client downloads if you don't have
     - an account
     - a "software subscription" to download the file (my private account has CCSE and CCSM but it can't download the client any more
   - We will cover the workarounds
@@ -111,7 +111,7 @@ This Windows 10 workstation will be used to build  the environment and later man
 - The details for the new Check Point VM are now displayed
 - Click the **Console** tab
 - Change the IP address of the second interface to a static IP 192.168.103.100/24
-  - Start > Settings > Newtork & internet
+  - Start > Settings > Network & internet
   - From the left menu click Ethernet
   - Click Change adapter options
   - Right-click Ethernet 2 and click Properties
@@ -177,7 +177,7 @@ Steps:
   - Backup and upgrade: 79GB (62%)
   - Feel free to customize
   - Choose **OK**
-- Select a passsword for the "admin" account
+- Select a password for the "admin" account
 - Select a password for <ins>maintenance mode "admin" user</ins>
 - Select **eth3** as the management port
   - IP address: **192.168.103.254"
