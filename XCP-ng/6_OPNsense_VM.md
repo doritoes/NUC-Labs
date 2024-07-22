@@ -161,7 +161,7 @@ Or, if you created local storage, upload the ISO there.
     - In XO, look at the opnsense VM general tab; management agent is now detected
 - Configure Firewall Rules
   - Firewall > Rules
-    - Clicking the interface (LAN, WAN, Loopbck) or "Floating" allows you to view the default rules
+    - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Penstesting network from accessing anything but the Internet
