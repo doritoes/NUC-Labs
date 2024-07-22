@@ -193,14 +193,14 @@ Overview:
 In lab testing this did NOT work. DHCP does not work to pass through the IP address from outside the L2 firewall.
 
 What works:
-- Setting your VM IP address to an IP on the managment subnet (i.e. 192.168.200.100) allows you to manage the firewall (but not traverse the bridge)
+- Setting your VM IP address to an IP on the management subnet (i.e. 192.168.200.100) allows you to manage the firewall (but not traverse the bridge)
   - Set VP IP to 192.168.200.100/24 (no gateway will help you here)
   - Example: https://192.168.200.1
 
 Concerns:
 - The documentation has conflicting information: a second author modified the tutorial to dispute some of the settings (e.g., "So you can skip this step" in two places)
-- The documenation has the user set the PC to the subnet that the managment IP is on
-  - this allows managment of the firewall, but did allow access to the Internet
+- The documentation has the user set the PC to the subnet that the management IP is on
+  - this allows management of the firewall, but did allow access to the Internet
 - Setting the IP address statically on the VM to match what the DHCP server would have given me did not work either. Traffic over the bridge didn't work.
 - A related How-To gives clues on how it might work: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
