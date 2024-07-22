@@ -175,12 +175,12 @@ It is always best practice to operate in an isolated Pentesting network. If you 
 - Your ISP may find you in violation of their acceptable use policy
 - Your activity is easily attributed to you and may draw attention from very anti-social netizens
 
-Best practice is to stop and finish setting up any parts you want to update over the Intrnet. The [next section](7_Pentesting_Lab.md) requires some of that.
+Best practice is to stop and finish setting up any parts you want to update over the Internet. The [next section](7_Pentesting_Lab.md) requires some of that.
 
 Then continue with the follow steps to lock things down safely.
 
 ## Disable Internet and DNS
-1. On the OPNsesne firewall block all traffic from 192.168.101.0/24 (LAN Net)
+1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
 2. Block DNS traffic from 192.168.101.0/24 to the firewall
     - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
 ## Configure TOR
@@ -188,7 +188,7 @@ Then continue with the follow steps to lock things down safely.
 
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
-- Be careful to <ins>configure DNS correctly</ins> to forward over Tr so your DNS traffic is not leaked
+- Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
 - You many choose to configure the firewall to instead use a proxy service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
 
 References:
