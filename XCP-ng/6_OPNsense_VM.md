@@ -68,7 +68,7 @@ Or, if you created local storage, upload the ISO there.
   - Click **Show advanced settings**
     - Check **Auto power on**
   - Click **Create**
-- The details for the new OPNsene VM are now displayed
+- The details for the new OPNsense VM are now displayed
 - Click the **Network** tab
   - Next to each interface is a small settings icon with a blue background
   - For every interface click the gear icon then <ins>disable TX checksumming</ins>
