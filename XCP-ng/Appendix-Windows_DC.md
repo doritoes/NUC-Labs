@@ -7,7 +7,7 @@ IMPORTANT <ins>Always</ins> use a fixed or static IP for a domain controller.
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **server2022-lan-prep**
-  - Name: server2022dc
+  - Name: **server2022dc**
   - Description: Domain controller on LAN network
   - CPU: **2** vCPU
   - RAM: **4**GB
