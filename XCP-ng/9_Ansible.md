@@ -4,4 +4,7 @@ Automation with XCP-ng is centered around Ansible. If you are looking at using P
 
 🌱 Need to test with XCP-ng
 
+- `sudo apt update && sudo apt install -y ansible`
+- `ansible-galaxy collection install community.general`
+
 https://docs.ansible.com/ansible/latest/collections/community/general/xenserver_guest_module.html
