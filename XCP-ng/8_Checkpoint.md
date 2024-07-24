@@ -724,6 +724,7 @@ Since the Lab network is our simulated Internet, we are going to use another IP 
 - From a device in your Lab
   - `http://<the IP address you assigned>`
 - Review the logs to see what rule was matched for each connection
+  - Do you see any drops? What could be the cause of out-of-state drops?
 
 # Advanced Notes
 Lab users not familiar with Check Point may wonder about these
