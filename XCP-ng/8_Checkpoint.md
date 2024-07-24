@@ -214,7 +214,7 @@ Steps:
 - Install guest tools
   - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
   - `cd LinuxGuestTools-8.4.0-1`
-  - ./install -d rhel -m el7`
+  - `./install -d rhel -m el7`
 
 ## Halt the system
 - `halt`
