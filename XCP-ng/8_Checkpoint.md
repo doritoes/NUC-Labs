@@ -102,7 +102,7 @@ This Windows 10 workstation will be used to build  the environment and later man
   - First Interface:
     - Network: from the dropdown select the **Pool-wide network associated with eth0**
     - This will allow us to download files and packages all allow setting up the Check Point management network
-    - We will move the Windows workstation to the Check Point Inside network later
+    - We will disable this interface later
   - Second Interface:
     - Click **Add Interface**
     - Network: from the dropdown select the **Check Point Management**
@@ -543,6 +543,8 @@ add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.
 ~~~
 
 # Create Initial Policy
+This policy is overy permissive, but it's a place to start.
+
 - Click the Check Point menu button at top left then click **Manage Polices and Layers**
 - Click the New icon under Policies
   - Name: **AccessPolicy**
@@ -585,25 +587,63 @@ add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.
   - Services: dns (service group)
   - Action: Accept
   - Track: Log
-  - NOTE This is not secure and only for use in a Lab environment
-    - Configure an internal DNS server (i.e., Domain Controller)
-    - Configure DHCP server and provide the internal DNS server to all hosts on Inside_Netwrork
-    - Lock down this rule to only source from the DNS server
-- Add sixth rule - Check Point Updates
-  - Name: Check Point Updates
-  - Source: Mgmt_Network
-  - Destination: *Any (will change this rule to use the an updatable object for Check Point)
-  - Services: https
+- Add sixth rule - Internal Zone to External NTP
+  - Name: Internal Zone to External NTP
+  - Source: InternalZone
+  - Destinations: ExternalZone
+  - Services: ntp (service group)
   - Action: Accept
   - Track: Log
 - Modify the last "Cleanup rule" Track from None to Log
 - Click **Publish**
 - Click **Install Policy** and install **AccessPolicy**
 
-# Testing
+# Basic Testing
 - From the left menu click **Logs & Monitor**
 - From the ribbon, click **Logs**
 - From the Windows VM, open a public web page such as https://ipchicken.com
+- Note that the management network is in the "InternalZone"
+
+# Add Windows 10 Workstation
+- New > VM
+- Pool **xcp-ng-lab1**
+- Template: **win10-lan-ready**
+- Name: **workstation1**
+- Description: **Windows 10 on Check Point Inside network**
+- Interfaces: Change to **Check Point Inside***
+- Click **Create**
+- Log in
+- Set Static IP address
+  - Use the following IP address
+    - IP address: 10.1.1.100
+    - Subnet mask: 255.255.255.0
+    - Default gateway: 10.1.1.1
+  - Use the following DNS server addresses:
+    - Preferred DNS server: 9.9.9.9
+    - Altername DNS server: 1.1.1.1
+  - Do you want to allow your PC to be discoverable by other PCs and devices on this network? **Yes**
+- Test access
+  - Access to the internet should work
+  - Access to the Web GUI of the firewall servers will not work
+    - https://192.168.103.2
+    - https://192.168.103.3
+    - https://192.168.103.4
+  - Review the logs to confirm
+- Add a firewall rule to allow InsideZone to Inside zone for https and ssh
+  - Try web access to https://192.168.103.4
+  - Try ssh access
+    - cmd or powershell: `ssh admin@192.168.103.4`
+    - Accept the fingerprint: **Yes**
+    - Enter the password you selected
+  - Note that the Stealth rule prevents access to 192.168.103.2 and 192.168.103.3
+    - What is the "best" way to give 10.1.1.100 https and ssh access to GW1 and GW2?
+- Not that if you install SmartConsole on this system, you will need to open [some more ports](https://support.checkpoint.com/results/sk/sk52421) to the SMS
+  - FW1_mgmt (TCP/258)
+  - CPMI (TCP/18190)
+  - CP_reporting (TCP/18205)
+  - FW1_ica_mgmt_tools (TCP/18265)
+  - CPM (TCP/19009)
+
 # Add DMZ Server
 
 # Testing
@@ -613,6 +653,8 @@ Lab users not familiar with Check Point may wonder about these
 
 - Does the Check Point management interface provide management/data plan separation?
   - Not by default. Management Data Plane Separation (MDPS) must be enabled and has requirements - https://support.checkpoint.com/results/sk/sk138672
+- Does Check Point offer application control and URL filtering?
+  - Yes
 
 # Ideas for Advanced Labs
 - Create Windows domain and workstations, and use Identity collector to control access by identity
