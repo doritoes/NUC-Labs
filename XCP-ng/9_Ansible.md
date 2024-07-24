@@ -8,7 +8,7 @@ References:
 - https://docs.ansible.com/ansible/latest/collections/community/general/xenserver_guest_powerstate_module.html
 
 Preparing your Ansible workstation
-- Run under WSL (Windows Subsystem for Linus) or on a Linux box
+- Run under WSL (Windows Subsystem for Linux) or on a Linux box
 - `sudo apt update && sudo apt install -y ansible`
 - `ansible-galaxy collection install community.general`
 - `python3 -m pip install XenAPI`
