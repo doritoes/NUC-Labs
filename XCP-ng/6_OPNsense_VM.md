@@ -188,8 +188,6 @@ Then continue with the follow steps to lock things down safely.
 2. Block DNS traffic from 192.168.101.0/24 to the firewall
     - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
 ## Configure TOR
-**WARNING** This is currently not working!
-
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
@@ -207,6 +205,14 @@ Steps:
   - http://ipchicken.com
 - Log in to firewall https://192.168.101.254
 - System > Firmware > Plugins
+  - os-OPNproxy - click "+" to install
+    - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
+    - Servcies > Squid Web Proxy > Administration
+      - Enable proxy and click Apply
+      - Click Forward proxy
+        - Proxy interfaces: LAN
+        - Check Enable Transparent HTTP proxy
+        - Click Apply
   - os-tor - click "+" to install
 - Refresh the page
 - Click **Services** > **Tor** > **Configuration**
