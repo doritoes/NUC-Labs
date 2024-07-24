@@ -66,6 +66,9 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 ## Install Check Point Firewall
 [Install Check Point](8_Checkpoint.md) steps you through setting up a lab for testing the Check Point security gateway product.
 
+# Automation with Ansible
+[Automation with Ansible](9_Ansible.md) is supported for XenServer, so here we test it with XCP-ng.
+
 # Appendices
 - [Appendix - Lab Architecture](Appendix-Architecture.md)
 - [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
