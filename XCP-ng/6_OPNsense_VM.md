@@ -235,18 +235,18 @@ Steps:
       - Click the arrow icon to the right of the first rule to move it to the top
     -  Allow LAN net to This Firewall IP for TCP/IP DNS
   -  Add a second rule just below it
-    - Action: Block
-    - Quick: Checked
-    - Interface: LAN
-    - Direction: in
-    - TCP/IP Version: IPv4
-    - Protocol: TCP/UDP
-    - Source: LAN net
-    - Destination: any
-    - Destination port range: From 53 to 53 (DNS)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: Deny unsanctioned DNS
-    - Click Save
+      - Action: Block
+      - Quick: Checked
+      - Interface: LAN
+      - Direction: in
+      - TCP/IP Version: IPv4
+      - Protocol: TCP/UDP
+      - Source: LAN net
+      - Destination: any
+      - Destination port range: From 53 to 53 (DNS)
+      - Log: This is not recommended for this Lab, but enable if you wish
+      - Description: Deny unsanctioned DNS
+      - Click Save
     - Move the new rule below the first rule if necessary
       - Put a Check next to new rule Deny unsanctioned DNS
       - Click the arrow icon to the right of the <ins>second</ins> rule to move it to the second position
