@@ -56,7 +56,7 @@ References:
 [Install LAN VM](5_LAN_VM.md) configures VMs on the internal LAN
 
 ## Install OPNsense firewall
-[Install OPNsense](6_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet.
+[Install OPNsense](6_OPNsense_VM.md) adds firewall to isolate our pen-testing network. The VMs on this network can only access each other and the Internet. 🌱 The Tor configuration is currently not working.
 
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted.
 
@@ -91,6 +91,11 @@ After installing a Linux system, you may see this warning. Here are the stops to
 5. Continue
 6. Reboot the VM
 
-With Windows it gets more complicated: https://xcp-ng.org/docs/guests.html#windows
-- A VM functions without the XenServer VM Tools for Windows, but performance is hampered when the I/O drivers are not installed.
-- Install XenServer VM Tools for Windows on Windows VMs to be able to perform the following operations: Cleanly shut down, reboot, or suspend a VM.
+With Windows, install the tools from https://www.xenserver.com/downloads
+
+If your distribution of Linux is not recognized by the install script
+- Download the tools for Linux from https://www.xenserver.com/downloads
+- Install while specifying the distribution and major release whem installing. Here is an example for Check Point Gaia OS, based on RHEL EL7.
+- `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
+- `cd LinuxGuestTools-8.4.0-1`
+- `./install -d rhel -m el7`
