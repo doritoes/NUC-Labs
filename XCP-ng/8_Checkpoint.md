@@ -519,9 +519,8 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - Re-open **Gateway_Cluster**
 - General Properites
   - Uncheck IPSec VPN for this lab (feel free to leave it on a experiment)
-  - Check Application Control
-  - Check URL Filtering
   - Check Monitoring
+  - Optionally Check Application Control and URL Filtering if you would like to experiment 
 - NAT
   - Check Hide internal networks behind the Gateway's external IP
     - This is acceptable for this Lab and cases where there are less that 50 hosts behind the firewall
@@ -537,6 +536,10 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 - Paste in the following text
 ~~~
 add host name "SmartConsole" ip-address "192.168.103.100"
+add host name "DNS_1.1.1.1" ip-address "1.1.1.1"
+add host name "DNS_9.9.9.9" ip-address "9.9.9.9"
+add host name "workstation1" ip-address "10.1.1.100"
+add host name "dmzserver" ip-address "192.168.103.10"
 add network name "Inside_Network" subnet "10.1.1.0" subnet-mask "255.255.255.0" color "Blue"
 add network name "DMZ_Network" subnet "192.168.102.0" subnet-mask "255.255.255.0" color "Red"
 add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.0"
@@ -620,7 +623,7 @@ This policy is overy permissive, but it's a place to start.
     - Default gateway: 10.1.1.1
   - Use the following DNS server addresses:
     - Preferred DNS server: 9.9.9.9
-    - Altername DNS server: 1.1.1.1
+    - Alternate DNS server: 1.1.1.1
   - Do you want to allow your PC to be discoverable by other PCs and devices on this network? **Yes**
 - Test access
   - Access to the internet should work
@@ -635,9 +638,17 @@ This policy is overy permissive, but it's a place to start.
     - cmd or powershell: `ssh admin@192.168.103.4`
     - Accept the fingerprint: **Yes**
     - Enter the password you selected
-  - Note that the Stealth rule prevents access to 192.168.103.2 and 192.168.103.3
+  - Note that the Stealth rule prevents access (or is meant to protect access) to 192.168.103.2 and 192.168.103.3
     - What is the "best" way to give 10.1.1.100 https and ssh access to GW1 and GW2?
-- Not that if you install SmartConsole on this system, you will need to open [some more ports](https://support.checkpoint.com/results/sk/sk52421) to the SMS
+    - First try accessing it. It works! Can you find this traffic in the logs? from 10.1.1.100 to 192.168.103.2 and .3 on https?
+    - Click **Action** > **Implied Rules**
+    - Under **Configuration**, click **Log Implied Rules**
+    - **Publish** and **Push Policy**
+    - This is safe to enable in our Lab; don't roll this to production
+    - Retest testing access, the search for `"Implied Rule"` (with the double quotes) in the Logs
+      - Does this make you re-think any of the rule sin the policy?
+    - How does setting Check Point to allow Any host to manage SmartConsole affect the security of the system here?
+- Note that if you install SmartConsole on this system, you will need to open [some more ports](https://support.checkpoint.com/results/sk/sk52421) to the SMS
   - FW1_mgmt (TCP/258)
   - CPMI (TCP/18190)
   - CP_reporting (TCP/18205)
@@ -645,8 +656,74 @@ This policy is overy permissive, but it's a place to start.
   - CPM (TCP/19009)
 
 # Add DMZ Server
+- New > VM
+- Pool **xcp-ng-lab1**
+- Template: **ubuntu-server-lan**
+- Name: **dmzserver**
+- Description: **Ubuntu web server in DMZ**
+- Interfaces: Change to **Check Point DMZ***
+- Click **Create**
+- Log in
+- Set Static IP address
+  - https://www.linuxtechi.com/static-ip-address-on-ubuntu-server/
+  - `sudo vi /etc/netplan/00-installer-config.yaml`
+~~~
+# This is the network config written by 'subiquity'
+network:
+  renderer: networkd
+  ethernets:
+    eth0:
+      addresses:
+        - 192.168.102.10/24
+      nameservers:
+        addresses: [9.9.9.9, 1.1.1.1]
+      routes:
+        - to: default
+          via: 192.168.102.1
+  version: 2
+~~~
+  - `sudo netplan apply`
+- You will need to allow the DMZ server to get to the internet to install Apache
+  - Add a rule to allow 192.168.102.10 to *Any for services https, https, dns, and icmp-requests
+  - Publish and Install Policy
+- Install web server
+  - `sudo apt update && sudo apt install apache2`
+  - `sudo ufw default allow outgoing`
+  - `sudo ufw default deny incoming`
+  - `sudo ufw allow Apache`
+  - `sudo ufw allow OpenSSH`
+  - `sudo ufw show added`
+  - `sudo ufw status`
+  - `sudo ufw enable`
+  - `sudo ufw status`
+- From the Windows 10 workstation with IP 10.1.1.100
+  - http://192.168.102.10
+- From the command line
+  - `ssh lab@192.168.102.10`
+  - this will fail
+  - add a firewall rule to allow ssh access to the dmzserver
 
-# Testing
+# Exposing the DMZ server to the Lab
+Since the Lab network is our simulated Internet, we are going to use another IP address from the Lab network to access the DMZ web server.
+
+- Select an IP address from your Lab network on the same subnet as the "public" external IPs on the firewall
+- Create a new firewall rule
+  - Soure: ExternalZone
+  - Destination: dmzserver (192.168.102.10)
+  - Services: http
+- Modify the `dmzserver` object
+  - Click NAT
+  - Check Add automated address translation rules
+  - Translation method: Static
+  - Translate to IP address:
+    - IPv4 address: the IP address you assigned in your Lab
+- Publish and push policy
+- From workstation1 (10.1.1.100)
+  - http://192.168.102.10
+  - `http://<the IP address you assigned>`
+- From a device in your Lab
+  - `http://<the IP address you assigned>`
+- Review the logs to see what rule was matched for each connection
 
 # Advanced Notes
 Lab users not familiar with Check Point may wonder about these
