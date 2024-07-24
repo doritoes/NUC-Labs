@@ -166,8 +166,12 @@ Or, if you created local storage, upload the ISO there.
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
+  - Because our "WAN" is on a RFC1919 network
+    - Click Interface > WAN
+    - Uncheck Block private networks
+    - Click Save
+    - Click Apply Changes
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
-
 
 # Isolate the Pentesting Lab
 It is always best practice to operate in an isolated Pentesting network. If you must access the internet, take precautions:
@@ -266,6 +270,8 @@ Steps:
     - Redirect Target Port: (other) **9040** (this is the Transparent TOR port)
     - Log: This is not recommended for this Lab, but enable if you wish
     - Description: **Port forward to Tor**
+    - NAT reflection:
+      - System default ?
     - Filter rule association:
       - (default) add associated filter rule, didn't work
       - trying None
@@ -292,3 +298,5 @@ Steps:
 
 ### Confirm privacy
 TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
+
+Now test `ping` commands to the Internet. Are they leaking outside the tunnel?
