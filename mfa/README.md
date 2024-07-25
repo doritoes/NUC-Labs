@@ -1,6 +1,8 @@
 # MFA Lab
 The mission in this Lab is to set up a variety of MFA login scenarios in the Lab.
 
+References: https://www.reddit.com/r/homelab/comments/16as74c/2fa_in_a_home_lab_environment/
+
 Mission:
 - Ubuntu Server  (ssh and sudo)
 - Ubuntu Desktop
@@ -8,6 +10,14 @@ Mission:
 
 Left to do:
 - Everything
+- Google MFA client
+- Authentik
+  - Selfhost a Single Sign-on MFA with Authentik
+  - https://medium.com/@svenvanginkel/selfhost-a-single-sign-on-mfa-with-authentik-2f0a64758be0
+- Yubikey
+- WebAuthN + TOTP
+- Reverse proxy to web apps
+- NAS
 
 Out of scope:
 - Still scoping
