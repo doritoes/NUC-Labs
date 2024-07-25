@@ -18,6 +18,7 @@ Left to do:
 - 🌱 Tor transparent proxy
 - 🌱 VPN transparent proxy
 - 🌱 L2 OPNsense firewall
+- 🌱 Get Windows 11 working
 
 Out of scope:
 - XCP-ng Center - Windows client
