@@ -14,6 +14,11 @@ Mission:
 - Set up guest VMs
 - Test automation that is available
 
+Left to do:
+- 🌱 Tor transparent proxy
+- 🌱 VPN transparent proxy
+- 🌱 L2 OPNsense firewall
+
 Out of scope:
 - XCP-ng Center - Windows client
   - Center is no longer end of life/EOL
