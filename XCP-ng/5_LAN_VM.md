@@ -1,0 +1,600 @@
+# Install LAN  VM
+Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router. Instructions are provided for a few different systems you might want to install, along with a Guacamole server to manage them without XO.
+
+NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
+
+IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
+
+# Ubuntu Desktop
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Name: **ubuntu-desktop-lan**
+  - Description: **Ubuntu desktop on LAN network**
+  - CPU: **1 vCPU**
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Ubuntu 22.04 Desktop image you uploaded*
+  - Interfaces: select **Inside** from the dropdown
+  - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click **Console** tab
+- Follow the Install wizard per usual
+  - To remove the installation media, click the Eject icon
+  - Press Enter to Reboot
+- Log in to the console and complete the first time wizard
+  - Skip, Skip, No, Next, Done
+- Optionally let the Software Updater "Install Now"; we will be doing updates later from the command line later
+  - However, you will need to let it finish before we can install the guest tools
+- Install guest tools
+  - Connect the guest-tools.iso (select it from the dropdown)
+    - it will be automatically mounted at /media in a folder that is the user name
+    - if the user name is `lab`, the directory is `/media/lab`
+  - Open Terminal
+  - Navigate to the correct directory
+    - `cd /media`
+    - `ls`
+    - "cd" to the user's folder (i.e. `cd lab`)
+    - `ls`
+    - You will see the "XCP-ng Tools" folder
+    - `cd XCP[tab]` then press enter (to auto-complete the name since it has a space in it)
+  - Run the installer
+    - `sudo Linux/install.sh`
+      - you maybe be prompted to enter your password
+      - you are prompted accept the change
+      - you are reminded to reboot
+    - `sudo reboot`
+    - Eject guest-tools.iso
+    - Back in XO, the General tab will show the management tools are detected
+- Test the VM
+  - Updates
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+  - Internet access using Firefox
+- Configure sharing your desktop
+  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts
+  - Settings > Sharing
+  - Enable the Sharing slider
+  - Click Remote Desktop
+  - Enable Remote Desktop
+  - Enable Remote Control
+  - Only Enable Legacy VNC Protocol if you must
+  - Under authentication, confirm the username <ins>and password</ins>
+    - a random password is set; you might want to change it to something more memorable  
+  - BEWARE that remote desktop is disabled when the screen is locked
+    - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
+    - there are workarounds
+- Enable SSH access
+  - `sudo apt install -y openssh-server`
+  - `sudo systemctl status ssh`
+  - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
+- Power down the VM
+- Take a Snapshot
+  - This is to demonstrate how to take a snapshot and what happens to snapshots when you convert a VM to a template
+  - Home > VMs
+  -   - Click the small X to remove the filter, showing ALL VMs including those shut down
+  - Click `ubuntu-desktop-lan`
+  - Click the Snapshots tab
+  - Click **New snapshot**
+- Convert to a Template
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm that this can't be undone
+  - Notice the VM is now gone from the list
+  - Notice that no Snapshots can be recovered after its removed
+- Re-create the VM from the template
+  - New > VM
+  - Pool: **xcp-ng-lab1**
+  - Template: **ubuntu-desktop-lan**
+  - Leave name and description with their template values
+  - Interface: Note that it's set to **Inside**, which is what we want
+  - Click **Create**
+- Click on the Console tab and Log back in examine the system
+  - What are the advantages of using DHCP in the lab for these templates?
+  - Are the guest tools detected?
+  - Change hostname
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Desktop on LAN" --pretty`
+    - Confirm it has changed: `hostnamectl`
+- Optionally create another VM from the same template and experiment
+
+# Ubuntu Server
+- From the left menu click **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
+  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Name: **ubuntu-server-lan**
+  - Description: **Ubuntu server on LAN network**
+  - CPU: **1 vCPU**
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
+  - Interfaces: select **Inside** from the dropdown
+  - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click the Console tab and follow the Install wizard per usual
+  - READ CAREFULLY the Guided storage configuration
+    - Root / only has **10GB** of the **20GB** allocated
+    - Solutions (if in doubt, use Option 1; Option 2 is popular for /var, /var/log, /opt, or /home)
+      - Option 1 expand root /
+        - Under used devices, locate ubuntu-lv which will be mounted at root /
+        - Select it, and then Edit
+        - Change the Size to the max value
+      - Option 2
+        - Select the free space, then Create Logical Volume
+        - Adjust the size to use the free space
+        - Adjust the mount point (/home by default)
+    - Choose Create
+  - Recommend checking the box Install OpenSSH server
+- To remove the installation media, click the Eject icon
+- Press Enter to Reboot
+- Log in and check the system using Terminal
+  - Is the disk size correct? `df -h`
+- Install guest tools
+  - Connect the guest-tools.iso (select it from the dropdown)
+  - Open Terminal
+  - Mount the iso
+    - `sudo mount /dev/cdrom /media`
+    - `cd /media/Linux`
+  - Install the tools
+    - `sudo ./install.sh`
+    - you may be prompted to enter your password
+    - you are prompted accept the change
+    - you are reminded to reboot
+  - Unmount the ISO
+    - `cd ~`
+    - `sudo umount /media`
+  - `sudo reboot`
+  - Eject guest-tools.iso
+- Test the VM
+  - Updates
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y    `
+    - accept the messages (default values OK)
+- Power down the VM
+  - 'sudo poweroff' or use the XO stop icon
+- Convert to a Template
+  - Click Advanced tab > Convert to template
+- Re-create the VM from the template
+  - New > VM
+  - Pool: **xcg-ng-lab1**
+  - Template: **ubuntu-server-lan**
+  - Name: **server-lan**
+  - Description: **Ubuntu server on LAN network**
+  - Interface: Note that it's set to **Inside**, which is what we want
+  - Click **Create**
+- Log in at the console and examine the system
+  - What are the advantages of using DHCP in the lab for these templates? What is the downside of DHCP for servers?
+  - Change hostname
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname server-lan`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
+    - Confirm it has changed: `hostnamectl`
+- Optionally create another VM from the same template and experiment
+  - How could you use Templates to quickly roll out a number of servers of the same type?
+
+# Windows 10
+- From the left menu click **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
+  - Template: **Windows 10 (64-bit)**
+  - Name: **win10-lan**
+  - Description: **Windows 10 on LAN network**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows 10 iso you uploaded*
+  - Interfaces: select **Inside** from the dropdown
+  - Disks: **128GB** (default 32GB is too small to apply the latest Windows updates)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click Console
+- You will be prompted to press any key to boot from CD or DVD
+  - **Press any key**
+  - If you missed it, power cycle and try again
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click **Install now**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
+  - Check the box then click **Next**
+  - Click **Custom: Install Windows only (advanced)**
+  - Accept the installation on Drive 0, click **Next**
+  - Wait while the system powers reboots and gradually installs
+- When the system boots to "Let's start with region. Is this right?"
+  - **Eject** the installation ISO
+  - **Shift-F10** to open command prompt
+    - `shutdown /t 0 /s`
+    - type this exactly, spacing matters
+- Click **Advanced** tab > **Convert to template**
+- Re-create the VM from the template
+  - New > VM
+  - Template: win10-lan
+  - Name: Rename from the VM from win10-lan to win10-lan-ready
+  - Description: leave the same
+  - Click **Create**
+- Log in complete the setup wizard
+  - Set region and keyboard layout, skip second keyboard layout
+  - Select **Set up for personal use** (feel free to experiment)
+  - Click **Offline account** then click **Limited experience**
+  - User: **lab**
+  - Password: select a password
+  - Create security questions for this account: be creative
+  - Click **Not now**
+  - Privacy: *disable all the settings* and then click **Accept**
+  - Experience: be creative and pick one, then click **Accept* (I chose Business)
+  - Cortana: Click **Not now**
+  - At the screen "Browse the web with the best performing browser on Windows"
+    - Click **Continue**
+    - Click **Start without your data**
+    - <ins>Uncheck</ins> bring over your data and continue
+    - Click **Continue without this data**
+    - <ins>Uncheck</ins> Make your Microsoft experience more useful and continue
+    - Flick Finish
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
+  - The impact of not having the agent:
+    - management of the OS and advanced features like moving the VM to another pool will not be available
+- Apply Windows Updates (reboots included)
+- Enable Remote Desktop (RDP)
+  - Start > Settings > System > Remote Desktop
+  - Slide to enable and Confirm
+- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to win-10-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+- Shut down the Windows VM
+- Convert win10-lan-ready to a template
+- Questions to ponder:
+  - What are the differences between the two templates?
+  - Does this affect the Activation required timers?
+- Optionally create another VM from each template and experiment
+
+# Windows 11
+IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. 
+
+🌱 These instructions have not been tested and are assumed to be <ins>incorrect and out of date</ins>
+
+- From the left menu click New > VM
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Other Install Media**
+  - Name: **win11-lan**
+  - Description: **Windows 11 on LAN network**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows 11 iso you uploaded*
+  - Interfaces: select **Inside** from the dropdown
+  - Disks: Add a disk **128GB** (Windows 11 minimum is 64GB; 128GB for lab, 256GB for average user)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click **Console** tab
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Activate Windows: Click I don't have a product key
+  - Select the OS to install: Windows 11 Pro (feel free to experiment)
+  - WARNING You might bet the error: This PC can't run Windows 11
+    - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
+    - Possible culprits: "Enable TPM 2.0 on your PC"
+    - XCP-ng only supports VTPMs on pools running 8.3 or later (8.3 is currently in beta)
+  - **NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME**
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - Accept the installation on Drive 0
+- When the system boots to "Let's start with region. Is this right?"
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New > VM
+  - Template: **win11-lan**
+  - Name: **win11-lan-ready**
+  - Interface: Note that it's set to **Inside**, which is what we want
+  - Click **Create**
+- Log in complete the setup wizard
+  - Set region and keyboard layout, skip second keyboard layout
+  - Select Set up for personal use (feel free to experiment)
+  - Click **Offline account** then click **Limited experience**
+  - User: **lab**
+  - Password: *select a password*
+  - Create security questions for this account: be creative
+  - Click **Not now**
+  - Privacy: disable all the settings and then click **Accept**
+  - Experience: be creative and pick one, then click **Accept** (I chose Business)
+  - Cortana: **Click Not now**
+  - Close "Browse the web with the best performing browser on Windows"
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
+  - The impact of not having the agent:
+    - management of the OS and advanced features like moving the VM to another pool will not be available
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to win11-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
+- Shut down the Windows VM
+- Rename from the VM from win11-lan to win11-lan-ready
+- Convert win11-lan-ready to a template
+- Questions to ponder:
+  - What are the differences between the two templates?
+  - Does this affect the Activation required timers?
+- Optionally create another VM from each template and experiment
+  - How could you use Templates to quickly roll out a number of servers of the same type?
+
+# Windows 2022 Server
+This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Windows Server 2022 (64-bit)**
+  - Name: **server2022-lan**
+  - Description: **Windows Server 2022 on LAN network**
+  - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
+  - Interfaces: select *Inside* from the dropdown
+  - Disks: **40GB** (default 32GB)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click **Console** tab
+- You will be prompted to Press any key to boot from CD to DVD
+  - **Press any key**
+  - If you missed it, power cycle and try again
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - Accept the installation on Drive 0
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New > VM
+  - Template: server2022-lan
+  - Name: server2022-lan-ready
+  - Click **Create**
+- After booting, set password for Administrator
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
+  - The impact of not having the agent:
+    - management of the OS and advanced features like moving the VM to another pool will not be available
+- Login in
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to server2022-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+- Shut down the Windows VM
+- Convert server2022-lan-ready to a template
+- Now let's prepare the template VM for cloning
+  - must perform generalization to remove the security identifier (SID)
+  - allows us to rapidly clone more servers
+  - create a new VM from the template win10-lan-ready
+    - New > VM
+    - Template: server2022-lan-ready
+    - Name: server2022-lan-prep
+    - Click **Create**
+  - Open the console to server2022-lan-prep and log in
+    - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+  - Convert server2022-lan-prep to template
+  - From now on, create Windows Server VMs from the template server2022-lan-prep
+- Questions to ponder:
+  - What are the differences between the three Windows server templates?
+  - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each template?
+- Optionally create VMs from each template and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
+
+To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
+
+To configure a Domain File Server, see [Appendix - Create Windows File Server](Appendix-Windows_File_Server.md)
+
+# Guacamole Server
+Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
+
+TIP The hotkey to escape a guacamole session is control-alt-shift
+
+See references:
+- https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
+- https://dae.me/blog/2698/guacamole-1-4-creation-of-websocket-tunnel-to-guacd-failed/
+
+Steps:
+- Create a Ubuntu server to run Guacamole
+  - New > VM
+  - Template: **ubuntu-server-lan**
+  - Name: **guacamole**
+  - Description: *Guacamole server on LAN network*
+  - Click **Create**
+- Log in to the console on the new guacamole VM
+  - Change hostname
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
+    - Confirm it has changed: `hostnamectl`
+- Install dependencies
+  - Copy [guac-dependencies.sh](guac-dependencies.sh)
+  - `sudo bash guac-dependencies.sh`
+- Download Apache Guacamole
+  - official downloads page: https://downloads.apache.org/guacamole/
+    - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
+- Extract and Compile Guacamole
+  - `tar -xzf guacamole-server-1.5.5.tar.gz`
+  - `cd guacamole-server-1.5.5`
+  - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
+  - `make`
+  - `sudo make install`
+  - `sudo ldconfig`
+- Configure Guacamole Server
+  - `sudo mkdir /etc/guacamole`
+  - Create new configuration file `/etc/guacamole/guacd.conf`
+    - Example: `sudo vi /etc/guacamole.conf`
+  - Contents:
+    - `[daemon]`
+    - `pid_file = /var/run/guacd.pid`
+- Start and Enable Guacamole Service
+  - `sudo systemctl daemon-reload`
+  - `sudo systemctl start guacd`
+  - `sudo systemctl enable guacd`
+  - `sudo systemctl status guacd`
+- Install the Guacamole Web App
+  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war`
+  - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
+- Configure Apache Guacamole Database Authentication
+  - `sudo mysql_secure_installation`
+    - current root password is none (default)
+    - accept default switch to unix_socket **Y**
+    - accept default and change the root password (i.e., passtoor)
+    - accept default and remove anonymous users
+    - accept default and disallow root login remotely
+    - accept default and remote test database and access to it
+    - accept default and reload privilege tables
+  - `wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz`
+  - `tar -xzf mysql-connector-java-8.0.26.tar.gz`
+  - `sudo mkdir /etc/guacamole/lib/`
+  - `sudo mkdir /etc/guacamole/extensions/`
+  - `sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/`
+  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
+  - `tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz`
+  - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
+- Create a Guacamole Database, User and Scheme
+  - Copy [create-database.sql](create-database.sql)
+    - `cat create-database.sql | sudo mysql`
+    - Old way (not Unix sockets): `cat create-database.sql | mysql -u root -p`
+  - Import SQL Schema Files and Create Properties Files For Guacamole
+    - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
+    - `cat *.sql | sudo mysql -p guac_db`
+    - press enter (no password) when prompted for the password
+    - Old way (not Unix sockets) : `cat *.sql | mysql -u root -p guac_db`
+- Configure Guacamole properties (new file)
+  - sudo vi /etc/guacamole/guacamole.properties
+```
+# MySQL properties
+mysql-hostname: 127.0.0.1
+mysql-port: 3306
+mysql-database: guac_db
+mysql-username: guac_user
+mysql-password: password
+```
+  - `sudo systemctl restart tomcat9 guacd mysql`
+- Configure ssh
+  - on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
+    - `sudo vi /etc/ssh/sshd_config`
+    - `PubkeyAcceptedKeyTypes +ssh-rsa`
+    - `HostKeyAlgorithms +ssh-rsa`
+- `sudo systemctl restart sshd`
+- Create /etc/guacamole/guacd.conf with the following contents
+  - `[server]`
+  - `bind_host = 127.0.0.1`
+  - `bind_port = 4822`
+- Modify /etc/guacamole/guacamole.properties to add
+  - `# guacd properties`
+  - `guacd-hostname: 127.0.0.1`
+  - `guacd-port: 4822`
+- restart guacd
+  - `sudo systemctl restart guacd`
+- Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
+  - Point the web browser to the IP address of the guacamole server
+  - `http://server-ip:8080/guacamole`
+    - If your connection is being directed to https, it will be "Unable to connect". See [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+  - Login as `guacadmin`/`guacadmin`
+  - REMEMBER the hotkey to escape a session is control-alt-shift
+  - Tips for connection to Windows 10 / Server 2022
+    - Protocol: RDP
+    - Max conns 1
+    - Max conns per user 1
+    - <ins>Network</ins> Hostname: use the IP address
+    - Port: leave blank
+    - Username: the username
+    - Password: the password
+    - Domain: leave blank
+    - Security mode: NLA (network level authentication)
+    - Disable Authentication: leave default = unchecked
+    - Ignore server certificate: **CHECK THIS**
+  - Tips for connection to Ubuntu Desktop
+    - Protocol: RDP
+    - Max conns 1
+    - Max conns per user 1
+    - <ins>Network</ins> Hostname: use the IP address
+    - Port: leave blank
+    - Username: the username
+    - Password: the password
+    - Domain: leave blank
+    - Security mode: leave blank
+    - Disable Authentication: leave default = unchecked
+    - Ignore server certificate: **CHECK THIS**
+- Add Port translation to make the Guacamole server accessible from outside the VyOS router
+  - NOTE Modify the 192.168.100.40 address to the IP address of the guacamole server
+  - `configure`
+  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'`
+  - `set nat destination rule 70 inbound-interface name 'eth0'`
+  - `set nat destination rule 70 translation address '192.168.100.40'`
+  - `set nat destination rule 70 destination port 8080`
+  - `set nat destination rule 70 translation port 8080`
+  - `set nat destination rule 70 protocol 'tcp'`
+  - `commit`
+  - `save`
+  - `exit`
+- From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
+- Configure re-direct to the guacamole app
+  - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=guacamole" />
+<title>Redirecting...</title>
+</head>
+<body>
+<p><a href="guacamole">Redirect</a></p>
+</body>
+</html>
+```
+
+To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+
+
+# Important Notes
+How to Set the Screen Size for Windows UEFI VMS on XCP-ng
+- Modify the VM advanced settings to increase Video RAM from 8MB to 16MB
+- Open the console of the virtual machine.
+- Start the virtual machine.
+- As soon as possible, keep continuously pressing F2 until the UEFI setup screen appears.
+- Open **Device Manager**
+- Open **OVMF Platform Configuration**
+- Select **Change Preferred**
+- Select the preferred resolution you want (1600x900 for example)
+- Select **Commit Changes and Exit**
+- Press **Esc**
+- Select **Reset**
+- Check Windows Display settings and note the display resolution has changed
