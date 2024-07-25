@@ -255,7 +255,10 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Optionally create another VM from each template and experiment
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. These instructions have not been tested and are assumed to be <ins>incorrect and out of data<ins>/
+IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. 
+
+🌱 These instructions have not been tested and are assumed to be <ins>incorrect and out of date</ins>
+
 - From the left menu click New > VM
   - Select the pool **xcp-ng-lab1**
   - Template: **Other Install Media**
