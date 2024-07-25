@@ -2,7 +2,7 @@
 The mission in this Lab is to set up a virtual Lab environment hosted on a NUC running proxmox. This replaces the previous Lab running on ESXi, which is not longer an option for home labs after the Broadcom acquisition of VMware.
 
 Why it's perfect to the lab:
-- proxmox is super-flexible and feature-rich, perfect for the Lab
+- ProxmoxVE is super-flexible and feature-rich, perfect for the Lab
 
 Mission:
 - Bare metal installation on the NUC
@@ -31,10 +31,11 @@ Materials:
   - 1 USB stick 8GB or more for installation of proxmox
  
 References:
-- link here
+- [link here](https://www.proxmox.com/en/proxmox-virtual-environment/get-started)
 
 # Overview
 ## Install Hypervisor on NUC Host
+[Install Proxmox VE](1_Install.md)
 
 ## Install VyOS router
 
