@@ -12,6 +12,11 @@ How to create a router to our backend "LAN"
   - Click Create
 - Click **Apply Configuration** and the new brige will start
 
+Here is list of the virtual bridge we will use in this lab:
+- vmbr0 - default bridge to the physical network interface
+- vmbr1 - "Inside" network
+- vmbr2 - "Pentesting" network
+
 # Download the ISO
 1. Go to https://vyos.io
 2. Click Rolling Release
