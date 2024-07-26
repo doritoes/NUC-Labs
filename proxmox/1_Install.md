@@ -1,5 +1,7 @@
 # Install Proxmox VE
-References: https://www.youtube.com/watch?v=fuS7tSOxcSo
+References:
+- https://www.proxmox.com/en/proxmox-virtual-environment/get-started
+- https://phoenixnap.com/kb/install-proxmox
 
 # Create Bootable Installation USB
 - Download ISO from https://www.proxmox.com/en/downloads/proxmox-virtual-environment/iso
