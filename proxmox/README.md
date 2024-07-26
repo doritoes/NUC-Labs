@@ -30,10 +30,15 @@ Mission:
 - Test automation that is available
 
 Left to do:
-- Everything
+- VMs
+- Templates
+- Inside VMs
+- CT - containers
+- OPNsense
+- Pentesting lab
 
 Out of scope:
-- Still scoping
+- Pools and multiple hosts
 - ACME certificate automation
 - CEPH
 
@@ -66,7 +71,7 @@ References:
 [Install Proxmox VE](1_Install.md)
 
 ## Connect ISO Storage
-[Connect ISO Stroage](2_ISO_Storage.md)
+[Connect ISO Storage](2_ISO_Storage.md)
 
 🌱 Currently only local storage is used. Need to investigate remote ISO storage
 
