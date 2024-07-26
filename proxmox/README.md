@@ -79,6 +79,7 @@ References:
 [Install Router](3_Router.md) outlines how to create a router to our backend "LAN".
 
 ## Install VMs on LAN
+Next we will [Install VMs](4_LAN_VM.md) on thebackend "LAN".
 
 ## Create CT (LXC container)
 CT stands for ConTainer
