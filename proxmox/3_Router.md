@@ -3,11 +3,14 @@ How to create a router to our backend "LAN"
 
 # Configure Networking
 - Log in to proxmox
-
-
-NOTE in this lab we will use the following VLAN numbers for "internal" networks, not to be trunked on the host's uplink
-- 100 = inside LAN (192.168.100.0/24)
-- 200 = pentesting network (192.168.101.0/24)
+- From the left menu navigate to Datacenter > proxmox-lab1
+- Click on the host (proxmox-lab1) to reveal the host settings
+- Click System > Network
+- Click Create > Linux Bridge
+  - Name: vmbr1
+  - Autostart: Checked
+  - Click Create
+- Click **Apply Configuration** and the new brige will start
 
 # Download the ISO
 1. Go to https://vyos.io
