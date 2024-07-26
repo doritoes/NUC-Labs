@@ -20,6 +20,12 @@ IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
 - guest tools???
 - how to install community edition so it doesn't keep bombing you will no subscription and errors
+- the proxmox logon on every screen takes you to sales site, not the root menu
+- login TFA = two factor authentciation
+- uses noVNC
+- gives direct access to the network guts: Linux Bridge vmbr0
+- certificates: exposes ACME for certificate  management
+- exposes a firewall
 
 Materials:
 - Lab router  providing DHCP and internet access
