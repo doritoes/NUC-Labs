@@ -1,9 +1,16 @@
 # Install Proxmox VE
 References: https://www.youtube.com/watch?v=fuS7tSOxcSo
 
-We will start with a the XOA virtual appliances, then build our own XO installation to replace it
+Things about Proxmox Virtual Environment
+- Based on Debian
+- Can install Proxmox in a Debian graphical desktop
+- Easier to use Ceph for storage than XCP-ng
+- Uses LVMs
+- Restful API
+- Multi-master for robust handling of failed node/system
+- Full virutalization (KVM)
 
-NOTES What is Ceph?
+Things about Ceph
 - Ceph is an open source software-defined storage solution designed to address the block, file and object storage needs of modern enterprises
 - Decouples physical storage hardware using software abstraction layers
 - Storage clustering solution; add any number of disks on any number of machines into one big storage cluster
