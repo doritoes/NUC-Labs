@@ -60,13 +60,34 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
     -  See also https://gist.github.com/vinhjaxt/a774ac87b0313a34f4c445048d8e13cf
 
 ## Connect Proxmox VE to File Share
-🌱 Not sure how to do this yet
+### File Share (SMB/CIFS)
+- From the left pane click **Datacenter**
+- Click **Storage** and then click **Add** > **SMB/CIFS**
+- ID: **ISO-SMB**
+- Server: `<IP_Address of computer/NAS>`
+- Username: *user authorized to access the share*
+- Password: *the password for that user*
+- Share: *the name of the share*
+- Enable: Checked
+- Content: **ISO image**
+- Click Add
+
+### NFS
+REMEMBER your NFS server (NAS) may require you to add the proxymox host's IP address to its permissions
+- From the left pane click **Datacenter**
+- Click **Storage** and then click **Add** > **SMB/CIFS**
+- ID: **ISO-SMB-NFS**
+- Server: `<IP_Address of NAS>`
+- Export: *click the down arrow* (e.g., `/volume1/ISO`)
+- Content: **ISO image**
+- Enable: Checked
+- Click Add
 
 # Local ISO Repository on XO Server
 We will also demonstrate storing .iso files on the proxmox host, which you might want to avoid--it uses up storage on our host.
 
 1. Log in to proxmox
 2. From the left menu, expane Datacenter > **proxymox-lab** > **local (proxmox-lab)**
-3. Click ISO Images
-4. Click Upload
+3. Click **ISO Images**
+4. Click **Upload**
 5. Select the ISO file to upload, and click **Upload**
