@@ -34,15 +34,11 @@ Or, if you created local storage, upload the ISO there.
 
 # Create VyOS VM
 - From the top ribbon clikc **Create VM**
-  - Node: Auto selects **proxmox-lab1**
-  - VM ID: automatically populated; each resource requries a unique ID
-  - Name: **vyos**
-  - Check **Start at boot**
-- From the left menu click **New** > **VM**
   - General tab
-    - Select the pool **xcp-ng-lab1**
-    - Template: **Other install media**
-    - Name: **VyOS**
+    - Node: Auto selects **proxmox-lab1**
+    - VM ID: automatically populated; each resource requries a unique ID
+    - Name: **vyos**
+    - Check **Start at boot**
   - OS tab (clicking Next takes you to the next tab)
     - Use CD/DVD disk image file (iso)
       - Storage: local
@@ -53,7 +49,7 @@ Or, if you created local storage, upload the ISO there.
   - System tab
     - no changes for VyOS (TPM requried for Windows 11)
   - Disks tab
-    - Disk side: 8GB
+    - Disk size: **8GB**
     - Check **Discard** because our host is using SSD's
   - CPU tab
     - Sockets: **1**
@@ -67,12 +63,18 @@ Or, if you created local storage, upload the ISO there.
     - Model: VirtIO (best performance)
     - Firewall: default is checked, <ins>uncheck</ins> for the router
   - Confirm tab
-  - Check **Start after created**
+  - Don't check **Start after created**
   - Click **Finish**
 - Click on the VM (ID 100) in the left pane
+  - Click Hardware
+  - Click Add > Network Device
+    - Bridge: vmbr1
+    - Uncheck Firewall
+    - Click Add
+  - Click **Start**
 - In the right pane click Console
   - A new windows will be opened for the console, using noVNC
-  - If the VM is not started, it will help you start it
+  - If the VM is not started, proxmox will help you start it
   - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
 - Login as `vyos`/`vyos`
 - `install image`
@@ -158,13 +160,3 @@ commit
 save
 exit
 ```
-
-# Xen Tools
-The VyOS image comes with vyos-xe-guest-utilities.
-
-Here is how to enable it:
-- `sudo sytemctl start xe-guest-utilities`
-- `sudo sytemctl enable xe-guest-utilties`
-- `sudo sytemctl status xe-guest-utilties`
-
-If you have a permissions issue, check the permissions on `/etc/systemd/system/xe-guest-utilities.service`
