@@ -35,3 +35,37 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Install Supplemental Packs: NO
 - Remove the USB stick when prompted
 - Wait as the system reboots
+
+Notes:
+- Tested on a NUC 14 with lots of storage
+  - nvme 4TB
+  - nvme 2TB
+  - SATA 4TB
+  - thunderbolt nvme 4TB
+- Selecting all the drives during installation caused the system to come up with NO local storage
+- Selecting just the nvme0 4TB installed as expected
+  - To use the additional drives
+    - SATA Drive
+      - **New** > **Storage**
+      - Host: **xcpng-lab1**
+      - Name: **SATA Drive** (customize as needed)
+      - Decription: **Internal SATA 4TB drive**
+      - Storage type: **VDI SR** > **ext (local)**
+      - Device: **/dev/sata**
+      - Click **Create**
+    - Internal second nvme 2TB
+      - **New** > **Storage**
+      - Host: **xcpng-lab1**
+      - Name: **Second Internal Drive** (customize as needed)
+      - Decription: **Internal nvme 2TB drive**
+      - Storage type: **VDI SR** > **ext (local)**
+      - Device: **/dev/nvme1n1**
+      - Click **Create**
+    - Attempts to similarly mount nvme0n1 for the external Thunderbolt drive errored out
+ 
+  admin@admin.net
+  admin
+
+
+  xoa
+  thepass
