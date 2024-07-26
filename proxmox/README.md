@@ -15,6 +15,8 @@ Left to do:
 
 Out of scope:
 - Still scoping
+- ACME certificate automation
+- CEPH
 
 IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
