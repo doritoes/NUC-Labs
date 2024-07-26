@@ -65,8 +65,8 @@ References:
 ## Install Hypervisor on NUC Host
 [Install Proxmox VE](1_Install.md)
 
-## Configure ISO Storage
-[Configure ISO Stroage](2_ISO_Storage.md)
+## Connect ISO Storage
+[Connect ISO Stroage](2_ISO_Storage.md)
 
 ## Install VyOS router
 
