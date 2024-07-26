@@ -19,6 +19,7 @@ Out of scope:
 IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
 - guest tools???
+- how to install community edition so it doesn't keep bombing you will no subscription and errors
 
 Materials:
 - Lab router  providing DHCP and internet access
