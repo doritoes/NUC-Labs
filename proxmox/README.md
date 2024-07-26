@@ -3,6 +3,25 @@ The mission in this Lab is to set up a virtual Lab environment hosted on a NUC r
 
 Why it's perfect to the lab:
 - ProxmoxVE is super-flexible and feature-rich, perfect for the Lab
+- Easy to use Ceph support for cobbling together storage
+
+Things about Proxmox Virtual Environment
+- Based on Debian
+- Can install Proxmox in a Debian graphical desktop
+- Easier to use Ceph for storage than XCP-ng
+- Uses LVMs
+- Restful API
+- Multi-master for robust handling of failed node/system
+- Full virutalization (KVM)
+
+Things about Ceph
+- Ceph is an open source software-defined storage solution designed to address the block, file and object storage needs of modern enterprises
+- Decouples physical storage hardware using software abstraction layers
+- Storage clustering solution; add any number of disks on any number of machines into one big storage cluster
+- Ideal for cloud, Openstack, Kubernetes, et.
+- Configuration for ceph can include the number of copies of a file (set 2 means cluster will always have 3 copies of all the objects this setting applies to)
+- self-managing, meaning that it will automatically try to distribute these copies over 3 physical machines (if possible), onto 3 separate disks; When any disk or machine dies, ceph will immediately use the 2 remaining copies of the affected objects and create a 3rd copy in the cluster.
+
 
 Mission:
 - Bare metal installation on the NUC
@@ -35,7 +54,6 @@ Materials:
   - NUC10FNH (BXNUC10i7FNH1) ([specs](https://www.intel.com/content/dam/support/us/en/documents/intel-nuc/NUC10i357FN_TechProdSpec.pdf))
   - 32GB RAM (64GB max)
   - 2TB SSD
-  - TIP From BIOS disable the SDHC card slot; 🌱 does proxmox have drivers for it? XCP-ng didn't
   - TIP Running a hypervisor and the NUC might be a reason to disable the feature to disable the "Fan off when cool" feature; by default the fan will stop for temperatures under 40C
 - USB sticks
   - 1 USB stick 8GB or more for installation of proxmox
