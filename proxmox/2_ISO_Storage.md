@@ -70,7 +70,10 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
 - Share: *the name of the share*
 - Enable: Checked
 - Content: **ISO image**
-- Click Add
+- Click **Add**
+
+IMPORTANT This will create a subdirectory "template" and inside that the "iso" directory
+- Copy your ISOs inside this "iso" location to be accessible from proxmox
 
 ### NFS
 REMEMBER your NFS server (NAS) may require you to add the proxymox host's IP address to its permissions
@@ -82,6 +85,9 @@ REMEMBER your NFS server (NAS) may require you to add the proxymox host's IP add
 - Content: **ISO image**
 - Enable: Checked
 - Click Add
+
+IMPORTANT This will create a subdirectory "template" and inside that the "iso" directory
+- Copy your ISOs inside this "iso" location to be accessible from proxmox
 
 # Local ISO Repository on XO Server
 We will also demonstrate storing .iso files on the proxmox host, which you might want to avoid--it uses up storage on our host.
