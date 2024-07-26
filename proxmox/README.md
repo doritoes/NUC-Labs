@@ -18,6 +18,7 @@ Out of scope:
 
 IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
+- guest tools???
 
 Materials:
 - Lab router  providing DHCP and internet access
@@ -40,6 +41,19 @@ References:
 ## Install VyOS router
 
 ## Install VMs on LAN
+
+## Create CT (LXC container)
+CT stands for ConTainer
+
+In your pve gui select storage "local" -> ct templates -> templates -> search for ubuntu -> download
+
+lightweight alternative to fully virtualized machines (VMs). They use the kernel of the host system that they run on, instead of emulating a full operating system (OS). This means that containers can access resources on the host system directly.
+
+Only Linux distributions can be run in Proxmox Containers
+
+For security reasons, access to host resources needs to be restricted. Therefore, containers run in their own separate namespaces. Additionally some syscalls (user space requests to the Linux kernel) are not allowed within containers.
+
+
 
 ## Install OPNsense firewall
 
