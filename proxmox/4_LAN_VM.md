@@ -50,7 +50,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - a separate windows is opened
 - Follow the Install wizard per usual
   - To remove the installation media
-    - Back in the main proxmox windows, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - Press Enter to Reboot
@@ -246,7 +246,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Remove the installation media
-    - Back in the main proxmox windows, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - At the console, press **Shift-F10** to open command prompt
@@ -257,11 +257,11 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click More > Clone
     - Target node: **proxmox-lab1**
     - VM ID: *automatically populated**
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
-      - the other option is Full Clone
+    - NOTE There is no "Linked Clone" option
     - Name: `win10-lan-ready`
     - Click **Clone**  
   - Log in complete the setup wizard
+    - Start the VM
     - Set region and keyboard layout, skip second keyboard layout
     - Select **Set up for personal use** (feel free to experiment)
     - Click **Offline account** then click **Limited experience**
@@ -283,117 +283,160 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
-- Convert win10-lan-ready to a template
+- Clone win10-lan-ready to create more Windows 10 VMs
 - Questions to ponder:
-  - What are the differences between the two templates?
+  - What are the differences between the two cloning bases we created?
   - Does this affect the Activation required timers?
-- Optionally create another VM from each template and experiment
+- Optionally create another VM from each win10-lan and win10-lan-ready and experiment
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. 
+IMPORTANT Windows 11 will not install without a TPM.
 
-🌱 These instructions have not been tested and are assumed to be <ins>incorrect and out of date</ins>
+IMPORTANT If you want to set up using a local account instead of a Microsoft account
+- Disconnect Internet during setup
+- https://www.elevenforum.com/t/clean-install-windows-11.99/
+  - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
 
-- From the left menu click New > VM
-  - Select the pool **xcp-ng-lab1**
-  - Template: **Other Install Media**
-  - Name: **win11-lan**
-  - Description: **Windows 11 on LAN network**
-  - CPU: **2 vCPU**
-  - RAM: **4GB**
-  - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Windows 11 iso you uploaded*
-  - Interfaces: select **Inside** from the dropdown
-  - Disks: Add a disk **128GB** (Windows 11 minimum is 64GB; 128GB for lab, 256GB for average user)
-  - Click **Create**
-- The details for the new VM are now displayed
-- Click **Console** tab
-- Follow the Install wizard per usual
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab1**
+    - VM ID: *auto populates* (unique ID required for every resource)
+    - Name: **win11-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 10 ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **11/2022/2025**
+  - System tab
+    - Check **Add TPM**
+    - TPM Storage: select **local-lvm**
+    - EFI Storage: select **local-lvm**
+  - Disks tab
+    - Disk size: **128GB**
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 2
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **4096 MB** (4GB)
+  - Network tab
+    - Bridge: **vmbr1**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab1 > 107 (win11-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate windows is opened
+- You are prompted **Press any key to boot from CD or DVD....**
+  - **press any key**
+  - if you missed it, stop the VM, start again and try again at the console
+- Click Console and follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
-  - Click Install now
-  - Activate Windows: Click I don't have a product key
-  - Select the OS to install: Windows 11 Pro (feel free to experiment)
-  - WARNING You might bet the error: This PC can't run Windows 11
-    - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
-    - Possible culprits: "Enable TPM 2.0 on your PC"
-    - XCP-ng only supports VTPMs on pools running 8.3 or later (8.3 is currently in beta)
-  - **NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME**
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
+  - Click **Install now**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 11 Pro** (feel free to experiment) and click **Next**
+  - Check the box then click **Next**
+  - Click **Custom: Install Windows only (advanced)**
+  - Accept the installation on Drive 0, click **Next**
+  - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
-  - Eject the installation ISO
-  - Shift-F10 to open command prompt
-  - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
-- Re-create the VM from the template
-  - New > VM
-  - Template: **win11-lan**
-  - Name: **win11-lan-ready**
-  - Interface: Note that it's set to **Inside**, which is what we want
-  - Click **Create**
-- Log in complete the setup wizard
-  - Set region and keyboard layout, skip second keyboard layout
-  - Select Set up for personal use (feel free to experiment)
-  - Click **Offline account** then click **Limited experience**
-  - User: **lab**
-  - Password: *select a password*
-  - Create security questions for this account: be creative
-  - Click **Not now**
-  - Privacy: disable all the settings and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept** (I chose Business)
-  - Cortana: **Click Not now**
-  - Close "Browse the web with the best performing browser on Windows"
-- Install Guest Tools
-  - The Windows tools are not included on the guest-tools.iso
-  - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
-    - Download MSI and install manually, or install later using group policy
-    - In XO, click the Advanced tab
-      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
-      - This requires a reboot
-      - You still need the Xen agent installed
-  - The impact of not having the agent:
-    - management of the OS and advanced features like moving the VM to another pool will not be available
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
+  - At the console, press **Shift-F10** to open command prompt
+    - `shutdown /t 0 /s`
+    - type this exactly, spacing matters
+- Clone a new VM from `win11-lan`
+  - Click on the VM win11-lan (it should still be powered off)
+  - Click More > Clone
+    - Target node: **proxmox-lab1**
+    - VM ID: *automatically populated**
+    - NOTE There is no "Linked Clone" option
+    - Name: `win11-lan-ready`
+    - Click **Clone**  
+  - Log in complete the setup wizard
+    - Start the VM
+      - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connect (as simple as powering down the VyOS router for now)
+    - Set region and keyboard layout, skip second keyboard layout
+    - Name your device: **windows11-lan**
+    - Select **Set up for personal use** (feel free to experiment)
+    - Windows 11 Pro is forcing "Sign in"
+      - This method didn't work in our Lab testing
+        - Shift-F10 and enter OOBE\BYPASSNRO
+        - It will reboot the system and restart the installation wizard
+        - It's supposed to give you the option to not have to create a Microsoft account, but it didn't work in the Labe
+      - Instead disconnect from the internet and start over
+        - Option 1 - power down the voyos router for a while
+        - Option 2 - edit the VM's network device and chedk Disconnect for now; uncheck it later
+    - At *Let's connect you to a network*
+      - Click **I don't have internet**
+    - Click **Continue with limited setup**
+    - User: **lab**
+    - Password: select a password
+    - Create security questions for this account: be creative
+    - Privacy: *disable all the settings* and then click **Next**
+- Reconnect to the Internet
 - Apply Windows Updates (reboots included)
-- Enable RDP
+- Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
-- Change the hostname to win11-lan-ready
+  - Slide to enable and Confirm
+- Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
-- Rename from the VM from win11-lan to win11-lan-ready
-- Convert win11-lan-ready to a template
+- Clone win11-lan-ready to create more Windows 11 VMs
 - Questions to ponder:
-  - What are the differences between the two templates?
+  - What are the differences between the two cloning bases we created?
   - Does this affect the Activation required timers?
-- Optionally create another VM from each template and experiment
-  - How could you use Templates to quickly roll out a number of servers of the same type?
+- Optionally create another VM from each win11-lan and win11-lan-ready and experiment
 
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
-- From the left menu click **New** > **VM**
-  - Select the pool **xcp-ng-lab1**
-  - Template: **Windows Server 2022 (64-bit)**
-  - Name: **server2022-lan**
-  - Description: **Windows Server 2022 on LAN network**
-  - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
-  - RAM: **2GB**
-  - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
-  - Interfaces: select *Inside* from the dropdown
-  - Disks: **40GB** (default 32GB)
-  - Click **Create**
-- The details for the new VM are now displayed
-- Click **Console** tab
-- You will be prompted to Press any key to boot from CD to DVD
-  - **Press any key**
-  - If you missed it, power cycle and try again
-- Follow the Install wizard per usual
+
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab1**
+    - VM ID: *auto populates* (unique ID required for every resource)
+    - Name: **server2022-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 2022 Serer Eval ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **11/2022/2025**
+  - System tab
+    - No TPM or EFI disk requried
+  - Disks tab
+    - Disk size: **128GB**
+    - Bus/Device defaults to IDE; feel free to experiment with this
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 1
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **2048 MB** (2GB)
+  - Network tab
+    - Bridge: **vmbr1**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab1 > 107 (win11-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate windows is opened
+- You are prompted **Press any key to boot from CD or DVD....**
+  - **press any key**
+  - if you missed it, stop the VM, start again and try again at the console
+- Open the console and follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
   - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
@@ -402,238 +445,57 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Click Custom: Install Windows only (advanced)
   - Accept the installation on Drive 0
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
-  - Eject the installation ISO
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
-- Re-create the VM from the template
-  - New > VM
-  - Template: server2022-lan
-  - Name: server2022-lan-ready
-  - Click **Create**
+- Clone a new VM from `server2022-lan`
+  - Click on the VM server2022-lan (it should still be powered off)
+  - Click More > Clone
+    - Target node: **proxmox-lab1**
+    - VM ID: *automatically populated**
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2022-lan-ready`
+    - Click **Clone**  
+- Power on `server2022-lan-ready`
 - After booting, set password for Administrator
-- Install Guest Tools
-  - The Windows tools are not included on the guest-tools.iso
-  - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
-    - Download MSI and install manually, or install later using group policy
-    - In XO, click the Advanced tab
-      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
-      - This requires a reboot
-      - You still need the Xen agent installed
-  - The impact of not having the agent:
-    - management of the OS and advanced features like moving the VM to another pool will not be available
-- Login in
-  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+- Log in
+  - Expand the noVNC meno on the left
+  - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
   - Yes, allow the server to be discovered by other hosts on the network
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM
-- Convert server2022-lan-ready to a template
-- Now let's prepare the template VM for cloning
+- Clone a new VM from `server2022-lan-ready`
+  - We are preparing a Server 2022 image suitable for cloning
   - must perform generalization to remove the security identifier (SID)
-  - allows us to rapidly clone more servers
-  - create a new VM from the template win10-lan-ready
-    - New > VM
-    - Template: server2022-lan-ready
-    - Name: server2022-lan-prep
-    - Click **Create**
+  - Click on the VM server2022-lan-ready (it should still be powered off)
+  - Click More > Clone
+    - Target node: **proxmox-lab1**
+    - VM ID: *automatically populated**
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2022-lan-prep`
+    - Click **Clone**  
+- Power on `server2022-lan-prep`
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-  - Convert server2022-lan-prep to template
   - From now on, create Windows Server VMs from the template server2022-lan-prep
 - Questions to ponder:
-  - What are the differences between the three Windows server templates?
+  - What are the differences between the three Windows server clone images?
   - Does this affect the 180-day evaluation timer?
   - What are the advantages of each template?
 - Optionally create VMs from each template and experiment
   - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
 
-To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
+Another NUC Lab for XCP-ng has details on
+- Converting Windows Server to a Domain Controller
+- Configuring a domain file server
+- https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
 
-To configure a Domain File Server, see [Appendix - Create Windows File Server](Appendix-Windows_File_Server.md)
-
-# Guacamole Server
-Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
-
-TIP The hotkey to escape a guacamole session is control-alt-shift
-
-See references:
-- https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
-- https://dae.me/blog/2698/guacamole-1-4-creation-of-websocket-tunnel-to-guacd-failed/
-
-Steps:
-- Create a Ubuntu server to run Guacamole
-  - New > VM
-  - Template: **ubuntu-server-lan**
-  - Name: **guacamole**
-  - Description: *Guacamole server on LAN network*
-  - Click **Create**
-- Log in to the console on the new guacamole VM
-  - Change hostname
-    - View current hostname: `hostnamectl`
-    - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
-    - Confirm it has changed: `hostnamectl`
-- Install dependencies
-  - Copy [guac-dependencies.sh](guac-dependencies.sh)
-  - `sudo bash guac-dependencies.sh`
-- Download Apache Guacamole
-  - official downloads page: https://downloads.apache.org/guacamole/
-    - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
-- Extract and Compile Guacamole
-  - `tar -xzf guacamole-server-1.5.5.tar.gz`
-  - `cd guacamole-server-1.5.5`
-  - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
-  - `make`
-  - `sudo make install`
-  - `sudo ldconfig`
-- Configure Guacamole Server
-  - `sudo mkdir /etc/guacamole`
-  - Create new configuration file `/etc/guacamole/guacd.conf`
-    - Example: `sudo vi /etc/guacamole.conf`
-  - Contents:
-    - `[daemon]`
-    - `pid_file = /var/run/guacd.pid`
-- Start and Enable Guacamole Service
-  - `sudo systemctl daemon-reload`
-  - `sudo systemctl start guacd`
-  - `sudo systemctl enable guacd`
-  - `sudo systemctl status guacd`
-- Install the Guacamole Web App
-  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war`
-  - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
-- Configure Apache Guacamole Database Authentication
-  - `sudo mysql_secure_installation`
-    - current root password is none (default)
-    - accept default switch to unix_socket **Y**
-    - accept default and change the root password (i.e., passtoor)
-    - accept default and remove anonymous users
-    - accept default and disallow root login remotely
-    - accept default and remote test database and access to it
-    - accept default and reload privilege tables
-  - `wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz`
-  - `tar -xzf mysql-connector-java-8.0.26.tar.gz`
-  - `sudo mkdir /etc/guacamole/lib/`
-  - `sudo mkdir /etc/guacamole/extensions/`
-  - `sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/`
-  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
-- Create a Guacamole Database, User and Scheme
-  - Copy [create-database.sql](create-database.sql)
-    - `cat create-database.sql | sudo mysql`
-    - Old way (not Unix sockets): `cat create-database.sql | mysql -u root -p`
-  - Import SQL Schema Files and Create Properties Files For Guacamole
-    - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
-    - `cat *.sql | sudo mysql -p guac_db`
-    - press enter (no password) when prompted for the password
-    - Old way (not Unix sockets) : `cat *.sql | mysql -u root -p guac_db`
-- Configure Guacamole properties (new file)
-  - sudo vi /etc/guacamole/guacamole.properties
-```
-# MySQL properties
-mysql-hostname: 127.0.0.1
-mysql-port: 3306
-mysql-database: guac_db
-mysql-username: guac_user
-mysql-password: password
-```
-  - `sudo systemctl restart tomcat9 guacd mysql`
-- Configure ssh
-  - on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
-    - `sudo vi /etc/ssh/sshd_config`
-    - `PubkeyAcceptedKeyTypes +ssh-rsa`
-    - `HostKeyAlgorithms +ssh-rsa`
-- `sudo systemctl restart sshd`
-- Create /etc/guacamole/guacd.conf with the following contents
-  - `[server]`
-  - `bind_host = 127.0.0.1`
-  - `bind_port = 4822`
-- Modify /etc/guacamole/guacamole.properties to add
-  - `# guacd properties`
-  - `guacd-hostname: 127.0.0.1`
-  - `guacd-port: 4822`
-- restart guacd
-  - `sudo systemctl restart guacd`
-- Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
-  - Point the web browser to the IP address of the guacamole server
-  - `http://server-ip:8080/guacamole`
-    - If your connection is being directed to https, it will be "Unable to connect". See [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
-  - Login as `guacadmin`/`guacadmin`
-  - REMEMBER the hotkey to escape a session is control-alt-shift
-  - Tips for connection to Windows 10 / Server 2022
-    - Protocol: RDP
-    - Max conns 1
-    - Max conns per user 1
-    - <ins>Network</ins> Hostname: use the IP address
-    - Port: leave blank
-    - Username: the username
-    - Password: the password
-    - Domain: leave blank
-    - Security mode: NLA (network level authentication)
-    - Disable Authentication: leave default = unchecked
-    - Ignore server certificate: **CHECK THIS**
-  - Tips for connection to Ubuntu Desktop
-    - Protocol: RDP
-    - Max conns 1
-    - Max conns per user 1
-    - <ins>Network</ins> Hostname: use the IP address
-    - Port: leave blank
-    - Username: the username
-    - Password: the password
-    - Domain: leave blank
-    - Security mode: leave blank
-    - Disable Authentication: leave default = unchecked
-    - Ignore server certificate: **CHECK THIS**
-- Add Port translation to make the Guacamole server accessible from outside the VyOS router
-  - NOTE Modify the 192.168.100.40 address to the IP address of the guacamole server
-  - `configure`
-  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'`
-  - `set nat destination rule 70 inbound-interface name 'eth0'`
-  - `set nat destination rule 70 translation address '192.168.100.40'`
-  - `set nat destination rule 70 destination port 8080`
-  - `set nat destination rule 70 translation port 8080`
-  - `set nat destination rule 70 protocol 'tcp'`
-  - `commit`
-  - `save`
-  - `exit`
-- From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
-- Configure re-direct to the guacamole app
-  - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta http-equiv="refresh" content="0; url=guacamole" />
-<title>Redirecting...</title>
-</head>
-<body>
-<p><a href="guacamole">Redirect</a></p>
-</body>
-</html>
-```
-
-To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
-
-
-# Important Notes
-How to Set the Screen Size for Windows UEFI VMS on XCP-ng
-- Modify the VM advanced settings to increase Video RAM from 8MB to 16MB
-- Open the console of the virtual machine.
-- Start the virtual machine.
-- As soon as possible, keep continuously pressing F2 until the UEFI setup screen appears.
-- Open **Device Manager**
-- Open **OVMF Platform Configuration**
-- Select **Change Preferred**
-- Select the preferred resolution you want (1600x900 for example)
-- Select **Commit Changes and Exit**
-- Press **Esc**
-- Select **Reset**
-- Check Windows Display settings and note the display resolution has changed
