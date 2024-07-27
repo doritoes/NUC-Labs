@@ -41,6 +41,9 @@ Out of scope:
 - Pools and multiple hosts
 - ACME certificate automation
 - CEPH
+- SDN features (Zones, VNets, Options, IPAM)
+- Firewall
+- Metrics server (Graphite, InfluxDB)
 
 IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
@@ -73,13 +76,11 @@ References:
 ## Connect ISO Storage
 [Connect ISO Storage](2_ISO_Storage.md)
 
-🌱 Currently only local storage is used. Need to investigate remote ISO storage
-
 ## Install VyOS router
 [Install Router](3_Router.md) outlines how to create a router to our backend "LAN".
 
 ## Install VMs on LAN
-Next we will [Install VMs](4_LAN_VM.md) on thebackend "LAN".
+Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Create CT (LXC container)
 CT stands for ConTainer
