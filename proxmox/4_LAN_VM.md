@@ -462,7 +462,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Power on `server2022-lan-ready`
 - After booting, set password for Administrator
 - Log in
-  - Expand the noVNC meno on the left
+  - Expand the noVNC menu on the left
   - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
   - Yes, allow the server to be discovered by other hosts on the network
 - Apply Windows Updates (reboots included)
@@ -471,12 +471,12 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Slide to Enable Remote Desktop then accept the message
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
-- Shut down the Windows VM
+- Shut down the Windows VM `server2022-lan-ready`
 - Clone a new VM from `server2022-lan-ready`
   - We are preparing a Server 2022 image suitable for cloning
   - must perform generalization to remove the security identifier (SID)
   - Click on the VM server2022-lan-ready (it should still be powered off)
-  - Click More > Clone
+  - Click **More** > **Clone**
     - Target node: **proxmox-lab1**
     - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
@@ -486,15 +486,15 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-  - From now on, create Windows Server VMs from the template server2022-lan-prep
+  - From now on, clone Windows Server VMs from server2022-lan-prep
 - Questions to ponder:
   - What are the differences between the three Windows server clone images?
   - Does this affect the 180-day evaluation timer?
-  - What are the advantages of each template?
-- Optionally create VMs from each template and experiment
+  - What are the advantages of each?
+- Optionally clone VMs from each and experiment
   - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
 
-Another NUC Lab for XCP-ng has details on
+Another NUC Lab (for XCP-ng) has details on
 - Converting Windows Server to a Domain Controller
 - Configuring a domain file server
 - https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
