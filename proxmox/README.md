@@ -83,17 +83,8 @@ References:
 Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Create CT (LXC container)
-CT stands for ConTainer
-
-In your pve gui select storage "local" -> ct templates -> templates -> search for ubuntu -> download
-
-lightweight alternative to fully virtualized machines (VMs). They use the kernel of the host system that they run on, instead of emulating a full operating system (OS). This means that containers can access resources on the host system directly.
-
-Only Linux distributions can be run in Proxmox Containers
-
-For security reasons, access to host resources needs to be restricted. Therefore, containers run in their own separate namespaces. Additionally some syscalls (user space requests to the Linux kernel) are not allowed within containers.
-
-
+An interesting feature of proxmox is its use of [CT (LXC containers)](5_LAN_CT.md)
+Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Install OPNsense firewall
 
