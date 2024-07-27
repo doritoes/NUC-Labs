@@ -88,8 +88,15 @@ Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Install OPNsense firewall
 
-Does we need to do this for proxmox? Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted.
+I did also get another dual port ethernet specifically to do a PCI passthru (to isolate the card from the PROXMOX hypervisor)
 
+
+Does we need to do this for proxmox? Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted. basicallly turn off hardware checksum offloading. 4GB RAM with no baloon, 4 host cores. 
+
+ net.isr.bindthreads to 1 and net.isr.maxthreads to -1 under tunables to take advanced of some multicore processing. I
+
+
+ 
 ## Set Up Pen Testing Lab
 
 ## Automation
