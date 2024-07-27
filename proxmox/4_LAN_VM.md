@@ -33,16 +33,6 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
-  - Template: **Ubuntu Jammy Jellyfish 22.04**
-  - Name: **ubuntu-desktop-lan**
-  - Description: **Ubuntu desktop on LAN network**
-  - CPU: **1 vCPU**
-  - RAM: **2GB**
-  - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Ubuntu 22.04 Desktop image you uploaded*
-  - Interfaces: select **Inside** from the dropdown
-  - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
-  - Click **Create**
 - From the left menu navigate to the new VM
   - Datacenter > proxmox-lab1 > 101 (ubuntu-desktop-lan)
   - Click on the VM in the left menu
@@ -98,8 +88,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Read the warning: *unable to create template, because VM contains snapshots**
     - Snapshots > click `initial_build` > Remove > **Yes**
     - Repeat the action to convert to template
-    - Note that the VM is still there
-    - Note that the template is only available for creating CT/LXC containers
+    - Note that the VM is still there, but <ins>can only be cloned<,ins>
 - Clone a new VM from `ubuntu-desktop-lan`
   - Click on the VM ubuntu-desktop-lab (it should still be powered off)
   - Click More > Clone
@@ -113,7 +102,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click on the new VM **desktop-lan**
   - Click **Start**
   - Click **Console**
-  - What are the advantages of using DHCP in the lab for these templates?
+  - What are the advantages of using DHCP in the lab for these closes and templates?
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
@@ -498,4 +487,3 @@ Another NUC Lab (for XCP-ng) has details on
 - Converting Windows Server to a Domain Controller
 - Configuring a domain file server
 - https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
-
