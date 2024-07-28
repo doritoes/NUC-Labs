@@ -168,7 +168,7 @@ Or, if you created local storage, upload the ISO there.
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Because our "WAN" is on a RFC1919 network
+  - Because our "WAN" is on a RFC1918 network
     - Click Interface > WAN
     - Uncheck Block private networks
     - Click Save
