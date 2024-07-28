@@ -164,11 +164,6 @@ Or, if you created local storage, upload the ISO there.
     - Scroll to the bottom of the Updates tab and click **Update** then accept the update and reboot
     - Wait for updates and the reboot to complete
     - Log back in and check if there are any more updates
-  - Install Xen guest utilities
-    - System > Firmware > Plugins
-      - os-xen - click "+" to install
-      - Reboot (Power > Reboot > Yes)
-    - In XO, look at the opnsense VM general tab; management agent is now detected
 - Configure Firewall Rules
   - Firewall > Rules
     - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
@@ -176,8 +171,8 @@ Or, if you created local storage, upload the ISO there.
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Because our "WAN" is on a RFC1919 network
-    - Click Interface > WAN
+  - Because our "WAN" is on a RFC1918 network
+    - Click Interfaces > WAN
     - Uncheck Block private networks
     - Click Save
     - Click Apply Changes
@@ -189,9 +184,9 @@ It is always best practice to operate in an isolated Pentesting network. If you 
 - Your ISP may find you in violation of their acceptable use policy
 - Your activity is easily attributed to you and may draw attention from very anti-social netizens
 
-Best practice is to stop and finish setting up any parts you want to update over the Internet. The [next section](7_Pentesting_Lab.md) requires some of that.
+Best practice is to stop and finish setting up any parts you want to update over the Internet.
 
-Then continue with the follow steps to lock things down safely.
+Then continue with the following steps to lock things down safely.
 
 ## Disable Internet and DNS
 1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
