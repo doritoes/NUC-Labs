@@ -45,7 +45,30 @@ References:
   - You will be bombarded with errors because there is no paid subscription
 - Click Upgrade to open a separate shell window; accept the updates
 
-## What is next?
-repositories
+# Configure Community Repositories
+Reference: https://pve.proxmox.com/wiki/Package_Repositories
+- `vi /etc/apt/sources.list.d/pve-enterprise.list`
+  - Comment out line:
+    - `#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise`
+- `vi /etc/apt/sources.list.d/ceph.list`
+  - Comment out line:
+    - `#deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise`
+  - Add line:
+    - `deb http://download.proxmox.com/debian/ceph-reef bookworm no-subscription`
+- `vi /etc/apt/sources.list`
+  - Add line:
+    - `deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription`
+- `apt update`
 
-https://pve.proxmox.com/pve-docs/chapter-sysadmin.html
+Complete `sources.list` file:
+~~~
+deb http://ftp.debian.org/debian bookworm main contrib
+deb http://ftp.debian.org/debian bookworm-updates main contrib
+
+# Proxmox VE pve-no-subscription repository provided by proxmox.com,
+# NOT recommended for production use
+deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
+
+# security updates
+deb http://security.debian.org/debian-security bookworm-security main contrib
+~~~
