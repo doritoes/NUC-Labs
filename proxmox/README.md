@@ -87,15 +87,11 @@ An interesting feature of proxmox is its use of [CT (LXC containers)](5_LAN_CT.m
 Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Install OPNsense firewall
+Installing [OPNsense](5_OPNsense_VM.md) adds a firewall to isolate our pen-testing network from the outside. The VMs on this network can only access each other and the Internet (if access to the Interent is enabled).
 
-I did also get another dual port ethernet specifically to do a PCI passthru (to isolate the card from the PROXMOX hypervisor)
+🌱 The Tor configuration is currently not working.
 
-
-Does we need to do this for proxmox? Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted. basicallly turn off hardware checksum offloading. 4GB RAM with no baloon, 4 host cores. 
-
- net.isr.bindthreads to 1 and net.isr.maxthreads to -1 under tunables to take advanced of some multicore processing. I
-
-
+OPsense on proxmox can be a challenge because there is no easy way to disable hardware checksum offloading. When proxmox is used to run OPNsense as a border firewall leading to the Internet, the standard approach is to add a NIC and do PCI passthru (to isolate the card from the PROXMOX hypervisor).
  
 ## Set Up Pen Testing Lab
 
