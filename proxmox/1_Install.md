@@ -36,17 +36,18 @@ References:
   - Username: `root`
   - Password: *the password you selected*
   - Realm: Linux PAM standard authentication
-- WARNING: You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options.
-  - "The enterprise repository is enabled, but there is no active subscription!"
 
-## Updates
-- From the left menu, expand **Datacenter** > **proxymox-lab**
-- Click Updates then click Refresh
-  - You will be bombarded with errors because there is no paid subscription
-- Click Upgrade to open a separate shell window; accept the updates
-
-# Configure Community Repositories
+## Configure Community Repositories
 Reference: https://pve.proxmox.com/wiki/Package_Repositories
+
+Note the warnings
+- WARNING: You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options.
+- "The enterprise repository is enabled, but there is no active subscription!"
+- proxymox requires you to manually switch to the community repositories
+  - this is intentional, and intended to push users to the "easier" paid subcription model
+  - the download.proxmox.com had an invalid certificate as of this writing, and it's a Let's Encrypt certificate 🤔
+
+Command Line Steps:
 - `vi /etc/apt/sources.list.d/pve-enterprise.list`
   - Comment out line:
     - `#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise`
@@ -72,3 +73,11 @@ deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
 # security updates
 deb http://security.debian.org/debian-security bookworm-security main contrib
 ~~~
+
+## Updates
+- From the left menu, expand **Datacenter** > **proxymox-lab**
+- Click **Updates** then click **Refresh**
+  - You will be receive errors because there is no paid subscription
+- Click **Upgrade** to open a separate shell window; accept the updates
+- Underneath Upgrade click **Repositories**
+  - Review the repositories here - you can also use this interface instead of the command line
