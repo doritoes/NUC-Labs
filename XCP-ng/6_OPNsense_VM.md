@@ -193,7 +193,7 @@ Then continue with the follow steps to lock things down safely.
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
-- You many choose to configure the firewall to instead use a proxy service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
+- You many choose to configure the firewall to instead use a VON service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
 
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
