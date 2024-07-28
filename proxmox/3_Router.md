@@ -73,7 +73,7 @@ Or, if you created local storage, upload the ISO there.
     - Click Add
   - Click **Start**
 - In the right pane click Console
-  - A new windows will be opened for the console, using noVNC
+  - A new window will be opened for the console, using noVNC
   - If the VM is not started, proxmox will help you start it
   - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
 - Login as `vyos`/`vyos`
