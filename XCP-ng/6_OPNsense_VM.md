@@ -183,7 +183,7 @@ It is always best practice to operate in an isolated Pentesting network. If you 
 
 Best practice is to stop and finish setting up any parts you want to update over the Internet. The [next section](7_Pentesting_Lab.md) requires some of that.
 
-Then continue with the follow steps to lock things down safely.
+Then continue with the following steps to lock things down safely.
 
 ## Disable Internet and DNS
 1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
