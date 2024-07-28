@@ -97,18 +97,4 @@ OPsense on proxmox can be a challenge because there is no easy way to disable ha
 [Set Up Lab](6_Pentesting_Lab.md) will take you into setting up Kali Linux and OpenVAS for the first time
 
 ## Automation
-Here we look at the most common automation used with proxmox.
-
-### Run Anxible on the proxmox host itself
-Proxmox does not ship with Ansible, but you can install it. This example includes using Cloud-init, Terraform, and Ansible
-
-Reference: https://www.reddit.com/r/homelab/comments/13u66yn/automating_your_homelab_with_proxmox_cloudinit/
-- https://medium.com/@fat_zombi/automating-your-homelab-with-proxmox-cloud-init-terraform-and-ansible-introduction-6a95ee3e57a
-- https://medium.com/@fat_zombi/automating-your-homelab-with-proxmox-cloud-init-terraform-and-ansible-part-1-configuring-a-448576621edd?sk=efe413d550cc0cac162463b804e18577
-- https://medium.com/@fat_zombi/automating-your-homelab-with-proxmox-cloud-init-terraform-and-ansible-part-2-deploying-your-a7de6caa64b7?sk=ef40743f7886f50cc1f121d818605c22
-- https://medium.com/@fat_zombi/automating-your-homelab-with-proxmox-cloud-init-terraform-and-ansible-part-3-automating-with-23acc2343340?sk=3f7023f29dc560b41bd97f3221e08c0b
-
-# Appendices
-- more details
-
-# Other Notes
+[Advanced Automation](7_Advanced_Automation.md) will take you through an advanced scenario with Cloud-init, Terraform, and Ansible.
