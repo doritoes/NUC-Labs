@@ -12,11 +12,11 @@ References:
 - Log in to proxmox
 - From the left menu navigate to Datacenter > proxmox-lab1
 - Click on the host (proxmox-lab1) to reveal the host settings
-- Click System > Network
-- Click Create > Linux Bridge
-  - Name: vmbr2
-  - Autostart: Checked
-  - Click Create
+- Click **System** > **Network**
+- Click **Create** > **Linux Bridge**
+  - Name: **vmbr2**
+  - Autostart: **Checked**
+  - Click **Create**
 - Click **Apply Configuration** and the new brige will start
 
 # Download the ISO
@@ -75,8 +75,16 @@ Or, if you created local storage, upload the ISO there.
   - Confirm tab
   - Don't check **Start after created**
   - Click **Finish**
+- Click on the new VM **opnense**
+- Click **Hardware**
+- Click **Add** > **Network Device**
+  - Bridge: **vmbr2**
+  - Uncheck Firewall
+  - Click **Add**
 
 # Configure OPNsense
+- Start VM **opnsense**
+- Click on **Console**
 - Log in as `installer`/`opnsense`
 - Select the keymap
 - **Install (ZFS)** - it is the best choice for the Lab
@@ -87,15 +95,19 @@ Or, if you created local storage, upload the ISO there.
   - You need to check the box (use space bar)
   - Accept erasing the disk
 - Select a root password when prompted
-- Select Complete Install
-- Eject the ISO once the reboot starts (click the icon on Console tab)
+- Select **Complete Install**
+- Eject the ISO once the reboot starts
+  - Click on the VM
+  - Click Hardware
+  - Edit CD/DVD Drive
+    - Do not use any media
 - Wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) **Assign interfaces**
   - LAGGs: **No**
   - VLANs: **No**
-  - WAN interface: **xn0**
-  - LAN interface: **xn1**
+  - WAN interface: **vtnet0**
+  - LAN interface: **vtnet1**
   - Optional (OPT1): *just press enter*
   - Confirm
 - Option 2) **Set interface IP address**
@@ -119,19 +131,15 @@ Or, if you created local storage, upload the ISO there.
     - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
-  - From the left menu click **New** > **VM**
-  - Select the pool **xcp-ng-lab1**
-  - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
-  - Name: **pentest-workstation**
-  - <ins>Change</ins> the Interface to **Pentesting**
-  - Click **Create**
+  - Create a new VM or clone an existing one
+  - <ins>Change</ins> the network  to bridge **vmbr2**
 - Initial firewall configuration
   - From VM's browser, log in to firewall https://192.168.101.254
     - User `root` and password you selected
   - Follow the Wizard
     - General information
       - Hostname: **pentestfw**
-      - Domain: **xcpng.lab**
+      - Domain: **proxmox.lab**
       - Primary DNS Server: **8.8.8.8** (we want unfiltered DNS for this network)
       - Secondary DNS Server: **8.8.4.4**
       - <ins>Uncheck</ins> Override DNS
@@ -193,7 +201,7 @@ Then continue with the follow steps to lock things down safely.
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
-- You many choose to configure the firewall to instead use a proxy service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
+- You many choose to configure the firewall to instead use a VPN service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
 
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
