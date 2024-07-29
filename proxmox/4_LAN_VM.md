@@ -65,6 +65,16 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - BEWARE that remote desktop is disabled when the screen is locked
     - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
     - there are workarounds
+- Install qemu-guest-agent
+  - https://pve.proxmox.com/wiki/Qemu-guest-agent
+  - First install the agent
+    - `sudo apt update && sudo apt install -y qemu-guest-agent`
+  - Second enable the agent in proxmox
+    - Click on the VM
+    - Click on Options
+    - Edit QEMU Guest Agent: Check Use QEMU Gyest Agent
+    - Click OK
+  - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Enable SSH access
   - `sudo apt install -y openssh-server`
   - `sudo systemctl status ssh`
@@ -88,7 +98,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Read the warning: *unable to create template, because VM contains snapshots**
     - Snapshots > click `initial_build` > Remove > **Yes**
     - Repeat the action to convert to template
-    - Note that the VM is still there, but <ins>can only be cloned<,ins>
+    - Note that the VM is still there, but <ins>can only be cloned</ins>
 - Clone a new VM from `ubuntu-desktop-lan`
   - Click on the VM ubuntu-desktop-lab (it should still be powered off)
   - Click More > Clone
@@ -168,6 +178,16 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
     - accept the messages (default values OK)
+- Install qemu-guest-agent
+  - https://pve.proxmox.com/wiki/Qemu-guest-agent
+  - First install the agent
+    - `sudo apt update && sudo apt install -y qemu-guest-agent`
+  - Second enable the agent in proxmox
+    - Click on the VM
+    - Click on Options
+    - Edit QEMU Guest Agent: Check Use QEMU Gyest Agent
+    - Click OK
+  - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Power down the VM
   - 'sudo poweroff'
 - Clone a new VM from `ubuntu-server-lan`
