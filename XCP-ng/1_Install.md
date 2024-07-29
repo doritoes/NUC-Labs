@@ -61,4 +61,6 @@ Notes:
       - Storage type: **VDI SR** > **ext (local)**
       - Device: **/dev/nvme1n1**
       - Click **Create**
-    - Attempts to similarly mount nvme0n1 for the external Thunderbolt drive errored out
+- External Thunderbolt drive challenges
+  - Attempts to similarly mount nvme0n1 for the external Thunderbolt drive errored out
+  - Removed the external Thunderbolt drive, reinstalled, then after configured added the Thunderbolt drive; it now appeared as /dev/sdb and was able to be used
