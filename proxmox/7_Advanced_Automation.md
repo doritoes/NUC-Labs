@@ -1,6 +1,8 @@
 # Advanced Automation with proxymox.
 Proxmox does not ship with Ansible, but you can install it on the host. This example is based on the example by [fatzombi](https://medium.com/@fat_zombi).
 
+Terraform is an open-source infrastructure as code tool that allows you to define and manage your infrastructure as code. This code is a declarative language that is simple to write. In this Labwe will use Terraform to automate the creation of VMs in Proxmox.
+
 TIP: Support fatzombi [here](https://www.buymeacoffee.com/fatzombi)
 
 Reference: https://www.reddit.com/r/homelab/comments/13u66yn/automating_your_homelab_with_proxmox_cloudinit/
@@ -13,34 +15,58 @@ NOTES
 - This lab is performned on the proxmox host itself
 - You will need a subscription or have installed the no-subscription repository
 
-# Prerequisites
-- `apt update && apt install -y libguestfs-tools`
+# Create API Users, Permissions and Tokens
+Terraform needs users, permissions, and tokens in order to interact with proxmox.
+- Log in to proxmox
+- Click Datacenter
+- Click Permissions > Users
+- Click Add
+  - Username: terrform
+  - Realm: Linux Pam standard authentication
+  - Enabled: Yes
+  - Click Add 
+- Click Permissions > API Tokens
+  - Click Add
+    - User: **terraform@pam**
+    - Privilege Separation: **checked**
+    - Token ID: **terraform_token_id**
+    - As you’ll be warned, make sure you copy down the Token Secret, as it will only be displayed once.
+- Click Permissions
+  - Click Add > User Permission three times
+    - First
+      - Path: /
+      - User: terraform@pam
+      - Role: PVEVMAdmin
+    - Second
+      - Path: /storage/local
+      - User: terraform@pam
+      - Role: Administrator
+    - Third
+      - Path: /storage/local-kvm
+      - User: terraform@pam
+      - Role: Administrator
 
-# Create Base Image with Cloud-init
+# Install Terraform
+It's not in the official repos for Debian, so we’ll add a new repository and install it onto Proxmox.
 
-## Download Ubuntu 22.04 Server ISO
-Free free to customize this lab and use 24.04! If you already have your favorite Ubuntu Server ISO uploaded to local storage, you can skip to the next step. Be aware we will be customizig this ISO.
-
-Steps
-- Select the version you want from https://releases.ubuntu.com for https://ubuntu.com/download/server
-  - Find the link on the releases site that is suitable for use with wget (see example below)
-- `cd /var/lib/vz/template/iso/`
-- `wget https://releases.ubuntu.com/22.04/ubuntu-22.04.4-live-server-amd64.iso`
-
-## Customize the Base Image
-We wish to install qemu-guest-agent on the VMs that use our Cloud-init image.
-- `virt-customize -a ubuntu-22.04.4-live-server-amd64.iso --install qemu-guest-agent`
-- virt-customize: error: no operating systems were found in the guest image
-
-# Create Template
-NOTE This template uses **vmbr0**, which puts the VM on the Lab network, not behind our router or firewall. Change this to vmbr1 for the "Inside" network, or vmbr2 for the "Pentesting" network.
 ~~~
-qm create 9001 --name "ubuntu-22.04-cloudinit-template" --memory 2048 --cores 2 --net0 virtio,bridge=vmbr0
-qm importdisk 9001 ubuntu-22.04.4-live-server-amd64.iso local-lvm
-qm set 9001 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-9001-disk-0
-qm set 9001 --boot c --bootdisk scsi0
-qm set 9001 --ide2 local-lvm:cloudinit
-qm set 9001 --serial0 socket --vga serial0
-qm set 9001 –-agent 1
-qm template 9001
+apt install lsb-release
+curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+echo "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main" >> /etc/apt/sources.list.d/terraform.list
+apt update && apt install terraform
+terraform -v
 ~~~
+
+# Configure Terraform project
+~~~
+mkdir terraform-lab
+cd terraform-lab
+touch main.tf
+touch vars.tf
+touch pihole.tf
+touch homebridge.tf
+~~~
+# Deploy VMs
+- terraform init
+- terraform plan
+- terraform apply
