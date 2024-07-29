@@ -292,6 +292,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
+- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
@@ -397,6 +398,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
+- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
 - Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
@@ -478,6 +480,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
+- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM `server2022-lan-ready`
