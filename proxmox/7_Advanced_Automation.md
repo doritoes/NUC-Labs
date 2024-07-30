@@ -30,13 +30,16 @@ Terraform needs users, permissions, and tokens in order to interact with proxmox
     - User: **terraform@pam**
     - Privilege Separation: **checked**
     - Token ID: **terraform_token_id**
-    - As you’ll be warned, make sure you copy down the Token Secret, as it will only be displayed once.
+    - Complete Token ID: terraform@pam!terraform_token_id 
+    - Make sure you copy down the Token Secret, as it will only be displayed once
+  - Other less secure option is to create a token for user root and <ins>unselect</ins> privilege separation, as this grants root permissions
 - Click Permissions
   - Click Add > User Permission three times
     - First
       - Path: /
       - User: terraform@pam
       - Role: PVEVMAdmin
+      - Role: PVEAdmin
     - Second
       - Path: /storage/local
       - User: terraform@pam
@@ -58,15 +61,66 @@ terraform -v
 ~~~
 
 # Configure Terraform project
+- Get the ssh_key from: `cat ~/.ssh/id_rsa.pub`
+- mkdir ~/automation
+- cd ~/automation
+- create provider.tf from (provider.tf)[provider.tf]
 ~~~
-mkdir terraform-lab
-cd terraform-lab
-touch main.tf
-touch vars.tf
-touch pihole.tf
-touch homebridge.tf
+terraform {
+  required_version = ">= 0.13.0"
+  required_providers {
+    proxmox = {
+      source = "telmate/proxmox"
+      version = ">= 2.9.3"
+    }
+  }
+}
+
+variable "proxmox_api_url" {
+  type = string
+}
+variable "proxmox_api_token_id" {
+  type = string
+  sensitive = true
+}
+variable "proxmox_api_token_secret" {
+  type = string
+  sensitive = true
+}
+provider "proxmox" {
+  pm_api_url = var.proxmox_api_url
+  pm_api_token_id = var.proxmox_api_token_id
+  pm_api_token_secret = var.proxmox_api_token_secret
+  pm_tls_insecure = true
+}
 ~~~
-# Deploy VMs
+- create credentials.auto.tfvars from (credentials.auto.tfvars)[credentials.auto.tfvars]
+~~~
+proxmox_api_url = "https://192.168.99.205:8006/api2/json"
+proxmox_api_token_id = "terraform@pam!terraform_token_id"
+proxmox_api_token_secret = "4fd84501-9c3c-48bf-92ce-xxxxxxxxxxxxx"
+~~~
+- create server-1-clone.tf
+~~~
+resource "proxmox_vm_qemu" "server-1-clone" {
+  name = "server-1-clone"
+  desc = "ubuntu server"
+  target_node = "labhost2"
+  agent = 1
+  clone = "template_ubuntu_server"
+  sockets = 1
+  cores = 2
+  cpu = "host"
+  memory = 2048
+  network {
+    bridge = "vmbr1"
+    model = "virtio"
+  }
+}
+~~~
 - terraform init
 - terraform plan
-- terraform apply
+  - terraform plan -out tf.plan
+- terraform apply --auto-approve
+  - terraform apply tf.plan
+- 
