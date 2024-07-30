@@ -66,7 +66,10 @@ terraform -v
 ~~~
 
 # Configure Terraform project
-Reference: https://github.com/ChristianLempa/boilerplates/tree/main/terraform/proxmox
+References:
+- https://github.com/ChristianLempa/boilerplates/tree/main/terraform/proxmox
+- https://www.youtube.com/watch?v=1nf3WOEFq1Y
+- https://www.youtube.com/watch?v=dvyeoDBUtsU
 
 - If you are going to set the ssh_key
   - Get the ssh_key `cat ~/.ssh/id_rsa.pub`
