@@ -1,6 +1,7 @@
 resource "proxmox_vm_qemu" "server-clone" {
   # VM general settings
   target_node = "proxmox-lab"
+  vm_id = "409"
   name = "server-clone"
   desc = "ubuntu server"
 
