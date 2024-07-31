@@ -10,12 +10,9 @@ These instructions did not work in Lab testing. The "PCI Simple Communications C
 - Open Device Manager
 - Find PCI Simple Communications Controller
   - ⚠️ Did not intially find this in device in Lab testing
-    - Try enabling in proxmox
-    - Try rebooting the Window VM
-    - Try installing the agent
-    - Try rebooting again
+    - This seemed to work: Installing agent from ISO, enable driver in proxmore, and full stop/start
     - It will eventually appear!
-  - Right click -> Update Driver
+  - Right click PCI Simple Communications Controller -> Update Driver
     - Browse my computer for drivers
     - Select the mounted ISO in DRIVE:\vioserial\<OSVERSION>\ where <OSVERSION> is your Windows Version (e.g. 2k12R2 for Windows 2012 R2)
       - Example: E:\vioserial\w10\amd64\
