@@ -48,7 +48,7 @@ Or, if you created local storage, upload the ISO there.
       - Version: 6.x - 2.6 Kernel
   - System tab
     - no changes for VyOS (TPM requried for Windows 11)
-    - have not tested teh Qemu agent with Voyos
+    - have not tested the Qemu agent with Voyos
   - Disks tab
     - Disk size: **8GB**
     - Check **Discard** because our host is using SSD
