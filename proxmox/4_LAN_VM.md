@@ -98,7 +98,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Read the warning: *unable to create template, because VM contains snapshots**
     - Snapshots > click `initial_build` > Remove > **Yes**
     - Repeat the action to convert to template
-    - Note that the VM is still there, but <ins>can only be cloned</ins>
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
 - Clone a new VM from `ubuntu-desktop-lan`
   - Click on the VM ubuntu-desktop-lab (it should still be powered off)
   - Click More > Clone
