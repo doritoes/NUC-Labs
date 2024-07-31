@@ -510,3 +510,10 @@ Another NUC Lab (for XCP-ng) has details on
 - Converting Windows Server to a Domain Controller
 - Configuring a domain file server
 - https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
+
+# Confirm quemu Agents are Running
+Verify from proxymox that the agents are running on your VMs
+- Log in to proxmox web GUI and find the VM's ID (for example, 102)
+- Log in to proxymox CLI and ping the VM's ID
+  - `qm agent 102 ping`
+- No message means it was successful, "QEMU guest agent is not running" means it is failing
