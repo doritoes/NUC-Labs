@@ -267,7 +267,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - `shutdown /t 0 /s`
     - type this exactly, spacing matters
 - Clone a new VM from `win10-lan`
-  - Click on the VM win10-lan (it should still be powered off)
+  - Click on the VM win10-lan
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated** (we are up to VM ID 106)
@@ -308,9 +308,8 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
     - Click **Yes**
     - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
-- Clone win10-lan-ready to create more Windows 10 VMs
 - Clone a new VM from `win10-lan-ready`
-  - Click on win10-lan-ready
+  - Click on 106 (win10-lan-ready)
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
@@ -318,12 +317,13 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
       - the other option is Full Clone
     - Name: `win10-desk`
     - Click **Clone**
-- Power on and test the new clone
+- Power on and test the new clone VM 107 (win10-desk)
   - Click on the new VM **win10-desk**
   - Click **Start**
   - Click **Console**
   - Change the hostname to win10-desk
     - From administrative powershell: `Rename-Computer -NewName win10-desk`
+    - `Restart-Computer`
 
 - Questions to ponder:
   - What are the differences between the two cloning bases we created?
@@ -338,10 +338,11 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - https://www.elevenforum.com/t/clean-install-windows-11.99/
   - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
 
+Steps:
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
-    - VM ID: *auto populates* (unique ID required for every resource)
+    - VM ID: *auto populates* (unique ID required for every resource, up to VM 108)
     - Name: **win11-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
@@ -368,7 +369,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab > 107 (win11-lan)
+  - Datacenter > proxmox-lab > 108 (win11-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -396,7 +397,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
   - Click on the VM win11-lan (it should still be powered off)
   - Click More > Clone
     - Target node: **proxmox-lab**
-    - VM ID: *automatically populated**
+    - VM ID: *automatically populated** (now up to 109)
     - NOTE There is no "Linked Clone" option
     - Name: `win11-lan-ready`
     - Click **Clone**  
@@ -404,24 +405,24 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
     - Start the VM
       - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connect (as simple as powering down the VyOS router for now)
     - Set region and keyboard layout, skip second keyboard layout
-    - Name your device: **windows11-lan**
+    - Name your device: **windows11-lan-ready**
     - Select **Set up for personal use** (feel free to experiment)
-    - Windows 11 Pro is forcing "Sign in"
-      - This method didn't work in our Lab testing
-        - Shift-F10 and enter OOBE\BYPASSNRO
-        - It will reboot the system and restart the installation wizard
-        - It's supposed to give you the option to not have to create a Microsoft account, but it didn't work in the Labe
-      - Instead disconnect from the internet and start over
-        - Option 1 - power down the voyos router for a while
-        - Option 2 - edit the VM's network device and chedk Disconnect for now; uncheck it later
+    - Disconnect from the Internet and start over
+      - Option 1 - power down the voyos router for a while
+      - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
+    - Shift-F10 to open a shell
+      - enter `OOBE\BYPASSNRO`
+      - It will reboot the system and restart the installation wizard
     - At *Let's connect you to a network*
       - Click **I don't have internet**
     - Click **Continue with limited setup**
     - User: **lab**
-    - Password: select a password
+    - Password: *select a password*
     - Create security questions for this account: be creative
-    - Privacy: *disable all the settings* and then click **Next**
+    - Privacy: *disable all the settings* and then click **Next** (or might be Accept)
+- Log in
 - Reconnect to the Internet
+- **WORKING HERE**
 - Apply Windows Updates (reboots included)
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
@@ -430,7 +431,28 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
-- Clone win11-lan-ready to create more Windows 11 VMs
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+- Clone a new VM from `win11-lan-ready`
+  - Click on 109 (win10-lan-ready)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 110)
+    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+      - the other option is Full Clone
+    - Name: `win11-desk`
+    - Click **Clone**
+- Power on and test the new clone VM 107 (win10-desk)
+  - Click on the new VM **win10-desk**
+  - Click **Start**
+  - Click **Console**
+  - Change the hostname to win10-desk
+    - From administrative powershell: `Rename-Computer -NewName win10-desk`
+    - `Restart-Computer`
+- %%%%% Clone `win11-lan-ready` to create more Windows 11 VMs
 - Questions to ponder:
   - What are the differences between the two cloning bases we created?
   - Does this affect the Activation required timers?
