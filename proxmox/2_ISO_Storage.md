@@ -68,8 +68,8 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
 - Username: *user authorized to access the share*
 - Password: *the password for that user*
 - Share: *the name of the share*
-- Enable: Checked
-- Content: **ISO image**
+- Enable: **Checked**
+- Content: **ISO image** (only)
 - Click **Add**
 
 IMPORTANT This will create a subdirectory "template" and inside that the "iso" directory
@@ -78,22 +78,22 @@ IMPORTANT This will create a subdirectory "template" and inside that the "iso" d
 ### NFS
 REMEMBER your NFS server (NAS) may require you to add the proxymox host's IP address to its permissions
 - From the left pane click **Datacenter**
-- Click **Storage** and then click **Add** > **SMB/CIFS**
-- ID: **ISO-SMB-NFS**
+- Click **Storage** and then click **Add** > **NFS**
+- ID: **ISO-NFS**
 - Server: `<IP_Address of NAS>`
 - Export: *click the down arrow* (e.g., `/volume1/ISO`)
-- Content: **ISO image**
-- Enable: Checked
-- Click Add
+- Content: **ISO image** (only)
+- Enable: **Checked**
+- Click **Add**
 
 IMPORTANT This will create a subdirectory "template" and inside that the "iso" directory
 - Copy your ISOs inside this "iso" location to be accessible from proxmox
 
-# Local ISO Repository on XO Server
+# Local ISO Repository on proxmox Host
 We will also demonstrate storing .iso files on the proxmox host, which you might want to avoid--it uses up storage on our host.
 
 1. Log in to proxmox
-2. From the left menu, expane Datacenter > **proxymox-lab** > **local (proxmox-lab)**
+2. From the left menu, expand **Datacenter** > **proxymox-lab** > **local (proxmox-lab)**
 3. Click **ISO Images**
 4. Click **Upload**
 5. Select the ISO file to upload, and click **Upload**
