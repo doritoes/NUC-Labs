@@ -72,7 +72,8 @@ Or, if you created local storage, upload the ISO there.
     - Bridge: **vmbr1**
     - **Uncheck Firewall**
     - Click **Add**
-  - Click **Start**
+  - Edit Network device (net0) to uncheck Firewall
+- Click **Start**
 - Click **Console** (in the main pane menu, to the right of Start and Shutdown)
   - A new window will be opened for the console, using noVNC
   - If the VM is not started, proxmox will help you start it
