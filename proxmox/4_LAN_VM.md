@@ -8,7 +8,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 # Ubuntu Desktop
 - From the top ribbon click **Create VM**
   - General tab
-    - Node: **proxmox-lab1**
+    - Node: **proxmox-lab**
     - VM ID: *auto populates* (unique ID required for every resource)
     - Name: **ubuntu-desktop-lan**
   - OS tab
@@ -34,7 +34,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab1 > 101 (ubuntu-desktop-lan)
+  - Datacenter > proxmox-lab > 101 (ubuntu-desktop-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -102,7 +102,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Clone a new VM from `ubuntu-desktop-lan`
   - Click on the VM ubuntu-desktop-lab (it should still be powered off)
   - Click More > Clone
-    - Target node: **proxmox-lab1**
+    - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - Mode: **Linked Clone** is recommeded (saves space across all the clones)
       - the other option is Full Clone
@@ -123,7 +123,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 # Ubuntu Server
 - From the top ribbon click **Create VM**
   - General tab
-    - Node: **proxmox-lab1**
+    - Node: **proxmox-lab**
     - VM ID: *auto populates* (unique ID required for every resource)
     - Name: **ubuntu-server-lan**
   - OS tab
@@ -149,7 +149,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab1 > 103 (ubuntu-server-lan)
+  - Datacenter > proxmox-lab > 103 (ubuntu-server-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -193,7 +193,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Clone a new VM from `ubuntu-server-lan`
   - Click on the VM ubuntu-server-lan (it should still be powered off)
   - Click More > Clone
-    - Target node: **proxmox-lab1**
+    - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - Mode: **Linked Clone** is recommeded (saves space across all the clones)
       - the other option is Full Clone
@@ -213,7 +213,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 # Windows 10
 - From the top ribbon click **Create VM**
   - General tab
-    - Node: **proxmox-lab1**
+    - Node: **proxmox-lab**
     - VM ID: *auto populates* (unique ID required for every resource)
     - Name: **win10-lan**
   - OS tab
@@ -240,7 +240,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab1 > 105 (win10-lan)
+  - Datacenter > proxmox-lab > 105 (win10-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -264,7 +264,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Clone a new VM from `win10-lan`
   - Click on the VM win10-lan (it should still be powered off)
   - Click More > Clone
-    - Target node: **proxmox-lab1**
+    - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
     - Name: `win10-lan-ready`
@@ -312,7 +312,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 
 - From the top ribbon click **Create VM**
   - General tab
-    - Node: **proxmox-lab1**
+    - Node: **proxmox-lab**
     - VM ID: *auto populates* (unique ID required for every resource)
     - Name: **win11-lan**
   - OS tab
@@ -340,7 +340,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab1 > 107 (win11-lan)
+  - Datacenter > proxmox-lab > 107 (win11-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -367,7 +367,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - Clone a new VM from `win11-lan`
   - Click on the VM win11-lan (it should still be powered off)
   - Click More > Clone
-    - Target node: **proxmox-lab1**
+    - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
     - Name: `win11-lan-ready`
@@ -413,7 +413,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 
 - From the top ribbon click **Create VM**
   - General tab
-    - Node: **proxmox-lab1**
+    - Node: **proxmox-lab**
     - VM ID: *auto populates* (unique ID required for every resource)
     - Name: **server2022-lan**
   - OS tab
@@ -440,7 +440,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab1 > 107 (win11-lan)
+  - Datacenter > proxmox-lab > 107 (win11-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -465,7 +465,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Clone a new VM from `server2022-lan`
   - Click on the VM server2022-lan (it should still be powered off)
   - Click More > Clone
-    - Target node: **proxmox-lab1**
+    - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
     - Name: `server2022-lan-ready`
@@ -489,7 +489,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - must perform generalization to remove the security identifier (SID)
   - Click on the VM server2022-lan-ready (it should still be powered off)
   - Click **More** > **Clone**
-    - Target node: **proxmox-lab1**
+    - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
     - Name: `server2022-lan-prep`
