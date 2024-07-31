@@ -10,7 +10,7 @@ These instructions did not work in Lab testing. The "PCI Simple Communications C
 - Open Device Manager
 - Find PCI Simple Communications Controller
   - ⚠️ Did not intially find this in device in Lab testing
-    - This seemed to work: Installing agent from ISO, enable driver in proxmore, and full stop/start
+    - This seemed to work: Installing agent from ISO, enable driver in proxmox, and full stop/start
     - It will eventually appear!
   - Right click PCI Simple Communications Controller -> Update Driver
     - Browse my computer for drivers
