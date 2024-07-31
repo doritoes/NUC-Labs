@@ -3,16 +3,16 @@ How to create a router to our backend "LAN"
 
 # Configure Networking
 - Log in to proxmox
-- From the left menu navigate to Datacenter > proxmox-lab1
+- From the left menu navigate to **Datacenter** > **proxmox-lab1**
 - Click on the host (proxmox-lab1) to reveal the host settings
-- Click System > Network
-- Click Create > Linux Bridge
-  - Name: vmbr1
-  - Autostart: Checked
-  - Click Create
+- Click **System** > **Network**
+- Click **Create** > **Linux Bridge**
+  - Name: **vmbr1**
+  - Autostart: **Checked**
+  - Click **Create**
 - Click **Apply Configuration** and the new brige will start
 
-Here is list of the virtual bridge we will use in this lab:
+Here is list of the virtual bridges we will use in this lab:
 - vmbr0 - default bridge to the physical network interface
 - vmbr1 - "Inside" network
 - vmbr2 - "Pentesting" network
