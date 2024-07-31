@@ -20,20 +20,20 @@ Here is list of the virtual bridges we will use in this lab:
 # Download the ISO
 1. Go to https://vyos.io
 2. Click Rolling Release
-  - the free version is limited to the Rolling Release
+    - the free version is limited to the Rolling Release
 4. Download the most recent image
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
 
 Or, if you created local storage, upload the ISO there.
-- From the left menu expand Datacenter > proxmox-lab
-- Click local (proxmox-lab)
-- Click ISO Images
-- Click Upload and follow the prompts
+- From the left menu expand **Datacenter** > **proxmox-lab**
+- Click **local (proxmox-lab)**
+- Click **ISO Images**
+- Click **Upload** and follow the prompts
 
 # Create VyOS VM
-- From the top ribbon clikc **Create VM**
+- From the top ribbon click **Create VM**
   - General tab
     - Node: Auto selects **proxmox-lab1**
     - VM ID: automatically populated; each resource requries a unique ID
@@ -41,16 +41,17 @@ Or, if you created local storage, upload the ISO there.
     - Check **Start at boot**
   - OS tab (clicking Next takes you to the next tab)
     - Use CD/DVD disk image file (iso)
-      - Storage: local
-      - ISO image: select the image you uploaded from the dropdown
+      - Storage: *select one of the storage points you configured, or local*
+      - ISO image: *select the image you uploaded from the dropdown*
     - Guest OS:
       - Type: Linux (VyOS is based on Debian)
       - Version: 6.x - 2.6 Kernel
   - System tab
     - no changes for VyOS (TPM requried for Windows 11)
+    - have not tested teh Qemu agent with Voyos
   - Disks tab
     - Disk size: **8GB**
-    - Check **Discard** because our host is using SSD's
+    - Check **Discard** because our host is using SSD
   - CPU tab
     - Sockets: **1**
     - Cores: **2**
@@ -63,16 +64,16 @@ Or, if you created local storage, upload the ISO there.
     - Model: VirtIO (best performance)
     - Firewall: default is checked, <ins>uncheck</ins> for the router
   - Confirm tab
-  - Don't check **Start after created**
+  - <ins>Don't check</ins> **Start after created**
   - Click **Finish**
-- Click on the VM (ID 100) in the left pane
-  - Click Hardware
-  - Click Add > Network Device
-    - Bridge: vmbr1
-    - Uncheck Firewall
-    - Click Add
+- Click on the VM **vyos** (ID 100) in the left pane
+  - Click **Hardware**
+  - Click **Add** > **Network Device**
+    - Bridge: **vmbr1**
+    - **Uncheck Firewall**
+    - Click **Add**
   - Click **Start**
-- In the right pane click Console
+- Click **Console** (in the main pane menu, to the right of Start and Shutdown)
   - A new window will be opened for the console, using noVNC
   - If the VM is not started, proxmox will help you start it
   - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
@@ -82,9 +83,9 @@ Or, if you created local storage, upload the ISO there.
   - Enter the new password for the `vyos` user
     - Fun fact, it allows you to set the password to `vyos`
 - When done reboot: `reboot`
-- Eject the VyOS iso
-  - Click on the VM > Hardware > CD/DVD Drive
-  - Edit and select **Do not use any media**
+- Eject the VyOS ISO
+  - Click on the VM vyos > **Hardware** > **CD/DVD Drive**
+  - **Edit** and select **Do not use any media**
 - Log back in with your updated password
 - Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
   - `configure`
