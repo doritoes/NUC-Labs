@@ -65,20 +65,20 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - BEWARE that remote desktop is disabled when the screen is locked
     - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
     - there are workarounds
-- Install qemu-guest-agent
-  - https://pve.proxmox.com/wiki/Qemu-guest-agent
-  - First install the agent
-    - `sudo apt update && sudo apt install -y qemu-guest-agent`
-  - Second enable the agent in proxmox
-    - Click on the VM
-    - Click on Options
-    - Edit QEMU Guest Agent: Check Use QEMU GUest Agent
-    - Click OK
-  - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Enable SSH access
   - `sudo apt install -y openssh-server`
   - `sudo systemctl status ssh`
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
+- Install qemu-guest-agent
+  - https://pve.proxmox.com/wiki/Qemu-guest-agent
+  - First, install the agent
+    - `sudo apt update && sudo apt install -y qemu-guest-agent`
+  - Second, enable the agent in proxmox
+    - Click on the VM
+    - Click on Options
+    - Edit QEMU Guest Agent: Check **Use QEMU Guest Agent**
+    - Click **OK**
+  - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Power down the VM
 - Take a Snapshot
   - This is to demonstrate how to take a snapshot and what happens to snapshots when you convert a VM to a template
@@ -93,7 +93,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click **New snapshot**
 - Convert to a Template
   - Click on the VM
-  - Click **More** > **Convert to Template** (next to start, shutdown, and console)
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
     - Click **Yes**
     - Read the warning: *unable to create template, because VM contains snapshots**
     - Snapshots > click `initial_build` > Remove > **Yes**
@@ -108,17 +108,17 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
       - the other option is Full Clone
     - Name: `desktop-lan`
     - Click **Clone**
-- Power on and test the new clone
+- Power on and test the new clone 102 (desktop-lab)
   - Click on the new VM **desktop-lan**
   - Click **Start**
   - Click **Console**
-  - What are the advantages of using DHCP in the lab for these closes and templates?
-  - Change hostname
+  - Change hostname from terminal
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Desktop on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Optionally create another clone and experiment
+- What are the advantages of using DHCP in the lab for these closes and templates?
 
 # Ubuntu Server
 - From the top ribbon click **Create VM**
@@ -138,8 +138,8 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Disk size: **20GB**
     - Check **Discard** because our host uses SSDs
   - CPU tab
-    - Sockets: 1
-    - Cores: 1
+    - Sockets: **1**
+    - Cores: **1**
     - Type: default (my Lab is x86-64-v2-AES)
   - Memory tab
     - **2048 MB** (2GB)
@@ -152,7 +152,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Datacenter > proxmox-lab > 103 (ubuntu-server-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
-  - a separate windows is opened
+  - a separate window is opened
 - Click the Console tab and follow the Install wizard per usual
   - READ CAREFULLY the Guided storage configuration
     - Root / only has **10GB** of the **20GB** allocated
