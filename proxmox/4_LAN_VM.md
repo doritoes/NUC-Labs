@@ -517,3 +517,9 @@ Verify from proxymox that the agents are running on your VMs
 - Log in to proxymox CLI and ping the VM's ID
   - `qm agent 102 ping`
 - No message means it was successful, "QEMU guest agent is not running" means it is failing
+
+If you are having issues
+- 100 (vyos)
+  - Confirm agent is running: `systemctl status qemu-guest-agent`
+  - make sure Options > QEMU Guest Agent is enabled
+  - completely power off and on the VM (not just restart)
