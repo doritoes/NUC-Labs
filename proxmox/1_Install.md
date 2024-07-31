@@ -81,3 +81,5 @@ deb http://security.debian.org/debian-security bookworm-security main contrib
 - Click **Upgrade** to open a separate shell window; accept the updates
 - Underneath Upgrade click **Repositories**
   - Review the repositories here - you can also use this interface instead of the command line
+
+The alternative is at the command line: `apt upgrade -y`
