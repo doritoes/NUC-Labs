@@ -180,16 +180,21 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - accept the messages (default values OK)
 - Install qemu-guest-agent
   - https://pve.proxmox.com/wiki/Qemu-guest-agent
-  - First install the agent
+  - First, install the agent
     - `sudo apt update && sudo apt install -y qemu-guest-agent`
-  - Second enable the agent in proxmox
+  - Second, enable the agent in proxmox
     - Click on the VM
     - Click on Options
-    - Edit QEMU Guest Agent: Check Use QEMU Gyest Agent
+    - Edit QEMU Guest Agent: Check Use QEMU Guest Agent
     - Click OK
-  - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
+  - Third, Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Power down the VM
-  - 'sudo poweroff'
+  - `sudo poweroff`
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
 - Clone a new VM from `ubuntu-server-lan`
   - Click on the VM ubuntu-server-lan (it should still be powered off)
   - Click More > Clone
@@ -243,7 +248,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Datacenter > proxmox-lab > 105 (win10-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
-  - a separate windows is opened
+  - a separate window is opened
 - Click Console and follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click **Install now**
@@ -265,28 +270,30 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click on the VM win10-lan (it should still be powered off)
   - Click More > Clone
     - Target node: **proxmox-lab**
-    - VM ID: *automatically populated**
+    - VM ID: *automatically populated** (we are up to VM ID 106)
     - NOTE There is no "Linked Clone" option
     - Name: `win10-lan-ready`
     - Click **Clone**  
   - Log in complete the setup wizard
-    - Start the VM
+    - Start the VM 106 (win10-lan-ready)
+    - Open the Console
     - Set region and keyboard layout, skip second keyboard layout
     - Select **Set up for personal use** (feel free to experiment)
     - Click **Offline account** then click **Limited experience**
     - User: **lab**
-    - Password: select a password
+    - Password: *select a password*
     - Create security questions for this account: be creative
     - Click **Not now**
     - Privacy: *disable all the settings* and then click **Accept**
     - Experience: be creative and pick one, then click **Accept* (I chose Business)
     - Cortana: Click **Not now**
+    - Open the Edge web browser
     - At the screen "Browse the web with the best performing browser on Windows"
       - Click **Continue**
       - Click **Start without your data**
-      - <ins>Uncheck</ins> bring over your data and continue
+      - <ins>Uncheck</ins> Bring over your data and **Confirm and continue**
       - Click **Continue without this data**
-      - <ins>Uncheck</ins> Make your Microsoft experience more useful and continue
+      - <ins>Uncheck</ins> Make your Microsoft experience more useful and **Confirm and start browsing**
       - Click **Finish**
 - Apply Windows Updates (reboots included)
 - Enable Remote Desktop (RDP)
@@ -296,10 +303,31 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
 - Clone win10-lan-ready to create more Windows 10 VMs
+- Clone a new VM from `win10-lan-ready`
+  - Click on win10-lan-ready
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated**
+    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+      - the other option is Full Clone
+    - Name: `win10-desk`
+    - Click **Clone**
+- Power on and test the new clone
+  - Click on the new VM **win10-desk**
+  - Click **Start**
+  - Click **Console**
+  - Change the hostname to win10-desk
+    - From administrative powershell: `Rename-Computer -NewName win10-desk`
+
 - Questions to ponder:
   - What are the differences between the two cloning bases we created?
-  - Does this affect the Activation required timers?
+  - Does this affect the "Activation required" timers?
 - Optionally create another VM from each win10-lan and win10-lan-ready and experiment
 
 # Windows 11
