@@ -437,7 +437,7 @@ Steps:
     - Click **Yes**
     - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
 - Clone a new VM from `win11-lan-ready`
-  - Click on 109 (win10-lan-ready)
+  - Click on 109 (win11-lan-ready)
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated** (up to 110)
@@ -445,17 +445,13 @@ Steps:
       - the other option is Full Clone
     - Name: `win11-desk`
     - Click **Clone**
-- Power on and test the new clone VM 107 (win10-desk)
+- Power on and test the new clone VM 1110 (win10-desk)
   - Click on the new VM **win10-desk**
   - Click **Start**
   - Click **Console**
   - Change the hostname to win10-desk
     - From administrative powershell: `Rename-Computer -NewName win10-desk`
     - `Restart-Computer`
-- %%%%% Clone `win11-lan-ready` to create more Windows 11 VMs
-- Questions to ponder:
-  - What are the differences between the two cloning bases we created?
-  - Does this affect the Activation required timers?
 - Optionally create another VM from each win11-lan and win11-lan-ready and experiment
 
 # Windows 2022 Server
