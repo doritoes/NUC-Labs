@@ -15,7 +15,7 @@ These instructions did not work in Lab testing. The "PCI Simple Communications C
     - Try installing the agent
     - Try rebooting again
     - It will eventually appear!
-  - Right glick -> Update Driver
+  - Right click -> Update Driver
     - Browse my computer for drivers
     - Select the mounted ISO in DRIVE:\vioserial\<OSVERSION>\ where <OSVERSION> is your Windows Version (e.g. 2k12R2 for Windows 2012 R2)
       - Example: E:\vioserial\w10\amd64\
