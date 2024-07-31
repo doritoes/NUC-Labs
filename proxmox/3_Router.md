@@ -47,8 +47,9 @@ Or, if you created local storage, upload the ISO there.
       - Type: Linux (VyOS is based on Debian)
       - Version: 6.x - 2.6 Kernel
   - System tab
-    - no changes for VyOS (TPM requried for Windows 11)
-    - have not tested the Qemu agent with Voyos
+    - **Enable agent**
+      - Agent is installed by default
+      - To confirm, `apt list --installed | grep queme`
   - Disks tab
     - Disk size: **8GB**
     - Check **Discard** because our host is using SSD
