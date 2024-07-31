@@ -72,7 +72,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Second enable the agent in proxmox
     - Click on the VM
     - Click on Options
-    - Edit QEMU Guest Agent: Check Use QEMU Gyest Agent
+    - Edit QEMU Guest Agent: Check Use QEMU GUest Agent
     - Click OK
   - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Enable SSH access
