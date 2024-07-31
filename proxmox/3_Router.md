@@ -3,8 +3,8 @@ How to create a router to our backend "LAN"
 
 # Configure Networking
 - Log in to proxmox
-- From the left menu navigate to **Datacenter** > **proxmox-lab1**
-- Click on the host (proxmox-lab1) to reveal the host settings
+- From the left menu navigate to **Datacenter** > **proxmox-lab**
+- Click on the host (proxmox-lab) to reveal the host settings
 - Click **System** > **Network**
 - Click **Create** > **Linux Bridge**
   - Name: **vmbr1**
@@ -35,7 +35,7 @@ Or, if you created local storage, upload the ISO there.
 # Create VyOS VM
 - From the top ribbon click **Create VM**
   - General tab
-    - Node: Auto selects **proxmox-lab1**
+    - Node: Auto selects **proxmox-lab**
     - VM ID: automatically populated; each resource requries a unique ID
     - Name: **vyos**
     - Check **Start at boot**
