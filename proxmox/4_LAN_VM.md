@@ -422,15 +422,23 @@ Steps:
     - Privacy: *disable all the settings* and then click **Next** (or might be Accept)
 - Log in
 - Reconnect to the Internet
-- **WORKING HERE**
 - Apply Windows Updates (reboots included)
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
+- Open the Edge web browser
+    - At the screen "Browse the web with the best performing browser on Windows"
+      - Click **Continue**
+      - Click **Start without your data**
+      - <ins>Uncheck</ins> Bring over your data and **Confirm and continue**
+      - Click **Continue without this data**
+      - <ins>Uncheck</ins> Make your Microsoft experience more useful and **Confirm and start browsing**
+      - Click **Finish**
 - [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
 - Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
+  - `stop-computer`
 - Convert to a Template
   - Click on the VM
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
@@ -445,12 +453,12 @@ Steps:
       - the other option is Full Clone
     - Name: `win11-desk`
     - Click **Clone**
-- Power on and test the new clone VM 1110 (win10-desk)
-  - Click on the new VM **win10-desk**
+- Power on and test the new clone VM 1110 (win11-desk)
+  - Click on the new VM **win11-desk**
   - Click **Start**
   - Click **Console**
-  - Change the hostname to win10-desk
-    - From administrative powershell: `Rename-Computer -NewName win10-desk`
+  - Change the hostname to win11-desk
+    - From administrative powershell: `Rename-Computer -NewName win11-desk`
     - `Restart-Computer`
 - Optionally create another VM from each win11-lan and win11-lan-ready and experiment
 
@@ -460,7 +468,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
-    - VM ID: *auto populates* (unique ID required for every resource)
+    - VM ID: *auto populates* (unique ID required for every resource) (up to 111)
     - Name: **server2022-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
@@ -486,13 +494,14 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab > 107 (win11-lan)
+  - Datacenter > proxmox-lab > 111 (server2022-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
 - You are prompted **Press any key to boot from CD or DVD....**
   - **press any key**
   - if you missed it, stop the VM, start again and try again at the console
+- **WORKING FROM HERE ON**
 - Open the console and follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
