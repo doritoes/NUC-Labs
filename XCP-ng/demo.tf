@@ -1,5 +1,5 @@
 data "xenorchestra_pool" "pool" {
-  name_label = "labhost1"
+  name_label = "${var.xo_pool}"
 }
 
 data "xenorchestra_vms" "vms" {
