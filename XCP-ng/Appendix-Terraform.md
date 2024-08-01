@@ -1,7 +1,8 @@
 # Appendix - Terraform and XCP-ng
-These instructions are tested on WSL running on Windows.
-
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
+
+Notes:
+- Terraform integrates with the XO server, not the XCP-ng host
 
 ## Install Terrafrom
 - Install prerequisites
