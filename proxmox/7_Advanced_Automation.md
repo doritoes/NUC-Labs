@@ -28,6 +28,10 @@ From proxmox Web GUI:
     - Complete Token ID: terraform-prov@pve!terrform_token_id
     - Make sure you copy down the Token Secret, as it will only be displayed once
   - Other less secure option is to create a token for user root and <ins>unselect</ins> privilege separation, as this grants root permissions
+- Click Permissions
+- Click Add > User Permission
+  - Path: /sdn/zones/localnetork
+  - Role: Administrator
 
 # Install Terraform
 It's not in the official repos for Debian, so we’ll add a new repository and install it onto Proxmox.
@@ -61,5 +65,14 @@ References:
 - `terraform apply --auto-approve`
   - Or, `terraform apply tf.plan`
 
+Error: The terraform-provider-proxmox_v2.9.14 plugin crashed!
+
+This is a known issue that is fixed in version 3RC3. Once version 3 is released, will try this again.
+
 # Test
 Open the new VM's console and verify the settings
+- CPU count remained at 1, not the expected 2
+- Network does not change the bridge from the original cloned device
+- Memory remains the same
+- vmid was set correctly
+- new VM name was set correctly
