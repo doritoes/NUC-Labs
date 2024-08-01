@@ -11,7 +11,7 @@ Features:
 - For security reasons, access to host resources needs to be restricted. Therefore, containers run in their own separate namespaces. Additionally some syscalls (user space requests to the Linux kernel) are not allowed within containers.
 
 Using pre-built templates:
-- Expand Datacenter > proxmab-lab
+- Expand **Datacenter** > **proxmab-lab**
 - Click **local (proxmox-lab)**
 - Click **CT templates**
 - Cick **Templates**
@@ -25,6 +25,7 @@ As you perform these Lab steps, note the many options available to you
   - General tab
     - Hostname: **container-ubuntu**
     - Password: *select a password*
+    - Note the default is *Unprivileged container*
   - Template tab
     - Storage: **local**
     - Template: *use the dropdown to select the template file you downloaded*
@@ -34,11 +35,11 @@ As you perform these Lab steps, note the many options available to you
   - CPU tab
     - Cores: **1**
   - Memory tab
-    - Memory: 1024 MiB (1GB)
+    - Memory: **1024** MiB (1GB)
     - Swap: match memory 1024MiB (1GB)
   - Network tab
-    - Bridge: vmbr1
-    - IPv4: DHCP
+    - Bridge: **vmbr1**
+    - IPv4: **DHCP**
     - Uncheck Firewall
   - DNS tab
     - DNS domain: *use host settings*
@@ -46,12 +47,17 @@ As you perform these Lab steps, note the many options available to you
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
-- Click on the **container-ubuntu** VM
+- Click on the VM 114 (container-ubuntu)
   - Open console; start if not already started
   - Log in as user `root` with the password you selected
   - By default you cannot ssh as root with a password; use ssh with keys or add another user
+- You can test the Ubuntu server container as usual
+  - `apt update && apt upgrade -y && apt autoremove -y`
+  - Note that under the VM's Options there is no agent to enable/disable
+    - If you try to "qm agent 114 ping" from proxmox, the agent configuration file does not exist
 
 ### TurnKey LAMP Stack
+- Return to download another CT template
 - Search for `lamp`
 - Click on **turnkey-lamp**
 - Click **Download**
@@ -68,19 +74,19 @@ As you perform these Lab steps, note the many options available to you
   - CPU tab
     - Cores: **1**
   - Memory tab
-    - Memory: 1024 MiB (1GB)
+    - Memory: **1024 MiB** (1GB)
     - Swap: match memory 1024MiB (1GB)
   - Network tab
-    - Bridge: vmbr1
-    - IPv4: DHCP
-    - Uncheck Firewall
+    - Bridge: **vmbr1**
+    - IPv4: **DHCP**
+    - **Uncheck Firewall**
   - DNS tab
     - DNS domain: *use host settings*
     - DNS servers: *use host settings*
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
-- Click on the **container-LAMP** VM
+- Click on the VM 115 (container-LAMP)
   - Open console; start if not already started
   - Log in as user `root` with the password you selected
     - By default you cannot ssh as root with a password; use ssh with keys or add another user
@@ -95,5 +101,5 @@ As you perform these Lab steps, note the many options available to you
     - Adminer (port 12322)
     - SSH/SFTP: (port 22)
 - Open Advanced Options and review the available seetings
-- Browse the the IP address from a workstation the same network (e.g., win10-lam or desktop-lab)
-  - Try the links one the page
+- Browse the the IP address from a workstation the same network (e.g., `win10-desk` or `desktop-lan`)
+  - Try the links on the page
