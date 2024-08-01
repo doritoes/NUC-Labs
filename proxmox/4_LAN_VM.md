@@ -501,7 +501,6 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - You are prompted **Press any key to boot from CD or DVD....**
   - **press any key**
   - if you missed it, stop the VM, start again and try again at the console
-- **WORKING FROM HERE ON**
 - Open the console and follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
@@ -518,19 +517,20 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
 - Clone a new VM from `server2022-lan`
-  - Click on the VM server2022-lan (it should still be powered off)
+  - Click on the VM 111 (server2022-lan)
   - Click More > Clone
     - Target node: **proxmox-lab**
-    - VM ID: *automatically populated**
+    - VM ID: *automatically populated** (up to 112)
     - NOTE There is no "Linked Clone" option
     - Name: `server2022-lan-ready`
     - Click **Clone**  
 - Power on `server2022-lan-ready`
-- After booting, set password for Administrator
+  - Once it boots, set password for Administrator
 - Log in
   - Expand the noVNC menu on the left
   - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
   - Yes, allow the server to be discovered by other hosts on the network
+**WORKING FROM HERE**
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
