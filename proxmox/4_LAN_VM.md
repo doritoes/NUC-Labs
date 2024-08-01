@@ -553,7 +553,6 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-- **WORKING FROM HERE**
 - Convert to a Template
   - Click on the VM 113 (server2022-lan-prep)
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
