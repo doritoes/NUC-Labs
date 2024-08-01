@@ -16,7 +16,7 @@ sudo apt update && sudo apt install -y terraform
 - Confirm
   - `terraform -v`
 
-## Create Files
+## Set up Project
 - Create project directory
   - `mkdir ~/terraform`
   - `cd ~/terraform`
@@ -24,9 +24,14 @@ sudo apt update && sudo apt install -y terraform
 - Create file credentials.auto.tfvars from [credentials.auto.tfvars](credentials.auto.tfvars)
   - Modify to use your XCP-ng host IP address
   - Modify to use a valid username and password
+- Create file demo.tf from [demo.tf](demo.tf)
 - Test
   - `terraform init`
   - `terraform plan`
   - `terraform apply`
+- The output shows
+  - number of VMs that are running (vms_length)
+  - sum of all running VMs' max memory in bytes (vms_max_memory_map)
 
-## Next step
+## Creating Things
+
