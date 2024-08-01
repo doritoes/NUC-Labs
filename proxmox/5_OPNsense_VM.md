@@ -131,8 +131,11 @@ Or, if you created local storage, upload the ISO there.
     - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
-  - Create a new VM or clone an existing one
-  - <ins>Change</ins> the network  to bridge **vmbr2**
+  - For example, clone VM 107 (win10-desk)
+    - Name: **win10-pen**
+    - <ins>Change</ins> the network to bridge **vmbr2**
+    - Note how it takes longer to clone a VM that is running
+    - Start the VM
 - Initial firewall configuration
   - From VM's browser, log in to firewall https://192.168.101.254
     - User `root` and password you selected
@@ -164,18 +167,31 @@ Or, if you created local storage, upload the ISO there.
     - Scroll to the bottom of the Updates tab and click **Update** then accept the update and reboot
     - Wait for updates and the reboot to complete
     - Log back in and check if there are any more updates
+- Enable qemu guest agent
+  - From OPNsense web GUI
+    - System > Firmware > Plugins
+    - **os-qemu-guest-agent** - click "+" to install
+    - Power > Power Off, click Yes
+  - From proxmox
+    - click on VM opnsense
+    - Options > QEMU Guest Agent
+    - Change to Enabled (check Use QEMU Guest Agent)
+    - Start VM opnsense
 - Configure Firewall Rules
+  - Log back in to OPNsense web GUI
+    - https://192.168.100.254
   - Firewall > Rules
     - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
-    - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Because our "WAN" is on a RFC1918 network
+    - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
+  - Because our "WAN" is on an RFC1918 network
     - Click Interfaces > WAN
-    - Uncheck Block private networks
+    - <ins>Uncheck</ins> Block private networks
     - Click Save
     - Click Apply Changes
+    - Yes, this could have been configured in the Wizard; this additional step emphasizes the importance of this feature
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
 
 # Isolate the Pentesting Lab
@@ -184,14 +200,17 @@ It is always best practice to operate in an isolated Pentesting network. If you 
 - Your ISP may find you in violation of their acceptable use policy
 - Your activity is easily attributed to you and may draw attention from very anti-social netizens
 
-Best practice is to stop and finish setting up any parts you want to update over the Internet.
+Best practice is to pause and finish setting up any VMs you want to update over the Internet.
+- you might build the VMs outside the pentesting network and move them into the isolated pentesting network
+- you might also decide to not isolate the pentesting network until your systems are built
 
-Then continue with the following steps to lock things down safely.
+Now continue with the following steps to safely lock down the pentesting network.
 
 ## Disable Internet and DNS
 1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
 2. Block DNS traffic from 192.168.101.0/24 to the firewall
-    - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
+    - Why block DNS? DNS is used as a covert channel that operates through DNS to the Internet
+
 ## Configure TOR
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
