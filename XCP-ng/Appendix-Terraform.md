@@ -1,6 +1,8 @@
 # Appendix - Terraform and XCP-ng
 These instructions are tested on WSL running on Windows.
 
+References: https://github.com/vatesfr/terraform-provider-xenorchestra
+
 ## Install Terrafrom
 - Install prerequisites
   - `sudo apt-get update && sudo apt-get install -y lsb-release gnupg software-properties-common`
