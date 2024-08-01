@@ -21,8 +21,8 @@ variable "xo_password" {
   sensitive = true
 }
 provider "xenorchestra" {
-  url      = "ws://${xo_host}"
-  username = "${xo_username}"
-  password = "${xo_password}"
+  url      = "wss://${var.xo_host}"
+  username = "${var.xo_username}"
+  password = "${var.xo_password}"
   insecure = true
 }
