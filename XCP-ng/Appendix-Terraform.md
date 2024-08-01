@@ -6,9 +6,9 @@ These instructions are tested on WSL running on Windows.
   - `sudo apt-get update && sudo apt-get install -y lsb-release gnupg software-properties-common`
 - Quick install
 ~~~
-curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-echo "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main" >> /etc/apt/sources.list.d/terraform.list
-apt update && apt install -y terraform
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+echo "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee -a  /etc/apt/sources.list.d/terraform.list
+sudo apt update && apt install -y terraform
 ~~~
 - Confirm
   - `terraform -v`
