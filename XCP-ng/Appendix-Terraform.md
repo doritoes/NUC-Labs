@@ -10,7 +10,7 @@ References: https://github.com/vatesfr/terraform-provider-xenorchestra
 ~~~
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 echo "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee -a  /etc/apt/sources.list.d/terraform.list
-sudo apt update && apt install -y terraform
+sudo apt update && sudo apt install -y terraform
 ~~~
 - Confirm
   - `terraform -v`
