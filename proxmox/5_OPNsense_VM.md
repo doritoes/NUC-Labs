@@ -3,15 +3,15 @@ OPNsense community edition is selected for the pentesting lab, mainly for its pr
 
 📓 This Lab was built using OPNsense-24.1. Soon after 24.7 was released with a complete re-work of the interface. Re-deploying the lab using 
 
-IMPORTANT You will have performance issues duo to TX checksumming aka hardware checksum offloading. Where OPNsense is used as the external firewall, the usual approach on proxmox is to add a NIC and do PCI passthrough.
+IMPORTANT You will have performance issues due to TX checksumming aka hardware checksum offloading. Where OPNsense is used as the external firewall, the usual approach on proxmox is to add a NIC and do PCI passthrough.
 
 References:
 - to do
 
 # Configure Networking
 - Log in to proxmox
-- From the left menu navigate to Datacenter > proxmox-lab1
-- Click on the host (proxmox-lab1) to reveal the host settings
+- From the left menu navigate to **Datacenter** > **proxmox-lab**
+- Click on the host (**proxmox-lab**) to reveal the host settings
 - Click **System** > **Network**
 - Click **Create** > **Linux Bridge**
   - Name: **vmbr2**
@@ -42,10 +42,10 @@ Or, if you created local storage, upload the ISO there.
 - Click Upload and follow the prompts
 
 # Create OPNsense VM
-- From the top ribbon clicc **Create VM**
+- From the top ribbon click **Create VM**
   - General tab
-    - Node: Auto selects **proxmox-lab1**
-    - VM ID: automatically populated; each resource requries a unique ID
+    - Node: Auto selects **proxmox-lab**
+    - VM ID: *automatically populated; each resource requries a unique ID* (up to 116)
     - Name: **opnsense**
     - Check **Start at boot**
   - OS tab (clicking Next takes you to the next tab)
@@ -53,6 +53,7 @@ Or, if you created local storage, upload the ISO there.
       - Storage: local
       - ISO image: select the image you uploaded from the dropdown
     - Guest OS:
+      - Use ISO file you uploaded
       - Type: Linux
       - Version: 6.x - 2.6 Kernel
   - System tab
@@ -67,15 +68,14 @@ Or, if you created local storage, upload the ISO there.
   - Memory tab
     - RAM: **2048**MiB = 2GiB
   - Network tab
-    - Bridge: vmbr0
+    - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
     - Model: VirtIO (best performance)
-    - Firewall: default is checked, <ins>uncheck</ins> for the router
-    - Add vmbr2
+    - Firewall: default is checked, <ins>uncheck</ins>
   - Confirm tab
   - Don't check **Start after created**
   - Click **Finish**
-- Click on the new VM **opnense**
+- Click on the new VM 116 (opnense)
 - Click **Hardware**
 - Click **Add** > **Network Device**
   - Bridge: **vmbr2**
