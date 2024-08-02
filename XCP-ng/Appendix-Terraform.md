@@ -20,11 +20,11 @@ sudo apt update && sudo apt install -y terraform
 - Create project directory
   - `mkdir ~/terraform`
   - `cd ~/terraform`
-- Create file provider.tf from [provider.tf](provider.tf)
-- Create file credentials.auto.tfvars from [credentials.auto.tfvars](credentials.auto.tfvars)
+- Create file provider.tf from [provider.tf](terraform/provider.tf)
+- Create file credentials.auto.tfvars from [credentials.auto.tfvars](terraform/credentials.auto.tfvars)
   - Modify to use your XCP-ng host IP address
   - Modify to use a valid username and password
-- Create file demo.tf from [demo.tf](demo.tf)
+- Create file demo.tf from [demo.tf](terraform/demo.tf)
 - Test
   - `terraform init`
   - `terraform plan`
