@@ -58,11 +58,19 @@ resource "xenorchestra_network" "vlan_network_230" {
   source_pif_device = "eth0"
   vlan = 230
 }
-# VLAN 310 Branch1 DMZ
-resource "xenorchestra_network" "vlan_network_310" {
+# VLAN 301 Branch1 DMZ
+resource "xenorchestra_network" "vlan_network_301" {
   name_label = "branch1dmz"
   name_description = "Branch 1 DMZ"
   pool_id = data.xenorchestra_host.host1.pool_id
   source_pif_device = "eth0"
-  vlan = 310
+  vlan = 301
+}
+# VLAN 401 Branch1 Management
+resource "xenorchestra_network" "vlan_network_401" {
+  name_label = "branch1dmz"
+  name_description = "Branch 1 Management"
+  pool_id = data.xenorchestra_host.host1.pool_id
+  source_pif_device = "eth0"
+  vlan = 401
 }
