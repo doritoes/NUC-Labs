@@ -140,12 +140,14 @@ Here we will
   - From XO with console the Check Point template device
     - Revert to clish shell
       - `chsh -s /etc/cli.sh admin`
-  - Install guest tools
-    - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
-    - `cd LinuxGuestTools-8.4.0-1`
-    - `./install -d rhel -m el7`
-    - press `y`
-  - `halt`
+    - 🌱Add SSH keys for Ansible management
+    - Install guest tools
+      - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
+      - `cd LinuxGuestTools-8.4.0-1`
+      - `./install -d rhel -m el7`
+      - press `y`
+      - `rm LinuxGuestTools-8.4.0-1.tar.gz && rm -rf LinuxGuestTools-8.4.0-1`
+    - `halt`
 - Click the **Advanced** tab
 - Click **Convert to template**
 
