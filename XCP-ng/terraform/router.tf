@@ -7,15 +7,15 @@ data "xenorchestra_network" "build" {
 }
 data "xenorchestra_network" "isp1" {
   name_label = "isp1"
-  depends_on = [xenorchestra_network.vlan_network_110]
+  depends_on = [xenorchestra_network.vlan_network_101]
 }
 data "xenorchestra_network" "isp2" {
   name_label = "isp2"
-  depends_on = [xenorchestra_network.vlan_network_120]
+  depends_on = [xenorchestra_network.vlan_network_102]
 }
 data "xenorchestra_network" "isp3" {
   name_label = "isp3"
-  depends_on = [xenorchestra_network.vlan_network_130]
+  depends_on = [xenorchestra_network.vlan_network_103]
 }
 
 data "xenorchestra_template" "template" {
