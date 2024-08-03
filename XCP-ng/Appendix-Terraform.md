@@ -75,7 +75,7 @@ sudo apt update && sudo apt install -y terraform
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **R81.20 Check Point Template**
+  - Description: **R81.20 Check Point template**
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
