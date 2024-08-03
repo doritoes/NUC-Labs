@@ -33,5 +33,47 @@ sudo apt update && sudo apt install -y terraform
   - number of VMs that are running (vms_length)
   - sum of all running VMs' max memory in bytes (vms_max_memory_map)
 
-## Creating Things
+## Create VyOS Template
+- Log in to XO and create a VyOS router
+- From left menu **New** > **VM**
+  - Pool: **xcp-ng-lab1**
+  - Template: **Ohter install media**
+  - Name: **vyos-template**
+  - Description: **vyos-template**
+  - CPU: **2 vCPU**
+  - RAM: **1GB**
+  - Topology: **Default behavior**
+  - Install: ISO/DVD: *Select the VyOS ISO image you uploaded earlier*
+  - Interfaces:
+    - First interface: *Pool-wide network associated with eth0*
+  - Disks: Click Add disk
+    - **8GB**
+  - Click **Create**
+- Open Console
+- Install the Image
+  - Login: `vyos`/`vyos`
+  - `install image`
+  - Allow installation to continue with default values
+  - When you are asked to set the password just use `vyos`
+  - When promted, `reboot`
+  - After the reboot starts, eject the VyOS iso
+- Enable guest utilties
+  - Log back in
+    - `sudo systemctl start xe-guest-utilities`
+    - `sudo systemctl enable xe-guest-utilties`
+    - `poweroff`
+- Convert to Template
+  - Click the Advanced tab
+  - Click Convert to template and confirm that this can't be undone
 
+## Network Configuration
+- Create file network.tf from [network.tf](terraform/network.tf)
+- `terraform init`
+- `terraform plan`
+- `terraform apply -auto-approve'
+- Log in to XO and confirm the new neworks are created
+- Destroy and re-create
+  - `terraform destroy`
+  - `terraform apply -auto-approve`
+
+## Create VyOS Router with Terraform
