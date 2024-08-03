@@ -40,7 +40,7 @@ sudo apt update && sudo apt install -y terraform
 - Log in to XO and create a VyOS router
 - From left menu **New** > **VM**
   - Pool: **xcp-ng-lab1**
-  - Template: **Ohter install media**
+  - Template: **Other install media**
   - Name: **vyos-template**
   - Description: **vyos-template**
   - CPU: **2 vCPU**
@@ -70,6 +70,7 @@ sudo apt update && sudo apt install -y terraform
   - Click Convert to template and confirm that this can't be undone
 
 ## Create Check Point firewall Template
+Here we will 
 - Log in to XO and create a Check Point firewall
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
@@ -84,7 +85,7 @@ sudo apt update && sudo apt install -y terraform
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface:
     - Network: from the dropdown select the **pool-wide network associated with eth0**
-    - This is replaced by the specific interfaces requuired
+    - This is replaced by the specific interfaces required
   - Disks: Click **Add disk**
     - Add **128GB** disk
   - Click **Create**
@@ -105,16 +106,15 @@ sudo apt update && sudo apt install -y terraform
   - Choose **OK**
 - Select a password for the "admin" account
 - Select a password for <ins>maintenance mode "admin" user</ins>
-- Select **eth3** as the management port
-  - IP address: **192.168.103.254"
+- Select **eth0** as the management port
+  - IP address: **192.168.31.254**
   - Netmask: **255.255.255.0**
-  - Default gateway: **blank**
-    - *will auto populate with 192.168.103.254, clear it*
-  - NO DHCP server on the management interface
+  - Default gateway: **192.168.31.1**
+  - <ins>NO</ins> DHCP server on the management interface
 - Confirm you want to continue with formatting the drive **OK**
 - When the message `Installation complete.` message appears
-  - Press enter
-  - Wait for the system to start to reboot, then eject the ISO
+  - Press Enter
+  - Wait for the system to start to reboot, then eject the iso
 - Log in from the Console
 - `set hostname CPTEMPLATE`
 - `save config`
