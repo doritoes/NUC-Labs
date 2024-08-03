@@ -1,5 +1,3 @@
-# Cannot "Other install media"
-
 data "xenorchestra_network" "wan" {
   name_label = "Pool-wide network associated with eth0"
 }
@@ -7,21 +5,25 @@ data "xenorchestra_network" "build" {
   name_label = "build"
   depends_on = [xenorchestra_network.vlan_network_100]
 }
+data "xenorchestra_network" "isp1" {
+  name_label = "isp1"
+  depends_on = [xenorchestra_network.vlan_network_110]
+}
+data "xenorchestra_network" "isp2" {
+  name_label = "isp2"
+  depends_on = [xenorchestra_network.vlan_network_120]
+}
+data "xenorchestra_network" "isp3" {
+  name_label = "isp3"
+  depends_on = [xenorchestra_network.vlan_network_130]
+}
 
 data "xenorchestra_template" "template" {
-  name_label = "Other install media"
+  name_label = "vyos-template"
 }
 
 data "xenorchestra_sr" "local" {
   name_label = "Local storage"
-}
-
-data "xenorchestra_sr" "ISO" {
-  name_label = "ISO"
-}
-
-data "xenorchestra_vdi" "vyos_rolling" {
-  name_label = "vyos-1.5-rolling-202407010024-amd64.iso"
 }
 
 resource "xenorchestra_vm" "vyos" {
@@ -31,9 +33,6 @@ resource "xenorchestra_vm" "vyos" {
   name_label = "vyos"
   name_description = "vyos router"
   template = data.xenorchestra_template.template.id
-  cdrom {
-    id = data.xenorchestra_vdi.vyos_rolling.id
-  }
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "vyos-router-disk"
@@ -44,5 +43,14 @@ resource "xenorchestra_vm" "vyos" {
   }
   network {
     network_id = data.xenorchestra_network.build.id
+  }
+  network {
+    network_id = data.xenorchestra_network.isp1.id
+  }
+  network {
+    network_id = data.xenorchestra_network.isp2.id
+  }
+  network {
+    network_id = data.xenorchestra_network.isp3.id
   }
 }
