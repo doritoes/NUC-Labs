@@ -68,7 +68,7 @@ resource "xenorchestra_network" "vlan_network_301" {
 }
 # VLAN 401 Branch1 Management
 resource "xenorchestra_network" "vlan_network_401" {
-  name_label = "branch1dmz"
+  name_label = "branch1mgt"
   name_description = "Branch 1 Management"
   pool_id = data.xenorchestra_host.host1.pool_id
   source_pif_device = "eth0"
