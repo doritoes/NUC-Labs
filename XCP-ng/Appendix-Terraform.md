@@ -118,28 +118,38 @@ Here we will
 - Log in from the Console
 - `set hostname CPTEMPLATE`
 - `save config`
-- Set the user shell to bash
-  - `set expert-password`
-    - select a password for "expert mode"
-  - `expert`
-    - enter the password when prompted
-  - `chsh -s /bin/bash admin`
-- From the Windows machine point WinSCP to the device:
-  - 192.168.103.254
-  - Username: admin
-  - Password: the password you selected
-  - Accept the warnings
-  - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
-  - Close WinSCO
-- Revert to clish shell
-  - `chsh -s /etc/cli.sh admin`
 - Install guest tools
-  - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
-  - `cd LinuxGuestTools-8.4.0-1`
-  - `./install -d rhel -m el7`
+  - Select and IP address on your Lab network for temporary use
+    - Example: 192.168.1.130
+  - Change the interface IP to that address
+    - `set interface eth0 ipv4-address 192.168.1.0 mask-length 24`
+  - Set the user shell to bash
+    - `set expert-password`
+      - select a password for "expert mode"
+    - `expert`
+      - enter the password when prompted
+    - `chsh -s /bin/bash admin`
+  - From a Windows machine in your Lab
+    - Download VM Tools for Linux from https://www.xenserver.com/downloads
+    - Point WinSCP to the device: For example, 192.168.1.130
+    - Username: admin
+    - Password: the password you selected
+    - Accept the warnings
+    - Drag file (i.e., LinuxGuestTools-8.4.0-1.tar.gz) file to the Check Point device's `/home/admin` folder
+    - Close WinSCP
+  - From XO with console the Check Point template device
+    - Revert to clish shell
+      - `chsh -s /etc/cli.sh admin`
+  - Install guest tools
+    - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
+    - `cd LinuxGuestTools-8.4.0-1`
+    - `./install -d rhel -m el7`
+    - press `y`
   - `halt`
 - Click the **Advanced** tab
 - Click **Convert to template**
+
+NOTE The interface change and setting expert password were not saved, preserving the clean template.
 
 # Create Lab Environment
 ## Network Configuration
