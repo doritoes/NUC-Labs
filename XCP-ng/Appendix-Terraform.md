@@ -4,7 +4,9 @@ References: https://github.com/vatesfr/terraform-provider-xenorchestra
 Notes:
 - Terraform integrates with the XO server, not the XCP-ng host
 
-## Install Terrafrom
+# Install Terrafrom
+This can be run from another host in your Lab, such as WSL on a Windows desktop.
+
 - Install prerequisites
   - `sudo apt-get update && sudo apt-get install -y lsb-release gnupg software-properties-common`
 - Quick install
@@ -16,7 +18,7 @@ sudo apt update && sudo apt install -y terraform
 - Confirm
   - `terraform -v`
 
-## Set up Project
+# Set up Project
 - Create project directory
   - `mkdir ~/terraform`
   - `cd ~/terraform`
@@ -33,6 +35,7 @@ sudo apt update && sudo apt install -y terraform
   - number of VMs that are running (vms_length)
   - sum of all running VMs' max memory in bytes (vms_max_memory_map)
 
+# Create Templates
 ## Create VyOS Template
 - Log in to XO and create a VyOS router
 - From left menu **New** > **VM**
@@ -66,6 +69,79 @@ sudo apt update && sudo apt install -y terraform
   - Click the Advanced tab
   - Click Convert to template and confirm that this can't be undone
 
+## Create Check Point firewall Template
+- Log in to XO and create a Check Point firewall
+- From the left menu click **New** > **VM**
+  - Select the pool **xcgp-ng-lab1**
+  - Template: **Other install media**
+  - Name: **checkpoint-template**
+  - Description: **R81.20 Check Point Template**
+  - CPU: **4 vCPU**
+    - A standalone gateway might run ok with 2 cores in some cases
+  - RAM: **4GB**
+    - SMS reqires more; we will increase this later
+  - Topology: *Default behavior*
+  - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
+  - First Interface:
+    - Network: from the dropdown select the **pool-wide network associated with eth0**
+    - This is replaced by the specific interfaces requuired
+  - Disks: Click **Add disk**
+    - Add **128GB** disk
+  - Click **Create**
+- The details for the new Check Point VM are now displayed
+- Click the **Network** tab
+  - Next to each interface is a small settings icon with a blue background
+  - For every interface click the gear icon then <ins>disable TX checksumming</ins>
+- Click **Console** tab and watch as the system boots
+- At the boot menu, select **Install Gaia on this system**
+- Accept the installation message **OK**
+- Confirm the keyboard type
+- Accept the default partitions sizing for 128GB drive
+  - Swap: 7GB (6%)
+  - Root: 20GB (16%)
+  - Logs: 20GB (16%)
+  - Backup and upgrade: 79GB (62%)
+  - Feel free to customize
+  - Choose **OK**
+- Select a password for the "admin" account
+- Select a password for <ins>maintenance mode "admin" user</ins>
+- Select **eth3** as the management port
+  - IP address: **192.168.103.254"
+  - Netmask: **255.255.255.0**
+  - Default gateway: **blank**
+    - *will auto populate with 192.168.103.254, clear it*
+  - NO DHCP server on the management interface
+- Confirm you want to continue with formatting the drive **OK**
+- When the message `Installation complete.` message appears
+  - Press enter
+  - Wait for the system to start to reboot, then eject the ISO
+- Log in from the Console
+- `set hostname CPTEMPLATE`
+- `save config`
+- Set the user shell to bash
+  - `set expert-password`
+    - select a password for "expert mode"
+  - `expert`
+    - enter the password when prompted
+  - `chsh -s /bin/bash admin`
+- From the Windows machine point WinSCP to the device:
+  - 192.168.103.254
+  - Username: admin
+  - Password: the password you selected
+  - Accept the warnings
+  - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
+  - Close WinSCO
+- Revert to clish shell
+  - `chsh -s /etc/cli.sh admin`
+- Install guest tools
+  - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
+  - `cd LinuxGuestTools-8.4.0-1`
+  - `./install -d rhel -m el7`
+  - `halt`
+- Click the **Advanced** tab
+- Click **Convert to template**
+
+# Create Lab Environment
 ## Network Configuration
 - Create file network.tf from [network.tf](terraform/network.tf)
 - `terraform init`
@@ -77,3 +153,11 @@ sudo apt update && sudo apt install -y terraform
   - `terraform apply -auto-approve`
 
 ## Create VyOS Router with Terraform
+- Create file network.tf from [router.tf](terraform/router.tf)
+- `terraform plan`
+- `terraform apply -auto-approve'
+
+## Create Check Point firewalls with Terraform
+- Create file firewalls.tf from [firewalls.tf](terraform/firewalls.tf)
+- `terraform plan`
+- `terraform apply -auto-approve'
