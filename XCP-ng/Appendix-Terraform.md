@@ -60,11 +60,12 @@ sudo apt update && sudo apt install -y terraform
   - When you are asked to set the password just use `vyos`
   - When promted, `reboot`
   - After the reboot starts, eject the VyOS iso
+- Log back in
+- 🌱 Add SSH keys for Ansible management
 - Enable guest utilties
-  - Log back in
-    - `sudo systemctl start xe-guest-utilities`
-    - `sudo systemctl enable xe-guest-utilties`
-    - `poweroff`
+  - `sudo systemctl start xe-guest-utilities`
+  - `sudo systemctl enable xe-guest-utilties`
+  - `poweroff`
 - Convert to Template
   - Click the Advanced tab
   - Click Convert to template and confirm that this can't be undone
