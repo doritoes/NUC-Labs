@@ -328,7 +328,7 @@ This is a bare-bones server with limited resources.
     - `sudo umount /media`
   - `sudo reboot`
   - Eject guest-tools.iso
-- Test the VM
+- Update the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
     - accept the messages (default values OK)
@@ -337,6 +337,8 @@ This is a bare-bones server with limited resources.
     - Set the new hostname: `sudo hostnamectl set-hostname ubuntu-server-template`
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server 22.04" --pretty`
     - Confirm it has changed: `hostnamectl`
+- Power down VM
+  - `poweroff`
 - Convert `ubuntu-server-template` to template
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm that this can't be undone
