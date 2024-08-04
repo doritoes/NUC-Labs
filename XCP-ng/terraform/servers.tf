@@ -2,7 +2,7 @@ data "xenorchestra_template" "server2022-template" {
   name_label = "server2022-template"
 }
 data "xenorchestra_template" "server-ubuntu-template" {
-  name_label = "Ubuntu Jammy Jellyfish 22.04"
+  name_label = "ubuntu-server-template"
 }
 
 
