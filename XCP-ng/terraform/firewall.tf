@@ -155,3 +155,20 @@ resource "xenorchestra_vm" "firewall3b" {
     network_id = data.xenorchestra_network.branch3.id
   }
 }
+
+resource "xenorchestra_vm" "sms" {
+  memory_max = 8589869056
+  cpus       = 4
+  name_label = "SMS"
+  name_description = "Check Point SMS"
+  template = data.xenorchestra_template.firewall-template.id
+  depends_on = [xenorchestra_network.vlan_network_401]
+  disk {
+    sr_id      = data.xenorchestra_sr.local.id
+    name_label = "sms-disk"
+    size       = 137437904896
+  }
+  network {
+    network_id = data.xenorchestra_network.branch1mgt.id
+  }
+}
