@@ -280,6 +280,67 @@ This is a bare-bones server with limited resources.
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm that this can't be undone
 
+## Create Ubuntu Server 22.04 LTS Template
+- From the left menu click **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
+  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Name: **ubuntu-server-template**
+  - Description: **Ubuntu Server 22.04**
+  - CPU: **1 vCPU**
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
+  - Interfaces: select **Pool-wide network associated with eth0**
+  - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click the Console tab and follow the Install wizard per usual
+  - READ CAREFULLY the Guided storage configuration
+    - Root / only has **10GB** of the **20GB** allocated
+    - Solutions (if in doubt, use Option 1; Option 2 is popular for /var, /var/log, /opt, or /home)
+      - Option 1 expand root /
+        - Under used devices, locate ubuntu-lv which will be mounted at root /
+        - Select it, and then Edit
+        - Change the Size to the max value
+      - Option 2
+        - Select the free space, then Create Logical Volume
+        - Adjust the size to use the free space
+        - Adjust the mount point (/home by default)
+  - Check **Install OpenSSH server**
+    - 🌱 add instructions on improrting SSH key
+  - Do not select any snaps
+- To remove the installation media, click the Eject icon
+- Press Enter to Reboot
+- Log in and check the system using Terminal
+- Install guest tools
+  - Connect the guest-tools.iso (select it from the dropdown)
+  - Open Terminal
+  - Mount the iso
+    - `sudo mount /dev/cdrom /media`
+    - `cd /media/Linux`
+  - Install the tools
+    - `sudo ./install.sh`
+    - you may be prompted to enter your password
+    - you are prompted accept the change
+    - you are reminded to reboot
+  - Unmount the ISO
+    - `cd ~`
+    - `sudo umount /media`
+  - `sudo reboot`
+  - Eject guest-tools.iso
+- Test the VM
+  - Updates
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+    - accept the messages (default values OK)
+  - Change hostname
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname ubuntu-server-template`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server 22.04" --pretty`
+    - Confirm it has changed: `hostnamectl`
+- Convert `ubuntu-server-template` to template
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm that this can't be undone
+
 # Create Lab Environment
 ## Network Configuration
 - Create file network.tf from [network.tf](terraform/network.tf)
