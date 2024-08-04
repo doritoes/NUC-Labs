@@ -211,7 +211,59 @@ NOTE The interface change and setting expert password were not saved, preserving
 - Shut down the Windows VM
   - `stop-computer`
 - Convert win10-template to a template
+
 ## Create Windows Server 2022 Template
+This is a bare-bones server with limited resources.
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Windows Server 2022 (64-bit)**
+  - Name: **server2022-template**
+  - Description: **Windows Server 2022**
+  - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
+  - Interfaces: select *Inside* from the dropdown
+  - Disks: **128GB** (default 32GB)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click **Console** tab
+- You will be prompted to Press any key to boot from CD to DVD
+  - **Press any key**
+  - If you missed it, power cycle and try again
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - Accept the installation on Drive 0
+- Set password for Administrator
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually (or install later using group policy)
+- Login in
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to server2022-template
+  - From administrative powershell: `Rename-Computer -NewName server2022-template`
+- Reboot the computer
+  - `restart-computer`
+- Now let's prepare the template VM for cloning
+  - must perform generalization to remove the security identifier (SID)
+  - allows us to rapidly clone more servers
+  - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+- Convert server2022-template to a template
+
 # Create Lab Environment
 ## Network Configuration
 - Create file network.tf from [network.tf](terraform/network.tf)
