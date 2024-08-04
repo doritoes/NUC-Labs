@@ -1,6 +1,8 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
+This appendix task
+
 Notes:
 - Terraform integrates with the XO server, not the XCP-ng host
 
@@ -154,6 +156,62 @@ Here we will
 
 NOTE The interface change and setting expert password were not saved, preserving the clean template.
 
+## Create Windows 10 Template
+- From the left menu click **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
+  - Template: **Windows 10 (64-bit)**
+  - Name: **win10-template**
+  - Description: **Windows 10**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows 10 iso you uploaded*
+  - Interfaces: select **Pool-wide network associated with eth0** from the dropdown
+  - Disks: **128GB** (default 32GB is too small to apply the latest Windows updates)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click Console
+- You will be prompted to press any key to boot from CD or DVD
+  - **Press any key**
+  - If you missed it, power cycle and try again
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click **Install now**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
+  - Check the box then click **Next**
+  - Click **Custom: Install Windows only (advanced)**
+  - Accept the installation on Drive 0, click **Next**
+  - Wait while the system powers reboots and gradually installs
+  - Set region and keyboard layout, skip second keyboard layout
+  - Select **Set up for personal use** (feel free to experiment)
+  - Click **Offline account** then click **Limited experience**
+  - User: **lab**
+  - Password: select a password
+  - Create security questions for this account: *be creative*
+  - Click **Not now**
+  - Privacy: *disable all the settings* and then click **Accept**
+  - Experience: be creative and pick one, then click **Accept* (I chose Business)
+  - Cortana: Click **Not now**
+  - At the desktop, open the Edge browser
+    - Click **Complete setup**
+    - Click **Continue without signing in**
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually (or install later using group policy)
+- Apply Windows Updates (reboots included)
+- Enable Remote Desktop (RDP)
+  - Start > Settings > System > Remote Desktop
+  - Slide to enable and Confirm
+- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to win10-template
+  - From administrative powershell: `Rename-Computer -NewName win10-template`
+- Shut down the Windows VM
+  - `stop-computer`
+- Convert win10-template to a template
+## Create Windows Server 2022 Template
 # Create Lab Environment
 ## Network Configuration
 - Create file network.tf from [network.tf](terraform/network.tf)
@@ -174,3 +232,18 @@ NOTE The interface change and setting expert password were not saved, preserving
 - Create file firewalls.tf from [firewalls.tf](terraform/firewalls.tf)
 - `terraform plan`
 - `terraform apply -auto-approve'
+
+## Create Windows Workstations
+Management Workstation
+
+LAN workstations
+
+## Create Windows Servers
+- Domain controller
+- DHCP
+- Join Worksations to domain
+- HTTPS inspection
+- Fileserver
+
+## Create Linux Servers
+From built-in template Ubuntu Jammy Jellyfish 22.04
