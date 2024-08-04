@@ -294,7 +294,7 @@ This is a bare-bones server with limited resources.
 ## Create VyOS Router with Terraform
 - Create file network.tf from [router.tf](terraform/router.tf)
 - `terraform plan`
-- `terraform apply -auto-approve'
+- `terraform apply -auto-approve1
 
 ## Create Check Point firewalls with Terraform
 - Create file firewalls.tf from [firewalls.tf](terraform/firewalls.tf)
