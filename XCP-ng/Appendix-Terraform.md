@@ -1,13 +1,22 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
-This appendix task
+This appendix outlines building a complete lab designed for testing Check Point security products. It requires a lot of resources.
 
 Notes:
 - Terraform integrates with the XO server, not the XCP-ng host
+- Once built, the Windows 10 desktop systems have a month to operate without activation
+  - Some personalization features in Windows Settings are diasbled if you don’t activate (cannot change desktop wallpapers, windows colors and themes, customize Start menu/taskbar/lock screen/title bar/fonts, etc.)
+  - Without activation, Windows may only download critical updates; some updates like optional updates, drivers, or security updates may be missed
+- Windows Servers have a standard 180 evaluation period
+- Check Point systems have a 15-day trial by default (request a [30-day evaluation license](https://community.checkpoint.com/t5/General-Topics/How-to-Request-an-Evaluation-License-for-Security-Gateways-and/td-p/40391) as needed)
+
+Need to complete:
+- add ansible ssh key to VyOS router
+- add ansible ssh key to Check Point firewalls
 
 # Install Terrafrom
-This can be run from another host in your Lab, such as WSL on a Windows desktop.
+This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
 
 - Install prerequisites
   - `sudo apt-get update && sudo apt-get install -y lsb-release gnupg software-properties-common`
@@ -68,9 +77,9 @@ sudo apt update && sudo apt install -y terraform
   - `sudo systemctl start xe-guest-utilities`
   - `sudo systemctl enable xe-guest-utilties`
   - `poweroff`
-- Convert to Template
-  - Click the Advanced tab
-  - Click Convert to template and confirm that this can't be undone
+- Convert `vyos-template` to template
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm that this can't be undone
 
 ## Create Check Point firewall Template
 Here we will 
@@ -151,8 +160,9 @@ Here we will
       - press `y`
       - `rm LinuxGuestTools-8.4.0-1.tar.gz && rm -rf LinuxGuestTools-8.4.0-1`
     - `halt`
-- Click the **Advanced** tab
-- Click **Convert to template**
+- Convert `checkpoint-template` to template
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm that this can't be undone
 
 NOTE The interface change and setting expert password were not saved, preserving the clean template.
 
@@ -206,11 +216,12 @@ NOTE The interface change and setting expert password were not saved, preserving
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
 - Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, clean up the taskbar, desktop, etc. to meet your preferences
 - Change the hostname to win10-template
   - From administrative powershell: `Rename-Computer -NewName win10-template`
 - Shut down the Windows VM
   - `stop-computer`
-- Convert win10-template to a template
+- Convert `win10-template` to a template
 
 ## Create Windows Server 2022 Template
 This is a bare-bones server with limited resources.
@@ -223,7 +234,7 @@ This is a bare-bones server with limited resources.
   - RAM: **2GB**
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
-  - Interfaces: select *Inside* from the dropdown
+  - Interfaces: select *Pool-wide network associated with eth0*
   - Disks: **128GB** (default 32GB)
   - Click **Create**
 - The details for the new VM are now displayed
@@ -233,21 +244,24 @@ This is a bare-bones server with limited resources.
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
-  - Click Install now
-  - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
+  - Click **Install now**
+  - Select the OS to install:**Windows Server 2022 Standard Edition Evaluation (Desktop Experience)**
     - feel free to experiment
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
+  - Check the box then click **Next**
+  - Click Custom: **Install Windows only (advanced)**
   - Accept the installation on Drive 0
-- Set password for Administrator
+- Set password for user Administrator
+- Disconnect the ISO
+- Login in
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
     - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
-    - Download MSI and install manually (or install later using group policy)
-- Login in
-  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
-  - Yes, allow the server to be discovered by other hosts on the network
+  - Download MSI and install manually (or install later using group policy)
+    - Accept the reboot; upon logging back in note the confirmation
+    - Remove the downloaded file when done
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -262,7 +276,9 @@ This is a bare-bones server with limited resources.
   - allows us to rapidly clone more servers
   - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-- Convert server2022-template to a template
+- Convert `server2022-template` to template
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm that this can't be undone
 
 # Create Lab Environment
 ## Network Configuration
