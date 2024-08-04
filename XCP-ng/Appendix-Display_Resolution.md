@@ -8,8 +8,13 @@ Windows VMs booting with UEFI have a fixed display size. You can't change the sc
 - Open **Device Manager**
 - Open **OVMF Platform Configuration**
 - Select **Change Preferred**
-- Select the preferred resolution you want (1600x900 for example)
+- Select the preferred resolution you want (1440 x 900 for example)
+  - 1366 x 768 - don't use - scrambled video
+  - 1440 x 900
+  - 1600 x 900
+  - 1920 x 1080
 - Select **Commit Changes and Exit**
 - Press **Esc**
 - Select **Reset**
-- Check Windows Display settings and note the display resolution has changed
+- Log in to Windows
+  - Check windows Display settings and note the display resolution has changed
