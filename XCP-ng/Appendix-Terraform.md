@@ -2,6 +2,10 @@
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
 This appendix outlines building a complete lab designed for testing Check Point security products. It requires a lot of resources.
+- 17 VMs
+- 31 vCPUs (can over subscribe CPUs)
+- 40GB RAM
+- 69GB storage
 
 Notes:
 - Terraform integrates with the XO server, not the XCP-ng host
