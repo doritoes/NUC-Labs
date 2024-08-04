@@ -77,7 +77,7 @@ resource "xenorchestra_vm" "file-1" {
 resource "xenorchestra_vm" "sql-1" {
   memory_max = 4294934528
   cpus       = 1
-  name_label = "file-1"
+  name_label = "sql-1"
   name_description = "SQL Server Branch 1"
   template = data.xenorchestra_template.server2022-template.id
   depends_on = [ xenorchestra_network.vlan_network_101]
