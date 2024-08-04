@@ -23,7 +23,6 @@ data "xenorchestra_template" "firewall-template" {
   name_label = "checkpoint-template"
 }
 
-
 resource "xenorchestra_vm" "firewall1a" {
   memory_max = 4294934528
   cpus       = 4
