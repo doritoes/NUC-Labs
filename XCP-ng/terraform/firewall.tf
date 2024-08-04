@@ -159,7 +159,7 @@ resource "xenorchestra_vm" "firewall3b" {
 resource "xenorchestra_vm" "sms" {
   memory_max = 8589869056
   cpus       = 4
-  name_label = "SMS"
+  name_label = "sms"
   name_description = "Check Point SMS"
   template = data.xenorchestra_template.firewall-template.id
   depends_on = [xenorchestra_network.vlan_network_401]
