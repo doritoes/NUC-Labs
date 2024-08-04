@@ -5,7 +5,6 @@ data "xenorchestra_template" "server-ubuntu-template" {
   name_label = "ubuntu-server-template"
 }
 
-
 resource "xenorchestra_vm" "dmz-apache" {
   memory_max = 1073733632
   cpus       = 1
