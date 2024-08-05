@@ -1,11 +1,11 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
-This appendix outlines building a complete lab designed for testing Check Point security products. It requires a lot of resources.
-- 17 VMs
-- 31 vCPUs (can over subscribe CPUs)
-- 40GB RAM
-- 69GB storage
+This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lotM/ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A version that will with 64GB of RAM might be in the future.
+- 18 VMs
+- 43 vCPUs (can over subscribe CPUs)
+- 76GB RAM
+- 71GB storage
 
 Notes:
 - Terraform integrates with the XO server, not the XCP-ng host
@@ -376,17 +376,58 @@ This is a bare-bones server with limited resources.
 - `terraform plan`
 - `terraform apply -auto-approve'
 
-## Create Windows Workstations
-Management Workstation
+## Create Workstations
+- Create file workstations.tf from [workstations.tf](terraform/workstations.tf)
+- `terraform plan`
+- `terraform apply -auto-approve'
 
-LAN workstations
+## Create Servers
+- Create file servers.tf from [servers.tf](terraform/servers.tf)
+- `terraform plan`
+- `terraform apply -auto-approve'
 
-## Create Windows Servers
+# Configure Branch 1
+## Configure Branch 1 LAN
 - Domain controller
 - DHCP
-- Join Worksations to domain
-- HTTPS inspection
-- Fileserver
+- Join Workstation to domain
+- File Server
+- SQL Server
 
-## Create Linux Servers
-From built-in template Ubuntu Jammy Jellyfish 22.04
+## Configure Management Workstation
+- Configure SMS
+
+## Configure Branch 1 firewalls
+- Initial settings
+- FTW
+- Gaia config
+- Create cluster
+- policy
+- DHCP helper in DMZ
+
+## Configure DMZ Servers
+Set up NAT and rules
+
+IIS and Apache
+
+## HTTPS Inspection
+- HTTPS inspection
+
+# Configure Branch 2
+- Initial settings
+- FTW
+- Gaia config
+- Create cluster
+- policy
+- VPN tunnel bring up
+- DHCP helper?????
+
+
+# Configure Branch 3
+- Initial settings
+- FTW
+- Gaia config
+- Create cluster
+- policy
+- VPN tunnel bring up
+- DHCP helper?????
