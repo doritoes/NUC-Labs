@@ -268,6 +268,7 @@ This is a bare-bones server with limited resources.
     - Accept the reboot; upon logging back in note the confirmation
     - Remove the downloaded file when done
 - Apply Windows Updates (reboots included)
+  - Note that at some boots, certain services are on a delayed start, impacting the updates
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
