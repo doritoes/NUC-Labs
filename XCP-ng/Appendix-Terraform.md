@@ -173,7 +173,7 @@ NOTE The interface change and setting expert password were not saved, preserving
 ## Create Windows 10 Template
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
-  - Template: **Windows 10 (64-bit)**
+  - Template: **Other install media**
   - Name: **win10-template**
   - Description: **Windows 10**
   - CPU: **2 vCPU**
@@ -185,7 +185,7 @@ NOTE The interface change and setting expert password were not saved, preserving
   - Click **Create**
 - The details for the new VM are now displayed
 - Click Console
-- You will be prompted to press any key to boot from CD or DVD
+- If you are prompted to press any key to boot from CD or DVD
   - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
@@ -232,7 +232,7 @@ NOTE The interface change and setting expert password were not saved, preserving
 This is a bare-bones server with limited resources.
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Template: **Windows Server 2022 (64-bit)**
+  - Template: **Other install media**
   - Name: **server2022-template**
   - Description: **Windows Server 2022**
   - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
@@ -244,7 +244,7 @@ This is a bare-bones server with limited resources.
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console** tab
-- You will be prompted to Press any key to boot from CD to DVD
+- If you are prompted to Press any key to boot from CD to DVD
   - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
