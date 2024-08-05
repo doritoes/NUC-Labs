@@ -221,6 +221,7 @@ NOTE The interface change and setting expert password were not saved, preserving
   - Slide to enable and Confirm
 - Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Optionally, clean up the taskbar, desktop, etc. to meet your preferences
+- Optionally, set the correct timezone
 - Change the hostname to win10-template
   - From administrative powershell: `Rename-Computer -NewName win10-template`
 - Shut down the Windows VM
@@ -271,6 +272,7 @@ This is a bare-bones server with limited resources.
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
 - Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, set the correct timezone
 - Change the hostname to server2022-template
   - From administrative powershell: `Rename-Computer -NewName server2022-template`
 - Reboot the computer
