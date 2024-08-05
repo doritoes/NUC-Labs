@@ -1,7 +1,7 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
-This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lotM/ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A version that will with 64GB of RAM might be in the future.
+This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A version that will with 64GB of RAM might be in the future.
 - 18 VMs
 - 43 vCPUs (can over subscribe CPUs)
 - 76GB RAM
@@ -14,10 +14,15 @@ Notes:
   - Without activation, Windows may only download critical updates; some updates like optional updates, drivers, or security updates may be missed
 - Windows Servers have a standard 180 evaluation period
 - Check Point systems have a 15-day trial by default (request a [30-day evaluation license](https://community.checkpoint.com/t5/General-Topics/How-to-Request-an-Evaluation-License-for-Security-Gateways-and/td-p/40391) as needed)
+- Creating your original templates from "Other installation media" was required for Windows systems
+  - creating Windows systems from the built-in "Windows" templates fail to boot when created using Terraform
+  - re-created the templates form "Other installation media" fixed the problem
+  - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 
 Need to complete:
 - add ansible ssh key to VyOS router
 - add ansible ssh key to Check Point firewalls
+- add ansible ssh key to Ubuntu server
 
 # Install Terrafrom
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
@@ -421,7 +426,6 @@ IIS and Apache
 - policy
 - VPN tunnel bring up
 - DHCP helper?????
-
 
 # Configure Branch 3
 - Initial settings
