@@ -1,7 +1,7 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
-This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A version that will with 64GB of RAM might be in the future.
+This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A reduced version designed for 64GB of RAM might be in the future.
 - 18 VMs
 - 43 vCPUs (can over subscribe CPUs)
 - 76GB RAM
