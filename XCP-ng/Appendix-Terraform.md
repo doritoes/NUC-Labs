@@ -201,12 +201,12 @@ NOTE The interface change and setting expert password were not saved, preserving
   - Select **Set up for personal use** (feel free to experiment)
   - Click **Offline account** then click **Limited experience**
   - User: **lab**
-  - Password: select a password
-  - Create security questions for this account: *be creative*
+  - Password: *select a password*
+  - Create security questions for this account (*be creative*)
   - Click **Not now**
   - Privacy: *disable all the settings* and then click **Accept**
   - Experience: be creative and pick one, then click **Accept* (I chose Business)
-  - Cortana: Click **Not now**
+  - Cortana: click **Not now**
   - At the desktop, open the Edge browser
     - Click **Complete setup**
     - Click **Continue without signing in**
@@ -214,14 +214,19 @@ NOTE The interface change and setting expert password were not saved, preserving
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
     - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
-    - Download MSI and install manually (or install later using group policy)
+    - Download .msi file and install manually (or install later using group policy)
+    - Permit the reboot and log back in
+      - Message confirming tools installed is displayed
+    - Delete the downloaded file when done
 - Apply Windows Updates (reboots included)
+- Eject the installation ISO
 - Enable Remote Desktop (RDP)
-  - Start > Settings > System > Remote Desktop
+  - **Start** > **Settings** > **System** > **Remote Desktop**
   - Slide to enable and Confirm
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
-- Optionally, clean up the taskbar, desktop, etc. to meet your preferences
-- Optionally, set the correct timezone
+- Optional
+  - increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+  - clean up the taskbar, desktop, etc. to meet your preferences
+  - set the correct timezone
 - Change the hostname to win10-template
   - From administrative powershell: `Rename-Computer -NewName win10-template`
 - Shut down the Windows VM
