@@ -138,6 +138,11 @@ Here we will
   - Wait for the system to start to reboot, then eject the iso
 - Log in from the Console
 - `set hostname CPTEMPLATE`
+- Set up ansible user
+  - Reference [link](https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
+  - `add user ansible uid 103 homedir /home/ansible`
+  - `set user ansible password`
+  - `add rba user ansible roles adminRole`
 - `save config`
 - Install guest tools
   - Select and IP address on your Lab network for temporary use
@@ -161,7 +166,6 @@ Here we will
   - From XO with console the Check Point template device
     - Revert to clish shell
       - `chsh -s /etc/cli.sh admin`
-    - 🌱Add SSH keys for Ansible management
     - Install guest tools
       - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
       - `cd LinuxGuestTools-8.4.0-1`
