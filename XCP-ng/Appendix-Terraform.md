@@ -91,7 +91,7 @@ sudo apt update && sudo apt install -y terraform
   - Click **Convert to template** and confirm that this can't be undone
 
 ## Create Check Point firewall Template
-Here we will 
+Here we will create a basic Check Point template suitable for an SMS or gateway (firewall).
 - Log in to XO and create a Check Point firewall
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
@@ -104,9 +104,8 @@ Here we will
     - SMS reqires more; we will increase this later
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
-  - First Interface:
+  - Interfaces:
     - Network: from the dropdown select the **pool-wide network associated with eth0**
-    - This is replaced by the specific interfaces required
   - Disks: Click **Add disk**
     - Add **128GB** disk
   - Click **Create**
@@ -171,7 +170,9 @@ Here we will
       - `cd LinuxGuestTools-8.4.0-1`
       - `./install -d rhel -m el7`
       - press `y`
-      - `rm LinuxGuestTools-8.4.0-1.tar.gz && rm -rf LinuxGuestTools-8.4.0-1`
+      - `cd ..`
+      - `rm LinuxGuestTools-8.4.0-1.tar.gz`
+      - `rm -rf LinuxGuestTools-8.4.0-1`
     - `halt`
 - Convert `checkpoint-template` to template
   - Click the **Advanced** tab
