@@ -20,9 +20,9 @@ Notes:
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 
 Need to complete:
-- add ansible ssh key to VyOS router
-- add ansible ssh key to Check Point firewalls
-- add ansible ssh key to Ubuntu server
+- add ansible user to VyOS router
+- add ansible user to Check Point firewalls
+- add ansible user to Ubuntu server
 
 # Install Terrafrom
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
@@ -367,7 +367,8 @@ This is a bare-bones server with limited resources.
   - `sudo reboot`
   - Eject guest-tools.iso
 - Add ansible user
-  - 🌱useradd
+  - `sudo useradd ansible -s /bin/bash -g sudo -m`
+  - `sudo passwd ansible`
 - Update the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
