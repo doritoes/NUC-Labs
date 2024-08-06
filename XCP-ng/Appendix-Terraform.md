@@ -82,6 +82,23 @@ sudo apt update && sudo apt install -y terraform
   - After the reboot starts, eject the VyOS iso
 - Log back in
 - 🌱 Add SSH keys for Ansible management
+  - add user
+  - use loadkeys in Op mode
+~~~
+vyos@vyos-rtr:~$ configure
+vyos@vyos-rtr# set system login user jsmith full-name "John Smith"
+vyos@vyos-rtr# set system login user jsmith authentication plaintext-password examplepassword
+vyos@vyos-rtr# set system login user jsmith level admin
+vyos@vyos-rtr# commit
+vyos@vyos-rtr# save
+
+pc1 = 192.168.0.3 (linux) username = user1
+vyos = 192.168.0.101 (version 1.1.8) username = user1
+
+login to vyos
+switch to configuration mode
+type the command: loadkey user1 scp://user1@192.168.0.3/home/user1/.ssh/id_rsa.pub
+~~~
 - Enable guest utilties
   - `sudo systemctl start xe-guest-utilities`
   - `sudo systemctl enable xe-guest-utilties`
@@ -329,7 +346,6 @@ This is a bare-bones server with limited resources.
         - Adjust the size to use the free space
         - Adjust the mount point (/home by default)
   - Check **Install OpenSSH server**
-    - 🌱 add instructions on improrting SSH key
   - Do not select any snaps
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
@@ -350,6 +366,8 @@ This is a bare-bones server with limited resources.
     - `sudo umount /media`
   - `sudo reboot`
   - Eject guest-tools.iso
+- Add ansible user
+  - 🌱useradd
 - Update the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
