@@ -19,11 +19,6 @@ Notes:
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 
-Need to complete:
-- add ansible user to VyOS router
-- add ansible user to Check Point firewalls
-- add ansible user to Ubuntu server
-
 # Install Terrafrom
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
 
@@ -81,24 +76,17 @@ sudo apt update && sudo apt install -y terraform
   - When promted, `reboot`
   - After the reboot starts, eject the VyOS iso
 - Log back in
-- 🌱 Add SSH keys for Ansible management
+- Add user `ansible` for management
   - add user
-  - use loadkeys in Op mode
-~~~
-vyos@vyos-rtr:~$ configure
-vyos@vyos-rtr# set system login user jsmith full-name "John Smith"
-vyos@vyos-rtr# set system login user jsmith authentication plaintext-password examplepassword
-vyos@vyos-rtr# set system login user jsmith level admin
-vyos@vyos-rtr# commit
-vyos@vyos-rtr# save
-
-pc1 = 192.168.0.3 (linux) username = user1
-vyos = 192.168.0.101 (version 1.1.8) username = user1
-
-login to vyos
-switch to configuration mode
-type the command: loadkey user1 scp://user1@192.168.0.3/home/user1/.ssh/id_rsa.pub
-~~~
+    - `configure`
+    - `set system login user ansible full-name "ansible management"`
+    - `set system login user ansible authentication plaintext-password examplepassword`
+    - The old permissions system has been removed
+      - Gone: `set system login user ansible level admin`
+      - All accounts now have sudo permisions
+    - `commit`
+    - `save`
+    - `exit`
 - Enable guest utilties
   - `sudo systemctl start xe-guest-utilities`
   - `sudo systemctl enable xe-guest-utilties`
@@ -159,6 +147,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - `add user ansible uid 103 homedir /home/ansible`
   - `set user ansible password`
   - `add rba user ansible roles adminRole`
+  - 🌱 Need to determine which shell (bash or cli.sh) is needed for Ansible; currently at cli.sh
 - `save config`
 - Install guest tools
   - Select and IP address on your Lab network for temporary use
