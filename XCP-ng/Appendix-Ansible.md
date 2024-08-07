@@ -55,25 +55,48 @@ Notes:
         - Click OK
       - Click OK
     - Click Close
+- Install additional Windows applications
+  - [Chrome browser](https://www.google.com/google_chrome/install)
+  - [WinSCP](https://winscp.net/eng/download.php)
+- Install additional WSL packages
+  - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+  - `sudo apt install -y python3-pip`
+  - ???? `python3-paramiko`
+  - Install Ansible
+    - `sudo apt install -y ansible`
+    - `ansible-galaxy collection install community.general`
+    - `python3 -m pip install XenAPI`
+- Generate ssh RSA key for user `ansible`
+  - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot)
+  - `ssh-keygen -o`
+    - <ins>Do not</ins> enter a passphrase
+    - Accept all defaults (press enter)
+  - The public key you will be using:
+    - `cat ~/.ssh/id_rsa.pub`
+    - https://docs.vyos.io/en/latest/automation/vyos-ansible.html
+
 # Configure VyOS Router
-- Log back in
-  - use loadkeys in Op mode
-~~~
-vyos@vyos-rtr:~$ configure
-vyos@vyos-rtr# set system login user jsmith full-name "John Smith"
-vyos@vyos-rtr# set system login user jsmith authentication plaintext-password examplepassword
-vyos@vyos-rtr# set system login user jsmith level admin
-vyos@vyos-rtr# commit
-vyos@vyos-rtr# save
-
-pc1 = 192.168.0.3 (linux) username = user1
-vyos = 192.168.0.101 (version 1.1.8) username = user1
-
-login to vyos
-switch to configuration mode
-type the command: loadkey user1 scp://user1@192.168.0.3/home/user1/.ssh/id_rsa.pub
-~~~
-configure router using ansible
+- Log back in to console
+- Configure eth0 interface
+  - `configure`
+  - `set interfaces ethernet eth0 address dhcp`
+  - `set service ssh`
+  - `commit`
+  - `save`
+  - `exit`
+  - Get the IP address on eth0
+    - `show interfaces ethernet eth0 brief`
+- From "manager" VM
+  - `ssh ansible@<vyps_lab_ip>`
+  - `exit`
+- Configure key login in VyOS
+  - Log in to VyOS as `ansible`
+  - `configure`
+  - `set sytem login user ansible authentiation public-keys home type 'ssh-rsa'`
+  - `set sytem login user ansible authentiation public-keys home key '<valueofkey>'`
+    - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
+- **CONTINUE HERE**
+  - configure router using ansible
 
 # Configure SMS
 - set IP information
