@@ -1,0 +1,60 @@
+- name: configure the VyOS router
+  vyos.vyos.vyos_config:
+    lines:
+    - set system host-name vyos
+    - set service ssh
+    - set interface ethernet eth0 description 'OUTSIDE'
+    - set interfaces ethernet eth1 description 'build'
+    - set interfaces ethernet eth1 address '192.168.100.254/24'
+    - set interfaces ethernet eth1 description 'ISP1'
+    - set interfaces ethernet eth1 address '192.168.101.254/24'
+    - set interfaces ethernet eth2 description 'ISP2'
+    - set interfaces ethernet eth2 address '192.168.102.254/24'
+    - set interfaces ethernet eth3 description 'ISP3'
+    - set interfaces ethernet eth3 address '192.168.103.254/24'
+    - set nat source rule 100 outbout-interface name 'eth0'
+    - set nat source rule 100 source address '192.168.100.0/24'
+    - set net soruce rule 100 translation address 'masquerade'
+    - set nat source rule 101 outbout-interface name 'eth0'
+    - set nat source rule 101 source address '192.168.101.0/24'
+    - set net soruce rule 101 translation address 'masquerade'
+    - set nat source rule 102 outbout-interface name 'eth0'
+    - set nat source rule 102 source address '192.168.102.0/24'
+    - set net soruce rule 102 translation address 'masquerade'
+    - set nat source rule 103 outbout-interface name 'eth0'
+    - set nat source rule 103 source address '192.168.103.0/24'
+    - set net soruce rule 103 translation address 'masquerade'
+    - set service dhcp-server shared-network-name vyoslab authoritative
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 subnet-id 100
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option default-router 192.168.100.254
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option name-server 9.9.9.9
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option domain-name lablocal
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 lease 3600
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 start 192.168.100.20
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 range 0 stop 192.168.100.250
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 subnet-id 101
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 option default-router 192.168.101.254
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 option name-server 9.9.9.9
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 option domain-name lablocal
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 lease 3600
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 range 0 start 192.168.101.20
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.101.0/24 range 0 stop 192.168.101.250
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 subnet-id 102
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 option default-router 192.168.102.254
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 option name-server 9.9.9.9
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 option domain-name lablocal
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 lease 3600
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 range 0 start 192.168.102.20
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 range 0 stop 192.168.102.250
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 subnet-id 103
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 option default-router 192.168.103.254
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 option name-server 9.9.9.9
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 option domain-name lablocal
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 lease 3600
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 range 0 start 192.168.103.20
+    - set service dhcp-server shared-network-name vyoslab subnet 192.168.102.0/24 range 0 stop 192.168.103.250
+    - set service dns forwarding system
+    - set service dns forwarding listen-address '192.168.100.254'
+    - set service dns forwarding allow-from '192.168.100.0/23'
+    - set system name-server '9.9.9.9'
+    - set system time-zone US/Eastern
