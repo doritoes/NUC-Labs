@@ -9,5 +9,9 @@
 #10.0.2.2
 # firewall2b
 #10.0.2.3
+# firewall3a
+#10.0.3.2
+# firewall3b
+#10.0.3.3
 [dmzserver]
 #192.168.31.11
