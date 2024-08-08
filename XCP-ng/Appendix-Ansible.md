@@ -104,8 +104,10 @@ Notes:
   - everything else should be "commented out"
   - `ansible all -m ping`
   - You are expecting `SUCCESS` and `"ping": "pong"`
-- **CONTINUE HERE**
-  - configure router using ansible
+- Create router.yml from [router.yml](ansible/router.yml]
+- `ansible-playbook router.yml`
+You can test by spinning up a VM on the build network
+- it should be get DHCP on and be able to connect to the Internet
 
 # Configure SMS
 - set IP information
