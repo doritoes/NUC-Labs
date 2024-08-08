@@ -1,7 +1,10 @@
 ---
 - name: configure the VyOS router
   hosts: router
-
+  vars:
+    ansible_network_os: vyos
+    ansible_ssh_user: ansible
+    ansible_connection: network_cli
   tasks:
   - name: Configure VyOS
     vyos.vyos.vyos_config:
