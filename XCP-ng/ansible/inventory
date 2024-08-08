@@ -1,0 +1,13 @@
+[router]
+# IP address of the LAB interface to start
+[firewalls]
+# firewall1a
+#192.168.41.11
+# firewall1b
+#192.168.41.12
+# firewall2a
+#10.0.2.2
+# firewall2b
+#10.0.2.3
+[dmzserver]
+#192.168.31.11
