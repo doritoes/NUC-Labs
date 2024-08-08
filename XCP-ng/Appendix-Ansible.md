@@ -60,8 +60,7 @@ Notes:
   - [WinSCP](https://winscp.net/eng/download.php)
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - `sudo apt install -y python3-pip`
-  - ???? `python3-paramiko`
+  - `sudo apt install -y python3-pip python3-paramiko`
   - Install Ansible
     - `sudo apt install -y ansible`
     - `ansible-galaxy collection install community.general`
