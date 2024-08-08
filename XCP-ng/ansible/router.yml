@@ -1,3 +1,4 @@
+---
 - name: configure the VyOS router
   hosts: router
 
