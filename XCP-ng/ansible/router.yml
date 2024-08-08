@@ -22,16 +22,16 @@
         - set interfaces ethernet eth3 address '192.168.103.254/24'
         - set nat source rule 100 outbound-interface name 'eth0'
         - set nat source rule 100 source address '192.168.100.0/24'
-        - set net source rule 100 translation address 'masquerade'
+        - set nat source rule 100 translation address 'masquerade'
         - set nat source rule 101 outbound-interface name 'eth0'
         - set nat source rule 101 source address '192.168.101.0/24'
-        - set net source rule 101 translation address 'masquerade'
+        - set nat source rule 101 translation address 'masquerade'
         - set nat source rule 102 outbound-interface name 'eth0'
         - set nat source rule 102 source address '192.168.102.0/24'
-        - set net source rule 102 translation address 'masquerade'
+        - set nat source rule 102 translation address 'masquerade'
         - set nat source rule 103 outbound-interface name 'eth0'
         - set nat source rule 103 source address '192.168.103.0/24'
-        - set net source rule 103 translation address 'masquerade'
+        - set nat source rule 103 translation address 'masquerade'
         - set service dhcp-server shared-network-name vyoslab authoritative
         - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 subnet-id 100
         - set service dhcp-server shared-network-name vyoslab subnet 192.168.100.0/24 option default-router 192.168.100.254
