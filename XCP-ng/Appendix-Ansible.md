@@ -74,7 +74,11 @@ Notes:
   - The public key you will be using:
     - `cat ~/.ssh/id_rsa.pub`
     - https://docs.vyos.io/en/latest/automation/vyos-ansible.html
-
+- Set up basic configuration files for Ansible
+  - Create `ansible.cfg` from [ansible.cfg](ansible/ansible.cfg)
+  - Create `inventory` from [ansible.cfg](ansible/inventory)
+    - Note the values are commented out; will confirm and enable these IPs as we go
+    - Under `[router]` put the Lab IP address of the router (yes, the simulated Internet IP; the path to the Lab isn't confiugred yet)
 # Configure VyOS Router
 - Log back in to console
 - Configure eth0 interface
@@ -95,6 +99,11 @@ Notes:
   - `set sytem login user ansible authentiation public-keys home type 'ssh-rsa'`
   - `set sytem login user ansible authentiation public-keys home key '<valueofkey>'`
     - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
+- Test ansible access
+  - the `inventory` files should have the VyOS "public" IP without the "#" comment character
+  - everything else should be "commented out"
+  - `ansible all -m ping`
+  - You are expecting `SUCCESS` and `"ping": "pong"`
 - **CONTINUE HERE**
   - configure router using ansible
 
