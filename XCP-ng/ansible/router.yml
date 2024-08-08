@@ -3,7 +3,7 @@
   hosts: router
 
   tasks:
-  - name Configure VyOS
+  - name: Configure VyOS
     vyos.vyos.vyos_config:
       lines:
         - set system host-name vyos
