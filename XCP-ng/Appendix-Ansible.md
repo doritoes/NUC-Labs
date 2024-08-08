@@ -65,6 +65,7 @@ Notes:
   - Install Ansible
     - `sudo apt install -y ansible`
     - `ansible-galaxy collection install community.general`
+    - `ansible-galaxy collection install vyos.vyos`
     - `python3 -m pip install XenAPI`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot)
