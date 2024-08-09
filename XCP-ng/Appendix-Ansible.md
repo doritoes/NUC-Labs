@@ -117,9 +117,16 @@ Notes:
     - Spin up a temporary VM based on template `win10-template` on the **build** network
       - it should be get DHCP information and be able to connect to the Internet
 # Configure SMS
-- set IP information
-- set hostname
-- configure ansible SSH RSA keys
+- Log in to console of SMS
+  - Username `admin` and the password you selected
+- Set IP address information
+  - `set interface eth0 ipv4-address 192.168.41.10 mask-length 24`
+  - `save config`
+- Log in to `manager` and open a WSL shell
+  - `ssh ansible@192.168.41.10`
+  - `lock database override`
+  - CONTINUE configure ansible SSH RSA keys
+- set hostname 
 - configure FTW using ansible
 
 # Configure Branch 1
