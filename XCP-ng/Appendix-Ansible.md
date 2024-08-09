@@ -28,11 +28,12 @@ Notes:
   - Click **OK**
   - Click **Restart now**
   - Log back in and open privileged shelll
-    - `wsl list`
+    - `wsl --list`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize
-      - Enter the username (e.g., `ansible`) and password to use
+      - Enter the username (i.e., `ansible`) and password to use
+      - If you use a username other than `ansible`, please create the `ansible` user and use that for your Ansible work
 - Configure Network interfaces
   - Settings > Network & Internet
   - Click Ethernet > First Interface (connected)
@@ -42,43 +43,42 @@ Notes:
     - From dropdown select Manual
     - Slide to enable **IPv4**
       - We cannot set the IP address without a gateway IP or DNS from this interface!
-  - Settings > Network & Interface > Ethernet
-    - Click Change adapter options
+  - Click **Start** > **Settings** > **Network & Interface** > **Ethernet**
+    - Click **Change adapter options**
     - Open the adapter (i.e., **Ethernet 3**) with "Unidentified network"
     - Click **Properties**
+    - Double-click **Internet Protocol Version 4** (TCP/IPv4)
     - Change to "Use the following IP address"
       - Use the following IP address:
-        - IP address: 192.168.41.100*
-        - Subnet mask: **24**
-        - Gateway: **192.168.41.1**
+        - IP address: **192.168.41.100**
+        - Subnet mask: **255.255.255.0**
+        - Gateway: Leave empty
         - Leave DNS entries empty
         - Click OK
       - Click OK
     - Click Close
 - Install additional Windows applications
-  - [Chrome browser](https://www.google.com/google_chrome/install)
+  - [Chrome browser](https://www.google.com/chrome/)
   - [WinSCP](https://winscp.net/eng/download.php)
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - `sudo apt install -y python3-pip python3-paramiko`
-  - Install Ansible
-    - `sudo apt install -y ansible`
-    - `ansible-galaxy collection install community.general`
-    - `ansible-galaxy collection install vyos.vyos`
+  - Install Ansible, modules and requirementes
+    - `sudo apt install -y ansible python3-paramiko python3-pip`
+    - `ansible-galaxy collection install community.general vyos.vyos`
     - `python3 -m pip install XenAPI`
 - Generate ssh RSA key for user `ansible`
-  - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot)
+  - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
     - <ins>Do not</ins> enter a passphrase
     - Accept all defaults (press enter)
   - The public key you will be using:
     - `cat ~/.ssh/id_rsa.pub`
-    - https://docs.vyos.io/en/latest/automation/vyos-ansible.html
 - Set up basic configuration files for Ansible
   - Create `ansible.cfg` from [ansible.cfg](ansible/ansible.cfg)
   - Create `inventory` from [ansible.cfg](ansible/inventory)
-    - Note the values are commented out; will confirm and enable these IPs as we go
-    - Under `[router]` put the Lab IP address of the router (yes, the simulated Internet IP; the path to the Lab isn't confiugred yet)
+    - Note the values are commented out; we will confirm and enable these IPs later in the Lab
+    - Under `[router]` put the Lab IP address of the router (yes, the simulated Internet IP; the path to the Lab isn't configured yet)
+
 # Configure VyOS Router
 - Log back in to console
 - Configure eth0 interface
@@ -90,24 +90,32 @@ Notes:
   - `exit`
   - Get the IP address on eth0
     - `show interfaces ethernet eth0 brief`
-- From "manager" VM
+- From "manager" VM Configure key login in VyOS
   - `ssh ansible@<vyos_lab_ip>`
-  - `exit`
-- Configure key login in VyOS
+    - accept the key
+    - log in with password
   - Log in to VyOS as `ansible`
   - `configure`
   - `set sytem login user ansible authentiation public-keys home type 'ssh-rsa'`
   - `set sytem login user ansible authentiation public-keys home key '<valueofkey>'`
     - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
-- Test ansible access
+  - `commit`
+  - `save`
+  - `exit`
+- Test Ansible access
+  - `exit`
   - the `inventory` files should have the VyOS "public" IP without the "#" comment character
   - everything else should be "commented out"
   - `ansible all -m ping`
   - You are expecting `SUCCESS` and `"ping": "pong"`
-- Create router.yml from [router.yml](ansible/router.yml]
-- `ansible-playbook router.yml`
-You can test by spinning up a VM on the build network
-- it should be get DHCP on and be able to connect to the Internet
+- Configure router using Ansible
+  - Create router.yml from [router.yml](ansible/router.yml)
+  - `ansible-playbook router.yml`
+  - Testing
+    - Login in to the VyOS router
+      - `show interfaces`
+    - Spin up a temporary VM on the build network
+      - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
 - set IP information
