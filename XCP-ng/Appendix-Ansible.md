@@ -121,12 +121,11 @@ Notes:
 - Log in to console of SMS
   - Username `admin` and the password you selected
 - Set IP address information
-  - `set interface eth0 ipv4-address 192.168.41.10 mask-length 24`
+  - `set interface eth0 ipv4-address 192.168.41.20 mask-length 24`
   - `save config`
 - Log in to `manager` and open a WSL shell
-  - `ssh ansible@192.168.41.10`
+  - `ssh ansible@192.168.41.20`
     - you will be in the default home directory `/home/ansible`
-  - `lock database override`
 - Create new authorized_keys file and add the key
   - `mkdir -v .ssh`
   - `chmod -v u=rwx,g=,o= ~/.ssh`
@@ -136,20 +135,13 @@ Notes:
     - `cat > .ssh/authorized_keys`
       - paste in the key
       - press Control-D
-- Configure SSH server to allow keys on the Gaia system
-  - back up the sshd_config.templ file
-    - `cp -v /etc/ssh/templates/sshd_config.templ{,_BKP}d`
-  - edit `sshd_config.templ` file
-    - `vi /etc/ssh/templates/sshd_config.templ`
-    - At the bottom of the file change the line
-      - From: PasswordAuthentication yes
-      - To: PasswordAuthentication no
-    - Save the changes and exist the editor
-  - import the change from the template to the running Gaia configuration
-    - `/usr/bin/sshd_template_xlate < /config/active`
-    - `service sshd restart`
-  - close the current SSH session and re-open to test the new connection
-- Ansible configs:
+
+- Test Ansible access
+  - `exit`
+  - uppdate the inventory, uncomment to IP of the SMS 192.168.41.20
+  - `ansible all -m ping`
+  - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
+- Configure SMS using Ansible
   - set hostname 
   - configure FTW using ansible
 
