@@ -13,4 +13,18 @@
         src: sms.j2
         dest: ftwstart
         mode: u=rwx,g=rx,o=rx
-    
+    - name: Run FTW setup
+      command: "/bin/bash /home/admin/ftwstart"
+    - name: Wait until FTW completes
+      stat:
+        path: /etc/.wizard_accepted
+      register: file_data
+      until: file_data.stat.exists
+      retries: 10
+      delay: 15
+    - name: Waiting 15 seconds before reboot
+      pause:
+        seconds: 10
+    - name: Reboot
+      command: "shutdown -r now"
+      
