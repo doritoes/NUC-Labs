@@ -1,3 +1,16 @@
 ---
 - name: SMS initial setup playbook
   hosts: sms
+  gather_facts: False
+  vars:
+    system_name: sms
+  vars_file:
+    - vars.yml
+
+  tasks:
+    - name: Create ftwstart script
+      ansible.builtin.template:
+        src: sms.j2
+        dest: ftwstart
+        mode: u=rwx,g=rx,o=rx
+    
