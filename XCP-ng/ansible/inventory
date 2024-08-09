@@ -1,7 +1,13 @@
 [router]
 # IP address of the LAB interface to start
 [sms]
-#192.168.41.20
+#192.168.41.20 ansible_python_interpreter="/opt/CPsuite-R81.20/fw/Pyrhon/bin/python"
+[sms:vars]
+ansible_connection=ssh
+ansible_ssh_user=ansible
+#ansible_ssh_pass=vpn1234
+ansible_python_interpreter="/opt/CPsuite-R81.20/fw/Pyrhon/bin/python"
+
 [firewalls]
 # firewall1a
 #192.168.41.11
