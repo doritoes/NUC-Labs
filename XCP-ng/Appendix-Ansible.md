@@ -116,6 +116,7 @@ Notes:
       - `show interfaces`
     - Spin up a temporary VM based on template `win10-template` on the **build** network
       - it should be get DHCP information and be able to connect to the Internet
+
 # Configure SMS
 - Log in to console of SMS
   - Username `admin` and the password you selected
@@ -124,10 +125,33 @@ Notes:
   - `save config`
 - Log in to `manager` and open a WSL shell
   - `ssh ansible@192.168.41.10`
+    - you will be in the default home directory `/home/ansible`
   - `lock database override`
-  - CONTINUE configure ansible SSH RSA keys
-- set hostname 
-- configure FTW using ansible
+- Create new authorized_keys file and add the key
+  - `mkdir -v .ssh`
+  - `chmod -v u=rwx,g=,o= ~/.ssh`
+  - `touch ~/.ssh/authorized_keys`
+  - `chmod -v u=rw,g=,o= ~/.ssh/authorized_keys`
+  - Add the public key from `manager` to the files
+    - `cat > .ssh/authorized_keys`
+      - paste in the key
+      - press Control-D
+- Configure SSH server to allow keys on the Gaia system
+  - back up the sshd_config.templ file
+    - `cp -v /etc/ssh/templates/sshd_config.templ{,_BKP}d`
+  - edit `sshd_config.templ` file
+    - `vi /etc/ssh/templates/sshd_config.templ`
+    - At the bottom of the file change the line
+      - From: PasswordAuthentication yes
+      - To: PasswordAuthentication no
+    - Save the changes and exist the editor
+  - import the change from the template to the running Gaia configuration
+    - `/usr/bin/sshd_template_xlate < /config/active`
+    - `service sshd restart`
+  - close the current SSH session and re-open to test the new connection
+- Ansible configs:
+  - set hostname 
+  - configure FTW using ansible
 
 # Configure Branch 1
 
