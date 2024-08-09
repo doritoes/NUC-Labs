@@ -135,18 +135,26 @@ Notes:
     - `cat > .ssh/authorized_keys`
       - paste in the key
       - press Control-D
-
 - Test Ansible access
   - `exit`
   - uppdate the inventory, uncomment to IP of the SMS 192.168.41.20
   - `ansible all -m ping`
   - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
+  - HOWEVER it's not working properly
+    - `ansible all -m ansible.builtin.gather_facts --tree /tmp/facts`
+
+References:
+- https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/
+- https://docs.ansible.com/ansible/latest/collections/check_point/mgmt/cp_mgmt_checkpoint_host_module.html#examples
+- https://www.youtube.com/watch?v=fx1KMtuBHWs
+
+Tasks to automate
 - Configure SMS using Ansible
   - set hostname 
-  - configure FTW using ansible
+  - configure FTW using Ansible
 
 # Configure Branch 1
-
+The following steps configure Branch 1
 ## Configure Branch 1 firewalls
 - Initial settings
   - set IP information
@@ -157,12 +165,11 @@ Notes:
 - Create cluster
 - policy
 - DHCP helper in DMZ
-- Move management workstation to Branch 1 LAN
+- Remove management workstation from the lab network, so solely be on Branch 1 Management
 
 ## Configure DMZ Servers
-Set up NAT and rules
-
-IIS and Apache
+- Set up NAT and rules
+- IIS and Apache servers
 
 ## HTTPS Inspection
 - HTTPS inspection
@@ -184,4 +191,3 @@ IIS and Apache
 - policy
 - VPN tunnel bring up
 - DHCP helper?????
-
