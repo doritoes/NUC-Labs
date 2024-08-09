@@ -1,5 +1,7 @@
 [router]
 # IP address of the LAB interface to start
+[sms]
+#192.168.41.20
 [firewalls]
 # firewall1a
 #192.168.41.11
