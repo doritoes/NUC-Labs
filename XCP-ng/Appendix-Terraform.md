@@ -147,7 +147,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - `add user ansible uid 103 homedir /home/ansible`
   - `set user ansible password`
   - `add rba user ansible roles adminRole`
-  - 🌱 Need to determine which shell (bash or cli.sh) is needed for Ansible; currently at cli.sh
+  - `set user ansible shell /bin/bash`
 - `save config`
 - Install guest tools
   - Select and IP address on your Lab network for temporary use
