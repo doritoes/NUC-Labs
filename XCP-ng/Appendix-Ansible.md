@@ -64,7 +64,7 @@ Notes:
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - Install Ansible, modules and requirementes
     - `sudo apt install -y ansible python3-paramiko python3-pip`
-    - `ansible-galaxy collection install community.general vyos.vyos`
+    - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt`
     - `python3 -m pip install XenAPI`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
