@@ -1,0 +1,3 @@
+---
+- name: SMS initial setup playbook
+  hosts: sms
