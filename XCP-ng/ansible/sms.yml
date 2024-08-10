@@ -4,7 +4,7 @@
   gather_facts: False
   vars:
     system_name: sms
-  vars_file:
+  vars_files:
     - vars.yml
 
   tasks:
