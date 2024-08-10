@@ -137,61 +137,32 @@ Notes:
       - press Control-D
 - Test Ansible access
   - `exit`
-  - uppdate the inventory, uncomment to IP of the SMS 192.168.41.20
+  - update the inventory, uncomment to IP of the SMS 192.168.41.20
   - `ansible all -m ping`
   - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
-  - HOWEVER it's not working properly
-    - `ansible all -m ansible.builtin.gather_facts --tree /tmp/facts`
+- Create files
+  - vars.yml
+  - sms.yml
+  - sms.j2
+- Run the playbook to complete the first time wizard (FTW) and reboot
+  - `ansible-playbook sms.yml`
+    - This takes a very very long time....
+- Testing
+  - Log in to `sms` console (or ssh)
+    - `fwm ver`
+    - *Should say Check Point Management Server R81.20*
+  - Log in to `sms` Web gui from `manager`
+    - https://192.168.41.20
+  - Download the SmartConsole R81.20 client using the link
+  - Install SmartConsole
+  - Launch SmartConsole
+    - Username: `cpadmin`
+    - Password: *the password from vars.yml (default Checkpoint123!)*
 
 References:
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/
 - https://docs.ansible.com/ansible/latest/collections/check_point/mgmt/cp_mgmt_checkpoint_host_module.html#examples
 - https://www.youtube.com/watch?v=fx1KMtuBHWs
-
-Tasks to automate
-- Configure SMS using Ansible
-  - set hostname 
-  - configure FTW using Ansible
-
-example playbook to change shell to bash ([link](interpreter="/opt/CPsuite-R81.20/fw/Pyrhon/bin/python"))
-~~~
----
-- name: "Change shell"
-  connection: local
-  gather_facts: no
-  tasks:
-    - name: "Set shell to bash"
-      raw: set user admin shell /bin/bash
-    - name: "Save configuration"
-      raw: save config
-~~~
-
-ftw playbook
-~~~
----
-- hosts: gw
-  gather_facts: no
-  connection: local
-  tasks:
-    - name: "FTW on GW"
-      raw: echo "config_system --config-string....." >> ftw.output & " > " /home/admin/ftwstart"
-    - name: "Change permissions"
-      raw: chmod 755 ftwstart
-    - name: "Run FTW setup"
-      command: "/bin/bash /home/admin/ftwstart"
-    - name: "wait until the FTW comletes"
-      stat:
-        path: "/etc/.wizard_accepted"
-      register: file_data
-      until: file_data.stat.exists
-      retries: 10
-      delay: 10
-    - name: "waiting 10 seconds before reboot"
-      pause:
-        seconds: 10
-    - name: "rebooting"
-      command: "shutdown -r now"
-~~~
 
 # Configure Branch 1
 The following steps configure Branch 1
