@@ -13,7 +13,7 @@
         src: sms.j2
         dest: ftwstart
         mode: u=rwx,g=rx,o=rx
-    - name: Run FTW setup
+    - name: Run FTW setup... please wait...
       command: "/bin/bash /home/ansible/ftwstart"
     - name: Wait until FTW completes
       stat:
@@ -27,4 +27,4 @@
         seconds: 10
     - name: Reboot
       command: "shutdown -r now"
-      
+  
