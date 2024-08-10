@@ -8,7 +8,7 @@
     - vars.yml
 
   tasks:
-    - name: Create ftwstart script
+    - name: Create FTW temaplate
       ansible.builtin.template:
         src: sms.j2
         dest: ftw.templ
