@@ -1,1 +1,47 @@
-config_system --config-string "hostname={{ system_name }}&ftw_sic_key={{ sic_pw }}&mgmt_admin_name={{ mgmt_user }}&mgmt_admin_password={{ mgmt_password }}&mgmt_gui_clients_radio=any&&timezone={{ timezone }}&install_security_management=true&install_mgmt_primary=true&install_mgmt_primary=false&install_security_gw=false&download_info=true&upload_info=true"
+install_security_gw="false"
+gateway_daip="false"
+gateway_cluster_member="false"
+install_security_management="true"
+
+install_mgmt_primary="true"
+install_mgmt_secondary="false"
+install_mds_primary="false"
+install_mds_secondary="false"
+
+install_mlm="false"
+install_mds_interface="false"
+
+# highly recommended
+download_info="true"
+download_from_checkpoint_non_security"="true"
+upload_info="true"
+
+# administrator
+mgmt_admin_radio="new_admin"
+mgmt_admin_name="{{ mgmt_user }}"
+mgmt_admin_passwd="{{ mgmt_password }}"
+
+# mgmt gui clients
+mgmt_gui_clients="any"
+
+# SIC
+ftw_sic_key="{{ sic_pw }}"
+
+# Host Name and Domain
+hostname="{{ system_name }}"
+#domainame = "{{ domain_name }}"
+
+# NTP
+ntp_primary="pool.ntp.org"
+ntp_primary_version="4"
+#ntp_secondary=
+#netp_secondary_version=
+timezone="{{ timezone }}"
+
+# DNS
+primary={{ dns_server_primary }}
+secondary={{ dns_server_secondary }}
+#tertiary=
+
+# Post
+reboot_if_required="true"
