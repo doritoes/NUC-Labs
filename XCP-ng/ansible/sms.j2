@@ -1,15 +1,12 @@
-install_security_gw="false"
-gateway_daip="false"
-gateway_cluster_member="false"
-install_security_management="true"
+# Hostname and Domain
+hostname="{{ system_name }}"
+#domainame = "{{ domain_name }}"
 
+# Mandatory parameters
+install_security_management="true"
+install_security_gw="false"
 install_mgmt_primary="true"
 install_mgmt_secondary="false"
-install_mds_primary="false"
-install_mds_secondary="false"
-
-install_mlm="false"
-install_mds_interface="false"
 
 # highly recommended
 download_info="true"
@@ -26,10 +23,6 @@ mgmt_gui_clients="any"
 
 # SIC
 ftw_sic_key="{{ sic_pw }}"
-
-# Host Name and Domain
-hostname="{{ system_name }}"
-#domainame = "{{ domain_name }}"
 
 # NTP
 ntp_primary="pool.ntp.org"
