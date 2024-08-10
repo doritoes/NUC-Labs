@@ -14,7 +14,7 @@
         dest: ftwstart
         mode: u=rwx,g=rx,o=rx
     - name: Run FTW setup
-      command: "/bin/bash /home/admin/ftwstart"
+      command: "/bin/bash /home/ansible/ftwstart"
     - name: Wait until FTW completes
       stat:
         path: /etc/.wizard_accepted
