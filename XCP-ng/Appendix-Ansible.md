@@ -118,6 +118,11 @@ Notes:
       - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
+
+Template:
+- config_system --create-template /path_to/name_of_template_file
+- config_system --config-file /path_to/name_of_template_file
+
 - Log in to console of SMS
   - Username `admin` and the password you selected
 - Set IP address information
