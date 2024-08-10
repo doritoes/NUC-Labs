@@ -12,7 +12,7 @@
       ansible.builtin.template:
         src: sms.j2
         dest: ftw.templ
-        mode: u=rwx,g=rx,o=rx
+        mode: u=rw,g=r,o=r
     - name: Run FTW setup... please wait...
       command: "config_system -f /home/ansible/ftw.temp"
     - name: Wait until FTW completes
