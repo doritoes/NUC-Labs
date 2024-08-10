@@ -13,7 +13,7 @@
         src: sms.j2
         dest: ftw.templ
         mode: u=rw,g=r,o=r
-    - name: Run FTW setup... please wait...
+    - name: Applying FTW template... please wait...
       command: "config_system -f /home/ansible/ftw.temp"
     - name: Wait until FTW completes
       stat:
