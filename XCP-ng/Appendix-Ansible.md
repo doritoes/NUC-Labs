@@ -35,12 +35,12 @@ Notes:
       - Enter the username (i.e., `ansible`) and password to use
       - If you use a username other than `ansible`, please create the `ansible` user and use that for your Ansible work
 - Configure Network interfaces
-  - Settings > Network & Internet
-  - Click Ethernet > First Interface (connected)
-    - Network profile: Private
-  - Click Ethernet > Second Interface (No Internet)
+  - **Settings** > **Network & Internet**
+  - **Click Ethernet** > **First Interface** (connected)
+    - Network profile: **Private**
+  - Click **Ethernet** > **Second Interface** (No Internet)
     - IP assigment: Click **Edit**
-    - From dropdown select Manual
+    - From dropdown select **Manual**
     - Slide to enable **IPv4**
       - We cannot set the IP address without a gateway IP or DNS from this interface!
   - Click **Start** > **Settings** > **Network & Interface** > **Ethernet**
@@ -54,9 +54,9 @@ Notes:
         - Subnet mask: **255.255.255.0**
         - Gateway: Leave empty
         - Leave DNS entries empty
-        - Click OK
-      - Click OK
-    - Click Close
+        - Click **OK**
+      - Click **OK**
+    - Click **Close**
 - Install additional Windows applications
   - [Chrome browser](https://www.google.com/chrome/)
   - [WinSCP](https://winscp.net/eng/download.php)
@@ -75,9 +75,11 @@ Notes:
     - `cat ~/.ssh/id_rsa.pub`
 - Set up basic configuration files for Ansible
   - Create `ansible.cfg` from [ansible.cfg](ansible/ansible.cfg)
-  - Create `inventory` from [ansible.cfg](ansible/inventory)
+  - Create `inventory` from [inventory](ansible/inventory)
     - Note the values are commented out; we will confirm and enable these IPs later in the Lab
-    - Under `[router]` put the Lab IP address of the router (yes, the simulated Internet IP; the path to the Lab isn't configured yet)
+    - Under `[router]` you will put the Lab IP address of the router
+      - This will be configured in the next step
+      - And yes, the simulated Internet IP; the inside interface won't be accessible until later
 
 # Configure VyOS Router
 - Log back in to console
@@ -96,8 +98,8 @@ Notes:
     - log in with password
   - Log in to VyOS as `ansible`
   - `configure`
-  - `set sytem login user ansible authentiation public-keys home type 'ssh-rsa'`
-  - `set sytem login user ansible authentiation public-keys home key '<valueofkey>'`
+  - `set sytem login user ansible authentication public-keys home type 'ssh-rsa'`
+  - `set sytem login user ansible authentication public-keys home key '<valueofkey>'`
     - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
   - `commit`
   - `save`
@@ -118,7 +120,6 @@ Notes:
       - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
-
 Template:
 - config_system --create-template /path_to/name_of_template_file
 - config_system --config-file /path_to/name_of_template_file
