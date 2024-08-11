@@ -148,12 +148,14 @@ Steps:
 - Test Ansible access
   - Exit back to session on manager
   - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
+    - leave the variable intact
   - `ansible all -m ping`
-  - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
+    - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
+    - the router should also respond `SUCCESS`
 - Create files
-  - vars.yml
-  - sms.yml
-  - sms.j2
+  - [vars.yml](ansible/vars.yml)
+  - [sms.yml](ansible/sms.yml)
+  - [sms.j2](ansible/sms.j2)
 - Run the playbook to complete the first time wizard (FTW) and reboot
   - `ansible-playbook sms.yml`
     - This takes a very very long time....
