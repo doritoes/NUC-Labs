@@ -98,8 +98,8 @@ Notes:
     - log in with password
   - Log in to VyOS as `ansible`
   - `configure`
-  - `set sytem login user ansible authentication public-keys home type 'ssh-rsa'`
-  - `set sytem login user ansible authentication public-keys home key '<valueofkey>'`
+  - `set system login user ansible authentication public-keys home type 'ssh-rsa'`
+  - `set system login user ansible authentication public-keys home key '<valueofkey>'`
     - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
   - `commit`
   - `save`
@@ -144,7 +144,7 @@ Steps:
       - press Control-D
 - Test Ansible access
   - `exit`
-  - update the inventory, uncomment to IP of the SMS 192.168.41.20
+  - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
   - `ansible all -m ping`
   - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
 - Create files
