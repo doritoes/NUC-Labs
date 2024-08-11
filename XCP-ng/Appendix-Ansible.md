@@ -124,6 +124,7 @@ Template:
 - config_system --create-template /path_to/name_of_template_file
 - config_system --config-file /path_to/name_of_template_file
 
+Steps:
 - Log in to console of SMS
   - Username `admin` and the password you selected
 - Set IP address information
@@ -133,10 +134,10 @@ Template:
   - `ssh ansible@192.168.41.20`
     - you will be in the default home directory `/home/ansible`
 - Create new authorized_keys file and add the key
-  - `mkdir -v .ssh`
-  - `chmod -v u=rwx,g=,o= ~/.ssh`
+  - `mkdir .ssh`
+  - `chmod u=rwx,g=,o= ~/.ssh`
   - `touch ~/.ssh/authorized_keys`
-  - `chmod -v u=rw,g=,o= ~/.ssh/authorized_keys`
+  - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
   - Add the public key from `manager` to the files
     - `cat > .ssh/authorized_keys`
       - paste in the key
