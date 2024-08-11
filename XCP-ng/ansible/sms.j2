@@ -133,10 +133,6 @@ maas_authentication_key=
 # Optional parameter
 admin_hash=''
 
-# Hostname and Domain
-hostname="{{ system_name }}"
-#domainame="{{ domain_name }}"
-
 # Default maintenance password (hash)
 # To generate a hash of maintenance password - in expert mode:
 #   grub2-mkpasswd-pbkdf2
@@ -170,13 +166,30 @@ ipaddr_v4="{{ system_ip }}"
 masklen_v4="{{ system_ip_masklen }}"
 default_gw_v4="{{ system_default_gateway }}"
 
+ipstat_v6=off
+ipaddr_v6=
+masklen_v6=
+default_gw_v6=
+
+# Host Name e.g host123, optional parameter
+hostname="{{ system_name }}"
+
+# Domain Name e.g. checkpoint.com, optional parameter 
+domainname="{{ domain_name }}"
+
+# Time Zone in format Area/Region (e.g America/New_York or Etc/GMT-5)
+# Pay attention that GMT offset should be in classic UTC notation:
+# GMT-5 is 5 hours behind UTC (i.e. west to Greenwich)
+# Enclose time zone string within the quotes.
+# Optional parameter
+timezone="{{ timezone }}"
+
 # NTP servers
 # NTP parameters are optional
 ntp_primary="ntp.checkpoint.com"
 ntp_primary_version="3"
 ntp_secondary="ntp2.checkpoint.com"
 ntp_secondary_version="3"
-timezone="{{ timezone }}"
 
 # DNS - IP address of primary, secondary, tertiary DNS servers
 # DNS parameters are optional.
