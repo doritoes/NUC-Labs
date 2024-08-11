@@ -1,5 +1,5 @@
 ---
-- name: configure the VyOS router
+- name: Configure VyOS router
   hosts: router
   vars:
     ansible_network_os: vyos
