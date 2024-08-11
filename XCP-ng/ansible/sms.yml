@@ -4,6 +4,9 @@
   gather_facts: False
   vars:
     system_name: sms
+    system_ip: 192.168.41.20
+    system_ip_masklen: 24
+    system_default_gateway: 192.168.41.1
   vars_files:
     - vars.yml
 
