@@ -144,11 +144,11 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 - `set hostname CPTEMPLATE`
 - Set up ansible user
   - Reference [link](https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
-  - `add user ansible uid 103 homedir /home/ansible`
+  - `add user ansible uid 0 homedir /home/ansible`
   - `set user ansible password`
   - `add rba user ansible roles adminRole`
   - `set user ansible shell /bin/bash`
-- `save config`
+  - `save config`
 - Install guest tools
   - Select and IP address on your Lab network for temporary use
     - Example: 192.168.1.130
