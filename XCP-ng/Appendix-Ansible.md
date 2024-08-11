@@ -142,8 +142,11 @@ Steps:
     - `cat > .ssh/authorized_keys`
       - paste in the key
       - press Control-D
-- Test Ansible access
   - `exit`
+  - You can now ssh without a password
+    - `ssh 192.168.41.20`
+- Test Ansible access
+  - Exit back to session on manager
   - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
   - `ansible all -m ping`
   - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
