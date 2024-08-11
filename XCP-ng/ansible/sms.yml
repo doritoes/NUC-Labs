@@ -14,7 +14,7 @@
         dest: ftw.templ
         mode: u=rw,g=r,o=r
     - name: Applying FTW template... please wait...
-      command: "config_system -f /home/ansible/ftw.temp"
+      command: "/usr/binconfig_system -f /home/ansible/ftw.templ"
     - name: Wait until FTW completes
       stat:
         path: /etc/.wizard_accepted
