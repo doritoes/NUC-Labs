@@ -66,7 +66,7 @@ Notes:
   - [WinSCP](https://winscp.net/eng/download.php)
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - Install Ansible, modules and requirementes
+  - Install Ansible, modules and requirements
     - `sudo apt install -y ansible python3-paramiko python3-pip`
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt`
     - `python3 -m pip install XenAPI`
