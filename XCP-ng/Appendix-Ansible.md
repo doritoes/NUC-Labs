@@ -174,6 +174,9 @@ Steps:
   - Launch SmartConsole
     - Username: `cpadmin`
     - Password: *the password from vars.yml (default Checkpoint123!)*
+- Add user 'ansible' for management using Management API
+  - *Continue research here*
+  - 🌱Anything else at this early phase?
 
 References:
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/
