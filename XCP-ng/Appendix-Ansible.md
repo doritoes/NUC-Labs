@@ -152,7 +152,7 @@ Steps:
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
     - the router should also respond `SUCCESS`
-- Create files
+- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
   - [vars.yml](ansible/vars.yml)
   - [sms.yml](ansible/sms.yml)
   - [sms.j2](ansible/sms.j2)
