@@ -16,7 +16,7 @@
         src: sms.j2
         dest: ftw.templ
         mode: u=rw,g=r,o=r
-    - name: Applying FTW template... please wait...
+    - name: Apply FTW template
       command: "/usr/bin/config_system -f /home/ansible/ftw.templ"
       async: 3600 # run in background up to 1 hours
       poll: 60    # check status every 60 seconds
