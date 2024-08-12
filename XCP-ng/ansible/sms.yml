@@ -29,4 +29,5 @@
       pause:
         seconds: 15
     - name: Reboot
-      command: "shutdown -r now"
+      ansible.builtin.reboot:
+        msg: "Rebooting to complete FTW"
