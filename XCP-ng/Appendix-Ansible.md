@@ -139,7 +139,7 @@ Steps:
   - `touch ~/.ssh/authorized_keys`
   - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
   - Add the public key from `manager` to the files
-    - `cat > .ssh/authorized_keys`
+    - `cat > ~/.ssh/authorized_keys`
       - paste in the key
       - press Control-D
   - `exit`
