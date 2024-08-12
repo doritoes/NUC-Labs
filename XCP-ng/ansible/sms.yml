@@ -18,6 +18,8 @@
         mode: u=rw,g=r,o=r
     - name: Applying FTW template... please wait...
       command: "/usr/bin/config_system -f /home/ansible/ftw.templ"
+      async: 3600 # run in background up to 1 hours
+      poll: 60    # check status every 60 seconds
     - name: Wait until FTW completes
       stat:
         path: /etc/.wizard_accepted
