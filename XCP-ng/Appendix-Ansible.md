@@ -13,11 +13,15 @@ Notes:
   - Note the network is configured for two interfaces
     - First one: `Pool-wide network associated with eth0`
       - allows downloading and installing software and packages
-      - will be desabled after Branch 1 configuration is complete, or completely removed
+      - will be disabled (or completely removed) after Branch 1 configuration is complete
     - Second one: `branch1mgt`
+- Log in to the console of `manager`
 - Optionally, from the app store install "Windows Terminal" by Microsoft
-  - this makes it easy to switch between CMD, Powershell, and WSL
-- Rename the PC as `manager`
+  - this makes it easy to switch between CMD, Powershell, and WSL shells
+  - Open Microsoft Store, update it if required
+  - Install Microsoft Terminal
+  - Open Terminal and note the dropdown to select which terminal(s) you want to open
+- Rename the PC to `manager`
   - From administrative powershell
     - `Rename-Computer -NewName manager`
     - `Restart-Computer`
