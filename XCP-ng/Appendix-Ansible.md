@@ -124,10 +124,6 @@ Notes:
       - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
-Template:
-- config_system --create-template /path_to/name_of_template_file
-- config_system --config-file /path_to/name_of_template_file
-
 Steps:
 - Log in to console of SMS
   - Username `admin` and the password you selected
@@ -162,21 +158,34 @@ Steps:
   - [sms.j2](ansible/sms.j2)
 - Run the playbook to complete the first time wizard (FTW) and reboot
   - `ansible-playbook sms.yml`
-    - This takes a very very long time....
+    - This takes a long time
 - Testing
   - Log in to `sms` console (or ssh)
     - `fwm ver`
     - *Should say Check Point Management Server R81.20*
-  - Log in to `sms` Web gui from `manager`
-    - https://192.168.41.20
-  - Download the SmartConsole R81.20 client using the link
-  - Install SmartConsole
-  - Launch SmartConsole
-    - Username: `cpadmin`
-    - Password: *the password from vars.yml (default Checkpoint123!)*
 - Add user 'ansible' for management using Management API
   - *Continue research here*
   - 🌱Anything else at this early phase?
+  - create objects?
+- Log in to `sms` Web gui from `manager`
+  - https://192.168.41.20
+  - Download the SmartConsole R81.20 client using the link "Download Now!"
+- Install SmartConsole using the downloaded file
+- Launch SmartConsole
+  - Username: `cpadmin`
+  - Password: *the password from vars.yml (default Checkpoint123!)*
+  - Accept the server identity and click **Proceed**
+  - After a short time, the SmartConsole will prompt you to click **Relaunch Now** to apply the latest updates
+    - In Lab testing sometimes a pop-up error appeared after trying to launche while staying logged in
+      - "Application has experienced a serious problem and must close immediately"
+      - Click **OK** and continue using the application normally
+
+Note:
+- To reset and re-run the FTW on this management server, remove the following files:
+  - `/etc/.wizard_accepted`
+  - `/etc/.wizard_started`
+  - `$FWDIR/conf/ICA.crl`
+  - `$FWDIR/conf/InternalCA.*`
 
 References:
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/
