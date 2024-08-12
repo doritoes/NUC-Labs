@@ -25,3 +25,8 @@
       until: file_data.stat.exists
       retries: 20
       delay: 15
+    - name: Waiting 15 seconds before reboot
+      pause:
+        seconds: 15
+    - name: Reboot
+      command: "shutdown -r now"
