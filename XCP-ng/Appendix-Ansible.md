@@ -163,6 +163,8 @@ Steps:
   - Log in to `sms` console (or ssh)
     - `fwm ver`
     - *Should say Check Point Management Server R81.20*
+  - `api status`
+    - 🌱 If needed, smartconsole, manage & settings, permissions & administrators, Management API, Advanced Settings
 - Add user 'ansible' for management using Management API
   - *Continue research here*
   - 🌱Anything else at this early phase?
