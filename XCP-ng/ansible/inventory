@@ -5,7 +5,6 @@
 [sms:vars]
 ansible_connection=ssh
 ansible_ssh_user=ansible
-#ansible_ssh_pass=vpn1234
 ansible_python_interpreter="/opt/CPsuite-R81.20/fw1/Python/bin/python3"
 
 [firewalls]
