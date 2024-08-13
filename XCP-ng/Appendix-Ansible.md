@@ -164,7 +164,9 @@ Steps:
     - `fwm ver`
     - *Should say Check Point Management Server R81.20*
   - `api status`
-    - 🌱 If needed, smartconsole, manage & settings, permissions & administrators, Management API, Advanced Settings
+    - 🌱 If needed, smartconsole,manage & settings, blades, management api, advanced settings
+      - All IP addresses, or all ip addresses that can be used for GUI clients
+      - PUBlOSH
 - Add user 'ansible' for management using Management API
   - *Continue research here*
   - 🌱Anything else at this early phase?
