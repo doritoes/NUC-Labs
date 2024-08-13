@@ -3,10 +3,10 @@
   hosts: sms
   gather_facts: False
   vars:
-    system_name: {{ sms_system_name }}
-    system_ip: {{ sms_ip}}
-    system_ip_masklen: {{ sms_ip_masklen }}
-    system_default_gateway: {{ sms_default_gateway }}
+    system_name: "{{ sms_system_name }}"
+    system_ip: "{{ sms_ip}}"
+    system_ip_masklen: "{{ sms_ip_masklen }}"
+    system_default_gateway: "{{ sms_default_gateway }}"
   vars_files:
     - vars.yml
 
