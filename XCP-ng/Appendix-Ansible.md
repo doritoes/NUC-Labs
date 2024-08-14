@@ -184,6 +184,56 @@ Steps:
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
 
+~~~
+web ansible check point
+
+[sms]
+192.168.41.20
+[sms:vars]
+ansible_httpapi_use_ssl=True
+ansible_httpapi_validate_certs=False
+ansible_user=cpadmin
+ansible_password=supersecrete
+ansible_network_os=check_point.mgmt.checkpoint
+
+---
+- hosts: sms
+  connection: httpapi
+  vars_file:
+    - vars.yml
+  vars:
+    mgmt_server: 192.168.41.20
+    ansible_httpapi_user_ssl: True
+    ansible_hhtpapi_validate_certs: False
+    ansible_user: "{{ mgmt_user }}"
+    ansible_checkpoint_domain: "System Data"
+    ansible_network_os: check_point.mgmt.checkpoint
+
+  tasks:
+    - name: Create host object
+      cp_mgmt_host:
+        color: dark green
+        ipv4_address: 192.168.41.100
+        name: Manager
+        comments: management workstation
+        state: present
+        auto_publish_session: True
+    - name: add-administrator
+      cp_mgmt_administrator:
+        authentication: check point password
+        email: admin@gmail.com
+        must_change_password: False
+        name: ansible
+        password: Checkpoint123!
+        permissions_profile: read write all
+        phone_number: 1800-800-800
+        state: present
+        auto_publish_session: True
+~~~
+
+
+
+
 Note:
 - To reset and re-run the FTW on this management server, remove the following files:
   - `/etc/.wizard_accepted`
