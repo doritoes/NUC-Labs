@@ -220,7 +220,7 @@ ansible_network_os=check_point.mgmt.checkpoint
         auto_publish_session: True
     - name: add-administrator
       cp_mgmt_administrator:
-        authentication: check point password
+        authentication_method: check point password
         email: admin@gmail.com
         must_change_password: False
         name: ansible
