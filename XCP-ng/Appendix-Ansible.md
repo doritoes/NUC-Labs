@@ -199,7 +199,7 @@ ansible_network_os=check_point.mgmt.checkpoint
 ---
 - hosts: sms
   connection: httpapi
-  vars_file:
+  vars_files:
     - vars.yml
   vars:
     mgmt_server: 192.168.41.20
