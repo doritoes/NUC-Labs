@@ -172,6 +172,7 @@ Steps:
   - `mgmt_cli set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"`
     - username: cpadmin
     - password: the password you chose
+    - OR use the session.txt file method below. remember to remove the file when you're done!
 - Add user 'ansible' for management using Management API
   - *Continue research here*
   - 🌱Anything else at this early phase?
@@ -236,6 +237,20 @@ ansible_network_os=check_point.mgmt.checkpoint
         auto_publish_session: True
 ~~~
 
+mgmt_cli version:
+~~~
+mgmt_cli add administrator name "ansible2" password "secret" must-change-password false email "admin@gmail.com" phone-number "1800-800-800" authentication-method "check point password" permissions-profile "read write all"  --domain 'System Data' --format json
+~~~
+enter username and password
+
+or
+
+~~~
+mgmt_cli -f json -r true login -d "System Data" > session.txt
+mgmt_cli -s session.txt add administrator name "ansible2" password "secret" must-change-password false email "admin@gmail.com" phone-number "1800-800-800" authentication-method "check point password" permissions-profile "read write all"  --domain 'System Data' --format json
+mgmt_cli -f json -s session.txt publish
+rm session.txt
+~~~
 
 
 
