@@ -166,7 +166,12 @@ Steps:
   - `api status`
     - 🌱 If needed, smartconsole,manage & settings, blades, management api, advanced settings
       - All IP addresses, or all ip addresses that can be used for GUI clients
-      - PUBlOSH
+      - PUBLISH
+- use ansible to run command to enabled API
+  - how log in and run the command?
+  - `mgmt_cli set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"`
+    - username: cpadmin
+    - password: the password you chose
 - Add user 'ansible' for management using Management API
   - *Continue research here*
   - 🌱Anything else at this early phase?
@@ -193,7 +198,7 @@ web ansible check point
 ansible_httpapi_use_ssl=True
 ansible_httpapi_validate_certs=False
 ansible_user=cpadmin
-ansible_password=supersecrete
+ansible_password=supersecret
 ansible_network_os=check_point.mgmt.checkpoint
 
 ---
