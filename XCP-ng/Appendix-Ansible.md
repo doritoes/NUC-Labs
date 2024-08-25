@@ -156,9 +156,10 @@ Steps:
   - [vars.yml](ansible/vars.yml)
   - [sms.yml](ansible/sms.yml)
   - [sms.j2](ansible/sms.j2)
-- Run the playbook to complete the first time wizard (FTW) and reboot
+- Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's managment database
   - `ansible-playbook sms.yml`
     - This takes a long time
+    - 🌱 Working on this playbook sms.yml
 - Testing
   - Log in to `sms` console (or ssh)
     - `fwm ver`
