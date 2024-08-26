@@ -32,3 +32,16 @@
         seconds: 15
     - name: Reboot
       command: "shutdown -r now"
+      async: 1
+      poll: 0
+      ignore_errors: True
+    - name: Wait for SMS to come back up
+      wait_for_connection:
+        delay: 75
+    - name: Create script create user ansible
+      ansible.builtin.template:
+        src: sms-user.j2
+        dest: user.sh
+        mode: u=rwx,g=rx,o=rx
+    - name: Run script to create user once API is up
+      command: "~/user.sh"
