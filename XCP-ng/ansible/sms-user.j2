@@ -17,6 +17,6 @@ if [[ $RETRY_COUNT -eq $MAX_RETRIES ]]; then
   # pass the error back to the caller
   exit 1
 fi
-mgmt_cli -s ~/session.txt add administrator name "{{ ansible_user }}" password "{{ ansible_user_password }}" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format jason || exit 1
+mgmt_cli -s ~/session.txt add administrator name "{{ ansible_user }}" password "{{ ansible_user_password }}" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json || exit 1
 mgmt_cli -f json -s ~/session.txt publish || exit 1
 rm ~/session.txt
