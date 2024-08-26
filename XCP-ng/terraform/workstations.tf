@@ -5,7 +5,6 @@ data "xenorchestra_network" "lan" {
   name_label = "Pool-wide network associated with eth0"
 }
 
-
 resource "xenorchestra_vm" "management-workstation" {
   memory_max = 4294934528
   cpus       = 2
