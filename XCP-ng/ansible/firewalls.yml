@@ -1,0 +1,54 @@
+---
+Firewall_List:
+  - Name: firewall1a
+    Deploy: True
+    Configuration:
+      Name: firewall1a
+      Network:
+        Interfaces:
+          eth0:
+            ip: x
+            masklen: y
+            gw: z
+          eth1:
+            ip: x
+            masklen: y
+          eth2:
+            ip: x
+            masklen: y
+        NTP:
+          primary: x
+          secondary: y
+          tertiary: z
+        DNS:
+          primary: x
+          secondary: y
+          tertiary: z
+        Gateway:
+          default: x
+  - Name: firewall1b
+    Deploy: True
+    Configuration:
+      Name: firewall1b
+      Network:
+        Interfaces:
+          eth0:
+            ip: x
+            masklen: y
+            gw: z
+          eth1:
+            ip: x
+            masklen: y
+          eth2:
+            ip: x
+            masklen: y
+        NTP:
+          primary: x
+          secondary: y
+          tertiary: z
+        DNS:
+          primary: x
+          secondary: y
+          tertiary: z
+        Gateway:
+          default: x
