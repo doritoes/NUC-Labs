@@ -32,21 +32,21 @@
         color: dark orange
         comments: Google DNS server 8.8.8.8
         state: present
-   - name: dns 8.8.4.4
+    - name: dns 8.8.4.4
       cp_mgmt_host:
         name: google_dns_8.8.4.4
         ipv4_address: 8.8.4.4
         color: dark orange
         comments: Google DNS server 8.8.4.4
         state: present
-   - name: dns quad9
+    - name: dns quad9
       cp_mgmt_host:
         name: quad9_dns_9.9.9.9
         ipv4_address: 9.9.9.9
         color: dark orange
         comments: Quad9 DNS server 9.9.9.9
         state: present
-   - name: dns cloudflare 1.1.1.1
+    - name: dns cloudflare 1.1.1.1
       cp_mgmt_host:
         name: cloudflare_dns_1.1.1.1
         ipv4_address: 1.1.1.1
