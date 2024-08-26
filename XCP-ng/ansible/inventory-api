@@ -1,6 +1,6 @@
-[sms]
+[check_point]
 192.168.41.20
-[sms:vars]
+[check_point:vars]
 ansible_httpapi_use_ssl=True
 ansible_httpapi_validate_certs=False
 ansible_user=ansible
