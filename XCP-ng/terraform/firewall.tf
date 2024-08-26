@@ -18,6 +18,18 @@ data "xenorchestra_network" "branch1mgt" {
   name_label = "branch1mgt"
   depends_on = [xenorchestra_network.vlan_network_401]
 }
+data "xenorchestra_network" "branch1sync" {
+  name_label = "branch1sync"
+  depends_on = [xenorchestra_network.vlan_network_501]
+}
+data "xenorchestra_network" "branch2sync" {
+  name_label = "branch2sync"
+  depends_on = [xenorchestra_network.vlan_network_502]
+}
+data "xenorchestra_network" "branch3sync" {
+  name_label = "branch3sync"
+  depends_on = [xenorchestra_network.vlan_network_503]
+}
 
 data "xenorchestra_template" "firewall-template" {
   name_label = "checkpoint-template"
