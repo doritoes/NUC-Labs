@@ -162,7 +162,7 @@ Steps:
     - This takes a long time
     - Uses `config_system` tool to perform FTW
     - Creates user `ansible` using `mgmt_cli`
-      - Creating the user directly using ansible isn't working correctly as of this writing
+      - Creating the user directly using the ansible module `add-administrator` isn't working correctly as of this writing
     - Allows all IP addresses to connect to the API in our Lab environment
   - Testing
     - Log in to `sms` console (or ssh)
@@ -192,6 +192,9 @@ Steps:
 - Create objects in the Check Point database related to management
   - Create files on the manager (inventory, playbook)
     - [inventory-api](ansible/inventory-api)
+      - Customize to update the credentials as needed
+      - Lab testing to move the login credentials to the playbook was not successful in Ansibile 2.10.8
+      - Starting Ansible 2.11, use new `include_vars` to include the var.yml and use the credentials from there
     - [management-objects.yml](ansible/management-objects.yml)
   - `ansible-playbook -i inventory-api management-objects.yml`
 
