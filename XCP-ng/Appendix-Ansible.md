@@ -31,7 +31,7 @@ Notes:
   - Check **Windows Subsystem for Linux**
   - Click **OK**
   - Click **Restart now**
-  - Log back in and open a privileged shelll
+  - Log back in and open a privileged shell
     - `wsl --list`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
