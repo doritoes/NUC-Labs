@@ -45,6 +45,9 @@ resource "xenorchestra_vm" "firewall1a" {
     network_id = data.xenorchestra_network.branch1.id
   }
   network {
+    network_id = data.xenorchestra_network.branch1sync.id
+  }
+  network {
     network_id = data.xenorchestra_network.branch1mgt.id
   }
 }
@@ -71,6 +74,9 @@ resource "xenorchestra_vm" "firewall1b" {
     network_id = data.xenorchestra_network.branch1.id
   }
   network {
+    network_id = data.xenorchestra_network.branch1sync.id
+  }
+  network {
     network_id = data.xenorchestra_network.branch1mgt.id
   }
 }
@@ -93,6 +99,9 @@ resource "xenorchestra_vm" "firewall2a" {
   network {
     network_id = data.xenorchestra_network.branch2.id
   }
+  network {
+    network_id = data.xenorchestra_network.branch2sync.id
+  }
 }
 
 resource "xenorchestra_vm" "firewall2b" {
@@ -112,6 +121,9 @@ resource "xenorchestra_vm" "firewall2b" {
   }
   network {
     network_id = data.xenorchestra_network.branch2.id
+  }
+  network {
+    network_id = data.xenorchestra_network.branch2sync.id
   }
 }
 
@@ -133,6 +145,9 @@ resource "xenorchestra_vm" "firewall3a" {
   network {
     network_id = data.xenorchestra_network.branch3.id
   }
+  network {
+    network_id = data.xenorchestra_network.branch3sync.id
+  }
 }
 
 resource "xenorchestra_vm" "firewall3b" {
@@ -152,6 +167,9 @@ resource "xenorchestra_vm" "firewall3b" {
   }
   network {
     network_id = data.xenorchestra_network.branch3.id
+  }
+  network {
+    network_id = data.xenorchestra_network.branch3sync.id
   }
 }
 
