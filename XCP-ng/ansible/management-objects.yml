@@ -12,8 +12,8 @@
         state: present
     - name: Management network
       cp_mgmt_network:
-        name: management_192.168.41.100/24
-        subnet: 192.168.41.100
+        name: management_192.168.41.0/24
+        subnet: 192.168.41.0
         mask_length: 24
         color: crete blue
         comments: management network
