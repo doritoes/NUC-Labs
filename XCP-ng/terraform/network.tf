@@ -92,8 +92,8 @@ resource "xenorchestra_network" "vlan_network_502" {
 }
 # VLAN 503 Branch3 Sync
 resource "xenorchestra_network" "vlan_network_503" {
-  name_label = "branch2sync"
-  name_description = "Branch 1 Sync"
+  name_label = "branch3sync"
+  name_description = "Branch 3 Sync"
   pool_id = data.xenorchestra_host.host1.pool_id
   source_pif_device = "eth0"
   vlan = 503
