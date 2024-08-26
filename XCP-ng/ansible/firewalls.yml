@@ -19,9 +19,9 @@ Firewall_List:
             ip: 192.168.51.2
             masklen: 24
         NTP:
-          primary: 0.pool.ntp.org
-          secondary: 1.pool.ntp.org
-          tertiary: 2.pool.ntp.org
+          primary: ntp.checkpoint.com
+          secondary: ntp2.checkpoint.com
+          tertiary: ntp3.checkpoint.com
         DNS:
           primary: 8.8.8.8
           secondary: 8.8.4.4
@@ -47,9 +47,9 @@ Firewall_List:
             ip: 192.168.51.3
             masklen: 24
         NTP:
-          primary: 0.pool.ntp.org
-          secondary: 1.pool.ntp.org
-          tertiary: 2.pool.ntp.org
+          primary: ntp.checkpoint.com
+          secondary: ntp2.checkpoint.com
+          tertiary: ntp3.checkpoint.com
         DNS:
           primary: 8.8.8.8
           secondary: 8.8.4.4
