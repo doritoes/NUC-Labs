@@ -2,6 +2,7 @@
 - name: Create management objects
   hosts: check_point
   connection: httpapi
+  # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: management workstation
       cp_mgmt_host:
