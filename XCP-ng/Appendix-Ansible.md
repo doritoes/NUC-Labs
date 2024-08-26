@@ -156,28 +156,19 @@ Steps:
   - [vars.yml](ansible/vars.yml)
   - [sms.yml](ansible/sms.yml)
   - [sms.j2](ansible/sms.j2)
+  - [sms-user.j2](ansible/sms-user.j2)
 - Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's managment database
   - `ansible-playbook sms.yml`
     - This takes a long time
-    - 🌱 Working on this playbook sms.yml
-- Testing
-  - Log in to `sms` console (or ssh)
-    - `fwm ver`
-    - *Should say Check Point Management Server R81.20*
-  - `api status`
-    - 🌱 If needed, smartconsole,manage & settings, blades, management api, advanced settings
-      - All IP addresses, or all ip addresses that can be used for GUI clients
-      - PUBLISH
-- use ansible to run command to enabled API
-  - how log in and run the command?
-  - `mgmt_cli set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"`
-    - username: cpadmin
-    - password: the password you chose
-    - OR use the session.txt file method below. remember to remove the file when you're done!
-- Add user 'ansible' for management using Management API
-  - *Continue research here*
-  - 🌱Anything else at this early phase?
-  - create objects?
+    - Uses `config_system` tool to perform FTW
+    - Creates user `ansible` using `mgmt_cli`
+      - Creating the user directly using ansible isn't working correctly as of this writing
+    - Allows all IP addresses to connect to the API in our Lab environment
+  - Testing
+    - Log in to `sms` console (or ssh)
+      - `fwm ver`
+      - *Should say Check Point Management Server R81.20*
+    - `api status`
 - Log in to `sms` Web gui from `manager`
   - https://192.168.41.20
   - Download the SmartConsole R81.20 client using the link "Download Now!"
@@ -190,70 +181,19 @@ Steps:
     - In Lab testing sometimes a pop-up error appeared after trying to launche while staying logged in
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
-
-~~~
-web ansible check point
-
-[sms]
-192.168.41.20
-[sms:vars]
-ansible_httpapi_use_ssl=True
-ansible_httpapi_validate_certs=False
-ansible_user=cpadmin
-ansible_password=supersecret
-ansible_network_os=check_point.mgmt.checkpoint
-
----
-- hosts: sms
-  connection: httpapi
-  vars_files:
-    - vars.yml
-  vars:
-    mgmt_server: 192.168.41.20
-    ansible_httpapi_user_ssl: True
-    ansible_hhtpapi_validate_certs: False
-    ansible_user: "{{ mgmt_user }}"
-    ansible_checkpoint_domain: "System Data"
-    ansible_network_os: check_point.mgmt.checkpoint
-
-  tasks:
-    - name: Create host object
-      cp_mgmt_host:
-        color: dark green
-        ipv4_address: 192.168.41.100
-        name: Manager
-        comments: management workstation
-        state: present
-        auto_publish_session: True
-    - name: add-administrator
-      cp_mgmt_administrator:
-        authentication_method: check point password
-        email: admin@gmail.com
-        must_change_password: False
-        name: ansible
-        password: Checkpoint123!
-        permissions_profile: read write all
-        phone_number: 1800-800-800
-        state: present
-        auto_publish_session: True
-~~~
-
-mgmt_cli version:
-~~~
-mgmt_cli add administrator name "ansible2" password "secret" must-change-password false email "admin@gmail.com" phone-number "1800-800-800" authentication-method "check point password" permissions-profile "read write all"  --domain 'System Data' --format json
-~~~
-enter username and password
-
-or
-
-~~~
-mgmt_cli -f json -r true login -d "System Data" > session.txt
-mgmt_cli -s session.txt add administrator name "ansible2" password "secret" must-change-password false email "admin@gmail.com" phone-number "1800-800-800" authentication-method "check point password" permissions-profile "read write all"  --domain 'System Data' --format json
-mgmt_cli -f json -s session.txt publish
-rm session.txt
-~~~
-
-
+- Update Gaia
+  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
+  - SMS updates are best applied manually (whereas firewalls are updated using management API)
+    - clish
+      - installer check-for-updates
+      - installer download [tab]
+      - installer install [tab]
+    - Web GUI > Upgrades (CPUSE)
+- Create objects in the Check Point database related to management
+  - Create files on the manager (inventory, playbook)
+    - [inventory-api](ansible/inventory-api)
+    - [management-objects.yml](ansible/management-objects.yml)
+  - `ansible-playbook -i inventory-api management-objects.yml`
 
 Note:
 - To reset and re-run the FTW on this management server, remove the following files:
