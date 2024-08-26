@@ -86,7 +86,7 @@ Notes:
       - And yes, the simulated Internet IP; the inside interface won't be accessible until later
 
 # Configure VyOS Router
-- Log back in to console
+- Open the `vyos` router VM and log in to console
 - Configure eth0 interface
   - `configure`
   - `set interfaces ethernet eth0 address dhcp`
@@ -96,11 +96,11 @@ Notes:
   - `exit`
   - Get the IP address on eth0
     - `show interfaces ethernet eth0 brief`
-- From "manager" VM Configure key login in VyOS
-  - `ssh ansible@<vyos_lab_ip>`
+- From `manager` VM Configure key login in VyOS
+  - Log in to VyOS as `ansible`
+    - `ssh ansible@<vyos_lab_ip>`
     - accept the key
     - log in with password
-  - Log in to VyOS as `ansible`
   - `configure`
   - `set system login user ansible authentication public-keys home type 'ssh-rsa'`
   - `set system login user ansible authentication public-keys home key '<valueofkey>'`
@@ -110,6 +110,9 @@ Notes:
   - `exit`
 - Test Ansible access
   - `exit`
+  - Retry: `ssh ansible@<vyos_lab_ip>`
+    - no longer requies a password
+  - Edit the `inventory` files to add the IP address of the router below `[router]`
   - the `inventory` files should have the VyOS "public" IP without the "#" comment character
   - everything else should be "commented out"
   - `ansible all -m ping`
