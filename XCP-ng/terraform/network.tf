@@ -74,3 +74,27 @@ resource "xenorchestra_network" "vlan_network_401" {
   source_pif_device = "eth0"
   vlan = 401
 }
+# VLAN 501 Branch1 Sync
+resource "xenorchestra_network" "vlan_network_501" {
+  name_label = "branch1sync"
+  name_description = "Branch 1 Sync"
+  pool_id = data.xenorchestra_host.host1.pool_id
+  source_pif_device = "eth0"
+  vlan = 501
+}
+# VLAN 502 Branch2 Sync
+resource "xenorchestra_network" "vlan_network_502" {
+  name_label = "branch2sync"
+  name_description = "Branch 1 Sync"
+  pool_id = data.xenorchestra_host.host1.pool_id
+  source_pif_device = "eth0"
+  vlan = 502
+}
+# VLAN 503 Branch3 Sync
+resource "xenorchestra_network" "vlan_network_503" {
+  name_label = "branch2sync"
+  name_description = "Branch 1 Sync"
+  pool_id = data.xenorchestra_host.host1.pool_id
+  source_pif_device = "eth0"
+  vlan = 503
+}
