@@ -1,0 +1,8 @@
+[sms]
+192.168.41.20
+[sms:vars]
+ansible_httpapi_use_ssl=True
+ansible_httpapi_validate_certs=False
+ansible_user=ansible
+ansible_password=Checkpoint123!
+ansible_network_os=check_point.mgmt.checkpoint
