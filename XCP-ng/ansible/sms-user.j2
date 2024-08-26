@@ -22,3 +22,16 @@ mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All 
 mgmt_cli -f json -s ~/session.txt publish || exit 1
 api restart
 rm ~/session.txt
+sleep $SLEEP_TIME
+while [[ $RETRY_COUNT -lt $MAX_RETRIES ]]; do
+  # attempt login
+  mgmt_cli -f json -r true login -d "System Data" > ~/session.txt
+  if [[ $? -eq 0 ]]; then
+    break;
+  else
+    # login failed, SMS API still starting
+    ((RETRY_COUNT++))
+    sleep $SLEEP_TIME
+  fi
+done
+rm ~/session.txt
