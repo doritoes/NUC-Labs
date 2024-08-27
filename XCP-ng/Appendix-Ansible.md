@@ -221,18 +221,18 @@ Steps:
   - Username `admin` and the password you selected
 - Set IP address information
   - firewall1a
-    - `set interface eth4 ipv4-address 192.168.41.11 mask-length 24`
+    - `set interface eth4 ipv4-address 192.168.41.2 mask-length 24`
     - `set interface eth4 state on`
     - `save config`
   - firewall1b
-    - `set interface eth4 ipv4-address 192.168.41.12 mask-length 24`
+    - `set interface eth4 ipv4-address 192.168.41.3 mask-length 24`
     - `set interface eth4 state on`
     - `save config`
 - Add manager's RSA keys to each firewall's authorized_keys file
   - Log in to `manager` and open a WSL shell
     - ssh to firewall1a and firewall1b
-      - `ssh ansible@192.168.41.11`
-      - `ssh ansible@192.168.41.12`
+      - `ssh ansible@192.168.41.2`
+      - `ssh ansible@192.168.41.3`
       - you will be in the default home directory `/home/ansible`
   - Create new authorized_keys file and add the key
     - `mkdir .ssh`
@@ -269,8 +269,9 @@ Steps:
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - Firewalls are best updated using the management API
 - Create objects in the Check Point database related to Branch 1
-  - Create file on the manager
+  - Create files on the manager
     - [branch1-objects.yml](ansible/branch1-objects.yml)
+    - firewalls.yml inventory?
   - `ansible-playbook -i inventory-api branch1-objects.yml`
 
 Note:
