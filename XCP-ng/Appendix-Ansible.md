@@ -170,7 +170,7 @@ Steps:
   - Testing
     - Log in to `sms` console (or ssh)
       - `fwm ver`
-      - *Should say Check Point Management Server R81.20*
+      - Should say *Check Point Management Server R81.20*
     - `api status`
 - Log in to `sms` Web gui from `manager`
   - https://192.168.41.20
