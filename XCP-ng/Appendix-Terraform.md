@@ -132,9 +132,9 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 - Select a password for the "admin" account
 - Select a password for <ins>maintenance mode "admin" user</ins>
 - Select **eth0** as the management port
-  - IP address: **192.168.31.254**
+  - IP address: **192.168.41.254**
   - Netmask: **255.255.255.0**
-  - Default gateway: **192.168.31.1**
+  - Default gateway: **192.168.41.1**
   - <ins>NO</ins> DHCP server on the management interface
 - Confirm you want to continue with formatting the drive **OK**
 - When the message `Installation complete.` message appears
