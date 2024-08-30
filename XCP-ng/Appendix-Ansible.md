@@ -226,12 +226,16 @@ Steps:
   - Username `admin` and the password you selected
 - Set IP address information
   - firewall1a
+    - `set interface eth0 ipv4-address 192.168.101.2 mask-length 24`
     - `set interface eth4 ipv4-address 192.168.41.2 mask-length 24`
     - `set interface eth4 state on`
+    - `set management interface eth4`
     - `save config`
   - firewall1b
+    - `set interface eth0 ipv4-address 192.168.101.3 mask-length 24`
     - `set interface eth4 ipv4-address 192.168.41.3 mask-length 24`
     - `set interface eth4 state on`
+    - `set management interface eth4`
     - `save config`
 - Add manager's RSA keys to each firewall's authorized_keys file
   - Log in to `manager` and open a WSL shell
@@ -256,28 +260,21 @@ Steps:
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 - Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
-  - [branch1.yml](ansible/branch1.yml)
-  - [branch1.j2](ansible/branch1.j2)
-- Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's managment database
-  - `ansible-playbook branch1.yml`
-    - This takes a long time
-    - Uses `config_system` tool to perform FTW
-    - Creates user `ansible` using `mgmt_cli`
-      - Creating the user directly using the ansible module `add-administrator` isn't working correctly as of this writing
-    - Allows all IP addresses to connect to the API in our Lab environment
-  - Testing
-    - Log in to `sms` console (or ssh)
-      - `fwm ver`
-      - *Should say Check Point Management Server R81.20*
-    - `api status`
+  - 🌱still working on this step
+  - [firewall1a.yml](ansible/firewall1a.yml)
+  - [firewall1a.cfg](ansible/firewall1a.cfg)
+  - [firewall1b.yml](ansible/firewall1b.yml)
+  - [firewall1b.cfg](ansible/firewall1b.cfg)
+- Run the playbooks to complete the first time wizard (FTW) and reboot
+  - `ansible-playbook firewall1a.yml`
+  - `ansible-playbook firewall1b.yml`
 - Update Gaia
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - Firewalls are best updated using the management API
 - Create objects in the Check Point database related to Branch 1
   - Create files on the manager
     - [branch1-objects.yml](ansible/branch1-objects.yml)
-    - firewalls.yml inventory?
-  - `ansible-playbook -i inventory-api branch1-objects.yml`
+    - `ansible-playbook -i inventory-api branch1-objects.yml`
 
 Note:
 - To reset and re-run the FTW on afirewall, remove the following files:
