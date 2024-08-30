@@ -180,9 +180,10 @@ Steps:
 - Launch SmartConsole
   - Username: `cpadmin`
   - Password: *the password from vars.yml (default Checkpoint123!)*
+  - Server Name or IP Address: **192.168.41.20**
   - Accept the server identity and click **Proceed**
-  - After a short time, the SmartConsole will prompt you to click **Relaunch Now** to apply the latest updates
-    - In Lab testing sometimes a pop-up error appeared after trying to launche while staying logged in
+  - After a short time, the SmartConsole app will prompt you to click **Relaunch Now** to apply the latest updates
+    - In Lab testing sometimes a pop-up error appeared after trying to launch while staying logged in
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
 - Update Gaia
