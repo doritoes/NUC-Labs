@@ -19,7 +19,7 @@ Notes:
 - Optionally, from the app store install "Windows Terminal" by Microsoft
   - this makes it easy to switch between CMD, Powershell, and WSL shells
   - Open Microsoft Store, update it if required
-  - Install Microsoft Terminal
+  - Install **Windows Terminal**
   - Open Terminal and note the dropdown to select which terminal(s) you want to open
 - Rename the PC to `manager`
   - From administrative powershell
@@ -36,8 +36,9 @@ Notes:
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize
-      - Enter the username (i.e., `ansible`) and password to use
-      - If you use a username other than `ansible`, please create the `ansible` user and use that for your Ansible work
+      - another window is opened as WSL is initialed
+        - Enter the username (i.e., `ansible`) and password to use
+        - If you use a username other than `ansible`, please create the `ansible` user and use that for your Ansible work
 - Configure Network interfaces
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
@@ -66,9 +67,9 @@ Notes:
   - [WinSCP](https://winscp.net/eng/download.php)
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - Install Ansible, modules and requirements
+  - Install Ansible and requirements
     - `sudo apt install -y ansible python3-paramiko python3-pip`
-    - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt`
+    - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
     - `python3 -m pip install XenAPI`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
