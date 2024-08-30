@@ -202,6 +202,9 @@ Steps:
       - Starting Ansible 2.11, use new `include_vars` to include the var.yml and use the credentials from there
     - [management-objects.yml](ansible/management-objects.yml)
   - `ansible-playbook -i inventory-api management-objects.yml`
+  - In SmartConsole press Control-E to open the Object explorer
+    - Expand Network Objects
+    - Note that the new hosts and network appear when you select Networks and/or Hosts 
 
 Note:
 - To reset and re-run the FTW on this management server, remove the following files:
