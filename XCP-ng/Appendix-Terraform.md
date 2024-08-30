@@ -402,7 +402,7 @@ This is a bare-bones server with limited resources.
 ## Create Servers
 - Create file servers.tf from [servers.tf](terraform/servers.tf)
 - `terraform plan`
-- `terraform apply -auto-approve'
+- `terraform apply -auto-approve`
 
 # Next Steps
 At this point we are are done with using terraform.
