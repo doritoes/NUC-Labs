@@ -20,6 +20,7 @@
         - set interfaces ethernet eth3 address '192.168.102.254/24'
         - set interfaces ethernet eth4 description 'ISP3'
         - set interfaces ethernet eth4 address '192.168.103.254/24'
+        - set protocols static route 0.0.0.0/0.0.0.0 dhcp-interface eth0
         - set nat source rule 100 outbound-interface name 'eth0'
         - set nat source rule 100 source address '192.168.100.0/24'
         - set nat source rule 100 translation address 'masquerade'
