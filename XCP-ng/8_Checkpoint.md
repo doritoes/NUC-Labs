@@ -375,7 +375,8 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
         - Subnet mask: **255.255.255.0**
       - Click **OK**
   - Edit the Default Route
-    - From the left menu click Network Management > **IPv4 Satatic Routes**
+    - From the left menu click Network Management > **IPv4 Static Routes**
+    - Click the "Default" route and then click **Edit**
     - Click **Add Gateway** > **IP Address**
     - Enter the default gateway for your Lab network
     - Click **OK**
@@ -431,6 +432,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
       - Click **OK**
   - Edit the Default Route
     - From the left menu click Network Management > **IPv4 Satatic Routes**
+    - Click the "Default" route and then click **Edit**
     - Click **Add Gateway** > **IP Address**
     - Enter the default gateway for your Lab network
     - Click **OK**
