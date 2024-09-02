@@ -208,8 +208,8 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Re-create the VM from the template
   - New > VM
   - Template: win10-lan
-  - Name: Rename from the VM from win10-lan to win10-lan-ready
-  - Description: leave the same
+  - Name: Rename from the VM from **win10-lan** to **win10-lan-ready**
+  - Description: *leave the same*
   - Click **Create**
 - Log in complete the setup wizard
   - Set region and keyboard layout, skip second keyboard layout
