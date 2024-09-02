@@ -96,7 +96,7 @@ This Windows 10 workstation will be used to build  the environment and later man
 
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
-  - Template: **win10-lab-ready**
+  - Template: **win10-lan-ready**
   - Name: **checkpoint-console**
   - Description: **R81.20 Check Point SmartConsole**
   - First Interface:
