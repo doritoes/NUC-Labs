@@ -220,7 +220,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Create security questions for this account: be creative
   - Click **Not now**
   - Privacy: *disable all the settings* and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept* (I chose Business)
+  - Experience: be creative and pick one, then click **Accept** (I chose Business)
   - Cortana: Click **Not now**
   - At the screen "Browse the web with the best performing browser on Windows"
     - Click **Continue**
