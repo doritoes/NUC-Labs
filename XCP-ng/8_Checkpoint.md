@@ -7,7 +7,7 @@ I strongly recommend reading the book **Check Point Firewall Administration R81.
 This section will walk you through setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
 
 IMPORTANT NOTES
-- Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below.
+- Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
 - Getting Check Point images
 - Trials and Evaluations
   - 15 day trial
