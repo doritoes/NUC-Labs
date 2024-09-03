@@ -179,6 +179,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 NOTE The interface change and setting expert password were not saved, preserving the clean template.
 
 ## Create Windows 10 Template
+NOTE Using "Other install media" isn't optimal, but required because we are using Terraform.
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
   - Template: **Other install media**
@@ -189,22 +190,22 @@ NOTE The interface change and setting expert password were not saved, preserving
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows 10 iso you uploaded*
   - Interfaces: select **Pool-wide network associated with eth0** from the dropdown
-  - Disks: **128GB** (default 32GB is too small to apply the latest Windows updates)
+  - Disks: Click **Add disk** and select **128GB**
   - Click **Create**
 - The details for the new VM are now displayed
-- Click Console
+- Click **Console** tab
 - If you are prompted to press any key to boot from CD or DVD
   - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
+  - Confirm Language, formats, and keyboard then **Next**
   - Click **Install now**
   - Activate Windows: Click **I don't have a product key**
-  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
+  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and **Next**
   - Check the box then click **Next**
   - Click **Custom: Install Windows only (advanced)**
   - Accept the installation on Drive 0, click **Next**
-  - Wait while the system powers reboots and gradually installs
+  - Wait while the system reboots and gradually installs
   - Set region and keyboard layout, skip second keyboard layout
   - Select **Set up for personal use** (feel free to experiment)
   - Click **Offline account** then click **Limited experience**
@@ -213,7 +214,7 @@ NOTE The interface change and setting expert password were not saved, preserving
   - Create security questions for this account (*be creative*)
   - Click **Not now**
   - Privacy: *disable all the settings* and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept* (I chose Business)
+  - Experience: be creative and pick one, then click **Accept** (I chose Business)
   - Cortana: click **Not now**
   - At the desktop, open the Edge browser
     - Click **Complete setup**
@@ -235,7 +236,7 @@ NOTE The interface change and setting expert password were not saved, preserving
   - increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
   - clean up the taskbar, desktop, etc. to meet your preferences
   - set the correct timezone
-- Change the hostname to win10-template
+- Change the hostname to **win10-template**
   - From administrative powershell: `Rename-Computer -NewName win10-template`
 - Shut down the Windows VM
   - `stop-computer`
