@@ -41,14 +41,6 @@ sudo apt update && sudo apt install -y terraform
 - Create file credentials.auto.tfvars from [credentials.auto.tfvars](terraform/credentials.auto.tfvars)
   - Modify to use your XCP-ng host IP address
   - Modify to use a valid username and password
-- Create file demo.tf from [demo.tf](terraform/demo.tf)
-- Test
-  - `terraform init`
-  - `terraform plan`
-  - `terraform apply`
-- The output shows
-  - number of VMs that are running (vms_length)
-  - sum of all running VMs' max memory in bytes (vms_max_memory_map)
 
 # Create Templates
 ## Create VyOS Template
@@ -387,17 +379,17 @@ This is a bare-bones server with limited resources.
 ## Create VyOS Router with Terraform
 - Create file network.tf from [router.tf](terraform/router.tf)
 - `terraform plan`
-- `terraform apply -auto-approve1
+- `terraform apply -auto-approve`
 
 ## Create Check Point firewalls with Terraform
 - Create file firewalls.tf from [firewalls.tf](terraform/firewalls.tf)
 - `terraform plan`
-- `terraform apply -auto-approve'
+- `terraform apply -auto-approve`
 
 ## Create Workstations
 - Create file workstations.tf from [workstations.tf](terraform/workstations.tf)
 - `terraform plan`
-- `terraform apply -auto-approve'
+- `terraform apply -auto-approve`
 
 ## Create Servers
 - Create file servers.tf from [servers.tf](terraform/servers.tf)
