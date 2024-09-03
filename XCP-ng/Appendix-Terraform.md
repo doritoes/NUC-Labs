@@ -67,7 +67,7 @@ sudo apt update && sudo apt install -y terraform
   - When you are asked to set the password just use `vyos`
   - When promted, `reboot`
   - After the reboot starts, eject the VyOS iso
-- Log back in
+- Log back in (`vyos`/`vyos`)
 - Add user `ansible` for management
   - add user
     - `configure`
@@ -94,7 +94,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **R81.20 Check Point template**
+  - Description: **Check Point R81.20 template**
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
@@ -108,8 +108,8 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - Click **Create**
 - The details for the new Check Point VM are now displayed
 - Click the **Network** tab
-  - Next to each interface is a small settings icon with a blue background
-  - For every interface click the gear icon then <ins>disable TX checksumming</ins>
+  - Next to each interface (one in this case) is a small settings icon with a blue background
+  - Click the gear icon then <ins>disable TX checksumming</ins>
 - Click **Console** tab and watch as the system boots
 - At the boot menu, select **Install Gaia on this system**
 - Accept the installation message **OK**
@@ -166,7 +166,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
     - Install guest tools
       - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
       - `cd LinuxGuestTools-8.4.0-1`
-      - `./install -d rhel -m el7`
+      - `./install.sh -d rhel -m el7`
       - press `y`
       - `cd ..`
       - `rm LinuxGuestTools-8.4.0-1.tar.gz`
