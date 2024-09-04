@@ -36,7 +36,7 @@ Notes:
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize
-      - another window is opened as WSL is initialed
+      - another window is opened as WSL is initialized
         - Enter the username (i.e., `ansible`) and password to use
         - If you use a username other than `ansible`, please create the `ansible` user and use that for your Ansible work
 - Configure Network interfaces
