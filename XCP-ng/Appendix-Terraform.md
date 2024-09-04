@@ -254,7 +254,7 @@ This is a bare-bones server with limited resources.
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
   - Interfaces: select *Pool-wide network associated with eth0*
-  - Disks: **128GB** (default 32GB)
+  - Disks: Click **Add disk** and select **128GB**
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console** tab
@@ -262,7 +262,7 @@ This is a bare-bones server with limited resources.
   - **Press any key**
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
+  - Confirm Language, formats, and keyboard then **Next**
   - Click **Install now**
   - Select the OS to install:**Windows Server 2022 Standard Edition Evaluation (Desktop Experience)**
     - feel free to experiment
@@ -281,7 +281,7 @@ This is a bare-bones server with limited resources.
   - Download MSI and install manually (or install later using group policy)
     - Accept the reboot; upon logging back in note the confirmation
     - Remove the downloaded file when done
-- Apply Windows Updates (reboots included)
+- Apply Windows Updates (reboots required)
   - Note that at some boots, certain services are on a delayed start, impacting the updates
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -304,7 +304,7 @@ This is a bare-bones server with limited resources.
 ## Create Ubuntu Server 22.04 LTS Template
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
-  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Template: **Other install media**
   - Name: **ubuntu-server-template**
   - Description: **Ubuntu Server 22.04**
   - CPU: **1 vCPU**
@@ -312,10 +312,10 @@ This is a bare-bones server with limited resources.
   - Topology: Default behavior
   - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
   - Interfaces: select **Pool-wide network associated with eth0**
-  - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
+  - Disks: Click **Add disk** and select **20GB**
   - Click **Create**
 - The details for the new VM are now displayed
-- Click the Console tab and follow the Install wizard per usual
+- Click the **Console** tab and follow the Install wizard per usual  
   - READ CAREFULLY the Guided storage configuration
     - Root / only has **10GB** of the **20GB** allocated
     - Solutions (if in doubt, use Option 1; Option 2 is popular for /var, /var/log, /opt, or /home)
@@ -331,11 +331,12 @@ This is a bare-bones server with limited resources.
   - Do not select any snaps
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
-- Log in and check the system using Terminal
+- Log in to the console and check the system
+  - `df -h`
 - Install guest tools
   - Connect the guest-tools.iso (select it from the dropdown)
-  - Open Terminal
-  - Mount the iso
+  - Log in to the console
+  - Mount the guest tools iso
     - `sudo mount /dev/cdrom /media`
     - `cd /media/Linux`
   - Install the tools
@@ -343,7 +344,7 @@ This is a bare-bones server with limited resources.
     - you may be prompted to enter your password
     - you are prompted accept the change
     - you are reminded to reboot
-  - Unmount the ISO
+  - Unmount the guest tools iso
     - `cd ~`
     - `sudo umount /media`
   - `sudo reboot`
