@@ -1,9 +1,10 @@
 # Appendix - Display Resolution
-Windows VMs booting with UEFI have a fixed display size. You can't change the screen resolution from Windows. Here is how to increase the screen resolution by modifying a UEFI setting
+Windows VMs booting with UEFI have a fixed display size. You can't change the screen resolution from Windows. Here is how to increase the screen resolution by modifying a UEFI setting.
 - First, in Xen Orchestra (XO), modify the VM advanced settings
-  - Enable VGA
+  - confirm VGA is enabled
   - increase Video RAM to 16MB
-- Open the console of the virtual machine.
+- Power off the VM
+- Open the console tab
 - Start the virtual machine
   - as soon as possible, keep continuously pressing F2 until the UEFI setup screen appears
   - this may take a few tries
