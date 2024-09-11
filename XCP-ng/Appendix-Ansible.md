@@ -226,16 +226,14 @@ Steps:
   - Username `admin` and the password you selected
 - Set IP address information
   - firewall1a
-    - `set interface eth0 ipv4-address 192.168.101.2 mask-length 24`
-    - `set interface eth4 ipv4-address 192.168.41.2 mask-length 24`
-    - `set interface eth4 state on`
-    - `set management interface eth4`
+    - `set interface eth0 ipv4-address 192.168.41.2 mask-length 24`
+    - `set interface eth1 ipv4-address 192.168.101.2 mask-length 24`
+    - `set interface eth1 state on`
     - `save config`
   - firewall1b
-    - `set interface eth0 ipv4-address 192.168.101.3 mask-length 24`
-    - `set interface eth4 ipv4-address 192.168.41.3 mask-length 24`
-    - `set interface eth4 state on`
-    - `set management interface eth4`
+    - `set interface eth0 ipv4-address 192.168.41.3 mask-length 24`
+    - `set interface eth1 ipv4-address 192.168.101.3 mask-length 24`
+    - `set interface eth1 state on`
     - `save config`
 - Add manager's RSA keys to each firewall's authorized_keys file
   - Log in to `manager` and open a WSL shell
