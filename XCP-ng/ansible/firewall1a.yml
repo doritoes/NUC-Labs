@@ -25,7 +25,7 @@
       command: "clish -c 'lock database override'"
       ignore_errors: True
     - name: Prepare to import network configuration
-      command: "clish -c 'set client on-failure continue'"
+      command: "clish -c 'set clienv on-failure continue'"
     - name: Import network configuration
       command: "clish -c 'load configuration network.cfg'"
     - name: Done with import network configuration
