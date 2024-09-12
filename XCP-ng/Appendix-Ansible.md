@@ -97,7 +97,7 @@ Notes:
   - `exit`
   - Get the IP address on eth0
     - `show interfaces ethernet eth0 brief`
-- From `manager` VM Configure key login in VyOS
+- From `manager` VM configure key login in VyOS
   - Log in to VyOS as `ansible`
     - `ssh ansible@<vyos_lab_ip>`
     - accept the key
