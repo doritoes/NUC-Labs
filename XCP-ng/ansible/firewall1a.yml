@@ -34,7 +34,7 @@
       command: "clish -c 'save config'"
     - name: Apply FTW template
       command: "/usr/bin/config_system -f /home/ansible/ftw.tpl"
-      aysnc: 3600: # run in background up to 1 hour
+      aysnc: 3600 # run in background up to 1 hour
       poll: 60 # check status every 60 seconds
     - name: Wait until FTW completes
       stat:
