@@ -263,6 +263,7 @@ Steps:
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
   - [firewall1b.cfg](ansible/firewall1b.cfg)
+  - [branch1.j2](ansible/branch1.j2)
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall1a.yml`
   - `ansible-playbook firewall1b.yml`
