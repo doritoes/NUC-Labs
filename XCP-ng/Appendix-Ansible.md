@@ -65,6 +65,7 @@ Notes:
 - Install additional Windows applications
   - [Chrome browser](https://www.google.com/chrome/)
   - [WinSCP](https://winscp.net/eng/download.php)
+- This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - Install Ansible and requirements
