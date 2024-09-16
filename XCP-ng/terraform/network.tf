@@ -54,7 +54,7 @@ resource "xenorchestra_network" "network_sync1" {
 }
 resource "xenorchestra_network" "network_sync2" {
   name_label = "branch2sync"
-  name_description = "Branch 1 Sync"
+  name_description = "Branch 2 Sync"
   pool_id = data.xenorchestra_host.host1.pool_id
 }
 resource "xenorchestra_network" "network_sync3" {
