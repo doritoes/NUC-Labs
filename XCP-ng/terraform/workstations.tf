@@ -10,8 +10,8 @@ resource "xenorchestra_vm" "management-workstation" {
   cpus       = 2
   name_label = "manager"
   name_description = "Windows 10 mangagement workstation"
-  template = data.xenorchestra_template.firewall-template.id
-  depends_on = [ xenorchestra_network.vlan_network_401]
+  template = data.xenorchestra_template.workstation-template.id
+  depends_on = [ xenorchestra_network.network_management1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "management-disk"
@@ -31,7 +31,7 @@ resource "xenorchestra_vm" "branch1-1" {
   name_label = "branch1-1"
   name_description = "Windows 10 workstation 1 in branch 1"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.vlan_network_201]
+  depends_on = [ xenorchestra_network.network_branch1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-1-1-disk"
@@ -47,10 +47,10 @@ resource "xenorchestra_vm" "branch2-1" {
   name_label = "branch2-1"
   name_description = "Windows 10 workstation 1 in branch 2"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.vlan_network_202]
+  depends_on = [ xenorchestra_network.network_branch2]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
-    name_label = "workstation-1-1-disk"
+    name_label = "workstation-2-1-disk"
     size       = 137437904896
   }
   network {
@@ -63,7 +63,7 @@ resource "xenorchestra_vm" "branch3-1" {
   name_label = "branch3-1"
   name_description = "Windows 10 workstation 1 in branch 3"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.vlan_network_203]
+  depends_on = [ xenorchestra_network.network_branch3]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-3-1-disk"
