@@ -28,6 +28,7 @@
       command: "clish -c 'set clienv on-failure continue'"
     - name: Import network configuration
       command: "clish -c 'load configuration network.cfg'"
+      async: 120 # run in backgroup up to 2 minutes
     - name: Done with import network configuration
       command: "clish -c 'set clienv on-failure stop'"
     - name: Save network configuration
