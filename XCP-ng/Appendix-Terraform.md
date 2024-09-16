@@ -372,7 +372,7 @@ This is a bare-bones server with limited resources.
 - Create file network.tf from [network.tf](terraform/network.tf)
 - `terraform init`
 - `terraform plan`
-- `terraform apply -auto-approve'
+- `terraform apply -auto-approve`
 - Log in to XO and confirm the new neworks are created
 - Destroy and re-create
   - `terraform destroy`
