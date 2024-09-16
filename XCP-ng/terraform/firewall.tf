@@ -42,7 +42,7 @@ resource "xenorchestra_vm" "firewall1a" {
   name_description = "Check Point firewall branch 1 A"
   template = data.xenorchestra_template.firewall-template.id
   auto_poweron = false
-  depends_on = [xenorchestra_network.network_isp1, xenorchestra_network.network_branch1, xenorchestra_network.network_dmz1, xenorchestra_network.network_management1, xenorchestra_network_sync1]
+  depends_on = [xenorchestra_network.network_isp1, xenorchestra_network.network_branch1, xenorchestra_network.network_dmz1, xenorchestra_network.network_management1, xenorchestra_network.network_sync1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-1a-disk"
@@ -174,7 +174,7 @@ resource "xenorchestra_vm" "firewall3b" {
   name_description = "Check Point firewall branch 3 B"
   template = data.xenorchestra_template.firewall-template.id
   auto_poweron = false
-  depends_on = [xenorchestra_network.vlan_network_103, xenorchestra_network.vlan_network_203, xenorchestra_network.network_sync3]
+  depends_on = [xenorchestra_network.network_isp3, xenorchestra_network.network_branch3, xenorchestra_network.network_sync3]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-3b-disk"
