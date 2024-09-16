@@ -3,11 +3,11 @@ data "xenorchestra_network" "wan" {
 }
 data "xenorchestra_network" "build" {
   name_label = "build"
-  depends_on = [xenorchestra_network.vlan_network_100]
+  depends_on = [xenorchestra_network.network_build]
 }
 data "xenorchestra_network" "isp1" {
   name_label = "isp1"
-  depends_on = [xenorchestra_network.network_build]
+  depends_on = [xenorchestra_network.network_isp1]
 }
 data "xenorchestra_network" "isp2" {
   name_label = "isp2"
