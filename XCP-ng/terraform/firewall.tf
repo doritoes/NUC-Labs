@@ -41,7 +41,7 @@ resource "xenorchestra_vm" "firewall1a" {
   name_label = "firewall1a"
   name_description = "Check Point firewall branch 1 A"
   template = data.xenorchestra_template.firewall-template.id
-  auto_poweron = false
+  power_state = "Halted"
   depends_on = [xenorchestra_network.network_isp1, xenorchestra_network.network_branch1, xenorchestra_network.network_dmz1, xenorchestra_network.network_management1, xenorchestra_network.network_sync1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
@@ -71,7 +71,7 @@ resource "xenorchestra_vm" "firewall1b" {
   name_label = "firewall1b"
   name_description = "Check Point firewall branch 1 B"
   template = data.xenorchestra_template.firewall-template.id
-  auto_poweron = false
+  power_state = "Halted"
   depends_on = [xenorchestra_network.network_isp1, xenorchestra_network.network_branch1, xenorchestra_network.network_dmz1, xenorchestra_network.network_management1, xenorchestra_network.network_sync1]  
   disk {
     sr_id      = data.xenorchestra_sr.local.id
@@ -101,7 +101,7 @@ resource "xenorchestra_vm" "firewall2a" {
   name_label = "firewall2a"
   name_description = "Check Point firewall branch 2 A"
   template = data.xenorchestra_template.firewall-template.id
-  auto_poweron = false
+  power_state = "Halted"
   depends_on = [xenorchestra_network.network_isp2, xenorchestra_network.network_branch2, xenorchestra_network.network_sync2]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
@@ -125,7 +125,7 @@ resource "xenorchestra_vm" "firewall2b" {
   name_label = "firewall2b"
   name_description = "Check Point firewall branch 2 B"
   template = data.xenorchestra_template.firewall-template.id
-  auto_poweron = false
+  power_state = "Halted"
   depends_on = [xenorchestra_network.network_isp2, xenorchestra_network.network_branch2, xenorchestra_network.network_sync2]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
@@ -149,7 +149,7 @@ resource "xenorchestra_vm" "firewall3a" {
   name_label = "firewall3a"
   name_description = "Check Point firewall branch 3 A"
   template = data.xenorchestra_template.firewall-template.id
-  auto_poweron = false
+  power_state = "Halted"
   depends_on = [xenorchestra_network.network_isp3, xenorchestra_network.network_branch3, xenorchestra_network.network_sync3]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
@@ -173,7 +173,7 @@ resource "xenorchestra_vm" "firewall3b" {
   name_label = "firewall3b"
   name_description = "Check Point firewall branch 3 B"
   template = data.xenorchestra_template.firewall-template.id
-  auto_poweron = false
+  power_state = "Halted"
   depends_on = [xenorchestra_network.network_isp3, xenorchestra_network.network_branch3, xenorchestra_network.network_sync3]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
