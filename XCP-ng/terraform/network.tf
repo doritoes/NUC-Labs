@@ -2,99 +2,63 @@ data "xenorchestra_host" "host1" {
   name_label = "${var.xo_pool}"
 }
 
-# VLAN 100 build network
-resource "xenorchestra_network" "vlan_network_100" {
+resource "xenorchestra_network" "network_build" {
   name_label = "build"
   name_description = "build network off router"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 100
 }
-# VLAN 101 ISP1 network
-resource "xenorchestra_network" "vlan_network_101" {
+resource "xenorchestra_network" "network_isp1" {
   name_label = "isp1"
   name_description = "isp1 emulated network"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 101
 }
-# VLAN 102 ISP2 network
-resource "xenorchestra_network" "vlan_network_102" {
+resource "xenorchestra_network" "network_isp2" {
   name_label = "isp2"
   name_description = "isp2 emulated network"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 102
 }
-# VLAN 103 ISP3 network
-resource "xenorchestra_network" "vlan_network_103" {
+resource "xenorchestra_network" "network_isp3" {
   name_label = "isp3"
   name_description = "isp3 emulated network"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 103
 }
-# VLAN 201 Branch1 network
-resource "xenorchestra_network" "vlan_network_201" {
+resource "xenorchestra_network" "network_branch1" {
   name_label = "branch1"
   name_description = "Branch 1 LAN"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 201
 }
-# VLAN 202 Branch2 network
-resource "xenorchestra_network" "vlan_network_202" {
+resource "xenorchestra_network" "network_branch2" {
   name_label = "branch2"
   name_description = "Branch 2 LAN"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 202
 }
-# VLAN 203 Branch3 network
-resource "xenorchestra_network" "vlan_network_203" {
+resource "xenorchestra_network" "network_branch3" {
   name_label = "branch3"
   name_description = "Branch 3 LAN"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 203
 }
-# VLAN 301 Branch1 DMZ
-resource "xenorchestra_network" "vlan_network_301" {
+resource "xenorchestra_network" "network_dmz1" {
   name_label = "branch1dmz"
   name_description = "Branch 1 DMZ"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 301
 }
-# VLAN 401 Branch1 Management
-resource "xenorchestra_network" "vlan_network_401" {
+resource "xenorchestra_network" "network_management1" {
   name_label = "branch1mgt"
   name_description = "Branch 1 Management"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 401
 }
-# VLAN 501 Branch1 Sync
-resource "xenorchestra_network" "vlan_network_501" {
+resource "xenorchestra_network" "network_sync1" {
   name_label = "branch1sync"
   name_description = "Branch 1 Sync"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 501
 }
-# VLAN 502 Branch2 Sync
-resource "xenorchestra_network" "vlan_network_502" {
+resource "xenorchestra_network" "network_sync2" {
   name_label = "branch2sync"
   name_description = "Branch 1 Sync"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 502
 }
-# VLAN 503 Branch3 Sync
-resource "xenorchestra_network" "vlan_network_503" {
+resource "xenorchestra_network" "network_sync3" {
   name_label = "branch3sync"
   name_description = "Branch 3 Sync"
   pool_id = data.xenorchestra_host.host1.pool_id
-  source_pif_device = "eth0"
-  vlan = 503
 }
