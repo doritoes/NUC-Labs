@@ -287,6 +287,8 @@ This is a bare-bones server with limited resources.
 - Apply Windows Updates (reboots required)
   - Note that at some boots, certain services are on a delayed start, impacting the updates
 - Optionally clear all browser settings (including history) by deleting the default profile
+- Optionally enable higher desktop resolution
+  - Advanced > Enable VGA, set Video RAM to 16MiB
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
