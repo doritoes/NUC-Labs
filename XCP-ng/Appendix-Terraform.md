@@ -229,6 +229,8 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
     - Delete the downloaded file when done
 - Apply Windows Updates (reboots included)
 - Optionally clear all browser settings (including history) by deleting the default profile
+- Optionally enable higher desktop resolution
+  - Advanced > Enable VGA, set Video RAM to 16MiB
 - Eject the installation ISO
 - Enable Remote Desktop (RDP)
   - **Start** > **Settings** > **System** > **Remote Desktop**
