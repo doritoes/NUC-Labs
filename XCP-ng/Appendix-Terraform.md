@@ -126,7 +126,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 - Select **eth0** as the management port
   - IP address: **192.168.41.254**
   - Netmask: **255.255.255.0**
-  - Default gateway: **192.168.41.1**
+  - Default gateway: **None** (it will auto feel; delete and leave blank)
   - <ins>NO</ins> DHCP server on the management interface
 - Confirm you want to continue with formatting the drive **OK**
 - When the message `Installation complete.` message appears
@@ -142,10 +142,10 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - `set user ansible shell /bin/bash`
   - `save config`
 - Install guest tools
-  - Select and IP address on your Lab network for temporary use
+  - Select an IP address on your Lab network for temporary use
     - Example: 192.168.1.130
   - Change the interface IP to that address
-    - `set interface eth0 ipv4-address 192.168.1.0 mask-length 24`
+    - `set interface eth0 ipv4-address 192.168.1.130 mask-length 24`
   - Set the user shell to bash
     - `set expert-password`
       - select a password for "expert mode"
@@ -179,7 +179,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 NOTE The interface change and setting expert password were not saved, preserving the clean template.
 
 ## Create Windows 10 Template
-NOTE Using "Other install media" isn't optimal, but required because we are using Terraform.
+NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
   - Template: **Other install media**
@@ -228,6 +228,7 @@ NOTE Using "Other install media" isn't optimal, but required because we are usin
       - Message confirming tools installed is displayed
     - Delete the downloaded file when done
 - Apply Windows Updates (reboots included)
+- Optionally clear all browser settings (including history) by deleting the default profile
 - Eject the installation ISO
 - Enable Remote Desktop (RDP)
   - **Start** > **Settings** > **System** > **Remote Desktop**
@@ -283,6 +284,7 @@ This is a bare-bones server with limited resources.
     - Remove the downloaded file when done
 - Apply Windows Updates (reboots required)
   - Note that at some boots, certain services are on a delayed start, impacting the updates
+- Optionally clear all browser settings (including history) by deleting the default profile
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
