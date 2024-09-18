@@ -223,16 +223,19 @@ References:
 The following steps configure Branch 1
 ## Configure Branch 1 firewalls
 Steps:
+- BEFORE you POWER ON the firewalls
+  - Turn off TX checksumming on each interface
+  - Click Network tab
+  - For each interface click the blue gear and click to set TX checksumming **Disabled**
+- Power of **firewall1a** and **firewall1b**
 - Log in to consoles of **firewall1a** and **firewall1b**
   - Username `admin` and the password you selected
 - Set IP address information
   - firewall1a
     - `set interface eth0 ipv4-address 192.168.41.2 mask-length 24`
-    - `set interface eth0 state on`
     - `save config`
   - firewall1b
     - `set interface eth0 ipv4-address 192.168.41.3 mask-length 24`
-    - `set interface eth0 state on`
     - `save config`
 - Add manager's RSA keys to each firewall's authorized_keys file
   - Log in to `manager` and open a WSL shell
