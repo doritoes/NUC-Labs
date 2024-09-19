@@ -269,6 +269,10 @@ Steps:
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall1a.yml`
   - `ansible-playbook firewall1b.yml`
+- Test
+  - You should still be able to connect to the web GUI from `manager`
+  - https://192.168.41.2
+  - https://192.168.41.3
 - Update Gaia (if you have proper eval licenses)
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - Firewalls are best updated using the management API
