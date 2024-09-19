@@ -260,7 +260,6 @@ Steps:
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 - Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
-  - 🌱still working on this step
   - [firewall1a.yml](ansible/firewall1a.yml)
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
@@ -278,31 +277,24 @@ Steps:
   - Firewalls are best updated using the management API
 - Create objects in the Check Point database related to Branch 1
   - Create files on the manager
+    - 🌱still working on this
     - [branch1-objects.yml](ansible/branch1-objects.yml)
     - `ansible-playbook -i inventory-api branch1-objects.yml`
+- 🌱 Create cluster using API
+  - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
+- 🌱 Create policy using API
+  - NAT
+  - allow all?
+  - get internet access working from LAN and management networks
+  - DHCP helper in DMZ
+  - Remove management workstation from the lab network, so solely be on Branch 1 Management
+- 🌱 push policy
+- 🌱 Test
 
-Note:
-- To reset and re-run the FTW on afirewall, remove the following files:
-  - `/etc/.wizard_accepted`
-  - `/etc/.wizard_started`
-
-- Initial settings
-  - set IP information
-  - set hostname
-  - configure ansible SSH RSA keys
-- FTW using Ansible
 ## Configure Domain Controller
 - Promote Domain Controller
 - Configure Domain
 - Configure DHCP
-## Create Firewall Cluster
-- Create cluster
-  - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
-## Create Firewall Policy
-- policy
-- get internet access working from LAN and management networks
-- DHCP helper in DMZ
-- Remove management workstation from the lab network, so solely be on Branch 1 Management
 
 ## Configure LAN devices
 - workstation
