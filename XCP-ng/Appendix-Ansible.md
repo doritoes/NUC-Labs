@@ -187,7 +187,7 @@ Steps:
     - In Lab testing sometimes a pop-up error appeared after trying to launch while staying logged in
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
-- Update Gaia
+- Update Gaia (if you have proper eval licenses)
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - SMS updates are best applied manually (whereas firewalls are updated using management API)
     - clish
@@ -269,7 +269,7 @@ Steps:
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall1a.yml`
   - `ansible-playbook firewall1b.yml`
-- Update Gaia
+- Update Gaia (if you have proper eval licenses)
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - Firewalls are best updated using the management API
 - Create objects in the Check Point database related to Branch 1
