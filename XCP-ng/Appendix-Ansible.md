@@ -9,7 +9,7 @@ Notes:
 - `terraform apply -auto-approve`
 
 # Configure Management Workstation
-- From XO, click on `mananger`
+- From XO, click on `manager`
   - Note the network is configured for two interfaces
     - First one: `Pool-wide network associated with eth0`
       - allows downloading and installing software and packages
