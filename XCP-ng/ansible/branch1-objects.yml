@@ -68,3 +68,5 @@
         ip_address_last: 10.0.1.250
         name: Branch 1 LAN Workstation DHCP scop
         state: present
+    - name: publish changes
+      cp_mgmt_publish:
