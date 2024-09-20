@@ -276,15 +276,17 @@ Steps:
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - Firewalls are best updated using the management API
 - Create objects in the Check Point database related to Branch 1
-  - Create files on the manager
-    - 🌱still working on this
+  - Create file on `manager`
     - [branch1-objects.yml](ansible/branch1-objects.yml)
-    - `ansible-playbook -i inventory-api branch1-objects.yml`
-- 🌱 Create cluster using API
+  - `ansible-playbook -i inventory-api branch1-objects.yml`
+- Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
-- 🌱 Create policy using API
+  - Create file on `manager`
+    - [firewall1-cluster.yml](ansible/firewall1-cluster.yml)
+  - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+- 🌱 Create new policy using API
+  - allow all access rule?
   - NAT
-  - allow all?
   - get internet access working from LAN and management networks
   - DHCP helper in DMZ
   - Remove management workstation from the lab network, so solely be on Branch 1 Management
