@@ -64,9 +64,11 @@
         state: present
     - name: Branch 1 LAN DHCP workstations
       cp_mgmt_address_range:
+        name: Branch 1 LAN Workstation DHCP scope
         ip_address_first: 10.0.1.20
         ip_address_last: 10.0.1.250
-        name: Branch 1 LAN Workstation DHCP scop
+        color: dark blue
+        comments: Branch 1 LAN Workstation DHCP scope
         state: present
     - name: publish changes
       cp_mgmt_publish:
