@@ -57,7 +57,7 @@
         state: present
     - name: SQL Server
       cp_mgmt_host:
-        name: file-1
+        name: sql-1
         ipv4_address: 10.0.1.12
         color: dark blue
         comments: SQL server
