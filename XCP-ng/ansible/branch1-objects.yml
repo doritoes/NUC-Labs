@@ -1,0 +1,70 @@
+---
+- name: Create branch1 objects
+  hosts: check_point
+  connection: httpapi
+  # include_vars: vars.yml # introduced in Ansible 2.11
+  tasks:
+    - name: branch 1 outbound NAT
+      cp_mgmt_host:
+        name: branch1_outbound_nat
+        ipv4_address: 192.168.101.4
+        color: dark blue
+        comments: barnch1 outbound NAT
+        state: present
+    - name: branch 1 inbound NAT IIS
+      cp_mgmt_host:
+        name: branch1_iis_inbound_nat
+        ipv4_address: 192.168.101.5
+        color: dark blue
+        comments: barnch1 outbound NAT
+        state: present
+    - name: branch 1 inbound NAT Apache
+      cp_mgmt_host:
+        name: branch1_iis_inbound_nat
+        ipv4_address: 192.168.101.6
+        color: dark blue
+        comments: barnch1 outbound NAT
+        state: present
+    - name: Branch 1 LAN network
+      cp_mgmt_network:
+        name: branch1_lan
+        subnet: 10.0.1.0
+        mask_length: 24
+        color: crete blue
+        comments: Branch 1 LAN network
+        state: present
+    - name: Branch 1 DMZ network
+      cp_mgmt_network:
+        name: branch1_dmz
+        subnet: 192.168.31.0
+        mask_length: 24
+        color: crete blue
+        comments: Branch 1 DMZ network
+        state: present
+    - name: Domain Controller
+      cp_mgmt_host:
+        name: dc-1
+        ipv4_address: 10.0.1.10
+        color: dark blue
+        comments: Domain controller
+        state: present
+    - name: File Server
+      cp_mgmt_host:
+        name: file-1
+        ipv4_address: 10.0.1.11
+        color: dark blue
+        comments: File server
+        state: present
+    - name: SQL Server
+      cp_mgmt_host:
+        name: file-1
+        ipv4_address: 10.0.1.12
+        color: dark blue
+        comments: SQL server
+        state: present
+    - name: Branch 1 LAN DHCP workstations
+      cp_mgmt_address_range:
+        ip_address_first: 10.0.1.20
+        ip_address_last: 10.0.1.250
+        name: Branch 1 LAN Workstation DHCP scop
+        state: present
