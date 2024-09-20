@@ -9,21 +9,21 @@
         name: branch1_outbound_nat
         ipv4_address: 192.168.101.4
         color: dark blue
-        comments: barnch1 outbound NAT
+        comments: branch1 outbound NAT
         state: present
     - name: branch 1 inbound NAT IIS
       cp_mgmt_host:
         name: branch1_iis_inbound_nat
         ipv4_address: 192.168.101.5
         color: dark blue
-        comments: barnch1 outbound NAT
+        comments: branch1 inbound NAT to IIS server in DMZ
         state: present
     - name: branch 1 inbound NAT Apache
       cp_mgmt_host:
-        name: branch1_iis_inbound_nat
+        name: branch1_apache_inbound_nat
         ipv4_address: 192.168.101.6
         color: dark blue
-        comments: barnch1 outbound NAT
+        comments: branch1 inbound NAT to Apache web server in DMZ
         state: present
     - name: Branch 1 LAN network
       cp_mgmt_network:
