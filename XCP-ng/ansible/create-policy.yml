@@ -1,0 +1,47 @@
+---
+- name: Create policy
+  hosts: check_point
+  connection: httpapi
+  # include_vars: vars.yml # introduced in Ansible 2.11
+  tasks:
+    - name: add a package
+      cp_mgmt_package:
+        access: true
+        color: forest green
+        comments: Access policy for Lab
+        name: Lab_Policy
+        state: present
+        threat_prevention: false
+    - name: add a rule
+      cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Rule 1
+        position: top
+        source:
+          - branch1_lan
+        destination:
+          - Any
+        service:
+        - http
+        - https
+        action: Accept
+        comments: Allow web traffic
+        track:
+          type: Log
+        state: present
+    - name: add a NAT rule
+      cp_mgmt_nat_rule:
+        package: Lab_Policy
+        name: Outbound NAT
+        enabled: true
+        install_on:
+        - Policy Targets
+        original_destination: All_Internet
+        original_source: branch1_lan
+        translated_source: branch1_outbound_nat
+        method: hide
+        position: top 
+        comments: outbound NAT
+        state: present
+    - name: publish changes
+      cp_mgmt_publish:
