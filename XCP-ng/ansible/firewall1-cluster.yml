@@ -36,7 +36,8 @@
           topology_settings:
             interface_leads_to_dmz: false
             ip_address_behind_this_interface: network defined by the interface ip and net mask
-        - interface_type: sync
+        - anti_spoofing: true
+          interface_type: sync
           name: eth4
           network_mask: 255.255.255.0
           topology: internal
