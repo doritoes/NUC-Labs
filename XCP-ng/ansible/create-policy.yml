@@ -29,19 +29,4 @@
         track:
           type: Log
         state: present
-    - name: add a NAT rule
-      cp_mgmt_nat_rule:
-        package: Lab_Policy
-        name: Outbound NAT
-        enabled: true
-        install_on:
-        - Policy Targets
-        original_destination: All_Internet
-        original_source: branch1_lan
-        translated_source: branch1_outbound_nat
-        method: hide
-        position: top 
-        comments: outbound NAT
-        state: present
-    - name: publish changes
-      cp_mgmt_publish:
+
