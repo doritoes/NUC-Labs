@@ -14,6 +14,15 @@
         interfaces:
         - anti_spoofing: true
           interface_type: cluster
+          ip_address: 192.168.41.1
+          name: eth0
+          network_mask: 255.255.255.0
+          topology: internal
+          topology_settings:
+            interface_leads_to_dmz: false
+            ip_address_behind_this_interface: network defined by the interface ip and net mask
+        - anti_spoofing: true
+          interface_type: cluster
           ip_address: 192.168.101.1
           name: eth1
           network_mask: 255.255.255.0
