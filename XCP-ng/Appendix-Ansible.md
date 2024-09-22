@@ -285,12 +285,10 @@ Steps:
     - [firewall1-cluster.yml](ansible/firewall1-cluster.yml)
   - `ansible-playbook -i inventory-api firewall1-cluster.yml`
 - 🌱 Create new policy using API
-  - cp_mgmt_access_layers
-  - cp_mgmt_access_layer
-  - allow all access rule?
-  - NAT
-  - get internet access working from LAN and management networks
-  - DHCP helper in DMZ
+  - :seedling: add NAT rule not working
+  - [branch1-policy.yml](ansible/branch1-policy.yml)
+  - :seedling: still working on what policy to deploy
+  - DHCP helper in DMZ?
   - Remove management workstation from the lab network, so solely be on Branch 1 Management
 - 🌱 push policy
   - cp_mgmt_install_policy
