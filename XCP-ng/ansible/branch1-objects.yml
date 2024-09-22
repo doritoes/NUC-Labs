@@ -32,6 +32,11 @@
         mask_length: 24
         color: crete blue
         comments: Branch 1 LAN network
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.101.4
+          method: hide
         state: present
     - name: Branch 1 DMZ network
       cp_mgmt_network:
