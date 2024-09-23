@@ -81,6 +81,7 @@ Notes:
       - `sudo apt-add-repository ppa:/ansible/ansible`
     - Install latest version of Ansible
       - `sudo apt install -y ansible`
+      - `ansible --version`
     - Install the Ansible collections
       - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
 - Generate ssh RSA key for user `ansible`
