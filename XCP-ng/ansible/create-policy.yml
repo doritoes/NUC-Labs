@@ -24,6 +24,8 @@
         service:
         - http
         - https
+        - echo-reply
+        - dns
         action: Accept
         comments: Allow web traffic
         track:
