@@ -29,4 +29,13 @@
         track:
           type: Log
         state: present
-
+    - name: modify cleanup rule
+      cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Cleanup rule
+        action: Accept
+        enabled: true
+        track:
+          type: Log
+        comments: Turn cleanup rule into allow all rule
+        state: present
