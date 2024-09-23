@@ -72,6 +72,17 @@ Notes:
     - `sudo apt install -y ansible python3-paramiko python3-pip`
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
     - `python3 -m pip install XenAPI`
+  - WARNING Ubuntu 22.04 installs Ansible 2.10 which is an older version
+    - Remove default version
+      - `sudo apt remove ansible`
+      - `sudo apt --purge autoremove`
+    - Set up PPA support
+      - `sudo apt install -y software-properties-common`
+      - `sudo apt-add-repository ppa:/ansible/ansible`
+    - Install latest version of Ansible
+      - `sudo apt install -y ansible`
+    - Install the Ansible collections
+      - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
