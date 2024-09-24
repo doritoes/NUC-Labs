@@ -9,6 +9,6 @@ dns_server_primary: "8.8.8.8"
 dns_server_secondary: "8.8.4.4"
 dns_server_tertiary: "9.9.9.9"
 sms_system_name: "sms"
-sms_ip: "192.168.4.20"
+sms_ip: "192.168.41.20"
 sms_ip_masklen: 24
 sms_default_gateway: "192.168.41.1"
