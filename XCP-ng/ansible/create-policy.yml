@@ -42,11 +42,11 @@
         comments: Turn cleanup rule into allow all rule
         state: present
     - name: create cleanup section
-	    check_point.mgmt.cp_mgmt_access_section:
-	      layer: Lab_Policy Network
-		    name: Cleanup section
-		    position:
-		      above: Cleanup rule
-		    state: present
-	- name: publish changes
-	  check_point.mgmt.cp_mgmt_publish:
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Cleanup section
+        position:
+          above: Cleanup rule
+        state: present
+    - name: publish changes
+      check_point.mgmt.cp_mgmt_publish:
