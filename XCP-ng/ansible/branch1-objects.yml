@@ -5,28 +5,28 @@
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: branch 1 outbound NAT
-      cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_host:
         name: branch1_outbound_nat
         ipv4_address: 192.168.101.4
         color: dark blue
         comments: branch1 outbound NAT
         state: present
     - name: branch 1 inbound NAT IIS
-      cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_host:
         name: branch1_iis_inbound_nat
         ipv4_address: 192.168.101.5
         color: dark blue
         comments: branch1 inbound NAT to IIS server in DMZ
         state: present
     - name: branch 1 inbound NAT Apache
-      cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_host:
         name: branch1_apache_inbound_nat
         ipv4_address: 192.168.101.6
         color: dark blue
         comments: branch1 inbound NAT to Apache web server in DMZ
         state: present
     - name: Branch 1 LAN network
-      cp_mgmt_network:
+      check_point.mgmt.cp_mgmt_network:
         name: branch1_lan
         subnet: 10.0.1.0
         mask_length: 24
@@ -39,7 +39,7 @@
           method: hide
         state: present
     - name: Branch 1 DMZ network
-      cp_mgmt_network:
+      check_point.mgmt.cp_mgmt_network:
         name: branch1_dmz
         subnet: 192.168.31.0
         mask_length: 24
@@ -47,28 +47,28 @@
         comments: Branch 1 DMZ network
         state: present
     - name: Domain Controller
-      cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_host:
         name: dc-1
         ipv4_address: 10.0.1.10
         color: dark blue
         comments: Domain controller
         state: present
     - name: File Server
-      cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_host:
         name: file-1
         ipv4_address: 10.0.1.11
         color: dark blue
         comments: File server
         state: present
     - name: SQL Server
-      cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_host:
         name: sql-1
         ipv4_address: 10.0.1.12
         color: dark blue
         comments: SQL server
         state: present
     - name: Branch 1 LAN DHCP workstations
-      cp_mgmt_address_range:
+      check_point.mgmt.cp_mgmt_address_range:
         name: Branch 1 LAN Workstation DHCP scope
         ip_address_first: 10.0.1.20
         ip_address_last: 10.0.1.250
@@ -76,4 +76,4 @@
         comments: Branch 1 LAN Workstation DHCP scope
         state: present
     - name: publish changes
-      cp_mgmt_publish:
+      check_point.mgmt.cp_mgmt_publish:
