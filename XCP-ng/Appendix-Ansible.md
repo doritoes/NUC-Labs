@@ -72,15 +72,15 @@ Notes:
     - `sudo apt install -y ansible python3-paramiko python3-pip`
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
     - `python3 -m pip install XenAPI`
-  - WARNING Ubuntu 22.04 installs Ansible 2.10 which is an older version
+  - WARNING Ubuntu 22.04 installs Ansible 2.10 which is an older version. Here is how to install 2.16 (or later)
     - Remove default version
       - `sudo apt remove ansible`
       - `sudo apt --purge autoremove`
     - Set up PPA support
       - `sudo apt install -y software-properties-common`
-      - `sudo apt-add-repository ppa:/ansible/ansible`
+      - `sudo apt-add-repository ppa:ansible/ansible`
     - Install latest version of Ansible
-      - `sudo apt install -y ansible`
+      - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
     - Install the Ansible collections
       - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
@@ -142,6 +142,7 @@ Notes:
 
 # Configure SMS
 Steps:
+- Under Advanced, set the network iterface settings to disable TX checksumming
 - Log in to console of SMS
   - Username `admin` and the password you selected
 - Set IP address information
