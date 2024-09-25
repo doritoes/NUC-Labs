@@ -45,7 +45,7 @@
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: Cleanup section
-        position:
+        realtive_position:
           above: Cleanup rule
         state: present
     - name: publish changes
