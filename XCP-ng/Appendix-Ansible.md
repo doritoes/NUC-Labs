@@ -250,7 +250,7 @@ Steps:
   - firewall1b
     - `set interface eth0 ipv4-address 192.168.41.3 mask-length 24`
     - `save config`
-- Add manager's RSA keys to each firewall's authorized_keys file
+- Add `manager`'s RSA keys to each firewall's authorized_keys file
   - Log in to `manager` and open a WSL shell
     - ssh to firewall1a and firewall1b
       - `ssh ansible@192.168.41.2`
