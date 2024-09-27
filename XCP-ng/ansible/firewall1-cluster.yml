@@ -56,6 +56,9 @@
         ip_address: 192.168.101.1
         members:
         - interfaces:
+          - ip_address: 192.168.41.2
+            name: eth0
+            network_mask: 255.255.255.0
           - ip_address: 192.168.101.2
             name: eth1
             network_mask: 255.255.255.0
@@ -72,6 +75,9 @@
           ip_address: 192.168.41.2
           one_time_password: vpn123
         - interfaces:
+          - ip_address: 192.168.41.3
+            name: eth0
+            network_mask: 255.255.255.0
           - ip_address: 192.168.101.3
             name: eth1
             network_mask: 255.255.255.0
