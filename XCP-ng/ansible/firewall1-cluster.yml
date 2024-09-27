@@ -73,7 +73,7 @@
             network_mask: 255.255.255.0
           name: firewall1a
           ip_address: 192.168.41.2
-          one_time_password: vpn123
+          one_time_password: {{ sic_pw }}
         - interfaces:
           - ip_address: 192.168.41.3
             name: eth0
