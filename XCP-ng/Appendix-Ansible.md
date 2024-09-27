@@ -301,11 +301,11 @@ Steps:
   - [branch1-policy.yml](ansible/branch1-policy.yml)
     - 🌱 still working on policy
     - `ansible-playbook -i inventory-api branch1-policy.yml`
-  - 🌱 push policy
-    - cp_mgmt_install_policy
-  - 🌱 DHCP helper in DMZ?
-  - Remove management workstation from the lab network, so solely be on Branch 1 Management
-
+- Push policy
+  - [push-branch11.yml](ansible/push-branch1.yml)
+    - `ansible-playbook -i inventory-api push-branch1.yml`
+- 🌱 DHCP helper in DMZ?
+- Remove management workstation from the lab network, so solely be on Branch 1 Management
 - 🌱 Test
 
 ## Configure Domain Controller
