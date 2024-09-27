@@ -304,8 +304,14 @@ Steps:
 - Push policy
   - [push-branch11.yml](ansible/push-branch1.yml)
     - `ansible-playbook -i inventory-api push-branch1.yml`
+- At this point you should be able to install a JHF on the SMS
+  - `installer check-for-udpates`
+  - wait
+  - `installer download-and-install [tab]`
+  - select the applicable JHF hotbix bundle
+  - Approve the reboot
+- 🌱Remove management workstation from the lab network, so solely be on Branch 1 Management
 - 🌱 DHCP helper in DMZ?
-- Remove management workstation from the lab network, so solely be on Branch 1 Management
 - 🌱 Test
 
 ## Configure Domain Controller
