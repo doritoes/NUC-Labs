@@ -4,6 +4,19 @@
   connection: httpapi
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
+    - name: Management network NAT
+      check_point.mgmt.cp_mgmt_network:
+        name: management_192.168.41.0/24
+        subnet: 192.168.41.0
+        mask_length: 24
+        color: crete blue
+        comments: management network
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.101.4
+          method: hide
+        state: present
     - name: branch 1 outbound NAT
       check_point.mgmt.cp_mgmt_host:
         name: branch1_outbound_nat
