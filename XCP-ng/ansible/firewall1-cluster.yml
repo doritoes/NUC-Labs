@@ -3,6 +3,8 @@
   hosts: check_point
   connection: httpapi
   # include_vars: vars.yml # introduced in Ansible 2.11
+  vars_files:
+    - vars.yml
   tasks:
     - name: create cluster firewall1
       check_point.mgmt.cp_mgmt_simple_cluster:
