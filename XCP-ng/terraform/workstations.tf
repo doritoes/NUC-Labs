@@ -38,7 +38,7 @@ resource "xenorchestra_vm" "branch1-1" {
     size       = 137437904896
   }
   network {
-    network_id = data.xenorchestra_network.branch1mgt.id
+    network_id = data.xenorchestra_network.branch1.id
   }
 }
 resource "xenorchestra_vm" "branch2-1" {
@@ -54,7 +54,7 @@ resource "xenorchestra_vm" "branch2-1" {
     size       = 137437904896
   }
   network {
-    network_id = data.xenorchestra_network.branch1mgt.id
+    network_id = data.xenorchestra_network.branch2.id
   }
 }
 resource "xenorchestra_vm" "branch3-1" {
@@ -70,6 +70,6 @@ resource "xenorchestra_vm" "branch3-1" {
     size       = 137437904896
   }
   network {
-    network_id = data.xenorchestra_network.branch1mgt.id
+    network_id = data.xenorchestra_network.branch3.id
   }
 }
