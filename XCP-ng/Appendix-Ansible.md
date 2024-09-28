@@ -304,20 +304,56 @@ Steps:
 - Push policy
   - [push-branch11.yml](ansible/push-branch1.yml)
     - `ansible-playbook -i inventory-api push-branch1.yml`
-- At this point you should be able to install a JHF on the SMS
+- At this point you should be able to install a JHF on the SMS and on the firewalls
   - `installer check-for-udpates`
-  - wait
+    - wait
   - `installer download-and-install [tab]`
   - select the applicable JHF hotbix bundle
   - Approve the reboot
-- 🌱Remove management workstation from the lab network, so solely be on Branch 1 Management
+- Remove management workstation from the lab network, so solely be on Branch 1 Management
+  - Set the default gateway on the second ethernet interface 192.18.41.1 and DNS (e.g., 8.8.8.8, 8.8.4.4)
+  - Disable the first ethernet interface in Windows 
 - 🌱 DHCP helper in DMZ?
 - 🌱 Test
 
 ## Configure Domain Controller
-- Promote Domain Controller
-- Configure Domain
-- Configure DHCP
+- Open console for DC-1
+- Complete initial setup and set administrator password
+- Log in for the first time
+- Rename server
+  - Open administrative powershell
+  - `Rename-Computer -NewName dc-1`
+  - `Restart-Computer`
+- Open administrative powershell
+- Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
+  - New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex
+  - Yes allow PC to be discoverable
+  - Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIncex -ServerAddresses 10.0.1.10
+- Promote DC-1 from server to Domain Controller
+  - `Install-WindowsFeature -name AD-Domain-Services -IncludeManagementTools`
+  - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
+    - Select a password for SafeModeAdministratorPassword (aka DSRM = Directory Services Restore Mode)
+  - Confirm configuring server as Domain Controller and rebooting
+  - Wait as the settings are applied and the server is rebooted
+  - Wait some more as "Applying Computer Settings" gets the domain controller ready
+- Configure Sites and Services Subnets and DNS
+  - `Import-Module ActiveDirectory`
+  - `New-ADReplicationSubnet -Name "10.0.1.0/24"`
+  - `Add-DNSServerPrimaryZone -NetworkID "10.0.1.0/24" -ReplicationScope "Forest"`
+  - `Add-DnsServerForwarder -IPAddress 8.8.8.8 -PassThru`
+  - `Add-DnsServerForwarder -IPAddress 8.8.4.4 -PassThru`
+- Create DNS records
+  - `Add-DnsServerResourceRecordA -Name "firewall1-lan" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "10.0.1.1" -TimeToLive 01:00:00`
+  - `Add-DnsServerResourceRecordPtr -Name "1" -ZoneName "1.0.10.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "firewall1-lan.xcpng.lab"`
+- 🌱create more DNS entries
+- test
+  - google.com
+  - firewall1-lan
+  - firewall1-lan.xcpng.lab
+  - nslookup 10.0.1.1
+  - nslookup dc-1
+  - nslookup 10.0.1.10 (notice reverse lookup fails)
+- 🌱 Configure DHCP server
 
 ## Configure LAN devices
 - workstation
