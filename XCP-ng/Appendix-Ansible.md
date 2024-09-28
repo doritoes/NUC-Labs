@@ -326,9 +326,9 @@ Steps:
   - `Restart-Computer`
 - Open administrative powershell
 - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
-  - New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex
+  - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
   - Yes allow PC to be discoverable
-  - Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIncex -ServerAddresses 10.0.1.10
+  - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
 - Promote DC-1 from server to Domain Controller
   - `Install-WindowsFeature -name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
@@ -346,18 +346,93 @@ Steps:
   - `Add-DnsServerResourceRecordA -Name "firewall1-lan" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "10.0.1.1" -TimeToLive 01:00:00`
   - `Add-DnsServerResourceRecordPtr -Name "1" -ZoneName "1.0.10.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "firewall1-lan.xcpng.lab"`
 - 🌱create more DNS entries
-- test
+- test using nslookup
   - google.com
   - firewall1-lan
   - firewall1-lan.xcpng.lab
   - nslookup 10.0.1.1
   - nslookup dc-1
-  - nslookup 10.0.1.10 (notice reverse lookup fails)
-- 🌱 Configure DHCP server
-
+  - nslookup 10.0.1.10
+- Configure DC-1 as DHCP server
+  - `Install-WindowsFeature -Name DHCP -IncludeManagementTools`
+  - `Add-DhcpServerInDC -DnsName dc-1.xcpng.lab -IPAddress 10.0.1.10`
+    - Verify: `Get-DhcpServerInDC`
+  - Create DHCP scope
+    - `Add-DhcpServerv4Scope -Name "branch1" -StartRange 10.0.1.20 -EndRange 10.0.1.250 -SubnetMask 255.255.255.0 -State Active`
+    - `Set-DhcpServerv4OptionValue -DnsDomain xcpng.lab -DnsServer 10.0.1.10 -Router 10.0.1.1`
+- 🌱 Configure some AD users, groups, roles, and permissions
 ## Configure LAN devices
-- workstation
-- file server
+- Configure workstation **branch1-1**
+  - Log in for the first time at the console
+  - Rename workstation
+    - Open administrative powershell
+    - `Rename-Computer -NewName branch1-1`
+    - `Restart-Computer`
+  - 🌱 join to domain
+  - 🌱 test domain users
+- Configure file server **file-1**
+  - Complete initial setup and set administrator password
+  - Log in for the first time at the console
+  - Rename server
+    - Open administrative powershell
+    - `Rename-Computer -NewName file-1`
+    - `Restart-Computer`
+  - Set static IP address and DNS information
+    - `New-NetIPAddress -IPAddress 10.0.1.11 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - Try testing nslookup to see what resolves (IPs, FQDN)
+  - Install file server feature
+    - `Install-WindowsFeature -Name FS-FileServer`
+  - 🌱 join to domain
+  - 🌱 more notes https://github.com/doritoes/NUC-Labs/blob/xcp-ng-improvement/XCP-ng/Appendix-Windows_File_Server.md
+  - test/create DNS records?
+  - 🌱 add second disk to server for storage
+  - 🌱create shared folder
+  - 🌱set share permissions
+  - create file shares
+  - 🌱 test domain users
+  - 🌱 test access from branch1-1 by different domain users
+- Configure sql server
+  - Complete initial setup and set administrator password
+  - Log in for the first time at the console
+  - Rename server
+    - Open administrative powershell
+    - `Rename-Computer -NewName sql-1`
+    - `Restart-Computer`
+  - Set static IP address and DNS information
+    - `New-NetIPAddress -IPAddress 10.0.1.12 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - Try testing nslookup to see what resolves (IPs, FQDN)
+  - 🌱 add second disk to server for storage
+  - 🌱 what is the current method to set up MS SQL server?
+```
+$CredEngine = Get-Credential
+$CredSa     = Get-Credential 'sa'
+$Params     = @{
+    DestinationServer = "SqlServer01"
+    SetupFilesPath = "C:\Setup"
+    Version = 2019
+    InstallEngine = $true
+    InstallCU = $true
+    InstallSSMS = $true
+    SqlCollation = "Latin1_General_CI_AS"
+    InstancePath = "C:\Program Files\Microsoft SQL Server"
+    DataPath = "D:\Data"
+    LogPath = "L:\Log"
+    TempPath = "T:\TempDB"
+    BackupPath = "B:\Backup"
+    EngineCredential = $CredEngine
+    AgentCredential = $CredEngine
+    SaCredential = $CredSa
+    Credential = $CredEngine
+    AdminAccount = "$($env:userdomain)\DBAdmin"
+    Restart = $true
+    WhatIf = $false
+    VerboseCommand = $false
+    EnableException = $true
+}
+Install-SqlServer @Params 
+```
 
 ## Configure DMZ Servers
 - Set up NAT and rules
