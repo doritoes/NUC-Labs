@@ -4,13 +4,6 @@
   vars:
     servername: dmz-apache
   tasks:
-    - name: Set hostname
-      hostname:
-        name: "{{ servername }}"
-      register: hostname_result
-    - name: Check hostname change
-      debug:
-        msg: "Hostname changed: {{ hostname_result.changed }}"
     - name: Install Apache
       apt:
         name: apache2
