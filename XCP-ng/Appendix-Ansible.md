@@ -480,8 +480,9 @@ network:
       - `ssh-copy-id 192.168.31.11`
   - inventory: uncomment dmzserver 192.168.31.11
     - 🌱 playbook dmz-apache.yml
+    - 🌱 this requires development
   - test
-- Configure server  **dmz-iis****
+- Configure server  **dmz-iis**
   - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
