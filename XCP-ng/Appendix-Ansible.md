@@ -472,8 +472,13 @@ network:
 ```
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
-  - set static IP address 192.168.31.11
-  - set hostname
+    - allow firewall to manager 192.168.41.100
+  - set up ssh key auth
+    - `ssh-copy-id 192.168.31.11`
+  - set hostname, dns
+    - inventory: uncomment dmzserver 192.168.31.11
+    - 🌱 playbook dmz-apache.yml
+  - test
 - Configure server  **dmz-iis****
   - Log in for the first time at the console
   - Rename workstation
