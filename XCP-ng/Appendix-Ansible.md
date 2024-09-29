@@ -384,9 +384,23 @@ Steps:
   - Install file server feature
     - `Install-WindowsFeature -Name FS-FileServer`
   - 🌱 join to domain
+    - Start > Settings > System > About
+    - Scroll down and under Related settings, click Rename this PC (advanced)
+    - Under the Computer Name tab click Change
+    - Under Member of, click Domain, enter the domain xcpng.lab and then click OK
+    - User name: Administrator
+    - Password: the password you set on the domain controller
   - 🌱 more notes https://github.com/doritoes/NUC-Labs/blob/xcp-ng-improvement/XCP-ng/Appendix-Windows_File_Server.md
   - test/create DNS records?
   - 🌱 add second disk to server for storage
+    - Xen Orchestra: add Disk
+    - Start > Create and format hard disk partitions
+      - You will be prompted to initialize the disk (Disk 1)
+      - Accept GPT (GUID Partition Table)
+      - Click OK
+      - Right-click Disk 1 and then click New Simple Volume
+      - Assign letter E:
+      - Follow the wizard and set the volume label to NETDRIVE
   - 🌱create shared folder
   - 🌱set share permissions
   - create file shares
