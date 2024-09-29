@@ -458,11 +458,13 @@ Install-SqlServer @Params
 network:
   version: 2
   ethernets:
-    eth0: # Replace eno1 with the actual interface name
+    eth0:
       dhcp4: no
       addresses:
         - 192.168.31.11/24
-      default: true
+      routes:
+        - to: 0.0.0.0/0
+          via: 192.168.31.1
       nameservers:
         addresses:
           - 8.8.8.8
