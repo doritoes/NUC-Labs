@@ -452,6 +452,24 @@ Install-SqlServer @Params
 - Set up NAT and rules
 - IIS and Apache servers
 - Configure server  **dmz-apache**
+  - Configure Static IP address
+    - sudo vi /etc/netplan/01-netcfg.yaml
+```
+network:
+  version: 2
+  ethernets:
+    eth0: # Replace eno1 with the actual interface name
+      dhcp4: no
+      addresses:
+        - 192.168.31.11/24
+      default: true
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+```
+    - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
+    - `sudo netplan apply`
   - set static IP address 192.168.31.11
   - set hostname
 - Configure server  **dmz-iis****
