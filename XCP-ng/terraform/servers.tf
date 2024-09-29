@@ -68,6 +68,11 @@ resource "xenorchestra_vm" "file-1" {
     name_label = "file-1-disk"
     size       = 137437904896
   }
+  disk {
+    sr_id      = data.xenorchestra_sr.local.id
+    name_label = "file-1-netdrive"
+    size       = 274875809792
+  }
   network {
     network_id = data.xenorchestra_network.branch1.id
   }
@@ -83,6 +88,11 @@ resource "xenorchestra_vm" "sql-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "sql-1-disk"
+    size       = 137437904896
+  }
+  disk {
+    sr_id      = data.xenorchestra_sr.local.id
+    name_label = "sql-1-datadrive"
     size       = 137437904896
   }
   network {
