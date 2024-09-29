@@ -1,5 +1,67 @@
 ---
-# configure hostname
-# install Apache, PHP
-# create php index.php
-# what about https
+- name: Configure DMZ Apache web server
+  hosts: 192.168.31.11
+  vars:
+    servername: dmz-apache
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "{{ servername }}"
+      register: hostame_result
+    - name: Check hostname change
+      debug:
+        msg: "Hostname changed: {{ hostname_result.changed }}"
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+    - name: Start Apache service
+      service:
+        name: apache2
+        state: started   
+    - name: Install PHP
+      apt:
+        name: php
+        state: present
+  - name: Configure HTTPS
+    hosts: all
+    become: true
+    tasks:
+      - name: Generate SSL certificate
+        command: certbot certonly --webroot -w /var/www/html -d {{ servername }}
+        register: certbot_result
+      - name: Check certificate generation
+        debug:
+          msg: "Certificate generated: {{ certbot_result.changed }}"
+      - name: Restart Apache service
+        service:
+          name: apache2
+          state: restarted
+
+  - name: Copy SSL certificate and key
+    hosts: all
+    become: true
+    tasks:
+      - name: Copy certificate
+        copy:
+          src: /etc/letsencrypt/live/{{ servername }}/fullchain.pem
+          dest: /etc/apache2/ssl/{{ servername }}.crt
+          mode: 0600
+      - name: Copy key
+        copy:
+          src: /etc/letsencrypt/live/{{ servername }}/privkey.pem
+          dest: /etc/apache2/ssl/{{ servername }}.key
+          mode: 0600
+
+  - name: Configure Apache for HTTPS
+    hosts: all
+    become: true
+    tasks:
+      - name: Create SSL configuration file
+        template:
+          src: https.conf.j2
+          dest: /etc/apache2/sites-enabled/{{ servername }}.conf
+      - name: Restart Apache service
+        service:
+          name: apache2
+          state: restarted
