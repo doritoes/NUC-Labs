@@ -472,11 +472,13 @@ network:
 ```
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
-    - allow firewall to manager 192.168.41.100
+  - Set hostname
+    - `sudo hostnamectl set-hostname dmz-apache`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "DMZ Web Server" --pretty`
   - set up ssh key auth
-    - `ssh-copy-id 192.168.31.11`
-  - set hostname, dns
-    - inventory: uncomment dmzserver 192.168.31.11
+    - from `manager`
+      - `ssh-copy-id 192.168.31.11`
+  - inventory: uncomment dmzserver 192.168.31.11
     - 🌱 playbook dmz-apache.yml
   - test
 - Configure server  **dmz-iis****
