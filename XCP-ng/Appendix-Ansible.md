@@ -452,6 +452,8 @@ Install-SqlServer @Params
 - Set up NAT and rules
 - IIS and Apache servers
 - Configure server  **dmz-apache**
+  - set static IP address 192.168.31.11
+  - set hostname
 - Configure server  **dmz-iis****
   - Log in for the first time at the console
   - Rename workstation
