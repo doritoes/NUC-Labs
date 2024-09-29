@@ -451,6 +451,31 @@ Install-SqlServer @Params
 ## Configure DMZ Servers
 - Set up NAT and rules
 - IIS and Apache servers
+- Configure server  **dmz-apache**
+- Configure server  **dmz-iis****
+  - Log in for the first time at the console
+  - Rename workstation
+    - Open administrative powershell
+    - `Rename-Computer -NewName dmz-iis`
+    - `Restart-Computer`
+  - 🌱 join to domain
+  - 🌱 test domain users
+- Configure file server **file-1**
+  - Complete initial setup and set administrator password
+  - Log in for the first time at the console
+  - Rename server
+    - Open administrative powershell
+    - `Rename-Computer -NewName file-1`
+    - `Restart-Computer`
+  - Set static IP address and DNS information
+    - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - Try testing nslookup to see what resolves (IPs, FQDN)
+    - What do you need to do to allow DMZ server to work as expected?
+  - Install IIS
+    - Install-WindowsFeature Web-Server -IncludeManagentTools
+    - http://localhost
+    - try asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
 ## HTTPS Inspection
 - HTTPS inspection
