@@ -472,14 +472,18 @@ network:
 ```
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
-  - Set hostname
-    - `sudo hostnamectl set-hostname dmz-apache`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "DMZ Web Server" --pretty`
+  - Give permissions to user ansible
+    - `export USER=ansible`
+    - `echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-$USER-for-sudo-password"`
   - set up ssh key auth
     - from `manager`
       - `ssh-copy-id 192.168.31.11`
-  - inventory: uncomment dmzserver 192.168.31.11
-    - 🌱 playbook dmz-apache.yml
+  - Update file `inventory`
+    - uncomment dmzserver 192.168.31.11
+    - test: `ansible all -m ping`
+  - Update hostname and install packages
+    - [dmz-apache.yml](ansible/dmz-apache.yml)
+    - ansible-playbook dmz-apache.yml
     - 🌱 this requires development
   - test
 - Configure server  **dmz-iis**
