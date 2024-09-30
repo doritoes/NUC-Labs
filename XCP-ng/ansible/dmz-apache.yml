@@ -11,6 +11,7 @@
     - name: Install Apache
       apt:
         name: apache2
+        update_cache: true
         state: present
     - name: Start Apache service
       service:
