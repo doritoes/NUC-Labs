@@ -1,9 +1,13 @@
 ---
 - name: Configure DMZ Apache web server
   hosts: 192.168.31.11
+  become: true
   vars:
     servername: dmz-apache
   tasks:
+    - name: set hostname
+      hostname:
+        name: "{{ servername }}"
     - name: Install Apache
       apt:
         name: apache2
