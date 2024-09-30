@@ -5,7 +5,7 @@
   vars:
     servername: dmz-apache
   tasks:
-    - name: set hostname
+    - name: Set hostname
       hostname:
         name: "{{ servername }}"
     - name: Install Apache
