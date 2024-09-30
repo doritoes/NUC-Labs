@@ -8,6 +8,20 @@
     - name: Set hostname
       hostname:
         name: "{{ servername }}"
+    - name: Disable DNS stub listener
+      ini_file: dest=/etc/systemd/resolved.conf section=Resolve option=DNSStubListener value=no backup=yes
+      tags: configuration
+    - name: Restart NetworkManager
+      systemd:
+        name: NetworkManager
+        state: restarted
+    - name: Restart systemd-resolved
+      systemd:
+        name: systemd-resolved
+        state: restarted
+    - name: daemon-reload
+      systemd:
+        daemon_reload: true
     - name: Install Apache
       apt:
         name: apache2
