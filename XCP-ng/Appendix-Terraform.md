@@ -358,6 +358,9 @@ This is a bare-bones server with limited resources.
 - Add ansible user
   - `sudo useradd ansible -s /bin/bash -g sudo -m`
   - `sudo passwd ansible`
+- Give permissions to user ansible
+  - `export USER=ansible`
+  - `echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-$USER-for-sudo-password"`
 - Update the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
