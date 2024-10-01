@@ -487,6 +487,7 @@ network:
     - ansible-playbook dmz-apache.yml
     - 🌱 this requires development
   - test
+  - note: https://medium.com/@lalalili/ubuntu-installation-tip-for-microsoft-drivers-for-php-for-sql-server-d5e705666f04
 - Configure server  **dmz-iis**
   - Log in for the first time at the console
   - Rename workstation
