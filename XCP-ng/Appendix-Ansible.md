@@ -470,6 +470,7 @@ network:
           - 8.8.8.8
           - 8.8.4.4
 ```
+
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
   - Give permissions to user ansible
