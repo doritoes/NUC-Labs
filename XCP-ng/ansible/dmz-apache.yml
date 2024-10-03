@@ -10,15 +10,6 @@
     - name: Set hostname
       hostname:
         name: "{{ servername }}"
-    - name: Gernate self-signed certificate
-      command: openssl req -x509 -nodes -newkey rsa:2048 -keyout {{ key_file }} -out {{ cert_file }} -subj "/C=US/ST=State/L=City/O=Organization/CN={{ servername }}"
-    - name: Set permissions for certifcates and key
-      file:
-        path: "{{ cert_file }}"
-        mode: 0644
-      file:
-        path: "{{ key_file }}"
-        mode: 0600
     - name: Install packages
       apt:
         pkg:
@@ -27,6 +18,15 @@
           - libapache2-mod-php
         update_cache: tue
         state: present
+    - name: Gernate self-signed certificate
+      command: openssl req -x509 -nodes -newkey rsa:2048 -keyout {{ key_file }} -out {{ cert_file }} -subj "/C=US/ST=State/L=City/O=Organization/CN={{ servername }}"
+    - name: Set permissions for certifcates and key
+      file:
+        path: "{{ cert_file }}"
+        mode: 0644
+      file:
+        path: "{{ key_file }}"
+        mode: 0600        
     - name: Enable SSL module
       shell: a2enmod ssl
     - name: Enable headers module
@@ -43,4 +43,6 @@
         name: apache2
         state: restarted
     - name: Upgrade packages
-      apt: upgrade
+      apt:
+        upgrade: yes
+        state: latest
