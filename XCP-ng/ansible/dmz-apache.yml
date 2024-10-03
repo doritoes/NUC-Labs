@@ -46,7 +46,7 @@
       shell: a2ensite default-ssl.conf
     - name: Restart Apache service
       service:
-        name: apache2
+        name: apache2.service
         state: restarted
     - name: Upgrade packages
       apt:
