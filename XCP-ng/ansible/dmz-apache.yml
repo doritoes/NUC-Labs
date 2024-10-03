@@ -4,61 +4,40 @@
   become: true
   vars:
     servername: dmz-apache
+    cert_file: /etc/ssl/certs/{{ servername }}.crt
+    key_file: /ssl/private/{{ servername }}.key
   tasks:
     - name: Set hostname
       hostname:
         name: "{{ servername }}"
-    - name: Disable DNS stub listener
-      ini_file: dest=/etc/systemd/resolved.conf section=Resolve option=DNSStubListener value=no backup=yes
-      tags: configuration
-    - name: Restart NetworkManager
-      systemd:
-        name: NetworkManager
-        state: restarted
-    - name: Restart systemd-resolved
-      systemd:
-        name: systemd-resolved
-        state: restarted
-    - name: daemon-reload
-      systemd:
-        daemon_reload: true
-    - name: Install Apache
-      apt:
-        name: apache2
-        update_cache: true
-        state: present
-    - name: Start Apache service
-      service:
-        name: apache2
-        state: started   
-    - name: Install PHP
-      apt:
-        name: php
-        state: present
-    - name: Generate SSL certificate
-      command: certbot certonly --webroot -w /var/www/html -d {{ servername }}
-      register: certbot_result
-    - name: Check certificate generation
-      debug:
-        msg: "Certificate generated: {{ certbot_result.changed }}"
-    - name: Restart Apache service
-      service:
-        name: apache2
-        state: restarted
-    - name: Copy certificate
-      copy:
-        src: /etc/letsencrypt/live/{{ servername }}/fullchain.pem
-        dest: /etc/apache2/ssl/{{ servername }}.crt
+    - name: Gernate self-signed certificate
+      command: openssl req -x509 -nodes -newkey rsa:2048 -keyout {{ key_file }} -out {{ cert_file }} -subj "/C=US/ST=State/L=City/O=Organization/CN={{ servername }}"
+    - name: Set permissions for certifcates and key
+      file:
+        path: "{{ cert_file }}"
+        mode: 0644
+      file:
+        path: "{{ key_file }}"
         mode: 0600
-    - name: Copy key
-      copy:
-        src: /etc/letsencrypt/live/{{ servername }}/privkey.pem
-        dest: /etc/apache2/ssl/{{ servername }}.key
-        mode: 0600
-    - name: Create SSL configuration file
+    - name: Install packages
+      apt:
+        pkg:
+          - apache2
+          - php
+          - libapache2-mod-php
+        update_cache: tue
+        state: present
+    - name: Enable SSL module
+      shell: a2enmod ssl
+    - name: Enable headers module
+      shell: a2enmod headers
+    - name: Configure https site
       template:
-        src: https.conf.j2
-        dest: /etc/apache2/sites-enabled/{{ servername }}.conf
+        src: ssl.conf.j2
+        dest: /etc/apache2/sites-available/default-ssl.conf
+        mode: 0644
+    - name: Enable https site
+      shell: a2ensite default-ssl.conf
     - name: Restart Apache service
       service:
         name: apache2
