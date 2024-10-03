@@ -5,7 +5,7 @@
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
         SSLEngine on
-        SSLCertificateFile /etc/ssl/certs/{{ servername }}.pem
+        SSLCertificateFile /etc/ssl/certs/{{ servername }}.crt
         SSLCertificateKeyFile /etc/ssl/private/{{ servername }}.key
         <FilesMatch "\.(cgi|shtml|phtml|php)$">
             SSLOptions +StdEnvVars
