@@ -5,7 +5,7 @@
   vars:
     servername: dmz-apache
     cert_file: /etc/ssl/certs/{{ servername }}.crt
-    key_file: /ssl/private/{{ servername }}.key
+    key_file: /etc/ssl/private/{{ servername }}.key
   tasks:
     - name: Set hostname
       hostname:
@@ -18,6 +18,11 @@
           - libapache2-mod-php
         update_cache: true
         state: present
+    - name: Configure Apache to handle PHP files
+      template:
+        src: php.conf
+        dest: /etc/apache2/mods-enabled/php.conf
+        mode: 0644
     - name: Generate self-signed certificate
       command: openssl req -x509 -nodes -newkey rsa:2048 -keyout {{ key_file }} -out {{ cert_file }} -subj "/C=US/ST=State/L=City/O=Organization/CN={{ servername }}"
     - name: Set permissions for certifcate
