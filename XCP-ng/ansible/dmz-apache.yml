@@ -42,3 +42,5 @@
       service:
         name: apache2
         state: restarted
+    - name: Upgrade packages
+      apt: upgrade
