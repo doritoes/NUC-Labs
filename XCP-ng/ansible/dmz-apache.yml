@@ -16,7 +16,7 @@
           - apache2
           - php
           - libapache2-mod-php
-        update_cache: tue
+        update_cache: true
         state: present
     - name: Gernate self-signed certificate
       command: openssl req -x509 -nodes -newkey rsa:2048 -keyout {{ key_file }} -out {{ cert_file }} -subj "/C=US/ST=State/L=City/O=Organization/CN={{ servername }}"
