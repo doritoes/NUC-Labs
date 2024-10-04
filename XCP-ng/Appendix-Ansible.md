@@ -485,8 +485,14 @@ network:
   - Update hostname and install packages
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - ansible-playbook dmz-apache.yml
-    - 🌱 this requires development
-  - test
+  - Testing
+    - 🌱 set up DMZ rule to allow All internet web traffic inbound
+      - having trouble getting traffic from build 100 to isp 1 101
+    - 🌱 test from a workstation on the `build` network
+      - 192.168.101.6
+        - NAT > auto > static > 192.168.31.1
+        - http://192.168.101.6
+        - https://192.168.101.6
   - note: https://medium.com/@lalalili/ubuntu-installation-tip-for-microsoft-drivers-for-php-for-sql-server-d5e705666f04
 - Configure server  **dmz-iis**
   - Log in for the first time at the console
