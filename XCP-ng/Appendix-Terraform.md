@@ -59,7 +59,7 @@ sudo apt update && sudo apt install -y terraform
   - Disks: Click Add disk
     - **8GB**
   - Click **Create**
-- Open Console
+- Click **Console** tab and access the console
 - Install the Image
   - Login: `vyos`/`vyos`
   - `install image`
@@ -69,23 +69,22 @@ sudo apt update && sudo apt install -y terraform
   - After the reboot starts, eject the VyOS iso
 - Log back in (`vyos`/`vyos`)
 - Add user `ansible` for management
-  - add user
-    - `configure`
-    - `set system login user ansible full-name "ansible management"`
-    - `set system login user ansible authentication plaintext-password examplepassword`
+  - `configure`
+  - `set system login user ansible full-name "ansible management"`
+  - `set system login user ansible authentication plaintext-password examplepassword`
     - The old permissions system has been removed
       - Gone: `set system login user ansible level admin`
       - All accounts now have sudo permisions
-    - `commit`
-    - `save`
-    - `exit`
+  - `commit`
+  - `save`
+  - `exit`
 - Enable guest utilties
   - `sudo systemctl start xe-guest-utilities`
   - `sudo systemctl enable xe-guest-utilties`
   - `poweroff`
 - Convert `vyos-template` to template
   - Click the **Advanced** tab
-  - Click **Convert to template** and confirm that this can't be undone
+  - Click **Convert to template** and confirm
 
 ## Create Check Point firewall Template
 Here we will create a basic Check Point template suitable for an SMS or gateway (firewall).
@@ -110,7 +109,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 - Click the **Network** tab
   - Next to each interface (one in this case) is a small settings icon with a blue background
   - Click the gear icon then <ins>disable TX checksumming</ins>
-- Click **Console** tab and watch as the system boots
+- Click **Console** tab and watch as the system boots to a menu
 - At the boot menu, select **Install Gaia on this system**
 - Accept the installation message **OK**
 - Confirm the keyboard type
@@ -133,6 +132,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - Press Enter
   - Wait for the system to start to reboot, then eject the iso
 - Log in from the Console
+  - user `admin` and the password you configured
 - `set hostname CPTEMPLATE`
 - Set up ansible user
   - Reference [link](https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
@@ -193,6 +193,8 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
   - Disks: Click **Add disk** and select **128GB**
   - Click **Create**
 - The details for the new VM are now displayed
+- Optionally enable higher desktop resolution
+  - Advanced tab > Enable VGA, set Video RAM to 16MiB
 - Click **Console** tab
 - If you are prompted to press any key to boot from CD or DVD
   - **Press any key**
@@ -229,8 +231,13 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
     - Delete the downloaded file when done
 - Apply Windows Updates (reboots included)
 - Optionally clear all browser settings (including history) by deleting the default profile
+  - Open Edge
+  - Settings > Settings
+  - Click the trash can next to **Profile 1** and then click **Remove profile**
+  - Close Edge
 - Optionally enable higher desktop resolution
-  - Advanced > Enable VGA, set Video RAM to 16MiB
+  - Advanced tab > Enable VGA, set Video RAM to 16MiB
+  - Will be able to set to higher resolutions after reboot
 - Eject the installation ISO
 - Enable Remote Desktop (RDP)
   - **Start** > **Settings** > **System** > **Remote Desktop**
@@ -244,9 +251,14 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
 - Shut down the Windows VM
   - `stop-computer`
 - Convert `win10-template` to a template
+  - Click the **Advanced** tab
+  - Click **Convert to template** and confirm
 
 ## Create Windows Server 2022 Template
-This is a bare-bones server with limited resources.
+This is a bare-bones server with limited resources. Images created from this template can given more resources.
+
+NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
+
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Other install media**
@@ -260,6 +272,8 @@ This is a bare-bones server with limited resources.
   - Disks: Click **Add disk** and select **128GB**
   - Click **Create**
 - The details for the new VM are now displayed
+- Optionally enable higher desktop resolution
+  - Advanced tab > Enable VGA, set Video RAM to 16MiB
 - Click **Console** tab
 - If you are prompted to Press any key to boot from CD to DVD
   - **Press any key**
@@ -267,12 +281,12 @@ This is a bare-bones server with limited resources.
 - Follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then **Next**
   - Click **Install now**
-  - Select the OS to install:**Windows Server 2022 Standard Edition Evaluation (Desktop Experience)**
+  - Select the OS to install: **Windows Server 2022 Standard Edition Evaluation (Desktop Experience)**
     - feel free to experiment
   - Check the box then click **Next**
   - Click Custom: **Install Windows only (advanced)**
   - Accept the installation on Drive 0
-- Set password for user Administrator
+- Set password for user `Administrator`
 - Disconnect the ISO
 - Login in
   - The small keyboard icon allows you to send a Ctrl-Alt-Delete
@@ -287,6 +301,10 @@ This is a bare-bones server with limited resources.
 - Apply Windows Updates (reboots required)
   - Note that at some boots, certain services are on a delayed start, impacting the updates
 - Optionally clear all browser settings (including history) by deleting the default profile
+  - Open Edge
+  - Settings > Settings
+  - Click the trash can next to **Profile 1** and then click **Remove profile**
+  - Close Edge
 - Optionally enable higher desktop resolution
   - Advanced > Enable VGA, set Video RAM to 16MiB
 - Enable RDP
@@ -305,7 +323,7 @@ This is a bare-bones server with limited resources.
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
 - Convert `server2022-template` to template
   - Click the **Advanced** tab
-  - Click **Convert to template** and confirm that this can't be undone
+  - Click **Convert to template** and confirm
 
 ## Create Ubuntu Server 22.04 LTS Template
 - From the left menu click **New** > **VM**
@@ -359,8 +377,7 @@ This is a bare-bones server with limited resources.
   - `sudo useradd ansible -s /bin/bash -g sudo -m`
   - `sudo passwd ansible`
 - Give permissions to user ansible
-  - `export USER=ansible`
-  - `echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-$USER-for-sudo-password"`
+  - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/dont-prompt-ansible-for-sudo-password`
 - Update the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
