@@ -37,8 +37,7 @@ Notes:
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize
       - another window is opened as WSL is initialized
-        - Enter the username (i.e., `ansible`) and password to use
-        - If you use a username other than `ansible`, please create the `ansible` user and use that for your Ansible work
+        - Enter the username: **ansible** and select a password
 - Configure Network interfaces
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
