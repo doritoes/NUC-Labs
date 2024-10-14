@@ -49,6 +49,9 @@ resource "xenorchestra_vm" "firewall1a" {
     size       = 137437904896
   }
   network {
+    network_id = data.xenorchestra_network.branch1mgt.id
+  }
+  network {
     network_id = data.xenorchestra_network.isp1.id
   }
   network {
@@ -59,9 +62,6 @@ resource "xenorchestra_vm" "firewall1a" {
   }
   network {
     network_id = data.xenorchestra_network.branch1sync.id
-  }
-  network {
-    network_id = data.xenorchestra_network.branch1mgt.id
   }
 }
 
@@ -79,6 +79,9 @@ resource "xenorchestra_vm" "firewall1b" {
     size       = 137437904896
   }
   network {
+    network_id = data.xenorchestra_network.branch1mgt.id
+  }
+  network {
     network_id = data.xenorchestra_network.isp1.id
   }
   network {
@@ -89,9 +92,6 @@ resource "xenorchestra_vm" "firewall1b" {
   }
   network {
     network_id = data.xenorchestra_network.branch1sync.id
-  }
-  network {
-    network_id = data.xenorchestra_network.branch1mgt.id
   }
 }
 
