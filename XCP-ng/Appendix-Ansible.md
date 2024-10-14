@@ -141,8 +141,8 @@ Notes:
 
 # Configure SMS
 Steps:
-- In XO, select the VM SMS
-- Under Advanced, set the network interface settings to disable TX checksumming
+- In XO, select the VM `SMS`
+- Under Network tab, set the network interface settings to disable TX checksumming
 - Log in to console of SMS
   - Username `admin` and the password you selected
 - Set IP address information
@@ -201,7 +201,8 @@ Steps:
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
 - Update Gaia (if you have proper eval licenses)
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
+  - Wait until the Branch 1 firewalls are configured and providing Internet access
+  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement); however once Internet access is working, you can use CPUSE to apply jumbo hotfixes
   - SMS updates are best applied manually (whereas firewalls are updated using management API)
     - clish
       - installer check-for-updates
