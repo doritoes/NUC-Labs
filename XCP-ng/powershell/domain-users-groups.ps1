@@ -5,7 +5,7 @@ New-ADOrganizationalUnit -Name "Development" -Path "OU=Corp,DC=xcpng,DC=lab"
 New-ADOrganizationalUnit -Name "Sales" -Path "OU=Corp,DC=xcpng,DC=lab"
 New-ADOrganizationalUnit -Name "Marketing" -Path "OU=Corp,DC=xcpng,DC=lab"
 New-ADOrganizationalUnit -Name "Finance" -Path "OU=Corp,DC=xcpng,DC=lab"
-# Import Users from `C:\domain_users.csv`
+# Import Users from C:\domain_users.csv
 # CSV file must be in UTF-8 encoding
 $import_users = Import-Csv -Path "C:\domain_users.csv"
 # Create AD users with properties from CSV
