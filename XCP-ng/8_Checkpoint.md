@@ -453,7 +453,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
 ## Create Cluster Object
 - On the Windows workstation, Log in to SmartConsole again
 - From the left menu, click **Gateways & Servers** (the default view when using SmartConsole for the first time)
-- The **New*** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
+- The **New** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
 - Click **New**  > **Cluster** > **Cluster**
 - Click **Wizard Mode**
   - Cluster Name: **Gateway_Cluster**
@@ -602,7 +602,7 @@ This policy is overy permissive, but it's a place to start.
 - Template: **win10-lan-ready**
 - Name: **workstation1**
 - Description: **Windows 10 on Check Point Inside network**
-- Interfaces: Change to **Check Point Inside***
+- Interfaces: Change to **Check Point Inside**
 - Click **Create**
 - Log in
 - Set Static IP address
@@ -650,7 +650,7 @@ This policy is overy permissive, but it's a place to start.
 - Template: **ubuntu-server-lan**
 - Name: **dmzserver**
 - Description: **Ubuntu web server in DMZ**
-- Interfaces: Change to **Check Point DMZ***
+- Interfaces: Change to **Check Point DMZ**
 - Click **Create**
 - Log in
 - Set Static IP address
