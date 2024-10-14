@@ -1,1 +1,112 @@
 ---
+- name: Create Branch 1 policy
+  hosts: check_point
+  connection: httpapi
+  collections:
+    - check_point.mgmt
+  # include_vars: vars.yml # introduced in Ansible 2.11
+  tasks:
+    - name: add a package
+      check_point.mgmt.cp_mgmt_package:
+        access: true
+        color: forest green
+        comments: Access policy for Lab
+        name: Lab_Policy
+        state: present
+        threat_prevention: false
+    - name: modify cleanup rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Cleanup rule
+        action: Accept
+        enabled: true
+        track:
+          type: Log
+        comments: Turn cleanup rule into allow all rule
+        state: present
+    - name: create cleanup section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Cleanup section
+        relative_position:
+          above: Cleanup rule
+        state: present
+    - name: create gateways access section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Gateways access
+        position: top
+        state: present
+    - name: add a rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Manage gateways
+        relative_position:
+          below: Gateways access
+        source:
+          - Manager
+        destination:
+          - firewall1
+        service:
+        - https
+        - echo-reply
+        - ssh_version_2
+        action: Accept
+        comments: Allow manage gateways
+        track:
+          type: Log
+        state: present
+    - name: create stealth section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Stealth rules
+        relative_position:
+          above: Cleanup section
+        state: present
+    - name: add a rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Stealth rule
+        relative_position:
+          below: Stealth rules
+        source:
+          - Any
+        destination:
+          - firewall1
+        service:
+        - Any
+        action: Accept
+        comments: Protect gateways
+        track:
+          type: Log
+        state: present
+    - name: General Internet access
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: General Internet access
+        relative_position:
+          above: Cleanup section
+    - name: add a rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Web access
+        relative_position:
+          below: General Internet access
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+        destination:
+          - All_Internet
+        service:
+        - dns
+        - http
+        - https
+        - echo-request
+        action: Accept
+        comments: Protect gateways
+        track:
+          type: Log
+        state: present
+
+    - name: publish changes
+      check_point.mgmt.cp_mgmt_publish:
