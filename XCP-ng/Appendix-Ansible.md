@@ -234,11 +234,11 @@ References:
 The following steps configure Branch 1
 ## Configure Branch 1 firewalls
 Steps:
-- BEFORE you POWER ON the firewalls
+- BEFORE you POWER ON the firewalls **firewall1a** and **firewall1b**
   - Turn off TX checksumming on each interface
   - Click Network tab
   - For each interface click the blue gear and click to set TX checksumming **Disabled**
-- Power of **firewall1a** and **firewall1b**
+- Power on **firewall1a** and **firewall1b**
 - Log in to consoles of **firewall1a** and **firewall1b**
   - Username `admin` and the password you selected
 - Set IP address information
@@ -266,7 +266,7 @@ Steps:
     - `exit`
   - You can now ssh without a password
 - Test Ansible access
-  - Exit back to session on manager
+  - Exit back to session on `manager`
   - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
