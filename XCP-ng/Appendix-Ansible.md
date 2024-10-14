@@ -38,6 +38,7 @@ Notes:
       - feel free to customize
       - another window is opened as WSL is initialized
         - Enter the username: **ansible** and select a password
+      - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins>, prompting you for the username and password
 - Configure Network interfaces
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
