@@ -304,13 +304,12 @@ Steps:
     - 🌱 still working on policy
     - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
-  - [push-branch1.yml](ansible/push-branch1.yml)
-    - `ansible-playbook -i inventory-api push-branch1.yml`
+  - [branch1-push.yml](ansible/branch1-pish.yml)
+    - `ansible-playbook -i inventory-api branch1-push.yml`
 - At this point you should be able to install a JHF on the SMS and on the firewalls
   - `installer check-for-udpates`
-    - wait
   - `installer download-and-install [tab]`
-  - select the applicable JHF hotbix bundle
+  - select the applicable JHF hotfix bundle by number
   - Approve the reboot
 - Remove management workstation from the lab network, so solely be on Branch 1 Management
   - Set the default gateway on the second ethernet interface 192.18.41.1 and DNS (e.g., 8.8.8.8, 8.8.4.4)
