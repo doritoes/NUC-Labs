@@ -369,8 +369,12 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - spin up a test workstation on branch1 subnet
       - confirm it receives an IP address via DHCP
       - test Internet access
-- 🌱 Configure some AD users, groups, roles, and permissions
-- Add users and groups
+- Configure AD users, groups, roles, and permissions
+  - copy domain-users.csv [domain-users.csv](ansible/domain-users.csv) to C:\domain-users.csv
+  - copy domain-users-groups.ps1 [domain-users-groups.ps1](ansible/domain-users-groups.ps1)
+  - `powershell -ExecutionPolicy Bypass domain-users-groups.ps1`
+- Test logging in to the domain controller as `AD\Juliette.Larocco2` and the password from [domain-users.csv](ansible/domain-users.csv)
+  - Juliette.Larocco2@xcpng.lab
 
 ## Configure LAN devices
 - Configure workstation **branch1-1**
