@@ -304,7 +304,7 @@ Steps:
     - 🌱 still working on policy
     - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
-  - [push-branch11.yml](ansible/push-branch1.yml)
+  - [push-branch1.yml](ansible/push-branch1.yml)
     - `ansible-playbook -i inventory-api push-branch1.yml`
 - At this point you should be able to install a JHF on the SMS and on the firewalls
   - `installer check-for-udpates`
