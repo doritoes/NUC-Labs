@@ -81,6 +81,7 @@ Notes:
       - `ansible --version`
   - Install ansible collections
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
+    - `ansible-galaxy collection install check_point.mgmt --force`
   - Install XenAPI python package
     - `python3 -m pip install XenAPI`
 - Generate ssh RSA key for user `ansible`
