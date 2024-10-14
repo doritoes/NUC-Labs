@@ -68,22 +68,20 @@ Notes:
 - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - Install Ansible and requirements
-    - `sudo apt install -y ansible python3-paramiko python3-pip`
-    - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
-    - `python3 -m pip install XenAPI`
-  - WARNING Ubuntu 22.04 installs Ansible 2.10 which is an older version. Here is how to install 2.16 (or later)
-    - Remove default version
-      - `sudo apt remove ansible`
-      - `sudo apt --purge autoremove`
-    - Set up PPA support
-      - `sudo apt install -y software-properties-common`
+  - `sudo apt install -y software-properties-common python3-paramiko python3-pip`
+  - Install Ansible
+    - Option 1 - recommended - Ansbile 2.16 (or later)
       - `sudo apt-add-repository ppa:ansible/ansible`
-    - Install latest version of Ansible
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
-    - Install the Ansible collections
-      - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
+      - Normally installing with ppa method is discouraged; this is is easiest way to get current ansible for automation
+    - Option 2 - Ubuntu 22.04 old Ansible 2.10
+      - `sudo apt install -y ansible`
+      - `ansible --version`
+  - Install ansible collections
+    - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
+  - Install XenAPI python package
+    - `python3 -m pip install XenAPI`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
