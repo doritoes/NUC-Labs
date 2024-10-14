@@ -26,15 +26,20 @@ Notes:
     - `Rename-Computer -NewName manager`
     - `Restart-Computer`
 - Install WSL
+  - Add optional feature Windows Subsystem for Linux (WSL)
+    - NOTE In Lab testing, skipping this step caused problems
+    - Start > type "Add an optional feature", click it
+    - Scroll to bottom, click **More Windows features**
+    - Check **Windows Subsystem for Linux** and click **OK**
+    - Click **Restart now**
   - Log back in and open a privileged shell
     - `wsl --list`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize
-      - wait as WSL is installed and then Ubuntu is installed
-      - another window is opened as WSL is initialized
-        - Enter the username: **ansible** and select a password
-      - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins>, prompting you to set the username and password
+      - A new WSL window is opened and you are promped set the username and password
+        - Username: `ansible`
+        - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins>, prompting you to set the username and password
 - Configure Network interfaces
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
@@ -66,7 +71,7 @@ Notes:
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - `sudo apt install -y software-properties-common python3-paramiko python3-pip`
   - Install Ansible
-    - Option 1 - recommended - Ansbile 2.16 (or later)
+    - Option 1 - recommended - Ansbile 2.17 (or later)
       - `sudo apt-add-repository ppa:ansible/ansible`
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
