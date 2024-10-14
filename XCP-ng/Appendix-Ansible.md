@@ -141,7 +141,8 @@ Notes:
 
 # Configure SMS
 Steps:
-- Under Advanced, set the network iterface settings to disable TX checksumming
+- In XO, select the VM SMS
+- Under Advanced, set the network interface settings to disable TX checksumming
 - Log in to console of SMS
   - Username `admin` and the password you selected
 - Set IP address information
