@@ -26,19 +26,15 @@ Notes:
     - `Rename-Computer -NewName manager`
     - `Restart-Computer`
 - Install WSL
-  - **Start** > **Settings** > **Add an optional feature**
-  - Click **More Windows features**
-  - Check **Windows Subsystem for Linux**
-  - Click **OK**
-  - Click **Restart now**
   - Log back in and open a privileged shell
     - `wsl --list`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize
+      - wait as WSL is installed and then Ubuntu is installed
       - another window is opened as WSL is initialized
         - Enter the username: **ansible** and select a password
-      - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins>, prompting you for the username and password
+      - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins>, prompting you to set the username and password
 - Configure Network interfaces
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
