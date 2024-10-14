@@ -369,6 +369,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - spin up a test workstation on branch1 subnet
       - confirm it receives an IP address via DHCP
       - test Internet access
+  - NOTE Server manager will complain: "Configuration required for DHCP Server at DC-1"
+    - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. Or find a way to do it with powershell.
 - Configure AD users, groups, roles, and permissions
   - copy domain-users.csv [domain-users.csv](ansible/domain-users.csv) to C:\domain-users.csv
   - copy domain-users-groups.ps1 [domain-users-groups.ps1](ansible/domain-users-groups.ps1)
