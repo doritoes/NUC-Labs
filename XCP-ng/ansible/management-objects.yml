@@ -5,7 +5,7 @@
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: management workstation
-      check_point.mgmt.cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_hosts:
         name: Manager
         ipv4_address: 192.168.41.100
         color: dark green
@@ -20,35 +20,35 @@
         comments: management network
         state: present
     - name: management network broadcast address
-      check_point.mgmt.cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_hosts:
         name: broadcast_192.168.41.255
         ipv4_address: 192.168.41.255
         color: slate blue
         comments: management network broadcast address
         state: present
     - name: dns 8.8.8.8
-      check_point.mgmt.cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_hosts:
         name: google_dns_8.8.8.8
         ipv4_address: 8.8.8.8
         color: dark orange
         comments: Google DNS server 8.8.8.8
         state: present
     - name: dns 8.8.4.4
-      check_point.mgmt.cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_hosts:
         name: google_dns_8.8.4.4
         ipv4_address: 8.8.4.4
         color: dark orange
         comments: Google DNS server 8.8.4.4
         state: present
     - name: dns quad9
-      check_point.mgmt.cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_hosts:
         name: quad9_dns_9.9.9.9
         ipv4_address: 9.9.9.9
         color: dark orange
         comments: Quad9 DNS server 9.9.9.9
         state: present
     - name: dns cloudflare 1.1.1.1
-      check_point.mgmt.cp_mgmt_host:
+      check_point.mgmt.cp_mgmt_hosts:
         name: cloudflare_dns_1.1.1.1
         ipv4_address: 1.1.1.1
         color: dark orange
