@@ -311,11 +311,23 @@ Steps:
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
-- Remove management workstation from the lab network, so solely be on Branch 1 Management
-  - Set the default gateway on the second ethernet interface 192.18.41.1 and DNS (e.g., 8.8.8.8, 8.8.4.4)
-  - Disable the first ethernet interface in Windows 
-- 🌱 DHCP helper in DMZ?
-- 🌱 Test
+
+## Remove management workstation from the Lab network
+Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
+- Start > Settings > Network & Internet > Ethernet
+- Click **Change adapter options**
+- Configure Ethernet 3 interface
+  - Double-click the Ethernet 3 interface, which is connected to the Management network
+  - Properties > Internet Protocol Version 4 (TCP/IP/IPv4)
+  - Configure default gateway: *8192.168.41.1**
+  - Enter DNS servers
+    - 8.8.8.8
+    - 8.8.4.4
+  - Click OK > OK > Close
+- Disable Ethernet 2 interface
+  - Right-click Ethernet 2
+  - Click Disable
+- Test Internet connectivity, etc. still workes from `manager`
 
 ## Configure Domain Controller
 - Open console for DC-1
@@ -325,11 +337,12 @@ Steps:
   - Open administrative powershell
   - `Rename-Computer -NewName dc-1`
   - `Restart-Computer`
-- Open administrative powershell
-- Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
-  - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-  - Yes allow PC to be discoverable
-  - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+- Network configuartaion
+  - Open administrative powershell
+  - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
+    - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - **Yes** allow PC to be discoverable
+    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
 - Promote DC-1 from server to Domain Controller
   - `Install-WindowsFeature -name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
@@ -338,30 +351,27 @@ Steps:
   - Wait as the settings are applied and the server is rebooted
   - Wait some more as "Applying Computer Settings" gets the domain controller ready
 - Configure Sites and Services Subnets and DNS
-  - `Import-Module ActiveDirectory`
-  - `New-ADReplicationSubnet -Name "10.0.1.0/24"`
-  - `Add-DNSServerPrimaryZone -NetworkID "10.0.1.0/24" -ReplicationScope "Forest"`
-  - `Add-DnsServerForwarder -IPAddress 8.8.8.8 -PassThru`
-  - `Add-DnsServerForwarder -IPAddress 8.8.4.4 -PassThru`
-- Create DNS records
-  - `Add-DnsServerResourceRecordA -Name "firewall1-lan" -ZoneName "xcpng.lab" -AllowUpdateAny -IPv4Address "10.0.1.1" -TimeToLive 01:00:00`
-  - `Add-DnsServerResourceRecordPtr -Name "1" -ZoneName "1.0.10.in-addr.arpa" -AllowUpdateAny -TimeToLive 01:00:00 -AgeRecord -PtrDomainName "firewall1-lan.xcpng.lab"`
-- 🌱create more DNS entries
-- test using nslookup
-  - google.com
-  - firewall1-lan
-  - firewall1-lan.xcpng.lab
-  - nslookup 10.0.1.1
-  - nslookup dc-1
-  - nslookup 10.0.1.10
+  - branch1-site.ps1 ([branch1-site.ps1](ansible/branch1-site.ps1))
+  - `powershell -ExecutionPolicy Bypass branch1-site.ps1`
+  - 🌱create more DNS entries
+  - test using nslookup
+    - nslookup google.com
+    - nslookup firewall1-lan
+    - nslookup firewall1-lan.xcpng.lab
+    - nslookup 10.0.1.1
+    - nslookup dc-1
+    - nslookup 10.0.1.10 (will not resolve yet)
 - Configure DC-1 as DHCP server
-  - `Install-WindowsFeature -Name DHCP -IncludeManagementTools`
-  - `Add-DhcpServerInDC -DnsName dc-1.xcpng.lab -IPAddress 10.0.1.10`
-    - Verify: `Get-DhcpServerInDC`
-  - Create DHCP scope
-    - `Add-DhcpServerv4Scope -Name "branch1" -StartRange 10.0.1.20 -EndRange 10.0.1.250 -SubnetMask 255.255.255.0 -State Active`
-    - `Set-DhcpServerv4OptionValue -DnsDomain xcpng.lab -DnsServer 10.0.1.10 -Router 10.0.1.1`
+  - branch1-dhcp.ps1 ([branch1-dhcp.ps1](ansible/branch1-dhcp.ps1))
+  - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
+  - test
+    - `Get-DhcpServerInDC`
+    - spin up a test workstation on branch1 subnet
+      - confirm it receives an IP address via DHCP
+      - test Internet access
 - 🌱 Configure some AD users, groups, roles, and permissions
+- Add users and groups
+
 ## Configure LAN devices
 - Configure workstation **branch1-1**
   - Log in for the first time at the console
