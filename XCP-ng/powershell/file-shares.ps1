@@ -1,4 +1,4 @@
-# Install-WindowsFeature -Name RSAT-AD-Powershell
+Install-WindowsFeature -Name RSAT-AD-Powershell
 Import-Module -Name ActiveDirectory
 
 # Create Folders on E:\
