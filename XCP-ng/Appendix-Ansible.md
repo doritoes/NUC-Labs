@@ -429,23 +429,23 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - copy file-shares.ps1 [file-shares.ps1](ansible/file-shares.ps1)
   - `powershell -ExecutionPolicy Bypass file-shares.ps1`
     - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided file; this causes an error when running the script, but the rest is successfully configured
-  - 🌱set share permissions
-  - create file shares
-  - 🌱 test domain users
-  - 🌱 test access from branch1-1 by different domain users
-- Configure sql server
+  - Testing
+    - test access from `branch1-1` to the shared folders by different domain users
+- Configure SQL server **sql-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
+  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName sql-1`
     - `Restart-Computer`
-  - Set static IP address and DNS information
-    - `New-NetIPAddress -IPAddress 10.0.1.12 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+  - Network configuration
+    - Open administrative powershell
+    - Set the static IP address and point DNS settings to the domain controller/DNS server
+      - `New-NetIPAddress -IPAddress 10.0.1.12 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
-  - 🌱 add second disk to server for storage
-  - 🌱 what is the current method to set up MS SQL server?
+    - 🌱 what is the current method to set up MS SQL server?
 ```
 $CredEngine = Get-Credential
 $CredSa     = Get-Credential 'sa'
