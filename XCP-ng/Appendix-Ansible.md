@@ -443,37 +443,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.1.12 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
-    - 🌱 what is the current method to set up MS SQL server?
-```
-$CredEngine = Get-Credential
-$CredSa     = Get-Credential 'sa'
-$Params     = @{
-    DestinationServer = "SqlServer01"
-    SetupFilesPath = "C:\Setup"
-    Version = 2019
-    InstallEngine = $true
-    InstallCU = $true
-    InstallSSMS = $true
-    SqlCollation = "Latin1_General_CI_AS"
-    InstancePath = "C:\Program Files\Microsoft SQL Server"
-    DataPath = "D:\Data"
-    LogPath = "L:\Log"
-    TempPath = "T:\TempDB"
-    BackupPath = "B:\Backup"
-    EngineCredential = $CredEngine
-    AgentCredential = $CredEngine
-    SaCredential = $CredSa
-    Credential = $CredEngine
-    AdminAccount = "$($env:userdomain)\DBAdmin"
-    Restart = $true
-    WhatIf = $false
-    VerboseCommand = $false
-    EnableException = $true
-}
-Install-SqlServer @Params 
-```
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
+  - Install MS SQL server ([more information](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16))
+    - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloadsa
 
 ## Configure DMZ Servers
 - Set up NAT and rules
