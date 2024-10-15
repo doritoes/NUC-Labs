@@ -497,8 +497,7 @@ network:
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
   - Give permissions to user ansible
-    - `export USER=ansible`
-    - `echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-$USER-for-sudo-password"`
+    - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
   - set up ssh key auth
     - from `manager`
       - `ssh-copy-id 192.168.31.11`
@@ -507,7 +506,8 @@ network:
     - test: `ansible all -m ping`
   - Update hostname and install packages
     - [dmz-apache.yml](ansible/dmz-apache.yml)
-    - ansible-playbook dmz-apache.yml
+    - `ansible-playbook dmz-apache.yml`
+    - FAILS currently: missing NAT, missing DMZ rules
   - Testing
     - 🌱 set up DMZ rule to allow All internet web traffic inbound
       - having trouble getting traffic from build 100 to isp 1 101
