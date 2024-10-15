@@ -426,7 +426,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Right-click Disk 1 and then click **New Simple Volume**
       - Assign letter E:
       - Follow the wizard and set the volume label to NETDRIVE
-  - 🌱create shared folder
+    - copy file-shares.ps1 [file-shares.ps1](ansible/file-shares.ps1)
+  - `powershell -ExecutionPolicy Bypass file-shares.ps1`  
   - 🌱set share permissions
   - create file shares
   - 🌱 test domain users
