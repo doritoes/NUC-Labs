@@ -427,7 +427,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Assign letter E:
       - Follow the wizard and set the volume label to NETDRIVE
     - copy file-shares.ps1 [file-shares.ps1](ansible/file-shares.ps1)
-  - `powershell -ExecutionPolicy Bypass file-shares.ps1`  
+  - `powershell -ExecutionPolicy Bypass file-shares.ps1`
+    - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided file; this causes an error when running the script, but the rest is successfully configured
   - 🌱set share permissions
   - create file shares
   - 🌱 test domain users
