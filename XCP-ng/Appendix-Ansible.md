@@ -445,13 +445,26 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - `New-NetIPAddress -IPAddress 10.0.1.12 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
+  - Set up data drive
+    - Log in as AD\juliette.larocco2
+    - Start > Create and format hard disk partitions
+      - You will be prompted to initialize the disk (Disk 1)
+      - Accept GPT (GUID Partition Table)
+      - Click OK
+      - Right-click Disk 1 and then click **New Simple Volume**
+      - Assign letter E:
+      - Follow the wizard and set the volume label to SQL
   - Join to domain
     - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
   - Install MS SQL server ([more information](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16))
-    - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloadsa
+    - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+      - file name looks like: `SQL2022-SSEI-Expr.exe`
+    - Run the installer
+      - Basic
+      - 
 
 ## Configure DMZ Servers
 - Set up NAT and rules
