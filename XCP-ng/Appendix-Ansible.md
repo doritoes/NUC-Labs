@@ -337,7 +337,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Open administrative powershell
   - `Rename-Computer -NewName dc-1`
   - `Restart-Computer`
-- Network configuartaion
+- Network configuration
   - Open administrative powershell
   - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
     - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
@@ -385,37 +385,45 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Open administrative powershell
     - `Rename-Computer -NewName branch1-1`
     - `Restart-Computer`
-  - 🌱 join to domain
-  - 🌱 test domain users
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
+  - Testing
+    - Log in as Other user > juliette.larocco
+      - Note the first time experience for the domain user
+      - Try Remote desktop connection to DC-1
+        - juliette.larocco fails "Logon failure: the user has not been granted the requested logon type at this computer."
+        - juliette.larocco2 fails if "Administrator" is still logged in on DC-1
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
+  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName file-1`
     - `Restart-Computer`
-  - Set static IP address and DNS information
-    - `New-NetIPAddress -IPAddress 10.0.1.11 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+  - Network configuration
+    - Open administrative powershell
+    - Set the static IP address and point DNS settings to the domain controller/DNS server
+      - `New-NetIPAddress -IPAddress 10.0.1.11 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Install file server feature
     - `Install-WindowsFeature -Name FS-FileServer`
-  - 🌱 join to domain
-    - Start > Settings > System > About
-    - Scroll down and under Related settings, click Rename this PC (advanced)
-    - Under the Computer Name tab click Change
-    - Under Member of, click Domain, enter the domain xcpng.lab and then click OK
-    - User name: Administrator
-    - Password: the password you set on the domain controller
-  - 🌱 more notes https://github.com/doritoes/NUC-Labs/blob/xcp-ng-improvement/XCP-ng/Appendix-Windows_File_Server.md
-  - test/create DNS records?
-  - 🌱 add second disk to server for storage
-    - Xen Orchestra: add Disk
+    - Join to domain
+      - Open administrative powershell
+      - `Add-Computer -DomainName xcpng.lab -restart`
+        - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+        - Password: the password you set
+  - Set up share drive and file shares
+    - Log in as AD\juliette.larocco2
     - Start > Create and format hard disk partitions
       - You will be prompted to initialize the disk (Disk 1)
       - Accept GPT (GUID Partition Table)
       - Click OK
-      - Right-click Disk 1 and then click New Simple Volume
+      - Right-click Disk 1 and then click **New Simple Volume**
       - Assign letter E:
       - Follow the wizard and set the volume label to NETDRIVE
   - 🌱create shared folder
