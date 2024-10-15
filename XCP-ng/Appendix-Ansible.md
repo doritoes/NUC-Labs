@@ -463,13 +463,20 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
       - file name looks like: `SQL2022-SSEI-Expr.exe`
     - Run the installer
-      - Basic
-      - 
+      - Click **Basic**
+      - Click **Install SSMS**
+        - From the web page that opens, download and install SQL Server Management Studio (SSMS)
+      - Click **Connect Now** to test
+      - Click **Close** and confirm
+  - Test
+    - Launch SQL Server Management Studio
+      - Check **Trust server certificate**
+      - Click **Connect**
+    - For a production environment, use proper authentication
 
 ## Configure DMZ Servers
-- Set up NAT and rules
-- IIS and Apache servers
-- Configure server  **dmz-apache**
+- 🌱 Set up NAT and rules
+- Configure Apache web server **dmz-apache**
   - Configure Static IP address
     - sudo vi /etc/netplan/01-netcfg.yaml
 ```
@@ -485,10 +492,8 @@ network:
           via: 192.168.31.1
       nameservers:
         addresses:
-          - 8.8.8.8
-          - 8.8.4.4
+          - 10.0.1.10
 ```
-
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
   - Give permissions to user ansible
@@ -512,7 +517,7 @@ network:
         - http://192.168.101.6
         - https://192.168.101.6
   - note: https://medium.com/@lalalili/ubuntu-installation-tip-for-microsoft-drivers-for-php-for-sql-server-d5e705666f04
-- Configure server  **dmz-iis**
+- Configure IIS web server **dmz-iis**
   - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
@@ -520,13 +525,6 @@ network:
     - `Restart-Computer`
   - 🌱 join to domain
   - 🌱 test domain users
-- Configure file server **file-1**
-  - Complete initial setup and set administrator password
-  - Log in for the first time at the console
-  - Rename server
-    - Open administrative powershell
-    - `Rename-Computer -NewName file-1`
-    - `Restart-Computer`
   - Set static IP address and DNS information
     - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
