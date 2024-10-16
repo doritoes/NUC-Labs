@@ -478,7 +478,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - 🌱 Set up NAT and rules
 - Configure Apache web server **dmz-apache**
   - Configure Static IP address
-    - sudo vi /etc/netplan/01-netcfg.yaml
+    - `sudo vi /etc/netplan/01-netcfg.yaml`
+
 ```
 network:
   version: 2
@@ -494,6 +495,7 @@ network:
         addresses:
           - 10.0.1.10
 ```
+
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
   - Give permissions to user ansible
@@ -518,22 +520,34 @@ network:
         - https://192.168.101.6
   - note: https://medium.com/@lalalili/ubuntu-installation-tip-for-microsoft-drivers-for-php-for-sql-server-d5e705666f04
 - Configure IIS web server **dmz-iis**
+  - Complete initial setup and set administrator password
   - Log in for the first time at the console
-  - Rename workstation
+  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+  - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName dmz-iis`
     - `Restart-Computer`
-  - 🌱 join to domain
-  - 🌱 test domain users
-  - Set static IP address and DNS information
-    - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+  - Network configuration
+    - Log back in
+    - Open administrative powershell
+    - Set the static IP address and point DNS settings to the domain controller/DNS server
+      - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+      - **Yes** allow your PC to be discoverable by other PCs and devices on this network
     - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
-    - Try testing nslookup to see what resolves (IPs, FQDN)
-    - What do you need to do to allow DMZ server to work as expected?
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
   - Install IIS
-    - Install-WindowsFeature Web-Server -IncludeManagentTools
-    - http://localhost
-    - try asp.net hello world https://www.guru99.com/asp-net-first-program.html
+    - Open administrative powershell
+    - `Install-WindowsFeature Web-Server -IncludeManagentTools`
+    - Test:
+      - From dmz-iis: http://localhost
+      - From branch1-1: http://dmz-iis or http://192.168.31.10
+      - From manager: http://192.168.31.10
+    - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
+  - 🌱access to DMZ from external is not working correctly
 
 ## HTTPS Inspection
 - HTTPS inspection
