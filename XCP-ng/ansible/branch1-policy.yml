@@ -87,7 +87,7 @@
           - firewall1
         service:
         - Any
-        action: Accept
+        action: Drop
         comments: Protect gateways
         track:
           type: Log
