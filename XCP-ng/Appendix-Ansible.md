@@ -509,9 +509,10 @@ network:
     - uncomment dmzserver 192.168.31.11
     - test: `ansible all -m ping`
   - Update hostname and install packages
+    - [php.conf](ansible/php.conf)
+    - [ss.conf.j2](ansible/ssl.conf.j2)
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
-    - FAILS currently: missing NAT, missing DMZ rules
   - Testing
     - 🌱 set up DMZ rule to allow All internet web traffic inbound
       - having trouble getting traffic from build 100 to isp 1 101
