@@ -134,7 +134,7 @@
         layer: Lab_Policy Network
         name: DMZ to Domain Controller
         relative_position:
-          below: Internal web access to DMZ
+          below: DMZ to Domain Controller
         source:
           - branch1_dmz
         destination:
