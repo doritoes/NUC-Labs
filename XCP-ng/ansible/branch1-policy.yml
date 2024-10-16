@@ -125,11 +125,28 @@
         service:
         - active_directory_ports
         action: Accept
-        comments: DMZ to Internal servcies
+        comments: DMZ to Domain Controller
         track:
           type: Log
         state: present
-
+    - name: add DMZ rule access to internal
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ to Domain Controller
+        relative_position:
+          below: Internal web access to DMZ
+        source:
+          - branch1_dmz
+        destination:
+          - dc-1
+        service:
+        - dns
+        - echo-request
+        action: Accept
+        comments: DMZ to Domain Controller DNS
+        track:
+          type: Log
+        state: present
     - name: add Internet access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
