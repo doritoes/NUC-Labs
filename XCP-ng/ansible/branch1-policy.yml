@@ -173,8 +173,8 @@
         source:
           - All_Internet
         destination:
-          - branch1_apache_inbound_nat
-          - branch1_iis_inbound_nat
+          - dmz-iis
+          - dmz-apache
         service:
         - http
         - https
