@@ -86,7 +86,13 @@
         name: DMZ
         relative_position:
           above: Cleanup section
-    - name: add a rule
+    - name: create General Internet access section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: General Internet access
+        relative_position:
+          below: DMZ
+    - name: add DMZ rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Web access to DMZ
@@ -106,13 +112,7 @@
         track:
           type: Log
         state: present
-    - name: General Internet access
-      check_point.mgmt.cp_mgmt_access_section:
-        layer: Lab_Policy Network
-        name: General Internet access
-        relative_position:
-          above: Cleanup section
-    - name: add a rule
+    - name: add Internet access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Web access
