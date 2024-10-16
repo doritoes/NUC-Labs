@@ -112,7 +112,7 @@
         track:
           type: Log
         state: present
-    - name: add DMZ rule access to internal
+    - name: add DMZ rule access to domain controller
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: DMZ to Domain Controller
@@ -129,7 +129,7 @@
         track:
           type: Log
         state: present
-    - name: add DMZ rule access to internal 2
+    - name: add DMZ rule access to internal DNS
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: DMZ DNS
@@ -144,6 +144,23 @@
         - echo-request
         action: Accept
         comments: DMZ to Domain Controller DNS
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule access to SQL server
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ SQL
+        relative_position:
+          below: DMZ DNS
+        source:
+          - dmz-iis
+        destination:
+          - sql-1
+        service:
+        - MS-SQL-Server
+        action: Accept
+        comments: DMZ Web server to SQL server
         track:
           type: Log
         state: present
