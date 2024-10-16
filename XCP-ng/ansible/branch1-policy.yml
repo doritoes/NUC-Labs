@@ -6,7 +6,7 @@
     - check_point.mgmt
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
-    - name: add a package
+    - name: add a policy package
       check_point.mgmt.cp_mgmt_package:
         access: true
         color: forest green
@@ -50,7 +50,7 @@
         name: DMZ
         relative_position:
           below: Stealth rules
-    - name: create General Internet access section
+    - name: create general Internet access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: General Internet access
@@ -193,7 +193,7 @@
         state: present
     - name: add DMZ No-NAT LAN rule
       check_point.mgmt.cp_mgmt_nat_rule:
-        layer: Lab_Policy Network
+        package: Lab_Policy
         name: LAN No-NAT
         comments: No-NAT LAN to DMZ
         original_source: branch1_lan
@@ -203,7 +203,7 @@
         state: present
     - name: add DMZ No-NAT Mgmt rule
       check_point.mgmt.cp_mgmt_nat_rule:
-        layer: Lab_Policy Network
+        package: Lab_Policy
         name: Management No-NAT
         comments: No-NAT LAN to DMZ
         original_source: management_192.168.41.0/24
