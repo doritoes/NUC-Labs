@@ -80,6 +80,20 @@
         color: dark blue
         comments: SQL server
         state: present
+    - name: DMZ IIS Server
+      check_point.mgmt.cp_mgmt_host:
+        name: dmz-iis
+        ipv4_address: 192.168.31.10
+        color: dark blue
+        comments: DMZ IIS web server
+        state: present
+    - name: DMZ Apache Server
+      check_point.mgmt.cp_mgmt_host:
+        name: dmz-apache
+        ipv4_address: 192.168.31.11
+        color: dark blue
+        comments: DMZ Apache web server
+        state: present
     - name: Branch 1 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
         name: Branch 1 LAN Workstation DHCP scope
@@ -87,6 +101,103 @@
         ip_address_last: 10.0.1.250
         color: dark blue
         comments: Branch 1 LAN Workstation DHCP scope
+        state: present
+    - name: TCP 135
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_135
+        port: 135
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 464
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_464
+        port: 464
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 3268
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_3268
+        port: 3268
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 3269
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_3269
+        port: 3269
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 9389
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_9389
+        port: 9389
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 49152 to 65535
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: false
+        name: tcp_49152-65535
+        port: 49152-65535
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: AD service group
+      check_point.mgmt.cp_mgmt_service_group:
+        members:
+        - dns
+        - echo-request
+        - ntp
+        - ldap
+        - ldap_udp
+        - ldap-ssl
+        - microsoft-ds
+        - microsoft-ds-udp
+        - kerberos
+        - tcp_135
+        - tcp_464
+        - tcp_3268
+        - tcp_3269
+        - tcp_49152-65535
+        name: active_directory_ports
         state: present
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
