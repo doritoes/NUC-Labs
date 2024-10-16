@@ -91,6 +91,10 @@
         ipv4_address: 192.168.31.10
         color: dark blue
         comments: DMZ IIS web server
+        nat_settings:
+          auto_rule: true
+          ip_address: 192.168.101.5
+          method: static
         state: present
     - name: DMZ Apache Server
       check_point.mgmt.cp_mgmt_host:
@@ -98,7 +102,11 @@
         ipv4_address: 192.168.31.11
         color: dark blue
         comments: DMZ Apache web server
-        state: present
+        nat_settings:
+          auto_rule: true
+          ip_address: 192.168.101.6
+          method: static
+        state: present        
     - name: Branch 1 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
         name: Branch 1 LAN Workstation DHCP scope
