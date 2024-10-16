@@ -514,14 +514,11 @@ network:
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
   - Testing
-    - 🌱 set up DMZ rule to allow All internet web traffic inbound
-      - having trouble getting traffic from build 100 to isp 1 101
-    - 🌱 test from a workstation on the `build` network
-      - 192.168.101.6
-        - NAT > auto > static > 192.168.31.1
+      - From branch1-1:
+        - https://192.168.31.11
         - http://192.168.101.6
-        - https://192.168.101.6
-  - note: https://medium.com/@lalalili/ubuntu-installation-tip-for-microsoft-drivers-for-php-for-sql-server-d5e705666f04
+      - From manager: http://192.168.31.11
+      - From a test machine on build network: http://192.168.101.6
 - Configure IIS web server **dmz-iis**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
@@ -547,10 +544,13 @@ network:
     - `Install-WindowsFeature Web-Server -IncludeManagentTools`
     - Test:
       - From dmz-iis: http://localhost
-      - From branch1-1: http://dmz-iis or http://192.168.31.10
+      - From branch1-1:
+        - http://dmz-iis
+        - http://192.168.31.10
+        - http://192.168.101.5
       - From manager: http://192.168.31.10
+      - From a test machine on build network: http://192.168.101.5
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
-  - 🌱access to DMZ from external is not working correctly
 
 ## HTTPS Inspection
 - HTTPS inspection
