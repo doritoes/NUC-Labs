@@ -185,5 +185,31 @@
         track:
           type: Log
         state: present
+    - name: create NAT rule section No-NAT
+      check_point.mgmt.cp_mgmt_nat_section:
+        layer: Lab_Policy Network
+        name: No-NAT
+        position: top
+        state: present
+    - name: add DMZ No-NAT LAN rule
+      check_point.mgmt.cp_mgmt_nat_rule:
+        layer: Lab_Policy Network
+        name: LAN No-NAT
+        comments: No-NAT LAN to DMZ
+        original_source: branch1_lan
+        original_destination: branch1_dmz
+        relative_position:
+          below: No-NAT
+        state: present
+    - name: add DMZ No-NAT Mgmt rule
+      check_point.mgmt.cp_mgmt_nat_rule:
+        layer: Lab_Policy Network
+        name: Management No-NAT
+        comments: No-NAT LAN to DMZ
+        original_source: management_192.168.41.0/24
+        original_destination: branch1_dmz
+        relative_position:
+          below: LAN No-NAT
+        state: present
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
