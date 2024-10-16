@@ -164,7 +164,7 @@
         track:
           type: Log
         state: present
-    - name: add DMZ rule input web traffic
+    - name: add DMZ rule inbound web traffic
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: DMZ Inbound Web
