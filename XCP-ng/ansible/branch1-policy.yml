@@ -164,6 +164,25 @@
         track:
           type: Log
         state: present
+    - name: add DMZ rule input web traffic
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ Inbound Web
+        relative_position:
+          below: DMZ SQL
+        source:
+          - All_Internet
+        destination:
+          - branch1_apache_inbound_nat
+          - branch1_iis_inbound_nat
+        service:
+        - http
+        - https
+        action: Accept
+        comments: DMZ Web server to SQL server
+        track:
+          type: Log
+        state: present
     - name: add Internet access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
