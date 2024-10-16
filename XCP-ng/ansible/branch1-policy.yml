@@ -187,7 +187,7 @@
         state: present
     - name: create NAT rule section No-NAT
       check_point.mgmt.cp_mgmt_nat_section:
-        layer: Lab_Policy Network
+        package: Lab_Policy
         name: No-NAT
         position: top
         state: present
