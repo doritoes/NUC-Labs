@@ -37,7 +37,26 @@
         name: Gateways access
         position: top
         state: present
-    - name: add a rule
+    - name: create stealth section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Stealth rules
+        relative_position:
+          below: Gateways access
+        state: present
+    - name: create DMZ section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: DMZ
+        relative_position:
+          below: Stealth rules
+    - name: create General Internet access section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: General Internet access
+        relative_position:
+          below: DMZ
+    - name: add gateways access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Manage gateways
@@ -56,14 +75,7 @@
         track:
           type: Log
         state: present
-    - name: create stealth section
-      check_point.mgmt.cp_mgmt_access_section:
-        layer: Lab_Policy Network
-        name: Stealth rules
-        relative_position:
-          above: Cleanup section
-        state: present
-    - name: add a rule
+    - name: add a stealth rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Stealth rule
@@ -80,22 +92,10 @@
         track:
           type: Log
         state: present
-    - name: create DMZ section
-      check_point.mgmt.cp_mgmt_access_section:
-        layer: Lab_Policy Network
-        name: DMZ
-        relative_position:
-          above: Cleanup section
-    - name: create General Internet access section
-      check_point.mgmt.cp_mgmt_access_section:
-        layer: Lab_Policy Network
-        name: General Internet access
-        relative_position:
-          below: DMZ
-    - name: add DMZ rule
+    - name: add DMZ rule internal access to web apps
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
-        name: Web access to DMZ
+        name: Internal web access to DMZ
         relative_position:
           below: DMZ
         source:
@@ -112,6 +112,24 @@
         track:
           type: Log
         state: present
+    - name: add DMZ rule access to internal
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ to Domain Controller
+        relative_position:
+          below: Internal web access to DMZ
+        source:
+          - dmz-iis
+        destination:
+          - dc-1
+        service:
+        - active_directory_ports
+        action: Accept
+        comments: DMZ to Internal servcies
+        track:
+          type: Log
+        state: present
+
     - name: add Internet access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
