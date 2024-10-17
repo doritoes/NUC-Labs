@@ -44,24 +44,24 @@
         relative_position:
           below: Gateways access
         state: present
-    - name: create core services section
-      check_point.mgmt.cp_mgmt_access_section:
-        layer: Lab_Policy Network
-        name: Core Services
-        relative_position:
-          below: Stealth rules      
     - name: create DMZ section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: DMZ
         relative_position:
-          below: Core Services
+          below: Stealth rule
+    - name: create core services section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Core Services
+        relative_position:
+          below: DMZ      
     - name: create general Internet access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: General Internet access
         relative_position:
-          below: DMZ
+          below: Core Services
     - name: add gateways access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
