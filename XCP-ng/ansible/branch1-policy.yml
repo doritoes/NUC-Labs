@@ -44,12 +44,18 @@
         relative_position:
           below: Gateways access
         state: present
+    - name: create core services section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Core Services
+        relative_position:
+          below: Stealth rules      
     - name: create DMZ section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: DMZ
         relative_position:
-          below: Stealth rules
+          below: Core Services
     - name: create general Internet access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
@@ -89,6 +95,46 @@
         - Any
         action: Drop
         comments: Protect gateways
+        track:
+          type: Log
+        state: present
+    - name: add core services ntp allowed
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: NTP allowed
+        relative_position:
+          below: Core Services
+        source:
+          - branch1_lan
+          - branch1_dmz
+          - management_192.168.41.0/24
+        destination:
+          - time.windows.com
+          - ntp.checkpoint.com
+          - ntp2.checkoint.com
+        service:
+        - ntp
+        action: Accept
+        comments: Approved ntp
+        track:
+          type: Log
+        state: present
+    - name: add core services ntp denied
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: NTP denied
+        relative_position:
+          below: NTP applowed
+        source:
+          - branch1_lan
+          - branch1_dmz
+          - management_192.168.41.0/24
+        destination:
+          - All-Internet
+        service:
+        - ntp
+        action: Drop
+        comments: Denied ntp
         track:
           type: Log
         state: present
