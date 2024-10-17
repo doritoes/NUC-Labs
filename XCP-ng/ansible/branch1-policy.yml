@@ -109,9 +109,9 @@
           - branch1_dmz
           - management_192.168.41.0/24
         destination:
-          - time.windows.com
-          - ntp.checkpoint.com
-          - ntp2.checkoint.com
+          - .time.windows.com
+          - .ntp.checkpoint.com
+          - .ntp2.checkoint.com
         service:
         - ntp
         action: Accept
