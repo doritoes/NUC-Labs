@@ -130,7 +130,7 @@
           - branch1_dmz
           - management_192.168.41.0/24
         destination:
-          - All-Internet
+          - All_Internet
         service:
         - ntp
         action: Drop
