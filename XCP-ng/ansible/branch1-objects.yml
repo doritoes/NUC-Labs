@@ -205,6 +205,8 @@
         - microsoft-ds
         - microsoft-ds-udp
         - kerberos
+        - Kerberos_v5_TCP
+        - Kerberos_v5_UDP
         - tcp_135
         - tcp_464
         - tcp_3268
