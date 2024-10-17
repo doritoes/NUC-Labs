@@ -124,7 +124,7 @@
         layer: Lab_Policy Network
         name: NTP denied
         relative_position:
-          below: NTP applowed
+          below: NTP allowed
         source:
           - branch1_lan
           - branch1_dmz
