@@ -230,6 +230,9 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
       - Message confirming tools installed is displayed
     - Delete the downloaded file when done
 - Apply Windows Updates (reboots included)
+- Optionally disable Windows Update Delivery Optimization to remove strange looking traffic from your logs
+  - Start > Settings > Update & Security > Windows Update > Advanced options > Delivery Optimization
+  - Turn off Allow downloads from other PCs
 - Optionally clear all browser settings (including history) by deleting the default profile
   - Open Edge
   - Settings > Settings
