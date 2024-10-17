@@ -119,31 +119,12 @@
         track:
           type: Log
         state: present
-    - name: add core services ntp denied
-      check_point.mgmt.cp_mgmt_access_rule:
-        layer: Lab_Policy Network
-        name: NTP denied
-        relative_position:
-          below: NTP allowed
-        source:
-          - branch1_lan
-          - branch1_dmz
-          - management_192.168.41.0/24
-        destination:
-          - All_Internet
-        service:
-        - ntp
-        action: Drop
-        comments: Denied ntp
-        track:
-          type: Log
-        state: present
     - name: add core services dns allowed
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: DNS allowed
         relative_position:
-          below: NTP denied
+          below: NTP allowed
         source:
           - dc-1
         destination:
@@ -154,25 +135,6 @@
         - dns
         action: Accept
         comments: Approved dns
-        track:
-          type: Log
-        state: present
-    - name: add core services dns denied
-      check_point.mgmt.cp_mgmt_access_rule:
-        layer: Lab_Policy Network
-        name: DNS denied
-        relative_position:
-          below: DNS allowed
-        source:
-          - branch1_lan
-          - branch1_dmz
-          - management_192.168.41.0/24
-        destination:
-          - All_Internet
-        service:
-        - dns
-        action: Drop
-        comments: Denied dns
         track:
           type: Log
         state: present
