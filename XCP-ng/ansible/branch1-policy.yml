@@ -111,7 +111,7 @@
         destination:
           - .time.windows.com
           - .ntp.checkpoint.com
-          - .ntp2.checkoint.com
+          - .ntp2.checkpoint.com
         service:
         - ntp
         action: Accept
