@@ -147,9 +147,9 @@
         source:
           - dc-1
         destination:
-          - google_dns.8.8.8.8
-          - google_dns.8.8.4.4
-          - quad9_dns.9.9.9.9
+          - google_dns_8.8.8.8
+          - google_dns_8.8.4.4
+          - quad9_dns_9.9.9.9
         service:
         - dns
         action: Accept
