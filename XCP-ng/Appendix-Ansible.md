@@ -302,6 +302,13 @@ Steps:
 - Create new policy using API
   - [branch1-policy.yml](ansible/branch1-policy.yml)
     - 🌱 still working on policy
+      - SMS to external DNS
+      - allow management (RDP, SSH) to DMZ servers
+      - noise supporession rules like multicast
+        - udp 1900 to 239.255.255.250
+        - 224.0.0.2???
+        - udp/137 to 192.168.41.255 broadcast
+        - udp/138 to 10.0.1.255
     - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
   - [branch1-push.yml](ansible/branch1-pish.yml)
@@ -327,7 +334,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Disable Ethernet 2 interface
   - Right-click Ethernet 2
   - Click Disable
-- Test Internet connectivity, etc. still workes from `manager`
+- Test Internet connectivity, etc. to confirm it is still working
 
 ## Configure Domain Controller
 - Open console for DC-1
@@ -481,6 +488,11 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Check **Trust server certificate**
       - Click **Connect**
     - For a production environment, use proper authentication
+
+## Update management workstation to join the domain
+🌱 need to design the work
+- DNS server should be dc-1
+- join domain means allow AD ports
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
