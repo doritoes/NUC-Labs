@@ -375,6 +375,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - copy domain-users.csv [domain-users.csv](ansible/domain-users.csv) to C:\domain-users.csv
   - copy domain-users-groups.ps1 [domain-users-groups.ps1](ansible/domain-users-groups.ps1)
   - `powershell -ExecutionPolicy Bypass C:\domain-users-groups.ps1`
+- Configure to use external time server
+  - `w32tm /config /manualpeerlist:"time.windows.com",0x8 /syncfromflags:MANUAL`
+  - `w32tm /resync`
+  - `w32tm /query /status`
+  - If you have trouble, try restarting the service
+    - `net stop w32time`
+    - `net start w32time`
 - Test logging in to the domain controller as `AD\Juliette.Larocco2` and the password from [domain-users.csv](ansible/domain-users.csv)
   - Juliette.Larocco2@xcpng.lab
 
