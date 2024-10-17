@@ -483,9 +483,6 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - For a production environment, use proper authentication
 
 ## Configure DMZ Servers
-- 🌱 Set up NAT and rules
-  - without these, DMZ can't reach Internet, and Internet won't reach the DMZ servers
-  - this means dmz-apache won't be able to install Apache
 - Configure Apache web server **dmz-apache**
   - Configure Static IP address
     - `sudo vi /etc/netplan/01-netcfg.yaml`
