@@ -297,7 +297,7 @@
         - nbname
         - nbdatagram
         action: Drop
-        comments: Do not log netbios broadcasts
+        comments: Do not log netbios broadcast drops
         track:
           type: None
         state: present
