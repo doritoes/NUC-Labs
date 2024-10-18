@@ -316,5 +316,10 @@
         is_sub_domain: false
         name: .ntp2.checkpoint.com
         state: present
+    - name: add ntp domain ntp.ubuntu.com
+      check_point.mgmt.cp_mgmt_dns_domain:
+        is_sub_domain: false
+        name: .ntp.ubuntu.com
+        state: present
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
