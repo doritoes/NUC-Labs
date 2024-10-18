@@ -300,21 +300,59 @@
         track:
           type: None
         state: present
-    - name: add noise suppression rule multicast
+    - name: add noise suppression rule multicast 224.0.0.251
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
-        name: llmnr and ssdp multicast
+        name: mDNS multicast
         relative_position:
           below: netbios broadcasts
         source:
           - management_192.168.41.0/24
           - branch1_lan
         destination:
+          - multicast_224.0.0.251
+        service:
+        - udp_5353
+        action: Drop
+        comments: Do not log mDNS drops
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule multicast 239.255.255.250 and 224.0.0.251
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: llmnr and ssdp multicast
+        relative_position:
+          below: mDNS multicast
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+        destination:
+          - multicast_224.0.0.251
           - multicast_239.255.255.250
         service:
         - udp_1900
+        - udp_3702
         action: Drop
         comments: Do not log LLMNR and SSDP multicast drops
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule multicast 224.0.0.22
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: IGMP multicast
+        relative_position:
+          below: llmnr and ssdp multicast
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+        destination:
+          - multicast_224.0.0.22
+        service:
+        - igmp
+        action: Drop
+        comments: Do not log mDNS drops
         track:
           type: None
         state: present
