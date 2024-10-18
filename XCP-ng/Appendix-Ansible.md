@@ -488,8 +488,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 
 ## Update management workstation to join the domain
 🌱 need to design the work
-- DNS server should be dc-1
-- join domain means allow AD ports
+  - missing firewall rule allow manager to get to DC-1 on DNS and AD services ports
+  - Set DNS to 10.0.1.10
+  - - join domain
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
