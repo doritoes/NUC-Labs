@@ -62,6 +62,12 @@
         name: General Internet access
         relative_position:
           below: Core Services
+    - name: create noise suppression section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Noise suppressio
+        relative_position:
+          below: General Internet access
     - name: add gateways access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
@@ -127,6 +133,7 @@
           below: NTP allowed
         source:
           - dc-1
+          - sms
         destination:
           - google_dns_8.8.8.8
           - google_dns_8.8.4.4
@@ -248,6 +255,44 @@
         comments: Protect gateways
         track:
           type: Log
+        state: present
+    - name: add noise suppression rule netbios
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: netbios broadcasts
+        relative_position:
+          below: Noise suppression
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+        destination:
+          - broadcast_192.167.41.255
+          - broadcast_10.0.1.255
+        service:
+        - nbname
+        - nbdatagram
+        action: Drop
+        comments: Do not log netbios broadcasts
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule multicast
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: netbios broadcasts
+        relative_position:
+          below: netbios broadcasts
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+        destination:
+          - multicast_239.255.255.250
+        service:
+        - udp_1900
+        action: Drop
+        comments: Do not log LLMNR and SSDP multicast drops
+        track:
+          type: None
         state: present
     - name: create NAT rule section No-NAT
       check_point.mgmt.cp_mgmt_nat_section:
