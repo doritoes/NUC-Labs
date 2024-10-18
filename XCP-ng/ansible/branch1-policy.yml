@@ -44,12 +44,19 @@
         relative_position:
           below: Gateways access
         state: present
+    - name: create management network section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Management network
+        relative_position:
+          below: Stealth rules
+        state: present
     - name: create DMZ section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: DMZ
         relative_position:
-          below: Stealth rule
+          below: Management network
     - name: create core services section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
@@ -101,6 +108,23 @@
         - Any
         action: Drop
         comments: Protect gateways
+        track:
+          type: Log
+        state: present
+    - name: add managment rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: manager DNS
+        relative_position:
+          below: Managment network
+        source:
+          - manager
+        destination:
+          - dc-1
+        service:
+        - active_directory_ports
+        action: Accept
+        comments: Approved manager ports
         track:
           type: Log
         state: present
