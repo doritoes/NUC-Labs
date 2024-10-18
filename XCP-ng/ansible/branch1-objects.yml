@@ -4,7 +4,7 @@
   connection: httpapi
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
-    - name: Management network NAT
+    - name: management network NAT
       check_point.mgmt.cp_mgmt_network:
         name: management_192.168.41.0/24
         subnet: 192.168.41.0
@@ -78,28 +78,28 @@
           ip_address: 192.168.101.4
           method: hide
         state: present
-    - name: Domain Controller
+    - name: domain controller
       check_point.mgmt.cp_mgmt_host:
         name: dc-1
         ipv4_address: 10.0.1.10
         color: dark blue
         comments: Domain controller
         state: present
-    - name: File Server
+    - name: file server
       check_point.mgmt.cp_mgmt_host:
         name: file-1
         ipv4_address: 10.0.1.11
         color: dark blue
         comments: File server
         state: present
-    - name: SQL Server
+    - name: SQL server
       check_point.mgmt.cp_mgmt_host:
         name: sql-1
         ipv4_address: 10.0.1.12
         color: dark blue
         comments: SQL server
         state: present
-    - name: DMZ IIS Server
+    - name: DMZ IIS server
       check_point.mgmt.cp_mgmt_host:
         name: dmz-iis
         ipv4_address: 192.168.31.10
@@ -110,7 +110,7 @@
           ip_address: 192.168.101.5
           method: static
         state: present
-    - name: DMZ Apache Server
+    - name: DMZ Apache server
       check_point.mgmt.cp_mgmt_host:
         name: dmz-apache
         ipv4_address: 192.168.31.11
