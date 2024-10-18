@@ -279,7 +279,7 @@
     - name: add noise suppression rule multicast
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
-        name: netbios broadcasts
+        name: llmnr and ssdp multicast
         relative_position:
           below: netbios broadcasts
         source:
