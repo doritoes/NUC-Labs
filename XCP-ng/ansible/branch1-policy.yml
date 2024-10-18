@@ -65,7 +65,7 @@
     - name: create noise suppression section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
-        name: Noise suppressio
+        name: Noise suppression
         relative_position:
           below: General Internet access
     - name: add gateways access rule
