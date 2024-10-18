@@ -266,7 +266,7 @@
           - management_192.168.41.0/24
           - branch1_lan
         destination:
-          - broadcast_192.167.41.255
+          - broadcast_192.168.41.255
           - broadcast_10.0.1.255
         service:
         - nbname
