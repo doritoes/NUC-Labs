@@ -487,10 +487,16 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - For a production environment, use proper authentication
 
 ## Update management workstation to join the domain
-🌱 need to design the work
-  - missing firewall rule allow manager to get to DC-1 on DNS and AD services ports
-  - Set DNS to 10.0.1.10
-  - - join domain
+- Log in to `manager`
+- Confirm Network profile is **Private**
+- Edit IP settings to set DNS
+  - Preferred DNS: 10.0.1.10
+  - Alternate DNS: *blank*
+- Join to domain
+  - Open administrative powershell
+  - `Add-Computer -DomainName xcpng.lab -restart`
+    - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+    - Password: the password you set
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
