@@ -142,6 +142,7 @@
           - .time.windows.com
           - .ntp.checkpoint.com
           - .ntp2.checkpoint.com
+          - .ntp.ubuntu.com
         service:
         - ntp
         action: Accept
