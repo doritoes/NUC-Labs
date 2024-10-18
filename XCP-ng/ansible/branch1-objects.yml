@@ -45,6 +45,27 @@
         color: dark blue
         comments: branch1 broadcast address
         state: present
+    - name: multicast 224.0.0.22
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_224.0.0.22
+        ipv4_address: 224.0.0.22
+        color: dark blue
+        comments: IGMP
+        state: present
+    - name: multicast 224.0.0.251
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_224.0.0.251
+        ipv4_address: 224.0.0.251
+        color: dark blue
+        comments: mDNS
+        state: present
+    - name: multicast 224.0.0.252
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_224.0.0.252
+        ipv4_address: 224.0.0.252
+        color: dark blue
+        comments: LLMNR and SSDP
+        state: present
     - name: multicast 239.255.255.250
       check_point.mgmt.cp_mgmt_host:
         name: multicast_239.255.255.250
@@ -238,6 +259,45 @@
         match_for_any: true
         name: udp_1900
         port: 1900
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: UDP 3702
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_3702
+        port: 3702
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: UDP 5353
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_5353
+        port: 5353
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: UDP 5355
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_5355
+        port: 5355
         session_timeout: 0
         state: present
         sync_connections_on_cluster: true
