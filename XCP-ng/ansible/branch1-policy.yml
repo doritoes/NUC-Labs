@@ -111,12 +111,12 @@
         track:
           type: Log
         state: present
-    - name: add managment rule
+    - name: add management rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: manager DNS
         relative_position:
-          below: Managment network
+          below: Management network
         source:
           - manager
         destination:
