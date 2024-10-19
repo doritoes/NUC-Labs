@@ -190,12 +190,31 @@
         track:
           type: Log
         state: present
+    - name: add DMZ rule manage DMZ servers
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Manage DMZ servers
+        relative_position:
+          below: DMZ
+        source:
+          - management_192.168.41.0/24
+        destination:
+          - branch1_dmz
+        service:
+        - ssh_version_2
+        - Remote_Desktop_Protocol
+        - Remote_Desktop_Protocol_UDP
+        action: Accept
+        comments: Web access to DMZ apps
+        track:
+          type: Log
+        state: present
     - name: add DMZ rule access to domain controller
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: DMZ to Domain Controller
         relative_position:
-          below: Internal web access to DMZ
+          below: Manage DMZ servers
         source:
           - dmz-iis
         destination:
