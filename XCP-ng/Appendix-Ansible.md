@@ -641,6 +641,7 @@ script explnation:
 - Get GPO GUID: Get-ADGroupPolicyObject retrieves the GPO's GUID, which is needed for further operations.
 - Set Permissions: Set-ADGroupPolicyObjectPermission grants "Read" permission to the "Authenticated Users" group for the GPO.
 - Link GPO: Add-ADGroupPolicyObjectLink links the GPO to the specified OU.
+- OU=Corp for our lab
 
 # Configure Branch 2
 - Initial settings
