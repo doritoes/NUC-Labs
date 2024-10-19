@@ -18,11 +18,11 @@
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Cleanup rule
-        action: Accept
+        action: Drop
         enabled: true
         track:
           type: Log
-        comments: Turn cleanup rule into allow all rule
+        comments: Cleanup rule drop any/any/any
         state: present
     - name: create cleanup section
       check_point.mgmt.cp_mgmt_access_section:
