@@ -573,6 +573,24 @@ network:
       - From a test machine on build network: http://192.168.101.5
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
+## Restrict interactive logins on domain controller
+Apply GPO to restrict interactive logins to only domain admins. With exception to allow users in "Support" OU to login too.
+```
+# Specify the domain controller name and OU path
+$DCName = "DC-1"
+$OUPath = "OU=Support,DC=xcpng,DC=lab"
+
+# Create a new GPO
+$GPOName = "Restrict Interactive Logins"
+New-ADGroupPolicyObject -Name $GPOName
+
+# Link the GPO to the domain controller
+Set-ADOrganizationalUnit -Identity $OUPath -Gplink $GPOName -Scope Computer -Target $DCName
+
+# Configure the GPO settings
+Set-ADGroupPolicyObject -Identity $GPOName -Path "Computer Configuration\Windows Settings\Security Settings\Local Policies\Security Options" -Name "Restrict interactive logon to members of the specified user groups" -Value 1 -UserGroups @("Domain Admins") -ExceptionToPolicy $OUPath
+```
+
 ## HTTPS Inspection
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_add_outbound_inspection_certificate/
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_outbound_inspection_certificate_facts/
