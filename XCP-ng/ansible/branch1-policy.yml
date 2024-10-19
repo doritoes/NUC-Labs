@@ -270,6 +270,7 @@
         source:
           - management_192.168.41.0/24
           - branch1_lan
+          - branch1_dmz
         destination:
           - All_Internet
         service:
@@ -359,6 +360,25 @@
         comments: Do not log mDNS drops
         track:
           type: None
+        state: present
+    - name: add noise suppression rule quic
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: quic
+        relative_position:
+          below: IGMP multicast
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - All_internet
+        service:
+        - quic
+        action: Drop
+        comments: explicitly drop quic
+        track:
+          type: Log
         state: present
     - name: create NAT rule section No-NAT
       check_point.mgmt.cp_mgmt_nat_section:
