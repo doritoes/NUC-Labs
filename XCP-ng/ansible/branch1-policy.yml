@@ -195,7 +195,7 @@
         layer: Lab_Policy Network
         name: Manage DMZ servers
         relative_position:
-          below: DMZ
+          below: Internal web access to DMZ
         source:
           - management_192.168.41.0/24
         destination:
