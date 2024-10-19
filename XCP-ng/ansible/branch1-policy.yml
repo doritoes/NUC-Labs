@@ -336,6 +336,7 @@
         - udp_1900
         - udp_3702
         - udp_5353
+        - udp_5355
         action: Drop
         comments: Do not log LLMNR and SSDP multicast drops
         track:
