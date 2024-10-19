@@ -574,7 +574,73 @@ network:
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
 ## HTTPS Inspection
-- HTTPS inspection
+- https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_add_outbound_inspection_certificate/
+- https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_outbound_inspection_certificate_facts/
+- https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_https_layer/
+- https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_https_section/
+- https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_https_rule/
+- Create certificate on firewall
+- Export the certificate from firewall
+- Create Group Policy Object (GPO) on DC-1
+  - Open Group Policy Management Console (GPMC)
+  - Right-click on a domain or organizational unit (OU) where you want to apply the policy.
+  - Select "Create a GPO Here" and give it a meaningful name (e.g., "Import Firewall Certificate").
+  - Link the GPO to the desired domain or OU.
+- Edit the GPO
+  - Right-click on the created GPO and select "Edit"
+- Navigate to Computer Configuration:
+  - In the Group Policy Management Editor, navigate to "Computer Configuration"
+- Go to Policies -> Windows Settings -> Security Settings
+  - Expand "Security Settings"
+- Locate Certificate Policies
+  - Under "Security Settings", expand "Public Key Policies".
+  - Right-click on "Certificate Policies" and select "Import".
+- Import the Certificate
+  - In the "Import Certificate" wizard:
+    - Browse to the location of your firewall certificate (.cer file).
+    - Ensure the "Place certificate in the following store" is selected.
+    - Choose "Local Machine".
+    - Choose "Trusted Root Certification Authorities".
+    - Click "Next" and follow the remaining prompts to complete the import.
+- Configure the GPO to Import the Certificate:
+  - In the Group Policy Management Editor, navigate to "Computer Configuration" -> "Policies" -> "Windows Settings" -> "Security Settings" -> "Public Key Policies".
+  - Right-click on the imported certificate policy and select "Properties".
+  - In the "Security" tab, add the "Authenticated Users" group and give it the "Read" permission.
+  - Click "Apply" and "OK".
+- Link the GPO
+  - Ensure that the GPO is linked to the desired domain or OU.
+
+```
+# Replace placeholders with your actual values
+$gpoName = "Import Firewall Certificate"
+$certPath = "C:\path\to\your\certificate.cer"
+$ouPath = "OU=YourOU,DC=yourdomain,DC=com"
+
+# Create the GPO
+New-ADGroupPolicyObject -Name $gpoName -Path $ouPath
+
+# Import the certificate
+$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+$cert.Import($certPath)
+$cert.Install()
+
+# Get the GPO's GUID
+$gpoGuid = (Get-ADGroupPolicyObject -Identity $gpoName).GUID
+
+# Set the GPO's permissions
+Set-ADGroupPolicyObjectPermission -Identity $gpoGuid -Principal "Authenticated Users" -PermissionRead -AccessAllowed
+
+# Link the GPO to the OU
+Add-ADGroupPolicyObjectLink -Identity $ouPath -GroupPolicyObject $gpoGuid
+```
+
+script explnation:
+- Replace Placeholders: Replace the placeholders with your actual GPO name, certificate path, and OU path.
+- Create GPO: New-ADGroupPolicyObject creates a new GPO in the specified OU.
+- Import Certificate: New-Object creates a new X509Certificate2 object, Import imports the certificate, and Install installs it into the Local Machine's Trusted Root Certification Authorities store.
+- Get GPO GUID: Get-ADGroupPolicyObject retrieves the GPO's GUID, which is needed for further operations.
+- Set Permissions: Set-ADGroupPolicyObjectPermission grants "Read" permission to the "Authenticated Users" group for the GPO.
+- Link GPO: Add-ADGroupPolicyObjectLink links the GPO to the specified OU.
 
 # Configure Branch 2
 - Initial settings
