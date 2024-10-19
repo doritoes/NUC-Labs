@@ -330,7 +330,7 @@
           - branch1_lan
         destination:
           - multicast_224.0.0.251
-          - multicast_224.0.0.251
+          - multicast_224.0.0.252
           - multicast_239.255.255.250
         service:
         - udp_1900
