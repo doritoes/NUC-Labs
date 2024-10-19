@@ -580,6 +580,8 @@ network:
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_https_section/
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_https_rule/
 - Create certificate on firewall
+  - define a varialble with the base 64 encoded password
+    - b64string: "{{ password | b64encode }}"
 - Export the certificate from firewall
 - Create Group Policy Object (GPO) on DC-1
   - Open Group Policy Management Console (GPMC)
