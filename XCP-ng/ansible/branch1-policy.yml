@@ -319,7 +319,7 @@
         track:
           type: None
         state: present
-    - name: add noise suppression rule multicast 239.255.255.250 and 224.0.0.251
+    - name: add noise suppression rule multicast 239.255.255.250 224.0.0.251 224.0.0.252
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: llmnr and ssdp multicast
@@ -329,6 +329,7 @@
           - management_192.168.41.0/24
           - branch1_lan
         destination:
+          - multicast_224.0.0.251
           - multicast_224.0.0.251
           - multicast_239.255.255.250
         service:
