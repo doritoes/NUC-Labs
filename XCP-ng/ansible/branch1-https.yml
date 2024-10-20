@@ -1,0 +1,37 @@
+---
+- name: Enable https inspection
+  hosts: check_point
+  connection: httpapi
+  collections:
+    - check_point.mgmt
+  vars:
+    b64_password: "{{ sic_pw | b64_encode }}"
+    valid_from: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+    valid_to: "{{ lookup('pipe', 'date ]d \"5 years\" +%Y-%m-%d') }}"
+  var_files:
+    - vars.yml
+  tasks:
+    - name: add outbound inspections certificate
+      check_point.mgmt.cp_mgmt_add_outbound_inspection_certificate:
+        base64_password: "{{ b64_password }}"
+        is_default: true
+        issued_by: "{{ domain_name }}"
+        name: OutboundCertificate
+        comments: Certificate for https inspection
+        valid_from: "{{ valid_from }}"
+        valid_to: "{{ valid_to }}"
+      register: certificate_output
+    # enable app control and url filtering blades
+    # enable https inspection on cluster
+    # add https section and rule(s)
+    # export the certificate for installation on the windows 
+    - name: extract base64 certificate
+      set_fact:
+          certificate: "{{ certificate_output['add-outbound-inspection-certificate']['base64-certificate'] }}"
+    - name: write certificate to file certificate.cer
+      copy:
+        content: "{{ certificate }}"
+        dest: certificate.cer
+    - name: publish changes
+      #check_point.mgmt.cp_mgmt_publish:
+      check_point.mgmt.cp_mgmt_discard:
