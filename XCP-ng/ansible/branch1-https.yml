@@ -34,6 +34,8 @@
     - name: write certificate to file certificate.cer
       copy:
         content: "{{ certificate }}"
+        # content: "{{ certificate | b64decode }}"
+        # neither version seems to be working
         dest: certificate.cer
     - name: publish changes
       #check_point.mgmt.cp_mgmt_publish:
