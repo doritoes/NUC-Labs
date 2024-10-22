@@ -587,6 +587,7 @@ network:
   - copy the .cer file to c:\certificate.cer
   - Powershell
     - `Import-Certificate -FilePath "C:\Certificate.cer" -CertStoreLocation "Cert:\LocalMachine\Root"`
+    - Note the thumbprint. Save this value for later.
   - verify the import using `certlm.msc`
 - 🌱 need to continue here
   
@@ -689,7 +690,7 @@ Set-ADGroupPolicyObjectPermission -Identity $gpoGuid -Principal "Authenticated U
 Add-ADGroupPolicyObjectLink -Identity $ouPath -GroupPolicyObject $gpoGuid
 ```
 
-script explnation:
+script explanation:
 - Replace Placeholders: Replace the placeholders with your actual GPO name, certificate path, and OU path.
 - Create GPO: New-ADGroupPolicyObject creates a new GPO in the specified OU.
 - Import Certificate: New-Object creates a new X509Certificate2 object, Import imports the certificate, and Install installs it into the Local Machine's Trusted Root Certification Authorities store.
