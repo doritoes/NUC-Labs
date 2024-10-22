@@ -575,6 +575,21 @@ network:
 
 ## HTTPS Inspection
 🌱 this needs to be developed
+- branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
+  - creates the certificate
+- Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
+  - creating https rules, etc not supported until R82
+  - some outbound certificate commands function differently pre-R82
+  - enable-https-inspection will be added in the next version
+- Export the certificate using SmartConsole gui
+- Enable HTTPS inspection in SmartConsole gui
+- Import the certificate on DC-1
+  - copy the .cer file to c:\certificate.cer
+  - Powershell
+    - `Import-Certificate -FilePath "C:\Certificate.cer" -CertStoreLocation "Cert:\LocalMachine\Root"
+  - verify the import using `certlm.msc`
+- 🌱 need to continue here
+     
 
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_add_outbound_inspection_certificate/
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_outbound_inspection_certificate_facts/
