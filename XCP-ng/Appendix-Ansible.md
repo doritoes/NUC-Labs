@@ -586,10 +586,46 @@ network:
 - Import the certificate on DC-1
   - copy the .cer file to c:\certificate.cer
   - Powershell
-    - `Import-Certificate -FilePath "C:\Certificate.cer" -CertStoreLocation "Cert:\LocalMachine\Root"
+    - `Import-Certificate -FilePath "C:\Certificate.cer" -CertStoreLocation "Cert:\LocalMachine\Root"`
   - verify the import using `certlm.msc`
 - 🌱 need to continue here
-     
+  
+```
+PowerShell
+# Replace "DomainName" with your actual domain name
+$DomainName = "xcpng.lab"
+
+# Replace "OU=Corp,DC=xcpng,DC=lab" with your desired OU
+$OU = "OU=Corp,DC=xcpng,DC=lab"
+
+# Specify the path to your certificate file
+$CertPath = "C:\Certificate.cer"
+
+# Create a new GPO
+$GPO = New-ADGroupPolicy -Name "Distribute Root CA Certificate" -Path "Domains/$DomainName/Organizational Units/$OU"
+
+# Set the GPO to link to the OU
+Set-ADGroupPolicy -Identity $GPO -Path "Domains/$DomainName/Organizational Units/$OU"
+
+# Create a new registry key to store the certificate
+$RegistryKey = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Certificates"
+
+# Create a new registry value to store the certificate thumbprint
+$RegistryValue = "RootCAThumbprint"
+
+# Get the thumbprint of the certificate
+$Cert = Get-ChildItem Cert:\LocalMachine\Root | Where-Object {$_.Thumbprint -match "YourCertificateThumbprint"}
+$Thumbprint = $Cert.Thumbprint
+
+# Create a new GPO preference to set the registry value
+$Preference = New-ADGroupPolicyPreference -Target "Computer" -Action "Create" -KeyPath $RegistryKey -ValueName $RegistryValue -ValueType "String" -ValueData $Thumbprint
+
+# Link the preference to the GPO
+Add-ADGroupPolicyPreference -Target $Preference -Path "Domains/$DomainName/Organizational Units/$OU"
+
+# Update the GPO
+Update-ADGroupPolicy -Identity $GPO
+```
 
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_add_outbound_inspection_certificate/
 - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_outbound_inspection_certificate_facts/
