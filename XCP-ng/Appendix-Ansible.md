@@ -574,7 +574,6 @@ network:
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
 ## HTTPS Inspection
-🌱 this needs to be developed
 - branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
   - creates the certificate
 - Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
@@ -583,13 +582,13 @@ network:
   - enable-https-inspection will be added in the next version
 - Export the certificate using SmartConsole gui
 - Enable HTTPS inspection in SmartConsole gui
-- Import the certificate on DC-1
+- Import the https inspection certificate on DC-1
   - copy the .cer file to `c:\certificate.cer`
   - create the GPO  
     - `$OU = "OU=Corp,DC=xpcng,DC=lab"`
     - `$gpoName = "Distribute Root CA Certficate"`
     - `$ouPath = "OU=Corp,DC=xpcng,DC=lab"`
-    - New-GPO -Name $gpoName | New-GPLink -Target $ouPath
+    - `New-GPO -Name $gpoName | New-GPLink -Target $ouPath`
   - Open Group Policy Management Console (GPMC)
     - Start > Group Policy Management
     - Forest: xcpng.lab
@@ -599,7 +598,47 @@ network:
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
       - Import `c:\certificate.cer`
-  - this is not wokring yet. "gpupdate /force" on the branch1-1 didn't install the certificate (not yet)
+  - Test from branch1-1
+    - "gpupdate /force" will trigger an update
+    - logging out and back in may also help
+    - When browsing to an https site, examine the certificate to confirm the signing authority is the firewall
+    - When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it
+    - Examine logs
+  - 🌱 need to add more https rules, not possible with API in R81.20; available on R82
+    - don't inspect outbound traffic (action: bypass)
+    - source: apache-dmz and sms
+    - updates.checkpoint.com is automatically bypassed
+
+## Import the User Check Certificate
+In this step we will import the Check Point ICA certificate and also distribute that using group policy
+- From branch1-1 or manager browse to https://192.168.101.1
+  - You will receive an untrusted certificate message
+  - View the certificate and Export/Copy to File
+  - Save as type: `DER Encoded Binary X.509 (*.cer)`
+  - Name as you wish
+- Copy the file to DC-1 (e.g., copy to \\file-1\it\ and access it from there)
+- Import the certificate to the GPO for trusted certificates
+  - Open Group Policy Management Console (GPMC)
+    - Start > Group Policy Management
+    - Forest: xcpng.lab
+    - Domain: xcpng.lab
+    - OU: Distribute Root CA Certication
+    - Right click the OU from the tree, and click Edit
+    - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
+    - Right-click Trusted Root Certification Authorities, and then click Import
+      - By default the certificate you exported is a .der file; select all file types to see the certificate you downloaded
+      - Import the file
+- You can now view User Check pages correctly
+  - "gpupdate /force" will trigger an update
+  - logging out and back in may also help
+
+## Change website categorization to Hold mode
+By default URl categorization occurs in the background. First attempts to a previously unkown URL will cucceed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
+- Log in to SmartConsole
+- MANAGE & SETTINGS > Blades > Application Control & URL Filtering > Advanced Settings
+- Click Check Point online web service
+- Change Website categorization mode to **Hold**
+- Click OK, publish, and install policy
 
 # Configure Branch 2
 🌱 this needs to be developed- Initial settings
