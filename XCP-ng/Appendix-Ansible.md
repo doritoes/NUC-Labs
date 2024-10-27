@@ -604,7 +604,20 @@ network:
     - When browsing to an https site, examine the certificate to confirm the signing authority is the firewall
     - When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it
     - Examine logs
-  - 🌱 need to add more https rules, not possible with API in R81.20; available on R82
+  - Add more https bypass rules
+    - not possible with API in R81.20; available on R82
+    - First rule
+      - Name: Bypass inspection
+      - Sources:
+        - dmz-apache
+        - sms
+      - Destination:
+        - Internet
+      - Services:
+        - HTTPS default services
+      - Action:
+        - Bypass
+      - Track: Log
     - don't inspect outbound traffic (action: bypass)
     - source: apache-dmz and sms
     - updates.checkpoint.com is automatically bypassed
