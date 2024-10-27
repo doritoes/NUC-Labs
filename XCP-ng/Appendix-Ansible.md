@@ -607,6 +607,29 @@ network:
   - Add more https bypass rules
     - not possible with API in R81.20; available on R82
     - First rule
+      - Name: Exceptions for recommended imported services
+      - Sources:
+        - *Any
+      - Destination:
+        - Import > Updatable Objects >  HTTPS services - recommended bypass
+      - Services:
+        - HTTPS default services
+      - Action:
+        - Bypass
+      - Track: Log
+    - Second rule
+      - Name: Exception for categories
+      - Sources:
+        - *Any
+      - Destination:
+        - Internet
+      - Services:
+        - Financial Services
+        - Health
+      - Action:
+        - Bypass
+      - Track: Log
+    - Third rule
       - Name: Bypass inspection
       - Sources:
         - dmz-apache
@@ -618,9 +641,6 @@ network:
       - Action:
         - Bypass
       - Track: Log
-    - don't inspect outbound traffic (action: bypass)
-    - source: apache-dmz and sms
-    - updates.checkpoint.com is automatically bypassed
 
 ## Import the User Check Certificate
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
@@ -652,6 +672,62 @@ By default URl categorization occurs in the background. First attempts to a prev
 - Click Check Point online web service
 - Change Website categorization mode to **Hold**
 - Click OK, publish, and install policy
+
+## Add Application Control layer
+🌱 These changes can likely be done using Ansible and the API. Need to test.
+- Open the Access Policy and fine the section **General Internet access**
+- Find the rule **General Internet access**
+- Change action from **Accept** to **Inline Layer > New Layer**
+  - Name: Internet Control
+  - Blades:
+    - Firewall (checked)
+    - Applications & URL Filtering (checked)
+  - Advanced > Implicit Cleanup Action: **Allow**
+- Rename the cleanup rule **Allow remaining traffic**
+- Add these sub rules above that
+  - Subrule 1
+    - Name: Block bad sites
+    - Source: *Any
+    - Destination: *Any
+    - Services & Applications:
+      - Hacking
+      - Pornography
+      - Phishing
+      - Weapons
+      - Critical Risk
+      - High Risk
+    - Action: **Drop > Blocked Message**
+    - Track: Log > Accounting
+  - Subrule 2
+    - Name: Allow general categories
+    - Source: *Any
+    - Destination: *Any
+    - Services & Applications:
+      - Medium Risk
+      - Low Risk
+      - Very Low Risk
+    - Action: Accept
+    - Track: Log > Accounting
+  - Subrule 3
+    - Name: Unknown risk
+    - Source: *Any
+    - Destination: *Any
+    - Services & Applications:
+      - Unknown Risk
+      - Uncategorized
+    - Action:
+      - Inform
+        - Access Approval
+        - Once a day
+        - Per applications
+    - Track: Log > Accounting
+
+## Identify Awarenewss and access roles
+This is currently outside the scope of this Lab.
+
+The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
+
+A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
 
 # Configure Branch 2
 🌱 this needs to be developed- Initial settings
