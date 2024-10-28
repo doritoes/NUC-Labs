@@ -366,7 +366,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - nslookup dc-1
     - nslookup 10.0.1.10 (will not resolve yet)
 - Configure DC-1 as DHCP server
-  - branch1-dhcp.ps1 ([branch1-dhcp.ps1](ansible/branch1-dhcp.ps1))
+  - branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
   - test
     - `Get-DhcpServerInDC`
@@ -377,7 +377,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. Or find a way to do it with powershell.
 - Configure AD users, groups, roles, and permissions
   - copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
-  - copy domain-users-groups.ps1 [domain-users-groups.ps1](powersehll/domain-users-groups.ps1)
+  - copy domain-users-groups.ps1 [domain-users-groups.ps1](powershell/domain-users-groups.ps1)
   - `powershell -ExecutionPolicy Bypass C:\domain-users-groups.ps1`
 - Configure to use external time server
   - `net stop w32time`
