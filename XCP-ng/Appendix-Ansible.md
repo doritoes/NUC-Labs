@@ -340,13 +340,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `Rename-Computer -NewName dc-1`
   - `Restart-Computer`
 - Network configuration
+  - Log back in
   - Open administrative powershell
   - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
     - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - **Yes** allow PC to be discoverable
-    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
 - Promote DC-1 from server to Domain Controller
-  - `Install-WindowsFeature -name AD-Domain-Services -IncludeManagementTools`
+  - `Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
     - Select a password for SafeModeAdministratorPassword (aka DSRM = Directory Services Restore Mode)
   - Confirm configuring server as Domain Controller and rebooting
