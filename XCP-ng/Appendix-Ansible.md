@@ -294,6 +294,7 @@ Steps:
   - Create file on `manager`
     - [branch1-objects.yml](ansible/branch1-objects.yml)
   - `ansible-playbook -i inventory-api branch1-objects.yml`
+  - NOTE Originally this playbook added automatic NAT to 192.168.101.7 on SMS; however due to a bug this doesn't work
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
@@ -301,17 +302,14 @@ Steps:
   - `ansible-playbook -i inventory-api firewall1-cluster.yml`
 - Create new policy using API
   - [branch1-policy.yml](ansible/branch1-policy.yml)
-    - 🌱 still working on policy
-      - allow management (RDP, SSH) to DMZ servers
-      - noise supporession rules like multicast
-        - udp 1900 to 239.255.255.250
-        - 224.0.0.2???
     - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
-  - [branch1-push.yml](ansible/branch1-pish.yml)
+  - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
 - At this point you should be able to install a JHF on the SMS and on the firewalls
-  - `installer check-for-udpates`
+  - SSH or console to each device (sms, firewall1a, firewall1b)
+  - `clish`
+  - `installer check-for-updates`
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
