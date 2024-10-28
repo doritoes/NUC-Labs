@@ -9,7 +9,7 @@
         name: sms
         ipv4_address: 192.168.41.20
         color: dark blue
-        comment: SMS
+        comments: SMS
         nat_settings:
           auto_rule: true
           hide_behind: ip-address
