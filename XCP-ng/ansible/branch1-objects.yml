@@ -7,6 +7,9 @@
     - name: add NAT to sms
       check_point.mgmt.cp_mgmt_host:
         name: sms
+        ipv4_address: 192.168.41.20
+        color: dark blue
+        comment: SMS
         nat_settings:
           auto_rule: true
           hide_behind: ip-address
