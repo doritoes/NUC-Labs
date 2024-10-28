@@ -420,15 +420,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.1.11 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Install file server feature
     - `Install-WindowsFeature -Name FS-FileServer`
-    - Join to domain
-      - Open administrative powershell
-      - `Add-Computer -DomainName xcpng.lab -restart`
-        - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
-        - Password: the password you set
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
   - Set up share drive and file shares
     - Log in as AD\juliette.larocco2
     - Start > Create and format hard disk partitions
@@ -480,6 +480,32 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - From the web page that opens, download and install SQL Server Management Studio (SSMS)
       - Click **Connect Now** to test
       - Click **Close** and confirm
+  - Test
+    - Launch SQL Server Management Studio
+      - Check **Trust server certificate**
+      - Click **Connect**
+    - For a production environment, use proper authentication
+- Configure Check Point Identity Collectror server **idc-1**
+  - Complete initial setup and set administrator password
+  - Log in for the first time at the console
+  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+  - Rename server
+    - Open administrative powershell
+    - `Rename-Computer -NewName idc-1`
+    - `Restart-Computer`
+  - Network configuration
+    - Open administrative powershell
+    - Set the static IP address and point DNS settings to the domain controller/DNS server
+      - `New-NetIPAddress -IPAddress 10.0.1.14 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - Try testing nslookup to see what resolves (IPs, FQDN)
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
+  - Install Check Point Identity Collector
+    - 🌱 needs to be developed
   - Test
     - Launch SQL Server Management Studio
       - Check **Trust server certificate**
