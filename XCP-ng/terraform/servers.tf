@@ -99,3 +99,20 @@ resource "xenorchestra_vm" "sql-1" {
     network_id = data.xenorchestra_network.branch1.id
   }
 }
+
+resource "xenorchestra_vm" "idc-1" {
+  memory_max = 4294934528
+  cpus       = 1
+  name_label = "idc-1"
+  name_description = "Identity Collector Server"
+  template = data.xenorchestra_template.server2022-template.id
+  depends_on = [ xenorchestra_network.network_branch1]
+  disk {
+    sr_id      = data.xenorchestra_sr.local.id
+    name_label = "idc-1-disk"
+    size       = 137437904896
+  }
+  network {
+    network_id = data.xenorchestra_network.branch1.id
+  }
+}
