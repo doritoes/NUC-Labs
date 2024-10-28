@@ -321,7 +321,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Configure Ethernet 3 interface
   - Double-click the Ethernet 3 interface, which is connected to the Management network
   - Properties > Internet Protocol Version 4 (TCP/IP/IPv4)
-  - Configure default gateway: *8192.168.41.1**
+  - Configure default gateway: **192.168.41.1**
   - Enter DNS servers
     - 8.8.8.8
     - 8.8.4.4
