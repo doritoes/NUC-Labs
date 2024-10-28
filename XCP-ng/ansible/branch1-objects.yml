@@ -4,6 +4,15 @@
   connection: httpapi
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
+    - name: add NAT to sms
+      check_point.mgmt.cp_mgmt_host:
+        name: sms
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.101.7
+          method: hide
+        state: present
     - name: management network NAT
       check_point.mgmt.cp_mgmt_network:
         name: management_192.168.41.0/24
