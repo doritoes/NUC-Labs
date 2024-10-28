@@ -346,6 +346,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - **Yes** allow PC to be discoverable
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+- Optionally increase the display resolution (e.g., 1440 x 900)
 - Promote DC-1 from server to Domain Controller
   - `Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
@@ -375,8 +376,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - NOTE Server manager will complain: "Configuration required for DHCP Server at DC-1"
     - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. Or find a way to do it with powershell.
 - Configure AD users, groups, roles, and permissions
-  - copy domain-users.csv [domain-users.csv](ansible/domain-users.csv) to C:\domain-users.csv
-  - copy domain-users-groups.ps1 [domain-users-groups.ps1](ansible/domain-users-groups.ps1)
+  - copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
+  - copy domain-users-groups.ps1 [domain-users-groups.ps1](powersehll/domain-users-groups.ps1)
   - `powershell -ExecutionPolicy Bypass C:\domain-users-groups.ps1`
 - Configure to use external time server
   - `net stop w32time`
@@ -386,7 +387,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `w32tm /query /configuration`
   - `w32tm /resync`
   - `w32tm /query /status`
-- Test logging in to the domain controller as `AD\Juliette.Larocco2` and the password from [domain-users.csv](ansible/domain-users.csv)
+- Test logging in to the domain controller as `AD\Juliette.Larocco2` and the password from [domain-users.csv](powershell/domain-users.csv)
   - Juliette.Larocco2@xcpng.lab
 
 ## Configure LAN devices
