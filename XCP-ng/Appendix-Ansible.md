@@ -472,16 +472,17 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
   - Install MS SQL server ([more information](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16))
+    - Log in as AD\juliette.larocco2
     - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
       - file name looks like: `SQL2022-SSEI-Expr.exe`
     - Run the installer
       - Click **Basic**
       - Click **Install SSMS**
         - From the web page that opens, download and install SQL Server Management Studio (SSMS)
-      - Click **Connect Now** to test
+      - Back in the SQL Express istaller, click **Connect Now** to test (type `exit` to close the prompt)
       - Click **Close** and confirm
   - Test
-    - Launch SQL Server Management Studio
+    - Launch SQL Server Management Studio (SSMS)
       - Check **Trust server certificate**
       - Click **Connect**
     - For a production environment, use proper authentication
@@ -504,13 +505,20 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
-  - Install Check Point Identity Collector
-    - 🌱 needs to be developed
+  - Install Check Point Identity Collector for Windows
+    - Download
+      - https://support.checkpoint.com/results/sk/sk134312
+      - https://support.checkpoint.com/results/download/74206
+      - NOTE: Login required; "Missing software subscription to download this file."
+        - Not sure if setting up up a proper eval license will take care of this
+    - Install
+    - Configure Identity Collector
+      - Launch the app
+      - 🌱 needs to be developed
+    - Configure in SmartConsole
+      - 🌱 needs to be developed
   - Test
-    - Launch SQL Server Management Studio
-      - Check **Trust server certificate**
-      - Click **Connect**
-    - For a production environment, use proper authentication
+    - 🌱 needs to be developed
 
 ## Update management workstation to join the domain
 - Log in to `manager`
