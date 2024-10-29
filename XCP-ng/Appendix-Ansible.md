@@ -565,7 +565,7 @@ network:
     - test: `ansible all -m ping`
   - Update hostname and install packages
     - [php.conf](ansible/php.conf)
-    - [ss.conf.j2](ansible/ssl.conf.j2)
+    - [ssl.conf.j2](ansible/ssl.conf.j2)
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
   - Testing
