@@ -438,9 +438,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Right-click Disk 1 and then click **New Simple Volume**
       - Assign letter E:
       - Follow the wizard and set the volume label to NETDRIVE
-    - copy file-shares.ps1 [file-shares.ps1](ansible/file-shares.ps1)
-  - `powershell -ExecutionPolicy Bypass file-shares.ps1`
-    - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided file; this causes an error when running the script, but the rest is successfully configured
+    - copy file-shares.ps1 [file-shares.ps1](powershell/file-shares.ps1)
+    - `powershell -ExecutionPolicy Bypass file-shares.ps1`
+      - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided file; this causes an error when running the script, but the rest is successfully configured
   - Testing
     - test access from `branch1-1` to the shared folders by different domain users
 - Configure SQL server **sql-1**
