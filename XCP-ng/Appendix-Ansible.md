@@ -513,10 +513,41 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Not sure if setting up up a proper eval license will take care of this
     - Install
     - Configure Identity Collector
+      - 🌱 need to develop service account credentials, etc.
+      - 🌱 firewalls need tcp 636 to DC-1
       - Launch the app
-      - 🌱 needs to be developed
+      - Ribbon menu > Domain
+        - New domain with service account credentials (log reader permissions)
+        - Edit the new domain, and click Test
+      - Left menu > Identity Sources
+        - New > AD > Add manually
+          - IP
+          - Site "Corp"
+          - Click Test
+          - Click OK
+      - Ribbon menu > Query Pools
+        - New
+          - Corp AD
+          - Select all Identity Sources
+      - Ribbon menu > Filters
+        - Edit Global filter
+        - add list of subnets the clients are on
+      - Left menu > Gateways
+        - Add Name of the firewall object
+        - IP = firewall's LAN IP
+        - Shared secret
+        - Query pool
+        - Filter
+        - Ok
+        - Edit the new gateway and click Test
+      - Left menu > Settings
     - Configure in SmartConsole
       - 🌱 needs to be developed
+      - Create LDAP account unit
+      - Edit cluster firewall1
+        - enable Identity Access Blade
+        - Check Identity Collector, and click Settings
+        - OK
   - Test
     - 🌱 needs to be developed
 
