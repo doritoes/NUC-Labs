@@ -11,6 +11,7 @@ $domainController = "DC-1"
 
 # Create the user
 New-ADUser -Name $username -Path $ouPath -UserPassword $password
+Enable-ADAccount -Identity <username>
 
 # Set the user's password never to expire
 Set-ADUser -Identity $username -PasswordNeverExpires $true
