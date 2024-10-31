@@ -546,18 +546,19 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Select all Identity Sources
           - Click OK and then click OK
       - Ribbon menu > Filters
-        - Edit Global filter
-        - add list of subnets the clients are on
-          - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
-          - Click "+" to add it
-          - Click OK
+        - Add a New filter
+          - Name: Prod
+          - add list of subnets the clients are on
+            - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
+            - Click "+" to add it
+            - Click OK
       - Left menu > Gateways
         - Add new Gateway
           - Name: firewall1
           - IP Address: 10.0.1.1
           - Shared secret: Checkpoint123!
           - Query pool: Corp AD
-          - Filter: Global filter doesn't appear, so leave blank
+          - Filter: Prod
           - Click OK
         - Edit the new gateway and click Test
           - Will fail until the cluster in configured
