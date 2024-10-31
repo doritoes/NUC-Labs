@@ -120,6 +120,13 @@
         color: dark blue
         comments: SQL server
         state: present
+    - name: IDC server
+      check_point.mgmt.cp_mgmt_host:
+        name: idc-1
+        ipv4_address: 10.0.1.14
+        color: dark blue
+        comments: Identity Collector server
+        state: present
     - name: DMZ IIS server
       check_point.mgmt.cp_mgmt_host:
         name: dmz-iis
