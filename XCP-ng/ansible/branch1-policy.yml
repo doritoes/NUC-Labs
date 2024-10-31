@@ -171,6 +171,26 @@
         track:
           type: Log
         state: present
+    - name: add core services ldap allowed
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: LDAP allowed
+        relative_position:
+          below: DNS allowed
+        source:
+          - sms
+          - firewall1
+        destination:
+          - dc-1
+        service:
+        - ldap
+        - ldap-ssl
+        action: Accept
+        comments: Approved LDAP
+        track:
+          type: Log
+        state: present
+
     - name: add DMZ rule internal access to web apps
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
