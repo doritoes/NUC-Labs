@@ -587,7 +587,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
               - Click OK
           - Objects Management tab
             - Click Fetch branches
-              - Or manually DN=xcpng,DN=lab
+              - Or manually DC=xcpng,DC=lab
             - Failure message: Failed to connect to LDAP Server. Please ensure the administrator's credentials are correct and try again
           - Authentication tab
             - Use common group path for queries (unchecked, default)
