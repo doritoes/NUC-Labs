@@ -511,43 +511,111 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - https://support.checkpoint.com/results/download/74206
       - NOTE: Login required; "Missing software subscription to download this file."
         - Not sure if setting up up a proper eval license will take care of this
+      - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
+      - Or try enabling Identity Awareness and the Identity Collector. A downwload link will be shown right in SmartConsole.
+      - In lab testing this link was 404
     - Install
     - Configure Identity Collector
       - 🌱 need to develop service account credentials, etc.
       - 🌱 firewalls need tcp 636 to DC-1
       - Launch the app
-      - Ribbon menu > Domain
-        - New domain with service account credentials (log reader permissions)
-        - Edit the new domain, and click Test
+      - Ribbon menu > Domains
+        - Click icon for New domain
+          - Name: xcpng.lab
+          - Username: adquery
+          - Password: YourStrongPassword123!
+          - This is an account with log reader permissions on DC-1
+          - Click OK
+        - Edit the new domain xcpng.lab, and click Test
+          - Credentials test
+            - IP address: 10.0.1.10
+            - Click Test
+            - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
       - Left menu > Identity Sources
         - New > AD > Add manually
-          - IP
-          - Site "Corp"
+          - Name: DC-1
+          - Domain: xcpng.lab
+          - Host name / IP address: DC-1 or 10.0.1.10
+          - Site: Corp
           - Click Test
+          - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be used
           - Click OK
       - Ribbon menu > Query Pools
         - New
           - Corp AD
           - Select all Identity Sources
+          - Click OK and then click OK
       - Ribbon menu > Filters
         - Edit Global filter
         - add list of subnets the clients are on
+          - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
+          - Click "+" to add it
+          - Click OK
       - Left menu > Gateways
-        - Add Name of the firewall object
-        - IP = firewall's LAN IP
-        - Shared secret
-        - Query pool
-        - Filter
-        - Ok
+        - Add new Gateway
+          - Name: firewall1
+          - IP Address: 10.0.1.1
+          - Shared secret: Checkpoint123!
+          - Query pool: Corp AD
+          - Filter: Global filter doesn't appear, so leave blank
+          - Click OK
         - Edit the new gateway and click Test
+          - Will fail until the cluster in configured
       - Left menu > Settings
+        - No changes required
     - Configure in SmartConsole
       - 🌱 needs to be developed
       - Create LDAP account unit
+        - New > More > User/Identity > LDAP Account Unit
+          - General tab
+            - Name: xcpng.lab_account_unit
+            - Profile: Microsoft_AD
+            - Domain: xcpng.lab
+            - Account Unit usage
+              - CRL retrieval: Not checked
+              - User management: Checked (default)
+              - Activity Directory Query: default not checked
+          - Servers tab
+            - Add
+              - Host: DC-1
+              - Port: 389 (default)
+              - Username: adquery
+              - Login DN: DN=adquery,DC=xcpng,DC=lab
+              - Password: YourStrongPassword123!
+              - Read data from this server: Checked (default)
+              - Write data to this server: Checked (default)
+              - Click OK
+          - Objects Management tab
+            - Click Fetch branches
+              - Or manually DN=xcpng,DN=lab
+            - Failure message: Failed to connect to LDAP Server. Please ensure the administrator's credentials are correct and try again
+          - Authentication tab
+            - Use common group path for queries (unchecked, default)
+            - Allowed authentication schemes
+              - Check Point Password (checked, default)
+              - SecurID (checked, default)
+              - RADIUS (checked, default)
+              - OS Password (checked, default)
+              - TACACS (checked, default)
+            - Users' default values
+              - Use user template (unchecked, default)
+              - Default authentication scheme (unchecked, default)
+            - Limit login failures (unchecked, default)
+            - Encryption
+              - IKE pre-shared secret encryption key: blank (default)
       - Edit cluster firewall1
-        - enable Identity Access Blade
+        - Enable Identity Access Blade
+          - AD Query
+          - Select an Active Directory: xcpng.lab
+          - Username: adquery
+          - Password: YourStrongPassword123!
+          - Click Connect
+            - Failure message: SmartConsole could not connect to 10.0.1.10 - Bad username or password.
         - Check Identity Collector, and click Settings
-        - OK
+          - Click the "+" and add IDC-1
+          - Shared secret: Checkpoint123!
+          - Click OK
+        - Click OK
   - Test
     - 🌱 needs to be developed
 
@@ -787,7 +855,7 @@ By default URl categorization occurs in the background. First attempts to a prev
         - Per applications
     - Track: Log > Accounting
 
-## Identify Awarenewss and access roles
+## Identify Awareness and access roles
 This is currently outside the scope of this Lab.
 
 The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
