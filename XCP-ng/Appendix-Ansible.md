@@ -581,7 +581,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
               - Host: DC-1
               - Port: 389 (default)
               - Username: adquery
-              - Login DN: DN=adquery,DC=xcpng,DC=lab
+              - Login DN: DC=xcpng,DC=lab
+                - not sure about this one!
               - Password: YourStrongPassword123!
               - Read data from this server: Checked (default)
               - Write data to this server: Checked (default)
