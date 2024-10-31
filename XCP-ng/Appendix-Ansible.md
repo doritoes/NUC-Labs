@@ -583,6 +583,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
               - Username: adquery
               - Login DN: DC=xcpng,DC=lab
                 - not sure about this one!
+                - CN=adquery,OU=Users,DC=xcpng,DC=lab
+                - CN=adquere,OU=Automation Users,OU=Corp,DC=xcpng,DC=lab
               - Password: YourStrongPassword123!
               - Read data from this server: Checked (default)
               - Write data to this server: Checked (default)
