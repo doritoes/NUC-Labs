@@ -5,9 +5,9 @@
   collections:
     - check_point.mgmt
   vars:
-    b64_password: "{{ sic_pw | b64_encode }}"
+    b64_password: "{{ sic_pw | b64encode }}"
     valid_from: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
-    valid_to: "{{ lookup('pipe', 'date ]d \"5 years\" +%Y-%m-%d') }}"
+    valid_to: "{{ lookup('pipe', 'date -d \"5 years\" +%Y-%m-%d') }}"
   vars_files:
     - vars.yml
   tasks:
