@@ -505,6 +505,11 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
+  - Disable the Windows Firewall on DC-1
+    - In exptensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
+    - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
+    - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
+    - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
   - Install Check Point Identity Collector for Windows
     - Download
       - https://support.checkpoint.com/results/sk/sk134312
@@ -514,10 +519,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
       - Or try enabling Identity Awareness and the Identity Collector. A downwload link will be shown right in SmartConsole.
       - In lab testing this link was 404
-    - Install
+    - Install the Identity Collector
     - Configure Identity Collector
-      - 🌱 need to develop service account credentials, etc.
-      - 🌱 firewalls need tcp 636 to DC-1
       - Launch the app
       - Ribbon menu > Domains
         - Click icon for New domain
@@ -531,6 +534,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - IP address: 10.0.1.10
             - Click Test
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
+              - Fix: Disable the Windows Firewall on the domain controller
       - Left menu > Identity Sources
         - New > AD > Add manually
           - Name: DC-1
@@ -539,6 +543,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Site: Corp
           - Click Test
           - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be used
+            - Fix: Disable the Windows Firewall on the domain controller
           - Click OK
       - Ribbon menu > Query Pools
         - New
@@ -564,64 +569,6 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Will fail until the cluster in configured
       - Left menu > Settings
         - No changes required
-    - Configure in SmartConsole
-      - 🌱 needs to be developed
-      - Create LDAP account unit
-        - New > More > User/Identity > LDAP Account Unit
-          - General tab
-            - Name: xcpng.lab_account_unit
-            - Profile: Microsoft_AD
-            - Domain: xcpng.lab
-            - Account Unit usage
-              - CRL retrieval: Not checked
-              - User management: Checked (default)
-              - Activity Directory Query: default not checked
-          - Servers tab
-            - Add
-              - Host: DC-1
-              - Port: 389 (default)
-              - Username: adquery
-              - Login DN: DC=xcpng,DC=lab
-                - not sure about this one!
-                - CN=adquery,OU=Users,DC=xcpng,DC=lab
-                - CN=adquere,OU=Automation Users,OU=Corp,DC=xcpng,DC=lab
-              - Password: YourStrongPassword123!
-              - Read data from this server: Checked (default)
-              - Write data to this server: Checked (default)
-              - Click OK
-          - Objects Management tab
-            - Click Fetch branches
-              - Or manually DC=xcpng,DC=lab
-            - Failure message: Failed to connect to LDAP Server. Please ensure the administrator's credentials are correct and try again
-          - Authentication tab
-            - Use common group path for queries (unchecked, default)
-            - Allowed authentication schemes
-              - Check Point Password (checked, default)
-              - SecurID (checked, default)
-              - RADIUS (checked, default)
-              - OS Password (checked, default)
-              - TACACS (checked, default)
-            - Users' default values
-              - Use user template (unchecked, default)
-              - Default authentication scheme (unchecked, default)
-            - Limit login failures (unchecked, default)
-            - Encryption
-              - IKE pre-shared secret encryption key: blank (default)
-      - Edit cluster firewall1
-        - Enable Identity Access Blade
-          - AD Query
-          - Select an Active Directory: xcpng.lab
-          - Username: adquery
-          - Password: YourStrongPassword123!
-          - Click Connect
-            - Failure message: SmartConsole could not connect to 10.0.1.10 - Bad username or password.
-        - Check Identity Collector, and click Settings
-          - Click the "+" and add IDC-1
-          - Shared secret: Checkpoint123!
-          - Click OK
-        - Click OK
-  - Test
-    - 🌱 needs to be developed
 
 ## Update management workstation to join the domain
 - Log in to `manager`
@@ -833,7 +780,7 @@ By default URl categorization occurs in the background. First attempts to a prev
       - Weapons
       - Critical Risk
       - High Risk
-    - Action: **Drop > Blocked Message**
+    - Action: **Drop > Blocked Message - Access Control**
     - Track: Log > Accounting
   - Subrule 2
     - Name: Allow general categories
@@ -850,7 +797,6 @@ By default URl categorization occurs in the background. First attempts to a prev
     - Source: *Any
     - Destination: *Any
     - Services & Applications:
-      - Unknown Risk
       - Uncategorized
     - Action:
       - Inform
@@ -865,6 +811,86 @@ This is currently outside the scope of this Lab.
 The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
 
 A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
+
+- Configure in SmartConsole
+  - Create LDAP account unit
+    - New > More > User/Identity > LDAP Account Unit
+      - General tab
+        - Name: xcpng.lab_account_unit
+        - Profile: Microsoft_AD
+        - Domain: xcpng.lab
+        - Account Unit usage
+          - CRL retrieval: Not checked
+          - User management: Checked (default)
+          - Activity Directory Query: default not checked
+      - Servers tab
+        - Add
+          - Host: DC-1
+          - Port: 389 (default)
+          - Username: adquery
+          - Login DN: DC=xcpng,DC=lab
+            - not sure about this one!
+            - CN=adquery,OU=Users,DC=xcpng,DC=lab
+            - CN=adquere,OU=Automation Users,OU=Corp,DC=xcpng,DC=lab
+          - Password: YourStrongPassword123!
+          - Read data from this server: Checked (default)
+          - Write data to this server: Checked (default)
+          - Click OK
+      - Objects Management tab
+        - Click Fetch branches
+          - Or manually DC=xcpng,DC=lab
+        - Failure message: Failed to connect to LDAP Server. Please ensure the administrator's credentials are correct and try again
+      - Authentication tab
+        - Use common group path for queries (unchecked, default)
+        - Allowed authentication schemes
+          - Check Point Password (checked, default)
+          - SecurID (checked, default)
+          - RADIUS (checked, default)
+          - OS Password (checked, default)
+          - TACACS (checked, default)
+        - Users' default values
+          - Use user template (unchecked, default)
+          - Default authentication scheme (unchecked, default)
+        - Limit login failures (unchecked, default)
+        - Encryption
+          - IKE pre-shared secret encryption key: blank (default)
+  - Edit cluster firewall1
+    - Enable Identity Access Blade
+      - AD Query
+      - Select an Active Directory: xcpng.lab
+      - Username: adquery
+      - Password: YourStrongPassword123!
+      - Click Connect
+        - Failure message: SmartConsole could not connect to 10.0.1.10 - Bad username or password.
+    - Check Identity Collector, and click Settings
+      - Click the "+" and add IDC-1
+      - Shared secret: Checkpoint123!
+      - Click OK
+    - Click OK
+  - Testing
+    - Log in to IDC-1
+    - Launch Identity Collector
+    - From the left menu click Logins Monitor
+    - Click the small power icon next to the text "Logins Monitor"
+    - Log in to branch-1 using a domain user account
+    - Back in the Identity Collector, click the refresh icon
+    - The login will show in the top pane and the related machine and user in the bottom pane
+    - Log in the Firewalla or Firewallb
+    - `pep show user all`
+    - Note that identities are being passed to the firewall
+    - Create Access role
+      - New > Access Role
+        - Object name: Support
+        - Networks: Specified Networks, add branch1_lan
+        - Users: Specific users/grpus
+          - Click "+" to add, and search for support
+          - Click on Support
+        - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
+        - Rmote Access Clients: Leave at Any Clint
+    - Add subrules above the rule allowing medium/low/very low risk applications
+      - Allow the new role Support to the domain object .ipgiraffe.com (FQDN)
+      - Deny all (other) traffic to the domain object .ipgiraffe.com
+    - Publish changes and push policy
 
 # Configure Branch 2
 🌱 this needs to be developed- Initial settings
