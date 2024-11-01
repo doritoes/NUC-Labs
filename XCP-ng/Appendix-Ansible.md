@@ -689,8 +689,8 @@ network:
     - When browsing to an https site, examine the certificate to confirm the signing authority is the firewall
     - When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it
     - Examine logs
-  - Add more https bypass rules
-    - not possible with API in R81.20; available on R82
+  - Add more https bypass rules manually
+    - Not possible with API in R81.20, but available on R82
     - First rule
       - Name: Exceptions for recommended imported services
       - Sources:
@@ -709,6 +709,8 @@ network:
       - Destination:
         - Internet
       - Services:
+        - HTTPS default services
+      - Category/Custom Application:
         - Financial Services
         - Health
       - Action:
