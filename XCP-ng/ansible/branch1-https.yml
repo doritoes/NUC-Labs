@@ -8,7 +8,7 @@
     b64_password: "{{ sic_pw | b64_encode }}"
     valid_from: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
     valid_to: "{{ lookup('pipe', 'date ]d \"5 years\" +%Y-%m-%d') }}"
-  var_files:
+  vars_files:
     - vars.yml
   tasks:
     - name: enable threat prevention and url filtering blades
@@ -40,5 +40,4 @@
         # manually exporting the cert and then enabling https seems the best route
         # $FWDIR/bin/export_https_cert -local -f mycompany.cer
     - name: publish changes
-      #check_point.mgmt.cp_mgmt_publish:
-      check_point.mgmt.cp_mgmt_discard:
+      check_point.mgmt.cp_mgmt_publish:
