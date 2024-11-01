@@ -665,11 +665,12 @@ network:
   - some outbound certificate commands function differently pre-R82
   - enable-https-inspection will be added in the next version
 - Export the certificate using SmartConsole gui
+  - if you can't find the certificate to export it, try Install Database then try again
+  - You can always manually create the certificate in the GUI and export it
 - Enable HTTPS inspection in SmartConsole gui
 - Import the https inspection certificate on DC-1
   - copy the .cer file to `c:\certificate.cer`
   - create the GPO  
-    - `$OU = "OU=Corp,DC=xpcng,DC=lab"`
     - `$gpoName = "Distribute Root CA Certficate"`
     - `$ouPath = "OU=Corp,DC=xpcng,DC=lab"`
     - `New-GPO -Name $gpoName | New-GPLink -Target $ouPath`
@@ -677,8 +678,8 @@ network:
     - Start > Group Policy Management
     - Forest: xcpng.lab
     - Domain: xcpng.lab
-    - OU: Distribute Root CA Certication
-    - Right click the OU from the tree, and click Edit
+    - OU: Corp
+    - Right-click Distribute Root CA Certication from the tree, then click Edit
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
       - Import `c:\certificate.cer`
