@@ -922,9 +922,11 @@ Steps:
 - Set IP address information
   - firewall2a
     - `set interface eth0 ipv4-address 192.168.102.2 mask-length 24`
+    - `set static-route default nexthop gateway address 192.168.102.254 on`
     - `save config`
   - firewall2b
     - `set interface eth0 ipv4-address 192.168.102.3 mask-length 24`
+    - `set static-route default nexthop gateway address 192.168.102.254 on`
     - `save config`
 - Add `manager`'s RSA keys to each firewall's authorized_keys file
   - Log in to `manager` and open a WSL shell
@@ -945,10 +947,9 @@ Steps:
   - You can now ssh without a password
 - Test Ansible access
   - Exit back to session on `manager`
-  - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
+  - update file `inventory`, uncomment the IPs of firewall2a (192.168.102.2) and firewall2b (192.168.102.3)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
-
 
 - Gaia config
 - FTW
