@@ -150,6 +150,24 @@
         track:
           type: Log
         state: present
+    - name: add management rule file lab router
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: manager to lab router
+        relative_position:
+          below: manager to file server
+        source:
+          - manager
+        destination:
+          - isp_router
+        service:
+        - ssh
+        - echo-request
+        action: Accept
+        comments: Approved manager ports
+        track:
+          type: Log
+        state: present
     - name: add core services ntp allowed
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
