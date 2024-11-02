@@ -896,20 +896,60 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
     - Publish changes and push policy
 
 # Configure Branch 2
-🌱 this needs to be developed- Initial settings
-## Enable SMS NAT to manange remote gateways
+## Enable SMS to manange remote gateways
 - Login in to `manager` and SmartConsole
-- Edit the object `sms`
-  - Click NAT to open NAT values
-  - <ins>Check</ins> Add Automatic Address Translation rules
-  - Translation method: **Static**192.168.101.
-  - Translate to IP Addresss: **192.168.101.7**
-  - Install on Gateway: **firewall1**
-  - <ins>Check</ins> Apply for Security Gateway control connections
-  - Click OK
+- Add SMS NAT
+  - Edit the object `sms`
+    - Click NAT to open NAT values
+    - <ins>Check</ins> Add Automatic Address Translation rules
+    - Translation method: **Static**=
+    - Translate to IP Addresss: **192.168.101.7**
+    - Install on Gateway: **firewall1**
+    - <ins>Check</ins> Apply for Security Gateway control connections
+    - Click OK
+- 🌱 permit manager to access remote gatewaysl
 - Publish and Install policy
 
-## Complete First Time Wizard
+## Initial Configuration
+Steps:
+- BEFORE you POWER ON the firewalls **firewall2a** and **firewall2b**
+  - Turn off TX checksumming on each interface
+  - Click Network tab
+  - For each interface click the blue gear and click to set TX checksumming **Disabled**
+- Power on **firewall1a** and **firewall1b**
+- Log in to consoles of **firewall1a** and **firewall1b**
+  - Username `admin` and the password you selected
+- Set IP address information
+  - firewall2a
+    - `set interface eth0 ipv4-address 192.168.102.2 mask-length 24`
+    - `save config`
+  - firewall2b
+    - `set interface eth0 ipv4-address 192.168.102.3 mask-length 24`
+    - `save config`
+- Add `manager`'s RSA keys to each firewall's authorized_keys file
+  - Log in to `manager` and open a WSL shell
+    - ssh to firewall1a and firewall1b
+      - `ssh ansible@192.168.102.2`
+      - `ssh ansible@192.168.102.3`
+      - you will be in the default home directory `/home/ansible`
+  - Create new authorized_keys file and add the key
+    - `mkdir .ssh`
+    - `chmod u=rwx,g=,o= ~/.ssh`
+    - `touch ~/.ssh/authorized_keys`
+    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
+    - Add the public key from `manager` to the files
+      - `cat > ~/.ssh/authorized_keys`
+        - paste in the key
+        - press Control-D
+    - `exit`
+  - You can now ssh without a password
+- Test Ansible access
+  - Exit back to session on `manager`
+  - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
+  - `ansible all -m ping`
+    - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
+
+
 - Gaia config
 - FTW
 
