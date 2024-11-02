@@ -127,6 +127,34 @@
         color: dark blue
         comments: Identity Collector server
         state: present
+    - name: dummy fw2a
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2a
+        ipv4_address: 192.168.102.2
+        color: red
+        comments: dummy fw2a for initial access
+        state: present
+    - name: dummy fw2b
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2b
+        ipv4_address: 192.168.102.3
+        color: red
+        comments: dummy fw2b for initial access
+        state: present
+    - name: dummy fw3a
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2a
+        ipv4_address: 192.168.103.2
+        color: red
+        comments: dummy fw3a for initial access
+        state: present
+    - name: dummy fw3b
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw3b
+        ipv4_address: 192.168.102.3
+        color: red
+        comments: dummy fw3b for initial access
+        state: present
     - name: DMZ IIS server
       check_point.mgmt.cp_mgmt_host:
         name: dmz-iis
