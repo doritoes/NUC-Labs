@@ -143,7 +143,7 @@
         destination:
           - file-1
         service:
-        - nb-session
+        - nbsession
         - smb
         action: Accept
         comments: Approved manager ports
