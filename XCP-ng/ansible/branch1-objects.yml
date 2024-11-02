@@ -151,7 +151,7 @@
     - name: dummy fw3b
       check_point.mgmt.cp_mgmt_host:
         name: dummy_fw3b
-        ipv4_address: 192.168.102.3
+        ipv4_address: 192.168.103.3
         color: red
         comments: dummy fw3b for initial access
         state: present
