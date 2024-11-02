@@ -85,6 +85,10 @@
           - Manager
         destination:
           - firewall1
+          - dummy_fw2a
+          - dummy_fw2b
+          - dummy_fw3a
+          - dummy_fw3b
         service:
         - https
         - echo-reply
@@ -111,7 +115,7 @@
         track:
           type: Log
         state: present
-    - name: add management rule
+    - name: add management rule domain
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: manager to DC
@@ -123,6 +127,24 @@
           - dc-1
         service:
         - active_directory_ports
+        action: Accept
+        comments: Approved manager ports
+        track:
+          type: Log
+        state: present
+    - name: add management rule file server
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: manager to file server
+        relative_position:
+          below: manager to DC
+        source:
+          - manager
+        destination:
+          - file-1
+        service:
+        - nb-session
+        - smb
         action: Accept
         comments: Approved manager ports
         track:
