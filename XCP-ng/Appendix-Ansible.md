@@ -897,9 +897,27 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
 
 # Configure Branch 2
 🌱 this needs to be developed- Initial settings
-- FTW
+## Enable SMS NAT to manange remote gateways
+- Login in to `manager` and SmartConsole
+- Edit the object `sms`
+  - Click NAT to open NAT values
+  - <ins>Check</ins> Add Automatic Address Translation rules
+  - Translation method: **Static**192.168.101.
+  - Translate to IP Addresss: **192.168.101.7**
+  - Install on Gateway: **firewall1**
+  - <ins>Check</ins> Apply for Security Gateway control connections
+  - Click OK
+- Publish and Install policy
+
+## Complete First Time Wizard
 - Gaia config
+- FTW
+
+## Create Cluster
 - Create cluster
+## Policy
+- branch 2 objects
+- updates to domain
 - policy
 - VPN tunnel bring up
 - DHCP helper?????
