@@ -94,7 +94,7 @@
             network_mask: 255.255.255.0
           name: firewall1b
           ip_address: 192.168.41.3
-          one_time_password: vpn123
+          one_time_password: "{{ sic_pw }}"
         os_name: Gaia
         state: present
         cluster_version: R81.20
