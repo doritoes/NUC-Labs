@@ -909,12 +909,11 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
   - Edit the object `sms`
     - Click NAT to open NAT values
     - <ins>Check</ins> Add Automatic Address Translation rules
-    - Translation method: **Static**=
+    - Translation method: **Static**
     - Translate to IP Addresss: **192.168.101.7**
     - Install on Gateway: **firewall1**
     - <ins>Check</ins> Apply for Security Gateway control connections
     - Click OK
-- 🌱 permit manager to access remote gatewaysl
 - Publish and Install policy
 
 ## Initial Configuration
