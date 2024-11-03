@@ -976,7 +976,9 @@ Steps:
   - `ansible-playbook firewall2a.yml`
   - `ansible-playbook firewall2b.yml`
 - Test
-  - 🌱 need to develop
+  - You will be able to connect from manager to
+    - https://192.168.102.2
+    - https://192.168.102.2
 
 ## Configure cluster and policy
 - 🌱 need to develop
