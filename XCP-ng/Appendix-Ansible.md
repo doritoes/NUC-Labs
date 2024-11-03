@@ -953,11 +953,11 @@ Steps:
 
 ## Configure Gaia
 - Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
-  - [firewall1a.yml](ansible/firewall2a.yml)
-  - [firewall1a.cfg](ansible/firewall2a.cfg)
-  - [firewall1b.yml](ansible/firewall2b.yml)
-  - [firewall1b.cfg](ansible/firewall2b.cfg)
-  - [branch1.j2](ansible/branch2.j2)
+  - [firewall2a.yml](ansible/firewall2a.yml)
+  - [firewall2a.cfg](ansible/firewall2a.cfg)
+  - [firewall2b.yml](ansible/firewall2b.yml)
+  - [firewall2b.cfg](ansible/firewall2b.cfg)
+  - [branch2.j2](ansible/branch2.j2)
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall2a.yml`
   - `ansible-playbook firewall2b.yml`
