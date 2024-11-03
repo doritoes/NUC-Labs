@@ -12,8 +12,10 @@
         color: forest green
         comments: Access policy for Lab Branches
         name: Lab_Policy_Branches
-        state: present
         threat_prevention: false
+        installation_targets:
+          - firewall2
+        state: present
     - name: modify cleanup rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
