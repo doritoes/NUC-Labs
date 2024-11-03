@@ -13,6 +13,7 @@
           auto_rule: true
           ip_address: 192.168.101.7
           method: static
+          install_on: firewall1
         state: present
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
