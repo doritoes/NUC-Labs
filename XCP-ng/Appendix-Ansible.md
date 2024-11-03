@@ -910,7 +910,11 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
   - [branch2-enablesms.yml](ansible/branch2-enablesms.yml)
 - Apply the changes
   - `ansible-playbook -i inventory-api branch2-enablesms.yml`
-  - Push policy `Lab policy` to **firewall1** to enable the SMS to connect to Branch 2
+- R81.1: Enable "Apply for Security Gateway control connections"
+  - Edit `sms` object
+  - Under NAT, <ins>check</ins> "Apply for Security Gateway control connections"
+  - Publish changes
+- Push policy `Lab policy` to **firewall1** to enable the SMS to connect to Branch 2
     -  ansible-playbook -i inventory-api branch1-push.yml`
 
 ## Initial Configuration
