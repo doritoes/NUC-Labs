@@ -289,7 +289,7 @@
         state: present
     - name: create NAT rule section No-NAT
       check_point.mgmt.cp_mgmt_nat_section:
-        package: Lab_Policy
+        package: Lab_Policy_Branches
         name: No-NAT
         position: top
         state: present
