@@ -8,6 +8,7 @@
   tasks:
     - name: create cluster firewall2
       check_point.mgmt.cp_mgmt_simple_cluster:
+        ignore_warnings: true
         cluster_mode: cluster-xl-ha
         color: firebrick
         firewall: true
