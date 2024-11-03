@@ -1,18 +1,18 @@
 ---
-- name: Create cluster
+- name: Create cluster branch 2ZZZ
   hosts: check_point
   connection: httpapi
   # include_vars: vars.yml # introduced in Ansible 2.11
   vars_files:
     - vars.yml
   tasks:
-    - name: create cluster firewall1
+    - name: create cluster firewall2
       check_point.mgmt.cp_mgmt_simple_cluster:
         cluster_mode: cluster-xl-ha
         color: firebrick
         firewall: true
         vpn: true
-        name: firewall1
+        name: firewall2
         interfaces:
         - anti_spoofing: true
           interface_type: cluster
@@ -35,6 +35,7 @@
         - anti_spoofing: true
           interface_type: sync
           name: eth2
+          network_mask: 255.255.255.0
           topology: internal
           topology_settings:
             interface_leads_to_dmz: false
