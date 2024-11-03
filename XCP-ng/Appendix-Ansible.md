@@ -951,17 +951,59 @@ Steps:
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
-- Gaia config
-- FTW
+## Configure Gaia
+- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
+  - [firewall1a.yml](ansible/firewall2a.yml)
+  - [firewall1a.cfg](ansible/firewall2a.cfg)
+  - [firewall1b.yml](ansible/firewall2b.yml)
+  - [firewall1b.cfg](ansible/firewall2b.cfg)
+  - [branch1.j2](ansible/branch2.j2)
+- Run the playbooks to complete the first time wizard (FTW) and reboot
+  - `ansible-playbook firewall2a.yml`
+  - `ansible-playbook firewall2b.yml`
+- Test
+  - 🌱 need to develop
+- Update Gaia (if you have proper eval licenses)
+  - 🌱 need to develop
 
-## Create Cluster
-- Create cluster
-## Policy
+## Configure cluster and policy
+- 🌱 need to develop
+- Create objects in the Check Point database related to Branch 2
+  - Create file on `manager`
+    - [branch2-objects.yml](ansible/branch2-objects.yml)
+  - `ansible-playbook -i inventory-api branch2-objects.yml`
+- Create cluster using API
+  - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
+  - Create file on `manager`
+    - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
+  - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+- Create new policy using API
+  - [branch2-policy.yml](ansible/branch2-policy.yml)
+    - `ansible-playbook -i inventory-api branch1-policy.yml`
+- Push policy
+  - [branch2-push.yml](ansible/branch2-push.yml)
+    - `ansible-playbook -i inventory-api branch2-push.yml`
+- At this point you should be able to install a JHF on the SMS and on the firewalls
+  - SSH or console to each device (sms, firewall1a, firewall1b)
+  - `clish`
+  - `installer check-for-updates`
+  - `installer download-and-install [tab]`
+  - select the applicable JHF hotfix bundle by number
+  - Approve the reboot
+
+## Configure DHCP helper
+- 🌱 need to develop
+
+## VPN 
+- configure
 - branch 2 objects
 - updates to domain
 - policy
 - VPN tunnel bring up
 - DHCP helper?????
+
+## Testing
+- configure
 
 # Configure Branch 3
 🌱 this needs to be developed
