@@ -10,6 +10,6 @@
         access: true
         threat_prevention: false
         install_on_all_cluster_members_or_fail: true
-        policy_package: Lab_Branch_Policy
+        policy_package: Lab_Policy_Branches
         targets:
         - firewall2
