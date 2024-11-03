@@ -20,9 +20,6 @@
           name: eth0
           network_mask: 255.255.255.0
           topology: external
-          topology_settings:
-            interface_leads_to_dmz: true
-            ip_address_behind_this_interface: network defined by the interface ip and net mask
         - anti_spoofing: true
           interface_type: cluster
           ip_address: 10.0.2.1
