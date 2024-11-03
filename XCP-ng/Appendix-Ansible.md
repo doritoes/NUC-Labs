@@ -896,12 +896,7 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
     - Publish changes and push policy
 
 # Configure Branch 2
-
 ## Add branch 2 to Domain Controller
-- 🌱 need to develop
-- sites and subnets
-- DNS
-- DHCP
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1`
     - branch2-site.ps1 ([branch2-site.ps1](powershell/branch2-site.ps1))
@@ -911,17 +906,12 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
   - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
 
 ## Enable SMS to manange remote gateways
-- Login in to `manager` and SmartConsole
-- Add SMS NAT
-  - Edit the object `sms`
-    - Click NAT to open NAT values
-    - <ins>Check</ins> Add Automatic Address Translation rules
-    - Translation method: **Static**
-    - Translate to IP Addresss: **192.168.101.7**
-    - Install on Gateway: **firewall1**
-    - <ins>Check</ins> Apply for Security Gateway control connections
-    - Click OK
-- Publish and Install policy
+- Create file on `manager`
+  - [branch2-enablesms.yml](ansible/branch2-enablesms.yml)
+- Apply the changes
+  - `ansible-playbook -i inventory-api branch2-enablesms.yml`
+  - Push policy `Lab policy` to **firewall1** to enable the SMS to connect to Branch 2
+    -  ansible-playbook -i inventory-api branch1-push.yml`
 
 ## Initial Configuration
 Steps:
