@@ -3,7 +3,7 @@
   hosts: 192.168.102.3
   gather_facts: False
   vars:
-    system_name: firewall2a
+    system_name: firewall2b
     system_ip: 192.168.102.3
     system_ip_masklen: 24
     system_default_gateway: 192.168.102.254
