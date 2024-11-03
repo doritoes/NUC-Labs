@@ -896,6 +896,13 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
     - Publish changes and push policy
 
 # Configure Branch 2
+
+## Add branch 2 to Domain Controller
+- 🌱 need to develop
+- sites and subnets
+- DNS
+- DHCP
+
 ## Enable SMS to manange remote gateways
 - Login in to `manager` and SmartConsole
 - Add SMS NAT
@@ -952,7 +959,8 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
+- 🌱 need to develop
+- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS
   - [firewall2a.yml](ansible/firewall2a.yml)
   - [firewall2a.cfg](ansible/firewall2a.cfg)
   - [firewall2b.yml](ansible/firewall2b.yml)
@@ -962,8 +970,6 @@ Steps:
   - `ansible-playbook firewall2a.yml`
   - `ansible-playbook firewall2b.yml`
 - Test
-  - 🌱 need to develop
-- Update Gaia (if you have proper eval licenses)
   - 🌱 need to develop
 
 ## Configure cluster and policy
