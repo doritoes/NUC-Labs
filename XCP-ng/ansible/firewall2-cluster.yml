@@ -53,7 +53,7 @@
           ip_address: 192.168.102.2
           one_time_password: "{{ sic_pw }}"
         - interfaces:
-          - ip_address: 192.169.102.3
+          - ip_address: 192.168.102.3
             name: eth0
             network_mask: 255.255.255.0
           - ip_address: 10.0.2.3
