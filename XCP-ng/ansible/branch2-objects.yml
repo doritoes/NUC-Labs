@@ -20,7 +20,7 @@
         state: present
     - name: Branch 2 LAN network
       check_point.mgmt.cp_mgmt_network:
-        name: branch1_lan
+        name: branch2_lan
         subnet: 10.0.2.0
         mask_length: 24
         color: crete blue
@@ -33,7 +33,7 @@
         state: present
     - name: Branch 2 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
-        name: Branch 1 LAN Workstation DHCP scope
+        name: Branch 2 LAN Workstation DHCP scope
         ip_address_first: 10.0.2.20
         ip_address_last: 10.0.2.250
         color: dark blue
