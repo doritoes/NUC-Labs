@@ -56,7 +56,7 @@
         layer: Lab_Policy_Branches Network
         name: Core Services
         relative_position:
-          below: DMZ      
+          below: Management network      
     - name: create general Internet access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
@@ -295,7 +295,7 @@
       check_point.mgmt.cp_mgmt_nat_rule:
         package: Lab_Policy_Branches
         name: LAN No-NAT
-        comments: No-NAT LAN to DMZ
+        comments: No-NAT LAN to LAN
         original_source: branch2_lan
         original_destination: branch1_lan
         relative_position:
