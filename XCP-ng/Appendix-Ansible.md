@@ -902,6 +902,13 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
 - sites and subnets
 - DNS
 - DHCP
+- Configure Sites and Services Subnets and DNS
+  - Run on `dc-1`
+    - branch2-site.ps1 ([branch2-site.ps1](powershell/branch2-site.ps1))
+    - `powershell -ExecutionPolicy Bypass branch2-site.ps1`
+- Configure DC-1 as DHCP server for branch 2
+  - branch2-dhcp.ps1 ([branch2-dhcp.ps1](powershell/branch2-dhcp.ps1))
+  - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
 
 ## Enable SMS to manange remote gateways
 - Login in to `manager` and SmartConsole
