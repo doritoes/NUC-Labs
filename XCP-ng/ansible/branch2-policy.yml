@@ -127,10 +127,10 @@
         track:
           type: Log
         state: present
-    - name: add core services dns allowed
+    - name: add core services domain controller
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
-        name: DNS allowed
+        name: Domain Services
         relative_position:
           below: NTP allowed
         source:
@@ -138,24 +138,8 @@
         destination:
           - dc-1
         service:
-        - dns
-        action: Accept
-        comments: Approved dns
-        track:
-          type: Log
-        state: present
-    - name: add core services domain controller
-      check_point.mgmt.cp_mgmt_access_rule:
-        layer: Lab_Policy_Branches Network
-        name: Domain Services
-        relative_position:
-          below: DNS allowed
-        source:
-          - branch2_lan
-        destination:
-          - dc-1
-        service:
         - active_directory_ports
+        action: Accept
         comments: domain controller access
         track:
           type: Log
@@ -173,6 +157,7 @@
         service:
         - nbsession
         - smb
+        action: Accept
         comments: file server access
         track:
           type: Log
