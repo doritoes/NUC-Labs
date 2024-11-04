@@ -315,7 +315,7 @@ Steps:
 
 ## Remove management workstation from the Lab network
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
-- Start > Settings > Network & Internet > Ethernet
+- Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
 - Click **Change adapter options**
 - Configure Ethernet 3 interface
   - Double-click the Ethernet 3 interface, which is connected to the Management network
@@ -324,7 +324,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Enter DNS servers
     - 8.8.8.8
     - 8.8.4.4
-  - Click OK > OK > Close
+  - Click **OK** > **OK** > **Close**
 - Disable Ethernet 2 interface
   - Right-click Ethernet 2
   - Click Disable
