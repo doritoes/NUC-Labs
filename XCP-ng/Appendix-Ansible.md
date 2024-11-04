@@ -28,7 +28,7 @@ Notes:
 - Install WSL
   - Add optional feature Windows Subsystem for Linux (WSL)
     - NOTE In Lab testing, skipping this step caused problems
-    - Start > type "Add an optional feature", click it
+    - Click **Start** Start > type "**Add an optional feature**", click it
     - Scroll to bottom, click **More Windows features**
     - Check **Windows Subsystem for Linux** and click **OK**
     - Click **Restart now**
