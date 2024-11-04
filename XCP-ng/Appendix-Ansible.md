@@ -193,7 +193,7 @@ Steps:
   - Download the SmartConsole R81.20 client using the link "Download Now!"
 - Install SmartConsole using the downloaded file
 - Launch SmartConsole
-  - Username: `cpadmin`
+  - Username: **cpadmin**
   - Password: *the password from vars.yml (default Checkpoint123!)*
   - Server Name or IP Address: **192.168.41.20**
   - Accept the server identity and click **Proceed**
