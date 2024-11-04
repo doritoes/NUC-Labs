@@ -4,6 +4,13 @@
   connection: httpapi
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
+    - name: ISP router
+      check_point.mgmt.cp_mgmt_host:
+        name: isp_router
+        ipv4_address: 192.168.99.201
+        color: dark blue
+        comments: Lab ISP router
+        state: present
     - name: management network NAT
       check_point.mgmt.cp_mgmt_network:
         name: management_192.168.41.0/24
