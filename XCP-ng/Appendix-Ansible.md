@@ -294,7 +294,6 @@ Steps:
   - Create file on `manager`
     - [branch1-objects.yml](ansible/branch1-objects.yml)
   - `ansible-playbook -i inventory-api branch1-objects.yml`
-  - NOTE Originally this playbook added automatic NAT to 192.168.101.7 on SMS; however due to a bug this doesn't work
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
