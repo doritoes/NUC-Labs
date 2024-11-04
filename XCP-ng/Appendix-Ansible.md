@@ -116,8 +116,8 @@ Notes:
     - accept the key
     - log in with password
   - `configure`
-  - `set system login user ansible authentication public-keys home type 'ssh-rsa'`
-  - `set system login user ansible authentication public-keys home key '<valueofkey>'`
+  - `set system login user ansible authentication public-keys lab type 'ssh-rsa'`
+  - `set system login user ansible authentication public-keys lab key '<valueofkey>'`
     - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
   - `commit`
   - `save`
