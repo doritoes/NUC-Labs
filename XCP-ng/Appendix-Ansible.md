@@ -698,9 +698,48 @@ network:
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
       - Import `c:\certificate.cer`
-  - Push policy Lab_Policy to enable https inspection
+  - Update Lab_Policy to enable https inspection
     - SECURITY POLICIES > HTTPS Inspection > Policy
     - Change the default rule **Track** value to **Log**
+  - Add more https bypass rules manually
+    - Not possible with API in R81.20, but available on R82 API
+    - First rule
+      - Name: Exceptions for recommended imported services
+      - Source:
+        - *Any
+      - Destination:
+        - Import > Updatable Objects >  **HTTPS services - recommended bypass**
+      - Services:
+        - HTTPS default services
+      - Action:
+        - Bypass
+      - Track: Log
+    - Second rule
+      - Name: Exceptions for categories
+      - Source:
+        - *Any
+      - Destination:
+        - Internet
+      - Services:
+        - HTTPS default services
+      - Category/Custom Application:
+        - Financial Services
+        - Health
+      - Action:
+        - Bypass
+      - Track: Log
+    - Third rule (important to allow SMS to download Updatable objects)
+      - Name: Bypass inspection
+      - Sources:
+        - dmz-apache
+        - sms
+      - Destination:
+        - Internet
+      - Services:
+        - HTTPS default services
+      - Action:
+        - Bypass
+      - Track: Log
     - Pulish and Install the policy
   - Test from branch1-1
     - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
@@ -716,47 +755,8 @@ network:
       - Click Certificates and select the Trusted Root Certification Authorities tab
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
-    - 🌱 this might not work without the application control blade enabled
-  - NOTE When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it; this is not the same as the outbound https inspection certificate
-  - Add more https bypass rules manually
-    - Not possible with API in R81.20, but available on R82
-    - First rule
-      - Name: Exceptions for recommended imported services
-      - Sources:
-        - *Any
-      - Destination:
-        - Import > Updatable Objects >  HTTPS services - recommended bypass
-      - Services:
-        - HTTPS default services
-      - Action:
-        - Bypass
-      - Track: Log
-    - Second rule
-      - Name: Exception for categories
-      - Sources:
-        - *Any
-      - Destination:
-        - Internet
-      - Services:
-        - HTTPS default services
-      - Category/Custom Application:
-        - Financial Services
-        - Health
-      - Action:
-        - Bypass
-      - Track: Log
-    - Third rule
-      - Name: Bypass inspection
-      - Sources:
-        - dmz-apache
-        - sms
-      - Destination:
-        - Internet
-      - Services:
-        - HTTPS default services
-      - Action:
-        - Bypass
-      - Track: Log
+  - NOTE When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it in a future step; this is not the same as the outbound https inspection certificate
+
 
 ## Import the User Check Certificate
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
