@@ -11,7 +11,7 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: enable threat prevention and url filtering blades
+    - name: enable app control and url filtering blades
       check_point.mgmt.cp_mgmt_simple_cluster:
         name: firewall1
         application_control: true
@@ -24,11 +24,8 @@
         valid_to: "{{ valid_to }}"
       register: certificate_output
     # enable https inspection on cluster (missing from Ansible collection)
-    # export the certificate for use on Windows systems
-    # cp_mgmt_https_layer > new layer
-    # cp_mgmt_https_section
-    # cp_mgmt_https_rule
-    - name: extract base64 certificate
+    # export the certificate for use on Windows systems (missing)
+    - name: extract base64 certificate (not suitable for importing as root CA certificate)
       set_fact:
           certificate: "{{ certificate_output['add-outbound-inspection-certificate']['base64-certificate'] }}"
     - name: write certificate to file certificate.cer
