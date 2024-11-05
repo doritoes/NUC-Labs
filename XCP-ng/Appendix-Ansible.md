@@ -504,7 +504,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
   - Disable the Windows Firewall on DC-1
-    - In exptensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
+    - In extensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
     - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
     - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
     - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
