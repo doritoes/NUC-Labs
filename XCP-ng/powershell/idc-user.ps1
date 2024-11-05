@@ -10,12 +10,11 @@ $domain = "xcpng.lab"
 $domainController = "DC-1"
 
 # Create the user
-New-ADUser -Name $username -Path $ouPath -UserPassword $password
+New-ADUser -Name $username -Path $ouPath -AccountPassword $password
 Enable-ADAccount -Identity $username
 
 # Set the user's password never to expire
 Set-ADUser -Identity $username -PasswordNeverExpires $true
 
-Add-ADGroupMEmber -Identity "Event Log Readers" -Member "$username"
-#Get-ADGroupMEmber -Identity "Event Log Readers"
-# not tested
+Add-ADGroupMember -Identity "Event Log Readers" -Members "$username"
+#Get-ADGroupMember -Identity "Event Log Readers"
