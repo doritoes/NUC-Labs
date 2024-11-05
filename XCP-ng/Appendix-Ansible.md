@@ -503,11 +503,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
-  - Disable the Windows Firewall on DC-1
-    - In extensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
-    - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
-    - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
-    - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
+  - Set up Domain Controller
+    - Disable the Windows Firewall on DC-1
+      - In extensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
+      - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
+      - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
+      - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
+    - copy idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
+      - `powershell -ExecutionPolicy bypass idc-user.ps1`
   - Install Check Point Identity Collector for Windows
     - Download
       - https://support.checkpoint.com/results/sk/sk134312
