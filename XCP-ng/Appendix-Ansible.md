@@ -536,6 +536,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - Click Test
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
               - Fix: Disable the Windows Firewall on the domain controller
+            - You can't log in to DC-1 as adquery, but you can log in to branch1-1 to confirm the account works
       - Left menu > Identity Sources
         - New > AD > Add manually
           - Name: DC-1
@@ -544,7 +545,6 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Site: Corp
           - Click Test
           - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be used
-            - Fix: Disable the Windows Firewall on the domain controller
           - Click OK
       - Ribbon menu > Query Pools
         - New
@@ -567,7 +567,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Filter: Prod
           - Click OK
         - Edit the new gateway and click Test
-          - Will fail until the cluster in configured
+          - Will fail until the cluster is configured
       - Left menu > Settings
         - No changes required
 
@@ -622,7 +622,7 @@ network:
   - Testing
       - From branch1-1:
         - https://192.168.31.11
-        - http://192.168.101.6
+        - https://192.168.101.6
       - From manager: http://192.168.31.11
       - From a test machine on build network: http://192.168.101.6
 - Configure IIS web server **dmz-iis**
@@ -639,7 +639,7 @@ network:
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
       - **Yes** allow your PC to be discoverable by other PCs and devices on this network
-    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
   - Join to domain
     - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
@@ -647,7 +647,7 @@ network:
       - Password: the password you set
   - Install IIS
     - Open administrative powershell
-    - `Install-WindowsFeature Web-Server -IncludeManagentTools`
+    - `Install-WindowsFeature Web-Server -IncludeManagementTools`
     - Test:
       - From dmz-iis: http://localhost
       - From branch1-1:
