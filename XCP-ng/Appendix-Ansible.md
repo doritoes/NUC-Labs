@@ -503,7 +503,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
-  - Set up Domain Controller
+  - Set up Domain Controller for IDC
     - Disable the Windows Firewall on DC-1
       - In extensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
       - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
@@ -518,7 +518,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - NOTE: Login required; "Missing software subscription to download this file."
         - Not sure if setting up up a proper eval license will take care of this
       - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
-      - Or try enabling Identity Awareness and the Identity Collector. A downwload link will be shown right in SmartConsole.
+      - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
       - In lab testing this link was 404
     - Install the Identity Collector
     - Configure Identity Collector
@@ -532,7 +532,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Click OK
         - Edit the new domain xcpng.lab, and click Test
           - Credentials test
-            - IP address: 10.0.1.10
+            - IP address: 10.0.1.10 or DC-1
             - Click Test
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
               - Fix: Disable the Windows Firewall on the domain controller
