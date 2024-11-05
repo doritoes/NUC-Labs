@@ -430,16 +430,16 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Password: the password you set
   - Set up share drive and file shares
     - Log in as AD\juliette.larocco2
-    - Start > Create and format hard disk partitions
+    - Click **Start** > **Create and format hard disk partitions**
       - You will be prompted to initialize the disk (Disk 1)
       - Accept GPT (GUID Partition Table)
       - Click OK
       - Right-click Disk 1 and then click **New Simple Volume**
       - Assign letter E:
-      - Follow the wizard and set the volume label to NETDRIVE
+      - Follow the wizard and set the volume label to **NETDRIVE**
     - copy file-shares.ps1 [file-shares.ps1](powershell/file-shares.ps1)
     - `powershell -ExecutionPolicy Bypass file-shares.ps1`
-      - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided file; this causes an error when running the script, but the rest is successfully configured
+      - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file; this causes an error when running the script, but the rest is successfully configured
   - Testing
     - test access from `branch1-1` to the shared folders by different domain users
 - Configure SQL server **sql-1**
@@ -457,14 +457,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Set up data drive
-    - Log in as AD\juliette.larocco2
-    - Start > Create and format hard disk partitions
+    - Click **Start** > **Create and format hard disk partitions**
       - You will be prompted to initialize the disk (Disk 1)
       - Accept GPT (GUID Partition Table)
       - Click OK
       - Right-click Disk 1 and then click **New Simple Volume**
       - Assign letter E:
-      - Follow the wizard and set the volume label to SQL
+      - Follow the wizard and set the volume label to **SQL**
   - Join to domain
     - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
