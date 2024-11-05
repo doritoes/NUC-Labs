@@ -699,12 +699,25 @@ network:
     - Right-click Trusted Root Certification Authorities, and then click Import
       - Import `c:\certificate.cer`
   - Push policy Lab_Policy to enable https inspection
+    - SECURITY POLICIES > HTTPS Inspection > Policy
+    - Change the default rule **Track** value to **Log**
+    - Pulish and Install the policy
   - Test from branch1-1
-    - "gpupdate /force" will trigger an update
-    - logging out and back in may also help
-    - When browsing to an https site, examine the certificate to confirm the signing authority is the firewall
-    - When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it
-    - Examine logs
+    - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
+    - Browse to an internet site like https://github.com and examine the https certificate
+      - Edge browser: click the lock next to the URL > Connection is secure
+      - Click the Cerificifate icon
+      - If https inspection is working, the Issued By will new reflect xcpng.lab
+      - Examine logs
+  - If the traffic is inspected and intercepted but not trusted by the browser
+    - Logging out and back in may also help
+    - Confirm the certificate is installed
+      - Start > Internet Options > Content
+      - Click Certificates and select the Trusted Root Certification Authorities tab
+  - If the traffic not intercepted at all
+    - add a rule to the HTTPS policy, publish and push, then try again
+    - 🌱 this might not work without the application control blade enabled
+  - NOTE When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it; this is not the same as the outbound https inspection certificate
   - Add more https bypass rules manually
     - Not possible with API in R81.20, but available on R82
     - First rule
