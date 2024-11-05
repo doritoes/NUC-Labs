@@ -521,6 +521,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
       - In lab testing this link was 404
     - Install the Identity Collector
+    - Allow Identity Collector in the Windows Firewall on IDC-1
+      - Click **Start** > type **Windows Defender Firewall**
+      - Click **Allow an app or feature through Windows Defender Firewall**
+      - Click **Allow another app**
+      - Browse to C:\Program Files (x86)\CheckPoint\Identity Collector\cpidc.exe
+      - Repeat for ipidcgui.exe
+      - The apps should be allowed for the Domain profile
+      - Click OK
     - Configure Identity Collector
       - Launch the app
       - Ribbon menu > Domains
@@ -567,7 +575,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Filter: Prod
           - Click OK
         - Edit the new gateway and click Test
-          - Will fail until the cluster is configured
+          - Will fail until the cluster is configured (see below)
       - Left menu > Settings
         - No changes required
 
