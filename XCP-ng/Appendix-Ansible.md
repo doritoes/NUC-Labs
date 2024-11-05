@@ -667,18 +667,24 @@ network:
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
 ## HTTPS Inspection
-- branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
-  - creates the certificate
+- Enable application control and url filtering blands, and create outbound https inspection certificate
+  - branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
+  - `ansible-playbook -i inventory-api branch1-https.yml`
 - Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
   - creating https rules, etc not supported until R82
   - some outbound certificate commands function differently pre-R82
-  - enable-https-inspection will be added in the next version
+  - `enable-https-inspection` will be added in the next version
 - Export the certificate using SmartConsole gui
-  - if you can't find the certificate to export it, try Install Database then try again
-  - You can always manually create the certificate in the GUI and export it
-- Enable HTTPS inspection in SmartConsole gui
-- Import the https inspection certificate on DC-1
-  - copy the .cer file to `c:\certificate.cer`
+  - Open the cluster `firewall1`
+  - Click on HTTPS Ispection
+  - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
+  - Step two > click **Export certificate**
+    - Name it **outbound**
+- Step 3 check **Enable HTTPS inspection**
+- Click and Publish
+- WARNING if you push policy now, your will get https warnings/errors in your browser. Let's set up the trusted Root CA first
+- Distribute the https inspection certificate using GPO on DC-1
+  - copy the .cer file to DC-1 at `c:\certificate.cer`
   - create the GPO  
     - `$gpoName = "Distribute Root CA Certficate"`
     - `$ouPath = "OU=Corp,DC=xpcng,DC=lab"`
@@ -692,6 +698,7 @@ network:
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
       - Import `c:\certificate.cer`
+  - Push policy Lab_Policy to enable https inspection
   - Test from branch1-1
     - "gpupdate /force" will trigger an update
     - logging out and back in may also help
