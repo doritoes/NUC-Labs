@@ -1025,7 +1025,6 @@ Steps:
     - https://192.168.102.3
 
 ## Configure cluster and policy
-- 🌱 need to develop
 - Create objects in the Check Point database related to Branch 2
   - Create file on `manager`
     - [branch2-objects.yml](ansible/branch2-objects.yml)
@@ -1035,6 +1034,7 @@ Steps:
   - Create file on `manager`
     - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
   - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+  - 🌱SIC files creating the cluster! Can't push policy
 - Create new policy using API
   - [branch2-policy.yml](ansible/branch2-policy.yml)
     - `ansible-playbook -i inventory-api branch1-policy.yml`
