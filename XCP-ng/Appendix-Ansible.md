@@ -1023,7 +1023,7 @@ Steps:
 - Test
   - You will be able to connect from manager to
     - https://192.168.102.2
-    - https://192.168.102.2
+    - https://192.168.102.3
 
 ## Configure cluster and policy
 - 🌱 need to develop
