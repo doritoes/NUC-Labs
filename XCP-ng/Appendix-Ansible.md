@@ -687,8 +687,8 @@ network:
   - copy the .cer file to DC-1 at `c:\certificate.cer`
   - create the GPO  
     - `$gpoName = "Distribute Root CA Certficate"`
-    - `$ouPath = "OU=Corp,DC=xpcng,DC=lab"`
-    - `New-GPO -Name $gpoName | New-GPLink -Target $ouPath`
+    - `$domainDN = "DC=xcpng,DC=lab"`
+    - `New-GPO -Name $gpoName | New-GPLink -Target $domainDN`
   - Open Group Policy Management Console (GPMC)
     - Start > Group Policy Management
     - Forest: xcpng.lab
