@@ -741,22 +741,6 @@ network:
         - Bypass
       - Track: Log
     - Pulish and Install the policy
-  - Test from branch1-1
-    - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
-    - Browse to an internet site like https://github.com and examine the https certificate
-      - Edge browser: click the lock next to the URL > Connection is secure
-      - Click the Cerificifate icon
-      - If https inspection is working, the Issued By will new reflect xcpng.lab
-      - Examine logs
-  - If the traffic is inspected and intercepted but not trusted by the browser
-    - Logging out and back in may also help
-    - Confirm the certificate is installed
-      - Start > Internet Options > Content
-      - Click Certificates and select the Trusted Root Certification Authorities tab
-  - If the traffic not intercepted at all
-    - add a rule to the HTTPS policy, publish and push, then try again
-  - NOTE When browsing to a blocked site, the UserCheck message will have an untrusted certificate until we import it in a future step; this is not the same as the outbound https inspection certificate
-
 
 ## Import the User Check Certificate
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
@@ -791,14 +775,15 @@ By default URl categorization occurs in the background. First attempts to a prev
 
 ## Add Application Control layer
 🌱 These changes can likely be done using Ansible and the API. Need to test.
-- Open the Access Policy and fine the section **General Internet access**
+- Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > New Layer**
-  - Name: Internet Control
+  - Name: **Internet Control**
   - Blades:
     - Firewall (checked)
     - Applications & URL Filtering (checked)
   - Advanced > Implicit Cleanup Action: **Allow**
+  - Confirm action is Accept and is set to Log
 - Rename the cleanup rule **Allow remaining traffic**
 - Add these sub rules above that
   - Subrule 1
@@ -830,19 +815,36 @@ By default URl categorization occurs in the background. First attempts to a prev
     - Destination: *Any
     - Services & Applications:
       - Uncategorized
+      - Unknown Risk
     - Action:
       - Inform
         - Access Approval
         - Once a day
         - Per applications
     - Track: Log > Accounting
+- Publish and install Policy
+  - This will enable https inspection!
+- Test from branch1-1
+  - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
+  - Browse to an internet site like https://github.com and examine the https certificate
+    - Edge browser: click the lock next to the URL > Connection is secure
+      - Click the Cerificifate icon
+      - If https inspection is working, the Issued By will new reflect xcpng.lab
+      - Examine logs
+  - If the traffic is inspected and intercepted but not trusted by the browser
+    - Logging out and back in may also help
+    - Confirm the certificate is installed
+      - Start > Internet Options > Content
+      - Click Certificates and select the Trusted Root Certification Authorities tab
+  - If the traffic not intercepted at all
+    - add a rule to the HTTPS policy, publish and push, then try again
 
 ## Identify Awareness and access roles
-This is currently outside the scope of this Lab.
-
 The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
 
 A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
+
+Here are the steps for configuring IDC in our Lab.
 
 - Configure in SmartConsole
   - Create LDAP account unit
@@ -857,13 +859,10 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
           - Activity Directory Query: default not checked
       - Servers tab
         - Add
-          - Host: DC-1
+          - Host: dc-1
           - Port: 389 (default)
           - Username: adquery
           - Login DN: DC=xcpng,DC=lab
-            - not sure about this one!
-            - CN=adquery,OU=Users,DC=xcpng,DC=lab
-            - CN=adquere,OU=Automation Users,OU=Corp,DC=xcpng,DC=lab
           - Password: YourStrongPassword123!
           - Read data from this server: Checked (default)
           - Write data to this server: Checked (default)
@@ -887,21 +886,27 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
         - Encryption
           - IKE pre-shared secret encryption key: blank (default)
   - Edit cluster firewall1
-    - Enable Identity Access Blade
+    - Enable Identity Awareness Blade
       - AD Query
       - Select an Active Directory: xcpng.lab
       - Username: adquery
       - Password: YourStrongPassword123!
       - Click Connect
-        - Failure message: SmartConsole could not connect to 10.0.1.10 - Bad username or password.
+        - Failure message: User is not a domain administrator, as such AD Query will not work.
+        - Check Ignore the errors and configure the LDAP account
+        - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
     - Check Identity Collector, and click Settings
-      - Click the "+" and add IDC-1
+      - Click the "+" and add **idc-1**
       - Shared secret: Checkpoint123!
       - Click OK
     - Click OK
+    - Publish and install policy
   - Testing
     - Log in to IDC-1
     - Launch Identity Collector
+    - From the left, click Gateways
+      - Edit firewall1
+      - Test and Trust the certificate
     - From the left menu click Logins Monitor
     - Click the small power icon next to the text "Logins Monitor"
     - Log in to branch-1 using a domain user account
@@ -910,19 +915,29 @@ A good alternative for Lab testing is using **Browser-Based Authentication**. Th
     - Log in the Firewalla or Firewallb
     - `pep show user all`
     - Note that identities are being passed to the firewall
-    - Create Access role
-      - New > Access Role
-        - Object name: Support
-        - Networks: Specified Networks, add branch1_lan
-        - Users: Specific users/grpus
-          - Click "+" to add, and search for support
-          - Click on Support
-        - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
-        - Rmote Access Clients: Leave at Any Clint
-    - Add subrules above the rule allowing medium/low/very low risk applications
-      - Allow the new role Support to the domain object .ipgiraffe.com (FQDN)
-      - Deny all (other) traffic to the domain object .ipgiraffe.com
-    - Publish changes and push policy
+  - Create Access role
+    - Add a subrule above the rule allowing medium/low/very low risk applications
+    - Name: Allow support access to sites
+    - Source: New > Access Role
+      - Object name: Support
+      - Networks: Specified Networks, add branch1_lan
+      - Users: Specific users/grpus
+        - Click "+" to add, and search for support
+        - Click on Support
+      - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
+      - Remote Access Clients: Leave at Any Client
+    - Destination: New > Other > Domain> .ipgiraffe.com (FQDN)
+    - Action: Accept
+    - Track: Log
+  - Add another subrules to deny all access to ipgiraffe.com
+    - Name: Deny all nonsupport access to sites
+    - Source: Any
+    - Destination .ipgiraffe.com
+    - ServiceS: Any
+    - Action: Drop > Blocked Message
+    - Track: Log
+  - Publish changes and push policy
+  - Test
 
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
