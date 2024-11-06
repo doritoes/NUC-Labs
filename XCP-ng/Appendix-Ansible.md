@@ -1010,7 +1010,6 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- 🌱 need to develop
 - Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS
   - [firewall2a.yml](ansible/firewall2a.yml)
   - [firewall2a.cfg](ansible/firewall2a.cfg)
