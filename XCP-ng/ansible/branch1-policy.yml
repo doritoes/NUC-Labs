@@ -100,6 +100,30 @@
         track:
           type: Log
         state: present
+    - name: add gateways managment rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: SMS manage gateways
+        relative_position:
+          below: Manage gateways
+        source:
+          - sms
+        destination:
+          - firewall1
+          - dummy_fw2a
+          - dummy_fw2b
+          - dummy_fw3a
+          - dummy_fw3b
+        service:
+        - FW1
+        - CPD
+        - CPD_amon
+        - FW1_ica_push
+        action: Accept
+        comments: SMS manage gateways local and remote
+        track:
+          type: Log
+        state: present
     - name: add a stealth rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
