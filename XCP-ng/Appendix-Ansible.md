@@ -518,8 +518,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - NOTE: Login required; "Missing software subscription to download this file."
         - Not sure if setting up up a proper eval license will take care of this
       - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
+      - Also look for the file on the SMS and gateways
       - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
-      - In lab testing this link was 404
+      - In lab testing this link was 404 until we had a working policy, then it worked
     - Install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on IDC-1
       - Click **Start** > type **Windows Defender Firewall**
@@ -746,7 +747,12 @@ network:
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
 - From branch1-1 or manager browse to https://192.168.101.1
   - You will receive an untrusted certificate message
-  - View the certificate and Export/Copy to File
+  - View the certificate Details
+  - Note the Certificate Hierarchy similar to the following
+    - O=sms.xcpng.labx3fd5d
+      - firewall1 VPN certificate
+  - Click on the root "O=sms.xcpng.labx3fd5d"
+  - Export/Copy to File
   - Save as type: `DER Encoded Binary X.509 (*.cer)`
   - Name as you wish
 - Copy the file to DC-1 (e.g., copy to \\file-1\it\ and access it from there)
@@ -762,7 +768,8 @@ In this step we will import the Check Point ICA certificate and also distribute 
       - By default the certificate you exported is a .der file; select all file types to see the certificate you downloaded
       - Import the file
 - You can now view User Check pages correctly
-  - "gpupdate /force" will trigger an update
+  - `gpupdate /force` will trigger an update
+  - closing/re-opening the browser can solve cacheing issues
   - logging out and back in may also help
 
 ## Change website categorization to Hold mode
