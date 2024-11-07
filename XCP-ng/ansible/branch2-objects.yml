@@ -2,7 +2,8 @@
 - name: Create branch2 objects
   hosts: check_point
   connection: httpapi
-  # include_vars: vars.yml # introduced in Ansible 2.11
+  collections:
+    - check_point.mgmt
   tasks:
     - name: branch 2 outbound NAT
       check_point.mgmt.cp_mgmt_host:
