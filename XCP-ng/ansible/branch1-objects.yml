@@ -23,6 +23,7 @@
           hide_behind: ip-address
           ip_address: 192.168.101.4
           method: hide
+          install_on: firewall1
         state: present
     - name: branch 1 outbound NAT
       check_point.mgmt.cp_mgmt_host:
@@ -92,6 +93,7 @@
           hide_behind: ip-address
           ip_address: 192.168.101.4
           method: hide
+          install_on: firewall1
         state: present
     - name: Branch 1 DMZ network
       check_point.mgmt.cp_mgmt_network:
@@ -105,6 +107,7 @@
           hide_behind: ip-address
           ip_address: 192.168.101.4
           method: hide
+          install_on: firewall1
         state: present
     - name: domain controller
       check_point.mgmt.cp_mgmt_host:
@@ -172,6 +175,7 @@
           auto_rule: true
           ip_address: 192.168.101.5
           method: static
+          install_on: firewall1
         state: present
     - name: DMZ Apache server
       check_point.mgmt.cp_mgmt_host:
@@ -183,6 +187,7 @@
           auto_rule: true
           ip_address: 192.168.101.6
           method: static
+          install_on: firewall1
         state: present        
     - name: Branch 1 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
