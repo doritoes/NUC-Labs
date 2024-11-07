@@ -200,8 +200,8 @@
     - name: Internal networks group No NAT
       check_point.mgmt.cp_mgmt_group:
         members:
-          - branch1_lan
-          - branch1_dmz
+        - branch1_lan
+        - branch1_dmz
       name: Internal_Networks_NO_NAT
       state: present
     - name: TCP 135
