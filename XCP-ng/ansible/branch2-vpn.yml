@@ -4,11 +4,9 @@
   connection: httpapi
   collections:
     - check_point.mgmt
-  vars_files:
-    - vars.yml
   tasks:
     - name: add-vpn-community-star
-      cp_mgmt_vpn_community_star:
+      check_point.mgmt.cp_mgmt_vpn_community_star:
         center_gateways: firewall1
         satellite_gateways: firewall2
         encryption_method: ikev2 only
