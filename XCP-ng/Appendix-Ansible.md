@@ -1043,7 +1043,9 @@ Steps:
     - `ansible-playbook -i inventory-api branch2-push.yml`
     - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
       - Create a Windows 10 workstation on branch2 and set static IP information
-      - 10.0.2.25/24 DNS 8.8.8.8 and gatewat 10.0.2.1
+      - 10.0.2.25/24 DNS 8.8.8.8 and gateway 10.0.2.1
+- Test that ansible can still manage firewall2 cluster members
+  - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
   - SSH or console to each device (sms, firewall1a, firewall1b)
   - `clish`
@@ -1052,16 +1054,14 @@ Steps:
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
 
+## VPN 
+- configure
+- policy
+- VPN tunnel bring up
+
 ## Configure DHCP helper
 - 🌱 need to develop
 
-## VPN 
-- configure
-- branch 2 objects
-- updates to domain
-- policy
-- VPN tunnel bring up
-- DHCP helper?????
 
 ## Testing
 - configure
