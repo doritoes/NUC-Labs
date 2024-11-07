@@ -41,5 +41,13 @@
         color: dark blue
         comments: Branch 2 LAN Workstation DHCP scope
         state: present
+    - name: Internal networks group No NAT
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - branch1_lan
+        - branch1_dmz
+        - branch2_lan
+        name: Internal_Networks_NO_NAT
+        state: present
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
