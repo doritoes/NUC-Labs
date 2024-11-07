@@ -1041,6 +1041,7 @@ Steps:
 - Push policy
   - [branch2-push.yml](ansible/branch2-push.yml)
     - `ansible-playbook -i inventory-api branch2-push.yml`
+  - 🌱 Tested creating win10 static ip 10.0.2.25/24 gw 10.0.2.1; DNS 10.0.1.10 and 8.8.8.8, can't browse internet
 - At this point you should be able to install a JHF on the SMS and on the firewalls
   - SSH or console to each device (sms, firewall1a, firewall1b)
   - `clish`
