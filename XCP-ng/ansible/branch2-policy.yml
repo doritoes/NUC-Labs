@@ -127,7 +127,7 @@
           type: Log
         state: present
     - name: add DMZ rule
-          check_point.mgmt.cp_mgmt_access_rule:
+      check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DMZ applications
         relative_position:
