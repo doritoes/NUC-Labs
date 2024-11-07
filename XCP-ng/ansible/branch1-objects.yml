@@ -197,6 +197,13 @@
         color: dark blue
         comments: Branch 1 LAN Workstation DHCP scope
         state: present
+    - name: Internal networks group No NAT
+      check_point.mgmt.cp_mgmt_group:
+        members:
+          - branch1_lan
+          - branch1_dmz
+      name: Internal_Networks_NO_NAT
+      state: present
     - name: TCP 135
       check_point.mgmt.cp_mgmt_service_tcp:
         aggressive_aging:
