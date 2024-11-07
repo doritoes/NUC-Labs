@@ -162,6 +162,24 @@
         track:
           type: Log
         state: present
+    - name: add temporary external DNS
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy_Branches Network
+        name: External DNS
+        relative_position:
+          below: File Server
+        source:
+          - branch2_lan
+        destination:
+          - google_dns_8.8.8.8
+          - google_dns_8.8.4.4
+        service:
+        - dns
+        action: Accept
+        comments: file server access
+        track:
+          type: Log
+        state: present
     - name: add Internet access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
