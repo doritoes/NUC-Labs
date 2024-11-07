@@ -1054,7 +1054,14 @@ Steps:
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
 
-## VPN 
+## VPN
+  - Create file on `manager`
+    - [branch2-vpn.yml](ansible/branch2-vpn.yml)
+  - `ansible-playbook -i inventory-api branch2-vpn.yml`
+  - Use SmartConsole to edit the community **Branch_Community**
+    - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
+branch2-vpn.yml
+
 - configure
 - policy
 - VPN tunnel bring up
