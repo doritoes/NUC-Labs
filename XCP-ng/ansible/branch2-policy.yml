@@ -46,19 +46,12 @@
         relative_position:
           below: Gateways access
         state: present
-    - name: create management network section
-      check_point.mgmt.cp_mgmt_access_section:
-        layer: Lab_Policy_Branches Network
-        name: Management network
-        relative_position:
-          below: Stealth rules
-        state: present
     - name: create core services section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Core Services
         relative_position:
-          below: Management network      
+          below: Stealth rules   
     - name: create general Internet access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
@@ -195,7 +188,7 @@
         service:
         - dns
         action: Accept
-        comments: file server access
+        comments: temporary external DNS
         track:
           type: Log
         state: present
