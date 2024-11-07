@@ -256,7 +256,41 @@
         track:
           type: Log
         state: present
-
+    - name: add core services domain controller
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Domain Controller allowed
+        relative_position:
+          below: LDAP allowed
+        source:
+          - LAN_Networks_NO_NAT
+        destination:
+          - dc-1
+        service:
+        - active_directory_ports
+        action: Accept
+        comments: Domain controller connectivity
+        track:
+          type: Log
+        state: present
+    - name: add core services file controller
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: File server allowed
+        relative_position:
+          below: Domain Controller allowed
+        source:
+          - LAN_Networks_NO_NAT
+        destination:
+          - file-1
+        service:
+        - nbsession
+        - smb
+        action: Accept
+        comments: File server connectivity
+        track:
+          type: Log
+        state: present
     - name: add DMZ rule internal access to web apps
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
