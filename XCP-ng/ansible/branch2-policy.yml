@@ -79,6 +79,7 @@
           below: Gateways access
         source:
           - Manager
+          - branch1_outbound_nat
         destination:
           - firewall2
         service:
