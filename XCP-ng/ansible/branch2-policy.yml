@@ -339,8 +339,8 @@
         package: Lab_Policy_Branches
         name: Internal No-NAT
         comments: No-NAT Internal traffic
-        original_source: Internal_Newtorks_NO_NAT
-        original_destination: Internal_Newtorks_NO_NAT
+        original_source: Internal_Networks_NO_NAT
+        original_destination: Internal_Networks_NO_NAT
         relative_position:
           below: No-NAT
         state: present
