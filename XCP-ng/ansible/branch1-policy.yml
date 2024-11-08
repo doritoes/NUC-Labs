@@ -299,7 +299,7 @@
           below: DMZ
         source:
           - management_192.168.41.0/24
-          - branch1_lan
+          - LAN_Networks_NO_NAT
         destination:
           - branch1_dmz
         service:
