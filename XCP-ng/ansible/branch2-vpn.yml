@@ -10,7 +10,9 @@
         center_gateways: firewall1
         satellite_gateways: firewall2
         override_vpn_domains:
-          firewall1: branch1_topology
+          - gateway:
+            name: firewall1
+          - vpn-domain: branch1_topology
         encryption_method: ikev2 only
         encryption_suite: custom
         ike_phase_1:
