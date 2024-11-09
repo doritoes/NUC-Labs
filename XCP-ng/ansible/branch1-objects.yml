@@ -151,6 +151,13 @@
         color: red
         comments: dummy fw2b for initial access
         state: present
+    - name: dummy fw2-internal
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2-internal
+        ipv4_address: 10.0.2.1
+        color: red
+        comments: dummy fw2 for IDC
+        state: present
     - name: dummy fw3a
       check_point.mgmt.cp_mgmt_host:
         name: dummy_fw3a
@@ -164,6 +171,13 @@
         ipv4_address: 192.168.103.3
         color: red
         comments: dummy fw3b for initial access
+        state: present
+    - name: dummy fw3-internal
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw3-internal
+        ipv4_address: 10.0.3.1
+        color: red
+        comments: dummy fw3 for IDC
         state: present
     - name: DMZ IIS server
       check_point.mgmt.cp_mgmt_host:
