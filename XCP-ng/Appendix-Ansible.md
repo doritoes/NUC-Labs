@@ -1103,6 +1103,7 @@ Steps:
     - Check Identity Collector, and click Settings
     - Click the "+" and add **idc-1**
     - Shared secret: Checkpoint123!
+    - Client Access Permissions > **Edit** > select **through all interfaces** and click **OK**
     - Click OK
   - Click OK
   - Publish and install policy **Lab_Policy_Branches**
@@ -1122,9 +1123,83 @@ Steps:
       - Filter: Branch2
       - Click OK
       - Edit the new gateway and click Test
+🌱 The following changes can likely be done using Ansible and the API. Need to test.
+- Open the Access Policy and find the section **General Internet access**
+- Find the rule **General Internet access**
+- Change action from **Accept** to **Inline Layer > New Layer**
+  - Name: **Internet Control Branches**
+  - Blades:
+    - Firewall (checked)
+    - Applications & URL Filtering (checked)
+  - Advanced > Implicit Cleanup Action: **Allow**
+  - Confirm action is Accept and is set to Log
+- Rename the cleanup rule **Allow remaining traffic**
+- Add these sub rules above that
+  - Subrule 1
+    - Name: Block bad sites
+    - Source: *Any
+    - Destination: *Any
+    - Services & Applications:
+      - Hacking
+      - Pornography
+      - Phishing
+      - Weapons
+      - Critical Risk
+      - High Risk
+    - Action: **Drop > Blocked Message - Access Control**
+    - Track: Log > Accounting
+  - Subrule 2
+    - Name: Allow general categories
+    - Source: *Any
+    - Destination: *Any
+    - Services & Applications:
+      - Medium Risk
+      - Low Risk
+      - Very Low Risk
+    - Action: Accept
+    - Track: Log > Accounting
+  - Subrule 3
+    - Name: Unknown risk
+    - Source: *Any
+    - Destination: *Any
+    - Services & Applications:
+      - Uncategorized
+      - Unknown Risk
+    - Action:
+      - Inform
+        - Access Approval
+        - Once a day
+        - Per applications
+    - Track: Log > Accounting
 
 ## HTTPS inspection
-- 🌱 need to develop
+- Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
+  - creating https rules, etc not supported until R82
+  - some outbound certificate commands function differently pre-R82
+  - `enable-https-inspection` will be added in the next version
+- Enable HTTPS inspection on **firewall2**
+  - Open the cluster `firewall2`
+  - Click on HTTPS Ispection
+  - Steps 1 and 2 are already completed
+  - Step 3 check **Enable HTTPS inspection**
+  - Click OK
+- Publish and install policy Lab_Policy_Branches
+- Click OK and Publish
+- Confirm the HTTPS policy is the same across Lab_Policy and Lab_Policy_Branches
+- Test from branch2-1
+  - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
+  - Browse to an internet site like https://github.com and examine the https certificate
+    - Edge browser: click the lock next to the URL > Connection is secure
+      - Click the Cerificifate icon
+      - If https inspection is working, the Issued By will new reflect xcpng.lab
+      - Examine logs
+  - If the traffic is inspected and intercepted but not trusted by the browser
+    - Logging out and back in may also help
+    - Confirm the certificate is installed
+      - Start > Internet Options > Content
+      - Click Certificates and select the Trusted Root Certification Authorities tab
+  - If the traffic not intercepted at all
+    - add a rule to the HTTPS policy, publish and push, then try again
 
 ## Configure DHCP helper
 - 🌱 need to develop
