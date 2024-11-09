@@ -91,12 +91,29 @@
         track:
           type: Log
         state: present
+    - name: add IDC to firewall rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy_Branches Network
+        name: IDC to gateways
+        relative_position:
+          below: Gateways access
+        source:
+          - idc-1
+        destination:
+          - firewall2
+        service:
+        - https
+        action: Accept
+        comments: Allow IDC to remote gateways
+        track:
+          type: Log
+        state: present
     - name: add gateways access rule temporary
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Manage gateways over Internet
         relative_position:
-          below: Manage gateways
+          below: IDC to gateways
         source:
           - branch1_outbound_nat
         destination:
