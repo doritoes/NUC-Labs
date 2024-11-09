@@ -124,6 +124,24 @@
         track:
           type: Log
         state: present
+    - name: add gateways IDC rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: IDC to gateways
+        relative_position:
+          below: SMS manage gateways
+        source:
+          - idc-1
+        destination:
+          - dummy_fw2-internal
+          - dummy_fw3-internal
+        service:
+        - https
+        action: Accept
+        comments: IDC connect to remote gateways
+        track:
+          type: Log
+        state: present
     - name: add a stealth rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
