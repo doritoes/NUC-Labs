@@ -1063,35 +1063,71 @@ Steps:
   - Testing
     - 🌱 need to develop the testing
 
+## Configure branch2-1
+- We will configure workstation branch2-1 with a static IP and later switch to DHCP
+- Log in for the first time at the console
+  - Rename workstation
+    - Open administrative powershell
+    - `Rename-Computer -NewName branch2-1`
+    - `Restart-Computer`
+  - Network configuration
+    - Open administrative powershell
+    - Set the static IP address and point DNS settings to the domain controller/DNS server
+      - `New-NetIPAddress -IPAddress 10.0.2.100 -DefaultGateway 10.0.2.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+    - Try testing nslookup to see what resolves (IPs, FQDN)
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
+- Testing
+  - Log in as Other user > juliette.larocco
+    - Try conntecting to the file server at \\file-1
+    - Confirm Internet browser is working
+    - Review logs
+
 ## Enable Application Control and Identity Awareness
-- :seedling: script enable applciationcontrol and url filtering
 - Edit cluster **firewall2**
-  - 🌱
-  - Enable Identity Awareness Blade
+  - Enable **Application Control** and **URL Filtering** blades
+  - Enable **Identity Awareness** blade
     - AD Query
     - Select an Active Directory: xcpng.lab
     - Username: adquery
     - Password: YourStrongPassword123!
-    - Click Connect
+    - Click **Connect**
       - Failure message: User is not a domain administrator, as such AD Query will not work.
-      - Check Ignore the errors and configure the LDAP account
+      - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
-  - Check Identity Collector, and click Settings
+    - Click Identity Awareness form tree on the left
+    - Check Identity Collector, and click Settings
     - Click the "+" and add **idc-1**
     - Shared secret: Checkpoint123!
     - Click OK
   - Click OK
-  - Publish and install policy
+  - Publish and install policy **Lab_Policy_Branches**
 - IDC-1
-  - configure
-  - 🌱
+  - From the ribbon menu click Filters
+    - Add new filter
+      - Name: Branch2
+      - Add network:
+        - Network: 10.0.2.0/24
+        - Comment: Branch 2 LAN
+  - From left menu click **Gateways**
+    - Add new Gateway
+      - Name: **firewall2**
+      - IP Address: 10.0.2.1
+      - Shared Secret: Checkpoint123!
+      - Query Pool: Corp AD
+      - Filter: Branch2
+      - Click OK
+      - Edit the new gateway and click Test
 
 ## HTTPS inspection
-
+- 🌱 need to develop
 
 ## Configure DHCP helper
 - 🌱 need to develop
-
 
 ## Testing
 - configure
