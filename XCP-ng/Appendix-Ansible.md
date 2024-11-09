@@ -1060,11 +1060,34 @@ Steps:
   - `ansible-playbook -i inventory-api branch2-vpn.yml`
   - Use SmartConsole to edit the community **Branch_Community**
     - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
-branch2-vpn.yml
+  - Testing
+    - 🌱 need to develop the testing
 
-- configure
-- policy
-- VPN tunnel bring up
+## Enable Application Control and Identity Awareness
+- :seedling: script enable applciationcontrol and url filtering
+- Edit cluster **firewall2**
+  - 🌱
+  - Enable Identity Awareness Blade
+    - AD Query
+    - Select an Active Directory: xcpng.lab
+    - Username: adquery
+    - Password: YourStrongPassword123!
+    - Click Connect
+      - Failure message: User is not a domain administrator, as such AD Query will not work.
+      - Check Ignore the errors and configure the LDAP account
+      - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
+  - Check Identity Collector, and click Settings
+    - Click the "+" and add **idc-1**
+    - Shared secret: Checkpoint123!
+    - Click OK
+  - Click OK
+  - Publish and install policy
+- IDC-1
+  - configure
+  - 🌱
+
+## HTTPS inspection
+
 
 ## Configure DHCP helper
 - 🌱 need to develop
