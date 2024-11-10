@@ -975,8 +975,8 @@ Steps:
   - Turn off TX checksumming on each interface
   - Click Network tab
   - For each interface click the blue gear and click to set TX checksumming **Disabled**
-- Power on **firewall1a** and **firewall1b**
-- Log in to consoles of **firewall1a** and **firewall1b**
+- Power on **firewall2a** and **firewall2b**
+- Log in to consoles of **firewall2a** and **firewall2b**
   - Username `admin` and the password you selected
 - Set IP address information
   - firewall2a
@@ -1035,10 +1035,9 @@ Steps:
   - Create file on `manager`
     - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
   - `ansible-playbook -i inventory-api firewall1-cluster.yml`
-  - 🌱SIC files creating the cluster! Can't push policy
 - Create new policy using API
   - [branch2-policy.yml](ansible/branch2-policy.yml)
-    - `ansible-playbook -i inventory-api branch1-policy.yml`
+    - `ansible-playbook -i inventory-api branch2-policy.yml`
 - Push policy
   - [branch2-push.yml](ansible/branch2-push.yml)
     - `ansible-playbook -i inventory-api branch2-push.yml`
@@ -1048,7 +1047,7 @@ Steps:
 - Test that ansible can still manage firewall2 cluster members
   - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (sms, firewall1a, firewall1b)
+  - SSH or console to each device (sms, firewall2a, firewall2b)
   - `clish`
   - `installer check-for-updates`
   - `installer download-and-install [tab]`
@@ -1275,13 +1274,112 @@ Steps:
 
 ## Configure branch2-1 to use DHCP
 - Change the IP address to use DHCP
-- 🌱 NOT WORKING - wrong gateway provided by DHCP
-
-## Testing
-- configure
 
 # Configure Branch 3
 🌱 this needs to be developed
+## Add branch 3 to Domain Controller
+- Configure Sites and Services Subnets and DNS
+  - Run on `dc-1`
+    - branch3-site.ps1 ([branch3-site.ps1](powershell/branch3-site.ps1))
+    - `powershell -ExecutionPolicy Bypass branch3-site.ps1`
+- Configure DC-1 as DHCP server for branch 3
+  - branch3-dhcp.ps1 ([branch3-dhcp.ps1](powershell/branch3-dhcp.ps1))
+  - `powershell -ExecutionPolicy Bypass branch3-dhcp.ps1`
+
+## Initial Configuration
+Steps:
+- BEFORE you POWER ON the firewalls **firewall3a** and **firewall3b**
+  - Turn off TX checksumming on each interface
+  - Click Network tab
+  - For each interface click the blue gear and click to set TX checksumming **Disabled**
+- Power on **firewall3a** and **firewall3b**
+- Log in to consoles of **firewall3a** and **firewall3b**
+  - Username `admin` and the password you selected
+- Set IP address information
+  - firewall3a
+    - `set interface eth0 ipv4-address 192.168.103.2 mask-length 24`
+    - `set static-route default nexthop gateway address 192.168.103.254 on`
+    - `save config`
+  - firewall3b
+    - `set interface eth0 ipv4-address 192.168.103.3 mask-length 24`
+    - `set static-route default nexthop gateway address 192.168.103.254 on`
+    - `save config`
+- Add `manager`'s RSA keys to each firewall's authorized_keys file
+  - Log in to `manager` and open a WSL shell
+    - ssh to firewall3a and firewall3b
+      - `ssh ansible@192.168.103.2`
+      - `ssh ansible@192.168.103.3`
+      - you will be in the default home directory `/home/ansible`
+  - Create new authorized_keys file and add the key
+    - `mkdir .ssh`
+    - `chmod u=rwx,g=,o= ~/.ssh`
+    - `touch ~/.ssh/authorized_keys`
+    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
+    - Add the public key from `manager` to the files
+      - `cat > ~/.ssh/authorized_keys`
+        - paste in the key
+        - press Control-D
+    - `exit`
+  - You can now ssh without a password
+- Test Ansible access
+  - Exit back to session on `manager`
+  - update file `inventory`, uncomment the IPs of firewall3a (192.168.103.2) and firewall2b (192.168.103.3)
+  - `ansible all -m ping`
+    - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
+
+## Configure Gaia
+- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS
+  - [firewall3a.yml](ansible/firewall3a.yml)
+  - [firewall3a.cfg](ansible/firewall3a.cfg)
+  - [firewall3b.yml](ansible/firewall3b.yml)
+  - [firewall23.cfg](ansible/firewall3b.cfg)
+  - [branch3.j2](ansible/branch3.j2)
+- Run the playbooks to complete the first time wizard (FTW) and reboot
+  - `ansible-playbook firewall3a.yml`
+  - `ansible-playbook firewall3b.yml`
+- Test
+  - You will be able to connect from manager to
+    - https://192.168.103.2
+    - https://192.168.103.3
+
+## Configure cluster and policy
+- Create objects in the Check Point database related to Branch 3
+  - Create file on `manager`
+    - [branch3-objects.yml](ansible/branch3-objects.yml)
+  - `ansible-playbook -i inventory-api branch2-objects.yml`
+- Create cluster using API
+  - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
+  - Create file on `manager`
+    - [firewall3-cluster.yml](ansible/firewall3-cluster.yml)
+  - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+- Create new policy using API
+  - [branch3-policy.yml](ansible/branch3-policy.yml)
+    - `ansible-playbook -i inventory-api branch1-policy.yml`
+- Push policy
+  - [branch3-push.yml](ansible/branch3-push.yml)
+    - `ansible-playbook -i inventory-api branch2-push.yml`
+    - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
+      - Create a Windows 10 workstation on branch2 and set static IP information
+      - 10.0.3.25/24 DNS 8.8.8.8 and gateway 10.0.3.1
+- Test that ansible can still manage firewall2 cluster members
+  - `ansible all -m ping`
+- At this point you should be able to install a JHF on the firewalls
+  - SSH or console to each device (sms, firewall1a, firewall1b)
+  - `clish`
+  - `installer check-for-updates`
+  - `installer download-and-install [tab]`
+  - select the applicable JHF hotfix bundle by number
+  - Approve the reboot
+
+## VPN
+  - Create file on `manager`
+    - [branch3-vpn.yml](ansible/branch3-vpn.yml)
+  - `ansible-playbook -i inventory-api branch3-vpn.yml`
+  - Use SmartConsole to edit the community **Branch_Community**
+    - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
+  - Testing
+    - 🌱 need to develop the testing
+
 - Initial settings
 - FTW
 - Gaia config
