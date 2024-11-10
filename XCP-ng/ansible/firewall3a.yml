@@ -1,0 +1,57 @@
+---
+- name: Firewall initial setup playbook
+  hosts: 192.168.102.3
+  gather_facts: False
+  vars:
+    system_name: firewall3a
+    system_ip: 192.168.103.2
+    system_ip_masklen: 24
+    system_default_gateway: 192.168.103.254
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create FTW template
+      ansible.builtin.template:
+        src: branch3.j2
+        dest: ftw.tpl
+        mode: u=rw,g=r,o=r
+    - name: Create network configuration
+      ansible.builtin.copy:
+        src: firewall3a.cfg
+        dest: network.cfg
+        mode: u=rw,g=r,o=r
+    - name: Capture configuration lock
+      command: "clish -c 'lock database override'"
+      ignore_errors: True
+    - name: Prepare to import network configuration
+      command: "clish -c 'set clienv on-failure continue'"
+    - name: Import network configuration
+      command: "clish -c 'load configuration network.cfg'"
+      async: 120 # run in backgroup up to 2 minutes
+    - name: Done with import network configuration
+      command: "clish -c 'set clienv on-failure stop'"
+    - name: Save network configuration
+      command: "clish -c 'save config'"
+    - name: Apply FTW template
+      command: "/usr/bin/config_system -f /home/ansible/ftw.tpl"
+      async: 3600 # run in background up to 1 hour
+      poll: 60 # check status every 60 seconds
+    - name: Wait until FTW completes
+      stat:
+        path: /etc/.wizard_accepted
+      register: file_data
+      until: file_data.stat.exists
+      retries: 20
+      delay: 15
+    - name: Wait 15 seconds before reboot
+      pause:
+        seconds: 15
+    - name: Reboot
+      command: "shutdown -r now"
+      async: 1
+      poll: 0
+      ignore_errors: True
+    - name: Wait for firewall to come back up (ssh)
+      ansible.builtin.wait_for_connection:
+        delay: 75
