@@ -1099,7 +1099,7 @@ Steps:
       - Failure message: User is not a domain administrator, as such AD Query will not work.
       - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
-    - Click Identity Awareness form tree on the left
+    - Click Identity Awareness from tree on the left
     - Check Identity Collector, and click Settings
     - Click the "+" and add **idc-1**
     - Shared secret: Checkpoint123!
@@ -1119,7 +1119,7 @@ Steps:
       - IP Address: 10.0.2.1
       - Shared Secret: Checkpoint123!
       - Query Pool: Corp AD
-      - Filter: Branch2
+      - Filter: Prod
       - Click OK
       - Edit the new gateway and click Test
 🌱 The following changes can likely be done using Ansible and the API. Need to test.
@@ -1355,7 +1355,23 @@ Steps:
 - Create new policy using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
     - `ansible-playbook -i inventory-api branch3-policy.yml`
-- Push policy
+- Edit cluster **firewall3**
+  - Enable **Application Control** and **URL Filtering** blades
+  - Enable **Identity Awareness** blade
+    - AD Query
+    - Select and Active Directory: xcpng.lab
+    - Username: adquery
+    - Password: YourStrongPassword123!
+    - Click **Connect**
+      - Failure message: User is not a domain administrator, as such AD Query will not work.
+      - Check **Ignore the errors and configure the LDAP acount**
+      - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
+    - Click Identity Awareness from tree on the left
+      - Check Identity Collector, and click Settings
+      - Click the "+" and add idc-1
+      - Shared secret: Checkpoint123!
+      - Client Access Permissions > Edit > select through all interfaces and click OK
+      - Click OK
   - [branch3-push.yml](ansible/branch3-push.yml)
     - `ansible-playbook -i inventory-api branch3-push.yml`
 - Test that ansible can still manage firewall3 cluster members
@@ -1367,6 +1383,21 @@ Steps:
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
+- IDC-1
+  - From the ribbon menu click Filters
+    - Edit filter **Prod**
+    - Add network:
+      - Network: 10.0.3.0/24
+      - Comment: Branch 3 LAN
+  - From left menu click **Gateways**
+    - Add new Gateway
+      - Name: **firewall3**
+      - IP Address: **10.0.3.1**
+      - Shared Secret: **Checkpoint123!**
+      - Query Pool: **Corp AD**
+      - Filter: **Prod**
+      - Click **OK**
+      - Edit the new gateway and click Test
 
 ## VPN
   - Create file on `manager`
@@ -1376,14 +1407,6 @@ Steps:
     - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
   - Testing
     - 🌱 need to develop the testing
-
-- Initial settings
-- FTW
-- Gaia config
-- Create cluster
-- policy
-- VPN tunnel bring up
-- DHCP helper?????
 
 # Demonstration
 🌱 this needs to be developed
