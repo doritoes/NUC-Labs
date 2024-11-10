@@ -1109,8 +1109,7 @@ Steps:
   - Publish and install policy **Lab_Policy_Branches**
 - IDC-1
   - From the ribbon menu click Filters
-    - Add new filter
-      - Name: Branch2
+    - Edit filter **Prod**
       - Add network:
         - Network: 10.0.2.0/24
         - Comment: Branch 2 LAN
@@ -1124,6 +1123,7 @@ Steps:
       - Click OK
       - Edit the new gateway and click Test
 🌱 The following changes can likely be done using Ansible and the API. Need to test.
+- TIP You can copy and paste rules from Lab_Policy to Lab_Policy_Brances
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > New Layer**
@@ -1201,8 +1201,34 @@ Steps:
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
 
+## Add Identity-Based Management
+- Add an access rule to the Lab_Policy and Lab_Policy_Branches
+  - TIP You can create in one policy and copy it to the other
+  - Name: **RDP access for Support**
+  - Source: **Suppport** (access role)
+  - Destination: **LAN_Networks_NO_NAT**
+  - Services:
+    - **Remote_Desktop_Protocol**
+    - **Remote_Desktop_Protocol_UDP**
+  - Action: **Accept**
+  - Track: **Log**
+  - Comments: **Allow support team RDP access**
+- Modify the **Support** access role
+  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
+- Push both policies, Lab_Policy and Lab_Policy_Branches
+- 🌱 need to develop
+  - firewall1 is allowing it, but on firewall2 it is dropped
+    - firewall2: `pep show user all` doesn't show logins
+    - firewall2 isn't getting logins, not even on branch2-1
+
 ## Configure DHCP helper
 - 🌱 need to develop
+- Log in to firewall2a and firewall2b
+  - `clish`
+  - `set bootp interface eth1 on`
+  - `set bootp interface eth1 relay-to 10.0.1.10 on`
+  - `save config`
+- 🌱 what else?
 
 ## Testing
 - configure
