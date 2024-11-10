@@ -955,6 +955,7 @@ Here are the steps for configuring IDC in our Lab.
 - Configure DC-1 as DHCP server for branch 2
   - branch2-dhcp.ps1 ([branch2-dhcp.ps1](powershell/branch2-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
+  - 🌱 this script overwrites the branch1 scope router setting and BREAKS everything
 
 ## Enable SMS to manange remote gateways
 - Create file on `manager`
@@ -1221,14 +1222,60 @@ Steps:
     - firewall2: `pep show user all` doesn't show logins
     - firewall2 isn't getting logins, not even on branch2-1
 
-## Configure DHCP helper
-- 🌱 need to develop
+## Configure DHCP helper and DHCP
 - Log in to firewall2a and firewall2b
   - `clish`
   - `set bootp interface eth1 on`
   - `set bootp interface eth1 relay-to 10.0.1.10 on`
   - `save config`
-- 🌱 what else?
+- Lab_Policy
+  - Add section **DHCP** above section **Stealth Rules**
+    - Add rule
+      - Name: DHCP requests
+      - Source: firewall2
+      - Destination: dc-1
+      - Service: bootp (udp/67)
+      - Action: Accept
+      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
+      - Comments: DHCP requests
+    - Add rule
+      - Name: DHCP replies
+      - Source: dc-1
+      - Destination: firewall2
+      - Service: bootp (udp/67)
+      - Action: Accept
+      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
+      - Comments: DHCP replies
+- Lab_Policy_Branches
+  - Add section **DHCP** above section **Stealth Rules**
+    - Add rule
+      - Name: DHCP broadcasts
+      - Source: *Any
+      - Destination: broadcast_255.255.255.255
+      - Service: bootp (udp/67)
+      - Action: Accept
+      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
+      - Comments: DHCP broadcasts
+    - Add rule
+      - Name: DHCP requests
+      - Source: firewall2
+      - Destination: dc-1
+      - Service: bootp (udp/67)
+      - Action: Accept
+      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
+      - Comments: DHCP requests
+    - Add rule
+      - Name: DHCP replies
+      - Source: dc-1
+      - Destination: firewall2
+      - Service: bootp (udp/67)
+      - Action: Accept
+      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
+      - Comments: DHCP replies
+
+## Configure branch2-1 to use DHCP
+- Change the IP address to use DHCP
+- 🌱 NOT WORKING - wrong gateway provided by DHCP
 
 ## Testing
 - configure
