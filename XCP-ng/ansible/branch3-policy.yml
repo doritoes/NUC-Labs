@@ -6,6 +6,17 @@
     - check_point.mgmt
   # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
+    - name: add installation target
+      check_point.mgmt.cp_mgmt_package:
+        access: true
+        color: forest green
+        comments: Access policy for Lab Branches
+        name: Lab_Policy_Branches
+        threat_prevention: false
+        installation_targets:
+          - firewall2
+          - firewall3
+        state: present
     - name: update gateways access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
