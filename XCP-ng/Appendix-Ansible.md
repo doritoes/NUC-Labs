@@ -1346,7 +1346,7 @@ Steps:
 - Create objects in the Check Point database related to Branch 3
   - Create file on `manager`
     - [branch3-objects.yml](ansible/branch3-objects.yml)
-  - `ansible-playbook -i inventory-api branch2-objects.yml`
+  - `ansible-playbook -i inventory-api branch3-objects.yml`
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
