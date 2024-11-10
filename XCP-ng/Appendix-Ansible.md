@@ -1354,17 +1354,14 @@ Steps:
   - `ansible-playbook -i inventory-api firewall3-cluster.yml`
 - Create new policy using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
-    - `ansible-playbook -i inventory-api branch1-policy.yml`
+    - `ansible-playbook -i inventory-api branch3-policy.yml`
 - Push policy
   - [branch3-push.yml](ansible/branch3-push.yml)
     - `ansible-playbook -i inventory-api branch3-push.yml`
-    - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
-      - Create a Windows 10 workstation on branch2 and set static IP information
-      - 10.0.3.25/24 DNS 8.8.8.8 and gateway 10.0.3.1
-- Test that ansible can still manage firewall2 cluster members
+- Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (sms, firewall1a, firewall1b)
+  - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
   - `installer check-for-updates`
   - `installer download-and-install [tab]`
