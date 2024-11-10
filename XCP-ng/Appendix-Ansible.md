@@ -1332,7 +1332,7 @@ Steps:
   - [firewall3a.yml](ansible/firewall3a.yml)
   - [firewall3a.cfg](ansible/firewall3a.cfg)
   - [firewall3b.yml](ansible/firewall3b.yml)
-  - [firewall23.cfg](ansible/firewall3b.cfg)
+  - [firewall3b.cfg](ansible/firewall3b.cfg)
   - [branch3.j2](ansible/branch3.j2)
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall3a.yml`
@@ -1351,13 +1351,13 @@ Steps:
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall3-cluster.yml](ansible/firewall3-cluster.yml)
-  - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+  - `ansible-playbook -i inventory-api firewall3-cluster.yml`
 - Create new policy using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
     - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
   - [branch3-push.yml](ansible/branch3-push.yml)
-    - `ansible-playbook -i inventory-api branch2-push.yml`
+    - `ansible-playbook -i inventory-api branch3-push.yml`
     - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
       - Create a Windows 10 workstation on branch2 and set static IP information
       - 10.0.3.25/24 DNS 8.8.8.8 and gateway 10.0.3.1
