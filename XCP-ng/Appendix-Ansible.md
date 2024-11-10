@@ -1337,6 +1337,11 @@ Steps:
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall3a.yml`
   - `ansible-playbook firewall3b.yml`
+- Enable DHCP relay on each
+  - `clish`
+  - `set bootp interface eth1 on`
+  - `set bootp interface eth1 relay-to 10.0.1.10 on`
+  - `save config`
 - Test
   - You will be able to connect from manager to
     - https://192.168.103.2
@@ -1403,8 +1408,6 @@ Steps:
   - Create file on `manager`
     - [branch3-vpn.yml](ansible/branch3-vpn.yml)
   - `ansible-playbook -i inventory-api branch3-vpn.yml`
-  - Use SmartConsole to edit the community **Branch_Community**
-    - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
   - Testing
     - 🌱 need to develop the testing
 
