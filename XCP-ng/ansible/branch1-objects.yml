@@ -53,6 +53,13 @@
         color: dark blue
         comments: branch1 broadcast address
         state: present
+    - name: global broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_255.255.255.255
+        ipv4_address: 255.255.255.255
+        color: dark blue
+        comments: global broadcast address
+        state: present
     - name: multicast 224.0.0.22
       check_point.mgmt.cp_mgmt_host:
         name: multicast_224.0.0.22
