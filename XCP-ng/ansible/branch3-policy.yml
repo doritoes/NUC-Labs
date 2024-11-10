@@ -1,5 +1,5 @@
 ---
-- name: Create Branch 3 policy
+- name: Update policy for branch 3
   hosts: check_point
   connection: httpapi
   collections:
