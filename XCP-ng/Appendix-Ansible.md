@@ -69,7 +69,8 @@ Notes:
 - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - `sudo apt install -y software-properties-common python3-paramiko python3-pip`
+  - `sudo apt install -y python3-paramiko python3-pip`
+    - or `sudo apt install -y software-properties-common python3-paramiko python3-pip`
   - Install Ansible
     - Option 1 - recommended - Ansbile 2.17 (or later)
       - `sudo apt-add-repository ppa:ansible/ansible`
