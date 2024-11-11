@@ -476,112 +476,131 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.1.12 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+      - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Set up data drive
     - Click **Start** > **Create and format hard disk partitions**
       - You will be prompted to initialize the disk (Disk 1)
-      - Accept GPT (GUID Partition Table)
+      - Select **GPT** (GUID Partition Table)
       - Click OK
-      - Right-click Disk 1 and then click **New Simple Volume**
+      - Right-click Disk 1 Unallocated space and then click **New Simple Volume**
       - Assign letter E:
-      - Follow the wizard and set the volume label to **SQL**
+      - Follow the wizard with its defaults and set the volume label to **SQL**
   - Join to domain
     - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
+      - Wait as the system reboots
   - Install MS SQL server ([more information](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16))
     - Log in as AD\juliette.larocco2
     - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
       - file name looks like: `SQL2022-SSEI-Expr.exe`
     - Run the installer
-      - Click **Basic**
+      - Click **Basic** and follow the installation wizard
       - Click **Install SSMS**
         - From the web page that opens, download and install SQL Server Management Studio (SSMS)
       - Back in the SQL Express istaller, click **Connect Now** to test (type `exit` to close the prompt)
       - Click **Close** and confirm
   - Test
-    - Launch SQL Server Management Studio (SSMS)
+    - Launch **SQL Server Management Studio (SSMS)**
       - Check **Trust server certificate**
       - Click **Connect**
-    - For a production environment, use proper authentication
-- Configure Check Point Identity Collectror server **idc-1**
+    - NOTE For a production environment, use proper authentication
+- Configure Check Point Identity Collector server **idc-1**
   - Complete initial setup and set administrator password
-  - Log in for the first time at the console
+  - Log in for the first time at the console as Administrator
   - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName idc-1`
     - `Restart-Computer`
+    - Wait for the computer to reboot
   - Network configuration
+    - Log back in
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.1.14 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+      - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Join to domain
-    - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
   - Set up Domain Controller for IDC
+    - Log in to DC-1
     - Disable the Windows Firewall on DC-1
       - In extensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
       - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
-      - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
-      - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
-    - copy idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
+        - Open an administrative powershell prompt
+        - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
+        - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
+    - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
       - `powershell -ExecutionPolicy bypass idc-user.ps1`
   - Install Check Point Identity Collector for Windows
+    - Log in to IDC-1 as `AD\Juliette.LaRocco2`
     - Download
       - https://support.checkpoint.com/results/sk/sk134312
       - https://support.checkpoint.com/results/download/74206
       - NOTE: Login required; "Missing software subscription to download this file."
         - Not sure if setting up up a proper eval license will take care of this
       - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
+        - In lab testing this link was 404 until we had a working policy, then it worked
       - Also look for the file on the SMS and gateways
+        - e.g., /var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi
+        - IMPORTANT this is different from the client from sk134312
+          - Twice the size, different file name
+          - In testing it worked fine compared to sk134312
       - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
-      - In lab testing this link was 404 until we had a working policy, then it worked
     - Install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on IDC-1
       - Click **Start** > type **Windows Defender Firewall**
       - Click **Allow an app or feature through Windows Defender Firewall**
-      - Click **Allow another app**
-      - Browse to C:\Program Files (x86)\CheckPoint\Identity Collector\cpidc.exe
-      - Repeat for ipidcgui.exe
-      - The apps should be allowed for the Domain profile
-      - Click OK
+      - Click **Change settings** and then click **Allow another app**
+      - Browse to `C:\Program Files (x86)\CheckPoint\Identity Collector\cpidc.exe`
+      - Click **Add**
+      - Repeat for `cpidcgui.exe` (maybe `CFGScript.exe` ?)
+      - Note the apps should be allowed for the Domain profile (checked)
+      - Click **OK**
     - Configure Identity Collector
       - Launch the app
       - Ribbon menu > Domains
         - Click icon for New domain
-          - Name: xcpng.lab
-          - Username: adquery
-          - Password: YourStrongPassword123!
+          - Name: **xcpng.lab**
+          - Username: **adquery**
+          - Password: **YourStrongPassword123!**
           - This is an account with log reader permissions on DC-1
-          - Click OK
+          - Click **OK**
         - Edit the new domain xcpng.lab, and click Test
+          - 🌱 TROUBLE with the connection
           - Credentials test
-            - IP address: 10.0.1.10 or DC-1
-            - Click Test
+            - IP address: **10.0.1.10** or **DC-1** (the IDC downloaded from the gateways/sms don't allow Name, only IP address)
+            - Click **Test**
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
-              - Fix: Disable the Windows Firewall on the domain controller
+              - Fix: Disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
+              - It some testing, still failed
+                - Tried rebooting IDC-1 and DC-1 without success
+                - Tried logging in as adquery from branch1-1
+                - Tried removing the domain and re-adding the domain
+                - Tried testing during the creation of the domain
+                - Tried restarting service `Check Point Identity Collector`
+                - ⚠️ Need to continue testing!!!
+                - tried uninstalling the R81 version and installing the R82 version without success
             - You can't log in to DC-1 as adquery, but you can log in to branch1-1 to confirm the account works
       - Left menu > Identity Sources
-        - New > AD > Add manually
+        - New > Active Directory > Add manually
           - Name: DC-1
           - Domain: xcpng.lab
-          - Host name / IP address: DC-1 or 10.0.1.10
-          - Site: Corp
-          - Click Test
+          - Host name / IP address: **10.0.1.10** or **DC-1** (the IDC downloaded from the gateways/sms don't allow Name, only IP address)
+          - Site: **Corp**
+          - Click **Test**
           - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be used
           - Click OK
       - Ribbon menu > Query Pools
         - New
-          - Corp AD
+          - Name: **Corp AD**
           - Select all Identity Sources
-          - Click OK and then click OK
+          - Click **OK** and then click **OK**
       - Ribbon menu > Filters
         - Add a New filter
           - Name: Prod
@@ -591,12 +610,12 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - Click OK
       - Left menu > Gateways
         - Add new Gateway
-          - Name: firewall1
-          - IP Address: 10.0.1.1
-          - Shared secret: Checkpoint123!
-          - Query pool: Corp AD
-          - Filter: Prod
-          - Click OK
+          - Name: **firewall1**
+          - IP Address: **10.0.1.1**
+          - Shared secret: **Checkpoint123!**
+          - Query pool: **Corp AD**
+          - Filter: **Prod**
+          - Click **OK**
         - Edit the new gateway and click Test
           - Will fail until the cluster is configured (see below)
       - Left menu > Settings
@@ -606,13 +625,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Log in to `manager`
 - Confirm Network profile is **Private**
 - Edit IP settings to set DNS
-  - Preferred DNS: 10.0.1.10
+  - Preferred DNS: **10.0.1.10**
   - Alternate DNS: *blank*
 - Join to domain
   - Open administrative powershell
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
+- Generally, you will still use the local account for easy acces to the files and configuration you have built to this point.
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
