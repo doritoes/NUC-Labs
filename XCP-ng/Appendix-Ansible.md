@@ -424,13 +424,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Web browsing works. Log in to SmartConsole on `manager` to view the firewall logs
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
-  - Log in for the first time at the console
+  - Log in for the first time at the console as administrator with the password you set
+    - Use the XCP-ng Ctrl+Alt+Del icon to bring up the login
   - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName file-1`
     - `Restart-Computer`
   - Network configuration
+    - Log back in
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.1.11 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
@@ -439,24 +441,29 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Install file server feature
     - `Install-WindowsFeature -Name FS-FileServer`
   - Join to domain
-    - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
+    - Wait as the system reboots
   - Set up share drive and file shares
     - Log in as AD\juliette.larocco2
     - Click **Start** > **Create and format hard disk partitions**
       - You will be prompted to initialize the disk (Disk 1)
-      - Accept GPT (GUID Partition Table)
-      - Click OK
-      - Right-click Disk 1 and then click **New Simple Volume**
-      - Assign letter E:
-      - Follow the wizard and set the volume label to **NETDRIVE**
-    - copy file-shares.ps1 [file-shares.ps1](powershell/file-shares.ps1)
+      - Select **GPT** (GUID Partition Table)
+      - Click **OK**
+      - Right-click Disk 1's Unallocated space and then click **New Simple Volume**
+        - Follow the wizard and use defaults (e.g., assign letter E:)
+        - Set the volume label to **NETDRIVE**
+    - Download and run file-shares.ps1 in an administrative shell [file-shares.ps1](powershell/file-shares.ps1)
     - `powershell -ExecutionPolicy Bypass file-shares.ps1`
-      - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file; this causes an error when running the script, but the rest is successfully configured
+      - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file
+        - this causes an error when running the script, but the rest is successfully configured
+        - you can add another test user in Finance if you want to avoid this messaage
   - Testing
-    - test access from `branch1-1` to the shared folders by different domain users
+    - Test access from `branch1-1` to the shared folders by different domain users
+      - For examplle, with juliette.larocco
+        - \\file-1
+        - \\file-1\IT
 - Configure SQL server **sql-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
