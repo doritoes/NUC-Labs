@@ -363,20 +363,21 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Wait as the settings are applied and the server is rebooted
   - Wait some more as "Applying Computer Settings" gets the domain controller ready
 - Configure Sites and Services Subnets and DNS
-  - branch1-site.ps1 ([branch1-site.ps1](powershell/branch1-site.ps1))
+  - Download branch1-site.ps1 ([branch1-site.ps1](powershell/branch1-site.ps1))
   - `powershell -ExecutionPolicy Bypass branch1-site.ps1`
-  - 🌱create more DNS entries
-  - test using nslookup
+  - Test using nslookup
     - nslookup google.com
     - nslookup firewall1-lan
     - nslookup firewall1-lan.xcpng.lab
     - nslookup 10.0.1.1
     - nslookup dc-1
     - nslookup 10.0.1.10 (will not resolve yet)
+- Test access to https://github.com/doritoes/NUC-Labs
+  - you will be downloading files from here
 - Configure DC-1 as DHCP server
-  - branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
+  - Download branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
-  - test
+  - Test
     - `Get-DhcpServerInDC`
     - spin up a test workstation on branch1 subnet
       - confirm it receives an IP address via DHCP
@@ -384,8 +385,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - NOTE Server manager will complain: "Configuration required for DHCP Server at DC-1"
     - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. Or find a way to do it with powershell.
 - Configure AD users, groups, roles, and permissions
-  - copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
-  - copy domain-users-groups.ps1 [domain-users-groups.ps1](powershell/domain-users-groups.ps1)
+  - download and copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
+  - download and copy domain-users-groups.ps1 [domain-users-groups.ps1](powershell/domain-users-groups.ps1) to C:\domain-users-groups.ps1
   - `powershell -ExecutionPolicy Bypass C:\domain-users-groups.ps1`
 - Configure to use external time server
   - `net stop w32time`
@@ -396,7 +397,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `w32tm /resync`
   - `w32tm /query /status`
 - Test logging in to the domain controller as `AD\Juliette.Larocco2` and the password from [domain-users.csv](powershell/domain-users.csv)
-  - Juliette.Larocco2@xcpng.lab
+  - You can also log in as `Juliette.Larocco2@xcpng.lab`
+  - You will be prompted to change the password at first login
 
 ## Configure LAN devices
 - Configure workstation **branch1-1**
@@ -406,16 +408,20 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Rename-Computer -NewName branch1-1`
     - `Restart-Computer`
   - Join to domain
+    - Log in
     - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
-      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - User name: `AD\Juliette.LaRocco2` (also work: XCPNG.LAB\juliette.larocco2, juliette.larocco2@xcpng.lab)
       - Password: the password you set
+    - Wait as the system reboots
   - Testing
     - Log in as Other user > juliette.larocco
+      - Use the password from  [domain-users.csv](powershell/domain-users.csv)
       - Note the first time experience for the domain user
       - Try Remote desktop connection to DC-1
         - juliette.larocco fails "Logon failure: the user has not been granted the requested logon type at this computer."
         - juliette.larocco2 fails if "Administrator" is still logged in on DC-1
+    - Web browsing works. Log in to SmartConsole on `manager` to view the firewall logs
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
