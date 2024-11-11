@@ -87,7 +87,7 @@ Notes:
     - `python3 -m pip install XenAPI`
   - You might use Git to clone the repo to have the files locally
     - `sudo apt install -y git`
-    - `git clone https:/github.com/doritoes/NUC-Labs`
+    - `git clone https://github.com/doritoes/NUC-Labs`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
