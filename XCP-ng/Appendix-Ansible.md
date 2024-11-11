@@ -28,10 +28,10 @@ Notes:
 - Install WSL
   - Add optional feature Windows Subsystem for Linux (WSL)
     - NOTE In Lab testing, skipping this step caused problems
-    - Click **Start** Start > type "**Add an optional feature**", click it
+    - Click **Start** > type "**Add an optional feature**", click it
     - Scroll to bottom, click **More Windows features**
-    - Check **Windows Subsystem for Linux** and click **OK**
-    - Click **Restart now**
+    - <ins>Check</ins> **Windows Subsystem for Linux** and click **OK**
+    - Click **Restart now** when prompted
   - Log back in and open a privileged shell
     - `wsl --list`
     - `wsl --list --online`
@@ -39,7 +39,7 @@ Notes:
       - feel free to customize
       - A new WSL window is opened and you are promped set the username and password
         - Username: `ansible`
-        - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few times), prompting you to set the username and password
+        - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few presses), prompting you to set the username and password
 - Configure Network interfaces
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
@@ -84,6 +84,9 @@ Notes:
     - `ansible-galaxy collection install check_point.mgmt --force`
   - Install XenAPI python package
     - `python3 -m pip install XenAPI`
+  - You might use Git to clone the repo to have the files locally
+    - `sudo apt install -y git`
+    - `git clone https:/github.com/doritoes/NUC-Labs`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
