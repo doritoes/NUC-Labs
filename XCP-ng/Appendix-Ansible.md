@@ -294,15 +294,15 @@ Steps:
 - Update Gaia (if you have proper eval licenses)
   - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
   - Firewalls are best updated using the management API
-- Create objects in the Check Point database related to Branch 1
-  - Create file on `manager`
-    - [branch1-objects.yml](ansible/branch1-objects.yml)
-  - `ansible-playbook -i inventory-api branch1-objects.yml`
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall1-cluster.yml](ansible/firewall1-cluster.yml)
   - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+- Create objects in the Check Point database related to Branch 1
+  - Create file on `manager`
+    - [branch1-objects.yml](ansible/branch1-objects.yml)
+  - `ansible-playbook -i inventory-api branch1-objects.yml`
 - Create new policy using API
   - [branch1-policy.yml](ansible/branch1-policy.yml)
     - `ansible-playbook -i inventory-api branch1-policy.yml`
@@ -316,6 +316,11 @@ Steps:
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
+  - TIP if you are having trouble on the SMS with `Result: The administrator did not authorized downloads, not performing update`
+    - `installer agent update`
+    - `installer disable`
+    - `installer enable`
+    - `installer check-for-updates` 
 
 ## Remove management workstation from the Lab network
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
