@@ -572,21 +572,22 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - This is an account with log reader permissions on DC-1
           - Click **OK**
         - Edit the new domain xcpng.lab, and click Test
-          - 🌱 TROUBLE with the connection
           - Credentials test
             - IP address: **10.0.1.10** or **DC-1** (the IDC downloaded from the gateways/sms don't allow Name, only IP address)
             - Click **Test**
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
               - Fix: Disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
-              - It some testing, still failed
-                - Tried rebooting IDC-1 and DC-1 without success
-                - Tried logging in as adquery from branch1-1
-                - Tried removing the domain and re-adding the domain
-                - Tried testing during the creation of the domain
-                - Tried restarting service `Check Point Identity Collector`
-                - ⚠️ Need to continue testing!!!
-                - tried uninstalling the R81 version and installing the R82 version without success
-            - You can't log in to DC-1 as adquery, but you can log in to branch1-1 to confirm the account works
+              - Lab testing encountered a number of issues with this
+                - Continue with the lab. It will start working eventually. Here's what I tried without success.
+                  - Tried rebooting IDC-1 and DC-1 without success
+                  - Tried logging in as adquery from branch1-1
+                  - Tried removing the domain and re-adding the domain
+                  - Tried testing during the creation of the domain
+                  - Tried restarting service `Check Point Identity Collector`
+                  - Tried uninstalling the R81 version and installing the R82 version without success
+                  - Tried building another IDC-2 with R82 client
+                - I strongly believe the R82 client (not easily available without license) is the key to this working
+            - NOTE You can't log in to DC-1 as adquery, but you can log in to branch1-1 as adquery to confirm the account works
       - Left menu > Identity Sources
         - New > Active Directory > Add manually
           - Name: DC-1
@@ -638,26 +639,10 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Configure Apache web server **dmz-apache**
   - Log in at the console
   - Configure Static IP address
-    - sudo vi /etc/netplan/01-netcfg.yaml
-
-```
-network:
-  version: 2
-  ethernets:
-    eth0:
-      dhcp4: no
-      addresses:
-        - 192.168.31.11/24
-      routes:
-        - to: 0.0.0.0/0
-          via: 192.168.31.1
-      nameservers:
-        addresses:
-          - 10.0.1.10
-```
-
-    - sudo chmod 600 /etc/netplan/01-netcfg.yaml
-    - sudo netplan apply
+    - `sudo vi /etc/netplan/01-netcfg.yaml`
+    - Paste in the contents of [01-netcfg.yaml]([01-netcfg.yaml)
+    - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
+    - `sudo netplan apply`
   - Give permissions to user ansible
     - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
   - set up ssh key auth
