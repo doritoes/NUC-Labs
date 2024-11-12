@@ -636,8 +636,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
+  - Log in at the console
   - Configure Static IP address
-    - `sudo vi /etc/netplan/01-netcfg.yaml`
+    - sudo vi /etc/netplan/01-netcfg.yaml
 
 ```
 network:
@@ -655,8 +656,8 @@ network:
           - 10.0.1.10
 ```
 
-    - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
-    - `sudo netplan apply`
+    - sudo chmod 600 /etc/netplan/01-netcfg.yaml
+    - sudo netplan apply
   - Give permissions to user ansible
     - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
   - set up ssh key auth
