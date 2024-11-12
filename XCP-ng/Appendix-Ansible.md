@@ -549,8 +549,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Also look for the file on the SMS and gateways
         - e.g., /var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi
         - IMPORTANT this is different from the client from sk134312
-          - Twice the size, different file name
-          - In testing it worked fine compared to sk134312
+          - R81 vs the recent R82 from sk134312
+          - In testing it installed OK compared to sk134312, but haven't been able to get it working in the Lab environment yet
       - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
     - Install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on IDC-1
@@ -966,29 +966,31 @@ Here are the steps for configuring IDC in our Lab.
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
       - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
+    - In Lab testing it just "started working", not sure why. The last thing tried was installing Wireshark.
   - Create Access role
     - Add a subrule above the rule allowing medium/low/very low risk applications
     - Name: Allow support access to sites
     - Source: New > Access Role
-      - Object name: Support
-      - Networks: Specified Networks, add branch1_lan
-      - Users: Specific users/grpus
-        - Click "+" to add, and search for support
-        - Click on Support
+      - Object name: **Support**
+      - Networks: **Specified Networks**, add **branch1_lan**
+      - Users: Specific users/groups
+        - Click "+" to add, and search for **support**
+        - Click on **Support**
       - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
       - Remote Access Clients: Leave at Any Client
+      - Click **OK**
     - Destination: New > Other > Domain> .ipgiraffe.com (FQDN)
     - Action: Accept
     - Track: Log
-  - Add another subrules to deny all access to ipgiraffe.com
+  - Add another subrule to deny all access to ipgiraffe.com
     - Name: Deny all nonsupport access to sites
     - Source: Any
     - Destination .ipgiraffe.com
-    - ServiceS: Any
+    - Services: Any
     - Action: Drop > Blocked Message
     - Track: Log
   - Publish changes and push policy
-  - Test
+  - Test access, access control, enforcement of user identity works and is logged
 
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
