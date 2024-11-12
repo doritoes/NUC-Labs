@@ -966,7 +966,7 @@ Here are the steps for configuring IDC in our Lab.
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
       - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
-    - In Lab testing it just "started working", not sure why. The last thing tried was installing Wireshark.
+    - In Lab testing it just "started working", not sure why. The last thing tried was installing Wireshark. If it's an issue with the XCP-ng virtual switch, could pinging from DC-1 to IDC-1; this ping would fail but populate the arp table
   - Create Access role
     - Add a subrule above the rule allowing medium/low/very low risk applications
     - Name: Allow support access to sites
@@ -1013,7 +1013,7 @@ Here are the steps for configuring IDC in our Lab.
   - Under NAT, <ins>check</ins> "Apply for Security Gateway control connections"
   - Publish changes
 - Push policy `Lab policy` to **firewall1** to enable the SMS to connect to Branch 2
-    -  ansible-playbook -i inventory-api branch1-push.yml`
+    -  `ansible-playbook -i inventory-api branch1-push.yml`
 
 ## Initial Configuration
 Steps:
