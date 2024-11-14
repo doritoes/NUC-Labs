@@ -1123,7 +1123,11 @@ Steps:
     - From the tree on the left expenc **Tunnels** and click **Tunnels on Gateway**
       - Select **firewall1** to view active tunnels at firewall1
       - Repeat and select **firewall2** to view active tunnels at firewall2
+      - Click the refresh icon to update the information and see the tunnels come up
     - 🌱 need to develop the testing
+      - from the firewall cluster active member, use `vpn tu`
+      - lost ansible and ssh connection from manager to firewall2 192.168.102.2 and .3
+      - how can we manage besides console?
 
 ## Configure branch2-1
 - We will configure workstation branch2-1 with a static IP and later switch to DHCP
@@ -1136,7 +1140,7 @@ Steps:
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.2.100 -DefaultGateway 10.0.2.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+      - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Join to domain
     - Open administrative powershell
@@ -1146,7 +1150,7 @@ Steps:
 - Testing
   - Log in as Other user > juliette.larocco
     - Try conntecting to the file server at \\file-1
-    - Confirm Internet browser is working
+    - Confirm Internet browsing is working
     - Review logs
 
 ## Enable Application Control and Identity Awareness
@@ -1192,7 +1196,7 @@ Steps:
   - Name: **Internet Control Branches**
   - Blades:
     - Firewall (checked)
-    - Applications & URL Filtering (checked)
+    - **Applications & URL Filtering** (checked)
   - Advanced > Implicit Cleanup Action: **Allow**
   - Confirm action is Accept and is set to Log
 - Rename the cleanup rule **Allow remaining traffic**
@@ -1244,13 +1248,13 @@ Steps:
   - Click on HTTPS Ispection
   - Steps 1 and 2 are already completed
   - Step 3 check **Enable HTTPS inspection**
-  - Click OK
+  - Click **OK**
 - Publish and install policy Lab_Policy_Branches
-- Click OK and Publish
+- Click **OK** and **Publish**
 - Confirm the HTTPS policy is the same across Lab_Policy and Lab_Policy_Branches
 - Test from branch2-1
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
-  - Browse to an internet site like https://github.com and examine the https certificate
+  - From `branch2-1` browse to an Internet site like https://github.com and examine the https certificate
     - Edge browser: click the lock next to the URL > Connection is secure
       - Click the Cerificifate icon
       - If https inspection is working, the Issued By will new reflect xcpng.lab
@@ -1264,6 +1268,7 @@ Steps:
     - add a rule to the HTTPS policy, publish and push, then try again
 
 ## Add Identity-Based Management
+- 🌱 this isn't working yet
 - Add an access rule to the Lab_Policy and Lab_Policy_Branches
   - TIP You can create in one policy and copy it to the other
   - Name: **RDP access for Support**
@@ -1336,9 +1341,15 @@ Steps:
 
 ## Configure branch2-1 to use DHCP
 - Change the IP address to use DHCP
+  - Start > Settings > Network & Internet
+  - Modify the interface to use Automatic (DHCP)
+    - Use `AD\Juliette.Larocco2` account
+- Test
+  - 🌱 currently broken
 
 # Configure Branch 3
 🌱 this needs to be developed
+
 ## Add branch 3 to Domain Controller
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1`
