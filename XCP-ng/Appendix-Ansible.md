@@ -995,20 +995,19 @@ Here are the steps for configuring IDC in our Lab.
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
 - Configure Sites and Services Subnets and DNS
-  - Run on `dc-1`
+  - Run on `dc-1` from an administartive powershell
     - branch2-site.ps1 ([branch2-site.ps1](powershell/branch2-site.ps1))
     - `powershell -ExecutionPolicy Bypass branch2-site.ps1`
 - Configure DC-1 as DHCP server for branch 2
   - branch2-dhcp.ps1 ([branch2-dhcp.ps1](powershell/branch2-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
-  - 🌱 this script overwrites the branch1 scope router setting and BREAKS everything
 
 ## Enable SMS to manange remote gateways
 - Create file on `manager`
   - [branch2-enablesms.yml](ansible/branch2-enablesms.yml)
 - Apply the changes
   - `ansible-playbook -i inventory-api branch2-enablesms.yml`
-- R81.1: Enable "Apply for Security Gateway control connections"
+- R81.20: Enable "Apply for Security Gateway control connections"
   - Edit `sms` object
   - Under NAT, <ins>check</ins> "Apply for Security Gateway control connections"
   - Publish changes
@@ -1072,15 +1071,15 @@ Steps:
     - https://192.168.102.3
 
 ## Configure cluster and policy
-- Create objects in the Check Point database related to Branch 2
-  - Create file on `manager`
-    - [branch2-objects.yml](ansible/branch2-objects.yml)
-  - `ansible-playbook -i inventory-api branch2-objects.yml`
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
   - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+- Create objects in the Check Point database related to Branch 2
+  - Create file on `manager`
+    - [branch2-objects.yml](ansible/branch2-objects.yml)
+  - `ansible-playbook -i inventory-api branch2-objects.yml`
 - Create new policy using API
   - [branch2-policy.yml](ansible/branch2-policy.yml)
     - `ansible-playbook -i inventory-api branch2-policy.yml`
@@ -1088,17 +1087,28 @@ Steps:
   - [branch2-push.yml](ansible/branch2-push.yml)
     - `ansible-playbook -i inventory-api branch2-push.yml`
     - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
-      - Create a Windows 10 workstation on branch2 and set static IP information
+      - For example, create a Windows 10 workstation on branch2 and set static IP information
       - 10.0.2.25/24 DNS 8.8.8.8 and gateway 10.0.2.1
 - Test that ansible can still manage firewall2 cluster members
   - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (sms, firewall2a, firewall2b)
+  - SSH or console to each device (firewall2a, firewall2b)
   - `clish`
   - `installer check-for-updates`
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
+  - If fails to check for updates "The administrator did not authorize downloads"
+    - See https://support.checkpoint.com/results/sk/sk181557
+    - Check using clish: show consent-flags allow-receiving-data
+    - To override and enable:
+      - `set consent-flags allow-receiving-data true`
+      - `save config`
+      - then check for updates again
+    - Also try
+      - `installer agent disable`
+      - `installer agent enable`
+      - then check for updates again
 
 ## VPN
   - Create file on `manager`
@@ -1107,6 +1117,12 @@ Steps:
   - Use SmartConsole to edit the community **Branch_Community**
     - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
   - Testing
+    - In SmartConsole open a new Log tab
+    - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
+    - SmartView Monitor will open
+    - From the tree on the left expenc **Tunnels** and click **Tunnels on Gateway**
+      - Select **firewall1** to view active tunnels at firewall1
+      - Repeat and select **firewall2** to view active tunnels at firewall2
     - 🌱 need to develop the testing
 
 ## Configure branch2-1
