@@ -124,12 +124,33 @@
         track:
           type: Log
         state: present
+    - name: add gateways managment rule reverse
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: SMS manage gateways reverse
+        relative_position:
+          below: SMS manage gateways
+        source:
+          - firewall1
+          - dummy_fw2a
+          - dummy_fw2b
+          - dummy_fw3a
+          - dummy_fw3b
+        destination:
+          - sms
+        service:
+        - CPD_amon
+        action: Accept
+        comments: SMS manage gateways local and remote
+        track:
+          type: Log
+        state: present
     - name: add gateways IDC rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: IDC to gateways
         relative_position:
-          below: SMS manage gateways
+          below: SMS manage gateways reverse
         source:
           - idc-1
         destination:
