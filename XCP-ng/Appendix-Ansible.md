@@ -1200,6 +1200,7 @@ Steps:
   - Advanced > Implicit Cleanup Action: **Allow**
   - Confirm action is Accept and is set to Log
 - Rename the cleanup rule **Allow remaining traffic**
+  - should be action Accept and track Log
 - Add these sub rules above that
   - Subrule 1
     - Name: Block bad sites
@@ -1436,6 +1437,8 @@ Steps:
 - Create new policy using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
     - `ansible-playbook -i inventory-api branch3-policy.yml`
+  - WARNING this resets to the basic access with no application or url control
+    - 🌱 recreate this access
 - Edit cluster **firewall3**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
@@ -1486,6 +1489,12 @@ Steps:
       - Click **OK**
       - Edit the new gateway and click Test
 - 🌱 need to add firewall3 to Lab_Policy LDAP Allowed rule
+- Enable https inspection
+  - edit cluster firewall3
+  - From left tree, click HTTPS inspection
+  - Check **Enable HTTPS inspect**
+  - Click **OK**
+  - Publish and install policy
 
 ## VPN
   - Create file on `manager`
@@ -1494,7 +1503,7 @@ Steps:
   - `ansible-playbook -i inventory-api branch3-push.yml`
   - Testing
     - 🌱 need to develop the testing
-    - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves; but this breaks remote management
+    - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves; but this breaks remote management with ansible
 
 ## Configure branch3-1
 - Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2
@@ -1514,7 +1523,10 @@ Steps:
     - Try conntecting to the file server at \\file-1
     - Confirm Internet browsing is working
       - Confirm internet filters are working
+      - Confirm https inspection is working (certificate being used)
       - 🌱 need to confirm IDC is working
+        - branch3-1 logins show up on fw1
+        - no logins show up on fw3 (or fw2)
     - Review logs
 
 # Demonstration
