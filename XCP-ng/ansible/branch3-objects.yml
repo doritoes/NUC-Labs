@@ -31,7 +31,7 @@
           hide_behind: ip-address
           ip_address: 192.168.103.4
           method: hide
-          install_on: firewall2
+          install_on: firewall3
         state: present
     - name: Branch 3 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
