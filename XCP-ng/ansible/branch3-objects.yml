@@ -46,7 +46,7 @@
         members:
         - branch1_lan
         - branch2_lan
-        - branch2_lan
+        - branch3_lan
         name: LAN_Networks_NO_NAT
         state: present
     - name: publish changes
