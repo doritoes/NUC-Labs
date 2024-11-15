@@ -1488,7 +1488,7 @@ Steps:
   - `ansible-playbook -i inventory-api branch3-push.yml`
   - Testing
     - 🌱 need to develop the testing
-    - 🌱 first try fw1/fw3 is stuck in phase 1
+    - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves
 
 # Demonstration
 🌱 this needs to be developed
