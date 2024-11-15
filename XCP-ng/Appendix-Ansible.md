@@ -318,8 +318,8 @@ Steps:
   - Approve the reboot
   - TIP if you are having trouble on the SMS with `Result: The administrator did not authorized downloads, not performing update`
     - `installer agent update`
-    - `installer disable`
-    - `installer enable`
+    - `installer agent disable`
+    - `installer agent enable`
     - `installer check-for-updates` 
 
 ## Remove management workstation from the Lab network
@@ -1457,6 +1457,7 @@ Steps:
     - `ansible-playbook -i inventory-api branch3-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
+  - 🌱 this seems to break once the VPN tunnels are up
 - At this point you should be able to install a JHF on the firewalls
   - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
@@ -1464,6 +1465,11 @@ Steps:
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
+    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorized downloads, not performing update`
+      - `installer agent update`
+      - `installer agent disable`
+      - `installer angent enable`
+      - `installer check-for-updates` 
 - IDC-1
   - From the ribbon menu click Filters
     - Edit filter **Prod**
@@ -1488,7 +1494,28 @@ Steps:
   - `ansible-playbook -i inventory-api branch3-push.yml`
   - Testing
     - 🌱 need to develop the testing
-    - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves
+    - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves; but this breaks remote management
+
+## Configure branch3-1
+- Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2 and push policies
+- Log in for the first time at the console
+  - 🌱 DHCP not working yet
+  - Rename workstation
+    - Open administrative powershell
+    - `Rename-Computer -NewName branch3-1`
+    - `Restart-Computer`
+  - Join to domain
+    - Open administrative powershell
+    - `Add-Computer -DomainName xcpng.lab -restart`
+      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - Password: the password you set
+- Testing
+  - Log in as Other user > juliette.larocco
+    - Try conntecting to the file server at \\file-1
+    - Confirm Internet browsing is working
+      - Confirm internet filters are working
+      - 🌱 need to confirm IDC is working
+    - Review logs
 
 # Demonstration
 🌱 this needs to be developed
