@@ -1497,7 +1497,8 @@ Steps:
     - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves; but this breaks remote management
 
 ## Configure branch3-1
-- Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2 and push policies
+- Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2
+- Push policies
 - Log in for the first time at the console
   - 🌱 DHCP not working yet
   - Rename workstation
