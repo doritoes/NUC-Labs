@@ -1424,15 +1424,15 @@ Steps:
     - https://192.168.103.3
 
 ## Configure cluster and policy
-- Create objects in the Check Point database related to Branch 3
-  - Create file on `manager`
-    - [branch3-objects.yml](ansible/branch3-objects.yml)
-  - `ansible-playbook -i inventory-api branch3-objects.yml`
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall3-cluster.yml](ansible/firewall3-cluster.yml)
   - `ansible-playbook -i inventory-api firewall3-cluster.yml`
+- Create objects in the Check Point database related to Branch 3
+  - Create file on `manager`
+    - [branch3-objects.yml](ansible/branch3-objects.yml)
+  - `ansible-playbook -i inventory-api branch3-objects.yml`
 - Create new policy using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
     - `ansible-playbook -i inventory-api branch3-policy.yml`
@@ -1479,13 +1479,16 @@ Steps:
       - Filter: **Prod**
       - Click **OK**
       - Edit the new gateway and click Test
+      - 🌱 taking a long time/failing
 
 ## VPN
   - Create file on `manager`
     - [branch3-vpn.yml](ansible/branch3-vpn.yml)
   - `ansible-playbook -i inventory-api branch3-vpn.yml`
+  - `ansible-playbook -i inventory-api branch3-push.yml`
   - Testing
     - 🌱 need to develop the testing
+    - 🌱 first try fw1/fw3 is stuck in phase 1
 
 # Demonstration
 🌱 this needs to be developed
