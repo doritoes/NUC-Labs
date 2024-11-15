@@ -1284,9 +1284,11 @@ Steps:
   - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
 - Push both policies, Lab_Policy and Lab_Policy_Branches
 - 🌱 need to develop
-  - firewall1 is allowing it, but on firewall2 it is dropped
+  - firewall1 is allowing it and shows logins from branch1 and branch2
+  - firewall2 is not showing any
     - firewall2: `pep show user all` doesn't show logins
     - firewall2 isn't getting logins, not even on branch2-1
+- 🌱 basic categories work for firewall2, but not the ipgiraffe.com identity rule
 
 ## Configure DHCP helper and DHCP
 - Log in to firewall2a and firewall2b
@@ -1344,8 +1346,9 @@ Steps:
   - Start > Settings > Network & Internet
   - Modify the interface to use Automatic (DHCP)
     - Use `AD\Juliette.Larocco2` account
-- Test
-  - 🌱 currently broken
+- Test DHCP is giving the IP address
+  - From shell prompt `ipconfig`
+  - Should get IP in 10.0.2.20-250 range,
 
 # Configure Branch 3
 🌱 this needs to be developed
