@@ -1485,7 +1485,7 @@ Steps:
       - Filter: **Prod**
       - Click **OK**
       - Edit the new gateway and click Test
-      - 🌱 taking a long time/failing
+- 🌱 need to add firewall3 to Lab_Policy LDAP Allowed rule
 
 ## VPN
   - Create file on `manager`
@@ -1500,7 +1500,6 @@ Steps:
 - Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2
 - Push policies
 - Log in for the first time at the console
-  - 🌱 DHCP not working yet
   - Rename workstation
     - Open administrative powershell
     - `Rename-Computer -NewName branch3-1`
