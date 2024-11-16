@@ -260,7 +260,7 @@
         - dummy_fw2b
         - dummy_fw3a
         - dummy_fw3b
-        name: remote_branch_filewalls
+        name: remote_branch_firewalls
         state: present
     - name: TCP 135
       check_point.mgmt.cp_mgmt_service_tcp:
