@@ -39,12 +39,19 @@
         name: Gateways access
         position: top
         state: present
+    - name: create DHCP section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: DHCP
+        relative_position:
+          below: Gateways access
+        state: present
     - name: create stealth section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy Network
         name: Stealth rules
         relative_position:
-          below: Gateways access
+          below: DHCP
         state: present
     - name: create management network section
       check_point.mgmt.cp_mgmt_access_section:
@@ -160,6 +167,40 @@
         - https
         action: Accept
         comments: IDC connect to remote gateways
+        track:
+          type: Log
+        state: present
+    - name: add DHCP rule requests
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DHCP requests
+        relative_position:
+          below: DHCP
+        source:
+          - remote_branch_firewalls
+        destination:
+          - dc-1
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP requests
+        track:
+          type: Log
+        state: present
+    - name: add DHCP rule replies
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DHCP replies
+        relative_position:
+          below: DHCP requests
+        source:
+          - dc-1
+        destination:
+          - remote_branch_firewalls
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP replies
         track:
           type: Log
         state: present
