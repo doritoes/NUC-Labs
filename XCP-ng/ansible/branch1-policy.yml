@@ -318,6 +318,7 @@
         source:
           - sms
           - firewall1
+          - remote_branch_firewalls
         destination:
           - dc-1
         service:
@@ -503,9 +504,11 @@
         source:
           - management_192.168.41.0/24
           - branch1_lan
+          - branch1_dmz
         destination:
           - broadcast_192.168.41.255
           - broadcast_10.0.1.255
+          - broadcast_192.168.31.255
         service:
         - nbname
         - nbdatagram
@@ -523,6 +526,7 @@
         source:
           - management_192.168.41.0/24
           - branch1_lan
+          - branch1_dmz
         destination:
           - multicast_224.0.0.251
         service:
@@ -541,6 +545,7 @@
         source:
           - management_192.168.41.0/24
           - branch1_lan
+          - branch1_dmz
         destination:
           - multicast_224.0.0.251
           - multicast_224.0.0.252
@@ -564,6 +569,7 @@
         source:
           - management_192.168.41.0/24
           - branch1_lan
+          - branch1_dmz
         destination:
           - multicast_224.0.0.22
         service:
