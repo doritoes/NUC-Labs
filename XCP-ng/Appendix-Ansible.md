@@ -147,9 +147,9 @@ Notes:
 
 # Configure SMS
 Steps:
-- In XO, select the VM `SMS`
-- Under Network tab, set the network interface settings (blue gear icon) and them disable TX checksumming
-- Log in to console of SMS
+- In XO, select the VM `sms`
+- Under **Network** tab, set the network interface settings (blue gear icon) and them disable TX checksumming
+- Log in to console of `sms`
   - Username `admin` and the password you selected
 - Set IP address information
   - `set interface eth0 ipv4-address 192.168.41.20 mask-length 24`
@@ -169,6 +169,7 @@ Steps:
   - `exit`
   - You can now ssh without a password
     - `ssh 192.168.41.20`
+  - TIP you can create your own script file `auth.sh` to repeat this process for all the devices. Example at [auth.sh](auth.sh)
 - Test Ansible access
   - Exit back to session on manager
   - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
