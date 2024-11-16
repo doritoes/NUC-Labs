@@ -94,10 +94,7 @@
           - Manager
         destination:
           - firewall1
-          - dummy_fw2a
-          - dummy_fw2b
-          - dummy_fw3a
-          - dummy_fw3b
+          - remote_branch_firewalls
         service:
         - https
         - echo-reply
@@ -117,10 +114,7 @@
           - sms
         destination:
           - firewall1
-          - dummy_fw2a
-          - dummy_fw2b
-          - dummy_fw3a
-          - dummy_fw3b
+          - remote_branch_firewalls
         service:
         - FW1
         - CPD
@@ -139,10 +133,7 @@
           below: SMS manage gateways
         source:
           - firewall1
-          - dummy_fw2a
-          - dummy_fw2b
-          - dummy_fw3a
-          - dummy_fw3b
+          - remote_branch_firewalls
         destination:
           - sms
         service:
@@ -163,6 +154,7 @@
         destination:
           - dummy_fw2-internal
           - dummy_fw3-internal
+          - remote_branch_firewalls
         service:
         - https
         action: Accept
