@@ -337,12 +337,12 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - 8.8.4.4
   - Click **OK** > **OK** > **Close**
 - Disable Ethernet 2 interface
-  - Right-click Ethernet 2
-  - Click Disable
+  - Right-click **Ethernet 2**
+  - Click **Disable**
 - Test Internet connectivity, etc. to confirm it is still working
 
 ## Configure Domain Controller
-- Open console for DC-1
+- Open console for `dc-1`
 - Complete initial setup and set administrator password
 - Log in for the first time
 - Rename server
