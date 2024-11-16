@@ -427,7 +427,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as administrator with the password you set
-    - Use the XCP-ng Ctrl+Alt+Del icon to bring up the login
+    - Use the XCP-ng Ctrl+Alt+Del icon to bring up the login prompt
   - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
