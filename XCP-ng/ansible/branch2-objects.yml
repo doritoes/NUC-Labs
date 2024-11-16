@@ -48,5 +48,13 @@
         - branch2_lan
         name: LAN_Networks_NO_NAT
         state: present
+    - name: remote branch firewalls group
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - firewall2
+        - dummy_fw3a
+        - dummy_fw3b
+        name: remote_branch_firewalls
+        state: present
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
