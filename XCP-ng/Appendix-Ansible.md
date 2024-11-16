@@ -565,7 +565,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Note the apps should be allowed for the Domain profile (checked)
       - Click **OK**
     - Configure Identity Collector
-      - Launch the app
+      - Back on `IDC-1`, launch the Identity Collecter app
       - Ribbon menu > Domains
         - Click icon for New domain
           - Name: **xcpng.lab**
@@ -580,7 +580,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
               - Fix: Disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
               - Lab testing encountered a number of issues with this
-                - Continue with the lab. It will start working eventually. Here's what I tried without success.
+                - Continue with the lab. <ins>It will start working eventually.</ins> Here's what I tried without success.
                   - Tried rebooting IDC-1 and DC-1 without success
                   - Tried logging in as adquery from branch1-1
                   - Tried removing the domain and re-adding the domain
@@ -591,13 +591,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
                 - I strongly believe the R82 client (not easily available without license) is the key to this working
             - NOTE You can't log in to DC-1 as adquery, but you can log in to branch1-1 as adquery to confirm the account works
       - Left menu > Identity Sources
-        - New > Active Directory > Add manually
+        - New > Active Directory > Add MDC-1anually
           - Name: DC-1
           - Domain: xcpng.lab
           - Host name / IP address: **10.0.1.10** or **DC-1** (the IDC downloaded from the gateways/sms don't allow Name, only IP address)
           - Site: **Corp**
           - Click **Test**
-          - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be used
+          - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be 
+          - Didn't work right away but started working later.
           - Click OK
       - Ribbon menu > Query Pools
         - New
@@ -610,7 +611,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - add list of subnets the clients are on
             - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
             - Click "+" to add it
-            - Click OK
+            - Click **OK**
       - Left menu > Gateways
         - Add new Gateway
           - Name: **firewall1**
