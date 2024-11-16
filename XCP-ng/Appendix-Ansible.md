@@ -32,6 +32,8 @@ Notes:
     - Scroll to bottom, click **More Windows features**
     - <ins>Check</ins> **Windows Subsystem for Linux** and click **OK**
     - Click **Restart now** when prompted
+    - Alternative: `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
+      - accept the reboot
   - Log back in and open a privileged shell
     - `wsl --list`
     - `wsl --list --online`
@@ -70,7 +72,6 @@ Notes:
 - Install additional WSL packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - `sudo apt install -y python3-paramiko python3-pip`
-    - or `sudo apt install -y software-properties-common python3-paramiko python3-pip`
   - Install Ansible
     - Option 1 - recommended - Ansbile 2.17 (or later)
       - `sudo apt-add-repository ppa:ansible/ansible`
