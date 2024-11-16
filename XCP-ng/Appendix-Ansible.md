@@ -420,9 +420,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Log in as Other user > juliette.larocco
       - Use the password from  [domain-users.csv](powershell/domain-users.csv)
       - Note the first time experience for the domain user
-      - Try Remote desktop connection to DC-1
-        - juliette.larocco fails "Logon failure: the user has not been granted the requested logon type at this computer."
-        - juliette.larocco2 fails if "Administrator" is still logged in on DC-1
+      - Try Remote Desktop connection to `dc-1`
+        - juliette.larocco fails because it doesn't have permisissions
+        - juliette.larocco2 works, but will fail if "Administrator" is still logged in on DC-1
     - Web browsing works. Log in to SmartConsole on `manager` to view the firewall logs
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
@@ -444,7 +444,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Install-WindowsFeature -Name FS-FileServer`
   - Join to domain
     - `Add-Computer -DomainName xcpng.lab -restart`
-      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - User name: `AD\Juliette.LaRocco2`
       - Password: the password you set
     - Wait as the system reboots
   - Set up share drive and file shares
@@ -457,10 +457,10 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Follow the wizard and use defaults (e.g., assign letter E:)
         - Set the volume label to **NETDRIVE**
     - Download and run file-shares.ps1 in an administrative shell [file-shares.ps1](powershell/file-shares.ps1)
-    - `powershell -ExecutionPolicy Bypass file-shares.ps1`
+      - `powershell -ExecutionPolicy Bypass file-shares.ps1`
       - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file
         - this causes an error when running the script, but the rest is successfully configured
-        - you can add another test user in Finance if you want to avoid this messaage
+        - you can add another test user in Finance OU if you want to avoid this messaage
   - Testing
     - Test access from `branch1-1` to the shared folders by different domain users
       - For examplle, with juliette.larocco
