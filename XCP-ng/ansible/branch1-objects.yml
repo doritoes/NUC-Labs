@@ -239,6 +239,15 @@
         - management_192.168.41.0/24
         name: branch1_topology
         state: present
+    - name: remote branch firewall group
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - dummy_fw2a
+        - dummy_fw2b
+        - dummy_fw3a
+        - dummy_fw3b
+        name: remote_branch_filewalls
+        state: present
     - name: TCP 135
       check_point.mgmt.cp_mgmt_service_tcp:
         aggressive_aging:
