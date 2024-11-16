@@ -39,12 +39,19 @@
         name: Gateways access
         position: top
         state: present
+    - name: create DHCP section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy_Branches Network
+        name: DHCP
+        relative_position:
+          below: Gateways access
+        state: present
     - name: create stealth section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Stealth rules
         relative_position:
-          below: Gateways access
+          below: DHCP
         state: present
     - name: create DMZ section
       check_point.mgmt.cp_mgmt_access_section:
@@ -100,7 +107,7 @@
         source:
           - idc-1
         destination:
-          - firewall2
+          - remote_branch_firewalls
         service:
         - https
         action: Accept
@@ -117,12 +124,82 @@
         source:
           - branch1_outbound_nat
         destination:
-          - firewall2
+          - remote_branch_firewalls
         service:
         - echo-reply
         - ssh_version_2
         action: Accept
         comments: Temporarily allow manage gateways over Internet until VPN tunnel is up
+        track:
+          type: Log
+        state: present
+    - name: add gateways access rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy_Branches Network
+        name: Manage gateways
+        relative_position:
+          below: Manage gateways over Internet
+        source:
+          - branch1_outbound_nat
+          - manager
+        destination:
+          - remote_branch_firewalls
+        service:
+        - echo-reply
+        - ssh_version_2
+        action: Accept
+        comments: Manage gateways 
+        track:
+          type: Log
+        state: present
+    - name: add a DHCP broadcasts rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy_Branches Network
+        name: DHCP Broadcasts
+        relative_position:
+          below: DHCP
+        source:
+          - Any
+        destination:
+          - broadcast_255.255.255.255
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP broadcasts
+        track:
+          type: Log
+        state: present
+    - name: add a DHCP requests rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy_Branches Network
+        name: DHCP Requests
+        relative_position:
+          below: DHCP Broadcasts
+        source:
+          - remote_branch_firewalls
+        destination:
+          - dc-1
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP requests
+        track:
+          type: Log
+        state: present
+    - name: add a DHCP replies rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy_Branches Network
+        name: DHCP Replies
+        relative_position:
+          below: DHCP Requests
+        source:
+          - dc-1
+        destination:
+          - remote_branch_firewalls
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP replies
         track:
           type: Log
         state: present
@@ -135,7 +212,7 @@
         source:
           - Any
         destination:
-          - firewall2
+          - remote_branch_firewalls
         service:
         - Any
         action: Drop
@@ -169,7 +246,7 @@
         relative_position:
           below: Core Services
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - .time.windows.com
           - .ntp.checkpoint.com
@@ -189,7 +266,7 @@
         relative_position:
           below: NTP allowed
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - dc-1
         service:
@@ -206,7 +283,7 @@
         relative_position:
           below: Domain Services
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - file-1
         service:
@@ -224,7 +301,7 @@
         relative_position:
           below: File Server
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - google_dns_8.8.8.8
           - google_dns_8.8.4.4
@@ -242,7 +319,7 @@
         relative_position:
           below: General Internet access
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - All_Internet
         service:
@@ -261,9 +338,10 @@
         relative_position:
           below: Noise suppression
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - broadcast_10.0.2.255
+          - broadcast_10.0.3.255
         service:
         - nbname
         - nbdatagram
@@ -279,7 +357,7 @@
         relative_position:
           below: netbios broadcasts
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - multicast_224.0.0.251
         service:
@@ -296,7 +374,7 @@
         relative_position:
           below: mDNS multicast
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - multicast_224.0.0.251
           - multicast_224.0.0.252
@@ -318,7 +396,7 @@
         relative_position:
           below: llmnr and ssdp multicast
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - multicast_224.0.0.22
         service:
@@ -335,7 +413,7 @@
         relative_position:
           below: IGMP multicast
         source:
-          - branch2_lan
+          - LAN_Networks_NO_NAT
         destination:
           - All_internet
         service:
