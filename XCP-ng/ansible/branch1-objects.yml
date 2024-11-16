@@ -25,6 +25,13 @@
           method: hide
           install_on: firewall1
         state: present
+    - name: branch 1 mgmt broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_192.168.41.255
+        ipv4_address: 192.168.41.255
+        color: dark blue
+        comments: branch1 mgmt broadcast address
+        state: present
     - name: branch 1 outbound NAT
       check_point.mgmt.cp_mgmt_host:
         name: branch1_outbound_nat
@@ -115,6 +122,13 @@
           ip_address: 192.168.101.4
           method: hide
           install_on: firewall1
+        state: present
+    - name: branch 1 DMZ broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_192.168.31.255
+        ipv4_address: 192.168.31.255
+        color: dark blue
+        comments: branch1 DMZ broadcast address
         state: present
     - name: domain controller
       check_point.mgmt.cp_mgmt_host:
