@@ -588,6 +588,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
                   - Tried restarting service `Check Point Identity Collector`
                   - Tried uninstalling the R81 version and installing the R82 version without success
                   - Tried building another IDC-2 with R82 client
+                  - What has worked is installing Wireshark (!)
                 - I strongly believe the R82 client (not easily available without license) is the key to this working
             - NOTE You can't log in to DC-1 as adquery, but you can log in to branch1-1 as adquery to confirm the account works
       - Left menu > Identity Sources
@@ -598,19 +599,19 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Site: **Corp**
           - Click **Test**
           - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be 
-          - Didn't work right away but started working later.
-          - Click OK
+          - Didn't work right away but started working later (after installing Wireshark)
+          - Click **OK**
       - Ribbon menu > Query Pools
         - New
           - Name: **Corp AD**
-          - Select all Identity Sources
+          - Select all Identity Sources (check **DC-1**)
           - Click **OK** and then click **OK**
       - Ribbon menu > Filters
         - Add a New filter
           - Name: Prod
           - add list of subnets the clients are on
             - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
-            - Click "+" to add it
+            - Click "**+**" to add it
             - Click **OK**
       - Left menu > Gateways
         - Add new Gateway
@@ -620,7 +621,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Query pool: **Corp AD**
           - Filter: **Prod**
           - Click **OK**
-        - Edit the new gateway and click Test
+        - Edit the new gateway and click **Test**
           - Will fail until the cluster is configured (see below)
       - Left menu > Settings
         - No changes required
@@ -974,29 +975,32 @@ Here are the steps for configuring IDC in our Lab.
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
       - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
-    - In Lab testing it just "started working", not sure why. The last thing tried was installing Wireshark. If it's an issue with the XCP-ng virtual switch, could pinging from DC-1 to IDC-1; this ping would fail but populate the arp table
+      - Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
+    - In Lab testing it just "started working", not sure why. The last thing tried was installing Wireshark.
   - Create Access role
-    - Add a subrule above the rule allowing medium/low/very low risk applications
-    - Name: Allow support access to sites
-    - Source: New > Access Role
-      - Object name: **Support**
-      - Networks: **Specified Networks**, add **branch1_lan**
-      - Users: Specific users/groups
-        - Click "+" to add, and search for **support**
-        - Click on **Support**
-      - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
-      - Remote Access Clients: Leave at Any Client
-      - Click **OK**
-    - Destination: New > Other > Domain> .ipgiraffe.com (FQDN)
-    - Action: Accept
-    - Track: Log
-  - Add another subrule to deny all access to ipgiraffe.com
-    - Name: Deny all nonsupport access to sites
-    - Source: Any
-    - Destination .ipgiraffe.com
-    - Services: Any
-    - Action: Drop > Blocked Message
-    - Track: Log
+    - Back on `manager` open SmartConsole
+    - Add a subrule above the rule "Allow general categories" which allows medium/low/very low risk applications
+      - Name: Allow support access to sites
+      - Source: **New** > **Access Role**
+        - Object name: **Support**
+        - Networks: **Specified Networks**, add **branch1_lan**
+        - Users: **Specific users/groups**
+          - Click "**+**" to add, and search for **support**
+          - Click on **Support**
+        - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
+        - Remote Access Clients: Leave at Any Client
+        - Click **OK**
+    - Destination: **New** > **Other** > **Domain..** > **.ipgiraffe.com** (FQDN)
+    - Services: ***Any**
+    - Action: **Accept**
+    - Track: **Log**
+  - Add another subrule just below to deny all access to ipgiraffe.com
+    - Name: **Deny all nonsupport access to sites**
+    - Source: ***Any**
+    - Destination **.ipgiraffe.com**
+    - Services: **Any**
+    - Action: **Drop** > **Blocked Message**
+    - Track: **Log** > **Accounting**
   - Publish changes and push policy
   - Test access, access control, enforcement of user identity works and is logged
 
