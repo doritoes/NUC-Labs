@@ -955,9 +955,14 @@ Here are the steps for configuring IDC in our Lab.
   - Testing
     - Log in to IDC-1
     - Launch Identity Collector
-    - From the left, click Gateways
+    - From the left, click **Gateways**
       - Edit **firewall1**
       - Click **Test** and then click **Trust** under Certificate Info
+      - Click **OK**
+    - Confirm Identity Sources > `dc-1` is working
+      - From left click **Identity Sources**
+      - `dc-1` should be green; if not, edit it and click Test to get troubleshooting information
+      - Next check firewall logs to be sure there aren't any missing firewall rules
     - From the left menu click Logins Monitor
     - Click the small power icon next to the text "Logins Monitor"
     - Log in to `branch-1` using a domain user account (i.e., `AD\juliette.larocco`)
