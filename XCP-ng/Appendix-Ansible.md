@@ -1010,7 +1010,7 @@ Here are the steps for configuring IDC in our Lab.
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
 - Configure Sites and Services Subnets and DNS
-  - Run on `dc-1` from an administartive powershell
+  - Run on `dc-1` from an administrative powershell
     - branch2-site.ps1 ([branch2-site.ps1](powershell/branch2-site.ps1))
     - `powershell -ExecutionPolicy Bypass branch2-site.ps1`
 - Configure DC-1 as DHCP server for branch 2
