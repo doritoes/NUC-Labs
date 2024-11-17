@@ -643,7 +643,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Log in at the console
   - Configure Static IP address
     - `sudo vi /etc/netplan/01-netcfg.yaml`
-    - Paste in the contents of [01-netcfg.yaml]([01-netcfg.yaml)
+    - Paste in the contents of [01-netcfg.yaml](01-netcfg.yaml)
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
   - Give permissions to user ansible
