@@ -152,6 +152,7 @@
         source:
           - idc-1
         destination:
+          - firewall1
           - dummy_fw2-internal
           - dummy_fw3-internal
           - remote_branch_firewalls
