@@ -710,15 +710,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `enable-https-inspection` will be added in the next version
 - Export the certificate using SmartConsole gui
   - Open the cluster `firewall1`
-  - Click on HTTPS Ispection
+  - Click  **HTTPS Inspection**
   - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
   - Step two > click **Export certificate**
     - Name it **outbound**
   - Step 3 > check **Enable HTTPS inspection**
   - Click **OK**
 - Click **Publish**
-- WARNING if you push policy now, you will get https warnings/errors in your browser. Let's set up the trusted Root CA first
-- Distribute the https inspection certificate using GPO on `DC-1`
+- Distribute the https inspection certificate using GPO on `dc-1`
   - copy the .cer file to DC-1 at `c:\certificate.cer`
   - create the GPO using administrative powershell
     - `$gpoName = "Distribute Root CA Certficate"`
@@ -727,7 +726,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Open Group Policy Management Console (GPMC)
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab
-    - Expand Domain: xcpng.lab
+    - Expand Domains: xcpng.lab
     - Right-click **Distribute Root CA Certication** from the tree, then click **Edit**
     - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
@@ -735,7 +734,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Accept the defaults
   - Update Lab_Policy to enable https inspection
     - From `manager` open SmartConsole
-    - SECURITY POLICIES > HTTPS Inspection > Policy
+    - SECURITY POLICIES > Open Lab_Policy > HTTPS Inspection > Policy
     - Change the default rule **Track** value to **Log**
   - Add more https bypass rules manually
     - Not possible with API in R81.20, but available on R82 API
@@ -780,7 +779,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 
 ## Import the User Check Certificate
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
-- From branch1-1 or manager browse to https://192.168.101.1
+- From `branch1-1` or `manager` browse to https://192.168.101.1
   - You will receive an untrusted certificate message
   - View the certificate Details
   - Note the Certificate Hierarchy similar to the following
@@ -807,7 +806,7 @@ In this step we will import the Check Point ICA certificate and also distribute 
   - closing/re-opening the browser can solve caching issues
   - logging out and back in may also help
  
-  NOTE As this point no HTTPS inspection will occur, until we enable the applciation control layer, below.
+NOTE As this point no HTTPS inspection will occur, until we enable the applciation control layer, below.
 
 ## Change website categorization to Hold mode
 By default URL categorization occurs in the background. First attempts to a previously unknown URL will succeed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
@@ -870,7 +869,7 @@ By default URL categorization occurs in the background. First attempts to a prev
         - Once a day
         - Per applications
     - Track: Log > Accounting
-- Publish and install Policy
+- Publish and install policy
   - This will enable https inspection!
 - Test from branch1-1
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
