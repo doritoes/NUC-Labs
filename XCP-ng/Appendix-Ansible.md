@@ -659,6 +659,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - [ssl.conf.j2](ansible/ssl.conf.j2)
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
+  - Update packages on `dmz-apache`
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - Testing
       - From branch1-1:
         - https://192.168.31.11
