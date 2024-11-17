@@ -670,7 +670,6 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Configure IIS web server **dmz-iis**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName dmz-iis`
