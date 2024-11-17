@@ -1003,6 +1003,9 @@ Here are the steps for configuring IDC in our Lab.
     - Track: **Log** > **Accounting**
   - Publish changes and push policy
   - Test access, access control, enforcement of user identity works and is logged
+    - http://maliciouswebsitetest.com/ should be blocked
+    - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
+    - https://ipgiraffe.com should be blocked when user Lab is logged in on `manager`
 
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
