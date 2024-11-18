@@ -1090,7 +1090,7 @@ Steps:
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
-  - `ansible-playbook -i inventory-api firewall1-cluster.yml`
+  - `ansible-playbook -i inventory-api firewall2-cluster.yml`
 - Create objects in the Check Point database related to Branch 2
   - Create file on `manager`
     - [branch2-objects.yml](ansible/branch2-objects.yml)
