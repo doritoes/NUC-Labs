@@ -1096,11 +1096,13 @@ Steps:
     - [branch2-objects.yml](ansible/branch2-objects.yml)
   - `ansible-playbook -i inventory-api branch2-objects.yml`
 - Create new policy using API
-  - [branch2-policy.yml](ansible/branch2-policy.yml)
-    - `ansible-playbook -i inventory-api branch2-policy.yml`
+  - Create file on `manager`
+    - [branch2-policy.yml](ansible/branch2-policy.yml)
+  - `ansible-playbook -i inventory-api branch2-policy.yml`
 - Push policy
-  - [branch2-push.yml](ansible/branch2-push.yml)
-    - `ansible-playbook -i inventory-api branch2-push.yml`
+  - Create file on `manager`
+    - [branch2-push.yml](ansible/branch2-push.yml)
+  - `ansible-playbook -i inventory-api branch2-push.yml`
     - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
       - For example, create a Windows 10 workstation on branch2 and set static IP information
       - 10.0.2.25/24 DNS 8.8.8.8 and gateway 10.0.2.1
