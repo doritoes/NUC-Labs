@@ -1133,7 +1133,13 @@ Steps:
   - `ansible-playbook -i inventory-api branch2-vpn.yml`
   - Use SmartConsole to edit the community **Branch_Community**
     - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
+  - Push policies
+    - `ansible-playbook -i inventory-api branch1-push.yml`
+    - `ansible-playbook -i inventory-api branch2-push.yml`
   - Testing
+    - Generate some test traffic
+      - `ansible all -m ping`
+      - 192.168.102.2 and 192.168.102.3 will fail now
     - In SmartConsole open a new Log tab
     - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
     - SmartView Monitor will open
@@ -1141,6 +1147,7 @@ Steps:
       - Select **firewall1** to view active tunnels at firewall1
       - Repeat and select **firewall2** to view active tunnels at firewall2
       - Click the refresh icon to update the information and see the tunnels come up
+      - NOTE "Up - Phase1" for now. Once we bring up branch2-1 the tunnels should go full up.
     - 🌱 need to develop the testing
       - from the firewall cluster active member, use `vpn tu`
       - lost ansible and ssh connection from manager to firewall2 192.168.102.2 and .3
@@ -1149,26 +1156,27 @@ Steps:
 ## Configure branch2-1
 - We will configure workstation branch2-1 with a static IP and later switch to DHCP
 - Log in for the first time at the console
-  - Rename workstation
-    - Open administrative powershell
-    - `Rename-Computer -NewName branch2-1`
-    - `Restart-Computer`
-  - Network configuration
-    - Open administrative powershell
-    - Set the static IP address and point DNS settings to the domain controller/DNS server
-      - `New-NetIPAddress -IPAddress 10.0.2.100 -DefaultGateway 10.0.2.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-      - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
-    - Try testing nslookup to see what resolves (IPs, FQDN)
-  - Join to domain
-    - Open administrative powershell
-    - `Add-Computer -DomainName xcpng.lab -restart`
-      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
-      - Password: the password you set
+- Rename workstation
+  - Open administrative powershell
+  - `Rename-Computer -NewName branch2-1`
+  - `Restart-Computer`
+- Network configuration
+  - Open administrative powershell
+  - Set the static IP address and point DNS settings to the domain controller/DNS server
+    - `New-NetIPAddress -IPAddress 10.0.2.100 -DefaultGateway 10.0.2.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+  - Try testing nslookup to see what resolves (IPs, FQDN)
+- Join to domain
+  - Open administrative powershell
+  - `Add-Computer -DomainName xcpng.lab -restart`
+    - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+    - Password: the password you set
 - Testing
   - Log in as Other user > juliette.larocco
-    - Try conntecting to the file server at \\file-1
-    - Confirm Internet browsing is working
-    - Review logs
+  - Confirm Internet browsing is working
+  - Try connecting to the file server at \\file-1
+  - Review logs in SmartConsole
+  - Go back to the SmartView Monitor app on `manager` and refresh to see the VPN tunnels are now fully up
 
 ## Enable Application Control and Identity Awareness
 - Edit cluster **firewall2**
