@@ -1148,10 +1148,7 @@ Steps:
       - Repeat and select **firewall2** to view active tunnels at firewall2
       - Click the refresh icon to update the information and see the tunnels come up
       - NOTE "Up - Phase1" for now. Once we bring up branch2-1 the tunnels should go full up.
-    - 🌱 need to develop the testing
-      - from the firewall cluster active member, use `vpn tu`
-      - lost ansible and ssh connection from manager to firewall2 192.168.102.2 and .3
-      - how can we manage besides console?
+      - NOTE: lost ansible and ssh connection from manager to firewall2 192.168.102.2 and .3. Will regain access 10.0.2.2 and 10.0.2.3 once the tunnels come up
 
 ## Configure branch2-1
 - We will configure workstation branch2-1 with a static IP and later switch to DHCP
@@ -1177,6 +1174,12 @@ Steps:
   - Try connecting to the file server at \\file-1
   - Review logs in SmartConsole
   - Go back to the SmartView Monitor app on `manager` and refresh to see the VPN tunnels are now fully up
+    - Also, from the firewall cluster active member, use `vpn tu`
+  - You can now ssh from `manager` to 10.0.2.2 and 10.0.2.3
+    - You can update `inventory` file
+      - firewall2a 10.0.2.2
+      - firewall2b IP 10.0.2.3
+    - `ansible all -ping will work again`
 
 ## Enable Application Control and Identity Awareness
 - Edit cluster **firewall2**
@@ -1199,11 +1202,14 @@ Steps:
   - Click OK
   - Publish and install policy **Lab_Policy_Branches**
 - IDC-1
+  - Log in as `AD\juliette.larocco2`
   - From the ribbon menu click Filters
     - Edit filter **Prod**
       - Add network:
         - Network: 10.0.2.0/24
         - Comment: Branch 2 LAN
+        - Click "**+**" to add it
+        - Click **OK** then **OK**
   - From left menu click **Gateways**
     - Add new Gateway
       - Name: **firewall2**
@@ -1211,9 +1217,12 @@ Steps:
       - Shared Secret: Checkpoint123!
       - Query Pool: Corp AD
       - Filter: Prod
-      - Click OK
-      - Edit the new gateway and click Test
+      - Click **OK**
+      - Edit the new gateway and click **Test**
+      - Click **Trust** and then click **OK**
 🌱 The following changes can likely be done using Ansible and the API. Need to test.
+- Log back in to `manager` and log in to SmartConsole
+- Open policy Lab_Policy_Branches
 - TIP You can copy and paste rules from Lab_Policy to Lab_Policy_Brances
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
@@ -1276,7 +1285,6 @@ Steps:
   - Step 3 check **Enable HTTPS inspection**
   - Click **OK**
 - Publish and install policy Lab_Policy_Branches
-- Click **OK** and **Publish**
 - Confirm the HTTPS policy is the same across Lab_Policy and Lab_Policy_Branches
 - Test from branch2-1
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
@@ -1295,6 +1303,9 @@ Steps:
 
 ## Add Identity-Based Management
 - 🌱 this isn't working yet
+  - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
+  - No logins are pushed to firewall2
+    - `pep show user all`
 - Add an access rule to the Lab_Policy and Lab_Policy_Branches
   - TIP You can create in one policy and copy it to the other
   - Name: **RDP access for Support**
@@ -1322,50 +1333,8 @@ Steps:
   - `set bootp interface eth1 on`
   - `set bootp interface eth1 relay-to 10.0.1.10 on`
   - `save config`
-- Lab_Policy
-  - Add section **DHCP** above section **Stealth Rules**
-    - Add rule
-      - Name: DHCP requests
-      - Source: firewall2
-      - Destination: dc-1
-      - Service: bootp (udp/67)
-      - Action: Accept
-      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
-      - Comments: DHCP requests
-    - Add rule
-      - Name: DHCP replies
-      - Source: dc-1
-      - Destination: firewall2
-      - Service: bootp (udp/67)
-      - Action: Accept
-      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
-      - Comments: DHCP replies
-- Lab_Policy_Branches
-  - Add section **DHCP** above section **Stealth Rules**
-    - Add rule
-      - Name: DHCP broadcasts
-      - Source: *Any
-      - Destination: broadcast_255.255.255.255
-      - Service: bootp (udp/67)
-      - Action: Accept
-      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
-      - Comments: DHCP broadcasts
-    - Add rule
-      - Name: DHCP requests
-      - Source: firewall2
-      - Destination: dc-1
-      - Service: bootp (udp/67)
-      - Action: Accept
-      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
-      - Comments: DHCP requests
-    - Add rule
-      - Name: DHCP replies
-      - Source: dc-1
-      - Destination: firewall2
-      - Service: bootp (udp/67)
-      - Action: Accept
-      - Track: None (it's OK to turn it on for troubleshooting and testing initial setup)
-      - Comments: DHCP replies
+- Install Lab_Policy_Branches policy
+  - `ansible-playbook -i inventory-api branch2-push.yml`
 
 ## Configure branch2-1 to use DHCP
 - Change the IP address to use DHCP
@@ -1374,7 +1343,8 @@ Steps:
     - Use `AD\Juliette.Larocco2` account
 - Test DHCP is giving the IP address
   - From shell prompt `ipconfig`
-  - Should get IP in 10.0.2.20-250 range,
+  - Should get IP in 10.0.2.20-250 range
+- Test access to Internet and branch1 (i.e., can access `\\file-1\IT`)
 
 # Configure Branch 3
 🌱 this needs to be developed
