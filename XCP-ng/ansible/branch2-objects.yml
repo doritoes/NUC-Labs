@@ -33,6 +33,13 @@
           method: hide
           install_on: firewall2
         state: present
+    - name: branch 3 broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_10.0.3.255
+        ipv4_address: 10.0.3.255
+        color: dark blue
+        comments: branch3 broadcast address
+        state: present
     - name: Branch 2 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
         name: Branch 2 LAN Workstation DHCP scope
