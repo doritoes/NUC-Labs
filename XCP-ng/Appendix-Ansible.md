@@ -1545,13 +1545,19 @@ Steps:
   - `ansible-playbook -i inventory-api branch3-vpn.yml`
   - `ansible-playbook -i inventory-api branch3-push.yml`
   - `ansible-playbook -i inventory-api branch2-push.yml`
+  - `ansible-playbook -i inventory-api branch1-push.yml`
   - Testing
-    - 🌱 need to develop the testing
-    - 🌱 at first fw1/fw3 is stuck in phase 1 but resolves once there is traffic to bring the tunnels fully up. this breaks ansible access wiht 192.168.103.2 and .3, but you can switch to 10.0.3.2 and .3 to continute to manage them
+    - While the VPN tunnels are down, DHCP and DNS will not work
+      - cannot join domain
+        - cannot received the root CA to handle HTTPS inspection
+      - Can set static IP address and DNS 8.8.8.8 to access internet but HTTP inspection will not work
+    - DHCP traffic on `branch3-1` should bring the tunnel up
+    - This breaks ansible access with 192.168.103.2 and .3
+    - Test ssh access to 10.0.3.2 and 10.0.3.3
+    - Update `inventory` to use the new IP addresses
+    - `ansible all -m ping`
 
 ## Configure branch3-1
-- Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2
-- Push policies
 - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
@@ -1568,10 +1574,28 @@ Steps:
     - Confirm Internet browsing is working
       - Confirm internet filters are working
       - Confirm https inspection is working (certificate being used)
+        - `gpupdate /force` can fetch the certificate from the domain controller
       - 🌱 need to confirm IDC is working
         - branch3-1 logins show up on fw1
         - no logins show up on fw3 (or fw2)
     - Review logs
+
+## Finish IDC-1 setup for Branch3
+- Log in to Identity Collector
+- Edit gateway `firewall3` and click **Test**
+- Click **Trust**
+- Click **OK**
+- Test logins
+  - From left menu click **Logins Monitor**
+  - Click the small power icon to the right of the text "Logins Monitor" to enable for 5 minutes
+  - Log out and Log in to `branch3-1`
+  - Back in `idc-1` click the "refresh" icon partly hidden behind the text
+  - The login will appear in the logins monitor
+- 🌱 the logins still don't get to firewall3 (`pep show user all`)
+- 🌱 logs: from idc-1 to fw3 blade identity awareness
+  - Auth method: User Identity Propagation
+  - User: juliette.larocco2
+  - Description: An error was detected while trying to authenticate against the AD server. It may be a problem of bad configuration or connectivity. Please refer to the troubleshooting guide for more help
 
 # Demonstration
 🌱 this needs to be developed
