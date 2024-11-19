@@ -1432,8 +1432,54 @@ Steps:
 - Create new policy using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
     - `ansible-playbook -i inventory-api branch3-policy.yml`
-  - WARNING this resets to the basic access with no application or url control
-    - 🌱 recreate this access
+  - WARNING this resets Lab_Policy_Branches Internet access to the basic access with no application or URL control
+    - Receate this access
+      - Change the action for rule "Web access" to **Inline Layer** > **New layer**
+        - Name: **Internet Control Branches**
+        - Blades:
+          - Firewall (checked)
+          - **Applications & URL Filtering** (checked)
+        - Advanced > Implicit Cleanup Action: **Accept**
+      - Click **OK**
+      - Rename the cleanup rule **Allow remaining traffic**
+        - Set action Accept and track Log
+      - Add these sub rules above that (or simply copy/paste from Lab_Policy to Lab_Policy_Branches)
+        - Subrule 1
+          - Name: Block bad sites
+          - Source: *Any
+          - Destination: Internet
+          - Services & Applications:
+            - Hacking
+            - Pornography
+            - Phishing
+            - Weapons
+            - Critical Risk
+            - High Risk
+          - Action: **Drop > Blocked Message - Access Control**
+          - Track: Log > Accounting
+        - Subrule 2
+          - Name: Allow general categories
+          - Source: *Any
+          - Destination: Internet
+          - Services & Applications:
+            - Medium Risk
+            - Low Risk
+            - Very Low Risk
+          - Action: Accept
+          - Track: Log > Accounting
+        - Subrule 3
+          - Name: Unknown risk
+          - Source: *Any
+          - Destination: Internet
+          - Services & Applications:
+            - Uncategorized
+            - Unknown Risk
+          - Action:
+            - Inform
+              - Access Approval
+              - Once a day
+              - Per applications
+          - Track: Log > Accounting
 - Edit cluster **firewall3**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
@@ -1453,9 +1499,11 @@ Steps:
       - Click OK
   - [branch3-push.yml](ansible/branch3-push.yml)
     - `ansible-playbook -i inventory-api branch3-push.yml`
+  - Since the policy changed, re-push to firewall2
+    - `ansible-playbook -i inventory-api branch3-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
-  - 🌱 this seems to break once the VPN tunnels are up
+  - 🌱 this seems to break once the VPN tunnels are up; you will need to use 10.0.3.2 and 10.0.3.3 once the tunnels are up
 - At this point you should be able to install a JHF on the firewalls
   - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
@@ -1483,22 +1531,23 @@ Steps:
       - Filter: **Prod**
       - Click **OK**
       - Edit the new gateway and click Test
-- 🌱 need to add firewall3 to Lab_Policy LDAP Allowed rule
+        - NOTE this test may fail until the VPN tunnel is up
 - Enable https inspection
   - edit cluster firewall3
   - From left tree, click HTTPS inspection
-  - Check **Enable HTTPS inspect**
+  - Check **Enable HTTPS inspection**
   - Click **OK**
-  - Publish and install policy
+  - Publish and install policy **Lab_Policy_Branches**
 
 ## VPN
   - Create file on `manager`
     - [branch3-vpn.yml](ansible/branch3-vpn.yml)
   - `ansible-playbook -i inventory-api branch3-vpn.yml`
   - `ansible-playbook -i inventory-api branch3-push.yml`
+  - `ansible-playbook -i inventory-api branch2-push.yml`
   - Testing
     - 🌱 need to develop the testing
-    - 🌱 at first fw1/fw3 is stuck in phase 1, but resolves; but this breaks remote management with ansible
+    - 🌱 at first fw1/fw3 is stuck in phase 1 but resolves once there is traffic to bring the tunnels fully up. this breaks ansible access wiht 192.168.103.2 and .3, but you can switch to 10.0.3.2 and .3 to continute to manage them
 
 ## Configure branch3-1
 - Update Lab_Policy and Lab_Policy_Branches to add firewall3 to DHCP rules similar to firewall2
