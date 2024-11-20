@@ -28,6 +28,7 @@ Notes:
     - Tried specifying the identity server manually
     - Confirmed the account information is correct (it works on firewall1 which has a dedicated management interface)
     - Tried all the identify permissions from all interfaces to all LAN including encrypted VPN (even everything checked)
+    - Could be https://support.checkpoint.com/results/sk/sk26059, but not sure
 
 # Install Terrafrom
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
