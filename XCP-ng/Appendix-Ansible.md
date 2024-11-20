@@ -892,7 +892,7 @@ The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-
 
 A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
 
-Here are the steps for configuring IDC in our Lab.
+Here are the steps for configuring IDC in our Lab. **Please Note** there is an resolved issue with the remotely managed branch firewalls not being able to query the user director. See cpview > Software-blades, see only unsuccessful user directory queries; therefore no users installed (`pep user show all` has no entries).
 
 - Configure in SmartConsole on `manager`
   - Create LDAP account unit
@@ -1220,7 +1220,7 @@ Steps:
       - Click **OK**
       - Edit the new gateway and click **Test**
       - Click **Trust** and then click **OK**
-🌱 The following changes can likely be done using Ansible and the API. Need to test.
+🌱 The following manual changes can likely be done using Ansible and the API. That could be a future effort.
 - Log back in to `manager` and log in to SmartConsole
 - Open policy Lab_Policy_Branches
 - TIP You can copy and paste rules from Lab_Policy to Lab_Policy_Brances
@@ -1302,7 +1302,7 @@ Steps:
     - add a rule to the HTTPS policy, publish and push, then try again
 
 ## Add Identity-Based Management
-- 🌱 this isn't working yet
+- 🌱 This isn't working yet - the remotely managed firewall is failing to make user directory queries
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
   - No logins are pushed to firewall2
     - `pep show user all`
@@ -1320,12 +1320,14 @@ Steps:
 - Modify the **Support** access role
   - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
 - Push both policies, Lab_Policy and Lab_Policy_Branches
-- 🌱 need to develop
+- 🌱 Investigation
   - firewall1 is allowing it and shows logins from branch1 and branch2
-  - firewall2 is not showing any
+  - firewall2 is not showing any users
     - firewall2: `pep show user all` doesn't show logins
     - firewall2 isn't getting logins, not even on branch2-1
-- 🌱 basic categories work for firewall2, but not the ipgiraffe.com identity rule
+    - cpview > Software-blades shows only unsuccessful user directory queries
+    - Extensive troubleshooting done
+- 🌱 Basic categories work for firewall2, but not the ipgiraffe.com identity rule
 
 ## Configure DHCP helper and DHCP
 - Log in to firewall2a and firewall2b
@@ -1347,8 +1349,6 @@ Steps:
 - Test access to Internet and branch1 (i.e., can access `\\file-1\IT`)
 
 # Configure Branch 3
-🌱 this needs to be developed
-
 ## Add branch 3 to Domain Controller
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1`
@@ -1503,7 +1503,7 @@ Steps:
     - `ansible-playbook -i inventory-api branch3-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
-  - 🌱 this seems to break once the VPN tunnels are up; you will need to use 10.0.3.2 and 10.0.3.3 once the tunnels are up
+  - Once the VPN tunnels are up, you can no longer use the 192.168.3.2 and .3 addresses with ansible; you will need to update `inventory` to use 10.0.3.2 and 10.0.3.3
 - At this point you should be able to install a JHF on the firewalls
   - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
@@ -1575,7 +1575,7 @@ Steps:
       - Confirm internet filters are working
       - Confirm https inspection is working (certificate being used)
         - `gpupdate /force` can fetch the certificate from the domain controller
-      - 🌱 need to confirm IDC is working
+      - 🌱 need to confirm IDC is working - this is not working currently; firewall user directory queries fail
         - branch3-1 logins show up on fw1
         - no logins show up on fw3 (or fw2)
     - Review logs
