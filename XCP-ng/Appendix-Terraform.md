@@ -2,13 +2,13 @@
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
 This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A reduced version designed for 64GB of RAM might be in the future.
-- 18 VMs
-- 43 vCPUs (can over subscribe CPUs)
-- 76GB RAM
-- 71GB storage
+- 19 VMs
+- 44 vCPUs (can over subscribe CPUs)
+- 80 GB RAM
+- 71 GB storage
 
 Notes:
-- Terraform integrates with the XO server, not the XCP-ng host
+- Terraform integrates with the XO server, <ins>notM/ins> the XCP-ng <ins>host</ins>
 - Once built, the Windows 10 desktop systems have a month to operate without activation
   - Some personalization features in Windows Settings are diasbled if you don’t activate (cannot change desktop wallpapers, windows colors and themes, customize Start menu/taskbar/lock screen/title bar/fonts, etc.)
   - Without activation, Windows may only download critical updates; some updates like optional updates, drivers, or security updates may be missed
@@ -18,6 +18,16 @@ Notes:
   - creating Windows systems from the built-in "Windows" templates fail to boot when created using Terraform
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
+- The are known issues with Identity Awareness
+  - The Identity Collector current version R82 sees to be required; it's not easily available from R81.20 systems. You might need a paid support account with Check Point, or try to grab from a R82 systems
+  - The remotely managed firewall clusters have trouble doing user directory lookup, which breaks Identity Awareness on the firewall. IDC works correctly, but the user directory lookup using the account unit is failing
+    - `cpview` > click Software-blade
+    - Under User Directory, "Unsuccessful User Directory Queries" goes up, and "Successful User Directory Queries" stays zero
+    - Could be the remote management using VPN tunnel
+    - Could the an issue because it's a <ins>cluster</ins>
+    - Tried specifying the identity server manually
+    - Confirmed the account information is correct (it works on firewall1 which has a dedicated management interface)
+    - Tried all the identify permissions from all interfaces to all LAN including encrypted VPN (even everything checked)
 
 # Install Terrafrom
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
