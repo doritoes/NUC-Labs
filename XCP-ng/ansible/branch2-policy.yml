@@ -234,7 +234,7 @@
         - echo-request
         - http
         - https
-        action: Drop
+        action: Accept
         comments: Allow access to DMZ web applications
         track:
           type: Log
