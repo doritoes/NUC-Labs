@@ -1602,6 +1602,13 @@ Steps:
   - User: juliette.larocco2
 
 # Demonstration
+
+Note that the VPN does not allow traffice between Branch 2 and Branch 3
+- Edit VPN community **Branch_Community**
+- Click VPN routering
+- Note the setting **To center only**
+- Change to **To center and other satellites through center** to you want to enable communication between the remote brances
+
 - branch1-1
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
@@ -1642,7 +1649,6 @@ Steps:
   - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
   - https://ipgiraffe.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch3-1 even though user Lab shouldn't work
-- 🌱 examine peer-to-peer access between branch2 and branch3
 - 🌱 Set Edge home page to http://home
   - Create GPO, link it, and edit it
   - Navigate: Computer Configuration > Administrative Templates > Windows Components > Microsoft Edge
