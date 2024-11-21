@@ -553,6 +553,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - IMPORTANT this is different from the client from sk134312
           - R81 vs the recent R82 from sk134312
           - In testing it installed OK compared to sk134312, but haven't been able to get it working in the Lab environment yet
+        - Building an R82 management server revealed that this too has the R81 IDC on it
       - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
     - Install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on IDC-1
