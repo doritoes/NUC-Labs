@@ -892,7 +892,7 @@ The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-
 
 A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
 
-Here are the steps for configuring IDC in our Lab. **Please Note** there is an resolved issue with the remotely managed branch firewalls not being able to query the user director. See cpview > Software-blades, see only unsuccessful user directory queries; therefore no users installed (`pep user show all` has no entries).
+Here are the steps for configuring IDC in our Lab. **Please Note** you will need to apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) for the remote firewalls firewall2 and firewall3 to work.
 
 - Configure in SmartConsole on `manager`
   - Create LDAP account unit
@@ -1028,6 +1028,21 @@ Here are the steps for configuring IDC in our Lab. **Please Note** there is an r
   - Publish changes
 - Push policy `Lab policy` to **firewall1** to enable the SMS to connect to Branch 2
     -  `ansible-playbook -i inventory-api branch1-push.yml`
+-  Apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) to allow branch 2 (and branch 3) Identity Awareness to work
+  - The User Directory query from the gateways to the LDAP on the domain controller will fail until you do this
+  - Connect to sms (the Security Management Server) in expert mode (e.g., log in as user `ansible`)
+  - Back up the currrent `implied_rules.def` file
+    - `cp $FWDIR/lib/implied_rules.def $FWDIR/lib/implied_rules.def_bkup`
+  - Edit `implied_rules.def`
+    - `vi $FWDIR/lib/implied_rules.def`
+    - Search for the string #define ENABLE_LDAP_SERVER
+    - Change this line:
+      - from:	`#define ENABLE_LDAP_SERVER`
+      - to: `/* #define ENABLE_LDAP_SERVER */`
+    - Save the changes and exist
+  - From `manager` log in to SmartConsole
+  - Note that there are explicit rules allowing the ldap and ldap-ssl traffic from firewalls to `dc-1`
+  - Install the Security policy
 
 ## Initial Configuration
 Steps:
@@ -1302,10 +1317,9 @@ Steps:
     - add a rule to the HTTPS policy, publish and push, then try again
 
 ## Add Identity-Based Management
-- 🌱 This isn't working yet - the remotely managed firewall is failing to make user directory queries
+- You should see login information passed to all the firewalls: firewall1, firewall2, firewall3
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
-  - No logins are pushed to firewall2
-    - `pep show user all`
+  - `pep show user all`
 - Add an access rule to the Lab_Policy and Lab_Policy_Branches
   - TIP You can create in one policy and copy it to the other
   - Name: **RDP access for Support**
@@ -1319,15 +1333,12 @@ Steps:
   - Comments: **Allow support team RDP access**
 - Modify the **Support** access role
   - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
+  - Click **OK**
 - Push both policies, Lab_Policy and Lab_Policy_Branches
-- 🌱 Investigation
-  - firewall1 is allowing it and shows logins from branch1 and branch2
-  - firewall2 is not showing any users
-    - firewall2: `pep show user all` doesn't show logins
-    - firewall2 isn't getting logins, not even on branch2-1
-    - cpview > Software-blades shows only unsuccessful user directory queries
-    - Extensive troubleshooting done
-- 🌱 Basic categories work for firewall2, but not the ipgiraffe.com identity rule
+- From system where you are logged in from as `AD\juliette.larocco` you should be able to:
+  - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
+  - Access https://ipgiraffe.com
+  - NOTE We will add branch 3
 
 ## Configure DHCP helper and DHCP
 - Log in to firewall2a and firewall2b
@@ -1538,7 +1549,6 @@ Steps:
   - Check **Enable HTTPS inspection**
   - Click **OK**
   - Publish and install policy **Lab_Policy_Branches**
-
 ## VPN
   - Create file on `manager`
     - [branch3-vpn.yml](ansible/branch3-vpn.yml)
@@ -1575,9 +1585,6 @@ Steps:
       - Confirm internet filters are working
       - Confirm https inspection is working (certificate being used)
         - `gpupdate /force` can fetch the certificate from the domain controller
-      - 🌱 need to confirm IDC is working - this is not working currently; firewall user directory queries fail
-        - branch3-1 logins show up on fw1
-        - no logins show up on fw3 (or fw2)
     - Review logs
 
 ## Finish IDC-1 setup for Branch3
@@ -1591,20 +1598,41 @@ Steps:
   - Log out and Log in to `branch3-1`
   - Back in `idc-1` click the "refresh" icon partly hidden behind the text
   - The login will appear in the logins monitor
-- 🌱 the logins still don't get to firewall3 (`pep show user all`)
-- 🌱 logs: from idc-1 to fw3 blade identity awareness
   - Auth method: User Identity Propagation
   - User: juliette.larocco2
-  - Description: An error was detected while trying to authenticate against the AD server. It may be a problem of bad configuration or connectivity. Please refer to the troubleshooting guide for more help
 
 # Demonstration
-🌱 this needs to be developed
-- branches 2 and 3
-  - access to file server
-  - access to DMZ web servers
-  - internet access goes out local firewalsl
-  - support team can access and support
-- secured access to Internet, blocking prohibited access
-- examine peer-to-peer access between branches
-- DHCP across branches
-- identity awareness for access
+- branch1-1
+  - http://192.168.31.10
+  - http://192.168.101.5
+  - RDP branch2-1
+  - RDP branch3-1
+  - RDP dc-1
+  - `\\file-1\IT`
+  - Internet access goes out local firewall1
+  - http://maliciouswebsitetest.com/ should be blocked
+  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in
+  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+- branch2-1
+  - http://192.168.31.10
+  - http://192.168.101.5
+  - RDP branch2-1 (support users only)
+  - RDP branch3-1 (support users only)
+  - RDP dc-1 (support users only)
+  - `\\file-1\IT`
+  - Internet access goes out local firewall2
+  - http://maliciouswebsitetest.com/ should be blocked
+  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in
+  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+- branch3-1
+  - http://192.168.31.10
+  - http://192.168.101.5
+  - RDP branch2-1 (support users only)
+  - RDP branch3-1 (support users only)
+  - RDP dc-1 (support users only)
+  - `\\file-1\IT`
+  - Internet access goes out local firewall3
+  - http://maliciouswebsitetest.com/ should be blocked
+  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in
+  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+- 🌱 examine peer-to-peer access between branch2 and branch3
