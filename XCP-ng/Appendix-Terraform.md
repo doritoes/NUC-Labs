@@ -20,15 +20,7 @@ Notes:
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 - The are known issues with Identity Awareness
   - The Identity Collector current version R82 sees to be required; it's not easily available from R81.20 systems. You might need a paid support account with Check Point, or try to grab from a R82 systems
-  - The remotely managed firewall clusters have trouble doing user directory lookup, which breaks Identity Awareness on the firewall. IDC works correctly, but the user directory lookup using the account unit is failing
-    - `cpview` > click Software-blade
-    - Under User Directory, "Unsuccessful User Directory Queries" goes up, and "Successful User Directory Queries" stays zero
-    - Could be the remote management using VPN tunnel
-    - Could the an issue because it's a <ins>cluster</ins>
-    - Tried specifying the identity server manually
-    - Confirmed the account information is correct (it works on firewall1 which has a dedicated management interface)
-    - Tried all the identify permissions from all interfaces to all LAN including encrypted VPN (even everything checked)
-    - Could be https://support.checkpoint.com/results/sk/sk26059, but not sure
+  - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terrafrom
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
