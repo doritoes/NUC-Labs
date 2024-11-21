@@ -1637,7 +1637,7 @@ Steps:
     - not seeing the traffic hit the "suppport" rule at branch1
   - RDP dc-1 (support users only) ✅
   - `\\file-1\IT` ✅
-  - Internet access goes out local firewall3
+  - Internet access goes out local firewall3 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
   - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
   - https://ipgiraffe.com should be blocked when local user Lab is logged in
