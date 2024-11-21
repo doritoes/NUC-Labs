@@ -1607,7 +1607,7 @@ Note that the VPN does not allow traffice between Branch 2 and Branch 3
 - Edit VPN community **Branch_Community**
 - Click VPN routering
 - Note the setting **To center only**
-- Change to **To center and other satellites through center** to you want to enable communication between the remote brances
+- Change to **To center and other satellites through center** to you want to enable communication between the remote brances (publish and install both policies)
 
 - branch1-1
   - http://192.168.31.10 ✅
@@ -1625,7 +1625,7 @@ Note that the VPN does not allow traffice between Branch 2 and Branch 3
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
   - RDP branch1-1 (support users only) ✅
-  - RDP branch3-1 (support users only) 🛑
+  - RDP branch3-1 (support users only) 🛑 cross-branch requires the change noted above
     - traffic between branch2 and branch3 needs to traverse branch1
     - not seeing the traffic hit the "suppport" rule at branch1
   - RDP dc-1 (support users only) ✅
@@ -1639,7 +1639,7 @@ Note that the VPN does not allow traffice between Branch 2 and Branch 3
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
   - RDP branch1-1 (support users only) ✅
-  - RDP branch2-1 (support users only) 🛑
+  - RDP branch2-1 (support users only) 🛑 cross-branch requires the change noted above
     - traffic between branch2 and branch3 needs to traverse branch1
     - not seeing the traffic hit the "suppport" rule at branch1
   - RDP dc-1 (support users only) ✅
@@ -1650,7 +1650,31 @@ Note that the VPN does not allow traffice between Branch 2 and Branch 3
   - https://ipgiraffe.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch3-1 even though user Lab shouldn't work
 - 🌱 Set Edge home page to http://home
-  - Create GPO, link it, and edit it
-  - Navigate: Computer Configuration > Administrative Templates > Windows Components > Microsoft Edge
-  - Enable the policy: Configure the homepage URL
-  - Set the "Homepage URL" to http://home
+  - `New-GPO -Name "Home Page Edge" | New-GPLink -Target "DC=xcpng,DC=lab"`
+  - Install the administrative template
+    - https://learn.microsoft.com/en-us/deployedge/configure-microsoft-edge#1-download-and-install-the-microsoft-edge-administrative-template
+      - https://www.microsoft.com/en-us/edge/business/download?form=MA13FJ
+      - Under Windows 64-bit click **Download Windows 64-bit Policy**
+      - Extract and "install" (place the files you extracted) to your Downloads folder
+      - Navigate **MicrosoftEdgePolicyTemplates** > windows > admx
+      - Copy the file `msedge.admx` to `%systemroot%\PolicyDefinitions\`
+      - Now navigate **MicrosoftEdgePolicyTemplates** > windows > admx > en-US
+      - Copy the file `msedge.adml` to `%systemroot%\PolicyDefinitions\en-US`
+  - Open Group Policy Management Console (GPMC)
+    - Click Start, search for Group Policy Management and click on it
+    - Expand Forest: xcpng.lab
+    - Expand Domains: xcpng.lab
+    - Right-click **Home Page Edge** from the tree, then click **Edit**
+    - Navigate: Computer Configuration > Policies > Administrative Templates
+    - Expand and modify **Microsoft Edge** and/or **Microsoft Edge - Default Settings (users can override)**
+      - Select **Startup, home page and new tab page**
+      - Double-click **Configure the new tab page URL**
+      - Set to **Enabled**
+      - Set the New tab page URL to `http://home`
+      - Click **Apply** then click **OK**
+      - Double-click **Set the new tab page as the home page**
+      - Set to **Enabled**
+      - Click **Apply** then click **OK**
+  - Log in to `branch1-1` and open Microsoft Edge
+    - Run `gpupdate /force` if desired to get the new policy immediately
+    - Try logging in as `AD\Don.Schafer` to confirm
