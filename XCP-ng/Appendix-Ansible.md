@@ -542,20 +542,22 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - `powershell -ExecutionPolicy bypass idc-user.ps1`
   - Install Check Point Identity Collector for Windows
     - Log in to IDC-1 as `AD\Juliette.LaRocco2`
-    - Download
-      - https://support.checkpoint.com/results/sk/sk134312
-      - https://support.checkpoint.com/results/download/74206
-      - NOTE: Login required; "Missing software subscription to download this file."
-        - Not sure if setting up up a proper eval license will take care of this
-      - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
-        - In lab testing this link was 404 until we had a working policy, then it worked
-      - Also look for the file on the SMS and gateways
-        - e.g., /var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi
-        - IMPORTANT this is different from the client from sk134312
-          - R81 vs the recent R82 from sk134312
-          - In testing it installed OK compared to sk134312, but haven't been able to get it working in the Lab environment yet
-        - Building an R82 management server revealed that this too has the R81 IDC on it
-      - Or try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
+    - How to Download / Obtain the Identity Collector
+      - Official source
+        - You <ins>really</ins> want the latest version R82. You can use names as wells as IPs.
+        - https://support.checkpoint.com/results/sk/sk134312
+        - https://support.checkpoint.com/results/download/74206
+        - NOTE: Login required; "Missing software subscription to download this file."
+          - Not sure if a support contract is required, or if setting up up a proper eval license will take care of this
+      - From a gateway or from the SMS (this is the R81 client, even if you load an R82 SMS or gateway)
+        - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
+          - In lab testing this link was 404 until we had a working policy, then it worked
+        - Also look for the file on the SMS and gateways
+          - e.g., /var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi
+          - IMPORTANT this is different from the R82 client from sk134312
+      - From SmartConsole
+        - Try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
+        - This link was a broken link in my testing, but might work eventually
     - Install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on IDC-1
       - Click **Start** > type **Windows Defender Firewall**
@@ -563,7 +565,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Click **Change settings** and then click **Allow another app**
       - Browse to `C:\Program Files (x86)\CheckPoint\Identity Collector\cpidc.exe`
       - Click **Add**
-      - Repeat for `cpidcgui.exe` (maybe `CFGScript.exe` ?)
+      - Repeat for `cpidcgui.exe`  🌱 (maybe `CFGScript.exe` ?)
       - Note the apps should be allowed for the Domain profile (checked)
       - Click **OK**
     - Configure Identity Collector
@@ -577,61 +579,58 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Click **OK**
         - Edit the new domain xcpng.lab, and click Test
           - Credentials test
-            - IP address: **10.0.1.10** or **DC-1** (the IDC downloaded from the gateways/sms don't allow Name, only IP address)
+            - IP address: **10.0.1.10** (also **DC-1** if you have IDC R82)
             - Click **Test**
             - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
-              - Fix: Disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
-              - Lab testing encountered a number of issues with this
-                - Continue with the lab. <ins>It will start working eventually.</ins> Here's what I tried without success.
-                  - Tried rebooting IDC-1 and DC-1 without success
-                  - Tried logging in as adquery from branch1-1
-                  - Tried removing the domain and re-adding the domain
-                  - Tried testing during the creation of the domain
-                  - Tried restarting service `Check Point Identity Collector`
-                  - Tried uninstalling the R81 version and installing the R82 version without success
-                  - Tried building another IDC-2 with R82 client
-                  - What has worked is installing Wireshark (!)
-                - I strongly believe the R82 client (not easily available without license) is the key to this working
+            - Fix: Disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
+            - Install [Wireshark ](https://www.wireshark.org/download.html)
+              - Re-test and the credential test will pass
+            - Seriously, lab testing encountered a number of issues with IDC working
+              - Continue with the lab. <ins>It will start working eventually.</ins> Here's what I tried without success.
+                - Tried rebooting IDC-1 and DC-1 without success
+                - Tried logging in as adquery from branch1-1
+                - Tried removing the domain and re-adding the domain
+                - Tried testing during the creation of the domain
+                - Tried restarting service `Check Point Identity Collector`
+                - Tried uninstalling the R81 version and installing the R82 version without success
+                - Tried building another IDC-2 with R82 client
+              - What has consistently worked is installing Wireshark (!)
             - NOTE You can't log in to DC-1 as adquery, but you can log in to branch1-1 as adquery to confirm the account works
       - Left menu > Identity Sources
-        - New > Active Directory > Add MDC-1anually
+        - Right-click in the emmpty space then click **New** > **Active Directory** > **Add MDC-1anually**
           - Name: DC-1
           - Domain: xcpng.lab
-          - Host name / IP address: **10.0.1.10** or **DC-1** (the IDC downloaded from the gateways/sms don't allow Name, only IP address)
+          - Host name / IP address: **10.0.1.10** (if you have the R82 client you can also use name **DC-1**)
           - Site: **Corp**
           - Click **Test**
-          - Failure message: Unable to connect; please check connectivity with server and server firewall configuration. If NTLM authentication restricted, the host name must be 
-          - Didn't work right away but started working later (after installing Wireshark)
           - Click **OK**
       - Ribbon menu > Query Pools
-        - New
+        - Click the **New** icon
           - Name: **Corp AD**
           - Select all Identity Sources (check **DC-1**)
           - Click **OK** and then click **OK**
       - Ribbon menu > Filters
-        - Add a New filter
+        - Click the **New** icon
           - Name: Prod
           - add list of subnets the clients are on
             - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
             - Click "**+**" to add it
-            - Click **OK**
+            - Click **OK** then click **OK**
       - Left menu > Gateways
-        - Add new Gateway
+        - Right click in the open spec and then click **Add**
           - Name: **firewall1**
           - IP Address: **10.0.1.1**
           - Shared secret: **Checkpoint123!**
           - Query pool: **Corp AD**
           - Filter: **Prod**
           - Click **OK**
-        - Edit the new gateway and click **Test**
-          - Will fail until the cluster is configured (see below)
+        - If you edit the new gateway and click **Test**, it will fail for now. Once the cluster configured (see below) this will work.
       - Left menu > Settings
         - No changes required
 
 ## Update management workstation to join the domain
 - Log in to `manager`
-- Confirm Network profile is **Private**
-- Edit IP settings to set DNS
+- Edit IP settings in Ethernet 3 to set DNS
   - Preferred DNS: **10.0.1.10**
   - Alternate DNS: *blank*
 - Join to domain
@@ -639,7 +638,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
-- Generally, you will still use the local account for easy acces to the files and configuration you have built to this point.
+- Generally, you will still use the local account
+  - this gives easy access to the files and configuration you have already built
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
