@@ -363,6 +363,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Wait as the settings are applied and the server is rebooted
   - Wait some more as "Applying Computer Settings" gets the domain controller ready
 - Configure Sites and Services Subnets and DNS
+  - Log back in and open administrative powershell
   - Download branch1-site.ps1 ([branch1-site.ps1](powershell/branch1-site.ps1))
   - `powershell -ExecutionPolicy Bypass branch1-site.ps1`
   - Test using nslookup
