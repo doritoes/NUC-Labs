@@ -422,7 +422,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Try Remote Desktop connection to `dc-1`
         - juliette.larocco fails because it doesn't have permisissions
         - juliette.larocco2 works, but will fail if "Administrator" is still logged in on DC-1
-    - Web browsing works. Log in to SmartConsole on `manager` to view the firewall logs
+    - Confirm web browsing works
+    - Log in to SmartConsole on `manager` to view the firewall logs
+      - Click **LOGS & MONITOR** and then click the open **Logs** tab
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as administrator with the password you set
