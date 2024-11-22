@@ -28,18 +28,15 @@ Notes:
 - Install WSL
   - Add optional feature Windows Subsystem for Linux (WSL)
     - NOTE In Lab testing, skipping this step caused problems
-    - Click **Start** > type "**Add an optional feature**", click it
-    - Scroll to bottom, click **More Windows features**
-    - <ins>Check</ins> **Windows Subsystem for Linux** and click **OK**
-    - Click **Restart now** when prompted
-    - Alternative: `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
-      - accept the reboot
+    - From administrative powershell
+      - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
+      - Accept the reboot
   - Log back in and open a privileged shell
     - `wsl --list`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
-      - feel free to customize
-      - A new WSL window is opened and you are promped set the username and password
+      - feel free to customize and choose your favorite Linux
+      - a new WSL window is opened and you are promped set the username and password
         - Username: `ansible`
         - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few presses), prompting you to set the username and password
 - Configure Network interfaces
@@ -77,16 +74,17 @@ Notes:
       - `sudo apt-add-repository ppa:ansible/ansible`
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
-      - Normally installing with ppa method is discouraged; this is is easiest way to get current ansible for automation
+      - Normally installing with ppa method is discouraged; this is is easiest way to get current Ansible for automation
     - Option 2 - Ubuntu 22.04 old Ansible 2.10
       - `sudo apt install -y ansible`
       - `ansible --version`
-  - Install ansible collections
+  - Install Ansible collections
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
     - `ansible-galaxy collection install check_point.mgmt --force`
+      - this replaces the very old packaged 5.2.3 with the latest 6.2.1 (or later)
   - Install XenAPI python package
     - `python3 -m pip install XenAPI`
-  - You might use Git to clone the repo to have the files locally
+  - You might use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
 - Generate ssh RSA key for user `ansible`
