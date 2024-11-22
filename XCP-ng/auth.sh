@@ -7,4 +7,4 @@ mkdir ~/.ssh
 chmod u=rwx,g=,o= ~/.ssh
 touch ~/.ssh/authorized_keys
 chmod u=rw,g=,o= ~/.ssh/authorized_keys
-echo "paste-key-herey" > ~/.ssh/authorized_keys
+echo "paste-key-here" > ~/.ssh/authorized_keys
