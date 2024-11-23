@@ -644,11 +644,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
   - Log in at the console
+    - As the default use or the `ansible` user
   - Configure Static IP address
     - `sudo vi /etc/netplan/01-netcfg.yaml`
     - Paste in the contents of [01-netcfg.yaml](01-netcfg.yaml)
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
+      - It is OK for a warning to disply that it was unable to call Open vSwitch: https://ubuntuforums.org/showthread.php?t=2495406
   - Give permissions to user ansible
     - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
   - set up ssh key auth
@@ -662,10 +664,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - [ssl.conf.j2](ansible/ssl.conf.j2)
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
-  - Update packages on `dmz-apache`
-    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - Testing
-      - From branch1-1:
+      - From `branch1-1`:
         - https://192.168.31.11
         - https://192.168.101.6
       - From manager: http://192.168.31.11
@@ -686,28 +686,29 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
   - Join to domain
     - `Add-Computer -DomainName xcpng.lab -restart`
-      - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
+      - User name: `AD\Juliette.LaRocco2`
       - Password: the password you set
     - Wait as system reboots
   - Install IIS
     - Log back in as `AD\Juliette.LaRocco2`
     - Open administrative powershell
     - `Install-WindowsFeature Web-Server -IncludeManagementTools`
-    - Test:
-      - From dmz-iis: http://localhost
-      - From branch1-1:
-        - http://dmz-iis
-        - http://192.168.31.10
-        - http://192.168.101.5
-      - From manager: http://192.168.31.10
-      - From a test machine on build network: http://192.168.101.5
+  - Test:
+    - From dmz-iis: http://localhost
+    - From branch1-1:
+      - http://dmz-iis
+      - http://192.168.31.10
+      - http://192.168.101.5
+    - From manager: http://192.168.31.10
+    - From a test machine on build network: http://192.168.101.5
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
 ## HTTPS Inspection
 - Enable application control and url filtering blands, and create outbound https inspection certificate
+  - Log back in to `manager`
   - Download and run branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
     - `ansible-playbook -i inventory-api branch1-https.yml`
-- Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
+- Non-ansible/manual solutions here since Ansible check_point.mgmt doesn't support all the commands until R82
   - creating https rules, etc not supported until R82
   - some outbound certificate commands function differently pre-R82
   - `enable-https-inspection` will be added in the next version
@@ -717,15 +718,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
   - Step two > click **Export certificate**
     - Name it **outbound**
-  - Step 3 > check **Enable HTTPS inspection**
-  - Click **OK**
+- Step 3 > check **Enable HTTPS inspection**
+- Click **OK**
 - Click **Publish**
 - Distribute the https inspection certificate using GPO on `dc-1`
-  - copy the .cer file to DC-1 at `c:\certificate.cer`
+  - copy the .cer file to `dc-1` at `c:\certificate.cer`
+    - for example, copy the certificate to the \\file-1\it share from `manager`, and pick it up from there from `dc-1`
   - create the GPO using administrative powershell
-    - `$gpoName = "Distribute Root CA Certficate"`
-    - `$domainDN = "DC=xcpng,DC=lab"`
-    - `New-GPO -Name $gpoName | New-GPLink -Target $domainDN`
+    - `New-GPO -Name "Distribute Root CA Certficate" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Open Group Policy Management Console (GPMC)
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab
@@ -735,9 +735,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
       - Import `c:\outbound.cer`
       - Accept the defaults
-  - Update Lab_Policy to enable https inspection
+  - Update `Lab_Policy` to enable https inspection
     - From `manager` open SmartConsole
-    - SECURITY POLICIES > Open Lab_Policy > HTTPS Inspection > Policy
+    - **SECURITY POLICIES** > Open **Lab_Policy** > **HTTPS Inspection** > **Policy**
     - Change the default rule **Track** value to **Log**
   - Add more https bypass rules manually
     - Not possible with API in R81.20, but available on R82 API
@@ -784,13 +784,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
 - From `branch1-1` or `manager` browse to https://192.168.101.1
   - You will receive an untrusted certificate message
-  - View the certificate Details
+  - View the certificate **Details**
   - Note the Certificate Hierarchy similar to the following
     - O=sms.xcpng.labx3fd5d
       - firewall1 VPN certificate
   - Click on the root "O=sms.xcpng.labx3fd5d"
   - Export/Copy to File
-  - Save as type: `DER Encoded Binary X.509 (*.cer)`
+  - Save as type: Base64-encoded ASCII, single certificate
   - Name as you wish
 - Copy the file to `DC-1` (e.g., copy to \\file-1\it\ and access it from there)
 - Import the certificate to the GPO for trusted certificates
@@ -829,6 +829,7 @@ By default URL categorization occurs in the background. First attempts to a prev
     - **Firewall** (checked)
     - **Applications & URL Filtering** (checked)
   - Advanced > Implicit Cleanup Action: **Accept**
+  - Click **OK**
 - Update the cleanup rule
   - Rename **Allow remaining traffic**
   - Action: **Accept**
@@ -867,7 +868,7 @@ By default URL categorization occurs in the background. First attempts to a prev
       - Uncategorized
       - If available, Unknown Risk
     - Action:
-      - Inform
+      - Ask
         - Access Approval
         - Once a day
         - Per applications
@@ -880,7 +881,7 @@ By default URL categorization occurs in the background. First attempts to a prev
     - Edge browser: click the lock next to the URL > Connection is secure
       - Click the Cerificifate icon
       - If https inspection is working, the Issued By will new reflect xcpng.lab
-      - Examine logs
+      - Examine logs in SmartConsole
   - If the traffic is inspected and intercepted but not trusted by the browser
     - Logging out and back in may also help
     - Confirm the certificate is installed
@@ -942,7 +943,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
       - Select an Active Directory: xcpng.lab
       - Username: adquery
       - Password: YourStrongPassword123!
-      - Click Connect
+      - Click **Connect**
         - Failure message: User is not a domain administrator, as such AD Query will not work.
         - Check **Ignore the errors and configure the LDAP account**
           - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
@@ -954,21 +955,22 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
       - Selected Client Secret: Checkpoint123!
       - Click **OK**
     - Click **OK** to close the firewall cluster settings
-    - Publish and install policy
-  - Testing
+    - **Publish** and install policy
+  - Finish Identity Collector configuration
     - Log in to IDC-1
     - Launch Identity Collector
     - From the left, click **Gateways**
       - Edit **firewall1**
       - Click **Test** and then click **Trust** under Certificate Info
       - Click **OK**
+  - Testing
     - Confirm Identity Sources > `dc-1` is working
       - From left click **Identity Sources**
       - `dc-1` should be green; if not, edit it and click Test to get troubleshooting information
       - Next check firewall logs to be sure there aren't any missing firewall rules
-    - From the left menu click Logins Monitor
+    - From the left menu click **Logins Monitor**
     - Click the small power icon next to the text "Logins Monitor"
-    - Log in to `branch-1` using a domain user account (i.e., `AD\juliette.larocco`)
+    - Log in to `branch1-1` using a domain user account (i.e., `AD\juliette.larocco`)
     - Back in the Identity Collector, click the refresh icon
     - The login will show in the top pane and the related machine and user in the bottom pane
     - Log in the Firewall1a or Firewall1b
@@ -978,7 +980,6 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
       - if these aren't working, Identity Awareness will not work
       - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
       - Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
-    - In Lab testing it just "started working", not sure why. The last thing tried was installing Wireshark.
   - Create Access role
     - Back on `manager` open SmartConsole
     - Add a subrule above the rule "Allow general categories" which allows medium/low/very low risk applications
@@ -1003,7 +1004,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Services: **Any**
     - Action: **Drop** > **Blocked Message**
     - Track: **Log** > **Accounting**
-  - Publish changes and push policy
+  - **Publish** changes and push policy
   - Test access, access control, enforcement of user identity works and is logged
     - http://maliciouswebsitetest.com/ should be blocked
     - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
