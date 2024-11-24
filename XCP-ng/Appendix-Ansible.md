@@ -278,7 +278,7 @@ Steps:
   - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
-- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
+- Create files on the manager (configuration file, playbooks to create firewalss, and the jinja template)
   - [firewall1a.yml](ansible/firewall1a.yml)
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
@@ -1028,7 +1028,8 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
 - R81.20: Enable "Apply for Security Gateway control connections"
   - Edit `sms` object
   - Under NAT, <ins>check</ins> "Apply for Security Gateway control connections"
-  - Publish changes
+  - Click **OK**
+  - **Publish** changes
 - Push policy `Lab policy` to **firewall1** to enable the SMS to connect to Branch 2
     -  `ansible-playbook -i inventory-api branch1-push.yml`
 -  Apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) to allow branch 2 (and branch 3) Identity Awareness to work
@@ -1042,10 +1043,10 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Change this line:
       - from:	`#define ENABLE_LDAP_SERVER`
       - to: `/* #define ENABLE_LDAP_SERVER */`
-    - Save the changes and exist
-  - From `manager` log in to SmartConsole
+    - Save the changes and exit
+  - Push policy `Lab policy` to **firewall1**
+    -  `ansible-playbook -i inventory-api branch1-push.yml`
   - Note that there are explicit rules allowing the ldap and ldap-ssl traffic from firewalls to `dc-1`
-  - Install the Security policy
 
 ## Initial Configuration
 Steps:
@@ -1089,7 +1090,7 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS
+- Create files on `manager` (configuration files, playbook to create firewalls , and the jinja template)
   - [firewall2a.yml](ansible/firewall2a.yml)
   - [firewall2a.cfg](ansible/firewall2a.cfg)
   - [firewall2b.yml](ansible/firewall2b.yml)
@@ -1099,7 +1100,7 @@ Steps:
   - `ansible-playbook firewall2a.yml`
   - `ansible-playbook firewall2b.yml`
 - Test
-  - You will be able to connect from manager to
+  - You will be able to connect from `manager` to
     - https://192.168.102.2
     - https://192.168.102.3
 
@@ -1414,7 +1415,7 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS
+- Create files on the manager (configuration files, playbooks to create firewalls, and the jinja template)
   - [firewall3a.yml](ansible/firewall3a.yml)
   - [firewall3a.cfg](ansible/firewall3a.cfg)
   - [firewall3b.yml](ansible/firewall3b.yml)
