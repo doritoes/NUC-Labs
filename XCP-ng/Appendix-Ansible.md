@@ -1146,42 +1146,49 @@ Steps:
       - `installer agent enable`
       - then check for updates again
 
+## Configure DHCP helper and DHCP
+- Log in to firewall2a and firewall2b
+  - `clish`
+  - `set bootp interface eth1 on`
+  - `set bootp interface eth1 relay-to 10.0.1.10 on`
+  - `save config`
+- Install Lab_Policy_Branches policy
+  - `ansible-playbook -i inventory-api branch2-push.yml`
+
 ## VPN
-  - Create file on `manager`
-    - [branch2-vpn.yml](ansible/branch2-vpn.yml)
-  - `ansible-playbook -i inventory-api branch2-vpn.yml`
-  - Use SmartConsole to edit the community **Branch_Community**
-    - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
-  - Push policies
-    - `ansible-playbook -i inventory-api branch1-push.yml`
-    - `ansible-playbook -i inventory-api branch2-push.yml`
-  - Testing
-    - Generate some test traffic
-      - `ansible all -m ping`
-      - 192.168.102.2 and 192.168.102.3 will fail now
-    - In SmartConsole open a new Log tab
-    - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
-    - SmartView Monitor will open
-    - From the tree on the left expenc **Tunnels** and click **Tunnels on Gateway**
-      - Select **firewall1** to view active tunnels at firewall1
-      - Repeat and select **firewall2** to view active tunnels at firewall2
-      - Click the refresh icon to update the information and see the tunnels come up
-      - NOTE "Up - Phase1" for now. Once we bring up branch2-1 the tunnels should go full up.
-      - NOTE: lost ansible and ssh connection from manager to firewall2 192.168.102.2 and .3. Will regain access 10.0.2.2 and 10.0.2.3 once the tunnels come up
+- Create file on `manager`
+  - [branch2-vpn.yml](ansible/branch2-vpn.yml)
+- `ansible-playbook -i inventory-api branch2-vpn.yml`
+- Use SmartConsole to edit the community **Branch_Community**
+  - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
+- Push policies
+  - `ansible-playbook -i inventory-api branch1-push.yml`
+  - `ansible-playbook -i inventory-api branch2-push.yml`
+- Testing
+  - Generate some test traffic
+    - `ansible all -m ping`
+    - 192.168.102.2 and 192.168.102.3 will fail now
+  - DHCP traffic will automatically bring up the tunnel
+  - In SmartConsole open a new Log tab
+  - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
+  - SmartView Monitor will open
+  - From the tree on the left expenc **Tunnels** and click **Tunnels on Gateway**
+    - Select **firewall1** to view active tunnels at firewall1
+    - Repeat and select **firewall2** to view active tunnels at firewall2
+    - Click the refresh icon to update the information and see the tunnels come up
+- SSH to each firewall and accept the keys
+  - change firewall2a to 10.0.2.2
+  - change firewall2b to 10.0.2.3
+- Update `inventory`
+  - change firewall2a to 10.0.2.2
+  - change firewall2b to 10.0.2.3
 
 ## Configure branch2-1
-- We will configure workstation branch2-1 with a static IP and later switch to DHCP
 - Log in for the first time at the console
 - Rename workstation
   - Open administrative powershell
   - `Rename-Computer -NewName branch2-1`
   - `Restart-Computer`
-- Network configuration
-  - Open administrative powershell
-  - Set the static IP address and point DNS settings to the domain controller/DNS server
-    - `New-NetIPAddress -IPAddress 10.0.2.100 -DefaultGateway 10.0.2.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
-  - Try testing nslookup to see what resolves (IPs, FQDN)
 - Join to domain
   - Open administrative powershell
   - `Add-Computer -DomainName xcpng.lab -restart`
@@ -1190,36 +1197,31 @@ Steps:
 - Testing
   - Log in as Other user > juliette.larocco
   - Confirm Internet browsing is working
-  - Try connecting to the file server at \\file-1
+  - Try connecting to the file server at `\\file-1`
   - Review logs in SmartConsole
   - Go back to the SmartView Monitor app on `manager` and refresh to see the VPN tunnels are now fully up
     - Also, from the firewall cluster active member, use `vpn tu`
-  - You can now ssh from `manager` to 10.0.2.2 and 10.0.2.3
-    - You can update `inventory` file
-      - firewall2a 10.0.2.2
-      - firewall2b IP 10.0.2.3
-    - `ansible all -ping will work again`
 
 ## Enable Application Control and Identity Awareness
 - Edit cluster **firewall2**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
     - AD Query
-    - Select an Active Directory: xcpng.lab
-    - Username: adquery
-    - Password: YourStrongPassword123!
+    - Select an Active Directory: **xcpng.lab**
+    - Username: **adquery**
+    - Password: **YourStrongPassword123!**
     - Click **Connect**
       - Failure message: User is not a domain administrator, as such AD Query will not work.
       - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
     - Click Identity Awareness from tree on the left
-    - Check Identity Collector, and click Settings
-    - Click the "+" and add **idc-1**
-    - Shared secret: Checkpoint123!
+    - <ins>Check</ins> Identity Collector, and click **Settings**
+    - Click the "**+**" and add **idc-1**
+    - Shared secret: **Checkpoint123!**
     - Client Access Permissions > **Edit** > select **through all interfaces** and click **OK**
-    - Click OK
-  - Click OK
-  - Publish and install policy **Lab_Policy_Branches**
+    - Click **OK**
+  - Click **OK**
+  - **Publish** and install policy **Lab_Policy_Branches**
 - IDC-1
   - Log in as `AD\juliette.larocco2`
   - From the ribbon menu click Filters
@@ -1231,17 +1233,18 @@ Steps:
         - Click **OK** then **OK**
   - From left menu click **Gateways**
     - Add new Gateway
+      - Right-click the empty space and then click **Add**
       - Name: **firewall2**
       - IP Address: 10.0.2.1
       - Shared Secret: Checkpoint123!
-      - Query Pool: Corp AD
-      - Filter: Prod
+      - Query Pool: **Corp AD**
+      - Filter: **Prod**
       - Click **OK**
       - Edit the new gateway and click **Test**
       - Click **Trust** and then click **OK**
 🌱 The following manual changes can likely be done using Ansible and the API. That could be a future effort.
 - Log back in to `manager` and log in to SmartConsole
-- Open policy Lab_Policy_Branches
+- Open policy **Lab_Policy_Branches**
 - TIP You can copy and paste rules from Lab_Policy to Lab_Policy_Brances
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
@@ -1343,15 +1346,6 @@ Steps:
   - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
   - Access https://ipgiraffe.com
   - NOTE We will add branch 3
-
-## Configure DHCP helper and DHCP
-- Log in to firewall2a and firewall2b
-  - `clish`
-  - `set bootp interface eth1 on`
-  - `set bootp interface eth1 relay-to 10.0.1.10 on`
-  - `save config`
-- Install Lab_Policy_Branches policy
-  - `ansible-playbook -i inventory-api branch2-push.yml`
 
 ## Configure branch2-1 to use DHCP
 - Change the IP address to use DHCP
