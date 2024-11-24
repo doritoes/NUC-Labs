@@ -1245,7 +1245,7 @@ Steps:
 🌱 The following manual changes can likely be done using Ansible and the API. That could be a future effort.
 - Log back in to `manager` and log in to SmartConsole
 - Open policy **Lab_Policy_Branches**
-- TIP You can copy and paste rules from Lab_Policy to Lab_Policy_Brances
+- TIP You can copy and paste rules from **Lab_Policy** to **Lab_Policy_Brances**
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > New Layer**
@@ -1254,14 +1254,13 @@ Steps:
     - Firewall (checked)
     - **Applications & URL Filtering** (checked)
   - Advanced > Implicit Cleanup Action: **Allow**
-  - Confirm action is Accept and is set to Log
 - Rename the cleanup rule **Allow remaining traffic**
-  - should be action Accept and track Log
+  - Set action to **Accept** and track to **Log**
 - Add these sub rules above that
   - Subrule 1
-    - Name: Block bad sites
-    - Source: *Any
-    - Destination: *Any
+    - Name: **Block bad sites**
+    - Source: ***Any**
+    - Destination: ***Any**
     - Services & Applications:
       - Hacking
       - Pornography
@@ -1270,31 +1269,33 @@ Steps:
       - Critical Risk
       - High Risk
     - Action: **Drop > Blocked Message - Access Control**
-    - Track: Log > Accounting
+    - Track: **Log** > **Accounting**
   - Subrule 2
-    - Name: Allow general categories
-    - Source: *Any
-    - Destination: *Any
+    - Name: **Allow general categories**
+    - Source: ***Any**
+    - Destination: ***Any**
     - Services & Applications:
       - Medium Risk
       - Low Risk
       - Very Low Risk
     - Action: Accept
-    - Track: Log > Accounting
+    - Track: **Log** > **Accounting**
   - Subrule 3
-    - Name: Unknown risk
-    - Source: *Any
-    - Destination: *Any
+    - Name: **Unknown risk**
+    - Source: ***Any**
+    - Destination: ***Any**
     - Services & Applications:
       - Uncategorized
       - Unknown Risk
     - Action:
-      - Inform
+      - **Inform**
         - Access Approval
         - Once a day
         - Per applications
-    - Track: Log > Accounting
-
+    - Track: **Log** > **Accounting**
+  - Update **Support** access role
+    - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**- 
+      - Click **OK**
 ## HTTPS inspection
 - Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
   - creating https rules, etc not supported until R82
@@ -1304,10 +1305,10 @@ Steps:
   - Open the cluster `firewall2`
   - Click on HTTPS Ispection
   - Steps 1 and 2 are already completed
-  - Step 3 check **Enable HTTPS inspection**
+  - Step 3 <ins>check</ins> **Enable HTTPS inspection**
   - Click **OK**
-- Publish and install policy Lab_Policy_Branches
-- Confirm the HTTPS policy is the same across Lab_Policy and Lab_Policy_Branches
+- **Publish** and install policy **Lab_Policy_Branches**
+- Note that the HTTPS policy is the same across `Lab_Policy` and `Lab_Policy_Branches`
 - Test from branch2-1
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
   - From `branch2-1` browse to an Internet site like https://github.com and examine the https certificate
@@ -1322,13 +1323,15 @@ Steps:
       - Click Certificates and select the Trusted Root Certification Authorities tab
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
+  - Test identity access by visiting https://ipgiraffe.com
 
 ## Add Identity-Based Management
 - You should see login information passed to all the firewalls: firewall1, firewall2, firewall3
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
   - `pep show user all`
-- Add an access rule to the Lab_Policy and Lab_Policy_Branches
-  - TIP You can create in one policy and copy it to the other
+- Add an access rule to the **Lab_Policy** and **Lab_Policy_Branches** policies
+  - TIP You can create in one policy and copy/paste it to the other
+  - Section: add it to the section **Core Services**
   - Name: **RDP access for Support**
   - Source: **Suppport** (access role)
   - Destination: **LAN_Networks_NO_NAT**
@@ -1338,24 +1341,11 @@ Steps:
   - Action: **Accept**
   - Track: **Log**
   - Comments: **Allow support team RDP access**
-- Modify the **Support** access role
-  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
-  - Click **OK**
-- Push both policies, Lab_Policy and Lab_Policy_Branches
-- From system where you are logged in from as `AD\juliette.larocco` you should be able to:
-  - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
-  - Access https://ipgiraffe.com
-  - NOTE We will add branch 3
-
-## Configure branch2-1 to use DHCP
-- Change the IP address to use DHCP
-  - Start > Settings > Network & Internet
-  - Modify the interface to use Automatic (DHCP)
-    - Use `AD\Juliette.Larocco2` account
-- Test DHCP is giving the IP address
-  - From shell prompt `ipconfig`
-  - Should get IP in 10.0.2.20-250 range
-- Test access to Internet and branch1 (i.e., can access `\\file-1\IT`)
+- Push both policies, **Lab_Policy** and **Lab_Policy_Branches**
+- Test
+  - From system where you are logged in from as `AD\juliette.larocco` you should be able to:
+    - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
+    - Access https://ipgiraffe.com
 
 # Configure Branch 3
 ## Add branch 3 to Domain Controller
@@ -1402,9 +1392,8 @@ Steps:
         - press Control-D
     - `exit`
   - You can now ssh without a password
+- Update file `inventory`, uncomment the IPs of firewall3a (192.168.103.2) and firewall2b (192.168.103.3)
 - Test Ansible access
-  - Exit back to session on `manager`
-  - update file `inventory`, uncomment the IPs of firewall3a (192.168.103.2) and firewall2b (192.168.103.3)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
@@ -1418,7 +1407,7 @@ Steps:
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall3a.yml`
   - `ansible-playbook firewall3b.yml`
-- Enable DHCP relay on each
+- Enable DHCP relay on firewall3a and firewall3b
   - `clish`
   - `set bootp interface eth1 on`
   - `set bootp interface eth1 relay-to 10.0.1.10 on`
@@ -1500,16 +1489,19 @@ Steps:
       - Failure message: User is not a domain administrator, as such AD Query will not work.
       - Check **Ignore the errors and configure the LDAP acount**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
+    - Click **Finish**
     - Click Identity Awareness from tree on the left
-      - Check Identity Collector, and click Settings
-      - Click the "+" and add idc-1
-      - Shared secret: Checkpoint123!
-      - Client Access Permissions > Edit > select through all interfaces and click OK
-      - Click OK
-  - [branch3-push.yml](ansible/branch3-push.yml)
+      - Check **Identity Collector** and then click **Settings**
+      - Click the "**+**" and add **idc-1**
+      - Shared secret: **Checkpoint123!**
+      - Client Access Permissions > Edit > select **Through all interfaces** and click **OK**
+      - Click **OK**
+  - **Publish** changes
+  - Push policies
+    - Create file on `manager` [branch3-push.yml](ansible/branch3-push.yml)
     - `ansible-playbook -i inventory-api branch3-push.yml`
-  - Since the policy changed, re-push to firewall2
-    - `ansible-playbook -i inventory-api branch3-push.yml`
+    - Since the policy changed, re-push to firewall2
+      - `ansible-playbook -i inventory-api branch2-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
   - Once the VPN tunnels are up, you can no longer use the 192.168.3.2 and .3 addresses with ansible; you will need to update `inventory` to use 10.0.3.2 and 10.0.3.3
