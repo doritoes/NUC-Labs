@@ -88,7 +88,7 @@
           - Manager
           - branch1_outbound_nat
         destination:
-          - firewall2
+          - remote_branch_firewalls
         service:
         - https
         - echo-reply
@@ -103,7 +103,7 @@
         layer: Lab_Policy_Branches Network
         name: IDC to gateways
         relative_position:
-          below: Gateways access
+          below: Manage gateways
         source:
           - idc-1
         destination:
@@ -130,25 +130,6 @@
         - ssh_version_2
         action: Accept
         comments: Temporarily allow manage gateways over Internet until VPN tunnel is up
-        track:
-          type: Log
-        state: present
-    - name: add gateways access rule
-      check_point.mgmt.cp_mgmt_access_rule:
-        layer: Lab_Policy_Branches Network
-        name: Manage gateways
-        relative_position:
-          below: Manage gateways over Internet
-        source:
-          - branch1_outbound_nat
-          - manager
-        destination:
-          - remote_branch_firewalls
-        service:
-        - echo-reply
-        - ssh_version_2
-        action: Accept
-        comments: Manage gateways 
         track:
           type: Log
         state: present
