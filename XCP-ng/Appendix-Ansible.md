@@ -1523,6 +1523,8 @@ Steps:
     - Add network:
       - Network: 10.0.3.0/24
       - Comment: Branch 3 LAN
+      - Click "**+**" to Add
+      - Click **OK**
   - From left menu click **Gateways**
     - Add new Gateway
       - Name: **firewall3**
@@ -1530,9 +1532,9 @@ Steps:
       - Shared Secret: **Checkpoint123!**
       - Query Pool: **Corp AD**
       - Filter: **Prod**
-      - Click **OK**
-      - Edit the new gateway and click Test
-        - NOTE this test may fail until the VPN tunnel is up
+      - Click **OK** and then click OK
+      - Edit the new gateway and click **Test** and then click **Trust**
+        - NOTE this test may fail until the VPN tunnel is up; come back to test & trust later
 - Enable https inspection
   - edit cluster firewall3
   - From left tree, click HTTPS inspection
@@ -1564,24 +1566,25 @@ Steps:
     - `Rename-Computer -NewName branch3-1`
     - `Restart-Computer`
   - Join to domain
-    - Open administrative powershell
+    - Log back in and open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
 - Testing
   - Log in as Other user > juliette.larocco
-    - Try conntecting to the file server at \\file-1
+    - Try connecting to the file server at \\file-1
     - Confirm Internet browsing is working
-      - Confirm internet filters are working
+      - Confirm Internet filters are working
       - Confirm https inspection is working (certificate being used)
         - `gpupdate /force` can fetch the certificate from the domain controller
     - Review logs
 
 ## Finish IDC-1 setup for Branch3
-- Log in to Identity Collector
-- Edit gateway `firewall3` and click **Test**
-- Click **Trust**
-- Click **OK**
+- Log in to `idc-1` and run **Identity Collector**
+- If not done already, Trust **firewall3**
+  - Edit gateway `firewall3` and click **Test**
+  - Click **Trust**
+  - Click **OK**
 - Test logins
   - From left menu click **Logins Monitor**
   - Click the small power icon to the right of the text "Logins Monitor" to enable for 5 minutes
@@ -1590,9 +1593,11 @@ Steps:
   - The login will appear in the logins monitor
   - Auth method: User Identity Propagation
   - User: juliette.larocco2
+- Test access
+  - Test that access to ipgiraffe.com works for `AD\juliette.larocco'
+  - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2')
 
 # Demonstration
-
 Note that the VPN does not allow traffice between Branch 2 and Branch 3
 - Edit VPN community **Branch_Community**
 - Click VPN routering
