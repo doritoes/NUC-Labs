@@ -6,4 +6,4 @@
     win_chocolatey:
       name: googlechrome
       state: present
-      ignore_checksum: true
+      ignore_checksums: true
