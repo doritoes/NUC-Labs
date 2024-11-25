@@ -45,7 +45,7 @@ Using SSH with Windows is experimental.
 ## Enable WinRM traffic in the Network Firewall as Needed
 Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed.
 ## Enable WinRM using GPO
-See https://woshub.com/enable-winrm-management-gpo/
+See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/watch?v=M18yDGAd9TU
 - Log in to `the domain controller (`dc-1`)
 - create the GPO using administrative powershell
   - `New-GPO -Name "Enable WinRM for Ansible Management" | New-GPLink -Target "DC=xcpng,DC=lab"`
@@ -130,47 +130,31 @@ See https://woshub.com/enable-winrm-management-gpo/
       - `enter-pssession dc-1`
 
 ## Playbooks
-🌱 need to re-work this
-- Log in to manager as `AD\juliette.larocco2`
-- Install WSL and Ansible for this user
-  - Install WSL
-    - Open a privileged shell
-    - `wsl --install -d Ubuntu-22.04`
-    - A new window will open; if it hands at "Installing, this many take a few minutes..." you many need to press control-c a few times to configure with the username selection
-    - username: adquery
-    - password: YourStrongPassword123!
-  - Open the WSL shell if not open already
-  - Install Ansible
-    - NOTE in lab testing had to re-install in a different envrironment on the domain user. Installing from the ppa failed.
-    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-    - `sudo apt install -y python3-paramiko python3-pip ansible krb5-user`
-    - `ansible --version`
-- Create inventory file `hosts.ini`
-  - 🌱 still working this out
-  - `[windows]`
-  - `dc-1.xcpng.lab`
-  - `[windows:vars]`
-  - `ansible_user=juliette.larocco2`
-  - `ansible_winrm_transport=kerberos`
-- `ansible -i hosts.ini all -m win_ping`
-  - 🌱currently fails
-- Create a kerberos ticket
-  - `kinit juliette.larocco2`
-  - enter the password
-  - List tickets: `klist`
-  - If you want to delete tickets: `kdestroy`
-- Create test playbook
-  - 🌱 currently fails
-  - `ansbile-playbook -i hosts.ini test.yml`
-```
----
-- name: Test playbook
-  hosts: windows
-  tasks:
-    - name: test
-      win_environment:
-        state: present
-        name: TestVariable
-        value: Test value
-        level: machine
-```
+- Allow unencrypted WinRM traffic on `dc-1` for testing
+  - `Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value true`
+- Log in to `manager` and open WSL shell
+- Install kerberos
+  - `sudo apt install -y krb5-user`
+- Create inventory file [inventory-win](ansible/inventory-win)
+- Get a kerberos ticket
+  - `kinit juliette.larocco2@XCPNG.LAB`
+  - `klist`
+- Test Ansible authentication
+  - `ansible -i inventory-win windows -m ping`
+- Create playbook to install Google Chrome
+  - [win-install-chrome.yml](ansible/win-install-chrome.yml)
+  - `ansible-playbook -i inventory-win win-install-chrome.yml`
+- Clean up: `kdestroy`
+
+NOTE ununcrypted management connections are NOT recommended. You need to allow unencrypted connections on each target server you want to manage.
+- Run `winrm e winrm/config/Listener` to config there is just one listener: transport HTTP
+- How to create an https listener: [winrm-https-listener.ps1](powershell/winrm-https-listener.ps1)
+  - run on `file-1`
+  - `winrm e winrm/config/Listener`
+  - Note the port is 5986 for https!
+- modify `inventory-win`
+  - change the server to `file-1.XCPNG.LAB`
+  - change port to 5986
+  - `ansible -i inventory-win all -m win_ping`
+- now run the playbook with the updated `inventory-win` file to install `Google Chrome`
+- `ansible-playbook -i inventory-win win-install-chrome.yml`
