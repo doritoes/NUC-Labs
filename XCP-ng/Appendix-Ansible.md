@@ -170,7 +170,9 @@ Steps:
   - `exit`
   - You can now ssh without a password
     - `ssh 192.168.41.20`
-  - TIP you can create your own script file `auth.sh` to repeat this process for all the devices. Example at [auth.sh](auth.sh)
+  - TIP you can create your own script file `auth.sh` to repeat this process for all the devices
+    - Example at [auth.sh](auth.sh)
+    - <ins>Make sure</ins> you edit the file and paste in your own key
 - Test Ansible access
   - Exit back to session on manager
   - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
@@ -185,7 +187,7 @@ Steps:
   - [sms-user.j2](ansible/sms-user.j2)
 - Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's managment database
   - `ansible-playbook sms.yml`
-    - This takes a long time
+    - ⏲️ This takes a long time to complete
     - Uses `config_system` tool to perform FTW
     - Creates user `ansible` using `mgmt_cli`
       - Creating the user directly using the ansible module `add-administrator` isn't working correctly as of this writing
@@ -193,7 +195,7 @@ Steps:
   - Testing
     - Log in to `sms` console (or ssh)
       - `fwm ver`
-      - Should say *Check Point Management Server R81.20*
+        - Should say *Check Point Management Server R81.20*
     - `api status`
 - Log in to `sms` Web gui from `manager`
   - https://192.168.41.20
@@ -225,9 +227,10 @@ Steps:
       - Starting Ansible 2.11, use new `include_vars` to include the var.yml and use the credentials from there
     - [management-objects.yml](ansible/management-objects.yml)
   - `ansible-playbook -i inventory-api management-objects.yml`
-  - In SmartConsole press Control-E to open the Object explorer
-    - Expand Network Objects
-    - Note that the new hosts and network appear when you select Networks and/or Hosts 
+  - Testing
+    - In SmartConsole press Control-E to open the Object explorer
+      - Expand Network Objects
+      - Note that the new hosts and network appear when you select Networks and/or Hosts 
 
 Note:
 - To reset and re-run the FTW on this management server, remove the following files:
