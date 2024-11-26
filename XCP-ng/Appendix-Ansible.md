@@ -75,7 +75,7 @@ Notes:
       - `sudo apt-add-repository ppa:ansible/ansible`
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
-      - Normally installing with ppa method is discouraged; this is is easiest way to get current Ansible for automation
+      - Normally installing with ppa method is discouraged; however this is is easiest way to get the current Ansible for automation
     - Option 2 - Ubuntu 22.04 old Ansible 2.10
       - `sudo apt install -y ansible`
       - `ansible --version`
