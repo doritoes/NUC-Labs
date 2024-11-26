@@ -230,7 +230,8 @@ Steps:
   - Testing
     - In SmartConsole press Control-E to open the Object explorer
       - Expand Network Objects
-      - Note that the new hosts and network appear when you select Networks and/or Hosts 
+      - Note that the new hosts and network appear when you select Networks and/or Hosts
+      - Close the Object explorer
 
 Note:
 - To reset and re-run the FTW on this management server, remove the following files:
