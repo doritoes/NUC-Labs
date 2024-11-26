@@ -88,6 +88,7 @@ Notes:
   - You might use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
+    - `cp NUC-Labs/ansible/* .`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
