@@ -88,7 +88,7 @@ Notes:
   - You might use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
-    - `cp NUC-Labs/ansible/* .`
+    - `cp NUC-Labs/XCP-ng/ansible/* .`
 - Generate ssh RSA key for user `ansible`
   - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
@@ -115,6 +115,7 @@ Notes:
   - `exit`
   - Get the IP address on eth0
     - `show interfaces ethernet eth0 brief`
+- Put this IP address in the `inventory` file under `[router]`
 - From `manager` VM configure key login in VyOS
   - Log in to VyOS as `ansible`
     - `ssh ansible@<vyos_lab_ip>`
