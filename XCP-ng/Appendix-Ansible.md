@@ -367,13 +367,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
     - Select a password for SafeModeAdministratorPassword (aka DSRM = Directory Services Restore Mode)
-  - Confirm configuring server as Domain Controller and rebooting
-  - Wait as the settings are applied and the server is rebooted
-  - Wait some more as "Applying Computer Settings" gets the domain controller ready
-- Configure Sites and Services Subnets and DNS
+  - Confirm configuring server as a Domain Controller and rebooting
+  - ⏲️ Wait as the settings are applied and the server is rebooted
+  - ⏲️ Wait some more as "Applying Computer Settings" gets the domain controller ready
+- Configure "Sites and Services" Subnets and DNS
   - Log back in and open administrative powershell
-  - Download branch1-site.ps1 ([branch1-site.ps1](powershell/branch1-site.ps1))
-  - `powershell -ExecutionPolicy Bypass branch1-site.ps1`
+  - You don't have access tothe Internet yet
+  - Either download and run this powershell script, or just run the commands from administartive powershell
+    - [branch1-site.ps1](powershell/branch1-site.ps1)
+    - `powershell -ExecutionPolicy Bypass branch1-site.ps1`
   - Test using nslookup
     - nslookup google.com
     - nslookup firewall1-lan
@@ -382,7 +384,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - nslookup dc-1
     - nslookup 10.0.1.10 (will not resolve yet)
 - Test access to https://github.com/doritoes/NUC-Labs
-  - you will be downloading files from here
+  - For easy access, download all the files from the `powershell` folder
 - Configure DC-1 as DHCP server
   - Download branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
@@ -392,7 +394,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - confirm it receives an IP address via DHCP
       - test Internet access
   - NOTE Server manager will complain: "Configuration required for DHCP Server at DC-1"
-    - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. Or find a way to do it with powershell.
+    - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. The powershell script already authorizes DHCP, but you might find a way to improve it.
 - Configure AD users, groups, roles, and permissions
   - download and copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
   - download and copy domain-users-groups.ps1 [domain-users-groups.ps1](powershell/domain-users-groups.ps1) to C:\domain-users-groups.ps1
