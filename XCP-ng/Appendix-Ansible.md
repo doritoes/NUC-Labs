@@ -451,7 +451,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 10.0.1.11 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+      - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
     - Try testing nslookup to see what resolves (IPs, FQDN)
   - Install file server feature
     - `Install-WindowsFeature -Name FS-FileServer`
@@ -459,7 +459,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2`
       - Password: the password you set
-    - Wait as the system reboots
+    - ⏲️ Wait as the system reboots
   - Set up share drive and file shares
     - Log in as AD\juliette.larocco2
     - Click **Start** > **Create and format hard disk partitions**
@@ -469,14 +469,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Right-click Disk 1's Unallocated space and then click **New Simple Volume**
         - Follow the wizard and use defaults (e.g., assign letter E:)
         - Set the volume label to **NETDRIVE**
-    - Download and run file-shares.ps1 in an administrative shell [file-shares.ps1](powershell/file-shares.ps1)
+    - Download and run file-shares.ps1 from an administrative powershell [file-shares.ps1](powershell/file-shares.ps1)
       - `powershell -ExecutionPolicy Bypass file-shares.ps1`
       - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file
         - this causes an error when running the script, but the rest is successfully configured
-        - you can add another test user in Finance OU if you want to avoid this messaage
+        - you can add another test user in Finance OU if you want; that would avoid this messaage
+  - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
   - Testing
     - Test access from `branch1-1` to the shared folders by different domain users
-      - For examplle, with juliette.larocco
+      - For example, with juliette.larocco
         - \\file-1
         - \\file-1\IT
 - Configure SQL server **sql-1**
@@ -515,13 +516,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Click **Basic** and follow the installation wizard
       - Click **Install SSMS**
         - From the web page that opens, download and install SQL Server Management Studio (SSMS)
-      - Back in the SQL Express istaller, click **Connect Now** to test (type `exit` to close the prompt)
+      - Back in the SQL Express installer, click **Connect Now** to test (type `exit` to close the prompt)
       - Click **Close** and confirm
   - Test
     - Launch **SQL Server Management Studio (SSMS)**
       - Check **Trust server certificate**
       - Click **Connect**
     - NOTE For a production environment, use proper authentication
+- This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Configure Check Point Identity Collector server **idc-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as Administrator
