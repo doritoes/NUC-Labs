@@ -323,11 +323,12 @@ Steps:
   - `installer download-and-install [tab]`
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
-  - TIP if you are having trouble on the SMS with `Result: The administrator did not authorized downloads, not performing update`
+  - TIP if you are having trouble on the SMS with `Result: The administrator did not authorize downloads, not performing update`
     - `installer agent update`
     - `installer agent disable`
     - `installer agent enable`
-    - `installer check-for-updates` 
+    - `installer check-for-updates`
+    - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
 ## Remove management workstation from the Lab network
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
@@ -344,7 +345,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Disable Ethernet 2 interface
   - Right-click **Ethernet 2**
   - Click **Disable**
-- Test Internet connectivity, etc. to confirm it is still working
+- Test Internet connectivity to confirm it is still working
 
 ## Configure Domain Controller
 - Open console for `dc-1`
