@@ -212,7 +212,7 @@ Steps:
       - Click **OK** and continue using the application normally
 - Update Gaia (if you have proper eval licenses)
   - Wait until the Branch 1 firewalls are configured and providing Internet access
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement); however once Internet access is working, you can use CPUSE to apply jumbo hotfixes
+  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requirement); however once Internet access is working, you can use CPUSE to apply jumbo hotfixes
   - SMS updates are best applied manually (whereas firewalls are updated using management API)
     - clish
       - installer check-for-updates
