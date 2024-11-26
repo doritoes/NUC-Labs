@@ -67,6 +67,7 @@ Notes:
   - [WinSCP](https://winscp.net/eng/download.php)
 - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Install additional WSL packages
+  - Open a WSL shell 
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - `sudo apt install -y python3-paramiko python3-pip`
   - Install Ansible
