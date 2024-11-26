@@ -149,7 +149,7 @@ Notes:
 # Configure SMS
 Steps:
 - In XO, select the VM `sms`
-- Under **Network** tab, set the network interface settings (blue gear icon) and them disable TX checksumming
+- Under **Network** tab, set the network interface settings (blue gear icon) and then disable TX checksumming
 - Log in to console of `sms`
   - Username `admin` and the password you selected
 - Set IP address information
