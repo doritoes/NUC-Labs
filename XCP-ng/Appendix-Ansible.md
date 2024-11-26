@@ -385,6 +385,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - nslookup 10.0.1.10 (will not resolve yet)
 - Test access to https://github.com/doritoes/NUC-Labs
   - For easy access, download all the files from the `powershell` folder
+  - Since you will be using a different user later, you could store these in C:\ or another handy location
 - Configure DC-1 as DHCP server
   - Download branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
@@ -419,22 +420,23 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Rename-Computer -NewName branch1-1`
     - `Restart-Computer`
   - Join to domain
-    - Log in
+    - Log back in
     - Open administrative powershell
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (also work: XCPNG.LAB\juliette.larocco2, juliette.larocco2@xcpng.lab)
       - Password: the password you set
-    - Wait as the system reboots
+    - ⏲️ Wait as the system reboots
   - Testing
-    - Log in as Other user > juliette.larocco
+    - Log in as **Other user** > **juliette.larocco**
       - Use the password from  [domain-users.csv](powershell/domain-users.csv)
       - Note the first time experience for the domain user
       - Try Remote Desktop connection to `dc-1`
-        - juliette.larocco fails because it doesn't have permisissions
-        - juliette.larocco2 works, but will fail if "Administrator" is still logged in on DC-1
+        - juliette.larocco account fails because it doesn't have permisissions
+        - juliette.larocco2 account works, but will fail if "Administrator" is still logged in on DC-1
     - Confirm web browsing works
     - Log in to SmartConsole on `manager` to view the firewall logs
-      - Click **LOGS & MONITOR** and then click the open **Logs** tab
+      - Click **LOGS & MONITOR** and then click the open **Logs** tab to the left
+        - note the limited information provided for Internet web traffic
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as administrator with the password you set
