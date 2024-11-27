@@ -535,7 +535,7 @@ add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.
 ~~~
 
 # Create Initial Policy
-This policy is overy permissive, but it's a place to start.
+This policy is overly permissive, but it's a place to start.
 
 - Click the Check Point menu button at top left then click **Manage Polices and Layers**
 - Click the New icon under Policies
