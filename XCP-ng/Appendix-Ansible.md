@@ -1411,57 +1411,9 @@ Steps:
   - Create file on `manager`
     - [branch3-objects.yml](ansible/branch3-objects.yml)
   - `ansible-playbook -i inventory-api branch3-objects.yml`
-- Create new policy using API
+- Update Lab_Policy_Branches to install on firewall3 using API
   - [branch3-policy.yml](ansible/branch3-policy.yml)
     - `ansible-playbook -i inventory-api branch3-policy.yml`
-  - WARNING this resets Lab_Policy_Branches Internet access to the basic access with no application or URL control
-    - Receate this access
-      - Change the action for rule "Web access" to **Inline Layer** > **New layer**
-        - Name: **Internet Control Branches**
-        - Blades:
-          - Firewall (checked)
-          - **Applications & URL Filtering** (checked)
-        - Advanced > Implicit Cleanup Action: **Accept**
-      - Click **OK**
-      - Rename the cleanup rule **Allow remaining traffic**
-        - Set action Accept and track Log
-      - Add these sub rules above that (or simply copy/paste from Lab_Policy to Lab_Policy_Branches)
-        - Subrule 1
-          - Name: Block bad sites
-          - Source: *Any
-          - Destination: Internet
-          - Services & Applications:
-            - Hacking
-            - Pornography
-            - Phishing
-            - Weapons
-            - Critical Risk
-            - High Risk
-          - Action: **Drop > Blocked Message - Access Control**
-          - Track: Log > Accounting
-        - Subrule 2
-          - Name: Allow general categories
-          - Source: *Any
-          - Destination: Internet
-          - Services & Applications:
-            - Medium Risk
-            - Low Risk
-            - Very Low Risk
-          - Action: Accept
-          - Track: Log > Accounting
-        - Subrule 3
-          - Name: Unknown risk
-          - Source: *Any
-          - Destination: Internet
-          - Services & Applications:
-            - Uncategorized
-            - Unknown Risk
-          - Action:
-            - Inform
-              - Access Approval
-              - Once a day
-              - Per applications
-          - Track: Log > Accounting
 - Edit cluster **firewall3**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
@@ -1488,7 +1440,7 @@ Steps:
       - `ansible-playbook -i inventory-api branch2-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
-  - Once the VPN tunnels are up, you can no longer use the 192.168.3.2 and .3 addresses with ansible; you will need to update `inventory` to use 10.0.3.2 and 10.0.3.3
+  - Once the VPN tunnels are up, you will no longer use the 192.168.3.2 and .3 addresses with ansible; you will need to update `inventory` to use 10.0.3.2 and 10.0.3.3
 - At this point you should be able to install a JHF on the firewalls
   - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
@@ -1500,8 +1452,9 @@ Steps:
       - `installer agent update`
       - `installer agent disable`
       - `installer angent enable`
-      - `installer check-for-updates` 
-- IDC-1
+      - `installer check-for-updates`
+- Configure `idc-1`- for the  new firewall
+  - Log in to `idc-1` as `AD\juliette.larocco2`
   - From the ribbon menu click Filters
     - Edit filter **Prod**
     - Add network:
@@ -1510,7 +1463,7 @@ Steps:
       - Click "**+**" to Add
       - Click **OK**
   - From left menu click **Gateways**
-    - Add new Gateway
+    - In the open area, right-click and then click **Add**
       - Name: **firewall3**
       - IP Address: **10.0.3.1**
       - Shared Secret: **Checkpoint123!**
@@ -1520,8 +1473,9 @@ Steps:
       - Edit the new gateway and click **Test** and then click **Trust**
         - NOTE this test may fail until the VPN tunnel is up; come back to test & trust later
 - Enable https inspection
-  - edit cluster firewall3
-  - From left tree, click HTTPS inspection
+  - Back on `manager`, open SmartConsole
+  - Edit cluster **firewall3**
+  - From left tree, click **HTTPS inspection**
   - Check **Enable HTTPS inspection**
   - Click **OK**
   - Publish and install policy **Lab_Policy_Branches**
@@ -1532,16 +1486,23 @@ Steps:
   - `ansible-playbook -i inventory-api branch3-push.yml`
   - `ansible-playbook -i inventory-api branch2-push.yml`
   - `ansible-playbook -i inventory-api branch1-push.yml`
-  - Testing
-    - While the VPN tunnels are down, DHCP and DNS will not work
-      - cannot join domain
-        - cannot received the root CA to handle HTTPS inspection
-      - Can set static IP address and DNS 8.8.8.8 to access internet but HTTP inspection will not work
-    - DHCP traffic on `branch3-1` should bring the tunnel up
-    - This breaks ansible access with 192.168.103.2 and .3
-    - Test ssh access to 10.0.3.2 and 10.0.3.3
-    - Update `inventory` to use the new IP addresses
+- Testing
+  - Generate some test traffic
     - `ansible all -m ping`
+    - 192.168.103.2 and 192.168.103.3 will fail now (as soon as VPN tunnels come up)
+  - DHCP traffic from `branch3-1` will automatically bring up the tunnel
+    - Give it a little time, or reboot `branch3-1` from console
+  - In SmartConsole open a new Log tab
+  - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
+  - SmartView Monitor will open
+  - From the tree on the left expand **Tunnels** and click **Tunnels on Gateway**
+    - Select **firewall1** to view active tunnels at firewall1
+    - Repeat and select **firewall3** to view active tunnels at firewall3
+    - Click the refresh icon to update the information and see the tunnels come up
+    - Also, from the firewall cluster active member, use `vpn tu`
+- Test ssh access to 10.0.3.2 and 10.0.3.3
+  - Update `inventory` to use the new IP addresses
+  - `ansible all -m ping`
 
 ## Configure branch3-1
 - Log in for the first time at the console
