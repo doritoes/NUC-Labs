@@ -234,7 +234,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Download from https://www.xenserver.com/downloads
     - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
-      - Installation requries a reboot
+      - Installation requires a reboot
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
       - This requires a reboot
@@ -245,7 +245,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
@@ -324,7 +324,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
@@ -392,7 +392,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM
