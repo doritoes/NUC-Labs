@@ -732,13 +732,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Log back in to `manager`
   - Download and run branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
     - `ansible-playbook -i inventory-api branch1-https.yml`
-- Non-ansible/manual solutions here since Ansible check_point.mgmt doesn't support all the commands until R82
+- We are using manual solutions (not Ansible) here since Ansible check_point.mgmt doesn't support all the commands until R82
   - creating https rules, etc not supported until R82
   - some outbound certificate commands function differently pre-R82
   - `enable-https-inspection` will be added in the next version
 - Export the certificate using SmartConsole gui
   - Open the cluster `firewall1`
-  - Click  **HTTPS Inspection**
+  - Click **HTTPS Inspection**
   - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
   - Step two > click **Export certificate**
     - Name it **outbound**
@@ -802,7 +802,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Action:
         - Bypass
       - Track: Log
-    - Pulish and Install the policy
+    - Pulish and Install the Lab_Policy
 
 ## Import the User Check Certificate
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
@@ -812,7 +812,7 @@ In this step we will import the Check Point ICA certificate and also distribute 
   - Note the Certificate Hierarchy similar to the following
     - O=sms.xcpng.labx3fd5d
       - firewall1 VPN certificate
-  - Click on the root "O=sms.xcpng.labx3fd5d"
+  - Click on the root "O=sms.xcpng.labx3fd5d" (the exact name will vary)
   - Export/Copy to File
   - Save as type: Base64-encoded ASCII, single certificate
   - Name as you wish
@@ -828,23 +828,23 @@ In this step we will import the Check Point ICA certificate and also distribute 
     - Right-click Trusted Root Certification Authorities, and then click Import
       - By default the certificate you exported is a .der file; select all file types to see the certificate you downloaded
       - Import the file
-- You can now view User Check pages correctly
+- You will now be able to view User Check pages correctly (for blocked site message, etc.)
   - `gpupdate /force` will trigger an update
   - closing/re-opening the browser can solve caching issues
   - logging out and back in may also help
  
-NOTE As this point no HTTPS inspection will occur, until we enable the applciation control layer, below.
+NOTE As this point no HTTPS inspection will occur, until we enable the application control layer, below.
 
 ## Change website categorization to Hold mode
 By default URL categorization occurs in the background. First attempts to a previously unknown URL will succeed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
-- Log in to SmartConsole
+- Back on `manager`, log in to SmartConsole
 - MANAGE & SETTINGS > Blades > Application Control & URL Filtering > Advanced Settings
 - Click **Check Point online web service**
 - Change **Website categorization mode** to **Hold**
 - Click **OK**, **Publish**, and install policy
 
 ## Add Application Control layer
-🌱 These changes can likely be done using Ansible and the API. Need to test.
+NOTE These changes can likely be done using Ansible and the API.This is not included in this Lab at this time.
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > New Layer**
@@ -852,6 +852,7 @@ By default URL categorization occurs in the background. First attempts to a prev
   - Blades:
     - **Firewall** (checked)
     - **Applications & URL Filtering** (checked)
+  - <ins>Check</ins> Multiple policies and rules can use this layer
   - Advanced > Implicit Cleanup Action: **Accept**
   - Click **OK**
 - Update the cleanup rule
@@ -897,22 +898,27 @@ By default URL categorization occurs in the background. First attempts to a prev
         - Once a day
         - Per applications
     - Track: Log > Accounting
-- Publish and install policy
+- Publish and install Lab_Policy
   - This will enable https inspection!
 - Test from branch1-1
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
   - Browse to an Internet site like https://github.com and examine the https certificate
     - Edge browser: click the lock next to the URL > Connection is secure
-      - Click the Cerificifate icon
+      - Click the Certificate icon
       - If https inspection is working, the Issued By will new reflect xcpng.lab
       - Examine logs in SmartConsole
   - If the traffic is inspected and intercepted but not trusted by the browser
+    - Close and re-open the browser
     - Logging out and back in may also help
     - Confirm the certificate is installed
       - Start > Internet Options > Content
       - Click Certificates and select the Trusted Root Certification Authorities tab
+      - xcpng.lab issued by xcpng.lab should be there at the bottom
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
+  - Test confirm that Health and Financial Sites are not inspected
+    - https://webmd.com - the certificate will be the original certificate, not from xcpng.lab
+    - https://chase.com - the certificate will be the original certificate, not from xcpng.lab
 
 ## Identify Awareness and access roles
 The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
@@ -944,8 +950,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
           - Click **OK**
       - Objects Management tab
         - Click Fetch branches
-          - Or manually DC=xcpng,DC=lab
-        - Failure message: Failed to connect to LDAP Server. Please ensure the administrator's credentials are correct and try again
+          - Or manually: DC=xcpng,DC=lab
       - Authentication tab
         - Use common group path for queries (unchecked, default)
         - Allowed authentication schemes
@@ -962,7 +967,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
           - IKE pre-shared secret encryption key: blank (default)
       - Click **OK**
   - Edit cluster **firewall1**
-    - Enable Identity Awareness Blade
+    - Enable (check) **Identity Awareness** blade
       - Use **AD Query** (checked, the default) and click **Next**
       - Select an Active Directory: xcpng.lab
       - Username: adquery
@@ -975,11 +980,11 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
       - Click **Finish**
     - From the tree, click **Identity Awareness**
       - Check **Identity Collector** and then click **Settings**
-      - Click the "+" and add **idc-1**
+      - Click the "**+**" and add **idc-1**
       - Selected Client Secret: Checkpoint123!
       - Click **OK**
     - Click **OK** to close the firewall cluster settings
-    - **Publish** and install policy
+    - **Publish** and install Lab_Policy
   - Finish Identity Collector configuration
     - Log in to IDC-1
     - Launch Identity Collector
@@ -991,15 +996,14 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Confirm Identity Sources > `dc-1` is working
       - From left click **Identity Sources**
       - `dc-1` should be green; if not, edit it and click Test to get troubleshooting information
-      - Next check firewall logs to be sure there aren't any missing firewall rules
     - From the left menu click **Logins Monitor**
     - Click the small power icon next to the text "Logins Monitor"
     - Log in to `branch1-1` using a domain user account (i.e., `AD\juliette.larocco`)
-    - Back in the Identity Collector, click the refresh icon
+    - Back in the Identity Collector, click the refresh icon (might be partly hidden behind the red text)
     - The login will show in the top pane and the related machine and user in the bottom pane
-    - Log in the Firewall1a or Firewall1b
-    - `pep show user all`
-    - Note that identities are being passed to the firewall
+    - Confirm identies are passed to the firewalls
+      - Log in to firewall1a and firewall1b
+      - from expert prompt: `pep show user all`
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
       - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
@@ -1070,7 +1074,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Save the changes and exit
   - Push policy `Lab policy` to **firewall1**
     -  `ansible-playbook -i inventory-api branch1-push.yml`
-  - Note that there are explicit rules allowing the ldap and ldap-ssl traffic from firewalls to `dc-1`
+  - Note that there are explicit rules allowing the ldap and ldap-ssl traffic from firewalls to `dc-1`. Since we disabled the implied rule, explicit rules are required in the policies
 
 ## Initial Configuration
 Steps:
@@ -1159,25 +1163,15 @@ Steps:
   - select the applicable JHF hotfix bundle by number
   - Approve the reboot
   - If fails to check for updates "The administrator did not authorize downloads"
+    - `installer agent disable`
+    - `installer agent enable`
+    - then check for updates again
     - See https://support.checkpoint.com/results/sk/sk181557
-    - Check using clish: show consent-flags allow-receiving-data
-    - To override and enable:
-      - `set consent-flags allow-receiving-data true`
-      - `save config`
-      - then check for updates again
-    - Also try
-      - `installer agent disable`
-      - `installer agent enable`
-      - then check for updates again
-
-## Configure DHCP helper and DHCP
-- Log in to firewall2a and firewall2b
-  - `clish`
-  - `set bootp interface eth1 on`
-  - `set bootp interface eth1 relay-to 10.0.1.10 on`
-  - `save config`
-- Install Lab_Policy_Branches policy
-  - `ansible-playbook -i inventory-api branch2-push.yml`
+      - Check using clish: show consent-flags allow-receiving-data
+      - To override and enable:
+        - `set consent-flags allow-receiving-data true`
+        - `save config`
+        - then check for updates again
 
 ## VPN
 - Create file on `manager`
@@ -1185,27 +1179,32 @@ Steps:
 - `ansible-playbook -i inventory-api branch2-vpn.yml`
 - Use SmartConsole to edit the community **Branch_Community**
   - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
-- Push policies
+  - Click **OK**
+- **Publish** changes
+- Push policies Lab_Policy and Lab_Policy_Branches
   - `ansible-playbook -i inventory-api branch1-push.yml`
   - `ansible-playbook -i inventory-api branch2-push.yml`
 - Testing
   - Generate some test traffic
     - `ansible all -m ping`
-    - 192.168.102.2 and 192.168.102.3 will fail now
-  - DHCP traffic will automatically bring up the tunnel
+    - 192.168.102.2 and 192.168.102.3 will fail now (as soon as VPN tunnels come up)
+  - DHCP traffic from `branch2-1` will automatically bring up the tunnel
+    - Give it a little time, or reboot `branch2-1` from console
   - In SmartConsole open a new Log tab
   - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
   - SmartView Monitor will open
-  - From the tree on the left expenc **Tunnels** and click **Tunnels on Gateway**
+  - From the tree on the left expand **Tunnels** and click **Tunnels on Gateway**
     - Select **firewall1** to view active tunnels at firewall1
     - Repeat and select **firewall2** to view active tunnels at firewall2
     - Click the refresh icon to update the information and see the tunnels come up
+    - Also, from the firewall cluster active member, use `vpn tu`
 - SSH to each firewall and accept the keys
+  - `ssh 10.0.2.2`
+  - `ssh 10.0.2.3`
+- Update `inventory` file
   - change firewall2a to 10.0.2.2
   - change firewall2b to 10.0.2.3
-- Update `inventory`
-  - change firewall2a to 10.0.2.2
-  - change firewall2b to 10.0.2.3
+- Retest `ansible all -m ping`
 
 ## Configure branch2-1
 - Log in for the first time at the console
@@ -1221,10 +1220,10 @@ Steps:
 - Testing
   - Log in as Other user > juliette.larocco
   - Confirm Internet browsing is working
+    - Note no https inspection (as see by inspecting the https site certificate details)
   - Try connecting to the file server at `\\file-1`
   - Review logs in SmartConsole
-  - Go back to the SmartView Monitor app on `manager` and refresh to see the VPN tunnels are now fully up
-    - Also, from the firewall cluster active member, use `vpn tu`
+    - Note that the Internet web traffic goes out the branch2 ISP connection
 
 ## Enable Application Control and Identity Awareness
 - Edit cluster **firewall2**
@@ -1238,7 +1237,7 @@ Steps:
       - Failure message: User is not a domain administrator, as such AD Query will not work.
       - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
-    - Click Identity Awareness from tree on the left
+    - Click **Identity Awareness** from tree on the left
     - <ins>Check</ins> Identity Collector, and click **Settings**
     - Click the "**+**" and add **idc-1**
     - Shared secret: **Checkpoint123!**
@@ -1246,8 +1245,9 @@ Steps:
     - Click **OK**
   - Click **OK**
   - **Publish** and install policy **Lab_Policy_Branches**
-- IDC-1
-  - Log in as `AD\juliette.larocco2`
+    - `ansible-playbook -i inventory-api branch2-push.yml`
+- Configure `idc-1`- for the  new firewall
+  - Log in to `idc-1` as `AD\juliette.larocco2`
   - From the ribbon menu click Filters
     - Edit filter **Prod**
       - Add network:
@@ -1269,57 +1269,12 @@ Steps:
 🌱 The following manual changes can likely be done using Ansible and the API. That could be a future effort.
 - Log back in to `manager` and log in to SmartConsole
 - Open policy **Lab_Policy_Branches**
-- TIP You can copy and paste rules from **Lab_Policy** to **Lab_Policy_Brances**
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
-- Change action from **Accept** to **Inline Layer > New Layer**
-  - Name: **Internet Control Branches**
-  - Blades:
-    - Firewall (checked)
-    - **Applications & URL Filtering** (checked)
-  - Advanced > Implicit Cleanup Action: **Allow**
-- Rename the cleanup rule **Allow remaining traffic**
-  - Set action to **Accept** and track to **Log**
-- Add these sub rules above that
-  - Subrule 1
-    - Name: **Block bad sites**
-    - Source: ***Any**
-    - Destination: ***Any**
-    - Services & Applications:
-      - Hacking
-      - Pornography
-      - Phishing
-      - Weapons
-      - Critical Risk
-      - High Risk
-    - Action: **Drop > Blocked Message - Access Control**
-    - Track: **Log** > **Accounting**
-  - Subrule 2
-    - Name: **Allow general categories**
-    - Source: ***Any**
-    - Destination: ***Any**
-    - Services & Applications:
-      - Medium Risk
-      - Low Risk
-      - Very Low Risk
-    - Action: Accept
-    - Track: **Log** > **Accounting**
-  - Subrule 3
-    - Name: **Unknown risk**
-    - Source: ***Any**
-    - Destination: ***Any**
-    - Services & Applications:
-      - Uncategorized
-      - Unknown Risk
-    - Action:
-      - **Inform**
-        - Access Approval
-        - Once a day
-        - Per applications
-    - Track: **Log** > **Accounting**
-  - Update **Support** access role
-    - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**- 
-      - Click **OK**
+- Change action from **Accept** to **Inline Layer > Internet Control**
+- Update **Support** access role
+  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**- 
+    - Click **OK**
 ## HTTPS inspection
 - Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
   - creating https rules, etc not supported until R82
@@ -1331,13 +1286,15 @@ Steps:
   - Steps 1 and 2 are already completed
   - Step 3 <ins>check</ins> **Enable HTTPS inspection**
   - Click **OK**
-- **Publish** and install policy **Lab_Policy_Branches**
+- **Publish** and install policies **Lab_Policy** and **Lab_Policy_Branches**
+  - `ansible-playbook -i inventory-api branch1-push.yml`
+  - `ansible-playbook -i inventory-api branch2-push.yml`
 - Note that the HTTPS policy is the same across `Lab_Policy` and `Lab_Policy_Branches`
 - Test from branch2-1
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
   - From `branch2-1` browse to an Internet site like https://github.com and examine the https certificate
     - Edge browser: click the lock next to the URL > Connection is secure
-      - Click the Cerificifate icon
+      - Click the Certificate icon
       - If https inspection is working, the Issued By will new reflect xcpng.lab
       - Examine logs
   - If the traffic is inspected and intercepted but not trusted by the browser
@@ -1348,9 +1305,10 @@ Steps:
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
   - Test identity access by visiting https://ipgiraffe.com
+  - Test blocking of bad web sites: http://maliciouswebsitetest.com/
 
 ## Add Identity-Based Management
-- You should see login information passed to all the firewalls: firewall1, firewall2, firewall3
+- You should see login information passed to all the firewalls: firewall1, firewall2, and soon firewall3
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
   - `pep show user all`
 - Add an access rule to the **Lab_Policy** and **Lab_Policy_Branches** policies
@@ -1363,11 +1321,13 @@ Steps:
     - **Remote_Desktop_Protocol**
     - **Remote_Desktop_Protocol_UDP**
   - Action: **Accept**
-  - Track: **Log**
+  - Track: **Log** > **Accounting**
   - Comments: **Allow support team RDP access**
-- Push both policies, **Lab_Policy** and **Lab_Policy_Branches**
+- **Publish** and install policies **Lab_Policy** and **Lab_Policy_Branches**
+  - `ansible-playbook -i inventory-api branch1-push.yml`
+  - `ansible-playbook -i inventory-api branch2-push.yml`
 - Test
-  - From system where you are logged in from as `AD\juliette.larocco` you should be able to:
+  - From systems where you are logged in from as `AD\juliette.larocco` you should be able to:
     - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
     - Access https://ipgiraffe.com
 
