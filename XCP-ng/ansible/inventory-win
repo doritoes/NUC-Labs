@@ -1,9 +1,9 @@
 [windows]
 dc-1.XCPNG.LAB
 [windows:vars]
-ansible_user: juliette.larocco2@XCPNG.LAB
-ansible_connection: winrm
-ansible_port: 5985
-ansible_winrm_transport: kerberos
-ansible_winrm_server_cert_validation: ignore
-ansible_become: false
+ansible_user=juliette.larocco2@XCPNG.LAB
+ansible_connection=winrm
+ansible_port=5985
+ansible_winrm_transport=kerberos
+ansible_winrm_server_cert_validation=ignore
+ansible_become=false
