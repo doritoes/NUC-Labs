@@ -131,7 +131,7 @@ Steps:
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
-    - SMS reqires more; we will increase this later
+    - SMS requires more; we will increase this later
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface:
