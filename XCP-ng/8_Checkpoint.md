@@ -697,7 +697,7 @@ Since the Lab network is our simulated Internet, we are going to use another IP 
 
 - Select an IP address from your Lab network on the same subnet as the "public" external IPs on the firewall
 - Create a new firewall rule
-  - Soure: ExternalZone
+  - Source: ExternalZone
   - Destination: dmzserver (192.168.102.10)
   - Services: http
 - Modify the `dmzserver` object
