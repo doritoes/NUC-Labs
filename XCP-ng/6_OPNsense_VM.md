@@ -209,7 +209,7 @@ Steps:
 - System > Firmware > Plugins
   - os-OPNproxy - click "+" to install
     - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
-    - Servcies > Squid Web Proxy > Administration
+    - Services > Squid Web Proxy > Administration
       - Enable proxy and click Apply
       - Click Forward proxy
         - Proxy interfaces: LAN
