@@ -299,7 +299,7 @@ Steps:
   - https://192.168.41.2
   - https://192.168.41.3
 - Update Gaia (if you have proper eval licenses)
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requriement)
+  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requirement)
   - Firewalls are best updated using the management API
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
