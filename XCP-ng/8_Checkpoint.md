@@ -506,7 +506,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
     - Security Zone: **According to topology: InternalZone**
     - Click **OK** and **OK**
 - Re-open **Gateway_Cluster**
-- General Properites
+- General Properties
   - Uncheck IPSec VPN for this lab (feel free to leave it on a experiment)
   - Check Monitoring
   - Optionally Check Application Control and URL Filtering if you would like to experiment 
