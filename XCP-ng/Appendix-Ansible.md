@@ -36,7 +36,7 @@ Notes:
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-22.04`
       - feel free to customize and choose your favorite Linux
-      - a new WSL window is opened and you are promped set the username and password
+      - a new WSL window is opened and you are prompted set the username and password
         - Username: `ansible`
         - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few presses), prompting you to set the username and password
 - Configure Network interfaces
@@ -44,7 +44,7 @@ Notes:
   - **Click Ethernet** > **First Interface** (connected)
     - Network profile: **Private**
   - Click **Ethernet** > **Second Interface** (No Internet)
-    - IP assigment: Click **Edit**
+    - IP assignment: Click **Edit**
     - From dropdown select **Manual**
     - Slide to enable **IPv4**
       - We cannot set the IP address without a gateway IP or DNS from this interface!
@@ -71,7 +71,7 @@ Notes:
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - `sudo apt install -y python3-paramiko python3-pip`
   - Install Ansible
-    - Option 1 - recommended - Ansbile 2.17 (or later)
+    - Option 1 - recommended - Ansible 2.17 (or later)
       - `sudo apt-add-repository ppa:ansible/ansible`
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
@@ -131,7 +131,7 @@ Notes:
 - Test Ansible access
   - `exit`
   - Retry: `ssh ansible@<vyos_lab_ip>`
-    - no longer requies a password
+    - no longer requires a password
   - Edit the `inventory` files to add the IP address of the router below `[router]`
   - the `inventory` files should have the VyOS "public" IP without the "#" comment character
   - everything else should be "commented out"
@@ -185,7 +185,7 @@ Steps:
   - [sms.yml](ansible/sms.yml)
   - [sms.j2](ansible/sms.j2)
   - [sms-user.j2](ansible/sms-user.j2)
-- Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's managment database
+- Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's management database
   - `ansible-playbook sms.yml`
     - ⏲️ This takes a long time to complete
     - Uses `config_system` tool to perform FTW
@@ -223,7 +223,7 @@ Steps:
   - Create files on the manager (inventory, playbook)
     - [inventory-api](ansible/inventory-api)
       - Customize to update the credentials as needed
-      - Lab testing to move the login credentials to the playbook was not successful in Ansibile 2.10.8
+      - Lab testing to move the login credentials to the playbook was not successful in Ansible 2.10.8
       - Starting Ansible 2.11, use new `include_vars` to include the var.yml and use the credentials from there
     - [management-objects.yml](ansible/management-objects.yml)
   - `ansible-playbook -i inventory-api management-objects.yml`
@@ -285,7 +285,7 @@ Steps:
   - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
-- Create files on the manager (configuration file, playbooks to create firewalss, and the jinja template)
+- Create files on the manager (configuration file, playbooks to create firewalls, and the jinja template)
   - [firewall1a.yml](ansible/firewall1a.yml)
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
@@ -372,8 +372,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - ⏲️ Wait some more as "Applying Computer Settings" gets the domain controller ready
 - Configure "Sites and Services" Subnets and DNS
   - Log back in and open administrative powershell
-  - You don't have access tothe Internet yet
-  - Either download and run this powershell script, or just run the commands from administartive powershell
+  - You don't have access to the Internet yet
+  - Either download and run this powershell script, or just run the commands from administrative powershell
     - [branch1-site.ps1](powershell/branch1-site.ps1)
     - `powershell -ExecutionPolicy Bypass branch1-site.ps1`
   - Test using nslookup
@@ -431,7 +431,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Use the password from  [domain-users.csv](powershell/domain-users.csv)
       - Note the first time experience for the domain user
       - Try Remote Desktop connection to `dc-1`
-        - juliette.larocco account fails because it doesn't have permisissions
+        - juliette.larocco account fails because it doesn't have permissions
         - juliette.larocco2 account works, but will fail if "Administrator" is still logged in on DC-1
     - Confirm web browsing works
     - Log in to SmartConsole on `manager` to view the firewall logs
@@ -473,7 +473,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - `powershell -ExecutionPolicy Bypass file-shares.ps1`
       - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file
         - this causes an error when running the script, but the rest is successfully configured
-        - you can add another test user in Finance OU if you want; that would avoid this messaage
+        - you can add another test user in Finance OU if you want; that would avoid this message
   - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
   - Testing
     - Test access from `branch1-1` to the shared folders by different domain users
@@ -593,7 +593,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Note the apps should be allowed for the Domain profile (checked)
       - Click **OK**
     - Configure Identity Collector
-      - Back on `IDC-1`, launch the Identity Collecter app (it requires Administrative permissions to run)
+      - Back on `IDC-1`, launch the Identity Collector app (it requires Administrative permissions to run)
       - Ribbon menu > **Domains**
         - Click icon for New domain
           - Name: **xcpng.lab**
@@ -607,7 +607,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Click **Test**
           - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
           - Fix: We did the following: disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
-          - Install [Wireshark ](https://www.wireshark.org/download.html) on `dc-1` (default settings)
+          - Install [Wireshark](https://www.wireshark.org/download.html) on `dc-1` (default settings)
             - Re-test and the credential test <ins>will pass</isn>
           - Seriously, lab testing encountered a number of issues with IDC working
               - Continue with the lab. <ins>It will start working eventually.</ins> Here's what I tried without success:
@@ -621,7 +621,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
               - What has consistently worked is installing Wireshark (!); it could be the installation of Npcap
             - NOTE You can't log in to DC-1 as adquery, but you can log in to branch1-1 as adquery to confirm the account works
       - Left menu > **Identity Sources**
-        - Right-click in the emmpty space then click **New** > **Active Directory** > **Add Manually**
+        - Right-click in the empty space then click **New** > **Active Directory** > **Add Manually**
           - Name: **DC-1**
           - Domain: **xcpng.lab**
           - Host name / IP address: **10.0.1.10** (if you have the R82 client you can also use name **DC-1**)
@@ -674,7 +674,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Paste in the contents of [01-netcfg.yaml](01-netcfg.yaml)
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
-      - It is OK for a warning to disply that it was unable to call Open vSwitch: https://ubuntuforums.org/showthread.php?t=2495406
+      - It is OK for a warning to display that it was unable to call Open vSwitch: https://ubuntuforums.org/showthread.php?t=2495406
   - Give permissions to user ansible
     - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
   - set up ssh key auth
@@ -728,7 +728,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
 
 ## HTTPS Inspection
-- Enable application control and url filtering blands, and create outbound https inspection certificate
+- Enable application control and url filtering blades, and create outbound https inspection certificate
   - Log back in to `manager`
   - Download and run branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
     - `ansible-playbook -i inventory-api branch1-https.yml`
@@ -754,7 +754,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab
     - Expand Domains: xcpng.lab
-    - Right-click **Distribute Root CA Certication** from the tree, then click **Edit**
+    - Right-click **Distribute Root CA Certificate** from the tree, then click **Edit**
     - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
       - Import `c:\outbound.cer`
@@ -802,7 +802,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Action:
         - Bypass
       - Track: Log
-    - Pulish and Install the Lab_Policy
+    - Publish and Install the Lab_Policy
 
 ## Import the User Check Certificate
 In this step we will import the Check Point ICA certificate and also distribute that using group policy
@@ -844,7 +844,7 @@ By default URL categorization occurs in the background. First attempts to a prev
 - Click **OK**, **Publish**, and install policy
 
 ## Add Application Control layer
-NOTE These changes can likely be done using Ansible and the API.This is not included in this Lab at this time.
+NOTE These changes can likely be done using Ansible and the API. This is not included in this Lab at this time.
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > New Layer**
@@ -1001,7 +1001,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Log in to `branch1-1` using a domain user account (i.e., `AD\juliette.larocco`)
     - Back in the Identity Collector, click the refresh icon (might be partly hidden behind the red text)
     - The login will show in the top pane and the related machine and user in the bottom pane
-    - Confirm identies are passed to the firewalls
+    - Confirm identities are passed to the firewalls
       - Log in to firewall1a and firewall1b
       - from expert prompt: `pep show user all`
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
@@ -1048,7 +1048,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
   - branch2-dhcp.ps1 ([branch2-dhcp.ps1](powershell/branch2-dhcp.ps1))
   - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
 
-## Enable SMS to manange remote gateways
+## Enable SMS to manage remote gateways
 - Create file on `manager`
   - [branch2-enablesms.yml](ansible/branch2-enablesms.yml)
 - Apply the changes
@@ -1063,7 +1063,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
 -  Apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) to allow branch 2 (and branch 3) Identity Awareness to work
   - The User Directory query from the gateways to the LDAP on the domain controller will fail until you do this
   - Connect to sms (the Security Management Server) in expert mode (e.g., log in as user `ansible`)
-  - Back up the currrent `implied_rules.def` file
+  - Back up the current `implied_rules.def` file
     - `cp $FWDIR/lib/implied_rules.def $FWDIR/lib/implied_rules.def_bkup`
   - Edit `implied_rules.def`
     - `vi $FWDIR/lib/implied_rules.def`
@@ -1282,7 +1282,7 @@ Steps:
   - `enable-https-inspection` will be added in the next version
 - Enable HTTPS inspection on **firewall2**
   - Open the cluster `firewall2`
-  - Click on HTTPS Ispection
+  - Click on HTTPS Inspection
   - Steps 1 and 2 are already completed
   - Step 3 <ins>check</ins> **Enable HTTPS inspection**
   - Click **OK**
@@ -1315,7 +1315,7 @@ Steps:
   - TIP You can create in one policy and copy/paste it to the other
   - Section: add it to the section **Core Services**
   - Name: **RDP access for Support**
-  - Source: **Suppport** (access role)
+  - Source: **Support** (access role)
   - Destination: **LAN_Networks_NO_NAT**
   - Services:
     - **Remote_Desktop_Protocol**
@@ -1423,7 +1423,7 @@ Steps:
     - Password: YourStrongPassword123!
     - Click **Connect**
       - Failure message: User is not a domain administrator, as such AD Query will not work.
-      - Check **Ignore the errors and configure the LDAP acount**
+      - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
     - Click **Finish**
     - Click Identity Awareness from tree on the left
@@ -1543,11 +1543,11 @@ Steps:
   - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2')
 
 # Demonstration
-Note that the VPN does not allow traffice between Branch 2 and Branch 3
+Note that the VPN does not allow traffic between Branch 2 and Branch 3
 - Edit VPN community **Branch_Community**
-- Click VPN routering
+- Click VPN routing
 - Note the setting **To center only**
-- Change to **To center and other satellites through center** to you want to enable communication between the remote brances (publish and install both policies)
+- Change to **To center and other satellites through center** to you want to enable communication between the remote branches (publish and install both policies)
 
 - branch1-1
   - http://192.168.31.10 ✅
@@ -1567,7 +1567,7 @@ Note that the VPN does not allow traffice between Branch 2 and Branch 3
   - RDP branch1-1 (support users only) ✅
   - RDP branch3-1 (support users only) 🛑 cross-branch requires the change noted above
     - traffic between branch2 and branch3 needs to traverse branch1
-    - not seeing the traffic hit the "suppport" rule at branch1
+    - not seeing the traffic hit the "support" rule at branch1
   - RDP dc-1 (support users only) ✅
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall2 ✅
@@ -1581,7 +1581,7 @@ Note that the VPN does not allow traffice between Branch 2 and Branch 3
   - RDP branch1-1 (support users only) ✅
   - RDP branch2-1 (support users only) 🛑 cross-branch requires the change noted above
     - traffic between branch2 and branch3 needs to traverse branch1
-    - not seeing the traffic hit the "suppport" rule at branch1
+    - not seeing the traffic hit the "support" rule at branch1
   - RDP dc-1 (support users only) ✅
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall3 ✅
