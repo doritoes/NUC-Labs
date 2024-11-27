@@ -349,7 +349,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
   - Enter an Activation key
     - `xcplab123!`
   - Click Finish and Yes to start the process
-  - Acccept the Reboot
+  - Accept the Reboot
   - Log back in
   - Configure interfaces
     - From the left menu click Network Management > **Network Interfaces**
