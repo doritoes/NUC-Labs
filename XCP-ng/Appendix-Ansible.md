@@ -1593,6 +1593,7 @@ Access Demonstration:
 
 Optional example how to set Edge browser home page to http://home
   - Log in to `dc-1` as `AD\juliette.larocco2`
+  - `Add-DnsServerResourceRecordCName -Name "home" -HostNameAlias "dmz-iis.xcpng.lab" -ZoneName "xcpng.lab"`
   - `New-GPO -Name "Home Page Edge" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Install the administrative template
     - https://learn.microsoft.com/en-us/deployedge/configure-microsoft-edge#1-download-and-install-the-microsoft-edge-administrative-template
