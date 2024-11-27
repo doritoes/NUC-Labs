@@ -103,7 +103,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
     - Remote access test:
-      - In Lab testing, this only worked on Servers, not workstations
+      - In Lab testing, this only worked on Servers, not workstations. HOWEVER, able to use Ansible playbooks on workstations too
       - From `dc-1`
         - `Test-WsMan localhost` - works
         - `Test-WsMan file-1` - works
@@ -159,3 +159,5 @@ NOTE Unencrypted management connections are NOT recommended. You can enable self
   - `ansible -i inventory-win all -m win_ping`
 - now run the playbook with the updated `inventory-win` file to install `Google Chrome`
 - `ansible-playbook -i inventory-win win-install-chrome.yml`
+
+In testing, I was able to run `winrm-https-listener.ps1` on workstations (branch1-1, branch2-1, branch3-1), then add them to the `inventory-win` file, and install Chrome.
