@@ -281,7 +281,7 @@ Steps:
 - Log in as `admin` and the password you selected
 - Complete First Time Configuration Wizard (FTCW) aka 'FTW'
   - Continue with R81.20 configuration
-  - Accept the Managment connection configuration
+  - Accept the Management connection configuration
     - Add Default gateway **192.168.103.1**
   - Host Name: **SMS**
   - Domain Name: **xcpng.lab**
@@ -514,7 +514,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
   - Check Hide internal networks behind the Gateway's external IP
     - This is acceptable for this Lab and cases where there are less that 50 hosts behind the firewall
   - Click **OK**
-- Network Managment
+- Network Management
   - To calculate the network topology from routes
     - Click Get Interfaces > Get Interfaces With Topology
 - Click **Publish**
@@ -544,7 +544,7 @@ This policy is overy permissive, but it's a place to start.
   - Click **Close**
 - From the left menu click **Security Policies**
 - If not already selected, click on the policy **AccessPolicy** or click on "+" and open it
-- Add first rule (at top) - Managment
+- Add first rule (at top) - Management
   - Name: Management rule
   - Source: SmartConsole (192.168.103.100)
   - Destinations: GW1 and GW2
