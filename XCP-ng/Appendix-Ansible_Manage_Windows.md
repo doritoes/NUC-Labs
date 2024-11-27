@@ -1,8 +1,6 @@
 # Appendix - Manage Windows with Ansible
 References: https://docs.ansible.com/ansible/latest/os_guide/index.html
 
-:seedling: This Appendix provides links to valuable information but has yet been fully validated in the Lab.
-
 Requirements:
 - PowerShell 5.1 or newer
   - $PSVersionTable.PSVersion
@@ -12,55 +10,52 @@ Requirements:
 
 Important details:
 - The best way to use Ansible is a domain environment with everything configured using GPO (group policy objects)
-- In this lab we will use a quick setup on individual machines
-
-# Install Ansible on Linux
-For this Lab we can install Ansible on a Desktop or Server.
-- `sudo apt update && sudo apt install -y ansible`
-
-# WinRM Method
-This is a quick example for setting up a single device. No GPO is used
-
-## WinRM Setup
-https://raw.githubusercontent.com/ansible/ansible-documentation/ae8772176a5c645655c91328e93196bcf741732d/examples/scripts/ConfigureRemotingForAnsible.ps1
-
-## WinRM Listener
-`winrm quickconfig`
-
-`winrm quickconfig -transport:https`
-
-### WinRM Service
-
-# Windows SSH Method
-Using SSH with Windows is experimental.
-
-## Install Win32-OpenSSH
-
-## Configure Win32-OpenSSH Shell
-
-## Configure Ansible for SSH on Windows
-
+- Many people use usernames and password for authentication because Certificates a Hard(TM), or use unencrypted http (bad!)
+- Using WinRM with Kerberos is the method tested in this Lab, using self-signed certificates
+  - See one example of issuing certificates here: https://www.darkoperator.com/blog/2015/3/24/bdvjiiw1ybzfdjulc5pprgpkm8os0b
 
 # GPO Method
 ## Enable WinRM traffic in the Network Firewall as Needed
-Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed.
+Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed. In the example below we omitted the DMZ Windows server.
+- Allow TCP port 5985 (http-based) and port 5986 (https-based) between the systems you will remote from/to
+  - Example Lab_Policy:
+    - Add rule to Core Services section
+      - Name: Allow WinRM for Ansible
+      - Source: Manager (you would use "support" there, and log in as Juliette.Larocco instead of "Lab")
+      - Destinations: LAN_Networks_NO_NAT
+      - Services:
+        - New > TCP: winrm_http_5985, port 5985
+        - New > TCP: winrm_https_5986, port 5986
+      - Action: Accept
+      - Track: Log > Accounting
+  - Example Lab_Policy_Branches:
+    - Add rule to Core Services section
+      - Name: Allow WinRM for Ansible
+      - Source: support
+      - Destination: LAN_Networks_NO_NAT
+      - Services:
+        - winrm_http_5985
+        - winrm_https_5986
+      - Action: Accept
+      - Track: Log > Accounting
+
 ## Enable WinRM using GPO
 See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/watch?v=M18yDGAd9TU
 - Log in to `the domain controller (`dc-1`)
 - create the GPO using administrative powershell
   - `New-GPO -Name "Enable WinRM for Ansible Management" | New-GPLink -Target "DC=xcpng,DC=lab"`
 - Open Group Policy Management Console (GPMC)
-  - Click Start, search for Group Policy Management and click on it
+  - Click **Start**, search for **Group Policy Management** and click on it
   - Expand Forest: xcpng.lab
   - Expand Domains: xcpng.lab
-  - Right-click **Enable WinRM for Ansible Management** from the tree, then click Edit
+  - Right-click **Enable WinRM for Ansible Management** from the tree, then click **Edit**
   - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\System Services
   - Find **Windows Remote Service (WS-Managmeent)** and enable automatic startup
     - <ins>Check</ins> Define this policy setting
     - Select **Automatic**
-    - Click **OK**
-  - Go to Computer Policies -> Preferences -> Control Panel Settings -> Services
-  - IN the open space right click, Select **New** -> **Service**
+    - Click **Apply** and then click **OK**
+  - Go to Computer Configuration -> Preferences -> Control Panel Settings -> Services
+  - In the open space, right-click, Select **New** -> **Service**
   -   Enter the service name: **WinRM**
   - Select the **Recovery** tab
     - First failure: Restart the Service
@@ -72,18 +67,23 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
   - Go to Computer Configuration -> Policies -> Administrative Templates -> Windows Components -> Windows Remote Management (WinRM) -> WinRM Service
   - Enable **Allow remote server management through WinRM**
     - In the Ipv4/IPv6 filter box, you can specify IP addresses or subnetworks, on which WinRM connections must be listened to
-    - If you want to allow WinRM connections on all IP addresses, enter '*****' onthe IPv4 filter box
+    - If you want to allow WinRM connections on all IP addresses, enter '*****' (single asterisk) in the IPv4 filter box
     - Click **Apply** and then click **OK**
   - Create Windows Defender Firewall Rules allowing WinRM connections on the default ports TCP/5985 and TCP/5986
     - Go to Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Windows Firewall with Advanced Security -> Windows Firewall with Advanced Security -> Inbound Rules
-    - Right click in the open area and click **New Rule**
-      - Select **Prefefined**, and from the dropdown **Windows Remote Management**
-      - Review acces to be craeeted: Windows Remote Management rules for ports TCP/5985 and TCP/5986
+    - Right-click in the open area and click **New Rule**
+      - Select **Predefined**, and from the dropdown **Windows Remote Management**
+      - Review acces to be created: Windows Remote Management rules for ports TCP/5985 and TCP/5986
       - Select **Allow the connection** (default)
       - Click **Finish**
     - Go to Computer Configuration -> Policies -> Administrative Templates -> Windows Components -> Windows Remote Shell
       - Enable **Allow Remote Shell Access**
       - Click **Apply** and then click **OK**
+- Enabling https
+  - Sadly as of this writing there is no ay to enable HTTPS using GPO
+  - There is the command to enable it; you could place it in a login script to enable WinRM and make it only use HTTPS
+    - `winrm quickconfig -transport:https`
+    - this requires a certificate to already be created
 - Testing
   - Log in to a workstation (`branch1-1`)
     - Wait for group policy to roll out, or run `gpupdate /force`
@@ -103,7 +103,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
     - Remote access test:
-      - 🌱 need to work on this; it looks only works on Servers
+      - In Lab testing, this only worked on Servers, not workstations
       - From `dc-1`
         - `Test-WsMan localhost` - works
         - `Test-WsMan file-1` - works
@@ -146,12 +146,13 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
   - `ansible-playbook -i inventory-win win-install-chrome.yml`
 - Clean up: `kdestroy`
 
-NOTE ununcrypted management connections are NOT recommended. You need to allow unencrypted connections on each target server you want to manage.
-- Run `winrm e winrm/config/Listener` to config there is just one listener: transport HTTP
-- How to create an https listener: [winrm-https-listener.ps1](powershell/winrm-https-listener.ps1)
-  - run on `file-1`
+NOTE Unencrypted management connections are NOT recommended. You can enable self-signed certificates to enable encrypted management connections.
+- Run `winrm e winrm/config/Listener` to confirm there is just one listener: transport HTTP
+- How to create an https listener with a self-signed certificate: [winrm-https-listener.ps1](powershell/winrm-https-listener.ps1)
+  - run on `file-1`: `powershell -ExecutionPolicy Bypass winrm-https-listener.ps1`
   - `winrm e winrm/config/Listener`
-  - Note the port is 5986 for https!
+  - NOTE the port is 5986 for https!
+  - NOTE you can also use the command `winrm quickconfig -transport:https` to enable https (only), but this requires a certificate to already exist
 - modify `inventory-win`
   - change the server to `file-1.XCPNG.LAB`
   - change port to 5986
