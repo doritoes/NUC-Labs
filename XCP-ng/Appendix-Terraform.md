@@ -8,9 +8,9 @@ This appendix outlines building a complete lab designed for testing Check Point 
 - 71 GB storage
 
 Notes:
-- Terraform integrates with the XO server, <ins>notM/ins> the XCP-ng <ins>host</ins>
+- Terraform integrates with the XO server, <ins>not/ins> the XCP-ng <ins>host</ins>
 - Once built, the Windows 10 desktop systems have a month to operate without activation
-  - Some personalization features in Windows Settings are diasbled if you don’t activate (cannot change desktop wallpapers, windows colors and themes, customize Start menu/taskbar/lock screen/title bar/fonts, etc.)
+  - Some personalization features in Windows Settings are disabled if you don’t activate (cannot change desktop wallpapers, windows colors and themes, customize Start menu/taskbar/lock screen/title bar/fonts, etc.)
   - Without activation, Windows may only download critical updates; some updates like optional updates, drivers, or security updates may be missed
 - Windows Servers have a standard 180 evaluation period
 - Check Point systems have a 15-day trial by default (request a [30-day evaluation license](https://community.checkpoint.com/t5/General-Topics/How-to-Request-an-Evaluation-License-for-Security-Gateways-and/td-p/40391) as needed)
@@ -22,7 +22,7 @@ Notes:
   - The Identity Collector current version R82 sees to be required; it's not easily available from R81.20 systems. You might need a paid support account with Check Point, or try to grab from a R82 systems
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
-# Install Terrafrom
+# Install Terraform
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
 
 - Install prerequisites
@@ -68,7 +68,7 @@ sudo apt update && sudo apt install -y terraform
   - `install image`
   - Allow installation to continue with default values
   - When you are asked to set the password just use `vyos`
-  - When promted, `reboot`
+  - When prompted, `reboot`
   - After the reboot starts, eject the VyOS iso
 - Log back in (`vyos`/`vyos`)
 - Add user `ansible` for management
@@ -77,11 +77,11 @@ sudo apt update && sudo apt install -y terraform
   - `set system login user ansible authentication plaintext-password examplepassword`
     - The old permissions system has been removed
       - Gone: `set system login user ansible level admin`
-      - All accounts now have sudo permisions
+      - All accounts now have sudo permissions
   - `commit`
   - `save`
   - `exit`
-- Enable guest utilties
+- Enable guest utilities
   - `sudo systemctl start xe-guest-utilities`
   - `sudo systemctl enable xe-guest-utilties`
   - `poweroff`
@@ -100,7 +100,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
-    - SMS reqires more; we will increase this later
+    - SMS requires more; we will increase this later
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - Interfaces:
@@ -249,7 +249,7 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
   - **Start** > **Settings** > **System** > **Remote Desktop**
   - Slide to enable and Confirm
 - Optional
-  - increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+  - increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
   - clean up the taskbar, desktop, etc. to meet your preferences
   - set the correct timezone
 - Change the hostname to **win10-template**
@@ -316,7 +316,7 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Optionally, set the correct timezone
 - Change the hostname to server2022-template
   - From administrative powershell: `Rename-Computer -NewName server2022-template`
@@ -405,7 +405,7 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
 - `terraform init`
 - `terraform plan`
 - `terraform apply -auto-approve`
-- Log in to XO and confirm the new neworks are created
+- Log in to XO and confirm the new networks are created
 - Destroy and re-create
   - `terraform destroy`
   - `terraform apply -auto-approve`
