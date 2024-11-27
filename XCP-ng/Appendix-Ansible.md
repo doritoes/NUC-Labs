@@ -545,62 +545,72 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
   - Set up Domain Controller for IDC
-    - Log in to DC-1
-    - Disable the Windows Firewall on DC-1
+    - Log in to `dc-1`
+    - Disable the Windows Firewall on `dc-1`
       - In extensive testing, the Windows Firewall on a domain controller prevents the IDC from connecting
       - The reliable way to get IDC to connect (especially in this Lab environment) is to disable the firewall on the domain controller
         - Open an administrative powershell prompt
         - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
-        - Re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
-    - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
-      - `powershell -ExecutionPolicy bypass idc-user.ps1`
+        - How to re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
+    - Create a domain account with permissions needed for the identity collector
+      - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
+        - `powershell -ExecutionPolicy bypass idc-user.ps1`
   - Install Check Point Identity Collector for Windows
-    - Log in to IDC-1 as `AD\Juliette.LaRocco2`
     - How to Download / Obtain the Identity Collector
+      - From the SMS
+        - First, find the file on the SMS (also on the gateways; even the R82 Gaia build has the R81 IDC client right now)
+          - Log in to `sms to the expert prompt (e.g., log in as `ansible`)
+          - `find / -name \*msi`
+          - Note a couple of Identity Collector msi files (Windows installation pacakges); the file name varies between R18 and R80
+          - Example: `/var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi`
+          - Go back to `manager` WSL shell
+          - Copy the client file: (modify the path the actual path you found)
+            - `scp ansible@192.168.41.20:/var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi .`
+          - On `manager` use the file explorer to open the Linux > Ubuntu-22.04 > home > ansible path
+          - Copy the installation package file (e.g. R81 file name is CPIdentityCollector.msi) to your desktop or another convenient location
+          - Next open a connection to \\10.0.1.11
+          - Athenticated as `AD\juliette.larocco`
+          - Change to the IT folder
+          - Paste the file here so it can be accessed from other systems
       - Official source
-        - You <ins>really</ins> want the latest version R82. You can use names as wells as IPs.
+        - You <ins>really</ins> want the latest version R82. You can use names as well as IP addresses when you configure it.
         - https://support.checkpoint.com/results/sk/sk134312
         - https://support.checkpoint.com/results/download/74206
         - NOTE: Login required; "Missing software subscription to download this file."
           - Not sure if a support contract is required, or if setting up up a proper eval license will take care of this
-      - From a gateway or from the SMS (this is the R81 client, even if you load an R82 SMS or gateway)
-        - Try this link: https://192.168.101.1/_IA_IDC/download_CPIdentityCollector.msi
-          - In lab testing this link was 404 until we had a working policy, then it worked
-        - Also look for the file on the SMS and gateways
-          - e.g., /var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi
-          - IMPORTANT this is different from the R82 client from sk134312
       - From SmartConsole
         - Try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
         - This link was a broken link in my testing, but might work eventually
-    - Install the Identity Collector
-    - Allow Identity Collector in the Windows Firewall on IDC-1
+    - Log in to `idc-1` as `AD\Juliette.LaRocco2`
+    - Copy the installation package to `idc-1   and install the Identity Collector
+    - Allow Identity Collector in the Windows Firewall on `idc-1`
       - Click **Start** > type **Windows Defender Firewall**
       - Click **Allow an app or feature through Windows Defender Firewall**
       - Click **Change settings** and then click **Allow another app**
       - Browse to `C:\Program Files (x86)\CheckPoint\Identity Collector\cpidc.exe`
       - Click **Add**
-      - Repeat for `cpidcgui.exe`  🌱 (maybe `CFGScript.exe` ?)
+      - Repeat for `cpidcgui.exe`
       - Note the apps should be allowed for the Domain profile (checked)
       - Click **OK**
     - Configure Identity Collector
-      - Back on `IDC-1`, launch the Identity Collecter app
-      - Ribbon menu > Domains
+      - Back on `IDC-1`, launch the Identity Collecter app (it requires Administrative permissions to run)
+      - Ribbon menu > **Domains**
         - Click icon for New domain
           - Name: **xcpng.lab**
           - Username: **adquery**
           - Password: **YourStrongPassword123!**
           - This is an account with log reader permissions on DC-1
           - Click **OK**
-        - Edit the new domain xcpng.lab, and click Test
-          - Credentials test
-            - IP address: **10.0.1.10** (also **DC-1** if you have IDC R82)
-            - Click **Test**
-            - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
-            - Fix: Disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
-            - Install [Wireshark ](https://www.wireshark.org/download.html)
-              - Re-test and the credential test will pass
-            - Seriously, lab testing encountered a number of issues with IDC working
-              - Continue with the lab. <ins>It will start working eventually.</ins> Here's what I tried without success.
+        - Credentials test
+          - Edit the new domain xcpng.lab
+          - IP address: **10.0.1.10** (also **DC-1** if you have IDC R82)
+          - Click **Test**
+          - Failure message: Unable to connect; please check connectivity with server and server firewall configuration
+          - Fix: We did the following: disable the Windows Firewall on the domain controller and allow the IDC apps in IDC-1 windows defender firewall
+          - Install [Wireshark ](https://www.wireshark.org/download.html) on `dc-1` (default settings)
+            - Re-test and the credential test <ins>will pass</isn>
+          - Seriously, lab testing encountered a number of issues with IDC working
+              - Continue with the lab. <ins>It will start working eventually.</ins> Here's what I tried without success:
                 - Tried rebooting IDC-1 and DC-1 without success
                 - Tried logging in as adquery from branch1-1
                 - Tried removing the domain and re-adding the domain
