@@ -1220,7 +1220,7 @@ Steps:
 - Testing
   - Log in as Other user > juliette.larocco
   - Confirm Internet browsing is working
-    - Note no https inspection (as see by inspecting the https site certificate details)
+    - Note no https inspection (as seen by inspecting the https site certificate details)
   - Try connecting to the file server at `\\file-1`
   - Review logs in SmartConsole
     - Note that the Internet web traffic goes out the branch2 ISP connection
@@ -1517,7 +1517,7 @@ Steps:
       - Password: the password you set
 - Testing
   - Log in as Other user > juliette.larocco
-    - Try connecting to the file server at \\file-1
+    - Try connecting to the file server at `\\file-1`
     - Confirm Internet browsing is working
       - Confirm Internet filters are working
       - Confirm https inspection is working (certificate being used)
@@ -1525,8 +1525,8 @@ Steps:
     - Review logs
 
 ## Finish IDC-1 setup for Branch3
-- Log in to `idc-1` and run **Identity Collector**
-- If not done already, Trust **firewall3**
+- Log in to `idc-1` and open **Identity Collector**
+- If not done already, trust **firewall3**
   - Edit gateway `firewall3` and click **Test**
   - Click **Trust**
   - Click **OK**
@@ -1540,15 +1540,16 @@ Steps:
   - User: juliette.larocco2
 - Test access
   - Test that access to ipgiraffe.com works for `AD\juliette.larocco'
-  - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2')
+  - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2') from a computer at Branch 1
 
 # Demonstration
-Note that the VPN does not allow traffic between Branch 2 and Branch 3
+NOTE that the VPN does not allow traffic between Branch 2 and Branch 3
 - Edit VPN community **Branch_Community**
 - Click VPN routing
 - Note the setting **To center only**
 - Change to **To center and other satellites through center** to you want to enable communication between the remote branches (publish and install both policies)
 
+Access Demonstration:
 - branch1-1
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
@@ -1589,16 +1590,18 @@ Note that the VPN does not allow traffic between Branch 2 and Branch 3
   - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
   - https://ipgiraffe.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch3-1 even though user Lab shouldn't work
-- 🌱 Set Edge home page to http://home
+
+Optional example how to set Edge browser home page to http://home
+  - Log in to `dc-1` as `AD\juliette.larocco2`
   - `New-GPO -Name "Home Page Edge" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Install the administrative template
     - https://learn.microsoft.com/en-us/deployedge/configure-microsoft-edge#1-download-and-install-the-microsoft-edge-administrative-template
       - https://www.microsoft.com/en-us/edge/business/download?form=MA13FJ
       - Under Windows 64-bit click **Download Windows 64-bit Policy**
       - Extract and "install" (place the files you extracted) to your Downloads folder
-      - Navigate **MicrosoftEdgePolicyTemplates** > windows > admx
+      - Navigate **MicrosoftEdgePolicyTemplates** > **windows** > **admx**
       - Copy the file `msedge.admx` to `%systemroot%\PolicyDefinitions\`
-      - Now navigate **MicrosoftEdgePolicyTemplates** > windows > admx > en-US
+      - Now navigate **MicrosoftEdgePolicyTemplates** > **windows** > **admx** > **en-US**
       - Copy the file `msedge.adml` to `%systemroot%\PolicyDefinitions\en-US`
   - Open Group Policy Management Console (GPMC)
     - Click Start, search for Group Policy Management and click on it
@@ -1617,4 +1620,4 @@ Note that the VPN does not allow traffic between Branch 2 and Branch 3
       - Click **Apply** then click **OK**
   - Log in to `branch1-1` and open Microsoft Edge
     - Run `gpupdate /force` if desired to get the new policy immediately
-    - Try logging in as `AD\Don.Schafer` to confirm
+    - Try logging in as `AD\Don.Schafer` to confirm the home page comes up automatically in the browser
