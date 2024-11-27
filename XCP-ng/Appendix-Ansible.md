@@ -618,29 +618,29 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
                 - Tried restarting service `Check Point Identity Collector`
                 - Tried uninstalling the R81 version and installing the R82 version without success
                 - Tried building another IDC-2 with R82 client
-              - What has consistently worked is installing Wireshark (!)
+              - What has consistently worked is installing Wireshark (!); it could be the installation of Npcap
             - NOTE You can't log in to DC-1 as adquery, but you can log in to branch1-1 as adquery to confirm the account works
-      - Left menu > Identity Sources
-        - Right-click in the emmpty space then click **New** > **Active Directory** > **Add MDC-1anually**
-          - Name: DC-1
-          - Domain: xcpng.lab
+      - Left menu > **Identity Sources**
+        - Right-click in the emmpty space then click **New** > **Active Directory** > **Add Manually**
+          - Name: **DC-1**
+          - Domain: **xcpng.lab**
           - Host name / IP address: **10.0.1.10** (if you have the R82 client you can also use name **DC-1**)
           - Site: **Corp**
           - Click **Test**
           - Click **OK**
-      - Ribbon menu > Query Pools
+      - Ribbon menu > **Query Pools**
         - Click the **New** icon
           - Name: **Corp AD**
           - Select all Identity Sources (check **DC-1**)
           - Click **OK** and then click **OK**
-      - Ribbon menu > Filters
+      - Ribbon menu > **Filters**
         - Click the **New** icon
-          - Name: Prod
+          - Name: **Prod**
           - add list of subnets the clients are on
-            - Enter Network 10.0.1.0/24 and comment Branch 1 LAN
+            - Enter Network **10.0.1.0/24** and comment **Branch 1 LAN**
             - Click "**+**" to add it
             - Click **OK** then click **OK**
-      - Left menu > Gateways
+      - Left menu > **Gateways*
         - Right click in the open spec and then click **Add**
           - Name: **firewall1**
           - IP Address: **10.0.1.1**
@@ -654,7 +654,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 
 ## Update management workstation to join the domain
 - Log in to `manager`
-- Edit IP settings in Ethernet 3 to set DNS
+- Edit IP settings in Ethernet 3 and set DNS to
   - Preferred DNS: **10.0.1.10**
   - Alternate DNS: *blank*
 - Join to domain
@@ -662,7 +662,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
-- Generally, you will still use the local account
+- Generally, you will still use the local account on `manager`
   - this gives easy access to the files and configuration you have already built
 
 ## Configure DMZ Servers
