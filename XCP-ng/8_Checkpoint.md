@@ -474,7 +474,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
   - Configure Cluster Topology
     - 192.168.104.0/255.255.255.0 = Cluster Synchronization Primary
     - 192.168.103.0/255.255.255.0 = Representing a cluster interface **192.168.103.1** **255.255.255.0**
-      - management interfaces can be a cluster or non-monitored private interfaces; for this Lab setup a clustered interace is used
+      - management interfaces can be a cluster or non-monitored private interfaces; for this Lab setup a clustered interface is used
     - 192.168.102.0/255.255.255.0 = Representing a cluster interface **192.168.102.1** **255.255.255.0**
     - 10.1.1.0/255.255.255.0 = Representing a cluster interface **10.1.1.1** **255.255.255.0**
     - Your Lab network = Representing a cluster interface withe cluster IP address you selected and your Lab's subnet mask
