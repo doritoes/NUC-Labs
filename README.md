@@ -8,3 +8,4 @@ This repository is for building and managing a NUC lab using Ansible.
 3. [UncleNUC's Lab: Kubernetes App Lab](https://www.unclenuc.com/lab:kubernetes_app:start) ▶️ [Get Started!](Kubernetes_App_Lab/README.md)
 4. UncleNUC's Lab: FAH Folding on Ubuntu Server ▶️ [Get Started!](folding/README.md)
 5. UncleNUC's Lab: XCP-ng Lab ▶️ [Get Started!](XCP-ng/README.md)
+6. UncleNUC's Lab: Nautobot ▶️ [Get Started!](nautobot/README.md)
