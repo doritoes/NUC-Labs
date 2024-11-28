@@ -1634,5 +1634,18 @@ Optional example how to set Edge browser home page to http://home
   - Enable blade on the cluster objects
   - Edit the **Internet Control** layer and enable **Content Awareness**
   - Add a rule blocking all DCHP ranges from downloading executable files, then add rule above allowing **support** to download executable files
-    - Try downloading the Chrome installer from https://chrome.com, then note the user experience -- a zero byte file is downloaded
+    - Try downloading the Chrome installer from https://chrome.com, then note the user experience: a zero byte file is downloaded
     - Search the logs for: `blade:"Content Awareness"`
+  - Note other content that can be detected, from such as "PCI - Credit Card Numbers - 20 or more"
+- Edit the **Lab_Policy** and enable the policy type **Threat Prevention**
+  - Add a new Custom Threat Prevention layer
+    - Name: **TP Policy**
+    - Sharing: <ins>Check</ins> Multiple policies and rules can use this layer
+  - Now the new policy **TP Policy** appears as a Custom Policy under **Threat Prevention**
+  - Publish and install **Lab_Policy** - be sure to check and push the Threat Prevention policy
+  - Test various eicar test files at https://www.eicar.org/download-anti-malware-testfile/
+    - Most are blocked as high-risk by Check Point or even by Chrome. The file never gets to be downloaded.
+    - https://rexswain.com/eicar.html allows you do download the test files, but here they got blocked by Microsoft Defender
+    - In the lab you might try samples listed at https://github.com/Virus-Samples/Malware-Sample-Sources
+      - In most cases these are in a password-protected ZIP file and can't be detected by Check Point; they are almost always caught by Windows Defender when you try to extract from the ZIP files
+- Next look at the Autonomous Policy and it's settings
