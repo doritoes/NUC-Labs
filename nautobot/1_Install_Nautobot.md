@@ -1,5 +1,5 @@
 # Install Nautobot
-This corresponds to chapter 3 in the book.
+This corresponds to chapter 3 in the book. The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production.
 
 ## Network Architecture
 For this Lab you can install in your home lab network.
@@ -75,17 +75,60 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 These steps are performed while logged in to `nautobot`
 
 ### Update Packages
+Update the system packages
 - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
 
 ### System Dependencies
-- `sudo apt install -y python3 python3-pip python3-venv python3-dev`
+Nautobot is a django application (runs on Python).
+- `sudo apt install -y git python3 python3-pip python3-venv python3-dev`
 
 ### Redis setup
+Redis is used to support the task queue. It is also used for cacheing.
 
-### Database (PostgeSQL) setup
+Install:
+- `sudo apt install -y redis-server
+Test: (using default localhost and tcp/6379)
+- `redis-cli ping`
+- successful test returns `PONG`
+
+### Database (PostgreSQL) setup
+PostgreSQL and MySQL are supported. PostgreSQL is used in this Lab. Yes, PostgreSQL uses a lot of back-slashes ("\").
+
+Install:
+- `sudo apt install -y postgresql`
+
+Test:
+- `sudo -iu postgres psql`
+- To exit: `\q`
+
+Set up the Nautobot database:
+- `sudo -iu postgres psql`
+- `CREATE DATABASE nautobot;`
+- `CREATE USER nautobot WITH PASSWORD 'nautobot123';`
+- `\connect nautobot`
+- `GRANT CREATE ON SCHEMA public TO nautobot;`
+- `\q`
+
+Test the user:
+- `psql --username nautobot --password --host localhost nautobot`
+- `\q`
 
 ### Install Nautobot
+#### Create nautobot system user
+It is best practice to run nautobot as a user other than root. This user, `nautobot`, will own files and permissions and services will be configured to run under this account.
+
+Create user:
+- `sudo useradd --system --shell /bin/bash --create-home --home-dir /opt/nautobot nautobot`
+- 🌱 need to set the password? or no?
+
+Test:
+- `eval echo ~nautobot`
+- `ls -l /opt/ | grep nautobot`
+  - Should be `drwxr-x---` and `nautobot nautobot`
+
+#### Set up Python virtual environment
 
 ### Configure Nautobot
+### Installing Nautobot
 
 ## Launch Nautobot
