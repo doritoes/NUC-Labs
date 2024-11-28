@@ -1,0 +1,74 @@
+---
+- name: Create cluster branch 3
+  hosts: check_point
+  connection: httpapi
+  # include_vars: vars.yml # introduced in Ansible 2.11
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: create cluster firewall3
+      check_point.mgmt.cp_mgmt_simple_cluster:
+        ignore_warnings: true
+        cluster_mode: cluster-xl-ha
+        color: firebrick
+        firewall: true
+        vpn: true
+        name: firewall3
+        interfaces:
+        - anti_spoofing: true
+          interface_type: cluster
+          ip_address: 192.168.103.1
+          name: eth0
+          network_mask: 255.255.255.0
+          topology: external
+        - anti_spoofing: true
+          interface_type: cluster
+          ip_address: 10.0.3.1
+          name: eth1
+          network_mask: 255.255.255.0
+          topology: internal
+          topology_settings:
+            interface_leads_to_dmz: false
+            ip_address_behind_this_interface: network defined by the interface ip and net mask
+        - anti_spoofing: true
+          interface_type: sync
+          name: eth2
+          network_mask: 255.255.255.0
+          topology: internal
+          topology_settings:
+            interface_leads_to_dmz: false
+            ip_address_behind_this_interface: network defined by the interface ip and net mask
+        ip_address: 192.168.103.1
+        members:
+        - interfaces:
+          - ip_address: 192.168.103.2
+            name: eth0
+            network_mask: 255.255.255.0
+          - ip_address: 10.0.3.2
+            name: eth1
+            network_mask: 255.255.255.0
+          - ip_address: 192.168.53.2
+            name: eth2
+            network_mask: 255.255.255.0
+          name: firewall3a
+          ip_address: 192.168.103.2
+          one_time_password: "{{ sic_pw }}"
+        - interfaces:
+          - ip_address: 192.168.103.3
+            name: eth0
+            network_mask: 255.255.255.0
+          - ip_address: 10.0.3.3
+            name: eth1
+            network_mask: 255.255.255.0
+          - ip_address: 192.168.53.3
+            name: eth2
+            network_mask: 255.255.255.0
+          name: firewall3b
+          ip_address: 192.168.103.3
+          one_time_password: "{{ sic_pw }}"
+        os_name: Gaia
+        state: present
+        cluster_version: R81.20
+        comments: firewall3 cluster for Branch 3
+    - name: publish changes
+      cp_mgmt_publish:

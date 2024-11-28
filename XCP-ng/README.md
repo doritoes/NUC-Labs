@@ -101,7 +101,7 @@ With Windows, install the tools from https://www.xenserver.com/downloads
 
 If your distribution of Linux is not recognized by the install script
 - Download the tools for Linux from https://www.xenserver.com/downloads
-- Install while specifying the distribution and major release whem installing. Here is an example for Check Point Gaia OS, based on RHEL EL7.
+- Install while specifying the distribution and major release when installing. Here is an example for Check Point Gaia OS, based on RHEL EL7.
 - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
 - `cd LinuxGuestTools-8.4.0-1`
 - `./install -d rhel -m el7`

@@ -208,10 +208,10 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Re-create the VM from the template
   - New > VM
   - Template: win10-lan
-  - Name: Rename from the VM from win10-lan to win10-lan-ready
-  - Description: leave the same
+  - Name: Rename from the VM from **win10-lan** to **win10-lan-ready**
+  - Description: *leave the same*
   - Click **Create**
-- Log in complete the setup wizard
+- Complete the setup wizard
   - Set region and keyboard layout, skip second keyboard layout
   - Select **Set up for personal use** (feel free to experiment)
   - Click **Offline account** then click **Limited experience**
@@ -220,7 +220,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Create security questions for this account: be creative
   - Click **Not now**
   - Privacy: *disable all the settings* and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept* (I chose Business)
+  - Experience: be creative and pick one, then click **Accept** (I chose Business)
   - Cortana: Click **Not now**
   - At the screen "Browse the web with the best performing browser on Windows"
     - Click **Continue**
@@ -234,6 +234,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Download from https://www.xenserver.com/downloads
     - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
+      - Installation requires a reboot
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
       - This requires a reboot
@@ -244,11 +245,11 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
-- Convert win10-lan-ready to a template
+- Convert win10-lan-ready to a template (advanced tab)
 - Questions to ponder:
   - What are the differences between the two templates?
   - Does this affect the Activation required timers?
@@ -323,7 +324,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
@@ -391,7 +392,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
-- Optionally, increase the diplay resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM

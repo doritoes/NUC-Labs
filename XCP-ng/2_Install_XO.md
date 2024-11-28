@@ -107,7 +107,7 @@ Steps:
   - `sudo apt update && sudo apt upgrade -y`
     - if you are prompted about updating a configuration file, select Y (update to the maintainer's version)
 - Remove vm-tools
-  - `sudo apt remove -y open-vm-tools
+  - `sudo apt remove -y open-vm-tools`
   - `sudo rm -r /etc/vmware-tools`
   - `sudo rm /etc/systemd/system/open-vm-tools.service`
   - `sudo rm /etc/systemd/system/vmtoolsd.service`

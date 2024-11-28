@@ -1,0 +1,437 @@
+---
+- name: Create branch1 objects
+  hosts: check_point
+  connection: httpapi
+  # include_vars: vars.yml # introduced in Ansible 2.11
+  tasks:
+    - name: ISP router
+      check_point.mgmt.cp_mgmt_host:
+        name: isp_router
+        ipv4_address: 192.168.99.201
+        color: dark blue
+        comments: Lab ISP router
+        state: present
+    - name: management network NAT
+      check_point.mgmt.cp_mgmt_network:
+        name: management_192.168.41.0/24
+        subnet: 192.168.41.0
+        mask_length: 24
+        color: crete blue
+        comments: management network
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.101.4
+          method: hide
+          install_on: firewall1
+        state: present
+    - name: branch 1 mgmt broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_192.168.41.255
+        ipv4_address: 192.168.41.255
+        color: dark blue
+        comments: branch1 mgmt broadcast address
+        state: present
+    - name: branch 1 outbound NAT
+      check_point.mgmt.cp_mgmt_host:
+        name: branch1_outbound_nat
+        ipv4_address: 192.168.101.4
+        color: dark blue
+        comments: branch1 outbound NAT
+        state: present
+    - name: branch 1 inbound NAT IIS
+      check_point.mgmt.cp_mgmt_host:
+        name: branch1_iis_inbound_nat
+        ipv4_address: 192.168.101.5
+        color: dark blue
+        comments: branch1 inbound NAT to IIS server in DMZ
+        state: present
+    - name: branch 1 inbound NAT Apache
+      check_point.mgmt.cp_mgmt_host:
+        name: branch1_apache_inbound_nat
+        ipv4_address: 192.168.101.6
+        color: dark blue
+        comments: branch1 inbound NAT to Apache web server in DMZ
+        state: present
+    - name: branch 1 broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_10.0.1.255
+        ipv4_address: 10.0.1.255
+        color: dark blue
+        comments: branch1 broadcast address
+        state: present
+    - name: global broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_255.255.255.255
+        ipv4_address: 255.255.255.255
+        color: dark blue
+        comments: global broadcast address
+        state: present
+    - name: multicast 224.0.0.22
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_224.0.0.22
+        ipv4_address: 224.0.0.22
+        color: dark blue
+        comments: IGMP
+        state: present
+    - name: multicast 224.0.0.251
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_224.0.0.251
+        ipv4_address: 224.0.0.251
+        color: dark blue
+        comments: mDNS
+        state: present
+    - name: multicast 224.0.0.252
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_224.0.0.252
+        ipv4_address: 224.0.0.252
+        color: dark blue
+        comments: LLMNR and SSDP
+        state: present
+    - name: multicast 239.255.255.250
+      check_point.mgmt.cp_mgmt_host:
+        name: multicast_239.255.255.250
+        ipv4_address: 239.255.255.250
+        color: dark blue
+        comments: LLMNR and SSDP
+        state: present
+    - name: Branch 1 LAN network
+      check_point.mgmt.cp_mgmt_network:
+        name: branch1_lan
+        subnet: 10.0.1.0
+        mask_length: 24
+        color: crete blue
+        comments: Branch 1 LAN network
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.101.4
+          method: hide
+          install_on: firewall1
+        state: present
+    - name: Branch 1 DMZ network
+      check_point.mgmt.cp_mgmt_network:
+        name: branch1_dmz
+        subnet: 192.168.31.0
+        mask_length: 24
+        color: crete blue
+        comments: Branch 1 DMZ network
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.101.4
+          method: hide
+          install_on: firewall1
+        state: present
+    - name: branch 1 DMZ broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_192.168.31.255
+        ipv4_address: 192.168.31.255
+        color: dark blue
+        comments: branch1 DMZ broadcast address
+        state: present
+    - name: domain controller
+      check_point.mgmt.cp_mgmt_host:
+        name: dc-1
+        ipv4_address: 10.0.1.10
+        color: dark blue
+        comments: Domain controller
+        state: present
+    - name: file server
+      check_point.mgmt.cp_mgmt_host:
+        name: file-1
+        ipv4_address: 10.0.1.11
+        color: dark blue
+        comments: File server
+        state: present
+    - name: SQL server
+      check_point.mgmt.cp_mgmt_host:
+        name: sql-1
+        ipv4_address: 10.0.1.12
+        color: dark blue
+        comments: SQL server
+        state: present
+    - name: IDC server
+      check_point.mgmt.cp_mgmt_host:
+        name: idc-1
+        ipv4_address: 10.0.1.14
+        color: dark blue
+        comments: Identity Collector server
+        state: present
+    - name: dummy fw2a
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2a
+        ipv4_address: 192.168.102.2
+        color: red
+        comments: dummy fw2a for initial access
+        state: present
+    - name: dummy fw2b
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2b
+        ipv4_address: 192.168.102.3
+        color: red
+        comments: dummy fw2b for initial access
+        state: present
+    - name: dummy fw2-internal
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw2-internal
+        ipv4_address: 10.0.2.1
+        color: red
+        comments: dummy fw2 for IDC
+        state: present
+    - name: dummy fw3a
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw3a
+        ipv4_address: 192.168.103.2
+        color: red
+        comments: dummy fw3a for initial access
+        state: present
+    - name: dummy fw3b
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw3b
+        ipv4_address: 192.168.103.3
+        color: red
+        comments: dummy fw3b for initial access
+        state: present
+    - name: dummy fw3-internal
+      check_point.mgmt.cp_mgmt_host:
+        name: dummy_fw3-internal
+        ipv4_address: 10.0.3.1
+        color: red
+        comments: dummy fw3 for IDC
+        state: present
+    - name: DMZ IIS server
+      check_point.mgmt.cp_mgmt_host:
+        name: dmz-iis
+        ipv4_address: 192.168.31.10
+        color: dark blue
+        comments: DMZ IIS web server
+        nat_settings:
+          auto_rule: true
+          ip_address: 192.168.101.5
+          method: static
+          install_on: firewall1
+        state: present
+    - name: DMZ Apache server
+      check_point.mgmt.cp_mgmt_host:
+        name: dmz-apache
+        ipv4_address: 192.168.31.11
+        color: dark blue
+        comments: DMZ Apache web server
+        nat_settings:
+          auto_rule: true
+          ip_address: 192.168.101.6
+          method: static
+          install_on: firewall1
+        state: present        
+    - name: Branch 1 LAN DHCP workstations
+      check_point.mgmt.cp_mgmt_address_range:
+        name: Branch 1 LAN Workstation DHCP scope
+        ip_address_first: 10.0.1.20
+        ip_address_last: 10.0.1.250
+        color: dark blue
+        comments: Branch 1 LAN Workstation DHCP scope
+        state: present
+    - name: LAN networks group No NAT
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - branch1_lan
+        name: LAN_Networks_NO_NAT
+        state: present
+    - name: Internal networks group No NAT
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - LAN_Networks_NO_NAT
+        - branch1_dmz
+        name: Internal_Networks_NO_NAT
+        state: present
+    - name: branch1 topology
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - branch1_lan
+        - branch1_dmz
+        - management_192.168.41.0/24
+        name: branch1_topology
+        state: present
+    - name: remote branch firewall group
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - dummy_fw2a
+        - dummy_fw2b
+        - dummy_fw3a
+        - dummy_fw3b
+        name: remote_branch_firewalls
+        state: present
+    - name: TCP 135
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_135
+        port: 135
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 464
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_464
+        port: 464
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 3268
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_3268
+        port: 3268
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 3269
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_3269
+        port: 3269
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 9389
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: tcp_9389
+        port: 9389
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: TCP 49152 to 65535
+      check_point.mgmt.cp_mgmt_service_tcp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: false
+        name: tcp_49152-65535
+        port: 49152-65535
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: AD service group
+      check_point.mgmt.cp_mgmt_service_group:
+        members:
+        - dns
+        - echo-request
+        - ntp
+        - ldap
+        - ldap_udp
+        - ldap-ssl
+        - microsoft-ds
+        - microsoft-ds-udp
+        - kerberos
+        - Kerberos_v5_TCP
+        - Kerberos_v5_UDP
+        - tcp_135
+        - tcp_464
+        - tcp_3268
+        - tcp_3269
+        - tcp_49152-65535
+        name: active_directory_ports
+        state: present
+    - name: UDP 1900
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_1900
+        port: 1900
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: UDP 3702
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_3702
+        port: 3702
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: UDP 5353
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_5353
+        port: 5353
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: UDP 5355
+      check_point.mgmt.cp_mgmt_service_udp:
+        aggressive_aging:
+          enable: true
+          timeout: 360
+          use_default_timeout: false
+        keep_connections_open_after_policy_installation: false
+        match_for_any: true
+        name: udp_5355
+        port: 5355
+        session_timeout: 0
+        state: present
+        sync_connections_on_cluster: true
+    - name: add ntp domain time.windows.com
+      check_point.mgmt.cp_mgmt_dns_domain:
+        is_sub_domain: false
+        name: .time.windows.com
+        state: present
+    - name: add ntp domain ntp.checkpoint.com
+      check_point.mgmt.cp_mgmt_dns_domain:
+        is_sub_domain: false
+        name: .ntp.checkpoint.com
+        state: present
+    - name: add ntp domain ntp2.checkpoint.com
+      check_point.mgmt.cp_mgmt_dns_domain:
+        is_sub_domain: false
+        name: .ntp2.checkpoint.com
+        state: present
+    - name: add ntp domain ntp.ubuntu.com
+      check_point.mgmt.cp_mgmt_dns_domain:
+        is_sub_domain: false
+        name: .ntp.ubuntu.com
+        state: present
+    - name: publish changes
+      check_point.mgmt.cp_mgmt_publish:
