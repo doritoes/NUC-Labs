@@ -35,7 +35,7 @@
         state: present
     - name: Branch 3 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
-        name: Branch 2 LAN Workstation DHCP scope
+        name: Branch 3 LAN Workstation DHCP scope
         ip_address_first: 10.0.3.20
         ip_address_last: 10.0.3.250
         color: dark blue
