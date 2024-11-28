@@ -1622,3 +1622,17 @@ Optional example how to set Edge browser home page to http://home
   - Log in to `branch1-1` and open Microsoft Edge
     - Run `gpupdate /force` if desired to get the new policy immediately
     - Try logging in as `AD\Don.Schafer` to confirm the home page comes up automatically in the browser
+
+# Things to Try
+- Allow `dc-1` to connect directly to DNS Root Servers (https://www.iana.org/domains/root/servers)
+- Find rules in the policy that are unused, and remove them
+- Remove unused dummy objects, and test if the firewall objects match for the internal LAN IP addresses
+- Remove the icmp-requests service from the Internet access and deploy a new rule in core services
+- Spin up a test app on `dmz-iis` that utilizes `sql-1`
+- Test Quic (udp/443) inspection on R82 (see https://community.checkpoint.com/t5/Management/Is-Quic-UDP-443-supported-for-HTTPS-inspection/m-p/223154#M39532
+- Experiment with the Content Awareness blade
+  - Enable blade on the cluster objects
+  - Edit the **Internet Control** layer and enable **Content Awareness**
+  - Add a rule blocking all DCHP ranges from downloading executable files, then add rule above allowing **support** to download executable files
+    - Try downloading the Chrome installer from https://chrome.com, then note the user experience -- a zero byte file is downloaded
+    - Search the logs for: `blade:"Content Awareness"`
