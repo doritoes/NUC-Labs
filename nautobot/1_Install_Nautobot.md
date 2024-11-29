@@ -198,15 +198,25 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Test run a development instance
   - `nautobot-server runserver 0.0.0.0:8080 --insecure`
   - Point web broswer to the IP address of VM using port 8080
-    - Ex. http://192.168.99.17
+    - Ex. http://192.168.99.17:8080
     - Log in as `admin`/`nautobot123`
+    - Press control-C at the terminal to stop it
 - Nautobot worker
   - picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. Uses Python Celery, a distributed task queue framework.
   - ssh to the server as `nautobot` and open another terminal
   - `nautobot-server celery worker`
+  - Press control-C to stop it
 - Nautobot web service
   - Django applications run WSGI aplications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
   - In this test will will not use advanced features such as using a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
   - Download [uwsgi.ini](uwsgi.ini) and copy to a new file `$NAUTOBOT_ROOT/uwsgi.ini`
-
+  - Start it
+    - `/opt/nautobot/bin/nautobot-server start --ini /opt/nautobot/uwsgi.ini`
+  - Test
+    - Point web browser to the IP address of the VM using port 8001
+      - Ex. http://192.168.99.17:8001
+    - Log in as `admin`/`nautobot123`
+  - Press control-C to stop it
+- Configure Nautobot as Linux services
+  - 🌱 continue here
 ## First-Time Configuration
