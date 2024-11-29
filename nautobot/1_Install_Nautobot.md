@@ -1,5 +1,7 @@
 # Install Nautobot
-This corresponds to chapter 3 in the book. The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
+This corresponds to chapter 3 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
+
+The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
 
 ## Network Architecture
 For this Lab you can install in your home lab network.
@@ -162,9 +164,49 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Test
   - `cat /opt/nautobot/nautobot_config.py`
 - Customize `nautobot_config.py`
+  - `vi $NAUTOBOT_ROOT/nautobot_config.py`
+  - Required Settings
+    - Uncomment (remote the leading" "#") the following parts
+      - ALLOWED_HOSTS
+      - CACHES
+      - CONTENT_TYPE_CACHE_TIMEOUT
+      - ? not CELERY_BEAT_HEARTBEAT_FILE
+      - CERLERY_BROKER_URL
+      - ? not CELERY_BROKER_USE_SSL
+      - DATABASES
 - Set environment variables
+  - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
+  - Test
+    - `source ~/.bashrc`
+    - `env | grep NAUTOBOT`
 - Database Migrations
-- Creat a Nautobot superuser
-- Collec Nautobot static files
+  - `nautobot-server migrate`
+    - ⏲️ This will take a while
+    - NOTE This is not just for the initial setup; every time a new release is deployed, a new migrate is needed to update the database  data models
+- Create a Nautobot superuser to log in to the Nautobot application
+  - `nautobot-server createsuperuser`
+    - Username: **admin**
+    - Email address: *be creative*
+    - Password: **nautobot123**
+- Collect Nautobot static files (collect data not covered by the `migrate` command)
+  - `nautobot-server collectstatic`
 - Nautobot Check
+  - Validate the configuration and check for common problems
+  - `nautobot-server check`
+- Test run a development instance
+  - `nautobot-server runserver 0.0.0.0:8080 --insecure`
+  - Point web broswer to the IP address of VM using port 8080
+    - Ex. http://192.168.99.17
+    - Log in as `admin`/`nautobot123`
+- Nautobot worker
+  - picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. Uses Python Celery, a distributed task queue framework.
+  - ssh to the server as `nautobot` and open another terminal
+  - `nautobot-server celery worker`
+- Nautobot web service
+  - Django applications run WSGI aplications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
+  - In this test will will not use advanced features such as using a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
+  - Download [uwsgi.ini](uwsgi.ini) and copy to a new file `$NAUTOBOT_ROOT/uwsgi.ini`
+
 ## First-Time Configuration
