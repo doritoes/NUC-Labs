@@ -1,5 +1,5 @@
 # Install Nautobot
-This corresponds to chapter 3 in the book. The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production.
+This corresponds to chapter 3 in the book. The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
 
 ## Network Architecture
 For this Lab you can install in your home lab network.
@@ -127,8 +127,44 @@ Test:
   - Should be `drwxr-x---` and `nautobot nautobot`
 
 #### Set up Python virtual environment
+A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivuldua procjects, preventing any interference with system packages or other projects.
+
+- Create venv
+  - `sudo -u nautobot python3 -m venv /opt/nautobot`
+- Configure the `$NAUTOBOT_ROOT` environment variable in the user `.bashrc` file
+  - `echo "export NAUTOBOOT_ROOT=/opt/nautobot" | sudo tee -a ~nautobot/.bashrc`
+- Test
+  - `sudo -ui nautobot`
+  - `echo $NAUTOBOT_ROOT`
+  - `exit`
+
+### Installing Nautobot
+🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> instal as `root`!
+- Log in as user `nautobot`
+  - Option 1: set the password for the user: `sudo passwd nautobot` and set it to `nautobot123`
+  - Option 2: switch to the user: `sudo -ui nautobot`
+- Install `wheel` so Python will use wheel packages when they are available
+  - `pip3 install --upgrade pip wheel`
+- Install Nautobot
+  - `pip3 install nautobot`
+    - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
+  - NOTE You can specific the book version like so: `pip3 install nautobot==2.1.4`
+  - NOTE You can install addition features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip3 install command
+    - `pip3 install nautobot[all]` - in Lab testing, this failed
+    - `pip3 install nautobot[napalm,mysqlclient]`
+- Test
+  - `nautobot-server --version`
 
 ### Configure Nautobot
-### Installing Nautobot
-
-## Launch Nautobot
+- Initialize Nautobox basic configuration will create the `nautobot_config.py` tool.
+  - `nautobot-server init`
+    - for this Lab, I don't send installation metrics to the developers
+- Test
+  - `cat /opt/nautobot/nautobot_config.py`
+- Customize `nautobot_config.py`
+- Set environment variables
+- Database Migrations
+- Creat a Nautobot superuser
+- Collec Nautobot static files
+- Nautobot Check
+## First-Time Configuration
