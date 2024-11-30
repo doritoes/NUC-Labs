@@ -64,7 +64,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Your name: **nauto**
   - Server name: **nautobot**
   - Username: **nauto**
-  - Password: **nautolab5**
+  - Password: **nautobot123**
   - Require password to log in
   - Continue
 - Skip Ubuntu Pro
@@ -74,35 +74,22 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Remove the installation media (USB stick or ISO file) when prompted and press **Enter**
 
 ## Set up System
-These steps are performed while logged in to `nautobot`
+### Update and Install Packages
+- Log in as user `nauto`
+- Update the system packages
+  - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+  - `sudo apt install -y git python3 python3-pip python3-venv python3-dev redis-server postgresql`
 
-### Update Packages
-Update the system packages
-- `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-
-### System Dependencies
-Nautobot is a django application (runs on Python).
-- `sudo apt install -y git python3 python3-pip python3-venv python3-dev`
-
-### Redis setup
-Redis is used to support the task queue. It is also used for cacheing.
-
-Install:
-- `sudo apt install -y redis-server
+**Redis server test**
 Test: (using default localhost and tcp/6379)
 - `redis-cli ping`
 - successful test returns `PONG`
 
-### Database (PostgreSQL) setup
-PostgreSQL and MySQL are supported. PostgreSQL is used in this Lab. Yes, PostgreSQL uses a lot of back-slashes ("\").
-
-Install:
-- `sudo apt install -y postgresql`
-
-Test:
+**postgresql test**
 - `sudo -iu postgres psql`
 - To exit: `\q`
 
+### Create database for Nautobot
 Set up the Nautobot database:
 - `sudo -iu postgres psql`
 - `CREATE DATABASE nautobot;`
@@ -122,6 +109,7 @@ It is best practice to run nautobot as a user other than root. This user, `nauto
 Create user:
 - `sudo useradd --system --shell /bin/bash --create-home --home-dir /opt/nautobot nautobot`
 - 🌱 need to set the password? or no?
+- 🌱 grant sudo permissions to user `nautobot`
 
 Test:
 - `eval echo ~nautobot`
