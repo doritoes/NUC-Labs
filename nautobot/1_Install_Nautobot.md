@@ -217,6 +217,8 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - Ex. http://192.168.99.17:8001
     - Log in as `admin`/`nautobot123`
   - Press control-C to stop it
+- Check services
+  - `systemctl status redis-server postgresql`
 - Configure Nautobot as Linux services
   - 🌱 continue here
 ## First-Time Configuration
