@@ -243,4 +243,9 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Enable and start the new service
     - `sudo systemctl daemon-reload`
     - `sudo systemctl enable --now nautobot
+  - Test
+    - `sudo systemctl status nautobot-scheduler`
+    - 🌱 at this point the service doesn't start because "no password supplied"
+- Test all the services
+  - `sudo systemctl status redis-server postgresql nautobot nautobot-worker nautobot-scheduler`
 ## First-Time Configuration
