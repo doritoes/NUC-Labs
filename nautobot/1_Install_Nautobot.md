@@ -59,17 +59,18 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Edit it
     - Change size to the maximum size (i.e., 77.996G)
     - Save
+  - TIP A second option is to add a partition for /opt and assign the space to /opt
 - Done and then Continue
 - Enter system and user information *you can modify these as desired*
   - Your name: **nauto**
   - Server name: **nautobot**
   - Username: **nauto**
   - Password: **nautobot123**
-  - Require password to log in
   - Continue
 - Skip Ubuntu Pro
-- Select Install Don't select any feature server snaps, Done
-- Wait patiently for the **Installation complete!** message
+- <ins>Check</ins> Install OpenSSH server
+- Don't select any feature server snaps
+- ⏲️ Wait patiently for the **Installation complete!** message
 - Select **Reboot Now**
   - Remove the installation media (USB stick or ISO file) when prompted and press **Enter**
 
@@ -79,28 +80,13 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 - Update the system packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - `sudo apt install -y git python3 python3-pip python3-venv python3-dev redis-server postgresql`
-
-**Redis server test**
-Test: (using default localhost and tcp/6379)
-- `redis-cli ping`
-- successful test returns `PONG`
-
-**postgresql test**
-- `sudo -iu postgres psql`
-- To exit: `\q`
-
-### Create database for Nautobot
-Set up the Nautobot database:
-- `sudo -iu postgres psql`
-- `CREATE DATABASE nautobot;`
-- `CREATE USER nautobot WITH PASSWORD 'nautobot123';`
-- `\connect nautobot`
-- `GRANT CREATE ON SCHEMA public TO nautobot;`
-- `\q`
-
-Test the user:
-- `psql --username nautobot --password --host localhost nautobot`
-- `\q`
+- Test
+  - Redis: (using default localhost and tcp/6379)
+    - `redis-cli ping`
+    - successful test returns `PONG`
+  - postgresql:
+    - `sudo -iu postgres psql`
+    - To exit: `\q`
 
 ### Install Nautobot
 #### Create nautobot system user
@@ -116,6 +102,26 @@ Test:
 - `ls -l /opt/ | grep nautobot`
   - Should be `drwxr-x---` and `nautobot nautobot`
 
+### Create database for Nautobot
+🔑 From now on, use the account `nautobot`. Log out of `nauto` and back in as `nautobot`.
+
+Set up the Nautobot database:
+- Manually
+  - `sudo -iu postgres psql`
+  - `CREATE DATABASE nautobot;`
+  - `CREATE USER nautobot WITH PASSWORD 'nautobot123';`
+  - `\connect nautobot`
+  - `GRANT CREATE ON SCHEMA public TO nautobot;`
+  - `\q`
+- Using a script
+  - `sudo -iu postgres bash`
+  - Download [setup.sql](setup.sql) and create in `~/postgres`
+  - `psql -f setup.sql`
+  - `exit`
+- Test the user
+  - `psql --username nautobot --password --host localhost nautobot`
+  - `\q`
+
 #### Set up Python virtual environment
 A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivdual projects, preventing any interference with system packages or other projects.
 
@@ -126,15 +132,13 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Configure the `$NAUTOBOT_ROOT` environment variable in the user `.bashrc` file
   - `echo "export NAUTOBOOT_ROOT=/opt/nautobot" | sudo tee -a ~nautobot/.bashrc`
 - Test
-  - `sudo -ui nautobot`
+  - Log out and back in as `nautobot`
   - `echo $NAUTOBOT_ROOT`
-  - `exit`
 
 ### Installing Nautobot
 🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> install as `root`!
 - Log in as user `nautobot`
-  - Option 1: set the password for the user: `sudo passwd nautobot` and set it to `nautobot123`
-  - Option 2: switch to the user: `sudo -ui nautobot`
+  - Or, switch to the user: `sudo -ui nautobot`
 - Install `wheel` so Python will use wheel packages when they are available
   - `pip3 install --upgrade pip wheel`
 - Install Nautobot
@@ -150,7 +154,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 ### Configure Nautobot
 - Initialize Nautobox basic configuration will create the `nautobot_config.py` tool.
   - `nautobot-server init`
-    - for this Lab, I don't send installation metrics to the developers
+    - 🗒️ for this Lab, I don't send installation metrics to the developers
 - Test
   - `cat /opt/nautobot/nautobot_config.py`
 - Customize `nautobot_config.py`
