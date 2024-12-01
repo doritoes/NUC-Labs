@@ -73,6 +73,10 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 - ⏲️ Wait patiently for the **Installation complete!** message
 - Select **Reboot Now**
   - Remove the installation media (USB stick or ISO file) when prompted and press **Enter**
+- TIP Set up a DHCP reservation for your Nautobot server so it always has the same IP address
+  - Home router: https://www.youtube.com/watch?v=dCAsHdRBrag
+  - pfSense: https://www.youtube.com/watch?v=NNKZm49keaA
+  - OPNsense: https://forum.opnsense.org/index.php?topic=34017.0
 
 ## Set up System
 ### Update and Install Packages
@@ -168,9 +172,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - ALLOWED_HOSTS
       - CACHES
       - CONTENT_TYPE_CACHE_TIMEOUT
-      - ? not CELERY_BEAT_HEARTBEAT_FILE
       - CERLERY_BROKER_URL
-      - ? not CELERY_BROKER_USE_SSL
       - DATABASES
     - Example of what it could look like: (nautobot_config.py)[nautobot_config.py]
 - Database Migrations
@@ -187,7 +189,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Nautobot Check
   - Validate the configuration and check for common problems
   - `nautobot-server check`
-  - It won't tell you if you forgot to run `nautobot-server collectstatic`
+  - NOTE It won't tell you if you forgot to run `nautobot-server collectstatic`
 - Test run a development instance
   - `nautobot-server runserver 0.0.0.0:8080 --insecure`
   - Point web broswer to the IP address of VM using port 8080
@@ -199,7 +201,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Log back in as `nautobot` at command line
   - `nautobot-server celery worker`
   - Press control-C to stop it
-- Nautobot web service
+- Configure WSGI
   - Django applications run WSGI aplications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
   - In this test will will not use advanced features such as using a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
   - Download [uwsgi.ini](uwsgi.ini) and copy to a new file `$NAUTOBOT_ROOT/uwsgi.ini`
@@ -212,6 +214,20 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Press control-C at the terminal to stop it
 - Check services
   - `systemctl status redis-server postgresql`
-- Configure Nautobot as Linux services
-  - 🌱 continue here
+- Configure Nautobot as Linux service
+  - Download [nautobot.service](nautobot.service) and copy to a new file `/etc/systemd/system/nautobot.service`
+    - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
+  - Enable and start the new service
+    - `sudo systemctl daemon-reload`
+    - `sudo systemctl enable -now nautobot
+  - Test
+    - `systemctl status nautobot.service`
+    - Point your broswer to the VM's IP address on port 8001
+      - Example: https://192.169.99.33:8001
+      - 🌱 at this point i get a failure connecting to PostgreSQL
+        - `sudo systemctl status postgresql`
+        - If postgresql is `active (exited)`, it can still be up and runing. Confirm using `sudo -iu postgres psql`
+        - Not sure how to fix this
+  - Configure Nautobot workers at Linux service
+    - 🌱 continue here
 ## First-Time Configuration
