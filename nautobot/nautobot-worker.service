@@ -1,6 +1,6 @@
 [Unit]
 Description=Nautobot Celery Worker
-Documentatation=https://docs.nautobot.com/projects/core/en/stable/
+Documentation=https://docs.nautobot.com/projects/core/en/stable/
 After=network-online.target
 Wants=network-online.target
 
@@ -8,7 +8,7 @@ Wants=network-online.target
 Type=simple
 Environment="NAUTOBOT_ROOT=/opt/nautobot"
 Environment="NAUTOBOT_ALLOWED_HOSTS=*"
-Environment="NAUTOBOT_DB_PASSWORD="nautobot123"
+Environment="NAUTOBOT_DB_PASSWORD=nautobot123"
 Environment="NAUTOBOT_DB_USER=nautobot"
 
 User=nautobot
