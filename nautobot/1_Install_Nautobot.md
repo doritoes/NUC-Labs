@@ -174,7 +174,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - CONTENT_TYPE_CACHE_TIMEOUT
       - CERLERY_BROKER_URL
       - DATABASES
-    - Example of what it could look like: (nautobot_config.py)[nautobot_config.py]
+    - Example of what it could look like: [nautobot_config.py](nautobot_config.py)
 - Database Migrations
   - `nautobot-server migrate`
     - ⏲️ This will take a while, be patient
