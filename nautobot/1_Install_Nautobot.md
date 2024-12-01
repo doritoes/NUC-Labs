@@ -228,6 +228,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
         - `sudo systemctl status postgresql`
         - If postgresql is `active (exited)`, it can still be up and runing. Confirm using `sudo -iu postgres psql`
         - Not sure how to fix this. Checked .bashrc of for user `nautobot`
+        - The environment variable database login information isn't being picked up.
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
