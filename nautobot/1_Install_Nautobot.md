@@ -169,6 +169,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - CERLERY_BROKER_URL
       - ? not CELERY_BROKER_USE_SSL
       - DATABASES
+    - Example of what it could look like: (nautobot_config.py)[nautobot_config.py]
 - Set environment variables
   - 🌱 might create a file for this
   - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
