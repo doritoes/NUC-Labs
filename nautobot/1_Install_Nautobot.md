@@ -21,7 +21,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Click **Select target** and select the the USB stick you inserted
   - Click **Flash!** and allow the command shell to continue
   - Wait for the flash and verification to complete
-  - Safely eject the USB stick (yes, there are two "drives" on the USB stick) ([tip](Appendix_Safely_Eject.md))
+  - Safely eject the USB stick (yes, there are two "drives" on the USB stick)
 - Boot the NUC from the bootable USB stick
   - Connect to keyboard, mouse and power
     - Optionally connect to wired network for faster setup
@@ -227,7 +227,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - 🌱 at this point i get a failure connecting to PostgreSQL
         - `sudo systemctl status postgresql`
         - If postgresql is `active (exited)`, it can still be up and runing. Confirm using `sudo -iu postgres psql`
-        - Not sure how to fix this
+        - Not sure how to fix this. Checked .bashrc of for user `nautobot`
   - Configure Nautobot workers at Linux service
     - 🌱 continue here
 ## First-Time Configuration
