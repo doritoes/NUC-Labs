@@ -1,0 +1,26 @@
+[Unit]
+Description=Nautobot Celery Schedurler
+Documentatation=https://docs.nautobot.com/projects/core/en/stable/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment="NAUTOBOT_ROOT=/opt/nautobot"
+Environment="NAUTOBOT_ALLOWED_HOSTS=*"
+Environment="NAUTOBOT_DB_PASSWORD="nautobot123"
+Environment="NAUTOBOT_DB_USER=nautobot"
+
+User=nautobot
+Group=nautobot
+PIDFile=/var/tmp/nautobot-beat.pid
+WorkingDirectory=/opt/nautobot
+
+ExecStart=/opt/nautobot/bin/nautobot-server celery beat --loglevel INFO --pidfile /var/tmp/nautobot-beat.pid
+
+Restart=on-failure
+RestartSec=30
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
