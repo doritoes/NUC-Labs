@@ -104,12 +104,12 @@ Test the user:
 
 ### Install Nautobot
 #### Create nautobot system user
-It is best practice to run nautobot as a user other than root. This user, `nautobot`, will own files and permissions and services will be configured to run under this account.
+It is best practice to run Nautobot as a user other than root. This user, `nautobot`, will own files and permissions and services will be configured to run under this account.
 
 Create user:
 - `sudo useradd --system --shell /bin/bash --create-home --home-dir /opt/nautobot nautobot`
-- 🌱 need to set the password? or no?
-- 🌱 grant sudo permissions to user `nautobot`
+- `sudo usermod -aG sudo nautobot`
+- `sudo passwd nautobot`
 
 Test:
 - `eval echo ~nautobot`
@@ -117,8 +117,10 @@ Test:
   - Should be `drwxr-x---` and `nautobot nautobot`
 
 #### Set up Python virtual environment
-A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivuldua procjects, preventing any interference with system packages or other projects.
+A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivdual projects, preventing any interference with system packages or other projects.
 
+ Here we create demonstrate configuring for the user `nautobot` right from the user `nauto`.
+ 
 - Create venv
   - `sudo -u nautobot python3 -m venv /opt/nautobot`
 - Configure the `$NAUTOBOT_ROOT` environment variable in the user `.bashrc` file
@@ -129,7 +131,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - `exit`
 
 ### Installing Nautobot
-🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> instal as `root`!
+🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> install as `root`!
 - Log in as user `nautobot`
   - Option 1: set the password for the user: `sudo passwd nautobot` and set it to `nautobot123`
   - Option 2: switch to the user: `sudo -ui nautobot`
@@ -152,6 +154,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Test
   - `cat /opt/nautobot/nautobot_config.py`
 - Customize `nautobot_config.py`
+  - 🌱 maybe create a file for this
   - `vi $NAUTOBOT_ROOT/nautobot_config.py`
   - Required Settings
     - Uncomment (remote the leading" "#") the following parts
@@ -163,6 +166,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - ? not CELERY_BROKER_USE_SSL
       - DATABASES
 - Set environment variables
+  - 🌱 might create a file for this
   - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
