@@ -129,8 +129,11 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
  
 - Create venv
   - `sudo -u nautobot python3 -m venv /opt/nautobot`
-- Configure the `$NAUTOBOT_ROOT` environment variable in the user `.bashrc` file
-  - `echo "export NAUTOBOOT_ROOT=/opt/nautobot" | sudo tee -a ~nautobot/.bashrc`
+- Configure the environment variables in the user `.bashrc` file
+  - `echo "export NAUTOBOOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
 - Test
   - Log out and back in as `nautobot`
   - `echo $NAUTOBOT_ROOT`
@@ -170,37 +173,30 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - ? not CELERY_BROKER_USE_SSL
       - DATABASES
     - Example of what it could look like: (nautobot_config.py)[nautobot_config.py]
-- Set environment variables
-  - 🌱 might create a file for this
-  - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
-  - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
-  - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
-  - Test
-    - `source ~/.bashrc`
-    - `env | grep NAUTOBOT`
 - Database Migrations
   - `nautobot-server migrate`
-    - ⏲️ This will take a while
-    - NOTE This is not just for the initial setup; every time a new release is deployed, a new migrate is needed to update the database  data models
-- Create a Nautobot superuser to log in to the Nautobot application
+    - ⏲️ This will take a while, be patient
+    - NOTE This is not just for the initial setup; every time a new release is deployed, a new migrate is needed to update the database data models
+- Create a Nautobot superuser to log in to the Nautobot web application
   - `nautobot-server createsuperuser`
     - Username: **admin**
     - Email address: *be creative*
     - Password: **nautobot123**
-- Collect Nautobot static files (collect data not covered by the `migrate` command)
+- Collect Nautobot static files (collect data not covered by the `migrate` command, also run for every release)
   - `nautobot-server collectstatic`
 - Nautobot Check
   - Validate the configuration and check for common problems
   - `nautobot-server check`
+  - It won't tell you if you forgot to run `nautobot-server collectstatic`
 - Test run a development instance
   - `nautobot-server runserver 0.0.0.0:8080 --insecure`
   - Point web broswer to the IP address of VM using port 8080
     - Ex. http://192.168.99.17:8080
     - Log in as `admin`/`nautobot123`
     - Press control-C at the terminal to stop it
-- Nautobot worker
-  - picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. Uses Python Celery, a distributed task queue framework.
-  - ssh to the server as `nautobot` and open another terminal
+- Test Nautobot worker
+  - Worker picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. It Python Celery, a distributed task queue framework.
+  - Log back in as `nautobot` at command line
   - `nautobot-server celery worker`
   - Press control-C to stop it
 - Nautobot web service
@@ -213,7 +209,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
     - Point web browser to the IP address of the VM using port 8001
       - Ex. http://192.168.99.17:8001
     - Log in as `admin`/`nautobot123`
-  - Press control-C to stop it
+  - Press control-C at the terminal to stop it
 - Check services
   - `systemctl status redis-server postgresql`
 - Configure Nautobot as Linux services
