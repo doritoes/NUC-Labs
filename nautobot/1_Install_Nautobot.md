@@ -219,15 +219,28 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Enable and start the new service
     - `sudo systemctl daemon-reload`
-    - `sudo systemctl enable -now nautobot
+    - `sudo systemctl enable --now nautobot
   - Test
-    - `systemctl status nautobot.service`
+    - `sudo systemctl status nautobot.service`
     - Point your broswer to the VM's IP address on port 8001
       - Example: https://192.169.99.33:8001
       - 🌱 at this point i get a failure connecting to PostgreSQL
         - `sudo systemctl status postgresql`
         - If postgresql is `active (exited)`, it can still be up and runing. Confirm using `sudo -iu postgres psql`
         - Not sure how to fix this. Checked .bashrc of for user `nautobot`
-  - Configure Nautobot workers at Linux service
-    - 🌱 continue here
+  - Configure Nautobot workers as Linux service
+    - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
+  - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
+    - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
+  - Enable and start the new service
+    - `sudo systemctl daemon-reload`
+    - `sudo systemctl enable --now nautobot-worker
+  - Test
+    - `sudo systemctl status nautobot-worker.service`
+  - Configure Nautobot Scheduler as Linux service
+    - Download [nautobot-scheduler.service](nautobot=scheduler.service) and copy to a new file `/etc/systemd/system/nautobot-scheduler.service`
+    - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
+  - Enable and start the new service
+    - `sudo systemctl daemon-reload`
+    - `sudo systemctl enable --now nautobot
 ## First-Time Configuration
