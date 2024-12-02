@@ -224,11 +224,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
     - `sudo systemctl status nautobot.service`
     - Point your broswer to the VM's IP address on port 8001
       - Example: https://192.169.99.33:8001
-      - 🌱 at this point i get a failure connecting to PostgreSQL
         - `sudo systemctl status postgresql`
-        - If postgresql is `active (exited)`, it can still be up and runing. Confirm using `sudo -iu postgres psql`
-        - Not sure how to fix this. Checked .bashrc of for user `nautobot`
-        - The environment variable database login information isn't being picked up.
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
@@ -249,4 +245,8 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Test all the services
   - `sudo systemctl status redis-server postgresql nautobot nautobot-worker nautobot-scheduler`
     - Read carefully to check for errors
+  -  Point web browser to the IP address of the VM using port 8001
+      - Ex. http://192.168.99.17:8001
+    - Log in as `admin`/`nautobot123`
+
 ## First-Time Configuration
