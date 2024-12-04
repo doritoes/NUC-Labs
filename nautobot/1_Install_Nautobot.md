@@ -249,4 +249,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
       - Ex. http://192.168.99.17:8001
     - Log in as `admin`/`nautobot123`
 
-## First-Time Configuration
+## Next Steps
+Before you can start creating devices and start doing things, there are some fundamental initial setup steps.
+
+Continue to [Initial Configuration](2_Initial_Configuration.md).
