@@ -24,5 +24,5 @@ Chapter 3 from the book steps through setting up our first Nautobot server.
 
 ## Installing and Deploying Nautobot
 Chapter 3 continues to help you set up some necessary items before you get started.
-- [Initial Configuration](2_Initial_Configuration.md).
+- [Initial Configuration](2_Initial_Configuration.md)
 ## Cleanup and Next Steps
