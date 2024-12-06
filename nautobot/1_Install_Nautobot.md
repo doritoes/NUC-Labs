@@ -144,7 +144,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Log out and back in as `nautobot`
   - `echo $NAUTOBOT_ROOT`
 
-### Installing Nautobot
+#### Installing Nautobot
 🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> install as `root`!
 - Log in as user `nautobot`
   - Or, switch to the user: `sudo -ui nautobot`
