@@ -148,6 +148,8 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Or, switch to the user: `sudo -ui nautobot`
 - Install `wheel` so Python will use wheel packages when they are available
   - `pip3 install --upgrade pip wheel`
+- Install `pyyml` for python scripts to easily handle yaml files
+  - `pip3 install -pyyaml`
 - Install Nautobot
   - `pip3 install nautobot`
     - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
