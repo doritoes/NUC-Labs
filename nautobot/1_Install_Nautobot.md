@@ -108,7 +108,7 @@ Test:
 - `ls -l /opt/ | grep nautobot`
   - Should be `drwxr-x---` and `nautobot nautobot`
 
-### Create database for Nautobot
+#### Create database for Nautobot
 🔑 From now on, use the account `nautobot`. Log out of `nauto` and back in as `nautobot`.
 
 Set up the Nautobot database:
