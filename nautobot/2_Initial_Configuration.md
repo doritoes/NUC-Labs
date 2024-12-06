@@ -13,7 +13,7 @@ To set up the first devices you need to do some steps before finally creating th
     - Location Type (Step 4)
   - Status (6)
 
-what about device families?
+Device Families can be optionally used to group similar device types.
 
 ## Roles
 Represents the logical role a device might have. Examples follow:
@@ -76,7 +76,6 @@ Required fields:
 - Model (e.g. A900-IAMC)
 - Height (1, check Is full depth)
 
-
 TIP Import from community library https://github.com/nautobot/devicetype-library
 
 Import
@@ -95,7 +94,9 @@ Import
 🌱 will test once manufacturers are imported
 
 ## Location Types
-
+Organization > Location Types
+- Name is only requried field
+- Example: Site
 
 ## Locations
 Represents the site where the device is installed. Some examples:
@@ -103,15 +104,26 @@ Represents the site where the device is installed. Some examples:
 - a building
 - a room
 
+requires:
+- location type
+- name
+- status
+
+optionally:
+- parent
+- facility (example data center prvider and facility such as Equinix NY7)
+- ASN (BGP ASN number)
+- timezone
+- description
+
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
 - Active
 - Decomissioning
 - Planned
 
-
 ## Devices
-
+Can now add devices
 
 ## Next Steps
 
