@@ -3,6 +3,8 @@ This corresponds to chapter 3 in the book. See https://github.com/PacktPublishin
 
 The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
 
+🌱 This is pretty bad with no https. Should circle back and improve the lab to use at least self-signed certificate with https.
+
 ## Network Architecture
 For this Lab you can install in your home lab network.
 
