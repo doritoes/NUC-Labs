@@ -1,5 +1,5 @@
 [Unit]
-Description=Nautobot Celery Schedurler
+Description=Nautobot Celery Scheduler
 Documentation=https://docs.nautobot.com/projects/core/en/stable/
 After=network-online.target
 Wants=network-online.target
