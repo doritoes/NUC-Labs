@@ -126,6 +126,7 @@ Set up the Nautobot database:
   - `exit`
 - Test the user
   - `psql --username nautobot --password --host localhost nautobot`
+    - The script sets the password to `nautobot123`
   - `\q`
 
 #### Set up Python virtual environment
@@ -136,7 +137,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Create venv
   - `sudo -u nautobot python3 -m venv /opt/nautobot`
 - Configure the environment variables in the user `.bashrc` file
-  - `echo "export NAUTOBOOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
@@ -151,12 +152,12 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
 - Install `wheel` so Python will use wheel packages when they are available
   - `pip3 install --upgrade pip wheel`
 - Install `pyyml` for python scripts to easily handle yaml files
-  - `pip3 install -pyyaml`
+  - `pip3 install pyyaml`
 - Install Nautobot
   - `pip3 install nautobot`
     - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
   - NOTE You can specific the book version like so: `pip3 install nautobot==2.1.4`
-  - NOTE You can install addition features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip3 install command
+  - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip3 install command
     - `pip3 install nautobot[all]` - in Lab testing, this failed
     - `pip3 install nautobot[napalm,mysqlclient]`
 - Test
@@ -201,13 +202,13 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
     - Log in as `admin`/`nautobot123`
     - Press control-C at the terminal to stop it
 - Test Nautobot worker
-  - Worker picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. It Python Celery, a distributed task queue framework.
+  - Worker picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. It usesPython Celery, a distributed task queue framework.
   - Log back in as `nautobot` at command line
   - `nautobot-server celery worker`
   - Press control-C to stop it
 - Configure WSGI
   - Django applications run WSGI aplications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
-  - In this test will will not use advanced features such as using a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
+  - In this test we will not use advanced features such as a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
   - Download [uwsgi.ini](uwsgi.ini) and copy to a new file `$NAUTOBOT_ROOT/uwsgi.ini`
   - Start it
     - `/opt/nautobot/bin/nautobot-server start --ini /opt/nautobot/uwsgi.ini`
@@ -228,7 +229,6 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
     - `sudo systemctl status nautobot.service`
     - Point your broswer to the VM's IP address on port 8001
       - Example: https://192.169.99.33:8001
-        - `sudo systemctl status postgresql`
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
@@ -239,7 +239,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Test
     - `sudo systemctl status nautobot-worker.service`
   - Configure Nautobot Scheduler as Linux service
-    - Download [nautobot-scheduler.service](nautobot=scheduler.service) and copy to a new file `/etc/systemd/system/nautobot-scheduler.service`
+    - Download [nautobot-scheduler.service](nautobot-scheduler.service) and copy to a new file `/etc/systemd/system/nautobot-scheduler.service`
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Enable and start the new service
     - `sudo systemctl daemon-reload`
