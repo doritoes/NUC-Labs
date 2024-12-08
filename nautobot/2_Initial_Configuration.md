@@ -29,7 +29,7 @@ Import
 - Click the <ins>drop down</ins> for Add Role
 - Click **Import from CSV**
   - Option 1: Use the prepared file 🌱 [roles.csv](roles.csv)
-    - content_types (required)
+    - content_types (required) *usually dcim.device*
     - name (required)
     - color (optional)
     - description (optional)
@@ -59,6 +59,8 @@ Import
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
+
+Not used in this Lab.
 
 For example:
 - Device family: Cat9000
@@ -90,13 +92,29 @@ Import
 - Click **Import from CSV (multiple records)**
   - Content type: dcim | device type (default)
   - Choose File and click **Run Job Now**
-
-🌱 will test once manufacturers are imported
+ 
+- In my Lab I imported the following
+  - https://github.com/nautobot/devicetype-library/blob/main/device-types/Netgear/GS116Ev2.yaml
+  - GS110TPv3
+    - Custom: GS110TPv3.yaml 🌱
+  - https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/USW-Lite-16-PoE.yaml
+  - https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml
+  - U7-Pro
+    - Custom: U7-Pro.yaml
+  - Firewall: Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC
+    - Custom: qotom-q55565-s05.yaml (requires adding Qotom as manufacuter) 🌱
+  - Synology NAS model DS224+
+    - Custom: DS224+.yaml 🌱
+  - Intel NUC proxmox Intel Core i7-10710U (NUC10i7FNH1)
+    - Custom: NUC10i7FNH1.yaml 🌱
+  - Intel NUC xcp-ng NUC14RVH (there is no ASUS manufacturer)
+    - Custom: NUC10i7FNH1.yaml 🌱 add ASUS manufacturer
 
 ## Location Types
-Organization > Location Types
-- Name is only requried field
-- Example: Site
+From the left menu click **Organization** > **Location Types**
+- Click **Add Location Type**
+- Name:  **Site**
+- Click **Create**
 
 ## Locations
 Represents the site where the device is installed. Some examples:
@@ -116,14 +134,26 @@ optionally:
 - timezone
 - description
 
+From the left menu click **Organization** > **Locations**
+- Click **Add Location**
+- Type: **Site**
+- Name: **Lab**
+- Status: **Active**
+- Time Zone: *set to your local Time Zone*
+- Click **Create**
+
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
 - Active
 - Decomissioning
 - Planned
 
+No custom statuses are required for this Lab.
+
 ## Devices
 Can now add devices
+
+🌱continue here with lab
 
 ## Next Steps
 
