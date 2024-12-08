@@ -14,7 +14,6 @@ We have all the reprequisites created, so we start adding devices in the web GUI
     - Manufacturer: **Netgear**
     - Device type: **Netgear GS116Ev2**
   - Location: **Lab**
-    - 🌱 In Lab testing we created location Lab but it wasn't in the dropdown. Tried creating Lab2, didn't work.
   - Management:
     - Status: **Active**
   - Comments: **Core Switch**
