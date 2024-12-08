@@ -1,0 +1,15 @@
+---
+manufacturer: Synology
+model: DS224+
+part_number: DS224+
+u_height: 4
+comments: '[Synology DS220+ Specs](https://www.synology.com/en-us/products/DS224+#specs)'
+is_full_depth: false
+power-ports:
+  - name: PSU
+    type: dc-terminal
+interfaces:
+  - name: LAN 1
+    type: 1000base-t
+  - name: LAN 2
+    type: 1000base-t
