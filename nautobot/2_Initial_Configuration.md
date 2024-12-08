@@ -115,6 +115,7 @@ Import
 From the left menu click **Organization** > **Location Types**
 - Click **Add Location Type**
 - Name:  **Site**
+- Content types: **dcim | device**
 - Click **Create**
 
 ## Locations
