@@ -57,6 +57,8 @@ Import
     - `git clone https://github.com/nautobot/devicetype-library`
     - `python3 scrape-manufacturers.py`
     - The file `manufacturers.csv` is created in the home directory
+    - Then add any additional manufacturers missing from the list
+      - Asus
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
@@ -94,22 +96,19 @@ Import
   - Content type: dcim | device type (default)
   - Choose File and click **Run Job Now**
  
-- In my Lab I imported the following
-  - https://github.com/nautobot/devicetype-library/blob/main/device-types/Netgear/GS116Ev2.yaml
-  - GS110TPv3
-    - Custom: GS110TPv3.yaml 🌱
-  - https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/USW-Lite-16-PoE.yaml
-  - https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml
-  - U7-Pro
-    - Custom: U7-Pro.yaml
+- In my Lab I imported the following (provided in this repo)
+  - [Netgear GS110Tv3.yaml](device-types/GS110Tv3.yaml)
+  - [Netgear GS116Ev2.yaml](device-types/GS116Ev2.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Netgear/GS116Ev2.yaml))
+  - [Unifi USW-Lite-16-PoE.yaml](device-types/USW-Lite-16-PoE.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/USW-Lite-16-PoE.yaml))
+  - [Unifi UAP-FlexHD.yaml](device-types/UAP-FlexHD.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml))
+  - [Unifi U7-Pro.yaml](device-types/U7-Pro.yaml)
+  - [Synology DS224+.yaml](device-types/DS224+.yaml)
   - Firewall: Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC
-    - Custom: qotom-q55565-s05.yaml (requires adding Qotom as manufacuter) 🌱
-  - Synology NAS model DS224+
-    - Custom: DS224+.yaml 🌱
+    - Custom: qotom-q55565-s05.yaml 🌱
   - Intel NUC proxmox Intel Core i7-10710U (NUC10i7FNH1)
     - Custom: NUC10i7FNH1.yaml 🌱
   - Intel NUC xcp-ng NUC14RVH (there is no ASUS manufacturer)
-    - Custom: NUC10i7FNH1.yaml 🌱 add ASUS manufacturer
+    - Custom: NUC10i7FNH1.yaml 🌱 added ASUS manufacturer to manufacturers.csv
 
 ## Location Types
 From the left menu click **Organization** > **Location Types**
