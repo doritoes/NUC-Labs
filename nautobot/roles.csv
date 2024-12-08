@@ -1,4 +1,4 @@
-content_type,name
+content_types,name
 extras.role, Switch L2
 extras.role, Switch L3
 extras.role, Firewall
