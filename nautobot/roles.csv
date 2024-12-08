@@ -1,7 +1,9 @@
 content_type,name
-extras | role, Switch L2
-extras | role, Switch L3
-extras | role, Firewall
-extras | role, Wireless Access Point
-extras | role, Wireless Controller
-extras | role, NAS
+extras.role, Switch L2
+extras.role, Switch L3
+extras.role, Firewall
+extras.role, Wireless Access Point
+extras.role, Wireless Controller
+extras.role, NAS
+extras.role, proxmox node
+extras.role, xcp-ng node
