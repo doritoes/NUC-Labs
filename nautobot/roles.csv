@@ -1,10 +1,16 @@
 content_types,name
-dcim.device, Switch L2
-dcim.device, Switch L3
-dcim.device, Router
-dcim.device, Firewall
-dcim.device, Wireless Access Point
-dcim.device, Wireless Controller
-dcim.device, NAS
-dcim.device, proxmox node
-dcim.device, xcp-ng node
+dcim.device,Switch L2
+dcim.device,Switch L2 PoE
+dcim.device,Switch L3
+dcim.device,Router
+dcim.device,Firewall
+dcim.device,Cable Modem
+dcim.device,Cellular Data Modem
+dcim.device,MoCA Adapter
+dcim.device,Wireless Access Point
+dcim.device,Wireless Controller
+dcim.device,Wireless Bridge
+dcim.device,PoE Power Injector
+dcim.device,NAS
+dcim.device,proxmox node
+dcim.device,xcp-ng node
