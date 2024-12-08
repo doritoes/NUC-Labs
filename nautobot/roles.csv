@@ -1,9 +1,10 @@
 content_types,name
-extras.role, Switch L2
-extras.role, Switch L3
-extras.role, Firewall
-extras.role, Wireless Access Point
-extras.role, Wireless Controller
-extras.role, NAS
-extras.role, proxmox node
-extras.role, xcp-ng node
+dcim.device, Switch L2
+dcim.device, Switch L3
+dcim.device, Router
+dcim.device, Firewall
+dcim.device, Wireless Access Point
+dcim.device, Wireless Controller
+dcim.device, NAS
+dcim.device, proxmox node
+dcim.device, xcp-ng node
