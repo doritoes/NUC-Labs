@@ -38,12 +38,12 @@ Import
     - weight (optional)
 
 ## Manufacturers
-Represents the name of a device's manufacturer. Examples follow:
+Represents the name of a device's manufacturer. Used in Device Types.
+
+Examples follow:
 - Cisco
 - Arista
 - from Juniper
-
-Used in Device Types
 
 Import
 - From the left menu expand **DEVICES**
@@ -57,18 +57,17 @@ Import
     - `git clone https://github.com/nautobot/devicetype-library`
     - `python3 scrape-manufacturers.py`
     - The file `manufacturers.csv` is created in the home directory
-- 🌱 in Lab testing, this didn't complete... it just kept running
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
-
-Not used in this Lab.
 
 For example:
 - Device family: Cat9000
 - Device types:
   - Cat9200
   - Cat9300
+
+Not used in this Lab.
 
 ## Device Types
 Represents the model of the device, which determines characteristics like interfaces. Examples follow:
