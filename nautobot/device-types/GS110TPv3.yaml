@@ -1,0 +1,34 @@
+---
+manufacturer: Netgear
+model: GS110TPv3
+u_height: 1
+comments: |
+  Netgear Managed Gigabit Switch 8 PoE/PoE+ (30W + max. 55W PoE), Gen2, (24) Gigabit, (1-16) Gigabit PoE+ IEEE 802.3af/at, (2) SFP
+  [Gigabit Managed Switch Series GS110TPv3](https://www.netgear.com/support/product/gs110tpv3/)
+  Dimensions: 236 x 101 x 27 mm (9.3 x 4.0 x 1.1")
+is_full_depth: false
+interfaces:
+  - name: GigabitEthernet/1
+    type: 1000base-t
+  - name: GigabitEthernet/2
+    type: 1000base-t
+  - name: GigabitEthernet/3
+    type: 1000base-t
+  - name: GigabitEthernet/4
+    type: 1000base-t
+  - name: GigabitEthernet/5
+    type: 1000base-t
+  - name: GigabitEthernet/6
+    type: 1000base-t
+  - name: GigabitEthernet/7
+    type: 1000base-t
+  - name: GigabitEthernet/8
+    type: 1000base-t
+  - name: GigabitEthernet/9
+    type: 1000base-x-sfp
+  - name: GigabitEthernet/10
+    type: 1000base-x-sfp
+power-ports:
+  - name: PSU1
+    type: dc-terminal
+    maximum_draw: 69.5
