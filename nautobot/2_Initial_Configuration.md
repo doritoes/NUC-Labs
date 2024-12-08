@@ -23,6 +23,8 @@ Represents the logical role a device might have. Examples follow:
 - access switch
 - border router
 
+Some common roles you might have in your home lab are provided.
+
 Import
 - From the left menu expand **ORGANIZATION**
 - Under **METADATA** click **Roles**
@@ -150,11 +152,5 @@ Represents the status of a device. Comes with prepopulated list and you can add 
 
 No custom statuses are required for this Lab.
 
-## Devices
-Can now add devices
-
-🌱continue here with lab
-
 ## Next Steps
-
-Continue to
+You can now start to add your devices. Continue to [Adding your First Devices](3_Adding_Devices.md).
