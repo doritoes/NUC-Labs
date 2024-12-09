@@ -97,7 +97,7 @@ Import
   - Choose File and click **Run Job Now**
  
 - In my Lab I imported the following (provided in this repo)
-  - [Netgear GS110Tv3.yaml](device-types/GS110Tv3.yaml)
+  - [Netgear GS110TPv3.yaml](device-types/GS110TPv3.yaml)
   - [Netgear GS116Ev2.yaml](device-types/GS116Ev2.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Netgear/GS116Ev2.yaml))
   - [Unifi USW-Lite-16-PoE.yaml](device-types/USW-Lite-16-PoE.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/USW-Lite-16-PoE.yaml))
   - [Unifi UAP-FlexHD.yaml](device-types/UAP-FlexHD.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml))
