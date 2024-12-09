@@ -31,4 +31,4 @@ interfaces:
 power-ports:
   - name: PSU1
     type: dc-terminal
-    maximum_draw: 69.5
+    maximum_draw: 70
