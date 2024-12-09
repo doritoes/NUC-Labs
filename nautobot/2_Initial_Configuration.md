@@ -103,8 +103,8 @@ Import
   - [Unifi UAP-FlexHD.yaml](device-types/UAP-FlexHD.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml))
   - [Unifi U7-Pro.yaml](device-types/U7-Pro.yaml)
   - [Synology DS224+.yaml](device-types/DS224+.yaml)
-  - Firewall: Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC
-    - Custom: qotom-q55565-s05.yaml 🌱
+  - [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml)
+    - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
   - Intel NUC proxmox Intel Core i7-10710U (NUC10i7FNH1)
     - Custom: NUC10i7FNH1.yaml 🌱
   - Intel NUC xcp-ng NUC14RVH (there is no ASUS manufacturer)
