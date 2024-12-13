@@ -1,2 +1,8 @@
 name,device_type,location,role,status
+LAB-SW1,Netgear GS116Ev3,Lab,Switch L2,Active
 LAB-SW2,Netgear GS110TPv3,Lab,Switch L2 POE,Active
+LAB-SW3,Ubiquiti UniFi Switch Lite 16 PoE,Lab,Switch L2 POE,Active
+LAB-AP1,Ubiquiti U7 Professional,Lab,Wireless Access Point,Active
+LAB-AP2,Ubiquiti FlexHD,Lab,Wireless Access Point,Active
+LAB-Firewall,Qotom Q555G6-S05,Lab,Firewall,Active
+LAB-NAS,Synology DS224+,Lab,NAS,Active
