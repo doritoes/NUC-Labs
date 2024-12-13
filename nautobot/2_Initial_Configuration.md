@@ -105,10 +105,10 @@ Import
   - [Synology DS224+.yaml](device-types/DS224+.yaml)
   - [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml)
     - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-  - Intel NUC proxmox Intel Core i7-10710U (NUC10i7FNH1)
-    - Custom: NUC10i7FNH1.yaml 🌱
-  - Intel NUC xcp-ng NUC14RVH (there is no ASUS manufacturer)
-    - Custom: NUC10i7FNH1.yaml 🌱 added ASUS manufacturer to manufacturers.csv
+  - Intel NUC NUC10i7FNH1 Intel Core i7-10710U  ([NUC10i7FNH1.yaml)[device-types/NUC10i7FNH1.yaml])
+    - running proxymox
+  - Asus NUC NUC14RVH ([NUC14RVH.yaml](device-types/NUC14RVH.yaml)) 🌱 added ASUS manufacturer to manufacturers.csv
+    - running XCP-ng
 
 ## Location Types
 From the left menu click **Organization** > **Location Types**
