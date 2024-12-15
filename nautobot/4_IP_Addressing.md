@@ -44,12 +44,18 @@ We have all the devices created, so we start configuring IP address information 
     - Click **Create**
 - GUI Bulk Add
   - Back in **IP Addreses**, click **Add IP Address** again
-  - This click click the tab **Bulk Create**
+  - Click the tab **Bulk Create**
   - Note that you can create multiple IP addresses at once using a pattern
     - Example address pattern: **192.168.99.[1-5,252]/24**
   - Instead of using this method, we will use the next method to import from CSV
 - Import IP Addresses using CSV
-  - [import-ip-addresses.csv](import-ip-addresses.csv)
+  - Still in **IP Addresses**,  click **Add IP Address** again
+  - In the center pane click click the <ins>dropdown</ins> for **Add IP Address** and then click **Import from CSV**
+    - Import the file [import-ip-addresses.csv](import-ip-addresses.csv)
+  - Alternatively, you can use "CSV Text Input" and paste in the CSV data
+  - Click **Run Job Now**
+
+## Assign IP Addresses to Devices/Interfaces
 
 ## Next Steps
 You can now start to add your devices. Continue to [Cabling](5_Cabling.md).
