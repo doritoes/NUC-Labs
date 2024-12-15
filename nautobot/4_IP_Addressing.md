@@ -32,11 +32,11 @@ We have all the devices created, so we start configuring IP address information 
   - Optionally add a description
   - Click **Create**
 
-## Create IP Addresses with the  Prefix
+## Create IP Addresses with the Prefix
 - Still  under IPAM, under the IP ADDRESSES section click **IP Addresses**
 - Add one using the GUI
   - Click **Add IP Address**
-    - Address: **192.168.99.254/24** (or whatever the default gateway/router IP is on your Lab LAN with CIDR masl)
+    - Address: **192.168.99.254/32**
     - Namespace: **Global**
     - Type: **Host** (default)
     - Status: **Active**
