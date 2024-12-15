@@ -1,0 +1,7 @@
+address,status__name,namespace__name
+192.168.99.1,Active,Global
+192.168.99.2,Active,Global
+192.168.99.3,Active,Global
+192.168.99.4,Active,Global
+192.168.99.5,Active,Global
+192.168.99.252,Active,Global
