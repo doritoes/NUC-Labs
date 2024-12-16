@@ -56,6 +56,37 @@ We have all the devices created, so we start configuring IP address information 
   - Click **Run Job Now**
 
 ## Assign IP Addresses to Devices/Interfaces
+- Start with the NAS device (it has a static IP address and is not a switch)
+  - From the left menu expand **DEVICES**
+  - Under the DEVICES  section click **Devices**
+  - Click on **LAB-NAS** (or another device with a static IP address and that is not a switch)
+    - 🌱 how handle switches and IP addresses
+  - Click **Interfaces** tab
+  - Click **LAN1**
+  - Click **Edit Interface**
+    - Select the IP Address from the dropdown **192.168.99.252**
+    - Click Update
+- Next add VLAN interfaces to the L2 switches and mark them as management
+  - Unifi switches can be set to have a static IP address. In my Labs I use DHCP reservations on my firewall/router to reserve addresses; this is more flexible.
+  - Add the interface to each switch
+    - LAB-SW1
+    - LAB-SW2
+    - LAB-SW3
+  - Click on the switch device
+  - Click **Add Components** then click **Interfaces
+    - Name: **vlan1** (adjust for the name if you want, such as management1)
+    - Status: **Active**
+    - Type:**Virtual** and <ins>check</ins> **Enabled**
+    - IP Address: select the management IP address for the switch from the dropdown
+      - LAB-SW1 (i.e., 192.168.99.1)
+      - LAB-SW2 (i.e., 192.168.99.2)
+      - LAB-SW3 (i.e., 192.168.99.3)
+- Next configure the Firewall
+  - LAB-Firewall
+- Next configure the wireless access points
+- 
+
+
 
 ## Next Steps
 You can now start to add your devices. Continue to [Cabling](5_Cabling.md).
