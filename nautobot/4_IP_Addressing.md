@@ -21,16 +21,22 @@ We have all the devices created, so we start configuring IP address information 
   - Optionally add a description
   - Click **Create**
 
-## Create a Prefix
-- Still  under IPAM, under the PREFIXES section click **Prefixes**
-- Click **Add Prefix**
-  - Prefix: **192.168.99.0/24** (or whatever network you are using in your lab in CIDR format)
-  - Namespace: **Global** (default)
-  - Type: **Network** (default)
-  - Status: **Active**
-  - RIR: Select from the dropdown **Lab RIR**
-  - Optionally add a description
-  - Click **Create**
+## Create Prefixes
+- Create prefix for internal IP addresses
+  - Still  under IPAM, under the PREFIXES section click **Prefixes**
+  - Click **Add Prefix**
+    - Prefix: **192.168.99.0/24** (or whatever network you are using in your lab in CIDR format)
+    - Namespace: **Global** (default)
+    - Type: **Network** (default)
+    - Status: **Active**
+    - RIR: Select from the dropdown **Lab RIR**
+    - Optionally add a description
+    - Click **Create**
+  - Still  under IPAM, under the PREFIXES section click **Prefixes**
+  - Click **Add Prefix**
+    - 🌱 Add WAN prefix
+    - 🌱 Add WAN2 prefix
+    - 🌱 if not in bridge mode you might have a RFC1918 address
 
 ## Create IP Addresses with the Prefix
 - Still  under IPAM, under the IP ADDRESSES section click **IP Addresses**
@@ -68,7 +74,7 @@ We have all the devices created, so we start configuring IP address information 
     - Click Update
 - Next add VLAN interfaces to the L2 switches and mark them as management
   - Unifi switches can be set to have a static IP address. In my Labs I use DHCP reservations on my firewall/router to reserve addresses; this is more flexible.
-  - Add the interface to each switch
+  - Add the interface to <ins>each switch</ins>
     - LAB-SW1
     - LAB-SW2
     - LAB-SW3
@@ -76,16 +82,33 @@ We have all the devices created, so we start configuring IP address information 
   - Click **Add Components** then click **Interfaces
     - Name: **vlan1** (adjust for the name if you want, such as management1)
     - Status: **Active**
-    - Type:**Virtual** and <ins>check</ins> **Enabled**
+    - Type: **Virtual** and <ins>check</ins> **Enabled**
     - IP Address: select the management IP address for the switch from the dropdown
       - LAB-SW1 (i.e., 192.168.99.1)
       - LAB-SW2 (i.e., 192.168.99.2)
       - LAB-SW3 (i.e., 192.168.99.3)
-- Next configure the Firewall
-  - LAB-Firewall
+    - Click **Create**
+  - Repeat for each switch
+- Next configure the Firewall **LAB-Firewall**
+  - Firewalls (especially pfSense firewalls and OPNsense firewalls) are funny with interface naming
+    - For the Qotom appliance for this lab there are 6 type ibg network ports ("Intel Gigabit Ethernet controllers")
+      - igb0
+      - igb1
+      - igb2
+      - igb3
+      - igb4
+      - igb5
+    - These get mapped to interfaces with customized names
+      - igb0 - WAN (primary internet connection to cable modem in bridge mode)
+      - igb1 - WAN2 (backup internet connection to wireless service provider modem in bridge mode)
+      - igb5 - LAN (LAN interface)
+  - In my Lab testing, I renamed the default "Ethernet 1" to "Ethernet6" interfaces to the final port names in the firewall
+    - Rename "Ethernet 1" to "WAN" and the firewall's public IP address for WAN
+    - Rename "Ethernet 2" to "WAN" and the firewall's public IP address for WAN2
+    - Rename "Ethernet 6" to "LAN" and the firewall's LAN IP address (192.168.99.254)
+    - Edit each interface and click **Update**
 - Next configure the wireless access points
-- 
-
+  - 🌱 continue here
 
 
 ## Next Steps
