@@ -143,6 +143,17 @@ From the left menu click **Organization** > **Locations**
 - Time Zone: *set to your local Time Zone*
 - Click **Create**
 
+## Tags
+Create tag for management interfaces.
+
+From the left menu click **Organization** > **METADATA**
+- Under METADATA click **Tags**
+- Click **Add Location Type** and then click **Add Tag**
+  - Name: **Management**
+  - Description: **Management interface**
+  - Content Type(s): **dcim | interface** 
+  - Click **Create**
+
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
 - Active
