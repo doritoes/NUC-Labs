@@ -3,22 +3,12 @@ This corresponds to the last pages of chapter 5 in the book. See https://github.
 
 We have all the devices created, so we start configuring IP address information using IPAM in the web GUI.
 
-## Create RIRs for Private Address Space and Exteral Addresses
-### Create a private RIR for Private Address Space
+## Create Private RIs for Private Address Space
 - From the left menu expand **IPAM**
 - Under the RIRS section click **RIRs**
 - Click **Add RIR**
   - Name: **Lab RIR**
   - Check **Private**
-  - Optionally add a description
-  - Click **Create**
-### Create a RIR for External Address Space
-Since the firewall is getting public IP addresses, we are creating an RIR for external public IP addresses.
-- From the left menu expand **IPAM**
-- Under the RIRS section click **RIRs**
-- Click **Add RIR**
-  - Name: **Lab External RIR**
-  - Check **Private** 🌱 is this correct
   - Optionally add a description
   - Click **Create**
 
@@ -46,9 +36,7 @@ Since the firewall is getting public IP addresses, we are creating an RIR for ex
   - Click **Add Prefix**
 - Create prefix for each ISP external IP addresses
   - If not in bridge mode you might have a RFC1918 address
-    - Add this to **Lab RIR**
-  - For public IP addresses
-    - Add them to **Lab External RIR**
+    - If so, you may decide to add to the **Lab RIR**
 
 ## Create IP Addresses with Prefix
 - Still  under IPAM, under the IP ADDRESSES section click **IP Addresses**
