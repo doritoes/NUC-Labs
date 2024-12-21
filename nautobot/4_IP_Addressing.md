@@ -84,7 +84,7 @@ We have all the devices created, so we start configuring IP address information 
     - LAB-SW2
     - LAB-SW3
   - Click on the switch device
-  - Click **Add Components** then click **Interfaces
+  - Click **Add Components** then click **Interfaces**
     - Name: **vlan1** (adjust for the name if you want, such as management1)
     - Status: **Active**
     - Type: **Virtual** and <ins>check</ins> **Enabled**
@@ -92,6 +92,7 @@ We have all the devices created, so we start configuring IP address information 
       - LAB-SW1 (i.e., 192.168.99.1)
       - LAB-SW2 (i.e., 192.168.99.2)
       - LAB-SW3 (i.e., 192.168.99.3)
+    - Add tag **Management**
     - Click **Create**
   - Repeat for each switch
 - Next configure the Firewall **LAB-Firewall**
