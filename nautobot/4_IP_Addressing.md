@@ -34,7 +34,7 @@ We have all the devices created, so we start configuring IP address information 
     - Click **Create**
   - Still  under IPAM, under the PREFIXES section click **Prefixes**
   - Click **Add Prefix**
-- Create prefix for each ISP external IP addresses
+- Optionally create prefix for each ISP external IP addresses
   - If not in bridge mode you might have a RFC1918 address
     - If so, you may decide to add to the **Lab RIR**
 
@@ -52,7 +52,7 @@ We have all the devices created, so we start configuring IP address information 
   - Back in **IP Addreses**, click **Add IP Address** again
   - Click the tab **Bulk Create**
   - Note that you can create multiple IP addresses at once using a pattern
-    - Example address pattern: **192.168.99.[1-5,252]/24**
+    - Example address pattern: **192.168.99.[1-5,252]/32**
   - Instead of using this method, we will use the next method to import from CSV
 - Import IP Addresses using CSV
   - Still in **IP Addresses**,  click **Add IP Address** again
@@ -60,18 +60,18 @@ We have all the devices created, so we start configuring IP address information 
     - Import the file [import-ip-addresses.csv](import-ip-addresses.csv)
   - Alternatively, you can use "CSV Text Input" and paste in the CSV data
   - Click **Run Job Now**
-- Add external Interet gateway IPs
+- Add external Internet gateway IPs
   - These are the ISP gateway IPs
   - If your cable modem/cell data modem is in router mode, this will be a RFC1918 address
   - If your cable modem/cell data modem is in bridge mode, this will be a public IP address
-  - 🌱 what do we do about the ISP gateways? We have IPs but not devices to stick them to? Hmmm should probably add the cable modems/cell data modem devices
+  - What do we do about the ISP gateways? We have IPs but not devices to stick them to? Create the IP addresses in IPAM.
+  - 🌱 Hmmm should probably add the cable modems/cell data modem devices!
 
 ## Assign IP Addresses to Devices/Interfaces
 - Start with the NAS device (it has a static IP address and is not a switch)
   - From the left menu expand **DEVICES**
   - Under the DEVICES  section click **Devices**
   - Click on **LAB-NAS** (or another device with a static IP address and that is not a switch)
-    - 🌱 how handle switches and IP addresses
   - Click **Interfaces** tab
   - Click **LAN1**
   - Click **Edit Interface**
@@ -110,7 +110,7 @@ We have all the devices created, so we start configuring IP address information 
       - igb5 - LAN (LAN interface)
   - In my Lab testing, I renamed the default "Ethernet 1" to "Ethernet6" interfaces to the final port names in the firewall
     - Rename "Ethernet 1" to "WAN" and the firewall's public IP address for WAN
-    - Rename "Ethernet 2" to "WAN" and the firewall's public IP address for WAN2
+    - Rename "Ethernet 2" to "WAN2" and the firewall's public IP address for WAN2
     - Rename "Ethernet 6" to "LAN" and the firewall's LAN IP address (192.168.99.254)
     - Edit each interface and click **Update**
 - Next configure the wireless access points
