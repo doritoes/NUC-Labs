@@ -143,13 +143,19 @@ optionally:
 - timezone
 - description
 
-From the left menu click **Organization** > **Locations**
+To demonstrate manuallying adding location, from the left menu click **Organization** > **Locations**
 - Click **Add Location**
 - Type: **Site**
 - Name: **Lab**
 - Status: **Active**
 - Time Zone: *set to your local Time Zone*
 - Click **Create**
+
+To demonstrate addding locations using Ansible
+- Download [01-add-locations.yml](ansible/01-add-locations.yml)
+- `cd ansible`
+- `ansible-playbook 01-add-locations.yml`
+
 
 ## Tags
 Create tag for management interfaces.
