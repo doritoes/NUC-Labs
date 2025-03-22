@@ -83,7 +83,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 ## Set up System
 ### Update and Install Packages
 - Log in as user `nauto`
-- Update the system packages
+- Update the system packages and install packages
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
   - `sudo apt install -y git python3 python3-pip python3-venv python3-dev redis-server postgresql`
 - Test
@@ -95,18 +95,30 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
     - To exit: `\q`
 
 ### Install Nautobot
-#### Create nautobot system user
+#### Create nautobot system user and set up Python environment
 It is best practice to run Nautobot as a user other than root. This user, `nautobot`, will own files and permissions and services will be configured to run under this account.
+
+A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivdual projects, preventing any interference with system packages or other projects.
+
+Here we create demonstrate configuring for the user `nautobot` right from the user `nauto`.
 
 Create user:
 - `sudo useradd --system --shell /bin/bash --create-home --home-dir /opt/nautobot nautobot`
 - `sudo usermod -aG sudo nautobot`
 - `sudo passwd nautobot`
-
-Test:
+Create Python environment
+- `sudo -u nautobot python3 -m venv /opt/nautobot`
+- Configure the environment variables in the user `.bashrc` file
+  - `echo "export NAUTOBOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
+  - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
+Test
+- Log out and back in as `nautobot`
+- `echo $NAUTOBOT_ROOT`
 - `eval echo ~nautobot`
 - `ls -l /opt/ | grep nautobot`
-  - Should be `drwxr-x---` and `nautobot nautobot`
+- Should be `drwxr-x---` and `nautobot nautobot`
 
 #### Create database for Nautobot
 🔑 From now on, use the account `nautobot`. Log out of `nauto` and back in as `nautobot`.
@@ -129,21 +141,13 @@ Set up the Nautobot database:
     - The script sets the password to `nautobot123`
   - `\q`
 
-#### Set up Python virtual environment
-A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivdual projects, preventing any interference with system packages or other projects.
-
- Here we create demonstrate configuring for the user `nautobot` right from the user `nauto`.
- 
-- Create venv
-  - `sudo -u nautobot python3 -m venv /opt/nautobot`
-- Configure the environment variables in the user `.bashrc` file
-  - `echo "export NAUTOBOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
-  - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
-  - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
-  - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
-- Test
-  - Log out and back in as `nautobot`
-  - `echo $NAUTOBOT_ROOT`
+#### Install Ansible
+- `pip install ansible`
+- `ansible-galaxy collection install networktocode.nautobot`
+- `pip install napalm`
+- `ansible-galaxy collection install napalm/napalm`
+- `pip install pynautobot`
+- `pip install netutils`
 
 #### Installing Nautobot
 🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> install as `root`!
@@ -228,7 +232,7 @@ A Python virtual environment (virtual env or nenv) is strongly recommended. If y
   - Test
     - `sudo systemctl status nautobot.service`
     - Point your broswer to the VM's IP address on port 8001
-      - Example: https://192.169.99.33:8001
+      - Example: https://192.168.99.33:8001
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
