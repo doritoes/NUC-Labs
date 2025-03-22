@@ -3,7 +3,7 @@ This corresponds to the last pages of chapter 5 in the book. See https://github.
 
 We have all the devices created, so we start configuring IP address information using IPAM in the web GUI.
 
-## Create Private RIs for Private Address Space
+## Create Private RIRs for Private Address Space
 - From the left menu expand **IPAM**
 - Under the RIRS section click **RIRs**
 - Click **Add RIR**
