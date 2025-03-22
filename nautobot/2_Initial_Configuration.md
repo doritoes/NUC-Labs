@@ -3,6 +3,14 @@ This corresponds to the latter part of chapter 3 in the book. See https://github
 
 You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creatings things.
 
+## Create API token for CRUD Operations
+- Click **admin** in the lower-left corner (your logged-in user)
+- Clikc **Profile**
+- Clikc **API Tokens**
+- Click **+ Add a Token**
+- Add create a token and record it for later use
+  - Ex. `nautobot-lab-token-crud-123456789-abcdefghij`
+
 ## Device Prerequisites
 To set up the first devices you need to do some steps before finally creating the devices.
 - Devices (Step 7)
