@@ -21,7 +21,7 @@ Materials:
 ## Installing and Deploying Nautobot
 Chapter 3 from the book steps through setting up our first Nautobot server. It also assist in setting up necessary items as you get started.
 
-TIP Chapter 10 has a quicker and more concise instructions if that works better for you.
+TIP Chapter 10 has quicker and more concise instructions if that works better for you.
 
 - [Install Nautobot](1_Install_Nautobot.md)
 
