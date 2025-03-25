@@ -152,7 +152,7 @@ Set up the Nautobot database:
 - `pip install ansible`
 - `ansible-galaxy collection install networktocode.nautobot`
 - `pip install napalm`
-- `ansible-galaxy collection install napalm/napalm`
+- `ansible-galaxy collection install napalm.napalm`
 - `pip install pynautobot`
 - `pip install netutils`
 
@@ -169,9 +169,11 @@ Set up the Nautobot database:
     - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
   - NOTE You can specific the book version like so: `pip3 install nautobot==2.1.4`
   - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip3 install command
+    - NEED TO TEST this!
     - `pip3 install nautobot[all]` - in Lab testing, this failed
     - `pip3 install nautobot[napalm,mysqlclient]`
 - Test
+  - `ansible --version`
   - `nautobot-server --version`
 
 ### Configure Nautobot
@@ -194,13 +196,13 @@ Set up the Nautobot database:
 - Database Migrations
   - `nautobot-server migrate`
     - ⏲️ This will take a while, be patient
-    - NOTE This is not just for the initial setup; every time a new release is deployed, a new migrate is needed to update the database data models
+    - NOTE This is not just for the initial setup! Every time a new release is deployed, a migrate run is needed to update the database data models
 - Create a Nautobot superuser to log in to the Nautobot web application
   - `nautobot-server createsuperuser`
     - Username: **admin**
     - Email address: *be creative*
     - Password: **nautobot123**
-- Collect Nautobot static files (collect data not covered by the `migrate` command, also run for every release)
+- Collect Nautobot static files (collect data not covered by the `migrate` command; this also needs to be run for every release)
   - `nautobot-server collectstatic`
 - Nautobot Check
   - Validate the configuration and check for common problems
@@ -237,9 +239,9 @@ Set up the Nautobot database:
     - `sudo systemctl daemon-reload`
     - `sudo systemctl enable --now nautobot
   - Test
-    - `sudo systemctl status nautobot.service`
+    - `systemctl status nautobot.service`
     - Point your broswer to the VM's IP address on port 8001
-      - Example: https://192.168.99.33:8001
+      - Example: https://192.168.99.17:8001
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
@@ -248,7 +250,7 @@ Set up the Nautobot database:
     - `sudo systemctl daemon-reload`
     - `sudo systemctl enable --now nautobot-worker
   - Test
-    - `sudo systemctl status nautobot-worker.service`
+    - `systemctl status nautobot-worker.service`
   - Configure Nautobot Scheduler as Linux service
     - Download [nautobot-scheduler.service](nautobot-scheduler.service) and copy to a new file `/etc/systemd/system/nautobot-scheduler.service`
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
@@ -256,10 +258,11 @@ Set up the Nautobot database:
     - `sudo systemctl daemon-reload`
     - `sudo systemctl enable --now nautobot
   - Test
-    - `sudo systemctl status nautobot-scheduler`
+    - `systemctl status nautobot-scheduler.service`
 - Test all the services
   - `sudo systemctl status redis-server postgresql nautobot nautobot-worker nautobot-scheduler`
     - Read carefully to check for errors
+    - NOTE that is ok that PostgreSQL shows active/exited; you can connect and confirm
   -  Point web browser to the IP address of the VM using port 8001
       - Ex. http://192.168.99.17:8001
     - Log in as `admin`/`nautobot123`
