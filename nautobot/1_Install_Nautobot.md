@@ -42,7 +42,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
       - File > New Virtual Machine
       - Typical
       - Browse to select the ISO file you downloaded (it will automatically detect the distribution and version)
-      - Name: nautobot
+      - Name: **nautobot**
       - Disk: 80GB or more (not aware of a minimum value)
       - Customize Hardware
         - Memory: 2GB or more (testing 4GB in Lab)
@@ -50,7 +50,10 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
         - Network Adapter: Bridged, connect at power on
 
 ### Initial Ubuntu Server Installation
-- Allow the system to come up to the "Install" screen and click **Install Ubuntu**
+- Allow the system to power on1
+- retest this part
+  - At the boot menu select **Try or Install Ubuntu**
+  - Allow the system to power on and come up to the "Install" screen and click **Install Ubuntu**
 - Accept the language settings and optionally update the installer
 - Accept the keyboard settings then accept **Ubuntu Server**
 - Accept or configure the network connection (DHCP is fine for this Lab, but in production you want a fixed IP address: either a static IP or use a DHCP reservation)
