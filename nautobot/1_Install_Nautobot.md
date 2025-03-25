@@ -109,13 +109,17 @@ Create user:
 - `sudo useradd --system --shell /bin/bash --create-home --home-dir /opt/nautobot nautobot`
 - `sudo usermod -aG sudo nautobot`
 - `sudo passwd nautobot`
+
 Create Python environment
 - `sudo -u nautobot python3 -m venv /opt/nautobot`
-- Configure the environment variables in the user `.bashrc` file
+
+Configure the environment variables in the user `.bashrc` file
+  - Log back in as user `nautobot`
   - `echo "export NAUTOBOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_PASSWORD=nautobot123" | tee -a ~nautobot/.bashrc`
+
 Test
 - Log out and back in as `nautobot`
 - `echo $NAUTOBOT_ROOT`
@@ -124,7 +128,7 @@ Test
 - Should be `drwxr-x---` and `nautobot nautobot`
 
 #### Create database for Nautobot
-🔑 From now on, use the account `nautobot`. Log out of `nauto` and back in as `nautobot`.
+🔑 From now on, use the account `nautobot`.
 
 Set up the Nautobot database:
 - Manually
