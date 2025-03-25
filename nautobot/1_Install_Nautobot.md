@@ -3,7 +3,7 @@ This corresponds to chapter 3 in the book. See https://github.com/PacktPublishin
 
 The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
 
-🌱 This is pretty bad with no https. Should circle back and improve the lab to use at least self-signed certificate with https.
+🌱 Additionally this is terribly insecure with http (no https). Should circle back and improve the lab to use at least self-signed certificate with https.
 
 ## Network Architecture
 For this Lab you can install in your home lab network.
@@ -50,11 +50,9 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
         - Network Adapter: Bridged, connect at power on
 
 ### Initial Ubuntu Server Installation
-- Allow the system to power on1
-- retest this part
-  - At the boot menu select **Try or Install Ubuntu**
-  - Allow the system to power on and come up to the "Install" screen and click **Install Ubuntu**
-- Accept the language settings and optionally update the installer
+- Allow the system to power on
+- At the boot menu select **Try or Install Ubuntu** (or wait and it will start automatically)
+- Accept the language settings and optionally update the installer (Internet access required)
 - Accept the keyboard settings then accept **Ubuntu Server**
 - Accept or configure the network connection (DHCP is fine for this Lab, but in production you want a fixed IP address: either a static IP or use a DHCP reservation)
 - No proxy, and continue after the mirror passes tests
@@ -64,7 +62,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Edit it
     - Change size to the maximum size (i.e., 77.996G)
     - Save
-  - TIP A second option is to add a partition for /opt and assign the space to /opt
+  - TIP A second option is to add a partition for /opt and assign the extra space space to /opt
 - Done and then Continue
 - Enter system and user information *you can modify these as desired*
   - Your name: **nauto**
@@ -74,7 +72,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Continue
 - Skip Ubuntu Pro
 - <ins>Check</ins> Install OpenSSH server
-- Don't select any feature server snaps
+- Don't select any featured server snaps
 - ⏲️ Wait patiently for the **Installation complete!** message
 - Select **Reboot Now**
   - Remove the installation media (USB stick or ISO file) when prompted and press **Enter**
@@ -82,6 +80,8 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - Home router: https://www.youtube.com/watch?v=dCAsHdRBrag
   - pfSense: https://www.youtube.com/watch?v=NNKZm49keaA
   - OPNsense: https://forum.opnsense.org/index.php?topic=34017.0
+- TIP once you identify the server's IP address, you can SSH to it using the IP address and the user/password for `nauto`
+  - Ex. `ip a`
 
 ## Set up System
 ### Update and Install Packages
@@ -114,7 +114,7 @@ Create Python environment
 - `sudo -u nautobot python3 -m venv /opt/nautobot`
 
 Configure the environment variables in the user `.bashrc` file
-  - Log back in as user `nautobot`
+  - Log in as user `nautobot`
   - `echo "export NAUTOBOT_ROOT=/opt/nautobot" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_ALLOWED_HOSTS=*" | tee -a ~nautobot/.bashrc`
   - `echo "export NAUTOBOT_DB_USER=nautobot" | tee -a ~nautobot/.bashrc`
@@ -149,29 +149,25 @@ Set up the Nautobot database:
   - `\q`
 
 #### Install Ansible
-- `pip install ansible`
-- `ansible-galaxy collection install networktocode.nautobot`
-- `pip install napalm`
-- `ansible-galaxy collection install napalm.napalm`
-- `pip install pynautobot`
-- `pip install netutils`
+- `pip install ansible napalm`
+- `ansible-galaxy collection install networktocode.nautobot napalm.napalm`
+- `pip install pynautobot netutils`
 
 #### Installing Nautobot
 🔑 Nautobot should be installed as the `nautobot` user --do <ins>NOT</ins> install as `root`!
 - Log in as user `nautobot`
   - Or, switch to the user: `sudo -ui nautobot`
 - Install `wheel` so Python will use wheel packages when they are available
-  - `pip3 install --upgrade pip wheel`
+  - `pip install --upgrade pip wheel`
 - Install `pyyml` for python scripts to easily handle yaml files
-  - `pip3 install pyyaml`
+  - `pip install pyyaml`
 - Install Nautobot
-  - `pip3 install nautobot`
+  - `pip install nautobot`
     - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
-  - NOTE You can specific the book version like so: `pip3 install nautobot==2.1.4`
-  - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip3 install command
-    - NEED TO TEST this!
-    - `pip3 install nautobot[all]` - in Lab testing, this failed
-    - `pip3 install nautobot[napalm,mysqlclient]`
+  - NOTE You can specific the book version like so: `pip install nautobot==2.1.4`
+  - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip install command
+    - `pip install nautobot[all]` - in Lab testing, this failed geeting requirements
+    - `pip install nautobot[napalm,mysqlclient]`
 - Test
   - `ansible --version`
   - `nautobot-server --version`
@@ -211,7 +207,7 @@ Set up the Nautobot database:
 - Test run a development instance
   - `nautobot-server runserver 0.0.0.0:8080 --insecure`
   - Point web broswer to the IP address of VM using port 8080
-    - Ex. http://192.168.99.17:8080
+    - Ex. http://192.168.99.14:8080
     - Log in as `admin`/`nautobot123`
     - Press control-C at the terminal to stop it
 - Test Nautobot worker
@@ -227,7 +223,7 @@ Set up the Nautobot database:
     - `/opt/nautobot/bin/nautobot-server start --ini /opt/nautobot/uwsgi.ini`
   - Test
     - Point web browser to the IP address of the VM using port 8001
-      - Ex. http://192.168.99.17:8001
+      - Ex. http://192.168.99.14:8001
     - Log in as `admin`/`nautobot123`
   - Press control-C at the terminal to stop it
 - Check services
@@ -237,18 +233,18 @@ Set up the Nautobot database:
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Enable and start the new service
     - `sudo systemctl daemon-reload`
-    - `sudo systemctl enable --now nautobot
+    - `sudo systemctl enable --now nautobot`
   - Test
     - `systemctl status nautobot.service`
     - Point your broswer to the VM's IP address on port 8001
-      - Example: https://192.168.99.17:8001
+      - Example: https://192.168.99.14:8001
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Enable and start the new service
     - `sudo systemctl daemon-reload`
-    - `sudo systemctl enable --now nautobot-worker
+    - `sudo systemctl enable --now nautobot-worker`
   - Test
     - `systemctl status nautobot-worker.service`
   - Configure Nautobot Scheduler as Linux service
@@ -256,7 +252,7 @@ Set up the Nautobot database:
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Enable and start the new service
     - `sudo systemctl daemon-reload`
-    - `sudo systemctl enable --now nautobot
+    - `sudo systemctl enable --now nautobot-scheduler`
   - Test
     - `systemctl status nautobot-scheduler.service`
 - Test all the services
@@ -264,7 +260,7 @@ Set up the Nautobot database:
     - Read carefully to check for errors
     - NOTE that is ok that PostgreSQL shows active/exited; you can connect and confirm
   -  Point web browser to the IP address of the VM using port 8001
-      - Ex. http://192.168.99.17:8001
+      - Ex. http://192.168.99.14:8001
     - Log in as `admin`/`nautobot123`
 
 ## Next Steps
