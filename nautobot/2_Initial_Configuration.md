@@ -4,12 +4,16 @@ This corresponds to the latter part of chapters 3 and 10 in the book. See https:
 You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creatings things.
 
 ## Create API token for CRUD Operations
+- Log in to your nautobot instance
+  - e.g., http://192.168.99.14:8001
+  - admin/nautobot123
 - Click **admin** in the lower-left corner (your logged-in user)
-- Clikc **Profile**
-- Clikc **API Tokens**
+- Click **Profile**
+- Click **API Tokens**
 - Click **+ Add a Token**
-- Add create a token and record it for later use
-  - Ex. `nautobot-lab-token-crud-123456789-abcdefghij`
+- Optionally specify a key name (e.g., `nautobot-lab-token-crud-123456789-abcdefghij`) and/or a description
+- Click Create
+- Click Copy copy the key name and record it for later use
 
 ## Device Prerequisites
 To set up the first devices you need to do some steps before finally creating the devices.
@@ -51,7 +55,7 @@ Represents the name of a device's manufacturer. Used in Device Types.
 Examples follow:
 - Cisco
 - Arista
-- from Juniper
+- Juniper
 
 Import
 - From the left menu expand **DEVICES**
