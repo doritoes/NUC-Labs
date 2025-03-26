@@ -129,11 +129,16 @@ Import
     - running XCP-ng
 
 ## Location Types
+### Manually
 From the left menu click **Organization** > **Location Types**
 - Click **Add Location Type**
 - Name:  **Site**
 - Content types: **dcim | device**
 - Click **Create**
+
+### Using Ansible
+1. Copy the playbook [01-location-types.yml](ansible/01-location-types.yml)
+2. Run the playboook `ansible-playbook 01-location-types.yml`
 
 ## Locations
 Represents the site where the device is installed. Some examples:
@@ -153,7 +158,8 @@ optionally:
 - timezone
 - description
 
-To demonstrate manuallying adding location, from the left menu click **Organization** > **Locations**
+### Manually
+From the left menu click **Organization** > **Locations**
 - Click **Add Location**
 - Type: **Site**
 - Name: **Lab**
@@ -161,11 +167,14 @@ To demonstrate manuallying adding location, from the left menu click **Organizat
 - Time Zone: *set to your local Time Zone*
 - Click **Create**
 
+### Using Ansible
+1. Copy the playbook [02-locations.yml](ansible/02-locations.yml)
+2. Run the playboook `ansible-playbook 02-locations.yml`
+
 To demonstrate addding locations using Ansible
 - Download [01-add-locations.yml](ansible/01-add-locations.yml)
 - `cd ansible`
 - `ansible-playbook 01-add-locations.yml`
-
 
 ## Tags
 Create tag for management interfaces.
