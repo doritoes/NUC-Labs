@@ -16,6 +16,8 @@ You can't create objects without the required fields. So we need to do some pre-
 - Click Copy to copy the key name and record it for later use
 - Add token to environment variable NAUTOBOT_TOKEN
   - echo "export NAUTOBOT_TOKEN=<<tokenvalue>>" | tee -a ~nautobot/.bashrc
+- Add the NAUTOBOT_URL environment variable
+  -  echo "export NAUTOBOT_URL=http://localhost:8001" | tee -a ~nautobot/.bashrc
 - Log out and back in, you will have the token stored in the envrironment variable
   - or run `source .bashrc`
 
