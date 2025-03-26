@@ -11,9 +11,13 @@ You can't create objects without the required fields. So we need to do some pre-
 - Click **Profile**
 - Click **API Tokens**
 - Click **+ Add a Token**
-- Optionally specify a key name (e.g., `nautobot-lab-token-crud-123456789-abcdefghij`) and/or a description
+  - Optionally specify a key name (e.g., `nautobot-lab-token-crud-123456789-abcdefghij`) and/or a description
 - Click Create
-- Click Copy copy the key name and record it for later use
+- Click Copy to copy the key name and record it for later use
+- Add token to environment variable NAUTOBOT_TOKEN
+  - echo "export NAUTOBOT_TOKEN=<<tokenvalue>>" | tee -a ~nautobot/.bashrc
+- Log out and back in, you will have the token stored in the envrironment variable
+  - or run `source .bashrc`
 
 ## Device Prerequisites
 To set up the first devices you need to do some steps before finally creating the devices.
