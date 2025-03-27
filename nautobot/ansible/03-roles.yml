@@ -15,10 +15,6 @@
         path: "{{ csv_file }}"
       register: csv_data
       delegate_to: localhost
-    - name: print data
-      debug:
-        msg: "{{ item }}"
-      loop: "{{ csv_data.list }}"
     - name: "add roles"
       networktocode.nautobot.role:
         url: "{{ nautobot_url }}"
