@@ -1,4 +1,7 @@
 # Initial Configuration
+
+📓 This page needs development
+
 This corresponds to the latter part of chapters 3 and 10 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
 
 You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creatings things.
@@ -41,19 +44,24 @@ Represents the logical role a device might have. Examples follow:
 - access switch
 - border router
 
-Some common roles you might have in your home lab are provided.
+Some common roles you might have in your home lab are provided. Import these.
 
-Import
+### Manually
 - From the left menu expand **ORGANIZATION**
 - Under **METADATA** click **Roles**
 - Click the <ins>drop down</ins> for Add Role
 - Click **Import from CSV**
-  - Option 1: Use the prepared file 🌱 [roles.csv](roles.csv)
+  - Option 1: Use the prepared file [roles.csv](roles.csv)
     - content_types (required) *usually dcim.device*
     - name (required)
     - color (optional)
     - description (optional)
     - weight (optional)
+
+### Using Ansible
+1. Copy the playbook [01-location-types.yml](ansible/01-location-types.yml)
+2. Copy the prepared CSV file [roles.csv](roles.csv)
+3. Run the playboook `ansible-playbook 03-roles.yml`
 
 ## Manufacturers
 Represents the name of a device's manufacturer. Used in Device Types.
@@ -63,7 +71,7 @@ Examples follow:
 - Arista
 - Juniper
 
-Import
+### Manually
 - From the left menu expand **DEVICES**
 - Click **Manufacturers**
 - Click the <ins>drop down</ins> for Add Manufacturer
@@ -77,6 +85,12 @@ Import
     - The file `manufacturers.csv` is created in the home directory
     - Then add any additional manufacturers missing from the list
       - Asus
+
+### Using Ansible
+1. Copy the playbook [04-manufacturers.yml](ansible/04-manufacturers.yml)
+2. Copy the prepared CSV file [manufacturers.csv](manufacturers.csv) or create your own (see above)
+3. Run the playboook `04-manufacturers.yml`
+
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
@@ -101,7 +115,7 @@ Required fields:
 
 TIP Import from community library https://github.com/nautobot/devicetype-library
 
-Import
+### Manually
 - From the left menu expance **DEVICES**
 - Click **Device Types**
 - Click the <ins>drop down</ins> for Add Device Type
@@ -127,6 +141,9 @@ Import
     - running proxymox
   - Asus NUC NUC14RVH ([NUC14RVH.yaml](device-types/NUC14RVH.yaml)) 🌱 added ASUS manufacturer to manufacturers.csv
     - running XCP-ng
+
+### Using Ansible
+📓This needs to be developed
 
 ## Location Types
 ### Manually
@@ -179,6 +196,7 @@ To demonstrate addding locations using Ansible
 ## Tags
 Create tag for management interfaces.
 
+### Manually
 From the left menu click **Organization** > **METADATA**
 - Under METADATA click **Tags**
 - Click **Add Location Type** and then click **Add Tag**
@@ -186,6 +204,9 @@ From the left menu click **Organization** > **METADATA**
   - Description: **Management interface**
   - Content Type(s): **dcim | interface** 
   - Click **Create**
+
+#### Using Ansible
+📓This needs to be developed
 
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
