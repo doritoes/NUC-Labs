@@ -5,6 +5,7 @@ The passwords used in the Lab are weak and are only suitable for Lab use. Use se
 
 Nautobot is insecure, using http (no https). The instructions to secure Nautobot with https involved using NGINX as a web server in front of the Nautobox WSGI.
 - https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/http-server/
+- [Appendix - Configuring HTTPS](appendix_https.md)
 
 ## Network Architecture
 For this Lab you can install in your home lab network.
