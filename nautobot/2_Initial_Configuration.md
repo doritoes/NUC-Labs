@@ -59,9 +59,9 @@ Some common roles you might have in your home lab are provided. Import these.
     - weight (optional)
 
 ### Using Ansible
-1. Copy the playbook [01-location-types.yml](ansible/01-location-types.yml)
+1. Copy the playbook [01-roles.yml](ansible/01-roles.yml)
 2. Copy the prepared CSV file [roles.csv](roles.csv)
-3. Run the playboook `ansible-playbook 03-roles.yml`
+3. Run the playboook `ansible-playbook 01-roles.yml`
 
 ## Manufacturers
 Represents the name of a device's manufacturer. Used in Device Types.
@@ -87,10 +87,9 @@ Examples follow:
       - Asus
 
 ### Using Ansible
-1. Copy the playbook [04-manufacturers.yml](ansible/04-manufacturers.yml)
+1. Copy the playbook [02-manufacturers.yml](ansible/02-manufacturers.yml)
 2. Copy the prepared CSV file [manufacturers.csv](manufacturers.csv) or create your own (see above)
-3. Run the playboook `04-manufacturers.yml`
-
+3. Run the playboook `02-manufacturers.yml`
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
@@ -144,6 +143,9 @@ TIP Import from community library https://github.com/nautobot/devicetype-library
 
 ### Using Ansible
 📓This needs to be developed
+1. Copy the playbook [03-device-types.yml](ansible/03-device-types.yml)
+2. 🌱 need to develop
+
 
 ## Location Types
 ### Manually
@@ -154,8 +156,8 @@ From the left menu click **Organization** > **Location Types**
 - Click **Create**
 
 ### Using Ansible
-1. Copy the playbook [01-location-types.yml](ansible/01-location-types.yml)
-2. Run the playboook `ansible-playbook 01-location-types.yml`
+1. Copy the playbook [04-location-types.yml](ansible/04-location-types.yml)
+2. Run the playboook `ansible-playbook 04-location-types.yml`
 
 ## Locations
 Represents the site where the device is installed. Some examples:
@@ -185,13 +187,8 @@ From the left menu click **Organization** > **Locations**
 - Click **Create**
 
 ### Using Ansible
-1. Copy the playbook [02-locations.yml](ansible/02-locations.yml)
-2. Run the playboook `ansible-playbook 02-locations.yml`
-
-To demonstrate addding locations using Ansible
-- Download [01-add-locations.yml](ansible/01-add-locations.yml)
-- `cd ansible`
-- `ansible-playbook 01-add-locations.yml`
+1. Copy the playbook [05-locations.yml](ansible/05-locations.yml)
+2. Run the playboook `ansible-playbook 05-locations.yml`
 
 ## Tags
 Create tag for management interfaces.
