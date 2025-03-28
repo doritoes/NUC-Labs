@@ -27,9 +27,19 @@ Two files will be created: the public certificate (nautobot.crt) and the private
 - Troubleshooting
   - Note that Ubuntu doesn't start SELinux, so when troubleshooting don't be distracted by tips to setsebool httpd_can_network_connect
     - `sestatus`
-- ⚠️ This currrently fails in lab testing
+  - Further configuration is required
+  - curl -vvvLk http://localhost
+  - sudo cat /var/log/nginx/error.log
+  - `upstream prematurely closed connection while reading response header from upstream`
+
+## Reconfigure uwsgi
+- Modify `$NAUTOBOT_ROOT/uwsgi.ini`
+  - From: `http = 0.0.0.0:8001`
+  - To: `http-socket = localhost:8001`
+  - This BREAKS http://192.168.99.14:8001
+- `sudo systemctl restart nautobot`
 - curl -vvvLk http://localhost
+- still fails
 - sudo systemctl restart nautobot
 - sudo cat /var/log/nginx/error.log
 - `upstream prematurely closed connection while reading response header from upstream`
-- issue is localhost:8001 isn't accessible, but the actual IP address:8001 is
