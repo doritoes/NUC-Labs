@@ -1,0 +1,24 @@
+---
+- name: "nautobot lab device types"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    devices_types_directory: "devicetypes"
+
+  tasks:
+    - name: "discover type type yml files"
+      find:
+      paths: "{{ device_types_directory }}"
+      use_regex: yes
+      patterns:
+        - '.*yml$'
+      register: files_matched
+    - name: "read yml files"
+      ansible.builtin.slup:
+        src: "{{ item }}"
+      register: remotefile
+      loop: "{{ files_matched }}"
