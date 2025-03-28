@@ -12,10 +12,10 @@
   tasks:
     - name: "discover type type yml files"
       find:
-      paths: "{{ device_types_directory }}"
-      use_regex: yes
-      patterns:
-        - '.*yml$'
+        paths: "{{ device_types_directory }}"
+        use_regex: yes
+        patterns:
+          - '.*yml$'
       register: files_matched
     - name: "read yml files"
       ansible.builtin.slup:
