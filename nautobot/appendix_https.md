@@ -4,6 +4,8 @@ The official process for securing Nautobot using https is standing up NGINX as a
 
 ⚠️ These steps will configure a self-signed certificate (again, only suitable for a Lab like ours) and secure the user web interface. The API interface on port 8001 is still in clear text and subject to snooping the API keys.
 
+⚠️ This process is currently FAILING in our Lab testing
+
 ## Create Self-signed Certificate
 Two files will be created: the public certificate (nautobot.crt) and the private key (nautobot.key).
 - `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nautobot.key -out /etc/ssl/certs/nautobot.crt`
