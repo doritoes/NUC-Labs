@@ -142,9 +142,9 @@ TIP Import from community library https://github.com/nautobot/devicetype-library
     - running XCP-ng
 
 ### Using Ansible
-📓This needs to be developed
 1. Copy the playbook [03-device-types.yml](ansible/03-device-types.yml)
-2. 🌱 need to develop
+2. Create a subdirectory named "devicetypes" and copy all the device types you want to import there
+3. Run the playboook `ansible-playbook 03-device-types.yml`
 
 
 ## Location Types
