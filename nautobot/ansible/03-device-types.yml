@@ -10,7 +10,7 @@
     device_types_directory: "devicetypes"
 
   tasks:
-    - name: "discover type yaml files"
+    - name: "discover the yaml files in the directory"
       find:
         paths: "{{ device_types_directory }}"
         use_regex: yes
@@ -21,14 +21,14 @@
       command: "cat {{ item['path'] }}"
       register: obs
       loop: "{{ files_matched.files }}"
-    - name: "dump the data from each file"
-      debug:
-        msg: "{{ item.stdout | from_yaml }}"
-      loop: "{{ obs.results }}"
-    - name: "parse files is BROKEN"
+    - name: "import device types"
       networktocode.nautobot.device_type:
         url: "{{ nautobot_url }}"
         token: "{{ nautobot_token }}"
-        data: "{{ item.stdout | from_yaml }}"
+        model:  "{{ (item.stdout | from_yaml)['model'] }}"
+        manufacturer:  "{{ (item.stdout | from_yaml)['manufacturer'] }}"
+        u_height: "{{ (item.stdout | from_yaml)['u_height'] | default(omit)}}"
+        is_full_depth: "{{ (item.stdout | from_yaml)['is_full_depth'] | default(omit)}}"
+        state: present
       loop: "{{ obs.results }}"
-
+      when:  (item.stdout | from_yaml)['model'] is defined
