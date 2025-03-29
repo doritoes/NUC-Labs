@@ -40,7 +40,81 @@ This isn't a problem in our Lab because we use the manufacturer's model number a
 - Run the playbook `ansible-playbook 07-devices.yml`
 
 ## Other Ways to Discover and Add Devices
+There are other ways to discover your network devices and add them. Nautobot plug-ins can use secrets to discover and identify systems along with network scanning to discover platforms and software versions.
+
 📓This section needs development
+
+### Adding Secrets for Discovery
+For security reasons, Nautobot generally does not store sensitive secrets (device access credentials, systems-integration API tokens, etc.) in its own database. There are other approaches and systems better suited to this purpose, ranging from simple solutions such as process-specific environment variables or restricted-access files on disk, all the way through to dedicated systems such as Hashicorp Vault or AWS Secrets Manager.
+
+This model does not store the secret value itself, but instead defines how Nautobot can retrieve the secret value as and when it is needed. By using this model as an abstraction of the underlying secrets storage implementation, this makes it possible for any Nautobot feature to make use of secret values without needing to know or care where or how the secret is actually stored.
+
+Nautobot's built-in secrets providers:
+- Environment Variable
+- Text File
+
+Other providers: https://github.com/nautobot/nautobot-app-secrets-providers
+
+⚠️ Beware that any App can potentially access your secrets (e.g., display on screen), so only install Apps you trust. Any job can access your secrets and log them to job results. Any Git repo can add new Jobs ot the system. Any user with access to one or more secrets can exploit this to access other secrets.
+
+#### Text File Method
+- Create a text file to contain the secret value
+  - `mkdir secrets`
+  - `echo -n mysecretpassord > secrets/password.txt`
+  - one file, one secret
+- Create a secret in Nautobot set to the path of the file
+  - From the left pane click SECRETS then click Secrets
+  - Click Add Secret
+    - Name: example_password
+    - Description: optional
+    - Provider: Text File
+    - Path: **Absolute filesystem path to the file (e.g., `/opt/nautobot/secrets/password.txt`)
+    - Click Create
+- Select the new secret, then click Check Secret to confirm it is working
+
+#### Environment Variable Method
+- Log in as nautobot user
+- Create .env file
+  - vi .env
+    - `NAUTOBOT_EXAMPLE_PASSWORD=mysecretpassword`
+  -   `chmod 0600 .env`
+- Configure the nautobot services to use the .env environment file
+  - Service files to modify
+    - /etc/systemd/system/nautobot.service
+    - /etc/systemd/system/nautobot-worker.service
+    - /etc/systemd/system/nautobot-scheduler.service
+  - In each file, under `[Service]` add the line
+    - `EnvironmentFile=/opt/nautobot/.env`
+- Do a daemon reload
+  - sudo systemctl daemon-reload
+- Modify the .bashrc file, adding to the end
+  - `set -o allexport`
+  - `source /opt/nautobot/.env`
+  - `set +o allexport`
+- Reboot
+- Create a secret in Nautobot
+  - From the left pane click SECRETS then click Secrets
+  - Click Add Secret
+    - Name: example_variable_password
+    - Description: optional
+    - Variable: NAUTOBOT_EXAMPLE_PASSWORD
+    - Click Create
+- Select the new secret, then click Check Secret to confirm it is working
+
+#### Create Secrets Group
+- From the left pane click SECRETS then click Secrets Groups
+- Click Add Secrets Group
+  - Name: example_secrets_group
+  - Description: optional
+  - Secret Assignment
+    - SSH username for Lab network devices
+      - Access type: Generic
+      - Secret type: Username
+      - Secret: example_password
+    - SSH password for Lab network devices
+      - Secret type: Password
+      - Secret: example_variable_password
+  - Click Create
 
 ### Using the Nautobot Device Onboarding plugin
 The worker will reach out to the device and attempt to discover its attributes, including hostname, FQDN, IP address, device type, manufacturer, and platform. The app uses netmiko and NAPALM to attempt to automatically discover the OS and model of each device.
@@ -93,7 +167,8 @@ PLUGINS_CONFIG = {
   - Uncheck Dryrun and Run the job
 
 ⚠️ default device role is "leaf". this doesn't exist. but we don't have a good default device type to use.
-⚠️ jobs requires selecting a "Secrets group". this doesn't exist.
+⚠️ after creating the secrets group, still getting `Missing credentials for ['username', 'password']`, which causes paramiko exception `No authentication methods available`
+⚠️ By default the plugin uses the credentials devind in the main nautobot_config.py for NAPALM (NAPALM_USERNAME/NAPALM_PASSWORD/DEVICE_ARGS). You can update the default credentials in nautobot_config.py or you can provide specific one for each onboarding job via a SecretsGroup. If using SecretsGroup the Access Type for the associated Secrets must be Generic and at minimum associated Secrets for Username & Password are required with Secret being optional.
 
 ### Using Slurpit' Plugin
 🌱 https://slurpit.io/nautobot-plugin/
