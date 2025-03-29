@@ -167,8 +167,25 @@ PLUGINS_CONFIG = {
   - Uncheck Dryrun and Run the job
 
 ⚠️ default device role is "leaf". this doesn't exist. but we don't have a good default device type to use.
-⚠️ after creating the secrets group, still getting `Missing credentials for ['username', 'password']`, which causes paramiko exception `No authentication methods available`
-⚠️ By default the plugin uses the credentials devind in the main nautobot_config.py for NAPALM (NAPALM_USERNAME/NAPALM_PASSWORD/DEVICE_ARGS). You can update the default credentials in nautobot_config.py or you can provide specific one for each onboarding job via a SecretsGroup. If using SecretsGroup the Access Type for the associated Secrets must be Generic and at minimum associated Secrets for Username & Password are required with Secret being optional.
+⚠️ failed in testing on NAS
+
+~~~
+Netmiko Send Commands failed on 192.168.99.252 with result: Traceback (most recent call last): File "/opt/nautobot/lib/python3.12/site-packages/nornir/core/task.py", line 98, in start r = self.task(self, **self.params) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File "/opt/nautobot/lib/python3.12/site-packages/nautobot_device_onboarding/nornir_plays/command_getter.py", line 117, in netmiko_send_commands if not command_getter_yaml_data[task.host.platform].get(command_getter_job): ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^ KeyError: 'linux'
+
+	
+load_device_types	Error	—	
+192.168.99.252: Unable to load DeviceType due to a missing key in returned data, ('device_type',)
+
+load_devices	Error	—	
+192.168.99.252: Unable to load Device due to a missing key in returned data, ('device_type',), 'device_type'
+
+load_devices	Error	—	
+Unable to onboard 192.168.99.252, returned data missing for ['device_type', 'hostname', 'mgmt_interface', 'mask_length', 'serial']
+
+load	Warning	—	
+Failed IP Addresses: ['192.168.99.252']
+
+~~~
 
 ### Using Slurpit' Plugin
 🌱 https://slurpit.io/nautobot-plugin/
