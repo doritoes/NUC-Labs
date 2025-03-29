@@ -95,6 +95,8 @@ PLUGINS_CONFIG = {
 ⚠️ default device role is "leaf". this doesn't exist. but we don't have a good default device type to use.
 ⚠️ jobs requires selecting a "Secrets group". this doesn't exist.
 
+### Using Slurpit' Plugin
+🌱 https://slurpit.io/nautobot-plugin/
 
 ## Next Steps
 You can now start to add your devices. Continue to [IP Addressing](4_IP_Addressing.md).
