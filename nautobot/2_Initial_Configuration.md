@@ -1,7 +1,4 @@
 # Initial Configuration
-
-📓 This page needs development
-
 This corresponds to the latter part of chapters 3 and 10 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
 
 You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creatings things.
@@ -203,7 +200,8 @@ From the left menu click **Organization** > **METADATA**
   - Click **Create**
 
 #### Using Ansible
-📓This needs to be developed
+1. Copy the playbook [06-tags.yml](ansible/06-tags.yml)
+2. Run the playboook `ansible-playbook 06-tags.yml`
 
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
