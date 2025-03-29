@@ -7,18 +7,28 @@
   vars:
     nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
     nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
-    devices_types_directory: "devicetypes"
+    device_types_directory: "devicetypes"
 
   tasks:
-    - name: "discover type type yml files"
+    - name: "discover type yaml files"
       find:
         paths: "{{ device_types_directory }}"
         use_regex: yes
         patterns:
-          - '.*yml$'
+          - '.*yaml$'
       register: files_matched
-    - name: "read yml files"
-      ansible.builtin.slup:
-        src: "{{ item }}"
-      register: remotefile
-      loop: "{{ files_matched }}"
+    - name: "read yaml files"
+      command: "cat {{ item['path'] }}"
+      register: obs
+      loop: "{{ files_matched.files }}"
+    - name: "dump the data from each file"
+      debug:
+        msg: "{{ item.stdout | from_yaml }}"
+      loop: "{{ obs.results }}"
+    - name: "parse files is BROKEN"
+      networktocode.nautobot.device_type:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        data: "{{ item.stdout | from_yaml }}"
+      loop: "{{ obs.results }}"
+
