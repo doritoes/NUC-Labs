@@ -48,25 +48,16 @@ The worker will reach out to the device and attempt to discover its attributes, 
 - Identify the App
   - From the left menu click APPS, then click Apps Marketplace
   - From the list of apps, click Device Onboarding
-- Install the App [(instructions)][https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/]
+- Install the App - [instructions](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/)
   - `pip install nautobot-device-onboarding`
   - `echo nautobot-device-onboarding >> local_requirements.txt`
   - modify nautobot_config.py to add the app's name to the PLUGINS list
+  - Add app configuration to PLUGINS_CONFIG
  
 ~~~
-# In your nautobot_config.py
 PLUGINS = ["nautobot_plugin_nornir", "nautobot_ssot", "nautobot_device_onboarding"]
 
-# PLUGINS_CONFIG = {
-#   "nautobot_device_onboarding": {
-#     ADD YOUR SETTINGS HERE
-#   }
-# }
-~~~
-
-  - Add app configuration to PLUGINS_CONFIG
-
-~~~
+PLUGINS_CONFIG = {
     "nautobot_plugin_nornir": {
         "nornir_settings": {
             "credentials": "nautobot_plugin_nornir.plugins.credentials.nautobot_secrets.CredentialsNautobotSecrets",
@@ -78,12 +69,32 @@ PLUGINS = ["nautobot_plugin_nornir", "nautobot_ssot", "nautobot_device_onboardin
             },
         },
     },
+    "nautobot_device_onboarding": {
+        "default_ip_status": "Active",
+        "default_device_role": "leaf",
+        "skip_device_type_on_update": True
+    }
+}
+~~~
 
-  
-  - run `nautobot-server post_upgrade`
-  - `sudo systemctl restart nautobot nautobot-worker nautobot-scheduler`
+- run `nautobot-server post_upgrade`
+- `sudo systemctl restart nautobot nautobot-worker nautobot-scheduler`
 - Verify app installed
-  - Apps > Installed Apps
+  - APPS > Installed Apps
+- Enable the Job Sync Devices From Network
+  - Click JOBS
+  - Under Device Onbarding edit the job Sync Devices From Network
+  - Check Enabled
+  - Click Udpate
+- Run the Job
+  - Click the job Sync Devices From Network
+  - Enter information about the device in the form
+  - Click Run Job Now (DRYRUN)
+  - Uncheck Dryrun and Run the job
+
+⚠️ default device role is "leaf". this doesn't exist. but we don't have a good default device type to use.
+⚠️ jobs requires selecting a "Secrets group". this doesn't exist.
+
 
 ## Next Steps
 You can now start to add your devices. Continue to [IP Addressing](4_IP_Addressing.md).
