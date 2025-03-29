@@ -42,5 +42,48 @@ This isn't a problem in our Lab because we use the manufacturer's model number a
 ## Other Ways to Discover and Add Devices
 📓This section needs development
 
+### Using the Nautobot Device Onboarding plugin
+The worker will reach out to the device and attempt to discover its attributes, including hostname, FQDN, IP address, device type, manufacturer, and platform. The app uses netmiko and NAPALM to attempt to automatically discover the OS and model of each device.
+
+- Identify the App
+  - From the left menu click APPS, then click Apps Marketplace
+  - From the list of apps, click Device Onboarding
+- Install the App [(instructions)][https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/]
+  - `pip install nautobot-device-onboarding`
+  - `echo nautobot-device-onboarding >> local_requirements.txt`
+  - modify nautobot_config.py to add the app's name to the PLUGINS list
+ 
+~~~
+# In your nautobot_config.py
+PLUGINS = ["nautobot_plugin_nornir", "nautobot_ssot", "nautobot_device_onboarding"]
+
+# PLUGINS_CONFIG = {
+#   "nautobot_device_onboarding": {
+#     ADD YOUR SETTINGS HERE
+#   }
+# }
+~~~
+
+  - Add app configuration to PLUGINS_CONFIG
+
+~~~
+    "nautobot_plugin_nornir": {
+        "nornir_settings": {
+            "credentials": "nautobot_plugin_nornir.plugins.credentials.nautobot_secrets.CredentialsNautobotSecrets",
+            "runner": {
+                "plugin": "threaded",
+                "options": {
+                    "num_workers": 20,
+                },
+            },
+        },
+    },
+
+  
+  - run `nautobot-server post_upgrade`
+  - `sudo systemctl restart nautobot nautobot-worker nautobot-scheduler`
+- Verify app installed
+  - Apps > Installed Apps
+
 ## Next Steps
 You can now start to add your devices. Continue to [IP Addressing](4_IP_Addressing.md).
