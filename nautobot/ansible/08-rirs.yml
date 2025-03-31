@@ -1,0 +1,18 @@
+---
+- name: "nautobot lab rir"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+
+  tasks:
+    - name: "create rir"
+      networktocode.nautobot.rir:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        name: "Lab RIR"
+        is_private: true
+        state: present
