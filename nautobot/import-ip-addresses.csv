@@ -5,3 +5,4 @@ address,status__name,namespace__name
 192.168.99.4,Active,Global
 192.168.99.5,Active,Global
 192.168.99.252,Active,Global
+192.168.99.254,Active,Global
