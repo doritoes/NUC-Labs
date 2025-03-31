@@ -185,11 +185,7 @@ Unable to onboard 192.168.99.252, returned data missing for ['device_type', 'hos
 
 load	Warning	—	
 Failed IP Addresses: ['192.168.99.252']
-
 ~~~
-
-### Using Slurpit' Plugin
-🌱 https://slurpit.io/nautobot-plugin/
 
 ## Next Steps
 You can now start to add your devices. Continue to [IP Addressing](4_IP_Addressing.md).
