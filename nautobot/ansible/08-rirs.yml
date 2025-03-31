@@ -9,7 +9,7 @@
     nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
 
   tasks:
-    - name: "create rir"
+    - name: "create Lab private RIR"
       networktocode.nautobot.rir:
         url: "{{ nautobot_url }}"
         token: "{{ nautobot_token }}"
