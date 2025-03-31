@@ -38,6 +38,11 @@ In this step, devices are added.
 In this step, IP addressing is set up.
 - [IP Addressing](4_IP_Addressing.md)
 
+## Cabling
+In this step, cables are configured.
+- [Cabling](4_Cabling.md)
+
+
 ## Golden Config
 https://docs.nautobot.com/projects/golden-config/en/latest/
 
