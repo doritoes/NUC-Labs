@@ -22,16 +22,21 @@ Materials:
 # Overview
 ## Installing and Deploying Nautobot
 Chapter 3 from the book steps through setting up our first Nautobot server. It also assist in setting up necessary items as you get started.
+- [Install Nautobot](1_Install_Nautobot.md)
 
 TIP Chapter 10 has quicker and more concise instructions if that works better for you.
 
-- [Install Nautobot](1_Install_Nautobot.md)
-
 ## Installing and Deploying Nautobot
-Chapter 3 continues to help you set up some necessary items before you get started.
+Chapters 3 and 10 continue to help set up some necessary items before we get started.
 - [Initial Configuration](2_Initial_Configuration.md)
 
+## Adding Devices
+In this step, devices are added.
+- [Adding Devices](3_Adding_Devices.md)
 
+## IP Addressing
+In this step, IP addressing is set up.
+- [IP Addressing](4_IP_Addressing.md)
 
 ## Golden Config
 https://docs.nautobot.com/projects/golden-config/en/latest/
