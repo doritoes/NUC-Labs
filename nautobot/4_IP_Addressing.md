@@ -4,6 +4,7 @@ This corresponds to the last pages of chapter 5 in the book. See https://github.
 We have all the devices created, so we start configuring IP address information using IPAM in the web GUI.
 
 ## Create Private RIRs for Private Address Space
+### Manually
 - From the left menu expand **IPAM**
 - Under the RIRS section click **RIRs**
 - Click **Add RIR**
@@ -11,8 +12,12 @@ We have all the devices created, so we start configuring IP address information 
   - Check **Private**
   - Optionally add a description
   - Click **Create**
+### Using Ansible
+1. Copy the playbook [08-rirs.yml](ansible/08-rirs.yml)
+2. Run the playboook `ansible-playbook 08-rirs.yml`
 
 ## Create a VLAN
+### Manually
 - Still  under IPAM, under the VLANS section click **VLANs**
 - Click **Add VLAN**
   - VLAN ID: **1** or the VLAN ID you are using the in the lab
@@ -20,8 +25,12 @@ We have all the devices created, so we start configuring IP address information 
   - Status: **Active**
   - Optionally add a description
   - Click **Create**
+### Using Ansible
+1. Copy the playbook [09-vlans.yml](ansible/09-vlans.yml)
+2. Run the playboook `ansible-playbook 09-vlans.yml`
 
 ## Create Prefixes
+### Manually
 - Create prefix for internal IP addresses
   - Still  under IPAM, under the PREFIXES section click **Prefixes**
   - Click **Add Prefix**
@@ -37,8 +46,12 @@ We have all the devices created, so we start configuring IP address information 
 - Optionally create prefix for each ISP external IP addresses
   - If not in bridge mode you might have a RFC1918 address
     - If so, you may decide to add to the **Lab RIR**
+### Using Ansible
+1. Copy the playbook [10-prefixes.yml](ansible/10-prefixes.yml)
+2. Run the playboook `ansible-playbook 10-prefixes.yml`
 
 ## Create IP Addresses with Prefix
+### Manually
 - Still  under IPAM, under the IP ADDRESSES section click **IP Addresses**
 - Add one using the GUI
   - Click **Add IP Address**
@@ -67,7 +80,13 @@ We have all the devices created, so we start configuring IP address information 
   - What do we do about the ISP gateways? We have IPs but not devices to stick them to? Create the IP addresses in IPAM.
   - 🌱 Hmmm should probably add the cable modems/cell data modem devices!
 
+### Using Ansible
+1. Download the file [import-ip-addresses.csv](import-ip-addresses.csv)
+1. Copy the playbook [11-ip-addresses.yml](ansible/11-ip-addresses.yml)
+2. Run the playboook `ansible-playbook 11-ip-addresses.yml`
+
 ## Assign IP Addresses to Devices/Interfaces
+### Manually
 - Start with the NAS device (it has a static IP address and is not a switch)
   - From the left menu expand **DEVICES**
   - Under the DEVICES  section click **Devices**
@@ -116,6 +135,10 @@ We have all the devices created, so we start configuring IP address information 
 - Next configure the wireless access points
   - 🌱 continue here
 
+### Using Ansible
+🌱 Need to investigate how to do this
+
+https://docs.nautobot.com/projects/ansible/en/stable/networktocode.nautobot/module/ip_address_to_interface.html#parameters
 
 ## Next Steps
 You can now start to add your devices. Continue to [Cabling](5_Cabling.md).
