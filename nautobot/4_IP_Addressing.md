@@ -140,5 +140,9 @@ We have all the devices created, so we start configuring IP address information 
 
 https://docs.nautobot.com/projects/ansible/en/stable/networktocode.nautobot/module/ip_address_to_interface.html#parameters
 
+1. Download the file [ip-addresses-interfaces.csv](ip-addresses-interfaces.csv)
+1. Copy the playbook [12-ip-addresses-interface.yml](ansible/12-ip-addresses-interface.yml)
+2. Run the playboook `ansible-playbook 12-ip-addresses-interface.yml`
+
 ## Next Steps
 You can now start to add your devices. Continue to [Cabling](5_Cabling.md).
