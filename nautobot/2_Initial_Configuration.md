@@ -139,10 +139,25 @@ TIP Import from community library https://github.com/nautobot/devicetype-library
     - running XCP-ng
 
 ### Using Ansible
-1. Copy the playbook [03-device-types.yml](ansible/03-device-types.yml)
-2. Create a subdirectory named "devicetypes" and copy all the device types you want to import there
-3. Run the playboook `ansible-playbook 03-device-types.yml`
+Due to the nesting of that interface data in the yaml devicetype files:
+- it's easy to parse a directory of yaml files and create the device types without interface information
+- it's hard to do the same and add the interfaces
+- it's mind-bending to try and do it in with Ansible without processing the data
 
+Therefore there is a two-step process
+1. Create the devicetypes without interfaces
+  1. Copy the playbook [03-device-types.yml](ansible/03-device-types.yml)
+  2. Create a subdirectory named "devicetypes" and copy all the device types you want to import there
+  3. Run the playboook `ansible-playbook 03-device-types.yml`
+2. Create a CSV file, extracting the data from the yaml files and preparing it for Ansible device_interface_template
+  1. Copy the Python script [scrape-device-types-interfaces.py](scrape-device-types-interfaces.py)
+  2. Run the script `python3 scrape-device-types-interfaces.py`
+    - scrapes the devicetypes folder
+    - reads all the devicetype names (model name) from all the yaml files
+    - creates a CSV file ready for Ansible
+3. Add the interfaces to the devicetypes
+  1. Copy the playbook [04-device-types-interfaces.yml](ansible/04-device-types-interfaces.yml)
+  2. Run the playboook `ansible-playbook 04-device-types-interfaces.yml`
 
 ## Location Types
 ### Manually
