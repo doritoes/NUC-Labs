@@ -13,8 +13,8 @@ We have all the devices created, so we start configuring IP address information 
   - Optionally add a description
   - Click **Create**
 ### Using Ansible
-1. Copy the playbook [08-rirs.yml](ansible/08-rirs.yml)
-2. Run the playboook `ansible-playbook 08-rirs.yml`
+1. Copy the playbook [09-rirs.yml](ansible/09-rirs.yml)
+2. Run the playboook `ansible-playbook 09-rirs.yml`
 
 ## Create a VLAN
 ### Manually
@@ -26,8 +26,8 @@ We have all the devices created, so we start configuring IP address information 
   - Optionally add a description
   - Click **Create**
 ### Using Ansible
-1. Copy the playbook [09-vlans.yml](ansible/09-vlans.yml)
-2. Run the playboook `ansible-playbook 09-vlans.yml`
+1. Copy the playbook [10-vlans.yml](ansible/10-vlans.yml)
+2. Run the playboook `ansible-playbook 10-vlans.yml`
 
 ## Create Prefixes
 ### Manually
@@ -47,7 +47,7 @@ We have all the devices created, so we start configuring IP address information 
   - If not in bridge mode you might have a RFC1918 address
     - If so, you may decide to add to the **Lab RIR**
 ### Using Ansible
-1. Copy the playbook [10-prefixes.yml](ansible/10-prefixes.yml)
+1. Copy the playbook [11-prefixes.yml](ansible/11-prefixes.yml)
 2. Run the playboook `ansible-playbook 10-prefixes.yml`
 
 ## Create IP Addresses with Prefix
@@ -82,8 +82,8 @@ We have all the devices created, so we start configuring IP address information 
 
 ### Using Ansible
 1. Download the file [import-ip-addresses.csv](import-ip-addresses.csv)
-1. Copy the playbook [11-ip-addresses.yml](ansible/11-ip-addresses.yml)
-2. Run the playboook `ansible-playbook 11-ip-addresses.yml`
+1. Copy the playbook [12-ip-addresses.yml](ansible/12-ip-addresses.yml)
+2. Run the playboook `ansible-playbook 12-ip-addresses.yml`
 
 ## Assign IP Addresses to Devices/Interfaces
 ### Manually
@@ -141,8 +141,8 @@ We have all the devices created, so we start configuring IP address information 
 https://docs.nautobot.com/projects/ansible/en/stable/networktocode.nautobot/module/ip_address_to_interface.html#parameters
 
 1. Download the file [ip-addresses-interfaces.csv](ip-addresses-interfaces.csv)
-2. Copy the playbook [12-ip-addresses-interface.yml](ansible/12-ip-addresses-interface.yml)
-3. Run the playboook `ansible-playbook 12-ip-addresses-interface.yml`
+2. Copy the playbook [13-ip-addresses-interface.yml](ansible/13-ip-addresses-interface.yml)
+3. Run the playboook `ansible-playbook 13-ip-addresses-interface.yml`
 
 ⚠️ BREAKS because the devicetypes aren't coming in with the interfaces. Either need to create the interfaces... or fix the creation of the devicetype when we create them using Ansible
 
