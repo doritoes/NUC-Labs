@@ -36,8 +36,8 @@ The provided CSV file contais device manufacturers and models. The module networ
 This isn't a problem in our Lab because we use the manufacturer's model number as the device_type.
 
 - Copy the file [devices.csv](devices.csv)
-- Copy the playbook [07-devices.yml](ansible/07-devices.yml)
-- Run the playbook `ansible-playbook 07-devices.yml`
+- Copy the playbook [08-devices.yml](ansible/08-devices.yml)
+- Run the playbook `ansible-playbook 08-devices.yml`
 
 ## Other Ways to Discover and Add Devices
 There are other ways to discover your network devices and add them. Nautobot plug-ins can use secrets to discover and identify systems along with network scanning to discover platforms and software versions.
