@@ -168,8 +168,8 @@ From the left menu click **Organization** > **Location Types**
 - Click **Create**
 
 ### Using Ansible
-1. Copy the playbook [04-location-types.yml](ansible/04-location-types.yml)
-2. Run the playboook `ansible-playbook 04-location-types.yml`
+1. Copy the playbook [05-location-types.yml](ansible/05-location-types.yml)
+2. Run the playboook `ansible-playbook 05-location-types.yml`
 
 ## Locations
 Represents the site where the device is installed. Some examples:
@@ -199,7 +199,7 @@ From the left menu click **Organization** > **Locations**
 - Click **Create**
 
 ### Using Ansible
-1. Copy the playbook [05-locations.yml](ansible/05-locations.yml)
+1. Copy the playbook [06-locations.yml](ansible/06-locations.yml)
 2. Run the playboook `ansible-playbook 05-locations.yml`
 
 ## Tags
@@ -215,7 +215,7 @@ From the left menu click **Organization** > **METADATA**
   - Click **Create**
 
 #### Using Ansible
-1. Copy the playbook [06-tags.yml](ansible/06-tags.yml)
+1. Copy the playbook [07-tags.yml](ansible/07-tags.yml)
 2. Run the playboook `ansible-playbook 06-tags.yml`
 
 ## Statuses
