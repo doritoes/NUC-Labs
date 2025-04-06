@@ -15,6 +15,17 @@
         path: "{{ csv_file }}"
       register: csv_data
       delegate_to: localhost
+    - name: "add vlans as needed"
+      networktocode.nautobot.device_interface:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        device: "{{ item['device'] }}"
+        name: "{{ item['interface'] }}"
+        type: "virtual"
+        status: Active
+        state: present
+      loop: "{{ csv_data.list }}"
+      when: "item['interface'].startswith('vlan')"
     - name: "add ip addresses"
       networktocode.nautobot.ip_address_to_interface:
         url: "{{ nautobot_url }}"
