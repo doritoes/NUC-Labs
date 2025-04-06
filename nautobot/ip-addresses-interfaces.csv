@@ -1,0 +1,6 @@
+address,namespace,interface,device
+192.168.99.252,Global,LAN1,LAB-NAS
+192.168.99.1,Global,vlan1,LAB-SW1
+192.168.99.2,Global,vlan1,LAB-SW2
+192.168.99.3,Global,vlan1,LAB-SW3
+192.168.99.254,Global,LAN,LAB-Firewall
