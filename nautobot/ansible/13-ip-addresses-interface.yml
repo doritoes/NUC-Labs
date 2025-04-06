@@ -1,0 +1,29 @@
+---
+- name: "nautobot lab ip addresses to interfaces"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    csv_file: "ip-addresses-interfaces.csv"
+
+  tasks:
+    - name: "map IP addresses to interfaces from CSV"
+      read_csv:
+        path: "{{ csv_file }}"
+      register: csv_data
+      delegate_to: localhost
+    - name: "add ip addresses"
+      networktocode.nautobot.ip_address_to_interface:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        ip_address:
+          address: "{{ item['address'] }}"
+          namespace: "{{ item['namespace'] }}"
+        interface:
+          name: "{{ item['interface'] }}"
+          device: "{{ item['device'] }}"
+        state: present
+      loop: "{{ csv_data.list }}"
