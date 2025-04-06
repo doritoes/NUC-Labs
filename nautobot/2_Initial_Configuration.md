@@ -216,7 +216,7 @@ From the left menu click **Organization** > **METADATA**
 
 #### Using Ansible
 1. Copy the playbook [07-tags.yml](ansible/07-tags.yml)
-2. Run the playboook `ansible-playbook 06-tags.yml`
+2. Run the playboook `ansible-playbook 07-tags.yml`
 
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
