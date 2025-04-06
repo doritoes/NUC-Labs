@@ -144,7 +144,7 @@ https://docs.nautobot.com/projects/ansible/en/stable/networktocode.nautobot/modu
 2. Copy the playbook [13-ip-addresses-interface.yml](ansible/13-ip-addresses-interface.yml)
 3. Run the playboook `ansible-playbook 13-ip-addresses-interface.yml`
 
-⚠️ BREAKS because the devicetypes aren't coming in with the interfaces. Either need to create the interfaces... or fix the creation of the devicetype when we create them using Ansible
+Manually modify the LAB-Firewall interfaces to your needs.
 
 ## Next Steps
 You can now start to add your devices. Continue to [Cabling](5_Cabling.md).
