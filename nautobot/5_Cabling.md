@@ -23,10 +23,12 @@ For each device:
 - Click Connect
 
 ### Using Ansible
-
+1. Download the file [cables.csv](cables.csv)
 cables.csv
-
-14-cables.yml
-
+2. Copy the playbook [14-cables.yml](ansible/14-cables.yml)
+3. Run the playboook `ansible-playbook 14-cables.yml`
 
 ## Next Steps
+Next we will try out dynamic inventory
+
+Continue to [Dynamic Inventory](6_Dynamic_Inventory.md).
