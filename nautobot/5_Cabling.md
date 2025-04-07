@@ -29,6 +29,6 @@ cables.csv
 3. Run the playboook `ansible-playbook 14-cables.yml`
 
 ## Next Steps
-Next we will try out dynamic inventory
+Next we will try out dynamic inventory.
 
 Continue to [Dynamic Inventory](6_Dynamic_Inventory.md).
