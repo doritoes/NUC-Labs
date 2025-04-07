@@ -82,8 +82,8 @@ We have all the devices created, so we start configuring IP address information 
 
 ### Using Ansible
 1. Download the file [import-ip-addresses.csv](import-ip-addresses.csv)
-1. Copy the playbook [12-ip-addresses.yml](ansible/12-ip-addresses.yml)
-2. Run the playboook `ansible-playbook 12-ip-addresses.yml`
+2. Copy the playbook [12-ip-addresses.yml](ansible/12-ip-addresses.yml)
+3. Run the playboook `ansible-playbook 12-ip-addresses.yml`
 
 ## Assign IP Addresses to Devices/Interfaces
 ### Manually
