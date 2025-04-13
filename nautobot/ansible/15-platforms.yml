@@ -1,0 +1,28 @@
+---
+- name: "nautobot lab platforms for automation"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+
+  tasks:
+    - name: "add platforms for automation"
+      networktocode.nautobot.platform:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        name: "{{ platform['name'] }}"
+        manufacturer: "{{ platform['manufacturer'] }}"
+        napalm_driver: "{{ platform['napalm_driver'] }}"
+        state: present
+      loop_control:
+        loop_var: platform
+      loop:
+        - name: "Unifi Switch"
+          manufacturer: "Ubiquiti"
+          napalm_driver: "ubiquiti_unifiswitch"
+        - name: "pfSense Firewall"
+          manufacturer: "Qotom"
+          napalm_driver: "Linux"
