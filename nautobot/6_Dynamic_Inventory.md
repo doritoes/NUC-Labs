@@ -3,9 +3,11 @@ Start with a very basic dynamic inventory to esure the inventory and connectivty
 
 See the book p. 435-437
 
-## Create dynamic inventory file
+## Create dynamic inventory files
 1. Download the file [nautobot-inventory-01.yml](ansible/nautobot-inventory-01.yml)
 2. Test: `ansible-inventory -i nautobot-inventory-01.yml --list`
+3. Download the file [nautobot-inventory-02.yml](ansible/nautobot-inventory-02.yml)
+4. Test: `ansible-inventory -i nautobot-inventory-02.yml --list`
 
 🌱 Need to determine the next steps
 - by default there is one platform in nautobot, `Linux`, which has no Napalm driver attached
