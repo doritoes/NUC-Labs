@@ -27,5 +27,18 @@ See the book p. 435-437
     - Synology NAS, try Linux
     - pfSense, try Linux
 
+## Create Platforms to Enable Automation
+🌱 This is in early testing. Not sure if this compatible at all.
+
+1. Download the file [15-platforms.yml](ansible/15-platforms.yml.yml)
+2. Test: `ansible-playbook 15-platforms.yml`
+
+
 ## Next Steps
-Next we will try out 
+🌱 Needs a LOT OF WORK!
+
+1. Need to create the dynamic group to bind the Ubiquiti switches to the platform and driver needed
+2. Want to try to create dynamic group for pfSense firewall to the platform and driver needed
+3. Want to try connecting to the devices using the nautobot credentials
+4. Want to try backups
+5. Want to try VyOS router
