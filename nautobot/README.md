@@ -40,7 +40,11 @@ In this step, IP addressing is set up.
 
 ## Cabling
 In this step, cables are configured.
-- [Cabling](4_Cabling.md)
+- [Cabling](5_Cabling.md)
+
+## Dynamic Inventory
+In this step, an example dynamic inventory is tested
+- [Dynamic Inventory](6_Dynamic_Inventory.md)
 
 
 ## Golden Config
