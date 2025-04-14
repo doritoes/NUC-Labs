@@ -31,14 +31,24 @@ See the book p. 435-437
 🌱 This is in early testing. Not sure if this compatible at all.
 
 1. Download the file [15-platforms.yml](ansible/15-platforms.yml.yml)
-2. Test: `ansible-playbook 15-platforms.yml`
+2. Run playbook: `ansible-playbook 15-platforms.yml`
 
+⚠️ None of the devices are supported with automation. Need to set up a VyOS router for the demo.
+
+## Test VyOS Access
+🌱 This is in early testing. Not sure if this compatible at all.
+1. Set environment variables with the credentials
+  - export VYOS_USERNAME=admin
+  - export VYOS_PASSWORD=password
+2. Create inventory file "hosts"
+  - [all]
+  - 192.168.99.15
+3. ansible -i hosts all -m ping
+4. Download the file [16-backup.yml](ansible/16-backup.yml)
+5. Run playbook: 16-backup.yml
 
 ## Next Steps
 🌱 Needs a LOT OF WORK!
 
-1. Need to create the dynamic group to bind the Ubiquiti switches to the platform and driver needed
-2. Want to try to create dynamic group for pfSense firewall to the platform and driver needed
-3. Want to try connecting to the devices using the nautobot credentials
-4. Want to try backups
-5. Want to try VyOS router
+1. Want to try backups
+
