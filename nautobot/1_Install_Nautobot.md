@@ -189,7 +189,7 @@ Set up the Nautobot database:
       - ALLOWED_HOSTS
       - CACHES
       - CONTENT_TYPE_CACHE_TIMEOUT
-      - CERLERY_BROKER_URL
+      - CELERY_BROKER_URL
       - DATABASES
     - Example of what it could look like: [nautobot_config.py](nautobot_config.py)
 - Database Migrations
