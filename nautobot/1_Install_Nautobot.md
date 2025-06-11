@@ -214,7 +214,7 @@ Set up the Nautobot database:
     - Log in as `admin`/`nautobot123`
     - Press control-C at the terminal to stop it
 - Test Nautobot worker
-  - Worker picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. It usesPython Celery, a distributed task queue framework.
+  - Worker picks up the background tasks triggered by the Nautobot platform and executes them asynchronously. It uses Python Celery, a distributed task queue framework.
   - Log back in as `nautobot` at command line
   - `nautobot-server celery worker`
   - Press control-C to stop it
