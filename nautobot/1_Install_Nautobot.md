@@ -239,9 +239,8 @@ Set up the Nautobot database:
     - `sudo systemctl enable --now nautobot`
   - Test
     - `systemctl status nautobot.service`
-    - Point your broswer to the VM's IP address on port 8001
-      - Example: https://192.168.99.14:8001
-      - ⚠️ FAILED testing at this point
+    - Point your broswer to the VM's IP address on port 8001 (attempts to use https will fail)
+      - Example: http://192.168.99.14:8001
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
   - Download [nautobot-worker.service](nautobot-worker.service) and copy to a new file `/etc/systemd/system/nautobot-worker.service`
