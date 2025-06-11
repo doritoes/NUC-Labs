@@ -149,6 +149,7 @@ Set up the Nautobot database:
   - `psql --username nautobot --password --host localhost nautobot`
     - The script sets the password to `nautobot123`
   - `\q`
+- Exit from user postgres and return to user nautobot
 
 #### Install Ansible
 - `pip install ansible napalm`
