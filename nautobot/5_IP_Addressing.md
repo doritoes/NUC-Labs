@@ -147,4 +147,4 @@ https://docs.nautobot.com/projects/ansible/en/stable/networktocode.nautobot/modu
 Manually modify the LAB-Firewall interfaces to your needs.
 
 ## Next Steps
-You can now start to add your devices. Continue to [Cabling](5_Cabling.md).
+You can now start to add your devices. Continue to [Cabling](6_Cabling.md).
