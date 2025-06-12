@@ -77,3 +77,6 @@ TIP Set up a DHCP reservation for your Nautobot server so it always has the same
   - Home router: https://www.youtube.com/watch?v=dCAsHdRBrag
   - pfSense: https://www.youtube.com/watch?v=NNKZm49keaA
   - OPNsense: https://forum.opnsense.org/index.php?topic=34017.0
+
+## Next Steps
+You can now start to add your devices. Continue to [Adding your First Devices](4_Adding_Devices.md).
