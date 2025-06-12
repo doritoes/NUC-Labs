@@ -10,6 +10,16 @@ This Lab is focused on building an understanding of how the server works, and is
 
 Want to learn more about nautbot in a hands-on challenge? Check out [100 Days of Nautobot](https://networktocode.com/blog/2025-01-17-100-days-of-nautobot/)
 
+Commentary for the Home Labber:
+- Nautobot is still very must a rough product for use by technologists with strong automation and/or programming skills
+- Nautobot doesn't work well for a home lab. The IPAM solution is far too high maintenance, and doesn't integrate with a Windows server DNS/DHCP or firewall-based DNS/DHCP.
+- Doesn't manage the "prosumer" gear, and not every labber is going to have Cisco or Arista in their lab. Incomplete Ubiquiti coverage, not enough for a useful lab.
+- Does support vyOS open source router
+
+Commentary for the Business:
+- You need a bit network automation evangelist to dedicate the time and energy to reap the rewards
+- Conversely, if you lose that person it could quickly fail
+
 Mission:
 - Install and Deploy Nautobot on Unbuntu server
 - to be continued
