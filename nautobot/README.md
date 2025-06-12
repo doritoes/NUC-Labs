@@ -46,11 +46,11 @@ In this set we set up a VyOS virtual router so we can test configuring it using 
 
 ## Adding Devices
 In this step, devices are added.
-- [Adding Devices](3_Adding_Devices.md)
+- [Adding Devices](4_Adding_Devices.md)
 
 ## IP Addressing
 In this step, IP addressing is set up.
-- [IP Addressing](4_IP_Addressing.md)
+- [IP Addressing](5_IP_Addressing.md)
 
 ## Cabling
 In this step, cables are configured.
