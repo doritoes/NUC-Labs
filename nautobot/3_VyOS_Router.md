@@ -3,9 +3,8 @@ In this step we will create a virtual router for the sole purpose of demonstrati
 
 ## Download the ISO
 1. Go to https://vyos.io
-2. Click Rolling Release
-  - the free version is limited to the Rolling Release
-4. Download the most recent image
+2. Click Rolling Release (the free version is limited to the Rolling Release)
+4. Download the most recent image (e.g., 2025.06.06-0019-rolling = vyos-2025.06.06-0019-rolling-generic-amd64.iso)
 
 ## Option 1 - NUC
 Use an additional NUC to perform as the router.
@@ -19,14 +18,14 @@ NOTE this will limit your testing options as it only has one network interface.
   - Click **Select target** and select the the USB stick you inserted
   - Click **Flash!** and allow the command shell to continue
   - Wait for the flash and verification to complete
-  - Safely eject the USB stick (yes, there are two "drives" on the USB stick)
+  - Safely eject the USB stick
 - Boot the NUC from the bootable USB stick
   - Connect to keyboard, mouse and power
     - Optionally connect to wired network for faster setup
   - Insert the USB stick
   - Reboot or power on the NUC
   - Press F10 at the boot prompt
-  - Select the USB stick (USB UEFI)
+  - Select the USB stick
 
 ## Option 2 - VM
 - Create a new VM based on the ISO
@@ -34,16 +33,24 @@ NOTE this will limit your testing options as it only has one network interface.
     - File > New Virtual Machine
     - Typical
     - Browse to select the ISO file you downloaded (it will automatically detect distribution and version)
+      - Since the OS isn't automatically detected, we will select Linux > Other Linux 6.x kernel 64-bit
+      - VyOS is a Debian GNU / Linux-based network OS 
     - Name: **vyos**
     - Disk: 8GB
     - Customize Hardware:
       - Memory: 1GB
       - vCPU: 2 vCPU (Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1)
       - Network Adapter: Bridged, connect at power on
+      - **Add** Network Adapter (Network Adapter 2)
+        - Custom: Specific virtual network: VMnet2
+      - **Add** Network Adapter (Network Adapter 3)
+        - Custom: Specific virtual network: VMnet2
         - Add 2 virtual switches LAN and DMZ
         - Add 1 interface connected to LAN
         - Add 1 interface connected to DMZ
-- Power on the VM
+    - Finish
+- Power on the VM (if it doesn't automatically power on)
+- Click "I Finished Installing"
 - Access the system console
 
 ## Initial VyOS Installation
@@ -53,9 +60,9 @@ NOTE this will limit your testing options as it only has one network interface.
   - Enter the new password for the `vyos` user
     - Fun fact, it allows you to set the password to `vyos`
 - When done reboot: `reboot`
-- Eject the VyOS iso
+- Eject the VyOS iso or remove the USB flash drive
 - Log back in with your updated password
-- Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
+- Configure your router's "management" connection (your Lab network)
   - `configure`
   - `set interfaces ethernet eth0 address dhcp`
   - `set service ssh`
