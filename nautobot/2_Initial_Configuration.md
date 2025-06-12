@@ -227,4 +227,4 @@ Represents the status of a device. Comes with prepopulated list and you can add 
 No custom statuses are required for this Lab.
 
 ## Next Steps
-You can now start to add your devices. Continue to [Adding your First Devices](3_Adding_Devices.md).
+You can now start to add your devices. Continue to adding a [VyOS Router](3_VyOS_Router.md).
