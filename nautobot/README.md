@@ -40,6 +40,10 @@ TIP Chapter 10 has quicker and more concise instructions if that works better fo
 Chapters 3 and 10 continue to help set up some necessary items before we get started.
 - [Initial Configuration](2_Initial_Configuration.md)
 
+## Configuring a VyOS Router
+In this set we set up a VyOS virtual router so we can test configuring it using Nautobot.
+- [VyOS Router](3_VyOS_Router.md)
+
 ## Adding Devices
 In this step, devices are added.
 - [Adding Devices](3_Adding_Devices.md)
