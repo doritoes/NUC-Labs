@@ -188,4 +188,4 @@ Failed IP Addresses: ['192.168.99.252']
 ~~~
 
 ## Next Steps
-You can now start to add your devices. Continue to [IP Addressing](4_IP_Addressing.md).
+You can now start to add your devices. Continue to [IP Addressing](5_IP_Addressing.md).
