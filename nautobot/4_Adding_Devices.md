@@ -60,17 +60,25 @@ Other providers: https://github.com/nautobot/nautobot-app-secrets-providers
 #### Text File Method
 - Create a text file to contain the secret value
   - `mkdir secrets`
-  - `echo -n mysecretpassord > secrets/password.txt`
+  - `echo -n vyos > secrets/vyos-username.txt`
+  - `echo -n vyos > secrets/vyos-password.txt`
   - one file, one secret
 - Create a secret in Nautobot set to the path of the file
+  - Log in to nautobot (e.g., http://192.168.99.14:8001)
   - From the left pane click SECRETS then click Secrets
   - Click Add Secret
-    - Name: example_password
-    - Description: optional
+    - Name: vyos_username
+    - Description: //optional//
     - Provider: Text File
-    - Path: **Absolute filesystem path to the file (e.g., `/opt/nautobot/secrets/password.txt`)
-    - Click Create
-- Select the new secret, then click Check Secret to confirm it is working
+    - Path: **Absolute filesystem path** to the file (e.g., `/opt/nautobot/secrets/vyos-username.txt`)
+    - Click **Create**
+  - Click Add Secret
+    - Name: vyos_password
+    - Description: //optional//
+    - Provider: Text File
+    - Path: **Absolute filesystem path** to the file (e.g., `/opt/nautobot/secrets/vyos-password.txt`)
+    - Click **Create**
+- Select each secret, then click Check Secret to confirm it is working
 
 #### Environment Variable Method
 - Log in as nautobot user
@@ -86,17 +94,19 @@ Other providers: https://github.com/nautobot/nautobot-app-secrets-providers
   - In each file, under `[Service]` add the line
     - `EnvironmentFile=/opt/nautobot/.env`
 - Do a daemon reload
-  - sudo systemctl daemon-reload
+  - `sudo systemctl daemon-reload`
 - Modify the .bashrc file, adding to the end
   - `set -o allexport`
   - `source /opt/nautobot/.env`
   - `set +o allexport`
 - Reboot
 - Create a secret in Nautobot
+  - Log in to nautobot (e.g., http://192.168.99.14:8001)
   - From the left pane click SECRETS then click Secrets
   - Click Add Secret
     - Name: example_variable_password
     - Description: optional
+    - Provider: Environment Variable
     - Variable: NAUTOBOT_EXAMPLE_PASSWORD
     - Click Create
 - Select the new secret, then click Check Secret to confirm it is working
@@ -110,10 +120,11 @@ Other providers: https://github.com/nautobot/nautobot-app-secrets-providers
     - SSH username for Lab network devices
       - Access type: Generic
       - Secret type: Username
-      - Secret: example_password
+      - Secret: vyos_username
     - SSH password for Lab network devices
+      - Access type: Generic
       - Secret type: Password
-      - Secret: example_variable_password
+      - Secret: vyos_password
   - Click Create
 
 ### Using the Nautobot Device Onboarding plugin
@@ -156,36 +167,31 @@ PLUGINS_CONFIG = {
 - Verify app installed
   - APPS > Installed Apps
 - Enable the Job Sync Devices From Network
-  - Click JOBS
-  - Under Device Onbarding edit the job Sync Devices From Network
+  - Click JOBS > Jobs
+  - Under Device Onboarding edit the job Sync Devices From Network
   - Check Enabled
   - Click Udpate
 - Run the Job
   - Click the job Sync Devices From Network
   - Enter information about the device in the form
+    - IMPORTANT VyOS is not currently supported. Hopefully they will add it in the future
+    - Location: Lab
+    - Namespace: Global
+    - IPv4 addresses: 192.168.99.14
+    - Port: 22
+    - Timeout: 30
+    - Set Management Only: **unchecked**
+    - Device role: Router
+    - Device status: Active
+    - Interface status: Active
+    - IP address status: Active
+    - Secrets group: example_secrets_group
+    - Platform: leave unset to allow auto-recognition of the platform
   - Click Run Job Now (DRYRUN)
-  - Uncheck Dryrun and Run the job
+    - VyOS, NAS, Unifi, Netgear devices are not supported and will fail
+  - If you have one of the supported devices (https://docs.nautobot.com/projects/device-onboarding/en/latest/), uncheck Dryrun and Run the job
 
 ⚠️ default device role is "leaf". this doesn't exist. but we don't have a good default device type to use.
-
-⚠️ failed in testing on NAS
-
-~~~
-Netmiko Send Commands failed on 192.168.99.252 with result: Traceback (most recent call last): File "/opt/nautobot/lib/python3.12/site-packages/nornir/core/task.py", line 98, in start r = self.task(self, **self.params) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ File "/opt/nautobot/lib/python3.12/site-packages/nautobot_device_onboarding/nornir_plays/command_getter.py", line 117, in netmiko_send_commands if not command_getter_yaml_data[task.host.platform].get(command_getter_job): ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^ KeyError: 'linux'
-
-	
-load_device_types	Error	—	
-192.168.99.252: Unable to load DeviceType due to a missing key in returned data, ('device_type',)
-
-load_devices	Error	—	
-192.168.99.252: Unable to load Device due to a missing key in returned data, ('device_type',), 'device_type'
-
-load_devices	Error	—	
-Unable to onboard 192.168.99.252, returned data missing for ['device_type', 'hostname', 'mgmt_interface', 'mask_length', 'serial']
-
-load	Warning	—	
-Failed IP Addresses: ['192.168.99.252']
-~~~
 
 ## Next Steps
 You can now start to add your devices. Continue to [IP Addressing](5_IP_Addressing.md).
