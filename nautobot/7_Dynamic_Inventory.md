@@ -14,7 +14,8 @@ See the book p. 435-437
 1. Download the file [nautobot-inventory-03.yml](ansible/nautobot-inventory-03.yml)
 2. Test: `ansible-inventory -i nautobot-inventory-03.yml --list`
 
-🌱 Need to determine the next steps
+## Next Steps
+Since we don't have the limited devices supported by nautobot in the lab, we can't do much with dynamic inventory and automation.
 - by default there is one platform in nautobot, `Linux`, which has no Napalm driver attached
 - When adding a device, adding a platform with a a working Napalm driver is the best choice
   - Drivers that might match our lab
@@ -23,19 +24,21 @@ See the book p. 435-437
     - ubiquiti_airos (not convinced this matches our version of access points)
     - generic
     - linux
+    - vyos
   - Missing drivers
     - Synology NAS, try Linux
     - pfSense, try Linux
+  - to manually add the VyOS router as a device, would need a device type for it
 
-## Create Platforms to Enable Automation
+### Create Platforms to Enable Automation
 🌱 This is in early testing. Not sure if this compatible at all.
 
 1. Download the file [15-platforms.yml](ansible/15-platforms.yml)
 2. Run playbook: `ansible-playbook 15-platforms.yml`
 
-⚠️ None of the devices are supported with automation. Need to set up a VyOS router for the demo.
+⚠️ None of the devices are supported with automation.
 
-## Test VyOS Access
+### Test VyOS Access
 🌱 This is in early testing. Not sure if this compatible at all.
 1. Set environment variables with the credentials
   - export VYOS_USERNAME=admin
@@ -44,10 +47,10 @@ See the book p. 435-437
   - [all]
   - 192.168.99.15
 3. ansible -i hosts all -m ping
-4. Download the file [16-backup.yml](ansible/16-backup.yml)
-5. Run playbook: 16-backup.yml
 
-## Next Steps
+## Further experimentation
 🌱 Needs a LOT OF WORK!
 
 1. Want to try backups
+  - Download the file [16-backup.yml](ansible/16-backup.yml)
+  - Run playbook: `ansible-playbook 16-backup.yml`
