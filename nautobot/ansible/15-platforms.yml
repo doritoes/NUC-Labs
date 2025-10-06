@@ -28,4 +28,5 @@
           napalm_driver: "Linux"
         - name: "vyos"
           manufacturer: "VyOS"
+          network_driver: "vyatta_vyos"
           napalm_driver: "vyos"
