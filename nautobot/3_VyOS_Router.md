@@ -75,7 +75,11 @@ TIP Set up a DHCP reservation for your Nautobot server so it always has the same
   - pfSense: https://www.youtube.com/watch?v=NNKZm49keaA
   - OPNsense: https://forum.opnsense.org/index.php?topic=34017.0
 
-TIP eth1 and eth2 will be configured later, and DHCP server configured
+TIP eth1 and eth2 will be configured later using nautobot
+  - static IP addresses
+  - default route via eth0
+  - DHCP server configured for eth1 and eth2
+  - might configure descriptions
 
 ## Next Steps
 You can now start to add your devices. Continue to [Adding your First Devices](4_Adding_Devices.md).
