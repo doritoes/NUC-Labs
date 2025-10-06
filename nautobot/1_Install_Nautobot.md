@@ -183,7 +183,6 @@ Set up the Nautobot database:
 - Test
   - `cat /opt/nautobot/nautobot_config.py`
 - Customize `nautobot_config.py`
-  - 🌱 maybe create a file for this
   - `vi $NAUTOBOT_ROOT/nautobot_config.py`
   - Required Settings
     - Uncomment (remote the leading" "#") the following parts
