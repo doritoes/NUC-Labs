@@ -265,6 +265,7 @@ Set up the Nautobot database:
   -  Point web browser to the IP address of the VM using port 8001
       - Ex. http://192.168.99.14:8001
     - Log in as `admin`/`nautobot123`
+    - From the left menu, click Worker Status to confirm worker uptime
 
 ## Next Steps
 Before you can start creating devices and start doing things, there are some fundamental initial setup steps.
