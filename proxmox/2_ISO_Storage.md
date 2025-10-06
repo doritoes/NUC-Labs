@@ -49,6 +49,11 @@ Here are some commonly used ISOs ans where to find them.
       - Click Download the ISO - <ins>Registration required</ins>
       -  Goes back to Server 2016
     -  See also https://gist.github.com/vinhjaxt/a774ac87b0313a34f4c445048d8e13cf
+- OPNsense - https://opnsense.org/download/
+  - OPNSense 25.7
+- pfSense - https://www.pfsense.org/download/
+  - "The installer is free but uses the Netgate Store to handle the download process."
+- VyOS - https://vyos.net/get/
 
 ## Connect Proxmox VE to File Share
 ### File Share (SMB/CIFS)
