@@ -11,9 +11,9 @@ You can't create objects without the required fields. So we need to do some pre-
 - Click **Profile**
 - Click **API Tokens**
 - Click **+ Add a Token**
-  - Optionally specify a key name (e.g., `nautobot-lab-token-crud-123456789-abcdefghij`) and/or a description
-- Click Create
-- Click Copy to copy the key name and record it for later use
+  - Optionally specify a key name (e.g., `nautobot-lab-token-crud-123456789-abcdef`) and/or a description
+- Click **Create**
+- Click **Copy** to copy the key name and record it for later use
 - Add token to environment variable NAUTOBOT_TOKEN
   - echo "export NAUTOBOT_TOKEN=<<tokenvalue>>" | tee -a ~nautobot/.bashrc
 - Add the NAUTOBOT_URL environment variable
