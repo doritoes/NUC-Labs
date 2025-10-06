@@ -84,6 +84,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
   - OPNsense: https://forum.opnsense.org/index.php?topic=34017.0
 - TIP once you identify the server's IP address, you can SSH to it using the IP address and the user/password for `nauto`
   - Ex. `ip a`
+- TIP to renew the DHCP IP address `sudo systemctl restart systemd-networkd`
 
 ## Set up System
 ### Update and Install Packages
