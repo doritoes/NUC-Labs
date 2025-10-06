@@ -14,15 +14,16 @@ Commentary for the Home Labber:
 - Nautobot is still very must a rough product for use by technologists with strong automation and/or programming skills
 - Nautobot doesn't work well for a home lab. The IPAM solution is far too high maintenance, and doesn't integrate with a Windows server DNS/DHCP or firewall-based DNS/DHCP.
 - Doesn't manage the "prosumer" gear, and not every labber is going to have Cisco or Arista in their lab. Incomplete Ubiquiti coverage, not enough for a useful lab.
-- Does support vyOS open source router
+- Tried to use the vyOS open source router without success
 
 Commentary for the Business:
-- You need a bit network automation evangelist to dedicate the time and energy to reap the rewards
+- You need a big network automation evangelist to dedicate the time and energy to reap the rewards
 - Conversely, if you lose that person it could quickly fail
 
 Mission:
 - Install and Deploy Nautobot on Unbuntu server
-- to be continued
+- Kick the tires on the environment
+- Was not able to get nautobot to work with VyOS or any of the lab gear to test further
 
 Materials:
 - NUC running Ubuntu server or a VM running Ubuntu server
@@ -65,3 +66,4 @@ In this step, an example dynamic inventory is tested
 https://docs.nautobot.com/projects/golden-config/en/latest/
 
 ## Cleanup and Next Steps
+When you are done working with nautobot, simply delete the docker container/VM or erase the NUC.
