@@ -132,7 +132,7 @@ TIP Import from community library https://github.com/nautobot/devicetype-library
   - [Synology DS224+.yaml](device-types/DS224+.yaml)
   - [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml)
     - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-  - [NUC10i7FNH1.yaml)[device-types/NUC10i7FNH1.yaml] Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
+  - [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
   - [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
 
 ### Using Ansible
