@@ -37,7 +37,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 
 ### Option 2 - VM
 - Download the [latest ISO file](https://ubuntu.com/download/server)
-  - For this Lab we are using Ubuntu Server 24.04 LTS, and the file name is similar to `ubuntu-24.04.1-live-server-amd64.iso`
+  - For this Lab we are using Ubuntu Server 24.04 LTS, and the file name is similar to `ubuntu-24.04.3-live-server-amd64.iso`
 - Create a new VM that is based on the ISO we downloaded
   - There are a lot of options: VMware Workstation, Oracle VirtualBox, proxmox, XCP-ng, etc.
     - For example, on VMware Workstation Pro:
