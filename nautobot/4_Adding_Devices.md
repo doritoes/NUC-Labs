@@ -42,8 +42,6 @@ This isn't a problem in our Lab because we use the manufacturer's model number a
 ## Other Ways to Discover and Add Devices
 There are other ways to discover your network devices and add them. Nautobot plug-ins can use secrets to discover and identify systems along with network scanning to discover platforms and software versions.
 
-📓This section needs development
-
 ### Adding Secrets for Discovery
 For security reasons, Nautobot generally does not store sensitive secrets (device access credentials, systems-integration API tokens, etc.) in its own database. There are other approaches and systems better suited to this purpose, ranging from simple solutions such as process-specific environment variables or restricted-access files on disk, all the way through to dedicated systems such as Hashicorp Vault or AWS Secrets Manager.
 
