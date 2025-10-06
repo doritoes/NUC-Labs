@@ -26,3 +26,6 @@
         - name: "pfSense Firewall"
           manufacturer: "Qotom"
           napalm_driver: "Linux"
+        - name: "vyos"
+          manufacturer: "VyOS"
+          napalm_driver: "vyos"
