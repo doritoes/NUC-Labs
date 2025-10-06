@@ -30,7 +30,7 @@ See the book p. 435-437
 ## Create Platforms to Enable Automation
 🌱 This is in early testing. Not sure if this compatible at all.
 
-1. Download the file [15-platforms.yml](ansible/15-platforms.yml.yml)
+1. Download the file [15-platforms.yml](ansible/15-platforms.yml)
 2. Run playbook: `ansible-playbook 15-platforms.yml`
 
 ⚠️ None of the devices are supported with automation. Need to set up a VyOS router for the demo.
