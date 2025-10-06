@@ -44,12 +44,9 @@ NOTE this will limit your testing options as it only has one network interface.
       - **Add** Network Adapter (Network Adapter 2)
         - Custom: Specific virtual network: VMnet2
       - **Add** Network Adapter (Network Adapter 3)
-        - Custom: Specific virtual network: VMnet2
-        - Add 2 virtual switches LAN and DMZ
-        - Add 1 interface connected to LAN
-        - Add 1 interface connected to DMZ
+        - Custom: Specific virtual network: VMnet3
     - Finish
-- Power on the VM (if it doesn't automatically power on)
+- Power on the VM (if it doesn't automatically power on) and allow it to boot
 - Click "I Finished Installing"
 - Access the system console
 
@@ -77,6 +74,8 @@ TIP Set up a DHCP reservation for your Nautobot server so it always has the same
   - Home router: https://www.youtube.com/watch?v=dCAsHdRBrag
   - pfSense: https://www.youtube.com/watch?v=NNKZm49keaA
   - OPNsense: https://forum.opnsense.org/index.php?topic=34017.0
+
+TIP eth1 and eth2 will be configured later, and DHCP server configured
 
 ## Next Steps
 You can now start to add your devices. Continue to [Adding your First Devices](4_Adding_Devices.md).
