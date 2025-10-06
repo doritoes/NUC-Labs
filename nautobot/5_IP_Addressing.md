@@ -48,7 +48,7 @@ We have all the devices created, so we start configuring IP address information 
     - If so, you may decide to add to the **Lab RIR**
 ### Using Ansible
 1. Copy the playbook [11-prefixes.yml](ansible/11-prefixes.yml)
-2. Run the playboook `ansible-playbook 10-prefixes.yml`
+2. Run the playboook `ansible-playbook 11-prefixes.yml`
 
 ## Create IP Addresses with Prefix
 ### Manually
