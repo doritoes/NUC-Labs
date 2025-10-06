@@ -5,7 +5,7 @@ References:
 
 # Create Bootable Installation USB
 - Download ISO from https://www.proxmox.com/en/downloads/proxmox-virtual-environment/iso
-  - Select the latest version ISO; this Lab tested with Proxmox vE 8.2
+  - Select the latest version ISO; this Lab tested with Proxmox vE 9.0
 - Create Bootable USB using [Balena Etcher](https://etcher.balena.io/)
 
 # Initial Installation
@@ -20,7 +20,7 @@ References:
   - Enter an email address to receive alerts
   - Verify/Set the management interface
     - eno1
-    - Hostname with domain: proxymox-lab.prox.lab
+    - Hostname with domain: proxmox-lab.prox.lab
     - IP address and network information
     - WARNING this seems to set a static IP address based on the DHCP IP received
   - Accept summary
@@ -28,7 +28,7 @@ References:
     - if you don't remove it, it will probably boot back to the USB and show the installation GUI
     - remove the USB and press ctrl-alt-delete and the system will reboot
 - Note the URL provided to access the system
-  - Example: https://192.168.1.110:8006
+  - Example: https://192.168.99.205:8006
 
 # Configure Host
 ## Log in
@@ -47,7 +47,29 @@ Note the warnings
   - this is intentional, and intended to push users to the "easier" paid subcription model
   - the download.proxmox.com ceph certificate is invalid as of this writing, and it's a Let's Encrypt certificate 🤔
 
-Command Line Steps:
+From the ProxMox web GUI
+- Click on the device (proxmox-lab) under the Datacenter
+- Click Updates > Repositories
+- Disable the enterprise/pve-enterprise components
+- Add APT repository:
+  - Repository: No-Subscription
+  - Click Add
+- Updates > Click Refresh button
+
+From cli:
+- vi /etc/apt/sources.list.d/pve-enterprise.sources
+  - Add line: `Enabled: false`
+- vi /etc/apt/sources.list.d/ceph.sources
+  - Add line: `Enabled: false`
+- vi /etc/apt/sources.list.d/proxmox.sources
+  - Types: deb
+  - URIs: http://download.proxmox.com/debian/pve
+  - Suites: trixie
+  - Components: pve-no-subscription
+  - Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+- `apt-update`
+
+Command Line Steps: (from console or ssh to the IP address and login as root with the password you selected)
 - `vi /etc/apt/sources.list.d/pve-enterprise.list`
   - Comment out line:
     - `#deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise`
@@ -60,19 +82,6 @@ Command Line Steps:
   - Add line:
     - `deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription`
 - `apt update`
-
-Complete `sources.list` file:
-~~~
-deb http://ftp.debian.org/debian bookworm main contrib
-deb http://ftp.debian.org/debian bookworm-updates main contrib
-
-# Proxmox VE pve-no-subscription repository provided by proxmox.com,
-# NOT recommended for production use
-deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
-
-# security updates
-deb http://security.debian.org/debian-security bookworm-security main contrib
-~~~
 
 ## Updates
 - From the left menu, expand **Datacenter** > **proxymox-lab**
