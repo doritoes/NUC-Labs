@@ -1,0 +1,7 @@
+a_device,a_interface,b_device,b_interface
+LAB-SW1,GigabitEthernet/1,LAB-Firewall,Ethernet 1
+LAB-SW1,GigabitEthernet/2,LAB-SW2,GigabitEthernet/1
+LAB-SW1,GigabitEthernet/3,LAB-SW3,Port 1 (PoE+)
+LAB-SW1,GigabitEthernet/4,LAB-NAS,LAN 1
+LAB-SW2,GigabitEthernet/2,LAB-AP1,Port 1
+LAB-SW2,GigabitEthernet/3,LAB-AP2,eth0

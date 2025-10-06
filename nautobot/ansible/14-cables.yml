@@ -1,0 +1,34 @@
+---
+- name: "nautobot lab cables"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    csv_file: "cables.csv"
+
+  tasks:
+    - name: "load cables from CSV"
+      read_csv:
+        path: "{{ csv_file }}"
+      register: csv_data
+      delegate_to: localhost
+    - name: "add cables"
+      networktocode.nautobot.cable:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        termination_a_type: dcim.interface
+        termination_a:
+          device: "{{ cable['a_device'] }}"
+          name: "{{ cable['a_interface'] }}"
+        termination_b_type: dcim.interface
+        termination_b:
+          device: "{{ cable['b_device'] }}"
+          name: "{{ cable['b_interface'] }}"
+        status: "Connected"
+        state: present
+      loop_control:
+        loop_var: cable
+      loop: "{{ csv_data.list }}"
