@@ -4,7 +4,7 @@ In this step we will create a virtual router for the sole purpose of demonstrati
 ## Download the ISO
 1. Go to https://vyos.io
 2. Click Rolling Release (the free version is limited to the Rolling Release)
-4. Download the most recent image (e.g., 2025.06.06-0019-rolling = vyos-2025.06.06-0019-rolling-generic-amd64.iso)
+4. Download the most recent image (e.g., 2025.10.05-0020-rolling = vyos-2025.10.05-0020-rolling-generic-amd64.iso)
 
 ## Option 1 - NUC
 Use an additional NUC to perform as the router.
