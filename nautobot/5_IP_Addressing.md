@@ -136,10 +136,6 @@ We have all the devices created, so we start configuring IP address information 
   - 🌱 continue here
 
 ### Using Ansible
-🌱 Need to investigate how to do this
-
-https://docs.nautobot.com/projects/ansible/en/stable/networktocode.nautobot/module/ip_address_to_interface.html#parameters
-
 1. Download the file [ip-addresses-interfaces.csv](ip-addresses-interfaces.csv)
 2. Copy the playbook [13-ip-addresses-interface.yml](ansible/13-ip-addresses-interface.yml)
 3. Run the playboook `ansible-playbook 13-ip-addresses-interface.yml`
