@@ -86,7 +86,7 @@ Examples follow:
 ### Using Ansible
 1. Copy the playbook [02-manufacturers.yml](ansible/02-manufacturers.yml)
 2. Copy the prepared CSV file [manufacturers.csv](manufacturers.csv) or create your own (see above)
-3. Run the playboook `02-manufacturers.yml`
+3. Run the playboook `ansible-playbook 02-manufacturers.yml`
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
