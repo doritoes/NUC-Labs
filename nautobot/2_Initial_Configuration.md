@@ -143,28 +143,28 @@ Due to the nesting of that interface data in the yaml devicetype files:
 
 Therefore there is a two-step process
 1. Create the devicetypes without interfaces
-  1. Copy the playbook [03-device-types.yml](ansible/03-device-types.yml)
-  2. Create a subdirectory named "devicetypes" and copy all the device types you want to import there
-     1. [Netgear GS110TPv3.yaml](device-types/GS110TPv3.yaml)
-     2. [Netgear GS116Ev2.yaml](device-types/GS116Ev2.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Netgear/GS116Ev2.yaml))
-     3. [Unifi USW-Lite-16-PoE.yaml](device-types/USW-Lite-16-PoE.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/USW-Lite-16-PoE.yaml))
-     4. [Unifi UAP-FlexHD.yaml](device-types/UAP-FlexHD.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml))
-     5. [Unifi U7-Pro.yaml](device-types/U7-Pro.yaml)
-     6. [Synology DS224+.yaml](device-types/DS224+.yaml)
-     7. [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml) - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-     8. [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) - Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
-     9. [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
-     10. Find more at https://github.com/nautobot/devicetype-library/tree/main/device-types
-  4. Run the playboook `ansible-playbook 03-device-types.yml`
+   1. Copy the playbook [03-device-types.yml](ansible/03-device-types.yml)
+   2. Create a subdirectory named "devicetypes" and copy all the device types you want to import there
+      1. [Netgear GS110TPv3.yaml](device-types/GS110TPv3.yaml)
+      2. [Netgear GS116Ev2.yaml](device-types/GS116Ev2.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Netgear/GS116Ev2.yaml))
+      3. [Unifi USW-Lite-16-PoE.yaml](device-types/USW-Lite-16-PoE.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/USW-Lite-16-PoE.yaml))
+      4. [Unifi UAP-FlexHD.yaml](device-types/UAP-FlexHD.yaml) ([official](https://github.com/nautobot/devicetype-library/blob/main/device-types/Ubiquiti/UAP-FlexHD.yaml))
+      5. [Unifi U7-Pro.yaml](device-types/U7-Pro.yaml)
+      6. [Synology DS224+.yaml](device-types/DS224+.yaml)
+      7. [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml) - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
+      8. [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) - Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
+      9. [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
+      10. Find more at https://github.com/nautobot/devicetype-library/tree/main/device-types
+   3. Run the playboook `ansible-playbook 03-device-types.yml`
 2. Create a CSV file, extracting the data from the yaml files and preparing it for Ansible device_interface_template
-  1. Copy the Python script [scrape-device-types-interfaces.py](scrape-device-types-interfaces.py)
-  2. Run the script `python3 scrape-device-types-interfaces.py`
-    - scrapes the devicetypes folder
-    - reads all the devicetype names (model name) from all the yaml files
-    - creates a CSV file ready for Ansible
+   1. Copy the Python script [scrape-device-types-interfaces.py](scrape-device-types-interfaces.py)
+   2. Run the script `python3 scrape-device-types-interfaces.py`
+      - scrapes the devicetypes folder
+      - reads all the devicetype names (model name) from all the yaml files
+      - creates a CSV file ready for Ansible
 3. Add the interfaces to the devicetypes
-  1. Copy the playbook [04-device-types-interfaces.yml](ansible/04-device-types-interfaces.yml)
-  2. Run the playboook `ansible-playbook 04-device-types-interfaces.yml`
+   1. Copy the playbook [04-device-types-interfaces.yml](ansible/04-device-types-interfaces.yml)
+   2. Run the playboook `ansible-playbook 04-device-types-interfaces.yml`
 
 ## Location Types
 ### Manually
