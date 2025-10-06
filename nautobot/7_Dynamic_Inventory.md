@@ -52,5 +52,11 @@ Since we don't have the limited devices supported by nautobot in the lab, we can
 🌱 Needs a LOT OF WORK!
 
 1. Want to try backups
-  - Download the file [16-backup.yml](ansible/16-backup.yml)
-  - Run playbook: `ansible-playbook 16-backup.yml`
+  - Back up postgres database
+     - `sudo -iu postgres`
+     - `pg_dump -d nautobot -f backup_file.sql`
+     - `pg_dumpall > all_databases_backup.sql`
+     - restore:
+        - `psql nautobot < backup_file.sql` (will not create the database, you need to create it first; needs all permissions first)
+        - `psql -f all_databases_backup.sql`
+  - Back up device configurations using Golden Configuration plugin
