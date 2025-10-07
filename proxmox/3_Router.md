@@ -2,7 +2,7 @@
 How to create a router to our backend "LAN"
 
 # Configure Networking
-- Log in to proxmox
+- Log in to proxmox (e.g., https://192.168.99.205:8006)
 - From the left menu navigate to **Datacenter** > **proxmox-lab**
 - Click on the host (proxmox-lab) to reveal the host settings
 - Click **System** > **Network**
@@ -10,7 +10,7 @@ How to create a router to our backend "LAN"
   - Name: **vmbr1**
   - Autostart: **Checked**
   - Click **Create**
-- Click **Apply Configuration** and the new brige will start
+- Click **Apply Configuration** and the new bridge will start (is a button next to Create and Revert)
 
 Here is list of the virtual bridges we will use in this lab:
 - vmbr0 - default bridge to the physical network interface
@@ -36,9 +36,9 @@ Or, if you created local storage, upload the ISO there.
 - From the top ribbon click **Create VM**
   - General tab
     - Node: Auto selects **proxmox-lab**
-    - VM ID: automatically populated; each resource requries a unique ID
+    - VM ID: automatically populated; each resource requires a unique ID
     - Name: **vyos**
-    - Check **Start at boot**
+    - Check **Start at boot** (not there in this version??)
   - OS tab (clicking Next takes you to the next tab)
     - Use CD/DVD disk image file (iso)
       - Storage: *select one of the storage points you configured, or local*
