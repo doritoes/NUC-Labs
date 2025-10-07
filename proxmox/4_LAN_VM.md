@@ -24,7 +24,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
-    - Cores: 1
+    - Cores: **2**
     - Type: default (my Lab is x86-64-v2-AES)
   - Memory tab
     - **2048 MB** (2GB)
