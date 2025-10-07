@@ -13,7 +13,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Name: **ubuntu-desktop-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
-    - ISO image: *search and/or select the Ubuntu 22.04 desktop ISO from dropdown*
+    - ISO image: *search and/or select the Ubuntu 24.04 desktop ISO from dropdown*
     - Guest OS:
       - Type: Linux
       - Version: 6x - 2.6 Kernel
@@ -37,10 +37,11 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Datacenter > proxmox-lab > 101 (ubuntu-desktop-lan)
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
-  - a separate windows is opened
+  - a separate window is opened
 - Follow the Install wizard per usual
+  - NOTE installation takes a while with just 1 vCPU and 2GB of RAM
   - To remove the installation media
-    - Back in the main proxmox window, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - Press Enter to Reboot
@@ -78,7 +79,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Click on Options
     - Edit QEMU Guest Agent: Check **Use QEMU Guest Agent**
     - Click **OK**
-  - Third Stop and Start the VM (a "restart" or "reboot" is not enough)
+  - Third, Stop and Start the VM (a "restart" or "reboot" is not enough)
 - Power down the VM
 - Take a Snapshot
   - This is to demonstrate how to take a snapshot and what happens to snapshots when you convert a VM to a template
