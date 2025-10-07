@@ -19,19 +19,38 @@ Build the ISO from source:
 # Packages needed for VM agents
 RUN apt-get update && apt-get install -y \
       qemu-guest-agent \
-      vyos-xe-guest-utilities
+      vyos-xe-guest-utilities && \
+      systemctl enable --now qemu-guest-agent && \
+      systemctl enable --now xe-guest-utilities.service && \
 ```
-  - BUT missing packages, can't install
+  - BUT missing packages, can't install in container
+  - CAN install in container manually. but systemctl not available; sudo service qemuu-guest-agent start fails
+- add data/build-flavors/vmagents.toml
+```
+# VM Agents enabled (aka "universal") ISO image
+
+image_format = "iso"
+
+# Include these packages in the image regardless of the architecture
+packages = [
+  # QEMU and Xen guest tools exist for multiple architectures
+  "qemu-guest-agent",
+  "xen-guest-agent"
+]
+
+[architectures.amd64]
+  # Hyper-V and VMware guest tools are x86-only
+  packages = ["hyperv-daemons", "vyos-1x-vmware"]
+```
 - build container
   - `cd ~/vyos-build`
   - `sudo docker build -t vyos/vyos-build:current docker`
-  - worked on second try
 - `sudo docker run --rm -it --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:current bash`
   - cd /vyos
   - sudo make clean
   - sudo ./build-vyos-image --architecture amd64 --build-by "j.randomhacker@vyos.io" generic
   - exit
-- When the build is successful, the resulting iso can be found inside the build directory as live-image-arm64.hybrid.iso
+- When the build is successful, the resulting iso can be found inside the build directory similr to vyos-1.5-rolling-202510072128-generic-amd64
 
 https://github.com/vyos/vyos-build/pull/747
 
