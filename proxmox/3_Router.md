@@ -21,7 +21,9 @@ Here is list of the virtual bridges we will use in this lab:
 1. Go to https://vyos.io
 2. Click Rolling Release
     - the free version is limited to the Rolling Release
-4. Download the most recent image
+3. Download the most recent image
+
+IMPORTANT See [Appendix_Build_VyOS_ISO_with_VM_agents.md] to build your own ISO with the VM agents installed.
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
@@ -48,7 +50,7 @@ Or, if you created local storage, upload the ISO there.
   - System tab
     - In December 2024, VyOS stopped including VM agents
       - To confirm, `apt list --installed | grep queme` (or is it queme)
-      - Leave **Qemu Agent** unchecked unless you roll your own ISO build with it included
+      - Leave **Qemu Agent** unchecked <i>unless</i> you roll your own ISO build with it included (see [Appendix_Build_VyOS_ISO_with_VM_agents.md] )
   - Disks tab
     - Disk size: **8GB**
     - Check **Discard** because our host is using SSD
