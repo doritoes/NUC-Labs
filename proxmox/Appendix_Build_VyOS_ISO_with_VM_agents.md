@@ -26,3 +26,27 @@ Build the ISO from source:
   - sudo make clean
   - sudo ./build-vyos-image --architecture amd64 --build-by "j.randomhacker@vyos.io" generic
   - When the build is successful, the resulting iso can be found inside the build directory as live-image-[architecture].hybrid.iso.
+
+
+https://github.com/vyos/vyos-build/pull/747
+
+
+
+build/manifest.json
+build_config
+
+
+packages:
+      "qemu-guest-agent",
+      "vyos-xe-guest-utilities",
+      "vyos-1x-vmware"
+
+pre_build_config
+"architectures": {
+      "amd64": {
+        "packages": [
+          "hyperv-daemons",
+          "vyos-1x-vmware"
+        ]
+      }
+    },
