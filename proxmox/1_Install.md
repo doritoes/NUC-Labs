@@ -45,7 +45,6 @@ Note the warnings
 - "The enterprise repository is enabled, but there is no active subscription!"
 - proxymox requires you to manually switch to the community repositories
   - this is intentional, and intended to push users to the "easier" paid subcription model
-  - the download.proxmox.com ceph certificate is invalid as of this writing, and it's a Let's Encrypt certificate 🤔
 
 From the ProxMox web GUI
 - Click on the device (proxmox-lab) under the Datacenter
