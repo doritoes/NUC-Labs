@@ -18,16 +18,19 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
       - Type: Linux
       - Version: 6x - 2.6 Kernel
   - System tab
-    - No changes
+    - Machine: **q35**
+    - Firmware: BIOS: **OVMF (UEFI)**
+    - Add EFI Disk: Checked
+    - EFI Storage: local-kvm
   - Disks tab
     - Disk size: **20GB**
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
-    - Cores: **2**
+    - Cores: 1
     - Type: default (my Lab is x86-64-v2-AES)
   - Memory tab
-    - **2048 MB** (2GB)
+    - **4096 MB** (4GB) (recommended, technically can run on 2GB RAM)
   - Network tab
     - Bridge: **vmbr1**
   - Confirm tab
@@ -36,10 +39,20 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - From the left menu navigate to the new VM
   - Datacenter > proxmox-lab > 101 (ubuntu-desktop-lan)
   - Click on the VM in the left menu
-- Click the **Console** button along the top of the pane
-  - a separate window is opened
+- Click the **Console** button along the top of the pane to open a separate window for the console
 - Follow the Install wizard per usual
-  - NOTE installation seemed to freeze with just 1 vCPU and 2GB of RAM
+  - NOTE Update the installer and restart it (click the icon that appears on the desktop)
+    - had issues with 24.04.02 default installer seeming to freeze during "Copying files ..."
+  - NOTE installation seemed to freeze at Copying files ...
+    - increasing vCPU from 1 to 2 did not solve the issue
+    - setting machine type as q35 instead of i440fx improved for a while before it froze
+    - setting machine type as q35 and bios to OVMF (UEFI) with 1 vCPU didn't work
+    - worked - setting machine type as q35 and bios to OVMF (UEFI) with 2 vCPU 4GB RAM and updated installer
+    - setting machine type as q35 and bios to OVMF (UEFI) with 1 vCPU 2GB RAM and updated installer - didn't work
+    - setting machine type as q35 and bios to OVMF (UEFI) with 1 vCPU 4GB RAM and updated installer - "Something went wrong"
+    - to test: default system with 2 vCPU 4GB RAM and updated installer
+    - to test: default system with 2 vCPU 4GB RAM and default installer
+    - to test: older 24.04.01 with default installer
   - To remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
@@ -54,13 +67,11 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Test the VM
   - Internet access using Firefox
 - Configure sharing your desktop
-  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts
+  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for older versions
+    - Settings > System > Remote Desktop
   - Settings > Sharing
-  - Enable the Sharing slider
-  - Click Remote Desktop
-  - Enable Remote Desktop
-  - Enable Remote Control
-  - Only Enable Legacy VNC Protocol if you must
+  - Enable the Desktop Sharing slider
+  - Enable Remote Control slider
   - Under authentication, confirm the username <ins>and password</ins>
     - a random password is set; you might want to change it to something more memorable  
   - BEWARE that remote desktop is disabled when the screen is locked
@@ -68,6 +79,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - there are workarounds
 - Enable SSH access
   - `sudo apt install -y openssh-server`
+  - `sudo systemctl enable --now ssh`
   - `sudo systemctl status ssh`
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Install qemu-guest-agent
@@ -96,10 +108,12 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click on the VM
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
     - Click **Yes**
-    - Read the warning: *unable to create template, because VM contains snapshots**
+    - Read the warning: **unable to create template, because VM contains snapshots**
     - Snapshots > click `initial_build` > Remove > **Yes**
     - Repeat the action to convert to template
-    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+    - Read the warning: **you can't convert a VM to template if VM is running (500)**
+    - Shut down the VM, then repeat the action to convert to template
+  - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
 - Clone a new VM from `ubuntu-desktop-lan`
   - Click on the VM ubuntu-desktop-lab (it should still be powered off)
   - Click More > Clone
