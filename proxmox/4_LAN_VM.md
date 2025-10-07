@@ -129,7 +129,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - Name: **ubuntu-server-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
-    - ISO image: *search and/or select the Ubuntu 22.04 server ISO from dropdown*
+    - ISO image: *search and/or select the Ubuntu 24.04 server ISO from dropdown*
     - Guest OS:
       - Type: Linux
       - Version: 6x - 2.6 Kernel
