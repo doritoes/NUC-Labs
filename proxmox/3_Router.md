@@ -63,7 +63,7 @@ Or, if you created local storage, upload the ISO there.
     - VLAN Tag: no VLAN
     - Model: VirtIO (best performance)
     - MAC address: leave at auto
-    - Firewall: default is checked, <ins>uncheck</ins> for the router
+    - Firewall: **Uncheck** (default is checked)
   - Confirm tab
   - <ins>Don't check</ins> **Start after created**
   - Click **Finish**
@@ -71,7 +71,7 @@ Or, if you created local storage, upload the ISO there.
   - Click **Hardware**
   - Click **Add** > **Network Device**
     - Bridge: **vmbr1**
-    - **Uncheck Firewall**
+    - Firewall: **Uncheck**
     - Click **Add**
   - Edit Network device (net0) to uncheck Firewall
 - Click **Start**
