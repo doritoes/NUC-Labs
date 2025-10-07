@@ -3,12 +3,12 @@ Reference: https://docs.vyos.io/en/latest/contributing/build-vyos.html
 
 We will use Docker for this ISO build and run off the VyOS rolling release.
 
-Prerequisites:
-- Disk space on docker host to build the ISO
-- sudo apt install -y git curl
-- install docker
-  - curl -fsSL https://get.docker.com -o get-docker.sh
-  - sh get-docker.sh
+Install Prerequisites:
+- `sudo apt install -y git curl`
+
+Install docker
+  - `curl -fsSL https://get.docker.com -o get-docker.sh`
+  - `sh get-docker.sh`
 
 Build the ISO from source:
 - `git clone -b current --single-branch https://github.com/vyos/vyos-build`
