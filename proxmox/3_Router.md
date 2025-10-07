@@ -38,7 +38,6 @@ Or, if you created local storage, upload the ISO there.
     - Node: Auto selects **proxmox-lab**
     - VM ID: automatically populated; each resource requires a unique ID
     - Name: **vyos**
-    - Check **Start at boot** (not there in this version??)
   - OS tab (clicking Next takes you to the next tab)
     - Use CD/DVD disk image file (iso)
       - Storage: *select one of the storage points you configured, or local*
@@ -47,9 +46,9 @@ Or, if you created local storage, upload the ISO there.
       - Type: Linux (VyOS is based on Debian)
       - Version: 6.x - 2.6 Kernel
   - System tab
-    - **Enable agent**
+    - Check **Qemu Agent**
       - Agent is installed by default
-      - To confirm, `apt list --installed | grep queme`
+      - To confirm, `apt list --installed | grep queme` or is it queme
   - Disks tab
     - Disk size: **8GB**
     - Check **Discard** because our host is using SSD
@@ -63,6 +62,7 @@ Or, if you created local storage, upload the ISO there.
     - Bridge: vmbr0
     - VLAN Tag: no VLAN
     - Model: VirtIO (best performance)
+    - MAC address: leave at auto
     - Firewall: default is checked, <ins>uncheck</ins> for the router
   - Confirm tab
   - <ins>Don't check</ins> **Start after created**
