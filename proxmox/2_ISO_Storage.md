@@ -88,7 +88,7 @@ IMPORTANT This will create a subdirectory "template" and inside that the "iso" d
 # Local ISO Repository on proxmox Host
 We will also demonstrate storing .iso files on the proxmox host, which you might want to avoid--it uses up storage on our host.
 
-1. Log in to proxmox
+1. Log in to proxmox (e.g., https://192.168.99.205:8006)
 2. From the left menu, expand **Datacenter** > **proxymox-lab** > **local (proxmox-lab)**
 3. Click **ISO Images**
 4. Click **Upload**
