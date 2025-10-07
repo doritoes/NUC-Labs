@@ -39,7 +39,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Click the **Console** button along the top of the pane
   - a separate window is opened
 - Follow the Install wizard per usual
-  - NOTE installation takes a while with just 1 vCPU and 2GB of RAM
+  - NOTE installation seemed to freeze with just 1 vCPU and 2GB of RAM
   - To remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
