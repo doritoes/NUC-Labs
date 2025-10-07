@@ -6,6 +6,7 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
 IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
 
 # Ubuntu Desktop
+NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM, 20GB disk installs and runs without problem.
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
@@ -18,19 +19,16 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
       - Type: Linux
       - Version: 6x - 2.6 Kernel
   - System tab
-    - Machine: **q35**
-    - Firmware: BIOS: **OVMF (UEFI)**
-    - Add EFI Disk: Checked
-    - EFI Storage: local-kvm
+    - No changes required
   - Disks tab
-    - Disk size: **20GB**
+    - Disk size: **25GB** (25GB is the recommended minimum)
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
-    - Cores: 1
+    - Cores: 2 (1 is minimum, but in lab testing 2 was required to install successfully)
     - Type: default (my Lab is x86-64-v2-AES)
   - Memory tab
-    - **4096 MB** (4GB) (recommended, technically can run on 2GB RAM)
+    - **4096 MB** (4GB recommended, technically can run on 2GB RAM; in lab testing, 4 was required to install successfully; some users say 3 is fine for a VM)
   - Network tab
     - Bridge: **vmbr1**
   - Confirm tab
@@ -41,18 +39,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane to open a separate window for the console
 - Follow the Install wizard per usual
-  - NOTE Update the installer and restart it (click the icon that appears on the desktop)
-    - had issues with 24.04.02 default installer seeming to freeze during "Copying files ..."
-  - NOTE installation seemed to freeze at Copying files ...
-    - increasing vCPU from 1 to 2 did not solve the issue
-    - setting machine type as q35 instead of i440fx improved for a while before it froze
-    - setting machine type as q35 and bios to OVMF (UEFI) with 1 vCPU didn't work
-    - worked - setting machine type as q35 and bios to OVMF (UEFI) with 2 vCPU 4GB RAM and updated installer
-    - setting machine type as q35 and bios to OVMF (UEFI) with 1 vCPU 2GB RAM and updated installer - didn't work
-    - setting machine type as q35 and bios to OVMF (UEFI) with 1 vCPU 4GB RAM and updated installer - "Something went wrong"
-    - to test: default system with 2 vCPU 4GB RAM and updated installer
-    - to test: default system with 2 vCPU 4GB RAM and default installer
-    - to test: older 24.04.01 with default installer
+  - NOTE installation seemed to freeze at "Copying files" with less that 2 vCPUs, 4GB RAM; seemed OK with only 20GB storage
   - To remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
@@ -64,12 +51,12 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Optionally let the Software Updater "Install Now"
   - Or do a manual update
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+  - reboot
 - Test the VM
   - Internet access using Firefox
 - Configure sharing your desktop
-  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for older versions
-    - Settings > System > Remote Desktop
-  - Settings > Sharing
+  - NOTE See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for older Ubuntu version
+  - Settings > System > Remote Desktop
   - Enable the Desktop Sharing slider
   - Enable Remote Control slider
   - Under authentication, confirm the username <ins>and password</ins>
@@ -80,7 +67,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Enable SSH access
   - `sudo apt install -y openssh-server`
   - `sudo systemctl enable --now ssh`
-  - `sudo systemctl status ssh`
+  - `systemctl status ssh`
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Install qemu-guest-agent
   - https://pve.proxmox.com/wiki/Qemu-guest-agent
