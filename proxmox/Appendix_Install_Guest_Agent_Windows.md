@@ -1,6 +1,10 @@
 # Appendix - Install QEMU Guest Agent on Windows
 Reference: https://pve.proxmox.com/wiki/Qemu-guest-agent#Windows
 
+🆕 See video https://www.youtube.com/watch?v=gWkqdVb4jp8
+
+
+
 These instructions did not work in Lab testing. The "PCI Simple Communications Controller" did not appear.
 
 - Download the virtio-win drive ISO
