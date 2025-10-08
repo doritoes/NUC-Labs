@@ -219,7 +219,16 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - Confirm it has changed: `hostnamectl`
   - How could you use cloning to quickly roll out a number of servers of the same type?
 
+# Upload the VirtUI ISO for Windows Systems
+- Download the virtio-win drive ISO
+  - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+  - similar to virtio-win-0.1.240.iso
+- Upload to your ISO store with your Windows, Ubunutu ISO images
+  - We will use this to configure Windows systems
+
 # Windows 10
+IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
@@ -232,10 +241,14 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
       - Type: **Microsoft Windows**
       - Version: **10/2016/2019**
         - the most recent option is *11/2022/2025*
+      - <i>Check </i> Add additional drive for VirtIO drivers
+        - Select the VirtIO ISO image you uploaded
   - System tab
-    - No changes
+    - BIOS: OVMF (UEFI)
+    - EFI Storage: local-lvm
   - Disks tab
     - Disk size: **128GB**
+    - Cache: **Write back**
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
@@ -254,20 +267,26 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
 - Click the **Console** button along the top of the pane
   - a separate window is opened
 - Click Console and follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
+  - If you get prompted to press any key to boot from the ISO image, do so
+  - Confirm Language, formats, and keyboard then **Next**
   - Click **Install now**
   - Activate Windows: Click **I don't have a product key**
   - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
   - Check the box then click **Next**
   - Click **Custom: Install Windows only (advanced)**
+  - No drives are visible so we need to add the VirtIO drivers
+    - we have the ISO mounted with the drives
+    - in the installer click Load Driver
+    - browse to the viosci directory within the VirtIO CE
+    - select the driver for Windows 10 (e.g., amd64/w10/viostor.inf)
   - Accept the installation on Drive 0, click **Next**
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
-      - Do not use any media
-  - At the console, press **Shift-F10** to open command prompt
+      - Set to "Do not use any media"
+  - At the proxmox console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
     - type this exactly, spacing matters
 - Clone a new VM from `win10-lan`
@@ -282,6 +301,9 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - Start the VM 106 (win10-lan-ready)
     - Open the Console
     - Set region and keyboard layout, skip second keyboard layout
+    - "To finish setup, you'll need to connect to the internet."
+      - Click "I don't have internet"
+      - Click "Continue with limited setup"
     - Select **Set up for personal use** (feel free to experiment)
     - Click **Offline account** then click **Limited experience**
     - User: **lab**
@@ -291,9 +313,11 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - Privacy: *disable all the settings* and then click **Accept**
     - Experience: be creative and pick one, then click **Accept* (I chose Business)
     - Cortana: Click **Not now**
+    - Install network drivers from the VirtIO CD
+      - 
     - Open the Edge web browser
     - At the screen "Browse the web with the best performing browser on Windows"
-      - Click **Continue**
+      - Click **Continue**/**Get Started***
       - Click **Start without your data**
       - <ins>Uncheck</ins> Bring over your data and **Confirm and continue**
       - Click **Continue without this data**
