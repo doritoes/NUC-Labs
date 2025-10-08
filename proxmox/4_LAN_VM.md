@@ -546,6 +546,10 @@ Steps:
   - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
 - Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
+- Remove the VirtIO CD
+  - Click on the VM > Hardware
+  - Set CD/DVD Drive to "Do not use any media"
+  - Optionally remove any extra CD/DVD drives; just leave 1
 - Shut down the Windows VM
   - `stop-computer`
 - Convert to a Template
