@@ -165,3 +165,9 @@ commit
 save
 exit
 ```
+
+## Optionally Set to Start at boot
+Since the VMs attached to the LAN (vbr1) depend on the router, let's configure the router to come up first.
+- Browse to the VM in the tree on the left
+- Select Options then edit Start at boot: Check "Start at boot"
+- Next Edit Startup/Shutdown order, set to 1
