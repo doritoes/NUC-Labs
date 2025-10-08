@@ -170,7 +170,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - Choose Create
   - Recommend checking the box Install OpenSSH server
   - To remove the installation media
-    - Back in the main proxmox window, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - Press Enter to Reboot
@@ -262,7 +262,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Remove the installation media
-    - Back in the main proxmox window, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - At the console, press **Shift-F10** to open command prompt
@@ -389,7 +389,7 @@ Steps:
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Remove the installation media
-    - Back in the main proxmox window, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - At the console, press **Shift-F10** to open command prompt
@@ -513,7 +513,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Accept the installation on Drive 0
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
   - Remove the installation media
-    - Back in the main proxmox window, click on the VM, then click hardware
+    - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
       - Do not use any media
   - Shift-F10 to open command prompt
