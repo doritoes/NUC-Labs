@@ -238,6 +238,11 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 - Windows 10/11 - recommend Intel E1000 or VMXNET3
 - Windows Server - recommend VirtIO
 
+NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
+- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is find in a lab like this
+
+Steps:
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
@@ -250,11 +255,12 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
       - Type: **Microsoft Windows**
       - Version: **10/2016/2019**
         - the most recent option is *11/2022/2025*
-      - <i>Check </i> Add additional drive for VirtIO drivers
+      - **Check** Add additional drive for VirtIO drivers
         - Select the VirtIO ISO image you uploaded
   - System tab
     - BIOS: OVMF (UEFI)
     - EFI Storage: local-lvm
+    - Queme Agent: Enabled
   - Disks tab
     - Disk size: **128GB**
     - Cache: **Write back**
@@ -267,6 +273,7 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
     - **4096 MB** (4GB)
   - Network tab
     - Bridge: **vmbr1**
+    - Model: VirtIO (paravirtualized) is the fastest, but for this lab choose **Intel E1000**
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
@@ -276,28 +283,28 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 - Click the **Console** button along the top of the pane
   - a separate window is opened
 - Click Console and follow the Install wizard per usual
-  - If you get prompted to press any key to boot from the ISO image, do so
-  - Confirm Language, formats, and keyboard then **Next**
+  - If you get prompted to press any key to boot from the CD or DVD, do so
+  - Confirm Language, formats, and keyboard then click **Next**
   - Click **Install now**
   - Activate Windows: Click **I don't have a product key**
   - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
   - Check the box then click **Next**
   - Click **Custom: Install Windows only (advanced)**
   - No drives are visible so we need to add the VirtIO drivers
-    - we have the ISO mounted with the drives
-    - in the installer click Load Driver
-    - browse to the viosci directory within the VirtIO CE
-    - select the driver for Windows 10 (e.g., amd64/w10/viostor.inf)
+    - We have the ISO mounted with the drivers
+    - In the installer click Load Driver
+    - Browse to the **viosci** directory within the VirtIO CE
+    - select the driver for Windows 10 (e.g., w10/amd64/viostor.inf)
   - Accept the installation on Drive 0, click **Next**
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
-    - Edit the CD/DVD Drive
+    - Edit the CD/DVD Drive for the Windows installation ISO (leave VirtIO CD for now)
       - Set to "Do not use any media"
   - At the proxmox console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters
+    - type this exactly, spacing matters (some use /f to force the shutdown)
 - Clone a new VM from `win10-lan`
   - Click on the VM win10-lan
   - Click More > Clone
@@ -327,24 +334,24 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
     - Privacy: *disable all the settings* and then click **Accept**
     - Experience: be creative and pick one, then click **Accept* (I chose Business)
     - Cortana: Click **Not now**
-    - Open the Edge web browser
-    - At the screen "Browse the web with the best performing browser on Windows"
-      - Click **Continue**/**Get Started***
+    - Configure the browser by clicking continue (opens the Edge web browser)
       - Click **Start without your data**
       - <ins>Uncheck</ins> Bring over your data and **Confirm and continue**
-      - Click **Continue without this data**
+      - Click **Continue without Google data**
       - <ins>Uncheck</ins> Make your Microsoft experience more useful and **Confirm and start browsing**
-      - Click **Finish**
+      - Click **Continue**, **Continue**, then **Finish**
 - Apply Windows Updates (reboots included)
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
 - Install QEMU Guest agent (see [Appendix_Install_Guest_Agent_Windows.md])
-  - In proxmox, select the VM then Options, set QEMU Guest Agent to "Use QEMU Guest Agent"
-  - Power off the VM, then back on
+  - In proxmox, select the VM then Options
+    - Confirm firm QEMU Guest Agent to "Use QEMU Guest Agent"
+    - If not, check it, power off the VM, then back power it back on
   - Log back in and open device manager
-  - Find the unrecognized device PCI Simple Communications Controller under Other devices
-  - Update driver, browse computer, select the mounted D: drive with the VirtIO CD, and it will be detected as VirtIO Serial Driver
+    - Find the unrecognized device PCI Simple Communications Controller under Other devices
+    - Update driver, browse computer, select the mounted D: drive with the VirtIO CD, and it will be detected as VirtIO Serial Driver
+    - Repeat for the PCI Device, which will be detected as VirtIO Balloon Driver
   - Open the CD and run guest-agent > qemu-ga-x86_64.exe
   - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
 - Change the hostname to win-10-lan-ready
