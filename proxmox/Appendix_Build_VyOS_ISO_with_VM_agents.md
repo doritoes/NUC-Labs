@@ -1,4 +1,4 @@
-# Appendix - Build VyOS ISO Install with VM Agents
+# Appendix - Build VyOS ISO with VM Agents Installed
 Reference: https://docs.vyos.io/en/latest/contributing/build-vyos.html
 
 We will use Docker for this ISO build and run off the VyOS rolling release.
