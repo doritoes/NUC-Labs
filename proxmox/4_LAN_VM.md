@@ -46,7 +46,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
       - Do not use any media
   - Press Enter to Reboot
 - Log in to the console and complete the first time wizard
-  - Skip, Skip, No, Next, Done
+  - Next, Skip, No, Next, Finish
 - Updates
   - Optionally let the Software Updater "Install Now"
   - Or do a manual update
@@ -79,6 +79,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - Edit QEMU Guest Agent: Check **Use QEMU Guest Agent**
     - Click **OK**
   - Third, Stop and Start the VM (a "restart" or "reboot" is not enough)
+    - Confirm it's running: `systemctl status qemu-guest-agent`
 - Power down the VM
 - Take a Snapshot
   - This is to demonstrate how to take a snapshot and what happens to snapshots when you convert a VM to a template
@@ -110,7 +111,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
       - the other option is Full Clone
     - Name: `desktop-lan`
     - Click **Clone**
-- Power on and test the new clone 102 (desktop-lab)
+- Power on and test the new clone (desktop-lan)
   - Click on the new VM **desktop-lan**
   - Click **Start**
   - Click **Console**
@@ -172,7 +173,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - To remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
     - Edit the CD/DVD Drive
-      - Do not use any media
+      - Set to "Do not use any media"
   - Press Enter to Reboot
 - Log in and check the system using Console
   - Is the disk size correct? `df -h`
@@ -190,6 +191,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - Edit QEMU Guest Agent: Check Use QEMU Guest Agent
     - Click OK
   - Third, Stop and Start the VM (a "restart" or "reboot" is not enough)
+    - Confirm it's running: `systemctl status qemu-guest-agent`
 - Power down the VM
   - `sudo poweroff`
 - Convert to a Template
@@ -206,7 +208,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
       - the other option is Full Clone
     - Name: `server-lan`
     - Click **Clone**
-- Power on and test the new clone
+- Power on and test the new clone (server-lan)
   - Click on the new VM **server-lan**
   - Click **Start**
   - Click **Console**
