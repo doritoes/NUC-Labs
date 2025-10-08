@@ -229,6 +229,15 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
 # Windows 10
 IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
 
+NOTE When creating a Windows VM, pay attention to the network Model setting
+- VirtIO (paravirtualized) will not be detected by Windows 10 until you install the drivers
+  - this is for optimal performance
+- Intel E1000 (emulated, for compatibility) is slower but stable
+- Intel E1000E and Realtek RTL8139 are also emulated and not tested in this lab
+- VMXNET3 is faster than Intel E1000 and E1000E but not tested in this lab
+- Windows 10/11 - recommend Intel E1000 or VMXNET3
+- Windows Server - recommend VirtIO
+
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
@@ -301,9 +310,14 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
     - Start the VM 106 (win10-lan-ready)
     - Open the Console
     - Set region and keyboard layout, skip second keyboard layout
-    - "To finish setup, you'll need to connect to the internet."
+    - If you receive the message "To finish setup, you'll need to connect to the internet."
+      - You have the network adapter mode set to VirtIO and need to install drivers
       - Click "I don't have internet"
       - Click "Continue with limited setup"
+      - Later, when you are logged in, install network drivers from the VirtIO CD
+      - Open the Device Manager
+      - Select the unknown VirtIO Ethernet adapter, update driver, local matching, browse to CD
+      - Yes allow your PC to be dicoverable
     - Select **Set up for personal use** (feel free to experiment)
     - Click **Offline account** then click **Limited experience**
     - User: **lab**
@@ -313,11 +327,6 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
     - Privacy: *disable all the settings* and then click **Accept**
     - Experience: be creative and pick one, then click **Accept* (I chose Business)
     - Cortana: Click **Not now**
-    - Install network drivers from the VirtIO CD
-      - Open the Device Manager
-      - Select the unknown VirtIO Ethernet adapter, update driver, local matching, browse the CD
-      - Yes allow your PC to be dicoverable
-      - While you're here, update the driver for the other unknown PCI device - VirtiIO Balloon Driver
     - Open the Edge web browser
     - At the screen "Browse the web with the best performing browser on Windows"
       - Click **Continue**/**Get Started***
@@ -330,10 +339,18 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
   - Slide to enable and Confirm
-- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
+- Install QEMU Guest agent (see [Appendix_Install_Guest_Agent_Windows.md])
+  - In proxmox, select the VM then Options, set QEMU Guest Agent to "Use QEMU Guest Agent"
+  - Power off the VM, then back on
+  - Log back in and open device manager
+  - Find the unrecognized device PCI Simple Communications Controller under Other devices
+  - Update driver, browse computer, select the mounted D: drive with the VirtIO CD, and it will be detected as VirtIO Serial Driver
+  - Open the CD and run guest-agent > qemu-ga-x86_64.exe
+  - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
+- Open the VM > Hardware options and set to CD/DVD drives to do not use any media; optionally remove the second CD/DVD drive
 - Convert to a Template
   - Click on the VM
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
@@ -355,7 +372,6 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
   - Change the hostname to win10-desk
     - From administrative powershell: `Rename-Computer -NewName win10-desk`
     - `Restart-Computer`
-
 - Questions to ponder:
   - What are the differences between the two cloning bases we created?
   - Does this affect the "Activation required" timers?
@@ -368,6 +384,9 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - Disconnect Internet during setup
 - https://www.elevenforum.com/t/clean-install-windows-11.99/
   - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
+  - works for Windows 11 Home or Pro
+  - need to test at add second keyboard layout screen: start ms-cxh:localonly
+    - follow the wizard, and then follow up with the skipping second keyboard layout
 
 Steps:
 - From the top ribbon click **Create VM**
