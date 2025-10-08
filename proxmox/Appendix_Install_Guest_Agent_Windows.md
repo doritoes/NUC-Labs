@@ -3,9 +3,12 @@ Reference: https://pve.proxmox.com/wiki/Qemu-guest-agent#Windows
 
 🆕 See video https://www.youtube.com/watch?v=gWkqdVb4jp8
 
+VirtIO Drivers
+
+https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 
 
-These instructions did not work in Lab testing. The "PCI Simple Communications Controller" did not appear.
+The following instructions did not work in Lab testing. The "PCI Simple Communications Controller" did not appear.
 
 - Download the virtio-win drive ISO
   - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
