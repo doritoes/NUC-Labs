@@ -240,7 +240,7 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 
 NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
 - proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
-- If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is find in a lab like this
+- If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
 
 Steps:
 - From the top ribbon click **Create VM**
@@ -346,7 +346,7 @@ Steps:
   - Slide to enable and Confirm
 - Install QEMU Guest agent (see [Appendix_Install_Guest_Agent_Windows.md])
   - In proxmox, select the VM then Options
-    - Confirm firm QEMU Guest Agent to "Use QEMU Guest Agent"
+    - Confirm QEMU Guest Agent set to "Use QEMU Guest Agent"
     - If not, check it, power off the VM, then back power it back on
   - Log back in and open device manager
     - Find the unrecognized device PCI Simple Communications Controller under Other devices
@@ -355,7 +355,8 @@ Steps:
   - Open the CD and run guest-agent > qemu-ga-x86_64.exe
   - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
 - Change the hostname to win-10-lan-ready
-  - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+  - Open administrative powershell
+  - `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
 - Open the VM > Hardware options and set to CD/DVD drives to do not use any media; optionally remove the second CD/DVD drive
 - Convert to a Template
@@ -377,18 +378,32 @@ Steps:
   - Click **Start**
   - Click **Console**
   - Change the hostname to win10-desk
-    - From administrative powershell: `Rename-Computer -NewName win10-desk`
-    - `Restart-Computer`
+    - From administrative powershell
+      - `Rename-Computer -NewName win10-desk`
+      - `Restart-Computer`
 - Questions to ponder:
   - What are the differences between the two cloning bases we created?
   - Does this affect the "Activation required" timers?
 - Optionally create another VM from each win10-lan and win10-lan-ready and experiment
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM.
+IMPORTANT Windows 11 will not install without a TPM
+
+NOTE When creating a Windows VM, pay attention to the network Model setting
+- VirtIO (paravirtualized) will not be detected by Windows 10 until you install the drivers
+  - this is for optimal performance
+- Intel E1000 (emulated, for compatibility) is slower but stable
+- Intel E1000E and Realtek RTL8139 are also emulated and not tested in this lab
+- VMXNET3 is faster than Intel E1000 and E1000E but not tested in this lab
+- Windows 10/11 - recommend Intel E1000, but use VirtIO for Windows 11 to make it easier to set up local account
+- Windows Server - recommend VirtIO
+
+NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
+- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
 
 IMPORTANT If you want to set up using a local account instead of a Microsoft account
-- Disconnect Internet during setup
+- Disconnect Internet during setup (like using the VirtIO network, which Windows does not have drivers for by default)
 - https://www.elevenforum.com/t/clean-install-windows-11.99/
   - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
   - works for Windows 11 Home or Pro
@@ -403,16 +418,22 @@ Steps:
     - Name: **win11-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
-    - ISO image: *search and/or select the Windows 10 ISO from dropdown*
+    - ISO image: *search and/or select the Windows 11 ISO from dropdown*
     - Guest OS:
       - Type: **Microsoft Windows**
       - Version: **11/2022/2025**
+      - **Check** Add additional drive for VirtIO drivers
+        - Select the VirtIO ISO image you uploaded
   - System tab
     - Check **Add TPM**
+    - Machine: **q35**
+    - SCSI Controller: **VirtIO SCSI single**
+    - Check **Qemu Agenmt**
     - TPM Storage: select **local-lvm**
     - EFI Storage: select **local-lvm**
   - Disks tab
     - Disk size: **128GB**
+    - Cache: **Write back**
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
@@ -422,6 +443,9 @@ Steps:
     - **4096 MB** (4GB)
   - Network tab
     - Bridge: **vmbr1**
+    - Model: **VirtIO (paravirtualized)**
+      - better performance, and breaks Internet connectivity to prevent creating the online account
+      - Or try Intel E1000 with the workaround
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
@@ -434,13 +458,18 @@ Steps:
   - **press any key**
   - if you missed it, stop the VM, start again and try again at the console
 - Click Console and follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
-  - Click **Install now**
-  - Activate Windows: Click **I don't have a product key**
+  - Confirm Language, formats, and keyboard (click **Next**, **Next**)
+  - Select **Install Windows 11** and check the box
+  - Product key: Click **I don't have a product key**
   - Select the OS to install: **Windows 11 Pro** (feel free to experiment) and click **Next**
-  - Check the box then click **Next**
-  - Click **Custom: Install Windows only (advanced)**
+  - Click **Accept**
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load Driver
+    - Browse to the **viosci** directory within the VirtIO CE
+    - select the driver for Windows 11 (e.g., w11/amd64/viostor.inf)
   - Accept the installation on Drive 0, click **Next**
+  - Click **Install**
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Remove the installation media
@@ -449,7 +478,7 @@ Steps:
       - Do not use any media
   - At the console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters
+    - type this exactly, spacing matters (some people as /f for force shutdown)
 - Clone a new VM from `win11-lan`
   - Click on the VM win11-lan (it should still be powered off)
   - Click More > Clone
@@ -460,25 +489,39 @@ Steps:
     - Click **Clone**  
   - Log in complete the setup wizard
     - Start the VM
-      - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connect (as simple as powering down the VyOS router for now)
-    - Set region and keyboard layout, skip second keyboard layout
-    - Name your device: **windows11-lan-ready**
-    - Select **Set up for personal use** (feel free to experiment)
-    - Disconnect from the Internet and start over
-      - Option 1 - power down the voyos router for a while
-      - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
-    - Shift-F10 to open a shell
-      - enter `OOBE\BYPASSNRO`
-      - It will reboot the system and restart the installation wizard
-    - At *Let's connect you to a network*
-      - Click **I don't have internet**
-    - Click **Continue with limited setup**
-    - User: **lab**
-    - Password: *select a password*
-    - Create security questions for this account: be creative
-    - Privacy: *disable all the settings* and then click **Next** (or might be Accept)
+      - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connection (as simple as powering down the VyOS router for now)
+    - Set region and click Yes
+    - Accept keyboard and click Yes
+    - A the second keyboard layout screen, STOP, and follow these steps if you haven't "broken" the internet connection
+      - Press shift-F10 to open a command prompt
+      - `start ms-cxh://setaddlocalonly`
+      - See also: `reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f`
+      - Follow prompts to add a local user, password, and security questions
+      - This ends at a blank screen. Reboot the VM.
+    - Disable all privacy settings and click **Next**
+    - Disable all privacy settings and click **Accept**
+    - Your device will a DESKTOP-xxxxxxx name
+    - If you chose to break the network connectivity insteady of bypassing the account creation
+      - Select **Set up for personal use** (feel free to experiment)
+      - Disconnect from the Internet and start over
+        - Option 1 - power down the voyos router for a while
+        - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
+      - At *Let's connect you to a network*
+        - Click **I don't have internet**
+      - Click **Continue with limited setup**
+      - User: **lab**
+      - Password: *select a password*
+      - Create security questions for this account: be creative
+      - Privacy: *disable all the settings* and then click **Next** (or might be Accept)
 - Log in
-- Reconnect to the Internet
+- Reconnect to the Internet as needed
+- Start Internet browser and disabled the settings that you don't want
+  - Start without your data
+  - Uncheck Bring over your data and click Confirm and continue
+  - Continue without Google data
+  - Uncheck Make your Microsoft experience more useful to you and click Confirm and start browsing
+  - Click **Continue** twice to skip past style settings
+  - Click **Finish**
 - Apply Windows Updates (reboots included)
 - Enable Remote Desktop (RDP)
   - Start > Settings > System > Remote Desktop
@@ -491,7 +534,16 @@ Steps:
       - Click **Continue without this data**
       - <ins>Uncheck</ins> Make your Microsoft experience more useful and **Confirm and start browsing**
       - Click **Finish**
-- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
+- Install QEMU Guest agent (see [Appendix_Install_Guest_Agent_Windows.md])
+  - In proxmox, select the VM then Options
+    - Confirm QEMU Guest Agent set to "Use QEMU Guest Agent"
+    - If not, check it, power off the VM, then back power it back on
+  - Log back in and open device manager
+    - Find the unrecognized device PCI Simple Communications Controller under Other devices
+    - Update driver, browse computer, select the mounted D: drive with the VirtIO CD, and it will be detected as VirtIO Serial Driver
+    - Repeat for the PCI Device, which will be detected as VirtIO Balloon Driver
+  - Open the CD and run guest-agent > qemu-ga-x86_64.exe
+  - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
 - Change the hostname to win-11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
@@ -523,8 +575,6 @@ Steps:
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
 
 See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
-
-https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 
 - From the top ribbon click **Create VM**
   - General tab
