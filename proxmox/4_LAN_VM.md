@@ -314,7 +314,10 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
     - Experience: be creative and pick one, then click **Accept* (I chose Business)
     - Cortana: Click **Not now**
     - Install network drivers from the VirtIO CD
-      - 
+      - Open the Device Manager
+      - Select the unknown VirtIO Ethernet adapter, update driver, local matching, browse the CD
+      - Yes allow your PC to be dicoverable
+      - While you're here, update the driver for the other unknown PCI device - VirtiIO Balloon Driver
     - Open the Edge web browser
     - At the screen "Browse the web with the best performing browser on Windows"
       - Click **Continue**/**Get Started***
