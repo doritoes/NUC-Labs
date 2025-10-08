@@ -469,6 +469,10 @@ Steps:
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
 
+See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
+
+https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
