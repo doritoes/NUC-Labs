@@ -3,26 +3,29 @@ Reference: https://pve.proxmox.com/wiki/Qemu-guest-agent#Windows
 
 🆕 See video https://www.youtube.com/watch?v=gWkqdVb4jp8
 
-VirtIO Drivers
+VirtIO Drivers location: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 
-https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+This is tested with Windows 10, Windows 11.
 
+Windows server testing pending.
 
 The following instructions did not work in Lab testing. The "PCI Simple Communications Controller" did not appear.
 
 - Download the virtio-win drive ISO
   - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
   - similar to `virtio-win-0.1.240.iso`
+- Inside proxmox select the VM, then Options
+  - Confirm "QEMU Guest Agent" is enabled/checked (ahead of time if possible)
+  - If you just enabled it, stop and start the VM
 - Mount the ISO file in the Windows VM (right-click, then click Mount)
+  - When building Windows servers in proxmox, there is an option to automatically mount the virtio CD
 - Open Device Manager
 - Find PCI Simple Communications Controller
-  - ⚠️ Did not intially find this in device in Lab testing
-    - This seemed to work: Installing agent from ISO, enable driver in proxmox, and full stop/start
-    - It will eventually appear!
+  - If you don't see it, make sure QEMU Guest Agent is enabled in proxy, and power off/on (<i>not just reoot</i>)
   - Right click PCI Simple Communications Controller -> Update Driver
     - Browse my computer for drivers
     - Select the mounted ISO in DRIVE:\vioserial\<OSVERSION>\ where <OSVERSION> is your Windows Version (e.g. 2k12R2 for Windows 2012 R2)
-      - Example: E:\vioserial\w10\amd64\
+      - Example: E:\vioserial\2k12R2\amd64\
 - Install qemu-guest-agent from the ISO you mounted
   - Navigate to directory guest-agent
   - Run `qemu-ga-x86_64.msi`
@@ -32,4 +35,4 @@ The following instructions did not work in Lab testing. The "PCI Simple Communic
   - Log in to proxmox web GUI and find the VM's ID (for example, 102)
   - Log in to proxymox CLI and ping the VM's ID
     - `qm agent 102 ping`
-  - No message means it was successful, "QEMU guest agent is not running" means it is failing
+  - No message means it was successful; "QEMU guest agent is not running" means it is failing
