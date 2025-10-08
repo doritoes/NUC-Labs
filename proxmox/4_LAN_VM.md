@@ -579,6 +579,8 @@ Another NUC Lab (for XCP-ng) has details on
 - Configuring a domain file server
 - See https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
 
+# Windows 2025 Server
+
 # Confirm quemu Agents are Running
 Verify from proxymox that the agents are running on your VMs
 - Log in to proxmox web GUI and find the VM's ID (for example, 102)
