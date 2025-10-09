@@ -664,6 +664,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
     - Click Next and the drver wil be found. Click Clost
   - When prompted about whether to allow the server to be discoverable, choose **Yes**
+- Remove the VirtIO CD ISO
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -741,7 +742,6 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - BIOS: Default (SeaBIOS)
   - Disks tab
     - Disk size: **128GB**
-    - Bus/Device defaults to IDE; feel free to experiment with this
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
@@ -755,7 +755,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Check **Start after created**
     - Click **Finish**
 - From the left menu navigate to the new VM
-  - Datacenter > proxmox-lab > 111 (server2025-lan)
+  - Datacenter > proxmox-lab > server2025-lan
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
@@ -767,12 +767,11 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
   - Click Accept
-  - ADD instructions to load driver, 2k25 amd64
   - No drives are visible so we need to add the VirtIO drivers
     - We have the ISO mounted with the drivers
     - In the installer click Load driver
     - Browse to the **viosci** directory within the VirtIO CD
-    - select the driver for Server 2025 (e.g., 2k25/amd64/viostor.inf) then Next
+    - select the driver for Server 2025 (e.g., 2k25/amd64/viostor.inf) then **Next**
   - Accept the installation on Drive 0, click **Next**
   - Click Install
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
