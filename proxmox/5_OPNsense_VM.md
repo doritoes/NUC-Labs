@@ -1,12 +1,12 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor. In contrast, pfSense CE is community based but pfSense+ is closed source. Downloaded even the free community edition requires going though the Netgate Store.
 
-📓 This Lab was built using OPNsense-24.1. Soon after 24.7 was released with a complete re-work of the interface. Re-deploying the lab using 
+In this lab we will be using OPNsense 25.7
 
 IMPORTANT You will have performance issues due to TX checksumming aka hardware checksum offloading. Where OPNsense is used as the external firewall, the usual approach on proxmox is to add a NIC and do PCI passthrough.
 
 References:
-- to do
+- https://www.youtube.com/watch?v=-eqenlbBDLQ
 
 # Configure Networking
 - Log in to proxmox
@@ -17,7 +17,7 @@ References:
   - Name: **vmbr2**
   - Autostart: **Checked**
   - Click **Create**
-- Click **Apply Configuration** and the new brige will start
+- Click **Apply Configuration** and the new brige will start (next to Create/Revert in the menu bar)
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
@@ -47,41 +47,42 @@ Or, if you created local storage, upload the ISO there.
     - Node: Auto selects **proxmox-lab**
     - VM ID: *automatically populated; each resource requries a unique ID* (up to 116)
     - Name: **opnsense**
-    - Check **Start at boot**
+    - Check Advanced and check **Start at boot**
   - OS tab (clicking Next takes you to the next tab)
     - Use CD/DVD disk image file (iso)
-      - Storage: local
-      - ISO image: select the image you uploaded from the dropdown
+      - Storage: select the storage you are using
+      - ISO image: select the ISO image you uploaded from the dropdown
     - Guest OS:
-      - Use ISO file you uploaded
-      - Type: Linux
-      - Version: 6.x - 2.6 Kernel
+      - Type: Other (it's FreeBSD not Linux)
   - System tab
     - no changes for OPNsense
   - Disks tab
-    - Disk size: **20GB**
+    - Bus Device: SCSI
+    - Cache: Write back
+    - Disk size: **32GB**
     - Check **Discard** because our host is using SSD's
   - CPU tab
     - Sockets: **1**
     - Cores: **4**
     - Type: Leave at the default (my Lab it's x86-64-v2-AES)
+    - Advanced: enable aes
   - Memory tab
-    - RAM: **2048**MiB = 2GiB
+    - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **2048**MiB = 2GiB
+    - Advanced: disable balooning device (requires the VM to have all 8GB available to it all the time)
   - Network tab
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
     - Model: VirtIO (best performance)
     - Firewall: default is checked, <ins>uncheck</ins>
   - Confirm tab
-  - Don't check **Start after created**
+  - <i>Don't</i> check **Start after created**
   - Click **Finish**
-- Click on the new VM 116 (opnense)
+- Click on the new VM opnsense
 - Click **Hardware**
 - Click **Add** > **Network Device**
   - Bridge: **vmbr2**
   - Uncheck Firewall
   - Click **Add**
-
 # Configure OPNsense
 - Start VM **opnsense**
 - Click on **Console**
