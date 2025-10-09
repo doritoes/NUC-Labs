@@ -576,7 +576,7 @@ Steps:
 - Optionally create another VM from each win11-lan and win11-lan-ready and experiment
 
 # Windows 2022 Server
-This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
+This is a bare-bones server with limited resources. Have seen Server 2019 run on 1vCPU 1GB RAM.
 
 See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
 
@@ -591,11 +591,15 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Guest OS:
       - Type: **Microsoft Windows**
       - Version: **11/2022/2025**
+    - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image you uploaded
   - System tab
-    - No TPM or EFI disk requried
+    - No TPM or EFI disk requried (uncheck)
+    - SCSI controller: VirtIO SCSI single
+    - Machine: q35
+    - Qemu Agent: Checked
+    - BIOS: Default (SeaBIOS)
   - Disks tab
     - Disk size: **128GB**
-    - Bus/Device defaults to IDE; feel free to experiment with this
     - Check **Discard** because our host uses SSDs
   - CPU tab
     - Sockets: 1
@@ -605,6 +609,8 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - **2048 MB** (2GB)
   - Network tab
     - Bridge: **vmbr1**
+    - Model: VirtIO (paravirtualized)
+      - Since this is a server, use the faster VirtIO (will install the driver during installation)
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
@@ -613,9 +619,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
-- You are prompted **Press any key to boot from CD or DVD....**
-  - **press any key**
-  - if you missed it, stop the VM, start again and try again at the console
+- If prompted **Press any key to boot from CD or DVD....**, do so
 - Open the console and follow the Install wizard per usual
   - Confirm Language, formats, and keyboard then Next
   - Click Install now
@@ -623,7 +627,12 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - feel free to experiment
   - Check the box then Next
   - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load driver
+    - Browse to the **viosci** directory within the VirtIO CE
+    - select the driver for Server 2022 (e.g., 2k22/amd64/viostor.inf) then Next
+  - Accept the installation on Drive 0, click **Next**
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
   - Remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
@@ -687,6 +696,117 @@ Another NUC Lab (for XCP-ng) has details on
 - See https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
 
 # Windows 2025 Server
+This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
+
+See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
+
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource) (up to 111)
+    - Name: **server2025-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 2022 Serer Eval ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **11/2022/2025**
+  - System tab
+    - No TPM or EFI disk requried
+  - Disks tab
+    - Disk size: **128GB**
+    - Bus/Device defaults to IDE; feel free to experiment with this
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 1
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **2048 MB** (2GB)
+  - Network tab
+    - Bridge: **vmbr1**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > 111 (server2025-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate windows is opened
+- You are prompted **Press any key to boot from CD or DVD....**
+  - **press any key**
+  - if you missed it, stop the VM, start again and try again at the console
+- Open the console and follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Click Accept
+  - ADD instructions to load driver, 2k25 amd64
+  - Accept the installation on Drive 0
+  - Click Install
+  - ADD more instructions
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Clone a new VM from `server2022-lan`
+  - Click on the VM 111 (server2022-lan)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 112)
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2022-lan-ready`
+    - Click **Clone**  
+- Power on `server2022-lan-ready`
+  - Once it boots, set password for Administrator
+- Log in
+  - Expand the noVNC menu on the left
+  - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
+  - Yes, allow the server to be discovered by other hosts on the network
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
+- Change the hostname to server2022-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+- Shut down the Windows VM `server2022-lan-ready`
+  - `stop-computer`
+- Clone a new VM from `server2022-lan-ready`
+  - We are preparing a Server 2022 image suitable for cloning
+  - must perform generalization to remove the security identifier (SID)
+  - Click on the VM 112 (server2022-lan-ready) (it should still be powered off)
+  - Click **More** > **Clone**
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 113)
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2022-lan-prep`
+    - Click **Clone**  
+- Power on VM 113 (server2022-lan-prep)
+  - Open the console to server2022-lan-prep and log in
+    - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+- Convert to a Template
+  - Click on the VM 113 (server2022-lan-prep)
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+  - From now on, clone Windows Server VMs from `server2022-lan-prep`
+- Questions to ponder:
+  - What are the differences between the three Windows server clone images?
+  - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each?
+- Optionally clone VMs from each and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server) When can this cause problems? (think SID)
+
+Another NUC Lab (for XCP-ng) has details on
+- Converting Windows Server to a Domain Controller
+- Configuring a domain file server
+- See https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
 
 # Confirm quemu Agents are Running
 Verify from proxymox that the agents are running on your VMs
