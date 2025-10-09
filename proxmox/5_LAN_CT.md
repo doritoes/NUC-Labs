@@ -7,7 +7,7 @@ Features:
   - LXC isolates ONE operating system in ONE container; allows running multiple isolated OS on a server
   - LXD improves LXC isolation, allows migration server to server while its runnning, improved resoure controls
 - use kernel of the host system that they run on, instead of emulating a full operating system (OS). This means that containers can access resources on the host system directly.
-- Only Linux distributions can be run in Proxmox Containers
+- pnly Linux distributions can be run in Proxmox Containers
 - For security reasons, access to host resources needs to be restricted. Therefore, containers run in their own separate namespaces. Additionally some syscalls (user space requests to the Linux kernel) are not allowed within containers.
 
 Using pre-built templates:
