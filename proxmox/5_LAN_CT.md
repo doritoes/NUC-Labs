@@ -3,7 +3,7 @@ CT stands for ConTainer, a lightweight alternative to fully virtualized machines
 
 Features:
 - <ins>NOT</ins> the same as Docker or Kubernetes containers; LXD extends LXC (Linux Container) with important improvements
-  - Docker isolates ONE application in ONE contianer; allows running multiple isolated applications on a server
+  - Docker isolates ONE application in ONE container; allows running multiple isolated applications on a server
   - LXC isolates ONE operating system in ONE container; allows running multiple isolated OS on a server
   - LXD improves LXC isolation, allows migration server to server while its runnning, improeved resoure controls
 - use kernel of the host system that they run on, instead of emulating a full operating system (OS). This means that containers can access resources on the host system directly.
