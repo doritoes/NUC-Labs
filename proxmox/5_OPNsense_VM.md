@@ -9,6 +9,8 @@ References:
 - https://www.youtube.com/watch?v=-eqenlbBDLQ
 
 # Configure Networking
+Add a secured network behind the firewall for our pentesting environment
+
 - Log in to proxmox
 - From the left menu navigate to **Datacenter** > **proxmox-lab**
 - Click on the host (**proxmox-lab**) to reveal the host settings
@@ -55,7 +57,8 @@ Or, if you created local storage, upload the ISO there.
     - Guest OS:
       - Type: Other (it's FreeBSD not Linux)
   - System tab
-    - no changes for OPNsense
+    - no changes (VirtIO SCSI single, i440fx, SeaBios)
+    - don't check Qemu Agent, that will happen later
   - Disks tab
     - Bus Device: SCSI
     - Cache: Write back
@@ -65,22 +68,24 @@ Or, if you created local storage, upload the ISO there.
     - Sockets: **1**
     - Cores: **4**
     - Type: Leave at the default (my Lab it's x86-64-v2-AES)
-    - Advanced: enable aes
+    - Advanced: enable **aes**
   - Memory tab
-    - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **2048**MiB = 2GiB
-    - Advanced: disable balooning device (requires the VM to have all 8GB available to it all the time)
+    - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **4096**MiB = 4GiB
+      - in testing we were able to build the firewall using 2GB of RAM despite the installer requiring 3000MiB to copy files
+    - Advanced: disable balooning device (requires the VM to have all 8GB available to it all the time, but you lose extra monitoring about memory usage)
   - Network tab
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
-    - Model: VirtIO (best performance)
+    - Model: VirtIO (paravirtualized) for best performance
     - Firewall: default is checked, <ins>uncheck</ins>
   - Confirm tab
   - <i>Don't</i> check **Start after created**
   - Click **Finish**
-- Click on the new VM opnsense
+- Click on the new VM `opnsense`
 - Click **Hardware**
 - Click **Add** > **Network Device**
   - Bridge: **vmbr2**
+  - Model: VirtIO (paravirtualized)
   - Uncheck Firewall
   - Click **Add**
 # Configure OPNsense
@@ -97,12 +102,13 @@ Or, if you created local storage, upload the ISO there.
   - Accept erasing the disk
 - Select a root password when prompted
 - Select **Complete Install**
-- Eject the ISO once the reboot starts
+- Select **Halt now**
+- Eject the ISO
   - Click on the VM
   - Click Hardware
   - Edit CD/DVD Drive
     - Do not use any media
-- Wait for the system to boot
+- Power on the VM and wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) **Assign interfaces**
   - LAGGs: **No**
