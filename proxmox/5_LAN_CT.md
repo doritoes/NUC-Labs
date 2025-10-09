@@ -19,13 +19,14 @@ Using pre-built templates:
 ### Ubuntu
 As you perform these Lab steps, note the many options available to you
 - Search for `ubuntu`
-- Click on **ubuntu-22.04-standard** (feel free to customize)
+- Click on **ubuntu-24.04-standard** (feel free to customize)
 - Click **Download**
 - From the top ribbon, click **Create CT**
   - General tab
     - Hostname: **container-ubuntu**
     - Password: *select a password*
     - Note the default is *Unprivileged container*
+      - Unprivileged containers use a new kernel feature called user namespaces. The root UID 0 inside the container is mapped to an unprivileged user outside the container. This means that most security issues (container escape, resource abuse, etc.) in these containers will affect a random unprivileged user, and would be a generic kernel security bug rather than an LXC issue. The LXC team thinks unprivileged containers are safe by design.
   - Template tab
     - Storage: **local**
     - Template: *use the dropdown to select the template file you downloaded*
@@ -47,14 +48,14 @@ As you perform these Lab steps, note the many options available to you
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
-- Click on the VM 114 (container-ubuntu)
+- Click on the VM container-ubuntu
   - Open console; start if not already started
   - Log in as user `root` with the password you selected
   - By default you cannot ssh as root with a password; use ssh with keys or add another user
 - You can test the Ubuntu server container as usual
   - `apt update && apt upgrade -y && apt autoremove -y`
   - Note that under the VM's Options there is no agent to enable/disable
-    - If you try to "qm agent 114 ping" from proxmox, the agent configuration file does not exist
+    - Even if you try to install the qemu-guest-agent, "qm agent [vmid] ping" from proxmox will fail
 
 ### TurnKey LAMP Stack
 - Return to download another CT template
@@ -86,15 +87,15 @@ As you perform these Lab steps, note the many options available to you
   - Confirm tab
     - Check **Start after created**
     - Click **Finish**
-- Click on the VM 115 (container-LAMP)
+- Click on the VM container-LAMP
   - Open console; start if not already started
   - Log in as user `root` with the password you selected
     - By default you cannot ssh as root with a password; use ssh with keys or add another user
   - Follw the first boot configuration wizard
-    - Password for MySQL 'adminer`: *select a password*
+    - Password for MySQL `adminer`: *select a password*
     - Skip setting up TurknKey Hub services
     - Skip setting up System Notifications and Critical Security Alerts
-    - Install security updates
+    - **Install** security updates and **Reboot**
   - Note links provided for
     - Web (ports 80 and 443)
     - Webmin (port 12321)
