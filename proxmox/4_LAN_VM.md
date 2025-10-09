@@ -673,7 +673,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - We already installed the drivers for the required VirtIO devices
     - From the virtio CD, run guest-agen > quemu-ga-x86_64.msi
     - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
-- Change the hostname to server2022-lan-ready
+- Change the hostname to `server2022-lan-ready`
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
   - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM `server2022-lan-ready`
@@ -815,8 +815,9 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - From the virtio CD, run guest-agent > quemu-ga-x86_64.msi
     - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
   - In proxmox, remove the virtiso CD from the CD/DVD drive
-- Change the hostname to server2025-lan-ready
+- Change the hostname to `server2025-lan-ready`
   - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
+  - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM `server2025-lan-ready`
   - `stop-computer`
 - Clone a new VM from `server2025-lan-ready`
@@ -829,17 +830,22 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - NOTE There is no "Linked Clone" option
     - Name: `server2025-lan-prep`
     - Click **Clone**  
-- Power on VM server2025-lan-prep
-  - Open the console to server2025-lan-prep and log in
+- Power on VM `server2025-lan-prep`
+  - Open the console to `server2025-lan-prep` and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+    - Wait as the process completes and the VM shuts down
 - Convert to a Template
-  - Click on the VM server2025-lan-prep
+  - Click on the VM `server2025-lan-prep`
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
     - Click **Yes**
     - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
   - From now on, clone Windows Server VMs from `server2025-lan-prep`
 - Questions to ponder:
+  - What is the experience when cloning a server from `server2025-lan-prep`?
+    - Is the Administrator password still the same?
+    - Does Internet connectivity work?
+    - Does the guest agent work?
   - What are the differences between the three Windows server clone images?
   - Does this affect the 180-day evaluation timer?
   - What are the advantages of each?
@@ -853,9 +859,9 @@ Another NUC Lab (for XCP-ng) has details on
 
 # Confirm quemu Agents are Running
 Verify from proxymox that the agents are running on your VMs
-- Log in to proxmox web GUI and find the VM's ID (for example, 102)
+- Log in to proxmox web GUI and find the VM's ID (for example, 118)
 - Log in to proxymox CLI and ping the VM's ID
-  - `qm agent 102 ping`
+  - `qm agent 118 ping`
 - No message means it was successful, "QEMU guest agent is not running" means it is failing
 
 If you are having issues
