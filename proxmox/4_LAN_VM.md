@@ -587,7 +587,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Name: **server2022-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
-    - ISO image: *search and/or select the Windows 2022 Serer Eval ISO from dropdown*
+    - ISO image: *search and/or select the Windows 2022 Server Eval ISO from dropdown*
     - Guest OS:
       - Type: **Microsoft Windows**
       - Version: **11/2022/2025**
@@ -630,7 +630,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - No drives are visible so we need to add the VirtIO drivers
     - We have the ISO mounted with the drivers
     - In the installer click Load driver
-    - Browse to the **viosci** directory within the VirtIO CE
+    - Browse to the **viosci** directory within the VirtIO CD
     - select the driver for Server 2022 (e.g., 2k22/amd64/viostor.inf) then Next
   - Accept the installation on Drive 0, click **Next**
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
@@ -654,18 +654,32 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Expand the noVNC menu on the left
   - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
   - Yes, allow the server to be discovered by other hosts on the network
+- Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
+  - Open the Device Manager
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+    - Open the unrecognized device
+    - Click Update Driver
+    - Click Browse my computer for drivers
+    - Click Browse
+    - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
+    - Click Next and the drver wil be found. Click Clost
+  - When prompted about whether to allow the server to be discoverable, choose **Yes**
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
-- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
+  - Install QEMU Guest Agent
+    - We already installed the drivers for the required VirtIO devices
+    - From the virtio CD, run guest-agen > quemu-ga-x86_64.msi
+    - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+  - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM `server2022-lan-ready`
   - `stop-computer`
 - Clone a new VM from `server2022-lan-ready`
-  - We are preparing a Server 2022 image suitable for cloning
-  - must perform generalization to remove the security identifier (SID)
+  - Next prepare a Server 2022 image suitable for cloning
+  - Must perform generalization to remove the security identifier (SID)
   - Click on the VM 112 (server2022-lan-ready) (it should still be powered off)
   - Click **More** > **Clone**
     - Target node: **proxmox-lab**
@@ -674,9 +688,10 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Name: `server2022-lan-prep`
     - Click **Clone**  
 - Power on VM 113 (server2022-lan-prep)
-  - Open the console to server2022-lan-prep and log in
+  - Open the console to `server2022-lan-prep` and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+    - Wait as the process completes and the VM shuts down
 - Convert to a Template
   - Click on the VM 113 (server2022-lan-prep)
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
@@ -684,6 +699,10 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
   - From now on, clone Windows Server VMs from `server2022-lan-prep`
 - Questions to ponder:
+  - What is the experience when cloning a server from `server2022-lan-prep`?
+    - Is the Administrator password still the same?
+    - Does Internet connectivity work?
+    - Does the guest agent work?
   - What are the differences between the three Windows server clone images?
   - Does this affect the 180-day evaluation timer?
   - What are the advantages of each?
@@ -696,23 +715,30 @@ Another NUC Lab (for XCP-ng) has details on
 - See https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
 
 # Windows 2025 Server
-This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
+This is a bare-bones server with limited resources.
 
 See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
 
 - From the top ribbon click **Create VM**
   - General tab
     - Node: **proxmox-lab**
-    - VM ID: *auto populates* (unique ID required for every resource) (up to 111)
+    - VM ID: *auto populates* (unique ID required for every resource)
     - Name: **server2025-lan**
   - OS tab
     - Storage: *select one of the ISO storage units you created*
-    - ISO image: *search and/or select the Windows 2022 Serer Eval ISO from dropdown*
+    - ISO image: *search and/or select the Windows 2025 Server Eval ISO from dropdown*
     - Guest OS:
       - Type: **Microsoft Windows**
       - Version: **11/2022/2025**
+    - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image
   - System tab
     - No TPM or EFI disk requried
+      - Missing TPM means no bitlocker and other capabilities
+      - Feel free to experiment
+    - SCSI controller: VirtIO SCSI single
+    - Machine: q35
+    - Qemu Agent: Checked
+    - BIOS: Default (SeaBIOS)
   - Disks tab
     - Disk size: **128GB**
     - Bus/Device defaults to IDE; feel free to experiment with this
@@ -733,19 +759,22 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Click on the VM in the left menu
 - Click the **Console** button along the top of the pane
   - a separate windows is opened
-- You are prompted **Press any key to boot from CD or DVD....**
-  - **press any key**
-  - if you missed it, stop the VM, start again and try again at the console
+- If prompted **Press any key to boot from CD or DVD....**, do so
 - Open the console and follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
-  - Click Install now
+  - Confirm Language and formats then **Next**
+  - Confirm keyboard then **Next**
+  - Confirm **Install Windows Server**, check the box, then **Next**
   - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
   - Click Accept
   - ADD instructions to load driver, 2k25 amd64
-  - Accept the installation on Drive 0
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load driver
+    - Browse to the **viosci** directory within the VirtIO CD
+    - select the driver for Server 2025 (e.g., 2k25/amd64/viostor.inf) then Next
+  - Accept the installation on Drive 0, click **Next**
   - Click Install
-  - ADD more instructions
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
   - Remove the installation media
     - Back in the main proxmox window, click on the VM, then click Hardware
@@ -753,15 +782,15 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
       - Do not use any media
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
-- Clone a new VM from `server2022-lan`
-  - Click on the VM 111 (server2022-lan)
+- Clone a new VM from `server2025-lan`
+  - Click on the VM (server2025-lan)
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated** (up to 112)
     - NOTE There is no "Linked Clone" option
-    - Name: `server2022-lan-ready`
+    - Name: `server2025-lan-ready`
     - Click **Clone**  
-- Power on `server2022-lan-ready`
+- Power on `server2025-lan-ready`
   - Once it boots, set password for Administrator
 - Log in
   - Expand the noVNC menu on the left
@@ -772,30 +801,30 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
 - [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
-- Change the hostname to server2022-lan-ready
-  - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
-- Shut down the Windows VM `server2022-lan-ready`
+- Change the hostname to server2025-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
+- Shut down the Windows VM `server2025-lan-ready`
   - `stop-computer`
-- Clone a new VM from `server2022-lan-ready`
-  - We are preparing a Server 2022 image suitable for cloning
+- Clone a new VM from `server2025-lan-ready`
+  - We are preparing a Server 2025 image suitable for cloning
   - must perform generalization to remove the security identifier (SID)
-  - Click on the VM 112 (server2022-lan-ready) (it should still be powered off)
+  - Click on the VM 112 (server2025-lan-ready) (it should still be powered off)
   - Click **More** > **Clone**
     - Target node: **proxmox-lab**
-    - VM ID: *automatically populated** (up to 113)
+    - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
-    - Name: `server2022-lan-prep`
+    - Name: `server2025-lan-prep`
     - Click **Clone**  
-- Power on VM 113 (server2022-lan-prep)
-  - Open the console to server2022-lan-prep and log in
+- Power on VM 113 (server2025-lan-prep)
+  - Open the console to server2025-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
 - Convert to a Template
-  - Click on the VM 113 (server2022-lan-prep)
+  - Click on the VM 113 (server2025-lan-prep)
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
     - Click **Yes**
     - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
-  - From now on, clone Windows Server VMs from `server2022-lan-prep`
+  - From now on, clone Windows Server VMs from `server2025-lan-prep`
 - Questions to ponder:
   - What are the differences between the three Windows server clone images?
   - Does this affect the 180-day evaluation timer?
