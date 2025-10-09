@@ -795,11 +795,26 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Expand the noVNC menu on the left
   - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
   - Yes, allow the server to be discovered by other hosts on the network
+- Send diagnostic data to Microsoft: **Required only** then **Accept**
+- Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
+  - Open the Device Manager
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+    - Open the unrecognized device
+    - Click Update Driver
+    - Click Browse my computer for drivers
+    - Click Browse
+    - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
+    - Click Next and the drver will be found. Click Close
+  - When prompted about whether to allow the server to be discoverable, choose **Yes**
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
-- [Install QEMU Guest Agent](Appendix_Install_Guest_Agent_Windows.md)
+- Install QEMU Guest Agent
+  - We already installed the drivers for the required VirtIO devices
+  - From the virtio CD, run guest-agent > quemu-ga-x86_64.msi
+    - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
+  - In proxmox, remove the virtiso CD from the CD/DVD drive
 - Change the hostname to server2025-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
 - Shut down the Windows VM `server2025-lan-ready`
@@ -807,19 +822,19 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
 - Clone a new VM from `server2025-lan-ready`
   - We are preparing a Server 2025 image suitable for cloning
   - must perform generalization to remove the security identifier (SID)
-  - Click on the VM 112 (server2025-lan-ready) (it should still be powered off)
+  - Click on the VM server2025-lan-ready (it should still be powered off)
   - Click **More** > **Clone**
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
     - NOTE There is no "Linked Clone" option
     - Name: `server2025-lan-prep`
     - Click **Clone**  
-- Power on VM 113 (server2025-lan-prep)
+- Power on VM server2025-lan-prep
   - Open the console to server2025-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
 - Convert to a Template
-  - Click on the VM 113 (server2025-lan-prep)
+  - Click on the VM server2025-lan-prep
   - Click **More** > **Convert to template** (next to start, shutdown, and console)
     - Click **Yes**
     - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
