@@ -69,13 +69,14 @@ Or, if you created local storage, upload the ISO there.
   - CPU tab
     - Sockets: **1**
     - Cores: **4**
-    - Type: **host** (if you don't care about performance leave at the default, i.e. x86-64-v2-AES)
+    - Type: **host**
+      - IMPORTANT For best performance, you would set this to "Host" CPU type, as eliminates CPU emulation
+      - if you don't care about performance leave at the default, i.e. x86-64-v2-AES
     - Advanced: enable **aes**
-    - IMPORTANT For best performance, you would set this to "Host" CPU type, as eliminates CPU emulation
   - Memory tab
     - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **4096**MiB = 4GiB
       - in testing we were able to build the firewall using 2GB of RAM despite the installer requiring 3000MiB to copy files
-    - Advanced: disable balooning device (requires the VM to have all 8GB available to it all the time, but you lose extra monitoring about memory usage)
+    - Advanced: disable Balooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
   - Network tab
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
@@ -102,18 +103,23 @@ Or, if you created local storage, upload the ISO there.
   - stripe - no redundancy (for our Lab this is fine)
   - uses slightly more RAM for the ARC (adaptive replacement cache) process
   - much more stable under power failure or hard reboots
+  - consumer SSDs will see more wear due to double synchronized writes
+    - sudo apt-get install smartmontools
+    - lsblk
+      - look for device similar to nvme0n1
+    - smartctl -a /dev/nvme0
 - Accept the disk to install on
   - You need to check the box (use space bar)
-  - Accept erasing the disk
-- Select a root password when prompted
+  - **Yes**, accept erasing the disk
+- Select a **Root Password** when prompted
 - Select **Complete Install**
 - Select **Halt now**
 - Eject the ISO
   - Click on the VM
-  - Click Hardware
+  - Click **Hardware**
   - Edit CD/DVD Drive
     - Do not use any media
-- Power on the VM and wait for the system to boot
+- Start the VM and wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) **Assign interfaces**
   - LAGGs: **No**
@@ -141,7 +147,8 @@ Or, if you created local storage, upload the ISO there.
     - Change web GUI protocol to HTTP: **No**
     - Generate a new self-signed web GUI certificate: **No**
     - Restore web GUI access defaults: **No**
-- Create a VM on the Pentesting network
+- Create a VM on the vmbr2, the pentesting network
+  - this VM will be able to access the OPNsense portal
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - For example, clone VM 107 (win10-desk)
     - Name: **win10-pen**
