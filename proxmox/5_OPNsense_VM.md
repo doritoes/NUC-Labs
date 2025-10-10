@@ -256,6 +256,7 @@ This provides some anonymity, if done correctly
 
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
+- https://forum.opnsense.org/index.php?topic=41550.0
 - https://cybernomad.online/dark-web-building-a-tor-gateway-7a7dfa45884f
 - https://www.youtube.com/watch?v=4K2YuWp2GB4
 - https://forum.opnsense.org/index.php?topic=15097.0
