@@ -3,7 +3,9 @@ OPNsense community edition is selected for the pentesting lab, mainly for its pr
 
 In this lab we will be using OPNsense 25.7
 
-IMPORTANT You will have performance issues due to TX checksumming aka hardware checksum offloading. Where OPNsense is used as the external firewall, the usual approach on proxmox is to add a NIC and do PCI passthrough.
+IMPORTANT You will have performance issues due to TX checksumming aka hardware checksum offloading. Where OPNsense is used as the external firewall, the usual approach on proxmox is to add a NIC and do PCI passthrough. Or it used to be the usual approach.
+
+IMPORTANT If you are considering using OPNsense in production, be search to read this thread about OPNsense on proxmox: https://forum.opnsense.org/index.php?topic=44159.0
 
 References:
 - https://www.youtube.com/watch?v=-eqenlbBDLQ
@@ -49,7 +51,7 @@ Or, if you created local storage, upload the ISO there.
     - Node: Auto selects **proxmox-lab**
     - VM ID: *automatically populated; each resource requries a unique ID* (up to 116)
     - Name: **opnsense**
-    - Check Advanced and check **Start at boot**
+    - Check Advanced and check **Start at boot**, consider setting start/shutdown order to **1**
   - OS tab (clicking Next takes you to the next tab)
     - Use CD/DVD disk image file (iso)
       - Storage: select the storage you are using
@@ -67,8 +69,9 @@ Or, if you created local storage, upload the ISO there.
   - CPU tab
     - Sockets: **1**
     - Cores: **4**
-    - Type: Leave at the default (my Lab it's x86-64-v2-AES)
+    - Type: **host** (if you don't care about performance leave at the default, i.e. x86-64-v2-AES)
     - Advanced: enable **aes**
+    - IMPORTANT For best performance, you would set this to "Host" CPU type, as eliminates CPU emulation
   - Memory tab
     - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **4096**MiB = 4GiB
       - in testing we were able to build the firewall using 2GB of RAM despite the installer requiring 3000MiB to copy files
@@ -77,7 +80,8 @@ Or, if you created local storage, upload the ISO there.
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
     - Model: VirtIO (paravirtualized) for best performance
-    - Firewall: default is checked, <ins>uncheck</ins>
+    - Firewall: uncheck
+    - Multiqueue: 4 (to match our 4 CPU cores)
   - Confirm tab
   - <i>Don't</i> check **Start after created**
   - Click **Finish**
@@ -86,7 +90,8 @@ Or, if you created local storage, upload the ISO there.
 - Click **Add** > **Network Device**
   - Bridge: **vmbr2**
   - Model: VirtIO (paravirtualized)
-  - Uncheck Firewall
+  - Firewall: uncheck
+  - Multiqueue: 4 (to match our 4 CPU cores)
   - Click **Add**
 # Configure OPNsense
 - Start VM **opnsense**
