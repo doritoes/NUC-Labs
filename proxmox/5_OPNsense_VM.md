@@ -152,34 +152,36 @@ Or, if you created local storage, upload the ISO there.
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - For example, clone VM 107 (win10-desk)
     - Name: **win10-pen**
-    - <ins>Change</ins> the network to bridge **vmbr2**
+    - <ins>Change</ins> the network to bridge **vmbr2** (behind the OPNsense firewall, not VyOS router)
     - Note how it takes longer to clone a VM that is running
-    - Start the VM
+    - Start the VM and log in
+    - **Yes**, allow the PC to be discovered
+    - Confirm Internet access is working
 - Initial firewall configuration
-  - From VM's browser, log in to firewall https://192.168.101.254
+  - From VM's weg browser, log in to firewall https://192.168.101.254
+    - Advanced > Continue
     - User `root` and password you selected
   - Follow the Wizard
     - General information
       - Hostname: **pentestfw**
       - Domain: **proxmox.lab**
-      - Primary DNS Server: **8.8.8.8** (we want unfiltered DNS for this network)
-      - Secondary DNS Server: **8.8.4.4**
+      - DNS Servers: **8.8.8.8** and then **8.8.4.4** (we want unfiltered DNS for this network)
       - <ins>Uncheck</ins> Override DNS
       - Click **Next**
-    - Time server information
-      - Leave the default time server
-      - Optionally adjust the Timezone
-      - Click **Next**
     - Configure WAN Interface
-      - Review the information, default values are OK
+      - Type DHCP
+      - <i>Uncheck</i> Block RFC1918 Private Networks since the "WAN" is connected to our lab which uses private RFC1918 address space
+        - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
+        - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
+    - Click Interfaces > WAN
+    - <ins>Uncheck</ins> Block private networks
       - Click **Next**
     - Configure LAN Interface
       - Review and click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
-    - Click **Reload**
+    - Click **Apply**
   - Update OPNsense
-    - Log back in
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
     - Read and accept the information provided
@@ -189,13 +191,16 @@ Or, if you created local storage, upload the ISO there.
 - Enable qemu guest agent
   - From OPNsense web GUI
     - System > Firmware > Plugins
+    - Check **Show community plugins**
     - **os-qemu-guest-agent** - click "+" to install
-    - Power > Power Off, click Yes
+    - **Power** > **Power Off**, click Yes (a simple restart is not sufficient)
   - From proxmox
     - click on VM opnsense
     - Options > QEMU Guest Agent
     - Change to Enabled (check Use QEMU Guest Agent)
     - Start VM opnsense
+  - Confirm opnsense summary page shows IP addresses instead of "Guest Agent Not Running"
+- Test Internet access from the pentesting network computer to confirm Internet access is still working
 - Configure Firewall Rules
   - Log back in to OPNsense web GUI
     - https://192.168.100.254
@@ -203,18 +208,11 @@ Or, if you created local storage, upload the ISO there.
     - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
     - This allows you to view the default NAT rule under Outbound
-  - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
-    - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
-  - Because our "WAN" is on an RFC1918 network
-    - Click Interfaces > WAN
-    - <ins>Uncheck</ins> Block private networks
-    - Click Save
-    - Click Apply Changes
-    - Yes, this could have been configured in the Wizard; this additional step emphasizes the importance of this feature
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
+  - In a later step we will create rules to further isolate the pentesting network from the Lab network
 
 # Isolate the Pentesting Lab
-It is always best practice to operate in an isolated Pentesting network. If you must access the internet, take precautions:
+It is always best practice to operate in an isolated Pentesting network. If you must access the Internet, take precautions:
 - Malicious traffic escaping the environment may expose you to prosecution and penalties
 - Your ISP may find you in violation of their acceptable use policy
 - Your activity is easily attributed to you and may draw attention from very anti-social netizens
@@ -226,12 +224,32 @@ Best practice is to pause and finish setting up any VMs you want to update over 
 Now continue with the following steps to safely lock down the pentesting network.
 
 ## Disable Internet and DNS
-1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
-2. Block DNS traffic from 192.168.101.0/24 to the firewall
-    - Why block DNS? DNS is used as a covert channel that operates through DNS to the Internet
+1. Log in to the console of the system on the pentesting network that you are using to configure OPNsense
+2. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
+   - Firewall > Rules > LAN
+   - Add rules
+      - Block DNS traffic from 192.168.101.0/24 to the firewall
+         - Action: Block
+         - Interface: LAN
+         - Protocol: TCP/UDP
+         - Destination: This Firewall
+         - Destination port range: DNS to DNS
+         - Log: Log packets
+         - Decription: block DNS covert channel
+         - Why block DNS? DNS is used as a covert channel that operates through DNS to the Internet
+         - Move to the top of the list
+      - Allow other traffic from the pentest network to the firewall
+         - Action: Pass
+         - Source Interface: LAN
+         - Protocol: any
+         - Destination: This Firewall
+         - Log: Log packets
+   - Disable the rule "Default allow LAN to any rule"
+   - Click **Apply changes**
+ - Confirm that Internet browsing fails and that nslookup from the command line also fails (i.e., 'nslookup google.com' times out)
 
 ## Configure TOR
-This provides some anonymity, if done correctly.
+This provides some anonymity, if done correctly
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
 - You many choose to configure the firewall to instead use a VPN service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
