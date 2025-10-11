@@ -263,108 +263,89 @@ References:
 - https://docs.huihoo.com/m0n0wall/opnsense/manual/how-tos/tor.html
 
 Steps:
-- From VM's browser, check the current public IP address, without TOR
-  - http://ipchicken.com
-- Log in to firewall https://192.168.101.254
+- From the pentest network VM's browser log in to OPNsense (https://192.168.101.254)
 - System > Firmware > Plugins
-  - os-OPNproxy - click "+" to install
-    - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
-    - Servcies > Squid Web Proxy > Administration
-      - Enable proxy and click Apply
-      - Click Forward proxy
-        - Proxy interfaces: LAN
-        - Check Enable Transparent HTTP proxy
-        - Click Apply
-  - os-tor - click "+" to install
+  - Check Show community plugins
+  -  os-tor - click "+" to install
+- Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
 - Refresh the page
-- Click **Services** > **Tor** > **Configuration**
+- Click Services > Tor > Configuration
   - General Tab
     - Enable: Yes
     - Listen Interfaces: LAN
     - Enable Advanced Mode
-      - Check **Enable Transparent Proxy**
+      - Check Enable Transparent Proxy
       - Confirm SOCKS port number: 9050
       - Confirm Control Port: 9051
       - Confirm Transparent port: 9040
       - Confirm Transparent DNS port: 9053
-  - Click **Save**
-- **Firewall** > **Rules** > **LAN**
-  - Add rule to top of policy
-    - Action: Pass
+  - Click Save
+- Firewall > NAT  > Port-Forward
+  - Add rule
+    - Disabled: No
+    - Interface: LAN (only)
+    - TCP/IP Version: IPv4
+    - Protocol: TCP/IP
+    - Source: Advanced > LAN net
+    - Destination: any
+    - Destination port range: DNS to DNS
+    - Redirect target IP: 127.0.0.1
+    - Redirect target port: other: 9053
     - Quick: Checked
     - Interface: LAN
     - Direction: in
     - TCP/IP Version: IPv4
-    - Protocol: TCP/UDP
-    - Source: LAN net
-    - Destination: This Firewall
-    - Destination port range: From 53 to 53 (DNS)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: Allow DNS to firewall
-    - Click Save
-    - Move the new rule to the top if necessary
-      - Put a Check next to new rule Allow DNS to Firewall
-      - Click the arrow icon to the right of the first rule to move it to the top
-    -  Allow LAN net to This Firewall IP for TCP/IP DNS
-  -  Add a second rule just below it
-      - Action: Block
-      - Quick: Checked
-      - Interface: LAN
-      - Direction: in
-      - TCP/IP Version: IPv4
-      - Protocol: TCP/UDP
-      - Source: LAN net
-      - Destination: any
-      - Destination port range: From 53 to 53 (DNS)
-      - Log: This is not recommended for this Lab, but enable if you wish
-      - Description: Deny unsanctioned DNS
-      - Click Save
-    - Move the new rule below the first rule if necessary
-      - Put a Check next to new rule Deny unsanctioned DNS
-      - Click the arrow icon to the right of the <ins>second</ins> rule to move it to the second position
-    -  Allow LAN net to This Firewall IP for TCP/IP DNS
-  - Click Apply Changes
-- **Firewall** > **NAT** > **Port Forward**
-  - Add rule
-    - Click the "+" to add a rule
-    - Interface: **LAN** (be sure you ONLY select LAN)
-    - TCP/IP Version: **IPv4**
-    - Protocol: **TCP** (TOR rejects UDP packets except for DNS requests)
-    - Source: **LAN net**
-    - Source port range: **any**
-    - Destination: **ANY**
-    - Destination Port: **ANY**
-    - Redirect Target IP: Single Host or Network: **127.0.0.1**
-    - Redirect Target Port: (other) **9040** (this is the Transparent TOR port)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: **Port forward to Tor**
-    - NAT reflection:
-      - System default ?
-    - Filter rule association:
-      - (default) add associated filter rule, didn't work
-      - trying None
-    - Click **Save**
-    - Click **Apply changes**
+    - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
+    - Description: Use Tor for DNS
+  - Add rule below (at the end)
+    - Disabled: No
+    - Interface: LAN (only)
+    - TCP/IP Version: IPv4
+    - Protocol: TCP/IP
+    - Source: Advanced > LAN net
+    - Destination: any
+    - Destination port range: any to any
+    - Redirect target IP: 127.0.0.1
+    - Redirect target port: other: 9040
+    - Quick: Checked
+    - Interface: LAN
+    - Direction: in
+    - TCP/IP Version: IPv4
+    - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
+    - Description: Use Tor for tcp traffic
+  - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
+- Firewall > Rules > LAN
+  - Confirm what rules are needed
+  - allow any to 127.0.0.1 port 9053?
+  - allow traffic to this firewall?
+  - block lan net to any?
 - Reboot the firewall
+  - is this needed?
   - Power > Reboot > confirm
 - Using your browser connect to https://check.torproject.org
   - You should see "Congratulations. This browser is configured to use Tor."
-  - Having issues connecting to the Internet?
-    - If may take a moment for the Tor circuits to be build
-      - Services > Tor > Diagnostics > Circuits
-    - Is DNS working from the command line, but you don't have web access?
-      - check the NAT: Port Forward rule <ins>carefully<ins>
-      - check Tor configuration
-    - restart Tor: Lobby > Dashboard > Under services, find the restart button next to tor
 
 ### Test TOR access
 - From VM's browser, check the public IP address <ins>with</ins> TOR
   - http://ipchicken.com
-- Try updating your VM's OS
+- Try updating your VM's OS (Linux example below)
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
 
 ### Confirm privacy
-TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
 
+#### Check for DNS Leaks
+TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. In that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
+- tcpdump -nni vtnet0 port 53
+
+#### Close ICMP Ping Leaks
 Now test `ping` commands to the Internet. Are they leaking outside the tunnel?
+- tcpdump -nni vtnet icmp
+
+#### Close UDP Leaks
+Now test udp connectivity. Is it leaking outside the tunnel? (for example QUIC traffic on udp/443)
+- tcpdump -nni vtnet0 proto 17 and port 443
+
+Add firewall rules to finish locking down UDP traffic and non-tcp/ip traffic like ping
+
+If you need UDP traffic to the Internet from the lab, consider using a VPN instead of Tor.
