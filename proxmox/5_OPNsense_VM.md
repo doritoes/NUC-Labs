@@ -316,9 +316,11 @@ Steps:
   - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
 - Firewall > Rules > LAN
   - Confirm what rules are needed
-  - allow any to 127.0.0.1 port 9053?
-  - allow traffic to this firewall?
-  - block lan net to any?
+  - allow any to 127.0.0.1 port 9053? is that an auto rule?
+  - allow any to 127.0.0.1 port 9040? is that an auto rule?
+  - block all ipv4 and ipv6 from LAN net to everything
+- Firewall > Rules > WAN
+  - block (inbound) mDNS no log dest 224.0.0.251 udp 5353
 - Reboot the firewall
   - is this needed?
   - Power > Reboot > confirm
@@ -338,14 +340,22 @@ Steps:
 TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. In that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
 - tcpdump -nni vtnet0 port 53
 
-#### Close ICMP Ping Leaks
+#### Test for ICMP Ping Leaks
 Now test `ping` commands to the Internet. Are they leaking outside the tunnel?
-- tcpdump -nni vtnet icmp
+- tcpdump -nni vtnet0 icmp
+vtnet0 is the WAN and no pings there. vtnet1 is the LAN so you will see the traffic attempted, but ultimately get dropped.
 
-#### Close UDP Leaks
+#### Test for UDP Leaks
 Now test udp connectivity. Is it leaking outside the tunnel? (for example QUIC traffic on udp/443)
 - tcpdump -nni vtnet0 proto 17 and port 443
 
 Add firewall rules to finish locking down UDP traffic and non-tcp/ip traffic like ping
 
 If you need UDP traffic to the Internet from the lab, consider using a VPN instead of Tor.
+
+To confirm these drops, I installed Chrome and browsed to google.com. To manually enabled quic in Chrome:
+- Open Google Chrome.
+- In the address bar, type chrome://flags and press Enter.
+- Search for Experimental QUIC protocol.
+- In the dropdown menu next to it, select Enabled.
+- Click the Relaunch button at the bottom to restart Chrome.
