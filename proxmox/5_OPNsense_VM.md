@@ -364,13 +364,14 @@ Steps:
   - Note that everything is slower over Tor
 - Check for leaks (privacy issues)
   - on firweall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
-    - tcpdump -nni vtnet0 port 53
+    - `tcpdump -nni vtnet0 port 53`
   - next check for icmp ping leak by running tcpdump while you test pings to the Internet (i.e., `ping 8.8.8.8`)
+    - `tcpdump -nni vtnet0 icmp`
   - finally check for udp leaks by running tcpdump and generating QUIC udp/443 traffic
     - install Chrome
     - chrome://flags
     - Search for Experimental QUIC protocol; in the dropdown next to it select Enabled
     - Click Relaunch at the bottom to restart Chrome
     - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
-    - tcpdump -nni vtnet0 proto 17 and port 443
+    - `tcpdump -nni vtnet0 proto 17 and port 443`
 - REMEMBER Tor supports TCP only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor
