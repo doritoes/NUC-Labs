@@ -62,8 +62,8 @@ Or, if you created local storage, upload the ISO there.
     - no changes (VirtIO SCSI single, i440fx, SeaBios)
     - don't check Qemu Agent, that will happen later
   - Disks tab
-    - Bus Device: SCSI
-    - Cache: Write back
+    - Bus Device: **SCSI**
+    - Cache: **Write back**
     - Disk size: **32GB**
     - Check **Discard** because our host is using SSD's
   - CPU tab
@@ -76,7 +76,7 @@ Or, if you created local storage, upload the ISO there.
   - Memory tab
     - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **4096**MiB = 4GiB
       - in testing we were able to build the firewall using 2GB of RAM despite the installer requiring 3000MiB to copy files
-    - Advanced: disable Balooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
+    - Advanced: <i>disable</i> Balooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
   - Network tab
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
@@ -130,7 +130,7 @@ Or, if you created local storage, upload the ISO there.
   - Confirm
 - Option 2) **Set interface IP address**
   - Configure **LAN**
-    - DHCP: **No**
+    - Configure using DHCP: **No**
     - IPv4 address: **192.168.101.254**
     - Subnet mask CIDR: **24**
     - Press enter to confirm no upstream gateway on the LAN interface
@@ -147,7 +147,7 @@ Or, if you created local storage, upload the ISO there.
     - Change web GUI protocol to HTTP: **No**
     - Generate a new self-signed web GUI certificate: **No**
     - Restore web GUI access defaults: **No**
-- Create a VM on the vmbr2, the pentesting network
+- Create a VM on the vmbr2 pentesting network
   - this VM will be able to access the OPNsense portal
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - For example, clone VM 107 (win10-desk)
@@ -185,8 +185,8 @@ Or, if you created local storage, upload the ISO there.
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
     - Read and accept the information provided
-    - Scroll to the bottom of the Updates tab and click **Update** then accept the update and reboot
-    - Wait for updates and the reboot to complete
+    - <i>Scroll to the bottom</i> of the Updates tab and click **Update** then accept the update and reboot
+    - Wait for updates and reboot to complete
     - Log back in and check if there are any more updates
 - Enable qemu guest agent
   - From OPNsense web GUI
@@ -224,7 +224,19 @@ Best practice is to pause and finish setting up any VMs you want to update over 
 Now continue with the following steps to safely lock down the pentesting network.
 
 ## Disable Internet and DNS
-1. Log in to the console of the system on the pentesting network that you are using to configure OPNsense
+Why are we disabling Internet DNS access? Because we only want traffic to get to the Internet via Tor.
+
+- Log in to the console of the system on the pentesting network that you are using to configure OPNsense
+- Firewall > Rules > LAN
+  - Change the IPv4 rule to be a Block action
+  - Change the IPv6 rule to be a Block action
+  - Confirm what rules are needed
+  - allow any to 127.0.0.1 port 9053? is that an auto rule?
+  - allow any to 127.0.0.1 port 9040? is that an auto rule?
+  - block all ipv4 and ipv6 from LAN net to everything
+  - Click **Apply changes**
+-  Confirm that Internet browsing fails and that nslookup from the command line also fails (i.e., 'nslookup google.com' times out)
+
 2. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
    - Firewall > Rules > LAN
    - Add rules
@@ -266,42 +278,46 @@ Steps:
 - From the pentest network VM's browser log in to OPNsense (https://192.168.101.254)
 - System > Firmware > Plugins
   - Check Show community plugins
-  -  os-tor - click "+" to install
-- Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
+  - os-tor - click "+" to install
 - Refresh the page
 - Click Services > Tor > Configuration
   - General Tab
     - Enable: Yes
-    - Listen Interfaces: LAN
+    - Listen Interfaces: LAN (only)
+    - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
     - Enable Advanced Mode
-      - Check Enable Transparent Proxy
       - Confirm SOCKS port number: 9050
       - Confirm Control Port: 9051
+      - Check Enable Transparent Proxy
       - Confirm Transparent port: 9040
       - Confirm Transparent DNS port: 9053
-  - Click Save
-- Firewall > NAT  > Port-Forward
-  - Add rule
+    - Click Save
+  - SOCKS Proxy ACL
+    - Add a new ACL
+      - Enable: /Yes
+      - Protocol: !Pv4
+      - Action: Accept
+      - Click Save
+      - Click Reload Service
+  - Firewall > NAT  > Port Forward
+    - Add a rule
     - Disabled: No
     - Interface: LAN (only)
     - TCP/IP Version: IPv4
     - Protocol: TCP/IP
     - Source: Advanced > LAN net
     - Destination: any
-    - Destination port range: DNS to DNS
+    - Destination port range: any to any
     - Redirect target IP: 127.0.0.1
     - Redirect target port: other: 9053
-    - Quick: Checked
-    - Interface: LAN
-    - Direction: in
-    - TCP/IP Version: IPv4
     - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
     - Description: Use Tor for DNS
+    - Click **Save**
   - Add rule below (at the end)
     - Disabled: No
     - Interface: LAN (only)
     - TCP/IP Version: IPv4
-    - Protocol: TCP/IP
+    - Protocol: TCP
     - Source: Advanced > LAN net
     - Destination: any
     - Destination port range: any to any
@@ -314,48 +330,47 @@ Steps:
     - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
     - Description: Use Tor for tcp traffic
   - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
+  - Click **Apply changes**
 - Firewall > Rules > LAN
-  - Confirm what rules are needed
-  - allow any to 127.0.0.1 port 9053? is that an auto rule?
-  - allow any to 127.0.0.1 port 9040? is that an auto rule?
-  - block all ipv4 and ipv6 from LAN net to everything
+  - Move the automatic rules to the top
+  - First, allow any to 127.0.0.1 port 9053
+  - Next, allow any to 127.0.0.1 port 9040
+  - The last two rules should be block rules
 - Firewall > Rules > WAN
-  - block (inbound) mDNS no log dest 224.0.0.251 udp 5353
+  - While we are here, we can clean up the logs by NOT logging our lab network mDNS to get logged on the OPNsense firewall
+  - Add rule
+    - Action: Block
+    - Disabled: No
+    - Interface: WAN
+    - Direction: in
+    - TCP/IP Version: IPv4
+    - Protocol: UDP
+    - Source: any
+    - Destination: Single host or Network: 224.0.0.251
+    - Destination port range: (other) 5353 to (other) 5353
+    - Log: No
+    - Description: Do not log mDNS drops
+    - Click **Save** then click **Apply changes**
 - Reboot the firewall
-  - is this needed?
   - Power > Reboot > confirm
-- Using your browser connect to https://check.torproject.org
-  - You should see "Congratulations. This browser is configured to use Tor."
 
 ### Test TOR access
-- From VM's browser, check the public IP address <ins>with</ins> TOR
+- Using the pentest VM's browser connect to https://check.torproject.org
+  - You should see "Congratulations. This browser is configured to use Tor."
+- From VM's browser, check the public IP address <ins>with</ins> Tor
   - http://ipchicken.com
-- Try updating your VM's OS (Linux example below)
+- Try updating your VM's OS using toor (Linux example below)
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
-
-### Confirm privacy
-
-#### Check for DNS Leaks
-TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. In that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
-- tcpdump -nni vtnet0 port 53
-
-#### Test for ICMP Ping Leaks
-Now test `ping` commands to the Internet. Are they leaking outside the tunnel?
-- tcpdump -nni vtnet0 icmp
-vtnet0 is the WAN and no pings there. vtnet1 is the LAN so you will see the traffic attempted, but ultimately get dropped.
-
-#### Test for UDP Leaks
-Now test udp connectivity. Is it leaking outside the tunnel? (for example QUIC traffic on udp/443)
-- tcpdump -nni vtnet0 proto 17 and port 443
-
-Add firewall rules to finish locking down UDP traffic and non-tcp/ip traffic like ping
-
-If you need UDP traffic to the Internet from the lab, consider using a VPN instead of Tor.
-
-To confirm these drops, I installed Chrome and browsed to google.com. To manually enabled quic in Chrome:
-- Open Google Chrome.
-- In the address bar, type chrome://flags and press Enter.
-- Search for Experimental QUIC protocol.
-- In the dropdown menu next to it, select Enabled.
-- Click the Relaunch button at the bottom to restart Chrome.
+- Check for leaks (privacy issues)
+  - on firweall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
+    - tcpdump -nni vtnet0 port 53
+  - next check for icmp ping leak by running tcpdump while you test pings to the Internet (i.e., `ping 8.8.8.8`)
+  - finally check for udp leaks by running tcpdump and generating QUIC udp/443 traffic
+    - install Chrome
+    - chrome://flags
+    - Search for Experimental QUIC protocol; in the dropdown next to it select Enabled
+    - Click Relaunch at the bottom to restart Chrome
+    - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
+    - tcpdump -nni vtnet0 proto 17 and port 443
+- REMEMBER Tor supports TCP only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor
