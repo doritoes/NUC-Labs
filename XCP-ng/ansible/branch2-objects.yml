@@ -1,0 +1,67 @@
+---
+- name: Create branch2 objects
+  hosts: check_point
+  connection: httpapi
+  collections:
+    - check_point.mgmt
+  tasks:
+    - name: branch 2 outbound NAT
+      check_point.mgmt.cp_mgmt_host:
+        name: branch2_outbound_nat
+        ipv4_address: 192.168.102.4
+        color: dark blue
+        comments: branch2 outbound NAT
+        state: present
+    - name: branch 2 broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_10.0.2.255
+        ipv4_address: 10.0.2.255
+        color: dark blue
+        comments: branch2 broadcast address
+        state: present
+    - name: Branch 2 LAN network
+      check_point.mgmt.cp_mgmt_network:
+        name: branch2_lan
+        subnet: 10.0.2.0
+        mask_length: 24
+        color: crete blue
+        comments: Branch 2 LAN network
+        nat_settings:
+          auto_rule: true
+          hide_behind: ip-address
+          ip_address: 192.168.102.4
+          method: hide
+          install_on: firewall2
+        state: present
+    - name: branch 3 broadcast address
+      check_point.mgmt.cp_mgmt_host:
+        name: broadcast_10.0.3.255
+        ipv4_address: 10.0.3.255
+        color: dark blue
+        comments: branch3 broadcast address
+        state: present
+    - name: Branch 2 LAN DHCP workstations
+      check_point.mgmt.cp_mgmt_address_range:
+        name: Branch 2 LAN Workstation DHCP scope
+        ip_address_first: 10.0.2.20
+        ip_address_last: 10.0.2.250
+        color: dark blue
+        comments: Branch 2 LAN Workstation DHCP scope
+        state: present
+    - name: LAN networks group No NAT
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - branch1_lan
+        - branch2_lan
+        name: LAN_Networks_NO_NAT
+        state: present
+    - name: remote branch firewalls group
+      check_point.mgmt.cp_mgmt_group:
+        members:
+        - firewall2
+        - dummy_fw3a
+        - dummy_fw3b
+        name: remote_branch_firewalls
+        state: present
+    - name: publish changes
+      check_point.mgmt.cp_mgmt_publish:

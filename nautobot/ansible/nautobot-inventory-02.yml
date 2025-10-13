@@ -1,0 +1,8 @@
+---
+plugin: networktocode.nautobot.gql_inventory
+query:
+  devices:
+    role: name
+    id:
+group_by:
+  - role.name

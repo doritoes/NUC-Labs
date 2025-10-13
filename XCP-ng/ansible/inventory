@@ -1,0 +1,28 @@
+[router]
+# IP address of the LAB interface to start
+[sms]
+#192.168.41.20
+[sms:vars]
+ansible_connection=ssh
+ansible_ssh_user=ansible
+ansible_python_interpreter="/opt/CPsuite-R81.20/fw1/Python/bin/python3"
+
+[firewalls]
+# firewall1a
+#192.168.41.2
+# firewall1b
+#192.168.41.3
+# firewall2a
+#192.168.102.2
+# firewall2b
+#192.168.102.3
+# firewall3a
+#192.168.103.2
+# firewall3b
+#192.168.103.3
+[firewalls:vars]
+ansible_connection=ssh
+ansible_ssh_user=ansible
+ansible_python_interpreter="/opt/CPsuite-R81.20/fw1/Python/bin/python3"
+[dmzserver]
+#192.168.31.11

@@ -1,0 +1,629 @@
+---
+- name: Create Branch 1 policy
+  hosts: check_point
+  connection: httpapi
+  collections:
+    - check_point.mgmt
+  # include_vars: vars.yml # introduced in Ansible 2.11
+  tasks:
+    - name: add a policy package
+      check_point.mgmt.cp_mgmt_package:
+        access: true
+        color: forest green
+        comments: Access policy for Lab
+        name: Lab_Policy
+        threat_prevention: false
+        installation_targets:
+          - firewall1
+        state: present
+    - name: modify cleanup rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Cleanup rule
+        action: Drop
+        enabled: true
+        track:
+          type: Log
+        comments: Cleanup rule drop any/any/any
+        state: present
+    - name: create cleanup section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Cleanup section
+        relative_position:
+          above: Cleanup rule
+        state: present
+    - name: create gateways access section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Gateways access
+        position: top
+        state: present
+    - name: create DHCP section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: DHCP
+        relative_position:
+          below: Gateways access
+        state: present
+    - name: create stealth section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Stealth rules
+        relative_position:
+          below: DHCP
+        state: present
+    - name: create management network section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Management network
+        relative_position:
+          below: Stealth rules
+        state: present
+    - name: create DMZ section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: DMZ
+        relative_position:
+          below: Management network
+    - name: create core services section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Core Services
+        relative_position:
+          below: DMZ      
+    - name: create general Internet access section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: General Internet access
+        relative_position:
+          below: Core Services
+    - name: create noise suppression section
+      check_point.mgmt.cp_mgmt_access_section:
+        layer: Lab_Policy Network
+        name: Noise suppression
+        relative_position:
+          below: General Internet access
+    - name: add gateways access rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Manage gateways
+        relative_position:
+          below: Gateways access
+        source:
+          - Manager
+        destination:
+          - firewall1
+          - remote_branch_firewalls
+        service:
+        - https
+        - echo-reply
+        - ssh_version_2
+        action: Accept
+        comments: Allow manage gateways
+        track:
+          type: Log
+        state: present
+    - name: add gateways managment rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: SMS manage gateways
+        relative_position:
+          below: Manage gateways
+        source:
+          - sms
+        destination:
+          - firewall1
+          - remote_branch_firewalls
+        service:
+        - FW1
+        - CPD
+        - CPD_amon
+        - FW1_ica_push
+        action: Accept
+        comments: SMS manage gateways local and remote
+        track:
+          type: Log
+        state: present
+    - name: add gateways managment rule reverse
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: SMS manage gateways reverse
+        relative_position:
+          below: SMS manage gateways
+        source:
+          - firewall1
+          - remote_branch_firewalls
+        destination:
+          - sms
+        service:
+        - CPD_amon
+        action: Accept
+        comments: SMS manage gateways local and remote
+        track:
+          type: Log
+        state: present
+    - name: add gateways IDC rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: IDC to gateways
+        relative_position:
+          below: SMS manage gateways reverse
+        source:
+          - idc-1
+        destination:
+          - firewall1
+          - dummy_fw2-internal
+          - dummy_fw3-internal
+          - remote_branch_firewalls
+        service:
+        - https
+        action: Accept
+        comments: IDC connect to remote gateways
+        track:
+          type: Log
+        state: present
+    - name: add DHCP rule requests
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DHCP requests
+        relative_position:
+          below: DHCP
+        source:
+          - remote_branch_firewalls
+        destination:
+          - dc-1
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP requests
+        track:
+          type: Log
+        state: present
+    - name: add DHCP rule replies
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DHCP replies
+        relative_position:
+          below: DHCP requests
+        source:
+          - dc-1
+        destination:
+          - remote_branch_firewalls
+        service:
+        - bootp
+        action: Accept
+        comments: DHCP replies
+        track:
+          type: Log
+        state: present
+    - name: add a stealth rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Stealth rule
+        relative_position:
+          below: Stealth rules
+        source:
+          - Any
+        destination:
+          - firewall1
+        service:
+        - Any
+        action: Drop
+        comments: Protect gateways
+        track:
+          type: Log
+        state: present
+    - name: add management rule domain
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: manager to DC
+        relative_position:
+          below: Management network
+        source:
+          - manager
+        destination:
+          - dc-1
+        service:
+        - active_directory_ports
+        action: Accept
+        comments: Approved manager ports
+        track:
+          type: Log
+        state: present
+    - name: add management rule file server
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: manager to file server
+        relative_position:
+          below: manager to DC
+        source:
+          - manager
+        destination:
+          - file-1
+        service:
+        - nbsession
+        - smb
+        action: Accept
+        comments: Approved manager ports
+        track:
+          type: Log
+        state: present
+    - name: add management rule file lab router
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: manager to lab router
+        relative_position:
+          below: manager to file server
+        source:
+          - manager
+        destination:
+          - isp_router
+        service:
+        - ssh
+        - echo-request
+        action: Accept
+        comments: Approved manager ports
+        track:
+          type: Log
+        state: present
+    - name: add core services ntp allowed
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: NTP allowed
+        relative_position:
+          below: Core Services
+        source:
+          - branch1_lan
+          - branch1_dmz
+          - management_192.168.41.0/24
+        destination:
+          - .time.windows.com
+          - .ntp.checkpoint.com
+          - .ntp2.checkpoint.com
+          - .ntp.ubuntu.com
+        service:
+        - ntp
+        action: Accept
+        comments: Approved ntp
+        track:
+          type: Log
+        state: present
+    - name: add core services dns allowed
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DNS allowed
+        relative_position:
+          below: NTP allowed
+        source:
+          - dc-1
+          - sms
+          - manager
+        destination:
+          - google_dns_8.8.8.8
+          - google_dns_8.8.4.4
+          - quad9_dns_9.9.9.9
+        service:
+        - dns
+        action: Accept
+        comments: Approved dns
+        track:
+          type: Log
+        state: present
+    - name: add core services ldap allowed
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: LDAP allowed
+        relative_position:
+          below: DNS allowed
+        source:
+          - sms
+          - firewall1
+          - remote_branch_firewalls
+        destination:
+          - dc-1
+        service:
+        - ldap
+        - ldap-ssl
+        action: Accept
+        comments: Approved LDAP
+        track:
+          type: Log
+        state: present
+    - name: add core services domain controller
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Domain Controller allowed
+        relative_position:
+          below: LDAP allowed
+        source:
+          - LAN_Networks_NO_NAT
+        destination:
+          - dc-1
+        service:
+        - active_directory_ports
+        action: Accept
+        comments: Domain controller connectivity
+        track:
+          type: Log
+        state: present
+    - name: add core services file controller
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: File server allowed
+        relative_position:
+          below: Domain Controller allowed
+        source:
+          - LAN_Networks_NO_NAT
+        destination:
+          - file-1
+        service:
+        - nbsession
+        - smb
+        action: Accept
+        comments: File server connectivity
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule internal access to web apps
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Internal web access to DMZ
+        relative_position:
+          below: DMZ
+        source:
+          - management_192.168.41.0/24
+          - LAN_Networks_NO_NAT
+        destination:
+          - branch1_dmz
+        service:
+        - http
+        - https
+        - echo-request
+        action: Accept
+        comments: Web access to DMZ apps
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule manage DMZ servers
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Manage DMZ servers
+        relative_position:
+          below: Internal web access to DMZ
+        source:
+          - management_192.168.41.0/24
+        destination:
+          - branch1_dmz
+        service:
+        - ssh_version_2
+        - Remote_Desktop_Protocol
+        - Remote_Desktop_Protocol_UDP
+        action: Accept
+        comments: Web access to DMZ apps
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule access to domain controller
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ to Domain Controller
+        relative_position:
+          below: Manage DMZ servers
+        source:
+          - dmz-iis
+        destination:
+          - dc-1
+        service:
+        - active_directory_ports
+        action: Accept
+        comments: DMZ to Domain Controller
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule access to internal DNS
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ DNS
+        relative_position:
+          below: DMZ to Domain Controller
+        source:
+          - branch1_dmz
+        destination:
+          - dc-1
+        service:
+        - dns
+        - echo-request
+        action: Accept
+        comments: DMZ to Domain Controller DNS
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule access to SQL server
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ SQL
+        relative_position:
+          below: DMZ DNS
+        source:
+          - dmz-iis
+        destination:
+          - sql-1
+        service:
+        - MS-SQL-Server
+        action: Accept
+        comments: DMZ Web server to SQL server
+        track:
+          type: Log
+        state: present
+    - name: add DMZ rule inbound web traffic
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: DMZ Inbound Web
+        relative_position:
+          below: DMZ SQL
+        source:
+          - All_Internet
+        destination:
+          - dmz-iis
+          - dmz-apache
+        service:
+        - http
+        - https
+        action: Accept
+        comments: DMZ Web server to SQL server
+        track:
+          type: Log
+        state: present
+    - name: add Internet access rule
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: Web access
+        relative_position:
+          below: General Internet access
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - All_Internet
+        service:
+        - http
+        - https
+        - echo-request
+        action: Accept
+        comments: Protect gateways
+        track:
+          type: Log
+        state: present
+    - name: add noise suppression rule netbios
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: netbios broadcasts
+        relative_position:
+          below: Noise suppression
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - broadcast_192.168.41.255
+          - broadcast_10.0.1.255
+          - broadcast_192.168.31.255
+        service:
+        - nbname
+        - nbdatagram
+        action: Drop
+        comments: Do not log netbios broadcast drops
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule multicast 224.0.0.251
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: mDNS multicast
+        relative_position:
+          below: netbios broadcasts
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - multicast_224.0.0.251
+        service:
+        - udp_5353
+        action: Drop
+        comments: Do not log mDNS drops
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule multicast 239.255.255.250 224.0.0.251 224.0.0.252
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: llmnr and ssdp multicast
+        relative_position:
+          below: mDNS multicast
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - multicast_224.0.0.251
+          - multicast_224.0.0.252
+          - multicast_239.255.255.250
+        service:
+        - udp_1900
+        - udp_3702
+        - udp_5353
+        - udp_5355
+        action: Drop
+        comments: Do not log LLMNR and SSDP multicast drops
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule multicast 224.0.0.22
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: IGMP multicast
+        relative_position:
+          below: llmnr and ssdp multicast
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - multicast_224.0.0.22
+        service:
+        - igmp
+        action: Drop
+        comments: Do not log mDNS drops
+        track:
+          type: None
+        state: present
+    - name: add noise suppression rule quic
+      check_point.mgmt.cp_mgmt_access_rule:
+        layer: Lab_Policy Network
+        name: quic
+        relative_position:
+          below: IGMP multicast
+        source:
+          - management_192.168.41.0/24
+          - branch1_lan
+          - branch1_dmz
+        destination:
+          - All_internet
+        service:
+        - quic
+        action: Drop
+        comments: explicitly drop quic
+        track:
+          type: Log
+        state: present
+    - name: create NAT rule section No-NAT
+      check_point.mgmt.cp_mgmt_nat_section:
+        package: Lab_Policy
+        name: No-NAT
+        position: top
+        state: present
+    - name: add No-NAT LAN rule internal traffic
+      check_point.mgmt.cp_mgmt_nat_rule:
+        package: Lab_Policy
+        name: Internal No-NAT
+        comments: No-NAT LAN and DMZ internal
+        original_source: Internal_Networks_NO_NAT
+        original_destination: Internal_Networks_NO_NAT
+        relative_position:
+          below: No-NAT
+        state: present
+    - name: add No-NAT Mgmt rule
+      check_point.mgmt.cp_mgmt_nat_rule:
+        package: Lab_Policy
+        name: Management No-NAT
+        comments: No-NAT management to internal
+        original_source: management_192.168.41.0/24
+        original_destination: Internal_Networks_NO_NAT
+        relative_position:
+          below: Internal No-NAT
+        state: present
+    - name: publish changes
+      check_point.mgmt.cp_mgmt_publish:

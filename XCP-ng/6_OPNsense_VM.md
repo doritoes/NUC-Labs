@@ -1,6 +1,8 @@
 # Install OPNsense firewall
 OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
 
+📓 This Lab was built using OPNsense-24.1. Soon after 24.7 was released with a complete re-work of the interface. Re-deploying the lab using 
+
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
 References:
@@ -166,8 +168,8 @@ Or, if you created local storage, upload the ISO there.
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Because our "WAN" is on a RFC1919 network
-    - Click Interface > WAN
+  - Because our "WAN" is on a RFC1918 network
+    - Click Interfaces > WAN
     - Uncheck Block private networks
     - Click Save
     - Click Apply Changes
@@ -181,7 +183,7 @@ It is always best practice to operate in an isolated Pentesting network. If you 
 
 Best practice is to stop and finish setting up any parts you want to update over the Internet. The [next section](7_Pentesting_Lab.md) requires some of that.
 
-Then continue with the follow steps to lock things down safely.
+Then continue with the following steps to lock things down safely.
 
 ## Disable Internet and DNS
 1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
@@ -191,7 +193,7 @@ Then continue with the follow steps to lock things down safely.
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
-- You many choose to configure the firewall to instead use a proxy service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
+- You many choose to configure the firewall to instead use a VON service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
 
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
@@ -207,7 +209,7 @@ Steps:
 - System > Firmware > Plugins
   - os-OPNproxy - click "+" to install
     - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
-    - Servcies > Squid Web Proxy > Administration
+    - Services > Squid Web Proxy > Administration
       - Enable proxy and click Apply
       - Click Forward proxy
         - Proxy interfaces: LAN
