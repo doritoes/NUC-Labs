@@ -2,6 +2,7 @@
 References:
 - https://docs.vyos.io/en/latest/contributing/build-vyos.html
 - https://github.com/vyos/vyos-build
+- https://github.com/doritoes/vyos-build/tree/reenable-agents
 
 We will use Docker for this ISO build and run off the VyOS rolling release. Adding a single file will allow us to build an ISO with the VM agents (xen, qemu, vmware, etc.) already installed.
 
