@@ -15,9 +15,20 @@ resource "proxmox_vm_qemu" "server-clone" {
     type = "host"
   }
   memory = 2048
+  bootdisk = "virtio"
+  scsihw = "virtio-scsi-single"
+  disk {
+    slot = "scsi0"
+    size = "40G"
+    type = "disk"
+    storage = "local-lvm"
+    discard = true
+    cache = "writeback"
+  }
 
   # Activate QEMU agent
   agent = 1
+  skip_ipv6 = true
 
   # Network settings
   network {
