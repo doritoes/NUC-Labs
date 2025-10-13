@@ -63,32 +63,16 @@ References:
   - Or, `terraform plan -out tf.plan`
 - `terraform apply --auto-approve`
   - Or, `terraform apply tf.plan`
+- Test the VMs
+- When done, `terraform destroy`
 
 Error: The terraform-provider-proxmox_v2.9.14 plugin crashed! This is a known issue that is fixed in version 3RC3.
 
 Problems:
- - cloned servers have no disk and don't boot
- - "Unused Disk" in hardware, needs "Discard" set, needs "Write back" cache (retest this)
- - Can manually add it, but won't auto boot to it; can manuallyi boot from proxmox boot menu
- - Try setting save as in the template
-```
-# Set the boot disk paramters
-  bootdisk     = "virtio"
-  scsihw       = "virtio-scsi-single"
+ - cloning to 40G works, but the volume is still 20GB, unused disk space
+   - `fdisk -l`
+   - GPT PMBR size mismatch (4194309 != 83886079) will be corrected by write.
+   - The backup GPT table is not at the end of the device
+   - run `sudo parted -l` and respond "fix"
+   - `fdisk -l`
 
-  disk {
-    slot            = 0
-    size            = "40G"
-    type            = "virtio"
-    storage         = "local-lvm"
-    ssd             = 1
-    discard         = "on"
-  } # end disk
-```
-
-# Test
-Open the new VM's console and verify the settings
-- CPU count remained at 1, not the expected 2
-- Network does not change the bridge from the original cloned device
-- Memory remains the same
-- new VM name was set correctly
