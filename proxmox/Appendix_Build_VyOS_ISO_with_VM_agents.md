@@ -1,7 +1,7 @@
 # Appendix - Build VyOS ISO with VM Agents Installed
 Reference: https://docs.vyos.io/en/latest/contributing/build-vyos.html
 
-We will use Docker for this ISO build and run off the VyOS rolling release.
+We will use Docker for this ISO build and run off the VyOS rolling release. Adding a single file will allow us to build an ISO with the VM agents (xen, qemu, vmware, etc.) already installed.
 
 Install Prerequisites:
 - `sudo apt install -y git curl`
@@ -33,6 +33,7 @@ packages = [
 - build container
   - `cd ~/vyos-build`
   - `sudo docker build -t vyos/vyos-build:current docker`
+
 Build the ISO from source inside the container:
 - `sudo docker run --rm -it --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:current bash`
   - `cd /vyos`
@@ -41,4 +42,4 @@ Build the ISO from source inside the container:
     - or without the vm agents
     - `sudo ./build-vyos-image --architecture amd64 --build-by "j.randomhacker@vyos.io" generic`
   - `exit`
-- When the build is successful, the resulting iso can be found inside the build directory similr to vyos-1.5-rolling-202510072128-generic-amd64. On this host this is in  `~/vyos-build/build`
+- When the build is successful, the resulting iso can be found inside the build directory similr to vyos-1.5-rolling-202510072128-generic-amd64. On the host fint it in  `~/vyos-build/build`.
