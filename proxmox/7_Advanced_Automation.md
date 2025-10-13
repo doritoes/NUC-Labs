@@ -13,8 +13,7 @@ Terraform needs users, permissions, and tokens in order to interact with proxmox
 
 Command line:
 ~~~
-pveum role add TerraformProv -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.PowerMgmt"
-pveum role modify TerraformProv -privs "Datastore.AllocateSpace Datastore.AllocateTemplate Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt SDN.Use"
+pveum role add TerraformProv -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.PowerMgmt VM.GuestAgent.Audit"
 pveum user add terraform-prov@pve --password strongpassword
 pveum aclmod / -user terraform-prov@pve -role TerraformProv
 pveum user token add terraform-prov@pve terraform-token --privsep=0
@@ -63,14 +62,14 @@ References:
 - `terraform apply --auto-approve`
   - Or, `terraform apply tf.plan`
 
-Error: The terraform-provider-proxmox_v2.9.14 plugin crashed!
+Error: The terraform-provider-proxmox_v2.9.14 plugin crashed! This is a known issue that is fixed in version 3RC3.
 
-This is a known issue that is fixed in version 3RC3. Once version 3 is released, will try this again.
+Problems:
+ - cloned servers have no disk and don't boot
 
 # Test
 Open the new VM's console and verify the settings
 - CPU count remained at 1, not the expected 2
 - Network does not change the bridge from the original cloned device
 - Memory remains the same
-- vmid was set correctly
 - new VM name was set correctly
