@@ -6,7 +6,7 @@ Proxmox does not ship with Ansible, but you can install it on the host. This wil
 NOTES
 - This lab is performned on the proxmox host itself
 - You will need a subscription or have installed the no-subscription repository
-- You have already created a template named **template-ubuntu-server**, created from a VM you built earlier
+- You have already created a template named **ubuntu-server-lan**, created from a VM you built earlier
 
 # Create API Users, Permissions and Tokens
 Terraform needs users, permissions, and tokens in order to interact with proxmox.
