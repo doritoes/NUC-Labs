@@ -23,6 +23,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Disks tab
     - Disk size: **25GB** (25GB is the recommended minimum)
     - Check **Discard** because our host uses SSDs
+    - Cache: **Write back**
   - CPU tab
     - Sockets: 1
     - Cores: 2 (1 is minimum, but in lab testing 2 was required to install successfully)
