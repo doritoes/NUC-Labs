@@ -66,7 +66,8 @@ Error: The terraform-provider-proxmox_v2.9.14 plugin crashed! This is a known is
 
 Problems:
  - cloned servers have no disk and don't boot
- - "Unused Disk" in hardware, needs "Discard" set, needs "Write back" cache
+ - "Unused Disk" in hardware, needs "Discard" set, needs "Write back" cache (retest this)
+ - Can manually add it, but won't auto boot to it; can manuallyi boot from proxmox boot menu
 
 # Test
 Open the new VM's console and verify the settings
