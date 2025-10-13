@@ -14,25 +14,16 @@ Terraform needs users, permissions, and tokens in order to interact with proxmox
 Command line:
 ~~~
 pveum role add TerraformProv -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.PowerMgmt"
+pveum role modify TerraformProv -privs "Datastore.AllocateSpace Datastore.AllocateTemplate Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt SDN.Use"
 pveum user add terraform-prov@pve --password strongpassword
 pveum aclmod / -user terraform-prov@pve -role TerraformProv
+pveum user token add terraform-prov@pve terraform-token --privsep=0
 ~~~
 NOTE proxmox 9 has removed VM.Monitor. Sys.Audit is relied on instead.
 
-From proxmox Web GUI:
-- Update the password for user **terraform-prov**
-  - Datacenter > Permissions > Users
-  - Click on user terraform-prov, then click Password
-- Next, click **Permissions** > **API Tokens**
-  - Datacenter > Permissions > API Tokens
-  - Click Add
-    - User: **terraform-prov@pve**
-    - Privilege Separation: **NOT checked**
-    - Token ID: **terrform_token_id**
-    - Click **Add**
-    - Complete Token ID: terraform-prov@pve!terrform_token_id
-    - Make sure you copy down the Token Secret, as it will only be displayed once
-  - Other less secure option is to create a token for user root and <ins>unselect</ins> privilege separation, as this grants root permissions
+- Complete Token ID: terraform-prov@pve!terrform-token
+- Make sure you copy down the Token Secret, as it will only be displayed once
+- Other less secure option is to create a token for user root and <ins>unselect</ins> privilege separation, as this grants root permissions
 - Datacenter > Permissions
 - Click Add > User Permission
   - Path: /sdn/zones/localnetork
