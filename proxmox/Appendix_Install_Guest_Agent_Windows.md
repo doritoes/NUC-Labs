@@ -5,11 +5,7 @@ Reference: https://pve.proxmox.com/wiki/Qemu-guest-agent#Windows
 
 VirtIO Drivers location: https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 
-This is tested with Windows 10, Windows 11.
-
-Windows server testing pending.
-
-The following instructions did not work in Lab testing. The "PCI Simple Communications Controller" did not appear.
+Lab tested with Windows 10, Windows 11, Server 2022, and Server 2025.
 
 - Download the virtio-win drive ISO
   - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
@@ -26,6 +22,7 @@ The following instructions did not work in Lab testing. The "PCI Simple Communic
     - Browse my computer for drivers
     - Select the mounted ISO in DRIVE:\vioserial\<OSVERSION>\ where <OSVERSION> is your Windows Version (e.g. 2k12R2 for Windows 2012 R2)
       - Example: E:\vioserial\2k12R2\amd64\
+- TIP You can install drivers for any remaining unrecognized devices using the same method
 - Install qemu-guest-agent from the ISO you mounted
   - Navigate to directory guest-agent
   - Run `qemu-ga-x86_64.msi`
