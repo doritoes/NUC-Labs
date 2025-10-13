@@ -1,0 +1,15 @@
+---
+- name: Push branch3 policy
+  hosts: check_point
+  connection: httpapi
+  collections:
+    - check_point.mgmt
+  tasks:
+    - name: push policy
+      check_point.mgmt.cp_mgmt_install_policy:
+        access: true
+        threat_prevention: false
+        install_on_all_cluster_members_or_fail: true
+        policy_package: Lab_Policy_Branches
+        targets:
+        - firewall3

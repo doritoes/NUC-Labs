@@ -1,0 +1,26 @@
+---
+- name: "nautobot lab ip addresses"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    csv_file: "import-ip-addresses.csv"
+
+  tasks:
+    - name: "load devices from CSV"
+      read_csv:
+        path: "{{ csv_file }}"
+      register: csv_data
+      delegate_to: localhost
+    - name: "add ip addresses"
+      networktocode.nautobot.ip_address:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        address: "{{ item['address'] }}"
+        namespace: "{{ item['namespace__name'] }}"
+        status: "{{ item['status__name'] }}"
+        state: present
+      loop: "{{ csv_data.list }}"

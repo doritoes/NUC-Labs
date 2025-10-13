@@ -1,0 +1,10 @@
+---
+plugin: networktocode.nautobot.gql_inventory
+query:
+  devices:
+    filters:
+      name__ic: firewall
+    role: name
+    id:
+group_by:
+  - role.name

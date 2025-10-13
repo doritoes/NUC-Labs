@@ -1,0 +1,872 @@
+# Install LAN  VM
+Next we will install our first VM(s). These are on the Inside/LAN network, located behind our VyOS router. Instructions are provided for a few different systems you might want to install.
+
+NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (storage repositories) configured earlier
+
+IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
+
+# Ubuntu Desktop
+NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM, 20GB disk installs and runs without problem.
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource)
+    - Name: **ubuntu-desktop-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Ubuntu 24.04 desktop ISO from dropdown*
+    - Guest OS:
+      - Type: Linux
+      - Version: 6x - 2.6 Kernel
+  - System tab
+    - No changes required
+  - Disks tab
+    - Disk size: **25GB** (25GB is the recommended minimum)
+    - Check **Discard** because our host uses SSDs
+    - Cache: **Write back**
+  - CPU tab
+    - Sockets: 1
+    - Cores: 2 (1 is minimum, but in lab testing 2 was required to install successfully)
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **4096 MB** (4GB recommended, technically can run on 2GB RAM; in lab testing, 4 was required to install successfully; some users say 3 is fine for a VM)
+  - Network tab
+    - Bridge: **vmbr1**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > 101 (ubuntu-desktop-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane to open a separate window for the console
+- Follow the Install wizard per usual
+  - NOTE installation seemed to freeze at "Copying files" with less that 2 vCPUs, 4GB RAM; seemed OK with only 20GB storage
+  - To remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
+  - Press Enter to Reboot
+- Log in to the console and complete the first time wizard
+  - Next, Skip, No, Next, Finish
+- Updates
+  - Optionally let the Software Updater "Install Now"
+  - Or do a manual update
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+  - reboot
+- Test the VM
+  - Internet access using Firefox
+- Configure sharing your desktop
+  - NOTE See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for older Ubuntu version
+  - Settings > System > Remote Desktop
+  - Enable the Desktop Sharing slider
+  - Enable Remote Control slider
+  - Under authentication, confirm the username <ins>and password</ins>
+    - a random password is set; you might want to change it to something more memorable  
+  - BEWARE that remote desktop is disabled when the screen is locked
+    - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
+    - there are workarounds
+- Enable SSH access
+  - `sudo apt install -y openssh-server`
+  - `sudo systemctl enable --now ssh`
+  - `systemctl status ssh`
+  - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
+- Install qemu-guest-agent
+  - https://pve.proxmox.com/wiki/Qemu-guest-agent
+  - First, install the agent
+    - `sudo apt update && sudo apt install -y qemu-guest-agent`
+  - Second, enable the agent in proxmox
+    - Click on the VM
+    - Click on Options
+    - Edit QEMU Guest Agent: Check **Use QEMU Guest Agent**
+    - Click **OK**
+  - Third, Stop and Start the VM (a "restart" or "reboot" is not enough)
+    - Confirm it's running: `systemctl status qemu-guest-agent`
+- Power down the VM
+- Take a Snapshot
+  - This is to demonstrate how to take a snapshot and what happens to snapshots when you convert a VM to a template
+  - Click on the VM in the left pane
+  - Click **Snapshots**
+  - Click **Take Snapshot**
+    - Name: **initial_build** (no spaces)
+  - Home > VMs
+  -   - Click the small X to remove the filter, showing ALL VMs including those shut down
+  - Click `ubuntu-desktop-lan`
+  - Click the Snapshots tab
+  - Click **New snapshot**
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Read the warning: **unable to create template, because VM contains snapshots**
+    - Snapshots > click `initial_build` > Remove > **Yes**
+    - Repeat the action to convert to template
+    - Read the warning: **you can't convert a VM to template if VM is running (500)**
+    - Shut down the VM, then repeat the action to convert to template
+  - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+- Clone a new VM from `ubuntu-desktop-lan`
+  - Click on the VM ubuntu-desktop-lab (it should still be powered off)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated*
+    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+      - the other option is Full Clone
+    - Name: `desktop-lan`
+    - Click **Clone**
+- Power on and test the new clone (desktop-lan)
+  - Click on the new VM **desktop-lan**
+  - Click **Start**
+  - Click **Console**
+  - Change hostname from terminal
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Desktop on LAN" --pretty`
+    - Confirm it has changed: `hostnamectl`
+- Optionally create another clone and experiment
+- What are the advantages of using DHCP in the lab for these closes and templates?
+
+# Ubuntu Server
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource)
+    - Name: **ubuntu-server-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Ubuntu 24.04 server ISO from dropdown*
+    - Guest OS:
+      - Type: Linux
+      - Version: 6x - 2.6 Kernel
+  - System tab
+    - No changes
+  - Disks tab
+    - Disk size: **20GB**
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: **1**
+    - Cores: **1**
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **2048 MB** (2GB)
+  - Network tab
+    - Bridge: **vmbr1**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > 103 (ubuntu-server-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate window is opened
+- Click the Console tab and follow the Install wizard per usual
+  - READ CAREFULLY the Guided storage configuration
+    - Root / only has **10GB** of the **20GB** allocated
+    - Solutions (if in doubt, use Option 1; Option 2 is popular for /var, /var/log, /opt, or /home)
+      - Option 1 expand root /
+        - Under used devices, locate ubuntu-lv which will be mounted at root /
+        - Select it, and then Edit
+        - Change the Size to the max value
+      - Option 2
+        - Select the free space, then Create Logical Volume
+        - Adjust the size to use the free space
+        - Adjust the mount point (/home by default)
+    - Choose Create
+  - Recommend checking the box Install OpenSSH server
+  - To remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive
+      - Set to "Do not use any media"
+  - Press Enter to Reboot
+- Log in and check the system using Console
+  - Is the disk size correct? `df -h`
+- Test the VM
+  - Updates
+    - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+    - accept the messages (default values OK)
+- Install qemu-guest-agent
+  - https://pve.proxmox.com/wiki/Qemu-guest-agent
+  - First, install the agent
+    - `sudo apt update && sudo apt install -y qemu-guest-agent`
+  - Second, enable the agent in proxmox
+    - Click on the VM
+    - Click on Options
+    - Edit QEMU Guest Agent: Check Use QEMU Guest Agent
+    - Click OK
+  - Third, Stop and Start the VM (a "restart" or "reboot" is not enough)
+    - Confirm it's running: `systemctl status qemu-guest-agent`
+- Power down the VM
+  - `sudo poweroff`
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+- Clone a new VM from `ubuntu-server-lan`
+  - Click on the VM ubuntu-server-lan (it should still be powered off)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated**
+    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+      - the other option is Full Clone
+    - Name: `server-lan`
+    - Click **Clone**
+- Power on and test the new clone (server-lan)
+  - Click on the new VM **server-lan**
+  - Click **Start**
+  - Click **Console**
+  - Change hostname
+    - View current hostname: `hostnamectl`
+    - Set the new hostname: `sudo hostnamectl set-hostname server-lan`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
+    - Confirm it has changed: `hostnamectl`
+  - How could you use cloning to quickly roll out a number of servers of the same type?
+
+# Upload the VirtUI ISO for Windows Systems
+- Download the virtio-win drive ISO
+  - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+  - similar to virtio-win-0.1.240.iso
+- Upload to your ISO store with your Windows, Ubunutu ISO images
+  - We will use this to configure Windows systems
+
+# Windows 10
+IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+
+NOTE When creating a Windows VM, pay attention to the network Model setting
+- VirtIO (paravirtualized) will not be detected by Windows 10 until you install the drivers
+  - this is for optimal performance
+- Intel E1000 (emulated, for compatibility) is slower but stable
+- Intel E1000E and Realtek RTL8139 are also emulated and not tested in this lab
+- VMXNET3 is faster than Intel E1000 and E1000E but not tested in this lab
+- Windows 10/11 - recommend Intel E1000 or VMXNET3
+- Windows Server - recommend VirtIO
+
+NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
+- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
+
+Steps:
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource)
+    - Name: **win10-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 10 ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **10/2016/2019**
+        - the most recent option is *11/2022/2025*
+      - **Check** Add additional drive for VirtIO drivers
+        - Select the VirtIO ISO image you uploaded
+  - System tab
+    - BIOS: OVMF (UEFI)
+    - EFI Storage: local-lvm
+    - Queme Agent: Enabled
+  - Disks tab
+    - Disk size: **128GB**
+    - Cache: **Write back**
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 2
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **4096 MB** (4GB)
+  - Network tab
+    - Bridge: **vmbr1**
+    - Model: VirtIO (paravirtualized) is the fastest, but for this lab choose **Intel E1000**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > 105 (win10-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate window is opened
+- Click Console and follow the Install wizard per usual
+  - If you get prompted to press any key to boot from the CD or DVD, do so
+  - Confirm Language, formats, and keyboard then click **Next**
+  - Click **Install now**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
+  - Check the box then click **Next**
+  - Click **Custom: Install Windows only (advanced)**
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load Driver
+    - Browse to the **viosci** directory within the VirtIO CE
+    - select the driver for Windows 10 (e.g., w10/amd64/viostor.inf)
+  - Accept the installation on Drive 0, click **Next**
+  - Wait while the system powers reboots and gradually installs
+- When the system boots to "Let's start with region. Is this right?"
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive for the Windows installation ISO (leave VirtIO CD for now)
+      - Set to "Do not use any media"
+  - At the proxmox console, press **Shift-F10** to open command prompt
+    - `shutdown /t 0 /s`
+    - type this exactly, spacing matters (some use /f to force the shutdown)
+- Clone a new VM from `win10-lan`
+  - Click on the VM win10-lan
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (we are up to VM ID 106)
+    - NOTE There is no "Linked Clone" option
+    - Name: `win10-lan-ready`
+    - Click **Clone**  
+  - Log in complete the setup wizard
+    - Start the VM 106 (win10-lan-ready)
+    - Open the Console
+    - Set region and keyboard layout, skip second keyboard layout
+    - If you receive the message "To finish setup, you'll need to connect to the internet."
+      - You have the network adapter mode set to VirtIO and need to install drivers
+      - Click "I don't have internet"
+      - Click "Continue with limited setup"
+      - Later, when you are logged in, install network drivers from the VirtIO CD
+      - Open the Device Manager
+      - Select the unknown VirtIO Ethernet adapter, update driver, local matching, browse to CD
+      - Yes allow your PC to be dicoverable
+    - Select **Set up for personal use** (feel free to experiment)
+    - Click **Offline account** then click **Limited experience**
+    - User: **lab**
+    - Password: *select a password*
+    - Create security questions for this account: be creative
+    - Click **Not now**
+    - Privacy: *disable all the settings* and then click **Accept**
+    - Experience: be creative and pick one, then click **Accept* (I chose Business)
+    - Cortana: Click **Not now**
+    - Configure the browser by clicking continue (opens the Edge web browser)
+      - Click **Start without your data**
+      - <ins>Uncheck</ins> Bring over your data and **Confirm and continue**
+      - Click **Continue without Google data**
+      - <ins>Uncheck</ins> Make your Microsoft experience more useful and **Confirm and start browsing**
+      - Click **Continue**, **Continue**, then **Finish**
+- Apply Windows Updates (reboots included)
+- Enable Remote Desktop (RDP)
+  - Start > Settings > System > Remote Desktop
+  - Slide to enable and Confirm
+- Install QEMU Guest agent (see [Appendix_Install_Guest_Agent_Windows.md])
+  - In proxmox, select the VM then Options
+    - Confirm QEMU Guest Agent set to "Use QEMU Guest Agent"
+    - If not, check it, power off the VM, then back power it back on
+  - Log back in and open device manager
+    - Find the unrecognized device PCI Simple Communications Controller under Other devices
+    - Update driver, browse computer, select the mounted D: drive with the VirtIO CD, and it will be detected as VirtIO Serial Driver
+    - Repeat for the PCI Device, which will be detected as VirtIO Balloon Driver
+  - Open the CD and run guest-agent > qemu-ga-x86_64.exe
+  - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
+- Change the hostname to win-10-lan-ready
+  - Open administrative powershell
+  - `Rename-Computer -NewName win10-lan-ready`
+- Shut down the Windows VM
+- Open the VM > Hardware options and set to CD/DVD drives to do not use any media; optionally remove the second CD/DVD drive
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+- Clone a new VM from `win10-lan-ready`
+  - Click on 106 (win10-lan-ready)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated**
+    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+      - the other option is Full Clone
+    - Name: `win10-desk`
+    - Click **Clone**
+- Power on and test the new clone VM 107 (win10-desk)
+  - Click on the new VM **win10-desk**
+  - Click **Start**
+  - Click **Console**
+  - Change the hostname to win10-desk
+    - From administrative powershell
+      - `Rename-Computer -NewName win10-desk`
+      - `Restart-Computer`
+- Questions to ponder:
+  - What are the differences between the two cloning bases we created?
+  - Does this affect the "Activation required" timers?
+- Optionally create another VM from each win10-lan and win10-lan-ready and experiment
+
+# Windows 11
+IMPORTANT Windows 11 will not install without a TPM
+
+NOTE When creating a Windows VM, pay attention to the network Model setting
+- VirtIO (paravirtualized) will not be detected by Windows 10 until you install the drivers
+  - this is for optimal performance
+- Intel E1000 (emulated, for compatibility) is slower but stable
+- Intel E1000E and Realtek RTL8139 are also emulated and not tested in this lab
+- VMXNET3 is faster than Intel E1000 and E1000E but not tested in this lab
+- Windows 10/11 - recommend Intel E1000, but use VirtIO for Windows 11 to make it easier to set up local account
+- Windows Server - recommend VirtIO
+
+NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
+- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
+
+IMPORTANT If you want to set up using a local account instead of a Microsoft account
+- Disconnect Internet during setup (like using the VirtIO network, which Windows does not have drivers for by default)
+- https://www.elevenforum.com/t/clean-install-windows-11.99/
+  - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
+  - works for Windows 11 Home or Pro
+  - need to test at add second keyboard layout screen: start ms-cxh:localonly
+    - follow the wizard, and then follow up with the skipping second keyboard layout
+
+Steps:
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource, up to VM 108)
+    - Name: **win11-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 11 ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **11/2022/2025**
+      - **Check** Add additional drive for VirtIO drivers
+        - Select the VirtIO ISO image you uploaded
+  - System tab
+    - Check **Add TPM**
+    - Machine: **q35**
+    - SCSI Controller: **VirtIO SCSI single**
+    - Check **Qemu Agenmt**
+    - TPM Storage: select **local-lvm**
+    - EFI Storage: select **local-lvm**
+  - Disks tab
+    - Disk size: **128GB**
+    - Cache: **Write back**
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 2
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **4096 MB** (4GB)
+  - Network tab
+    - Bridge: **vmbr1**
+    - Model: **VirtIO (paravirtualized)**
+      - better performance, and breaks Internet connectivity to prevent creating the online account
+      - Or try Intel E1000 with the workaround
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > 108 (win11-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate windows is opened
+- You are prompted **Press any key to boot from CD or DVD....**
+  - **press any key**
+  - if you missed it, stop the VM, start again and try again at the console
+- Click Console and follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard (click **Next**, **Next**)
+  - Select **Install Windows 11** and check the box
+  - Product key: Click **I don't have a product key**
+  - Select the OS to install: **Windows 11 Pro** (feel free to experiment) and click **Next**
+  - Click **Accept**
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load Driver
+    - Browse to the **viosci** directory within the VirtIO CE
+    - select the driver for Windows 11 (e.g., w11/amd64/viostor.inf)
+  - Accept the installation on Drive 0, click **Next**
+  - Click **Install**
+  - Wait while the system powers reboots and gradually installs
+- When the system boots to "Let's start with region. Is this right?"
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
+  - At the console, press **Shift-F10** to open command prompt
+    - `shutdown /t 0 /s`
+    - type this exactly, spacing matters (some people as /f for force shutdown)
+- Clone a new VM from `win11-lan`
+  - Click on the VM win11-lan (it should still be powered off)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (now up to 109)
+    - NOTE There is no "Linked Clone" option
+    - Name: `win11-lan-ready`
+    - Click **Clone**  
+  - Log in complete the setup wizard
+    - Start the VM
+      - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connection (as simple as powering down the VyOS router for now)
+    - Set region and click Yes
+    - Accept keyboard and click Yes
+    - A the second keyboard layout screen, STOP, and follow these steps if you haven't "broken" the internet connection
+      - Press shift-F10 to open a command prompt
+      - `start ms-cxh://setaddlocalonly`
+      - See also: `reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f`
+      - Follow prompts to add a local user, password, and security questions
+      - This ends at a blank screen. Reboot the VM.
+    - Disable all privacy settings and click **Next**
+    - Disable all privacy settings and click **Accept**
+    - Your device will a DESKTOP-xxxxxxx name
+    - If you chose to break the network connectivity insteady of bypassing the account creation
+      - Select **Set up for personal use** (feel free to experiment)
+      - Disconnect from the Internet and start over
+        - Option 1 - power down the voyos router for a while
+        - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
+      - At *Let's connect you to a network*
+        - Click **I don't have internet**
+      - Click **Continue with limited setup**
+      - User: **lab**
+      - Password: *select a password*
+      - Create security questions for this account: be creative
+      - Privacy: *disable all the settings* and then click **Next** (or might be Accept)
+- Log in
+- Reconnect to the Internet as needed
+- Start Internet browser and disabled the settings that you don't want
+  - Start without your data
+  - Uncheck Bring over your data and click Confirm and continue
+  - Continue without Google data
+  - Uncheck Make your Microsoft experience more useful to you and click Confirm and start browsing
+  - Click **Continue** twice to skip past style settings
+  - Click **Finish**
+- Apply Windows Updates (reboots included)
+- Enable Remote Desktop (RDP)
+  - Start > Settings > System > Remote Desktop
+  - Slide to enable and Confirm
+- Open the Edge web browser
+    - At the screen "Browse the web with the best performing browser on Windows"
+      - Click **Continue**
+      - Click **Start without your data**
+      - <ins>Uncheck</ins> Bring over your data and **Confirm and continue**
+      - Click **Continue without this data**
+      - <ins>Uncheck</ins> Make your Microsoft experience more useful and **Confirm and start browsing**
+      - Click **Finish**
+- Install QEMU Guest agent (see [Appendix_Install_Guest_Agent_Windows.md])
+  - In proxmox, select the VM then Options
+    - Confirm QEMU Guest Agent set to "Use QEMU Guest Agent"
+    - If not, check it, power off the VM, then back power it back on
+  - Log back in and open device manager
+    - Find the unrecognized device PCI Simple Communications Controller under Other devices
+    - Update driver, browse computer, select the mounted D: drive with the VirtIO CD, and it will be detected as VirtIO Serial Driver
+    - Repeat for the PCI Device, which will be detected as VirtIO Balloon Driver
+  - Open the CD and run guest-agent > qemu-ga-x86_64.exe
+  - In the summary screen the IP addresses will now populate instead of "Guest Agent not Installed" being shown
+- Change the hostname to win-11-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
+- Remove the VirtIO CD
+  - Click on the VM > Hardware
+  - Set CD/DVD Drive to "Do not use any media"
+  - Optionally remove any extra CD/DVD drives; just leave 1
+- Shut down the Windows VM
+  - `stop-computer`
+- Convert to a Template
+  - Click on the VM
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+- Clone a new VM from `win11-lan-ready`
+  - Click on 109 (win11-lan-ready)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 110)
+    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+      - the other option is Full Clone
+    - Name: `win11-desk`
+    - Click **Clone**
+- Power on and test the new clone VM 1110 (win11-desk)
+  - Click on the new VM **win11-desk**
+  - Click **Start**
+  - Click **Console**
+  - Change the hostname to win11-desk
+    - From administrative powershell: `Rename-Computer -NewName win11-desk`
+    - `Restart-Computer`
+- Optionally create another VM from each win11-lan and win11-lan-ready and experiment
+
+# Windows 2022 Server
+This is a bare-bones server with limited resources. Have seen Server 2019 run on 1vCPU 1GB RAM.
+
+See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
+
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource) (up to 111)
+    - Name: **server2022-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 2022 Server Eval ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **11/2022/2025**
+    - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image you uploaded
+  - System tab
+    - No TPM or EFI disk requried (uncheck)
+    - SCSI controller: VirtIO SCSI single
+    - Machine: q35
+    - Qemu Agent: Checked
+    - BIOS: Default (SeaBIOS)
+  - Disks tab
+    - Disk size: **128GB**
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 1
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **2048 MB** (2GB)
+  - Network tab
+    - Bridge: **vmbr1**
+    - Model: VirtIO (paravirtualized)
+      - Since this is a server, use the faster VirtIO (will install the driver during installation)
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > 111 (server2022-lan)
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate windows is opened
+- If prompted **Press any key to boot from CD or DVD....**, do so
+- Open the console and follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then Next
+  - Click Install now
+  - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Check the box then Next
+  - Click Custom: Install Windows only (advanced)
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load driver
+    - Browse to the **viosci** directory within the VirtIO CD
+    - select the driver for Server 2022 (e.g., 2k22/amd64/viostor.inf) then Next
+  - Accept the installation on Drive 0, click **Next**
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Clone a new VM from `server2022-lan`
+  - Click on the VM 111 (server2022-lan)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 112)
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2022-lan-ready`
+    - Click **Clone**  
+- Power on `server2022-lan-ready`
+  - Once it boots, set password for Administrator
+- Log in
+  - Expand the noVNC menu on the left
+  - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
+  - Yes, allow the server to be discovered by other hosts on the network
+- Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
+  - Open the Device Manager
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+    - Open the unrecognized device
+    - Click Update Driver
+    - Click Browse my computer for drivers
+    - Click Browse
+    - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
+    - Click Next and the drver wil be found. Click Clost
+  - When prompted about whether to allow the server to be discoverable, choose **Yes**
+- Remove the VirtIO CD ISO
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+  - Install QEMU Guest Agent
+    - We already installed the drivers for the required VirtIO devices
+    - From the virtio CD, run guest-agen > quemu-ga-x86_64.msi
+    - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
+- Change the hostname to `server2022-lan-ready`
+  - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+  - Accept the warning about the NetBIOS name being truncated
+- Shut down the Windows VM `server2022-lan-ready`
+  - `stop-computer`
+- Clone a new VM from `server2022-lan-ready`
+  - Next prepare a Server 2022 image suitable for cloning
+  - Must perform generalization to remove the security identifier (SID)
+  - Click on the VM 112 (server2022-lan-ready) (it should still be powered off)
+  - Click **More** > **Clone**
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 113)
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2022-lan-prep`
+    - Click **Clone**  
+- Power on VM 113 (server2022-lan-prep)
+  - Open the console to `server2022-lan-prep` and log in
+    - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+    - Wait as the process completes and the VM shuts down
+- Convert to a Template
+  - Click on the VM 113 (server2022-lan-prep)
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+  - From now on, clone Windows Server VMs from `server2022-lan-prep`
+- Questions to ponder:
+  - What is the experience when cloning a server from `server2022-lan-prep`?
+    - Is the Administrator password still the same?
+    - Does Internet connectivity work?
+    - Does the guest agent work?
+  - What are the differences between the three Windows server clone images?
+  - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each?
+- Optionally clone VMs from each and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server) When can this cause problems? (think SID)
+
+Another NUC Lab (for XCP-ng) has details on
+- Converting Windows Server to a Domain Controller
+- Configuring a domain file server
+- See https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
+
+# Windows 2025 Server
+This is a bare-bones server with limited resources.
+
+See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
+
+- From the top ribbon click **Create VM**
+  - General tab
+    - Node: **proxmox-lab**
+    - VM ID: *auto populates* (unique ID required for every resource)
+    - Name: **server2025-lan**
+  - OS tab
+    - Storage: *select one of the ISO storage units you created*
+    - ISO image: *search and/or select the Windows 2025 Server Eval ISO from dropdown*
+    - Guest OS:
+      - Type: **Microsoft Windows**
+      - Version: **11/2022/2025**
+    - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image
+  - System tab
+    - No TPM or EFI disk requried
+      - Missing TPM means no bitlocker and other capabilities
+      - Feel free to experiment
+    - SCSI controller: VirtIO SCSI single
+    - Machine: q35
+    - Qemu Agent: Checked
+    - BIOS: Default (SeaBIOS)
+  - Disks tab
+    - Disk size: **128GB**
+    - Check **Discard** because our host uses SSDs
+  - CPU tab
+    - Sockets: 1
+    - Cores: 1
+    - Type: default (my Lab is x86-64-v2-AES)
+  - Memory tab
+    - **2048 MB** (2GB)
+  - Network tab
+    - Bridge: **vmbr1**
+  - Confirm tab
+    - Check **Start after created**
+    - Click **Finish**
+- From the left menu navigate to the new VM
+  - Datacenter > proxmox-lab > server2025-lan
+  - Click on the VM in the left menu
+- Click the **Console** button along the top of the pane
+  - a separate windows is opened
+- If prompted **Press any key to boot from CD or DVD....**, do so
+- Open the console and follow the Install wizard per usual
+  - Confirm Language and formats then **Next**
+  - Confirm keyboard then **Next**
+  - Confirm **Install Windows Server**, check the box, then **Next**
+  - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Click Accept
+  - No drives are visible so we need to add the VirtIO drivers
+    - We have the ISO mounted with the drivers
+    - In the installer click Load driver
+    - Browse to the **viosci** directory within the VirtIO CD
+    - select the driver for Server 2025 (e.g., 2k25/amd64/viostor.inf) then **Next**
+  - Accept the installation on Drive 0, click **Next**
+  - Click Install
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Remove the installation media
+    - Back in the main proxmox window, click on the VM, then click Hardware
+    - Edit the CD/DVD Drive
+      - Do not use any media
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Clone a new VM from `server2025-lan`
+  - Click on the VM (server2025-lan)
+  - Click More > Clone
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated** (up to 112)
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2025-lan-ready`
+    - Click **Clone**  
+- Power on `server2025-lan-ready`
+  - Once it boots, set password for Administrator
+- Log in
+  - Expand the noVNC menu on the left
+  - The first icon "A" is for "extra keys"; click the "Ctrl-Alt-Delete button" at the bottom
+  - Yes, allow the server to be discovered by other hosts on the network
+- Send diagnostic data to Microsoft: **Required only** then **Accept**
+- Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
+  - Open the Device Manager
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+    - Open the unrecognized device
+    - Click Update Driver
+    - Click Browse my computer for drivers
+    - Click Browse
+    - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
+    - Click Next and the drver will be found. Click Close
+  - When prompted about whether to allow the server to be discoverable, choose **Yes**
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+- Install QEMU Guest Agent
+  - We already installed the drivers for the required VirtIO devices
+  - From the virtio CD, run guest-agent > quemu-ga-x86_64.msi
+    - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
+  - In proxmox, remove the virtiso CD from the CD/DVD drive
+- Change the hostname to `server2025-lan-ready`
+  - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
+  - Accept the warning about the NetBIOS name being truncated
+- Shut down the Windows VM `server2025-lan-ready`
+  - `stop-computer`
+- Clone a new VM from `server2025-lan-ready`
+  - We are preparing a Server 2025 image suitable for cloning
+  - must perform generalization to remove the security identifier (SID)
+  - Click on the VM server2025-lan-ready (it should still be powered off)
+  - Click **More** > **Clone**
+    - Target node: **proxmox-lab**
+    - VM ID: *automatically populated**
+    - NOTE There is no "Linked Clone" option
+    - Name: `server2025-lan-prep`
+    - Click **Clone**  
+- Power on VM `server2025-lan-prep`
+  - Open the console to `server2025-lan-prep` and log in
+    - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+    - Wait as the process completes and the VM shuts down
+- Convert to a Template
+  - Click on the VM `server2025-lan-prep`
+  - Click **More** > **Convert to template** (next to start, shutdown, and console)
+    - Click **Yes**
+    - Note that the VM is still there, but as a template it <ins>can only be cloned</ins>
+  - From now on, clone Windows Server VMs from `server2025-lan-prep`
+- Questions to ponder:
+  - What is the experience when cloning a server from `server2025-lan-prep`?
+    - Is the Administrator password still the same?
+    - Does Internet connectivity work?
+    - Does the guest agent work?
+  - What are the differences between the three Windows server clone images?
+  - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each?
+- Optionally clone VMs from each and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server) When can this cause problems? (think SID)
+
+Another NUC Lab (for XCP-ng) has details on
+- Converting Windows Server to a Domain Controller
+- Configuring a domain file server
+- See https://github.com/doritoes/NUC-Labs/tree/main/XCP-ng
+
+# Confirm quemu Agents are Running
+Verify from proxymox that the agents are running on your VMs
+- Log in to proxmox web GUI and find the VM's ID (for example, 118)
+- Log in to proxymox CLI and ping the VM's ID
+  - `qm agent 118 ping`
+- No message means it was successful, "QEMU guest agent is not running" means it is failing
+
+If you are having issues
+- 100 (vyos)
+  - Confirm agent is running: `systemctl status qemu-guest-agent`
+  - make sure Options > QEMU Guest Agent is enabled
+  - completely power off and on the VM (not just restart)

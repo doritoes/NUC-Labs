@@ -1,0 +1,47 @@
+---
+- name: SMS initial setup playbook
+  hosts: sms
+  gather_facts: False
+  vars:
+    system_name: "{{ sms_system_name }}"
+    system_ip: "{{ sms_ip }}"
+    system_ip_masklen: "{{ sms_ip_masklen }}"
+    system_default_gateway: "{{ sms_default_gateway }}"
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create FTW template
+      ansible.builtin.template:
+        src: sms.j2
+        dest: ftw.templ
+        mode: u=rw,g=r,o=r
+    - name: Apply FTW template
+      command: "/usr/bin/config_system -f /home/ansible/ftw.templ"
+      async: 3600 # run in background up to 1 hours
+      poll: 60    # check status every 60 seconds
+    - name: Wait until FTW completes
+      stat:
+        path: /etc/.wizard_accepted
+      register: file_data
+      until: file_data.stat.exists
+      retries: 20
+      delay: 15
+    - name: Waiting 15 seconds before reboot
+      pause:
+        seconds: 15
+    - name: Reboot
+      command: "shutdown -r now"
+      async: 1
+      poll: 0
+      ignore_errors: True
+    - name: Wait for SMS to come back up
+      ansible.builtin.wait_for_connection:
+        delay: 75
+    - name: Create script create user ansible
+      ansible.builtin.template:
+        src: sms-user.j2
+        dest: user.sh
+        mode: u=rwx,g=rx,o=rx
+    - name: Run script to create user once API is up
+      command: "~/user.sh"

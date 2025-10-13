@@ -1,0 +1,37 @@
+---
+- name: Update VPN community
+  hosts: check_point
+  connection: httpapi
+  collections:
+    - check_point.mgmt
+  tasks:
+    - name: set-vpn-community-star
+      check_point.mgmt.cp_mgmt_vpn_community_star:
+        center_gateways: firewall1
+        satellite_gateways:
+          - firewall2
+          - firewall3
+        override_vpn_domains:
+          - gateway: firewall1
+            vpn_domain: branch1_topology
+        encryption_method: ikev2 only
+        encryption_suite: custom
+        ike_phase_1:
+          data_integrity: sha256
+          encryption_algorithm: aes-256
+          diffie_hellman_group: group-19
+          ike_p1_rekey_time: 86400
+          ike_p1_rekey_time_unit: seconds
+        ike_phase_2:
+          data_integrity: sha256
+          encryption_algorithm: aes-256
+          ike_p2_use_pfs: true
+          ike_p2_pfs_dh_grp: group-19
+          ike_p2_rekey_time: 3600
+          ike_p2_rekey_time_unit: seconds
+        use_shared_secret: false
+        name: Branch_Community
+        comments: VPN connects branch2 and branch3 to branch1
+        state: present
+    - name: publish changes
+      check_point.mgmt.cp_mgmt_publish:

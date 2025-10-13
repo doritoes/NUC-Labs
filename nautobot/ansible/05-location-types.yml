@@ -1,0 +1,29 @@
+---
+- name: "nautobot lab location types"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+
+  tasks:
+    - name: "add location types"
+      networktocode.nautobot.location_type:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        name: "{{ location_type['name'] }}"
+        description: "{{ location_type['description'] }}"
+        nestable: "{{ location_type['nestable'] }}"
+        content_types: "{{ location_type['content_types'] | default([]) }}"
+        state: present
+      loop_control:
+        loop_var: location_type
+      loop:
+        - name: "Site"
+          nestable: True
+          description: "Site"
+          state: "active"
+          content_types:
+            - "dcim.device"

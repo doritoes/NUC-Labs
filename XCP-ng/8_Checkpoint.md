@@ -7,7 +7,7 @@ I strongly recommend reading the book **Check Point Firewall Administration R81.
 This section will walk you through setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
 
 IMPORTANT NOTES
-- Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below.
+- Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
 - Getting Check Point images
 - Trials and Evaluations
   - 15 day trial
@@ -29,8 +29,6 @@ IMPORTANT NOTES
         - VLAN: **300**
         - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
         - Click **Create network**
-      - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-      - Under the list of PIFs (physical interfaces), find the new Check Point Inside interface, click **Status** to  disconnect it from your the eth0 interface
   - Firewall "DMZ" interface
     - Under Private networks click **Manage**
       - Click **Add a Network**
@@ -41,8 +39,6 @@ IMPORTANT NOTES
         - VLAN: **400**
         - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
         - Click **Create network**
-      - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-      - Under the list of PIFs (physical interfaces), find the new Check Point DMZ interface, click **Status** to  disconnect it from your the eth0 interface
   - Firewall "Management" interface
     - Under Private networks click **Manage**
       - Click **Add a Network**
@@ -53,8 +49,6 @@ IMPORTANT NOTES
         - VLAN: **500**
         - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
         - Click **Create network**
-      - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-      - Under the list of PIFs (physical interfaces), find the new Check Point Management interface, click **Status** to  disconnect it from your the eth0 interface
   - Firewall "Sync" interface
     - Under Private networks click **Manage**
       - Click **Add a Network**
@@ -65,8 +59,6 @@ IMPORTANT NOTES
         - VLAN: **600**
         - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
         - Click **Create network**
-      - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-      - Under the list of PIFs (physical interfaces), find the new Check Point Sync interface, click **Status** to  disconnect it from your the eth0 interface
 
 # Download the ISO and SmartConsole Client
 For this lab we are using [R81.20](https://support.checkpoint.com/results/sk/sk173903)
@@ -96,7 +88,7 @@ This Windows 10 workstation will be used to build  the environment and later man
 
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
-  - Template: **win10-lab-ready**
+  - Template: **win10-lan-ready**
   - Name: **checkpoint-console**
   - Description: **R81.20 Check Point SmartConsole**
   - First Interface:
@@ -114,7 +106,7 @@ This Windows 10 workstation will be used to build  the environment and later man
   - Start > Settings > Network & internet
   - From the left menu click Ethernet
   - Click Change adapter options
-  - Right-click Ethernet 2 and click Properties
+  - Right-click Ethernet 3 (Unidentified network) and click Properties
   - Click Internet Protocol Version 4 (TCP/IPv4) and then click Properties
   - Select **Use the following IP address**
     - IP address: 192.168.103.100
@@ -122,12 +114,9 @@ This Windows 10 workstation will be used to build  the environment and later man
     - Gateway: blank
     - Preferred DNS: blank
     - Alternate DNS: blank
-    - Click OK and then click Close
+    - Click OK and then click OK
 - Download and install Winscp: https://winscp.net/eng/download.php
   - Typical installation with default settings suites our purposes
-- Download Guest tools for Linux
-  - Download from https://www.xenserver.com/downloads
-  - XenServer VM Tools for Linux > Download XenServer VM Tools for Linux
 
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
@@ -142,7 +131,7 @@ Steps:
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
-    - SMS reqires more; we will increase this later
+    - SMS requires more; we will increase this later
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface:
@@ -169,7 +158,7 @@ Steps:
 ## Boot from ISO
 - At the boot menu, select **Install Gaia on this system**
 - Accept the installation message **OK**
-- Confirm the keyboard type
+- Confirm the keyboard type **OK**
 - Accept the default partitions sizing for 128GB drive
   - Swap: 7GB (6%)
   - Root: 20GB (16%)
@@ -208,13 +197,13 @@ Steps:
   - Password: the password you selected
   - Accept the warnings
   - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
-  - Close WinSCO
+  - Close WinSCP
 - Revert to clish shell
   - `chsh -s /etc/cli.sh admin`
 - Install guest tools
   - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
   - `cd LinuxGuestTools-8.4.0-1`
-  - `./install -d rhel -m el7`
+  - `./install.sh -d rhel -m el7`
 
 ## Halt the system
 - `halt`
@@ -232,11 +221,11 @@ Steps:
   - Description: **R81.20 Check Point SMS**
   - CPU: **4 vCPU**
   - RAM: **6GB** minimum in a Lab; do 8GB if you can
-  - Interfaces: Remove all interfaces except Check Point Management
+  - Interfaces: Remove all interfaces except **Check Point Management**
   - Click **Create**
-- Log in the console
+- Log in at the console
 - Configure hostname and IP address
-  - `set hostname SMS`
+  - `set hostname sms`
   - `set interface eth0 ipv4-address 192.168.103.4 mask-length 24`
   - `set interface eth0 comments "Management"`
   - `set interface eth0 state on`
@@ -259,7 +248,7 @@ Steps:
     - For each interface, click the blue gear, click to disable TX checksumming, and click OK
   - Log in the console
   - Configure hostname and IP address
-    - `set hostname GW1`
+    - `set hostname gw1`
     - `set interface eth3 ipv4-address 192.168.103.2 mask-length 24`
     - `set interface eth3 comments "Management"`
     - `set interface eth3 state on`
@@ -278,9 +267,9 @@ Steps:
     - Click the Network tab
     - Each interface has a blue gear icon to the right
     - For each interface, click the blue gear, click to disable TX checksumming, and click OK
-  - Log in the console
+  - Log in at the console
   - Configure hostname and IP address
-    - `set hostname GW2`
+    - `set hostname gw2`
     - `set interface eth3 ipv4-address 192.168.103.3 mask-length 24`
     - `set interface eth3 comments "Management"`
     - `set interface eth3 state on`
@@ -290,9 +279,9 @@ Steps:
 # Set up SMS
 - On the Windows workstation, point browser to https://192.168.103.4
 - Log in as `admin` and the password you selected
-- Complete First Time Configuration Wizard (FTCW)
+- Complete First Time Configuration Wizard (FTCW) aka 'FTW'
   - Continue with R81.20 configuration
-  - Accept the Managment connection configuration
+  - Accept the Management connection configuration
     - Add Default gateway **192.168.103.1**
   - Host Name: **SMS**
   - Domain Name: **xcpng.lab**
@@ -321,13 +310,13 @@ Steps:
   - Username: **cpadmin**
   - Password: *the password you selected*
   - Server Name or IP Address: **192.168.103.4**
-  - Accept the server fingerprint
-  - SmartConsole will update itself; click **Relaunch Now**
+  - Accept the server fingerprint and **Proceed**
+  - SmartConsole will update itself; click **Relaunch Now** when prompted
 
 NOTE The SMS takes some time to start all the management processes after a reboot
 - Check on SMS: `api status`
 
-Alternate method: https://support.checkpoint.com/results/sk/sk170314
+Alternate management method: https://support.checkpoint.com/results/sk/sk170314
 - Point your browser to https://192.168.103.4/smartconsole
 - This is the web version of SmartConsole
 - In our Lab testing, Web SmartConsole did not work at this point
@@ -348,7 +337,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
       - Subnet mask: *Use the same mask as your Lab network*
       - NOTE It is not recommended to use DHCP on the external interface
           - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
-  - Host Name: GW1
+  - Host Name: gw1
   - Domain Name: xcpng.lab
   - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
   - Secondary DNS Server: 1.1.1.1
@@ -356,12 +345,11 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Select **Security Gateway and/or Security Management**
   - Leave Security Gateway selected
   - <ins>Uncheck</ins> Security Management
-  - Leave Security Management set to Primary
   - Select **Unit is part of a cluster** and leave type as **ClusterXL**
   - Enter an Activation key
     - `xcplab123!`
   - Click Finish and Yes to start the process
-  - Acccept the Reboot
+  - Accept the Reboot
   - Log back in
   - Configure interfaces
     - From the left menu click Network Management > **Network Interfaces**
@@ -387,7 +375,8 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
         - Subnet mask: **255.255.255.0**
       - Click **OK**
   - Edit the Default Route
-    - From the left menu click Network Management > **IPv4 Satatic Routes**
+    - From the left menu click Network Management > **IPv4 Static Routes**
+    - Click the "Default" route and then click **Edit**
     - Click **Add Gateway** > **IP Address**
     - Enter the default gateway for your Lab network
     - Click **OK**
@@ -413,12 +402,11 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Select **Security Gateway and/or Security Management**
   - Leave Security Gateway selected
   - <ins>Uncheck</ins> Security Management
-  - Leave Security Management set to Primary
   - Select **Unit is part of a cluster** and leave type as **ClusterXL**
   - Enter an Activation key
     - `xcplab123!`
   - Click Finish and Yes to start the process
-  - Acccept the Reboot
+  - Accept the Reboot
   - Log back in
    - From the left menu click Network Management: **Network Interfaces**
     - Edit **eth1**
@@ -443,7 +431,8 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
         - Subnet mask: **255.255.255.0**
       - Click **OK**
   - Edit the Default Route
-    - From the left menu click Network Management > **IPv4 Satatic Routes**
+    - From the left menu click Network Management > **IPv4 Static Routes**
+    - Click the "Default" route and then click **Edit**
     - Click **Add Gateway** > **IP Address**
     - Enter the default gateway for your Lab network
     - Click **OK**
@@ -464,7 +453,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
 ## Create Cluster Object
 - On the Windows workstation, Log in to SmartConsole again
 - From the left menu, click **Gateways & Servers** (the default view when using SmartConsole for the first time)
-- The **New*** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
+- The **New** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
 - Click **New**  > **Cluster** > **Cluster**
 - Click **Wizard Mode**
   - Cluster Name: **Gateway_Cluster**
@@ -485,7 +474,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Configure Cluster Topology
     - 192.168.104.0/255.255.255.0 = Cluster Synchronization Primary
     - 192.168.103.0/255.255.255.0 = Representing a cluster interface **192.168.103.1** **255.255.255.0**
-      - management interfaces can be a cluster or non-monitored private interfaces; for this Lab setup a clustered interace is used
+      - management interfaces can be a cluster or non-monitored private interfaces; for this Lab setup a clustered interface is used
     - 192.168.102.0/255.255.255.0 = Representing a cluster interface **192.168.102.1** **255.255.255.0**
     - 10.1.1.0/255.255.255.0 = Representing a cluster interface **10.1.1.1** **255.255.255.0**
     - Your Lab network = Representing a cluster interface withe cluster IP address you selected and your Lab's subnet mask
@@ -517,7 +506,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
     - Security Zone: **According to topology: InternalZone**
     - Click **OK** and **OK**
 - Re-open **Gateway_Cluster**
-- General Properites
+- General Properties
   - Uncheck IPSec VPN for this lab (feel free to leave it on a experiment)
   - Check Monitoring
   - Optionally Check Application Control and URL Filtering if you would like to experiment 
@@ -525,7 +514,7 @@ Alternate method: https://support.checkpoint.com/results/sk/sk170314
   - Check Hide internal networks behind the Gateway's external IP
     - This is acceptable for this Lab and cases where there are less that 50 hosts behind the firewall
   - Click **OK**
-- Network Managment
+- Network Management
   - To calculate the network topology from routes
     - Click Get Interfaces > Get Interfaces With Topology
 - Click **Publish**
@@ -546,7 +535,7 @@ add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.
 ~~~
 
 # Create Initial Policy
-This policy is overy permissive, but it's a place to start.
+This policy is overly permissive, but it's a place to start.
 
 - Click the Check Point menu button at top left then click **Manage Polices and Layers**
 - Click the New icon under Policies
@@ -555,7 +544,7 @@ This policy is overy permissive, but it's a place to start.
   - Click **Close**
 - From the left menu click **Security Policies**
 - If not already selected, click on the policy **AccessPolicy** or click on "+" and open it
-- Add first rule (at top) - Managment
+- Add first rule (at top) - Management
   - Name: Management rule
   - Source: SmartConsole (192.168.103.100)
   - Destinations: GW1 and GW2
@@ -613,7 +602,7 @@ This policy is overy permissive, but it's a place to start.
 - Template: **win10-lan-ready**
 - Name: **workstation1**
 - Description: **Windows 10 on Check Point Inside network**
-- Interfaces: Change to **Check Point Inside***
+- Interfaces: Change to **Check Point Inside**
 - Click **Create**
 - Log in
 - Set Static IP address
@@ -661,7 +650,7 @@ This policy is overy permissive, but it's a place to start.
 - Template: **ubuntu-server-lan**
 - Name: **dmzserver**
 - Description: **Ubuntu web server in DMZ**
-- Interfaces: Change to **Check Point DMZ***
+- Interfaces: Change to **Check Point DMZ**
 - Click **Create**
 - Log in
 - Set Static IP address
@@ -708,7 +697,7 @@ Since the Lab network is our simulated Internet, we are going to use another IP 
 
 - Select an IP address from your Lab network on the same subnet as the "public" external IPs on the firewall
 - Create a new firewall rule
-  - Soure: ExternalZone
+  - Source: ExternalZone
   - Destination: dmzserver (192.168.102.10)
   - Services: http
 - Modify the `dmzserver` object

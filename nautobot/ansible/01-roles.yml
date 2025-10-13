@@ -1,0 +1,27 @@
+---
+- name: "nautobot lab roles"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    csv_file: "roles.csv"
+
+  tasks:
+    - name: "load roles from CSV"
+      read_csv:
+        path: "{{ csv_file }}"
+      register: csv_data
+      delegate_to: localhost
+    - name: "add roles"
+      networktocode.nautobot.role:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        name: "{{ role['name'] }}"
+        content_types: "{{ role['content_types'] | default(omit) }}"
+        state: present
+      loop_control:
+        loop_var: role
+      loop: "{{ csv_data.list }}"

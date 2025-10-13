@@ -1,0 +1,61 @@
+---
+- name: Configure DMZ Apache web server
+  hosts: 192.168.31.11
+  become: true
+  vars:
+    servername: dmz-apache
+    cert_file: /etc/ssl/certs/{{ servername }}.crt
+    key_file: /etc/ssl/private/{{ servername }}.key
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "{{ servername }}"
+    - name: Install packages
+      apt:
+        pkg:
+          - apache2
+          - php
+          - libapache2-mod-php
+        update_cache: true
+        state: present
+    - name: Configure Apache to handle PHP files
+      template:
+        src: php.conf
+        dest: /etc/apache2/mods-enabled/php.conf
+        mode: 0644
+    - name: Generate self-signed certificate
+      command: openssl req -x509 -nodes -newkey rsa:2048 -keyout {{ key_file }} -out {{ cert_file }} -subj "/C=US/ST=State/L=City/O=Organization/CN={{ servername }}"
+    - name: Set permissions for certifcate
+      file:
+        path: "{{ cert_file }}"
+        mode: 0644
+    - name: Set permissions for key
+      file:
+        path: "{{ key_file }}"
+        mode: 0600        
+    - name: Enable SSL module
+      shell: a2enmod ssl
+    - name: Enable headers module
+      shell: a2enmod headers
+    - name: Configure https site
+      template:
+        src: ssl.conf.j2
+        dest: /etc/apache2/sites-available/default-ssl.conf
+        mode: 0644
+    - name: Enable https site
+      shell: a2ensite default-ssl.conf
+    - name: Restart Apache service
+      service:
+        name: apache2.service
+        state: restarted
+    - name: Upgrade packages
+      apt:
+        upgrade: yes
+        state: latest
+    - name: Check if reboot required
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+    - name: Reboot if required
+      reboot:
+      when: reboot_required_file.stat.exists == true

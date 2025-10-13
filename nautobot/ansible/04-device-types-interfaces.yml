@@ -1,0 +1,26 @@
+---
+- name: "nautobot lab device type interfaces"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    csv_file_path: "device-types-interfaces.csv"
+
+  tasks:
+    - name: "read CSV file with device types interfaces information"
+      community.general.read_csv:
+        path: "{{ csv_file_path }}"
+      register: device_types_interfaces
+      delegate_to: localhost
+    - name: "add devicetype interfaces"
+      networktocode.nautobot.device_interface_template:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        device_type: "{{ item['devicetype'] }}"
+        name: "{{ item['name'] }}"
+        type: "{{ item['type'] }}"
+        state: present
+      loop: "{{ device_types_interfaces.list }}"

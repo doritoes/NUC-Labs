@@ -1,0 +1,34 @@
+---
+- name: "nautobot lab device types"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    nautobot_url: "{{ lookup('env', 'NAUTOBOT_URL') }}"
+    nautobot_token: "{{ lookup('env', 'NAUTOBOT_TOKEN') }}"
+    device_types_directory: "devicetypes"
+
+  tasks:
+    - name: "discover the yaml files in the directory"
+      find:
+        paths: "{{ device_types_directory }}"
+        use_regex: yes
+        patterns:
+          - '.*yaml$'
+      register: files_matched
+    - name: "read yaml files"
+      command: "cat {{ item['path'] }}"
+      register: obs
+      loop: "{{ files_matched.files }}"
+    - name: "import device types"
+      networktocode.nautobot.device_type:
+        url: "{{ nautobot_url }}"
+        token: "{{ nautobot_token }}"
+        model:  "{{ (item.stdout | from_yaml)['model'] }}"
+        manufacturer:  "{{ (item.stdout | from_yaml)['manufacturer'] }}"
+        u_height: "{{ (item.stdout | from_yaml)['u_height'] | default(omit)}}"
+        is_full_depth: "{{ (item.stdout | from_yaml)['is_full_depth'] | default(omit)}}"
+        state: present
+      loop: "{{ obs.results }}"
+      when:  (item.stdout | from_yaml)['model'] is defined
