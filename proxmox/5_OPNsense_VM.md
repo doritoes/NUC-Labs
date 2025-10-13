@@ -173,9 +173,6 @@ Or, if you created local storage, upload the ISO there.
       - <i>Uncheck</i> Block RFC1918 Private Networks since the "WAN" is connected to our lab which uses private RFC1918 address space
         - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
         - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
-    - Click Interfaces > WAN
-    - <ins>Uncheck</ins> Block private networks
-      - Click **Next**
     - Configure LAN Interface
       - Review and click **Next**
     - Set Root Password
@@ -230,35 +227,8 @@ Why are we disabling Internet DNS access? Because we only want traffic to get to
 - Firewall > Rules > LAN
   - Change the IPv4 rule to be a Block action
   - Change the IPv6 rule to be a Block action
-  - Confirm what rules are needed
-  - allow any to 127.0.0.1 port 9053? is that an auto rule?
-  - allow any to 127.0.0.1 port 9040? is that an auto rule?
-  - block all ipv4 and ipv6 from LAN net to everything
   - Click **Apply changes**
 -  Confirm that Internet browsing fails and that nslookup from the command line also fails (i.e., 'nslookup google.com' times out)
-
-2. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
-   - Firewall > Rules > LAN
-   - Add rules
-      - Block DNS traffic from 192.168.101.0/24 to the firewall
-         - Action: Block
-         - Interface: LAN
-         - Protocol: TCP/UDP
-         - Destination: This Firewall
-         - Destination port range: DNS to DNS
-         - Log: Log packets
-         - Decription: block DNS covert channel
-         - Why block DNS? DNS is used as a covert channel that operates through DNS to the Internet
-         - Move to the top of the list
-      - Allow other traffic from the pentest network to the firewall
-         - Action: Pass
-         - Source Interface: LAN
-         - Protocol: any
-         - Destination: This Firewall
-         - Log: Log packets
-   - Disable the rule "Default allow LAN to any rule"
-   - Click **Apply changes**
- - Confirm that Internet browsing fails and that nslookup from the command line also fails (i.e., 'nslookup google.com' times out)
 
 ## Configure TOR
 This provides some anonymity, if done correctly
@@ -280,22 +250,22 @@ Steps:
   - Check Show community plugins
   - os-tor - click "+" to install
 - Refresh the page
-- Click Services > Tor > Configuration
-  - General Tab
-    - Enable: Yes
-    - Listen Interfaces: LAN (only)
-    - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
-    - Enable Advanced Mode
-      - Confirm SOCKS port number: 9050
-      - Confirm Control Port: 9051
-      - Check Enable Transparent Proxy
-      - Confirm Transparent port: 9040
-      - Confirm Transparent DNS port: 9053
-    - Click Save
-  - SOCKS Proxy ACL
+- Click Services > Tor > Configuration > General
+  - Enable: Yes
+  - Listen Interfaces: LAN (only)
+  - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
+  - Enable Advanced Mode
+    - Confirm SOCKS port number: 9050
+    - Confirm Control Port: 9051
+    - Check Enable Transparent Proxy
+    - Confirm Transparent port: 9040
+    - Confirm Transparent DNS port: 9053
+  - Click Save
+- Services > Tor > Configuration > SOCKS Proxy ACL
     - Add a new ACL
-      - Enable: /Yes
-      - Protocol: !Pv4
+      - Enable: Yes
+      - Protocol: IPv4
+      - Network: 192.168.101.0/24
       - Action: Accept
       - Click Save
       - Click Reload Service
@@ -307,7 +277,7 @@ Steps:
     - Protocol: TCP/IP
     - Source: Advanced > LAN net
     - Destination: any
-    - Destination port range: any to any
+    - Destination port range: DNS to DNS
     - Redirect target IP: 127.0.0.1
     - Redirect target port: other: 9053
     - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
