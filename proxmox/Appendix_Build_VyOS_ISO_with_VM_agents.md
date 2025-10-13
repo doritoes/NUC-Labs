@@ -1,5 +1,7 @@
 # Appendix - Build VyOS ISO with VM Agents Installed
-Reference: https://docs.vyos.io/en/latest/contributing/build-vyos.html
+References:
+- https://docs.vyos.io/en/latest/contributing/build-vyos.html
+- https://github.com/vyos/vyos-build
 
 We will use Docker for this ISO build and run off the VyOS rolling release. Adding a single file will allow us to build an ISO with the VM agents (xen, qemu, vmware, etc.) already installed.
 
