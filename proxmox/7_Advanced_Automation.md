@@ -13,10 +13,11 @@ Terraform needs users, permissions, and tokens in order to interact with proxmox
 
 Command line:
 ~~~
-pveum role add TerraformProv -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt"
+pveum role add TerraformProv -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.PowerMgmt"
 pveum user add terraform-prov@pve --password strongpassword
 pveum aclmod / -user terraform-prov@pve -role TerraformProv
 ~~~
+NOTE proxmox 9 has removed VM.Monitor. Sys.Audit is relied on instead.
 
 From proxmox Web GUI:
 - Update the password for user **terrafrom-prov**
