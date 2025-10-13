@@ -3,6 +3,8 @@ Terraform is an open-source infrastructure as code tool that allows you to defin
 
 Proxmox does not ship with Ansible, but you can install it on the host. This will enable further management of the VMs.
 
+IMPORTANT proxmox and Terraform have a LOT of gotchas and you will run into a lot of issues trying to use it in production (see https://github.com/Telmate/terraform-provider-proxmox/issues)
+
 NOTES
 - This lab is performned on the proxmox host itself
 - You will need a subscription or have installed the no-subscription repository
@@ -68,6 +70,21 @@ Problems:
  - cloned servers have no disk and don't boot
  - "Unused Disk" in hardware, needs "Discard" set, needs "Write back" cache (retest this)
  - Can manually add it, but won't auto boot to it; can manuallyi boot from proxmox boot menu
+ - Try setting save as in the template
+```
+# Set the boot disk paramters
+  bootdisk     = "virtio"
+  scsihw       = "virtio-scsi-single"
+
+  disk {
+    slot            = 0
+    size            = "40G"
+    type            = "virtio"
+    storage         = "local-lvm"
+    ssd             = 1
+    discard         = "on"
+  } # end disk
+```
 
 # Test
 Open the new VM's console and verify the settings
