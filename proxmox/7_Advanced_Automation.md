@@ -20,29 +20,35 @@ pveum aclmod / -user terraform-prov@pve -role TerraformProv
 NOTE proxmox 9 has removed VM.Monitor. Sys.Audit is relied on instead.
 
 From proxmox Web GUI:
-- Update the password for user **terrafrom-prov**
+- Update the password for user **terraform-prov**
+  - Datacenter > Permissions > Users
+  - Click on user terraform-prov, then click Password
 - Next, click **Permissions** > **API Tokens**
+  - Datacenter > Permissions > API Tokens
   - Click Add
     - User: **terraform-prov@pve**
     - Privilege Separation: **NOT checked**
     - Token ID: **terrform_token_id**
+    - Click **Add**
     - Complete Token ID: terraform-prov@pve!terrform_token_id
     - Make sure you copy down the Token Secret, as it will only be displayed once
   - Other less secure option is to create a token for user root and <ins>unselect</ins> privilege separation, as this grants root permissions
-- Click Permissions
+- Datacenter > Permissions
 - Click Add > User Permission
   - Path: /sdn/zones/localnetork
+  - User: terraform-prov
   - Role: Administrator
 
 # Install Terraform
-It's not in the official repos for Debian, so we’ll add a new repository and install it onto Proxmox.
+https://developer.hashicorp.com/terraform/install
 
+It's not in the official repos for Debian, so add a new repository and install it onto the proxmox host. Note that these commands are tuned for this installation, run as `root`.
 ~~~
 apt install lsb-release
-curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-echo "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main" >> /etc/apt/sources.list.d/terraform.list
+wget -O - -q https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
 apt update && apt install -y terraform
-terraform -v
+terrform version
 ~~~
 
 # Configure Terraform project
