@@ -8,7 +8,7 @@ resource "proxmox_vm_qemu" "server-clone" {
   # onboot = true
 
   # VM OS Settings
-  clone = "template_ubuntu_server"
+  clone = "ubuntu-server-lan"
 
   # VM System Settings
   agent = 1
