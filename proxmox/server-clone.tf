@@ -15,6 +15,7 @@ resource "proxmox_vm_qemu" "server-clone" {
     type = "host"
   }
   memory = 2048
+  balloon = 1024
   bootdisk = "virtio"
   scsihw = "virtio-scsi-single"
   disk {
