@@ -17,6 +17,7 @@ Mission:
 Left to do:
 - Everything
 - Test MS authenticator with TOTP
+- Microsoft Entra
 - Authentik
   - Selfhost a Single Sign-on MFA with Authentik
   - https://medium.com/@svenvanginkel/selfhost-a-single-sign-on-mfa-with-authentik-2f0a64758be0
