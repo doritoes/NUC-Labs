@@ -23,42 +23,56 @@ How to enable SSH access on Desktop
 - `systemctl status ssh`
 - 📓 To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 
-Copy the ssh key/id to the host you will log in from
-- if not ssh key exists in ~/.ssh/
-  - ssh-keygen
-    - No passphrase
-- From that host
-  - ssh-copy-id username@mfa_host_ip
+Copy the ssh key/id from the test box to the MFA box
+- if no ssh key exists in ~/.ssh/ on the test box
+  - `ssh-keygen`
+    - no passphrase
+- From the test box
+  - `ssh-copy-id username@mfa_host_ip`
 
-Test ssh login to the MFA test VM from another 
+Test ssh login from test box to MFA box
+- `ssh username@mfa_host_ip`
+- `exit`
 
-Install Packages
+Install Packages on the MFA box
 - `sudo apt install -y libpam-google-authenticator`
 
-Configure authentication
+Configure authentication on the MFA box
 - run `google-authenticator`
   - Make tokens "time-base": yes
-  - Update the .google_authenticator file: yes
-  - Disallow multiple users: yes
-  - Increase the original generation time limit: no
-  - Enable rate-limiting: yes
-- In production you will save the secret key and emergency scratch codes
+  - Open the Google Authenticator open on the mobile phone
+    - Tap (+) Add
+    - scan the QR code (change terminal font size follow the url for a scaled down to the scaled down QR code) or use the secret key
+  - Update the .google_authenticator file: **yes**
+  - Disallow multiple users: **yes**
+  - Increase the original generation time limit: **no**
+  - Enable rate-limiting: **yes**
+- In production you will <i>save the emergency scratch codes</i>
 - Once you finish setup, you can copy the ~/.google-authenticator file to a trusted location. From there you can deploy it on additional systems or redploy it after a backup.
-- Open Google Authenticator app on the mobile phone, add, and scan the QR code
-- Type the number
 
 Configure SSH
 - `sudo vi /etc/pam.d/sshd` to add to the bottom of the file
   - `auth required pam_google_authenticator.so nullok`
   - `auth required pam_permit.so`
-  - The `nullok` makes this optional. once it's working, remove nullok to make it mandatory
+  - The `nullok` makes this optional; users without MFA set up are not required to use MFA. Once all users are enrolled, remove nullok to make it mandatory
 - `sudo systemctl daemon-reload`
 - `sudo systemctl restart sshd.service`
 - `sudo vi /etc/ssh/sshd_config` modify "no" to "yes"
-  - `ChallengeResponseAuthentication yes`
-  - on desktop 24.04 didn't find this value had to add it
-- sudo systemctl restart sshd.service
+  - `KbdInteractiveAuthentication yes`
+- `sudo systemctl restart sshd.service`
+- NOTE at this point
+  - ssh from the test box to the MFA box will works as before because the key is set up
+  - ssh from without the key will require username, password, and verification code
+- Enable MFA for the desktop gui login
+  - `sudo vi /etc/pam.d/gdm-password`
+  - add below the line "#@include common-auth"
+    - `auth required pam_google_authenticator.so nullok`
+    - The `nullok` makes this optional; users without MFA set up are not required to use MFA. Once all users are enrolled, remove nullok to make it mandatory
+- Log out and log back to the MFA box using the gui console
+  - NOTE the verification code from the Google Authenticator app is entered first, then the password
+NOTE to enable MFA everywhere (i.e., sudo commands)
+- `sudo vi /etc/pam.d/common-auth` and add the line
+  - `auth required pam_google_authenticator.so nullok`
+  - The `nullok` makes this optional; users without MFA set up are not required to use MFA. Once all users are enrolled, remove nullok to make it mandatory
+- Open a new terminal session and/or ssh connection to the system and try to sudo. You are prompted for the verification code.
 
-NOTE to enable MFA everywhere (including sudo commands!!!!)
-- sudo vi /etc/pam.d/common-auth and add
-- auth required pam_google_authenticator.so
