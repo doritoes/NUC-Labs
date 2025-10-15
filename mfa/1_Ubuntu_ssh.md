@@ -1,6 +1,9 @@
 # Ubuntu SSH with MFA
 There are steps for configuration SSH access to a single machine to use MFA.
 
+WARNING This is currently NOT WORKING status
+
+
 ## Google Authenticator
 This works on servers and desktops.
 
@@ -8,11 +11,29 @@ See https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-
 
 Prerequisites:
 - Mobile phone with Google Authenticator
-- Configured ssh connection
-- sudo non-root user with sshk
+- Linux VM ("MFA box")
+  - Configured ssh connection
+  - sudo non-root user with ssh
+- Second Linux VM ("test box")
+  - will ssh to the MFA box
+
+How to enable SSH access on Desktop
+- `sudo apt install -y openssh-server`
+- `sudo systemctl enable --now ssh`
+- `systemctl status ssh`
+- 📓 To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
+
+Copy the ssh key/id to the host you will log in from
+- if not ssh key exists in ~/.ssh/
+  - ssh-keygen
+    - No passphrase
+- From that host
+  - ssh-copy-id username@mfa_host_ip
+
+Test ssh login to the MFA test VM from another 
 
 Install Packages
-- `sudo apt install l-y ibpam-google-authenticator`
+- `sudo apt install -y libpam-google-authenticator`
 
 Configure authentication
 - run `google-authenticator`
