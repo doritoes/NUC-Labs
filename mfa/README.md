@@ -5,8 +5,8 @@ References: https://www.reddit.com/r/homelab/comments/16as74c/2fa_in_a_home_lab_
 
 Mission:
 - Ubuntu Server  (ssh and sudo)
-- Ubuntu Desktop
-- Windows 10 Pro
+- Ubuntu Desktop (desktop and ssh)
+- Windows 10 Pro (or ... 11 Pro)
 
 Left to do:
 - Everything
@@ -24,6 +24,8 @@ Out of scope:
 
 IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
+- Gotchas
+  - Google AI have some bogus steps for "ubuntu desktop login mfa"
 
 Materials:
 - Lab router  providing DHCP and internet access
