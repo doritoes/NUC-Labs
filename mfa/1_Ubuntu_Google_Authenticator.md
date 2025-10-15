@@ -72,7 +72,7 @@ NOTE to enable MFA everywhere (i.e., sudo commands)
   - The `nullok` makes this optional; users without MFA set up are not required to use MFA. Once all users are enrolled, remove nullok to make it mandatory
 - Open a new terminal session and/or ssh connection to the system and try to sudo. You are prompted for the verification code.
 
-IMPORTANT From the desktop log screen sometimes you get prompted first for the verification code, then the password, then the verification code. ALLOW THE CODE TO CHANGE to the next value, before putting it in the second time.
+IMPORTANT From the desktop log screen sometimes you get prompted first for the verification code, then the password, then the verification code. ALLOW THE CODE TO CHANGE to the next value before putting it in the second time.
 
 Next steps:
 - Enroll all your users and remove "nullok" from each pam.d file edited in the lab
