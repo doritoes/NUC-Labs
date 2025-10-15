@@ -71,3 +71,14 @@ NOTE to enable MFA everywhere (i.e., sudo commands)
   - `auth required pam_google_authenticator.so nullok`
   - The `nullok` makes this optional; users without MFA set up are not required to use MFA. Once all users are enrolled, remove nullok to make it mandatory
 - Open a new terminal session and/or ssh connection to the system and try to sudo. You are prompted for the verification code.
+
+IMPORTANT From the desktop log screen sometimes you get prompted first for the verification code, then the password, then the verification code. ALLOW THE CODE TO CHANGE to the next value, before putting it in the second time.
+
+Next steps:
+- Enroll all your users and remove "nullok" from each pam.d file edited in the lab
+- Consider that if you copy the file `.google_authenticator` to another user's home directory an set the permisssions correctly (400, belongs to the user) you are using the SAME TOKEN FOR ANOTHER USER. This is no longer MFA when you share a factor like that.
+- Fail MFA on the gui login for a few times
+  - Note you can no longer log in because we set:
+    - Enable rate-limiting (see `RATE LIMIT 3 30` in the .google_authenticator file)
+    - You can modify the file to increase the values (e.g., RATE LIMIT 100 30)
+      - You will need to sudo vi the file and force the write (:!w)
