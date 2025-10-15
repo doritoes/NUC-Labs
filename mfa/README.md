@@ -16,11 +16,12 @@ Mission:
 
 Left to do:
 - Everything
-- Google MFA client
+- Test MS authenticator with TOTP
 - Authentik
   - Selfhost a Single Sign-on MFA with Authentik
   - https://medium.com/@svenvanginkel/selfhost-a-single-sign-on-mfa-with-authentik-2f0a64758be0
 - Yubikey
+- Duo
 - WebAuthN + TOTP
 - Reverse proxy to web apps
 - NAS
