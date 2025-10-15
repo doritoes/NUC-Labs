@@ -33,4 +33,4 @@ IMPORTANT:
  
 # Overview
 ## Ubuntu Server/Desktop
-- With Google Authenticator - [1_Ubuntu_Google_Authenticator.md]
+- With Google Authenticator - [Ubuntu MFA with Google Authenticator](1_Ubuntu_Google_Authenticator.md)
