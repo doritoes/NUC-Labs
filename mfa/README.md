@@ -1,12 +1,18 @@
 # MFA Lab
 The mission in this Lab is to set up a variety of MFA login scenarios in the Lab.
 
-References: https://www.reddit.com/r/homelab/comments/16as74c/2fa_in_a_home_lab_environment/
+References:
+- https://docs.vultr.com/how-to-use-two-factor-authentication-with-sudo-and-ssh-on-linux-with-google-authenticator
 
 Mission:
-- Ubuntu Server  (ssh and sudo)
-- Ubuntu Desktop (desktop and ssh)
+- Ubuntu Server (ssh and sudo)
+  - 🆗 Google Authenticator
+- Ubuntu Desktop (desktop, ssh, and sudo)
+  - 🆗 Google Authenticator
 - Windows 10 Pro (or ... 11 Pro)
+  - ⛔ not engineered or working
+- Windows 2025 Server
+  - ⛔ not engineered or working
 
 Left to do:
 - Everything
@@ -24,26 +30,7 @@ Out of scope:
 
 IMPORTANT:
 - Post important gotchas, limitations, "before you start" notes
-- Gotchas
-  - Google AI have some bogus steps for "ubuntu desktop login mfa"
-
-Materials:
-- Lab router  providing DHCP and internet access
-- NUC either as bare metal OS installation or as a hypervisor running VMs
-- 1 USB stick 8GB or more if you will be installing OS on bare meetal
  
-References:
-- to do
-
 # Overview
-## MFA for SSH on Ubuntu Server
-[Ubuntu Server](1_Ubuntu_Server.md)
-
-https://medium.com/@loganzinsmaster/enabling-multi-factor-authentication-mfa-for-ssh-on-an-ubuntu-server-cc7ad8706463
-
-## MFA on Ubuntu Desktop
-SSH, sudo, gui
-
-## MFA on Windows
-
-## Other Use cases
+## Ubuntu Server/Desktop
+- With Google Authenticator - [1_Ubuntu_Google_Authenticator.md]
