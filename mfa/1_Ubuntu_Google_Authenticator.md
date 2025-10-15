@@ -5,6 +5,7 @@ This works on servers and desktops. See https://www.digitalocean.com/community/t
 
 Prerequisites:
 - Mobile phone with Google Authenticator
+  - NOTE You can also use this TOTP configuration with the Microsoft Authenticator app
 - Linux VM ("MFA box")
   - Configured ssh connection
   - sudo non-root user with ssh
