@@ -37,6 +37,9 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Remove the USB stick when prompted and press Enter to reboot
 - Wait as the system reboots
 
+# Review Configuration
+- Log in to the console and review the configuration
+
 Notes:
 - Tested on a NUC 14 with lots of storage
   - nvme 4TB
