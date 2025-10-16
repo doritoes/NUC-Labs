@@ -1,6 +1,8 @@
 # XCP-ng Lab
 The mission in this Lab is to set up a virtual Lab environment hosted on a NUC running XCP-ng. This replaces the previous Lab running on ESXi, which is not longer an option for home labs after the Broadcom acquisition of VMware.
 
+UPDATE This lab is getting a refresh for XCP-ng 8.3 LTS. This is imporant since prior versions did not support a virtual VTPM, which affects Windows 11 and Windows server.
+
 Why it's perfect to the lab:
 - Main goal of XCP-ng is to be a fully integrated and dedicated virtualization platform, without requiring any deep Linux or system knowledge
 - Meant to be managed in a centralized manner via Xen Orchestra, regardless the fact you have only one host or thousand of them
@@ -21,14 +23,10 @@ Left to do:
 - 🌱 Get Windows 11 working
 
 Out of scope:
-- XCP-ng Center - Windows client
+- XCP-ng Center
+  - Windows-based management tool for XCP-ng and Citrix® XenServer® environments
   - Center is no longer end of life/EOL
   - https://github.com/xcp-ng/xenadmin
-
-IMPORTANT:
-- You must install XCP-ng 8.3 or later to run Windows 11 (support VTPM)
-  - https://updates.xcp-ng.org/isos/8.3/
-  - Currently in Beta, this may be in scope for you in a Lab environment
 
 Materials:
 - Lab router  providing DHCP and internet access
