@@ -153,11 +153,12 @@ Steps
       - In my testing this did not break the installation; it's possible to increase the VM's RAM if desired
     - Choose option 1 to kick off install
     - Wait for it to complete (updates are much faster; the first installation takes time)
+    - IMPORTANT If the build fails, reboot the VM and try again
 
 NOTE To update the XO server, run the same xo-install.sh script and select "2. Update".
 
 ## Configure the XO on Ubuntu
-1. Point browser to the IP of xo-ubuntu
+1. Point browser to the IP of xo-ubuntu (using https)
     - the IP address is listed on the General tab for the VM
     - Example: https://192.168.1.103
     - Accept the warnings for the self-signed certificate
@@ -175,11 +176,11 @@ NOTE To update the XO server, run the same xo-install.sh script and select "2. U
     - Settings > Servers
     - Enter information for the host
       - Label: xcp-ng-lab1
-      - Address:port: the IP address of the host
+      - Host: the IP address of the host
       - Username: root
       - Password: the root password you configured
       - "Unauthorized certificates" Slider: enable it
-      - Click Connect
+      - Click **Connect**
 6. Make sure the XO Ubuntu VM is configured to stay up and prevent accidental deletion
     - Home > VMs
     - Click XO-Ubuntu
@@ -200,8 +201,9 @@ You may choose to keep the XOA virtual appliance if you have enough CPU cores an
 1. ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
 2. Option 1 - `reboot`
 3. Option 2 -  `xsconsole`
-    - Reboot or Shutdown
-    - Reboot Server
+  - Reboot or Shutdown
+  - Reboot Server
+  - Press F8 to confirm
 
 IMPORTANT Note how long it can take for the host and then the guest to come up. Don't panic too early.
 
