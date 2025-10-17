@@ -197,6 +197,14 @@ You may choose to keep the XOA virtual appliance if you have enough CPU cores an
 4. Click More > Remove
 5. Click OK to confirm
 
+## Optionally Reserve IP address for xo-ubuntu
+Now is a good time to create a dhcp reservation for xo-ubuntu for a fixed IP address. This is super helpful, so the IP address does not change.
+
+TIP To tell Ubunutu 24.04 to refesh the IP address, `networkctl renew`
+- `networkctl list`
+  - note the link enX0
+- `sudo networkctl renew enX0`
+
 ## Reboot the Host
 1. ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
 2. Option 1 - `reboot`
