@@ -87,18 +87,17 @@ Steps:
   - Description: **XO on Ubuntu**
   - vCPU's: 2 (default, same as VOA)
   - RAM: 2GB (default, same as VOA)
+  - Disks:  20GB
   - You cannot change the disk size; we will increase it shortly
   - Under Install settings select **Custom config**
     - In "User config" section:
       - add the line: `password: changeme`
+      - add the line: `ssh_pwauth: true`
       - you can optionally set the hostname here; be aware the "{index}" is index value, starting with "0"; if you uncomment the hostname line the hostname will be set to the "name" of the VM in XO with a zero after it (e.g., XO-Ubuntu0)
   - Click **Show advanced settings**
-    - Add check to **Auto power on** (this is important)
+    - <i>Check</i> **Auto power on** (this is important)
+    - <i>Uncheck</i>: Boot VM after creation; we are going to increase the disk size
   - Click **Create**
-- Increase storage to 20GB
-  - The VM needs to be powered off (e.g., `sudo poweroff`)
-  - On the VM's **Disks** tab click on the disk size `3.5 GiB` and enter `20` press enter
-  - 3.5GB is not enough to run XO, and in testing we had issues just updating packages!
 - Apply updates for 24.04
   - Open the VM's Console (click the Console tab)
   - Log in as `ubuntu`/`changeme`
@@ -107,7 +106,6 @@ Steps:
 - Remove vm-tools
   - `sudo apt remove -y open-vm-tools`
   - `sudo rm -r /etc/vmware-tools`
-  - `sudo rm /etc/systemd/system/open-vm-tools.service`
   - `sudo rm /etc/systemd/system/vmtoolsd.service`
   - `sudo rm -r /etc/systemd/system/open-vm-tools.service.requires`
   - `sudo apt autoremove -y`
@@ -130,8 +128,6 @@ Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
 
 TIP ssh to the server for easier copy/paste of commands
 - the IP address is shown on the General tab
-- BUT it is looking for keys, not username and password
-- 🌱 follow up and get this working
 
 Steps
 1. `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
@@ -157,25 +153,25 @@ Steps
       - In my testing this did not break the installation; it's possible to increase the VM's RAM if desired
     - Choose option 1 to kick off install
     - Wait for it to complete (updates are much faster; the first installation takes time)
-10. Get the IP address of the VM: `ip a` or `hostname -i`
 
 NOTE To update the XO server, run the same xo-install.sh script and select "2. Update".
 
 ## Configure the XO on Ubuntu
-1. Point browser to the IP
+1. Point browser to the IP of xo-ubuntu
+    - the IP address is listed on the General tab for the VM
     - Example: https://192.168.1.103
     - Accept the warnings for the self-signed certificate
-2. Log in
+3. Log in
     - user: admin@admin.net
     - pass: admin
-3. Add new user to replace admin@admin.net
+4. Add new user to replace admin@admin.net
     - Settings > Users > Create
       - Name: admin
       - Permissions: Admin
       - Select a password
     - Click Sign out then sign in as the new user `admin`
     - Remove user admin@admin.net
-4. Add the XCP-ng host ("server")
+5. Add the XCP-ng host ("server")
     - Settings > Servers
     - Enter information for the host
       - Label: xcp-ng-lab1
@@ -184,7 +180,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select "2. U
       - Password: the root password you configured
       - "Unauthorized certificates" Slider: enable it
       - Click Connect
-5. Make sure the XO Ubuntu VM is configured to stay up and prevent accidental deletion
+6. Make sure the XO Ubuntu VM is configured to stay up and prevent accidental deletion
     - Home > VMs
     - Click XO-Ubuntu
     - Click Advanced tab
