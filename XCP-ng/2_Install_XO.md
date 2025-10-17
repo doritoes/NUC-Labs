@@ -119,30 +119,21 @@ Steps:
 - Reboot
   - `reboot`
 - Rename the VM from XCP-ng to `xo-ubuntu`
-- Install guest tools
-  - Connect the guest-tools.iso ("Select disk(s)...", select it from the dropdown)
-    - if you have having trouble with a half-connected cdrom/dvd, power off the VM, eject the iso, and try again
-  - Open Console
-  - Mount the tools ISO
-    - `sudo mount /dev/xvdb /media`
-      - in older versions it was "sudo mount /dev/cdrom /media"
-    - STUCK here, not getting the guest tools CD mounted
-    - `cd /media/Linux`
-  - Install the tools
-    - `sudo ./install.sh`
-    - you may be prompted to enter your password
-    - you are prompted accept the change
-    - you are reminded to reboot
-  - Unmount the ISO
-    - `cd ~`
-    - `sudo umount /media`
-  - `sudo reboot`
-  - Eject guest-tools.iso
-  - Back in XO, the General tab will show the management tools are detected
+- Confirm the XEN guest agent is working
+  - View the VM's general tab
+  - Look for "Management agent 1.0.0-proto-0.4.0 detected"
+  - To manually install:
+    - `sudo apt install xe-guest-agent`
 
 ## Install Xen Orchestra (XO) on the Ubuntu Server
 Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
 
+TIP ssh to the server for easier copy/paste of commands
+- the IP address is shown on the General tab
+- BUT it is looking for keys, not username and password
+- 🌱 follow up and get this working
+
+Steps
 1. `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
 2. `cd XenOrchestraInstallerUpdater`
 3. `cp sample.xo-install.cfg xo-install.cfg`
