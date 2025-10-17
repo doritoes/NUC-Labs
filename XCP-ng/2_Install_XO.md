@@ -7,38 +7,24 @@ In this Lab you will get to experience both processes. We will start with the XO
 
 NOTES
 - The XO server, whether the XOA virtual appliance or a separate server, will have its own IP address
-- Another management solution, XOLite is in beta
+- The other management solution, XO-Lite, is out of beta and GA in 8.3
 
 # Getting Started with Quick Deploy and XOA
-## Option 1 - Quick Deploy
 - Point your browser to the IP address of the NUC
   - Example: https://192.168.1.100
+- Login to "XO-Lite" (Xen Orchestra Lite) with the root password you set earlier
 - Under management tools, click Quick Deploy under Xen Orchestra
 - Login with the root password you set earlier
-- Leave the network settings at their defaults to use DHCP (later set up a DHCP reservation)
-- Click NEXT
-- Create Admin account on your XOA
-  - Username: `admin`
-  - Password: `labboss`
-- Register your XOA
-  - xen-orchestra.com username: *use the value you used when registering*
-  - xen-orchestra.com username: *use the value you used when registering*
-- Set the XOA machine password
-  - Login: `xoa` (default)
-  - Password: `labboss`
-- Click **DEPLOY**
-- Wait as the XOA image is downloaded and the VM deployed
-- Your browser is automatically redirected to the login page on the new IP address
-
-## Option 2 - Vates Deploy Page
+- This is the basic access you get without deploying Xen Orchestrator
 - Direct your browser to
   - https://vates.tech/deploy
+  - This deploys Xen Orchestra 5 (Xen Orchestrator Appliance = XOA)
 - Click **Got it, let's go!**
 - Enter primary host information
   - Primary host: *IP address of the host, xcp-ng-lab1*
   - Login: **root**
   - Password: *enter the password you set earlier*
-- Click **Continue**
+  - Click **Continue**
 - Configure storage and network
   - Default storage and DHCP for the lab
   - Click **Continue**
@@ -50,57 +36,65 @@ NOTES
     - Login: `xoa` (default)
     - Password: `labboss`
  - Click **Deploy**
- - Wait *patiently* as the XOA deployment completes
- - When *XOA deployment successful!* is displayed
-   - Click **Access XOA** to be redirected to the IP address of the XOA
- - You will need to register the XOA separately; you will be "reminded" constantly to do this 
+ - Wait *patiently* as the XOA deployment completes (10-15 minutes)
+   - downloads XOA image
+   - VM deployed
+   - TIP log in to the host's web portal again, and scroll to the bottom to watch the progress of these tasks (it give you and estimated completing time which is helpful)
+  - When *XOA deployment successful!* is displayed
+  - Click **Access XOA** to be redirected to the IP address of the XOA
+  - TIP take this opportunity so set up a fixed IP address for the XOA for ease of use, then restart the XOA server
 
-## Log In and Apply Updates
-- Point your browser to the IP address of the XOA
-- Log in as username `admin` and password `labboss`
+## Log In, Register, and Apply Updates to XOA
+- Log in using the XOA ADMIN ACCOUNT you configured earlier
+- You will need to register the XOA, you will be "reminded" constantly to do this
+  - From the XOA menu, XOA > Updates
+  - Registeration:
+    - enter the username and password you registered with, then click **Register**
+    - Optionally, you can click **Start trial** (30 days)
 - Apply Updates
   - From the left menu Click XOA > Updates
-  - If an upgrade is available, click Upgrade and wait for the upgrade to complete
+  - If an upgrade is available, click **Upgrade** and wait for the upgrade to complete
     - If it remains Disconnected for too long, try clicking Refresh to re-connect
-  - In Lab testing there were two updates to apply; the second update required refresh the <ins>entire page</ins> afterwards
+
+IMPORTANT XOA does not allow you to apply patches to the pool devices (the host) unless you start the trial or pay. Therefore we are going to build our own XO Server which will allow to apply patches to hosts.
 
 # Build Your Own XO Server on XCP-ng
-The default XOA VM was created on Debian Jessie 8.0, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build our own XO server using Ubuntu 22.04 right on this host.
+The default XOA VM was created on Debian 12, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build our own XO server using Ubuntu 24.04 right on this host.
 
 NOTE You can also build set up your XO server elsewhere, such as a VM on your Lab laptop
 
 Overview
-- Create new Ubuntu 20.04 using the Hub template
+- Create new Ubuntu 24.04 using the Hub template
 - Add more disk space
-- Upgrade to Ubuntu 22.04
 - Install XO
 - Remove XOA
 
 ## Create New Ubuntu Server Using Hub
-The "Hub" offers older options. We will install Ubuntu 20.04 and upgrade it to 22.04 for this lab.
+We will use the Hub's images to install Ubuntu 24.04.
 
 Steps:
 - Log in to the XOA web page/portal
-- Click Hub from menu on the left
-- Under **Ubuntu 20.04** click **Install** to install the image
+- Click **Hub** from menu on the left
+- Under **Ubuntu 24.04** click **Install** to install the image
+  - accept defaults for pool and storage, and click **OK**
   - wait for the tasks to complete
     - monitor the process by clicking **Tasks** in the left menu
     - note the Pool tasks and the XO tasks being performed
-- Under **Ubuntu 20.04** click **Create**
-    - Click OK to accept the pool **xcp-ng-lab1** (there is only one)
-    - Name: XO-Ubuntu
-    - Description: XO on Ubuntu
-    - vCPU's: 2 (default, same as VOA)
-    - RAM: 2GB (default, same as VOA)
-    - You cannot change the disk size; we will increase it shortly
-    - Select **Custom config**
-      - In "User config" section:
-        - add the line: `password: changeme`
-        - you can optionally set the hostname here; be aware the "%" is index value, starting with "0"; if you uncomment the hostname line the hostname will be set to the "name" of the VM in XO with a zero after it (e.g., XO-Ubuntu0)
-    - Click Show advanced settings
-      - Add check to **Auto power on** (this is important)
-  - Click Create
-- Apply updates for 20.04
+- Still in Hub, under **Ubuntu 24.04** click **Create** which is now enabled
+  - Click **OK** to accept the pool **xcp-ng-lab1** (there is only one)
+  - Name: **XO-Ubuntu**
+  - Description: **XO on Ubuntu**
+  - vCPU's: 2 (default, same as VOA)
+  - RAM: 2GB (default, same as VOA)
+  - You cannot change the disk size; we will increase it shortly
+  - Under Install settings select **Custom config**
+    - In "User config" section:
+      - add the line: `password: changeme`
+      - you can optionally set the hostname here; be aware the "{index}" is index value, starting with "0"; if you uncomment the hostname line the hostname will be set to the "name" of the VM in XO with a zero after it (e.g., XO-Ubuntu0)
+  - Click **Show advanced settings**
+    - Add check to **Auto power on** (this is important)
+  - Click **Create**
+- Apply updates for 24.04
   - Open the VM's Console (click the Console tab)
   - Log in as `ubuntu`/`changeme`
   - You will be prompted to change your password
@@ -117,7 +111,7 @@ Steps:
   - `sudo poweroff`
 - Increase storage to 20GB
   - On the VM's **Disks** tab click on the disk size `6 GiB` and enter `20` press enter
-  - 6GB is not enough to do the distribution upgrade, much less run XO
+  - 3.5GB is not enough to run XO
 - Start the VM (click the Start icon in the Web GUI)
 - Perform a release upgrade (from 20.20 to 22.04 or whatever the latest version is)
   - Open the VM's Console
