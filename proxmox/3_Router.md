@@ -23,7 +23,7 @@ Here is list of the virtual bridges we will use in this lab:
     - the free version is limited to the Rolling Release
 3. Download the most recent image
 
-IMPORTANT See [Appendix_Build_VyOS_ISO_with_VM_agents.md] to build your own ISO with the VM agents installed.
+IMPORTANT See [Appendix - Build VyOS IS with VM agents](Appendix_Build_VyOS_ISO_with_VM_agents.md) to build your own ISO with the VM agents installed.
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
