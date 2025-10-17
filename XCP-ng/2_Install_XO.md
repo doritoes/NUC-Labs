@@ -80,6 +80,7 @@ Steps:
   - wait for the tasks to complete
     - monitor the process by clicking **Tasks** in the left menu
     - note the Pool tasks and the XO tasks being performed
+    - NOTE in testing this took a long time
 - Still in Hub, under **Ubuntu 24.04** click **Create** which is now enabled
   - Click **OK** to accept the pool **xcp-ng-lab1** (there is only one)
   - Name: **XO-Ubuntu**
@@ -94,12 +95,15 @@ Steps:
   - Click **Show advanced settings**
     - Add check to **Auto power on** (this is important)
   - Click **Create**
+- Increase storage to 20GB
+  - The VM needs to be powered off (e.g., `sudo poweroff`)
+  - On the VM's **Disks** tab click on the disk size `3.5 GiB` and enter `20` press enter
+  - 3.5GB is not enough to run XO, and in testing we had issues just updating packages!
 - Apply updates for 24.04
   - Open the VM's Console (click the Console tab)
   - Log in as `ubuntu`/`changeme`
   - You will be prompted to change your password
-  - `sudo apt update && sudo apt upgrade -y`
-    - if you are prompted about updating a configuration file, select Y (update to the maintainer's version)
+  - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
 - Remove vm-tools
   - `sudo apt remove -y open-vm-tools`
   - `sudo rm -r /etc/vmware-tools`
@@ -107,36 +111,24 @@ Steps:
   - `sudo rm /etc/systemd/system/vmtoolsd.service`
   - `sudo rm -r /etc/systemd/system/open-vm-tools.service.requires`
   - `sudo apt autoremove -y`
-- Shut down the VM
-  - `sudo poweroff`
-- Increase storage to 20GB
-  - On the VM's **Disks** tab click on the disk size `6 GiB` and enter `20` press enter
-  - 3.5GB is not enough to run XO
-- Start the VM (click the Start icon in the Web GUI)
-- Perform a release upgrade (from 20.20 to 22.04 or whatever the latest version is)
-  - Open the VM's Console
-  - Log in as user `ubuntu` and the password you selected
-  - `sudo do-release-upgrade`
-    - Enter `y` to continue when prompted
-    - Select `Yes` to allow service restarts
-    - You will be prompted to keep existing settings (N) or use the maintainer's settings (Y); for the new system generally you want the maintainer's version, but there is no real argument of one over the over
-    - Approve removing obsolete packages
-    - Approve rebooting the system
-- Verify upgrade
-  - Log in from the console
-  - `cat /etc/os-release`
-  - confirm the version is now 22.04 LTS (Jammy Jellyfish), or whatever the latest version is
 - Change hostname
   - View current hostname: `hostnamectl`
   - Set the new hostname: `sudo hostnamectl set-hostname xo-ubuntu`
   - Optionally set the pretty name: `sudhostnamectl set-hostname "XO Ubuntu Server for managing XCP-ng" --pretty`
   - Confirm it has changed: `hostnamectl`
+- Reboot
+  - `reboot`
+- Rename the VM from XCP-ng to `xo-ubuntu`
 - Install guest tools
   - Connect the guest-tools.iso ("Select disk(s)...", select it from the dropdown)
     - if you have having trouble with a half-connected cdrom/dvd, power off the VM, eject the iso, and try again
-  - Open Terminal
+  - Open Console
   - Mount the iso
+   - THIS IS WHERE IT BREAKS
     - `sudo mount /dev/cdrom /media`
+    -  Edit /etc/fstab
+      - Add the following line of text to the /etc/fstab file if it does not exist: 
+      - /dev/cdrom /mnt/cdrom udf, iso9660 noauto, owner,ro 0 0
     - `cd /media/Linux`
   - Install the tools
     - `sudo ./install.sh`
