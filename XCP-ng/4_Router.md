@@ -29,8 +29,10 @@ NOTE in this lab we will use the following VLAN numbers for "internal" networks,
 # Download the ISO
 1. Go to https://vyos.io
 2. Click Rolling Release
-  - the free version is limited to the Rolling Release
-4. Download the most recent image
+    - the free version is limited to the Rolling Release
+3. Download the most recent image
+
+IMPORTANT See [Appendix_Build_VyOS_ISO_with_VM_agents.md] to build your own ISO with the VM agents installed.
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
