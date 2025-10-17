@@ -1,7 +1,9 @@
 # Install XCP-ng
 In this Lab we will use XO to manage the environment. Please be aware that XO Lite exists in beta and is coming in the near future.
 
-References: https://www.youtube.com/watch?v=fuS7tSOxcSo
+References:
+- https://www.youtube.com/watch?v=fuS7tSOxcSo
+- https://www.youtube.com/watch?v=5uU73RQb15I
 
 We will start with a the XOA virtual appliances, then build our own XO installation to replace it
 
