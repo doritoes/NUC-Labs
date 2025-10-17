@@ -123,12 +123,10 @@ Steps:
   - Connect the guest-tools.iso ("Select disk(s)...", select it from the dropdown)
     - if you have having trouble with a half-connected cdrom/dvd, power off the VM, eject the iso, and try again
   - Open Console
-  - Mount the iso
-   - THIS IS WHERE IT BREAKS
-    - `sudo mount /dev/cdrom /media`
-    -  Edit /etc/fstab
-      - Add the following line of text to the /etc/fstab file if it does not exist: 
-      - /dev/cdrom /mnt/cdrom udf, iso9660 noauto, owner,ro 0 0
+  - Mount the tools ISO
+    - `sudo mount /dev/xvdb /media`
+      - in older versions it was "sudo mount /dev/cdrom /media"
+    - STUCK here, not getting the guest tools CD mounted
     - `cd /media/Linux`
   - Install the tools
     - `sudo ./install.sh`
