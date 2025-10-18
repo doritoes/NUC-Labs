@@ -6,25 +6,29 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
 IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
 
 # Ubuntu Desktop
+NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM, 20GB disk installs and runs without problem.
+
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Template: **Ubuntu Noble Numbat  24.04**
+    - NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM, 20GB disk installs and runs without problem.
   - Name: **ubuntu-desktop-lan**
   - Description: **Ubuntu desktop on LAN network**
-  - CPU: **1 vCPU**
-  - RAM: **2GB**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Ubuntu 22.04 Desktop image you uploaded*
+  - Install: ISO/DVD: *Select the Ubuntu 24.04 Desktop image you uploaded*
   - Interfaces: select **Inside** from the dropdown
-  - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
+  - Disks: **25GB** (default 10GB is NOT enough; minimum is 25GB)
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console** tab
 - Follow the Install wizard per usual
+  - NOTE installation seemed to freeze at "Copying files" with less than 2 vCPUs, 4GB RAM
   - To remove the installation media, click the Eject icon
   - Press Enter to Reboot
 - Log in to the console and complete the first time wizard
-  - Skip, Skip, No, Next, Done
+  - Next, Skip, No, Next, Finish
 - Optionally let the Software Updater "Install Now"; we will be doing updates later from the command line later
   - However, you will need to let it finish before we can install the guest tools
 - Install guest tools
@@ -46,27 +50,26 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
       - you are reminded to reboot
     - `sudo reboot`
     - Eject guest-tools.iso
-    - Back in XO, the General tab will show the management tools are detected
+    - Back in XO, the VM's General tab will show the management tools are detected
 - Test the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+    - reboot after updates are applied
   - Internet access using Firefox
 - Configure sharing your desktop
-  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts
-  - Settings > Sharing
-  - Enable the Sharing slider
-  - Click Remote Desktop
-  - Enable Remote Desktop
-  - Enable Remote Control
-  - Only Enable Legacy VNC Protocol if you must
-  - Under authentication, confirm the username <ins>and password</ins>
-    - a random password is set; you might want to change it to something more memorable  
+  - NOTE See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for older Ubuntu version
+  - Settings > System > Remote Desktop
+  - Enable the Desktop Sharing slider
+  - Enable Remote Control slider
+  - Under authentication, confirm the username and password
+    - a random password is set; you might want to change it to something more memorable
   - BEWARE that remote desktop is disabled when the screen is locked
     - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
     - there are workarounds
 - Enable SSH access
   - `sudo apt install -y openssh-server`
-  - `sudo systemctl status ssh`
+  - `sudo systemctl enable --now ssh`
+  - `systemctl status ssh`
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Power down the VM
 - Take a Snapshot
