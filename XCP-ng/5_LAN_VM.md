@@ -11,7 +11,6 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Ubuntu Noble Numbat  24.04**
-    - NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM, 20GB disk installs and runs without problem.
   - Name: **ubuntu-desktop-lan**
   - Description: **Ubuntu desktop on LAN network**
   - CPU: **2 vCPU**
