@@ -71,7 +71,7 @@ Or, if you created local storage, upload the ISO there.
   - Enter the new password for the `vyos` user
     - Fun fact, it allows you to set the password to `vyos`
 - When done reboot: `reboot`
-- Eject the VyOS ISO (ejectd icon)
+- Eject the VyOS ISO (eject icon)
 - Log back in with your updated password
 - Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
   - `configure`
@@ -154,13 +154,6 @@ The default VyOS rolling release image no longers comes with vyos-xe-guest-utili
 See the appendix for instructions to build your own ISO with the agents installed
 - [Appendix_Build_VyOS_ISO_with_VM_agents.md](Appendix_Build_VyOS_ISO_with_VM_agents.md)
 
-BROKEN HERE, the file does not exist
-- sudo apt list
-  - no xe-guest-agent, xe-guest,utilities, etc
-
-Here is how to enable it:
-- `sudo sytemctl start xe-guest-utilities`
-- `sudo sytemctl enable xe-guest-utilties`
-- `sudo sytemctl status xe-guest-utilties`
-
-If you have a permissions issue, check the permissions on `/etc/systemd/system/xe-guest-utilities.service`
+Testing with the custom ISO, the agent worked out of the box, no steps required
+- General tab: "Management agent 1.0.0-proto-0.4.0 detected"
+- `systemctl status xen-guest-agent`
