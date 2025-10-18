@@ -62,6 +62,8 @@ Or, if you created local storage, upload the ISO there.
   - Click **Create**
 - The details for the new VyOS VM are now displayed
   - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
+
+# Install VyOS
 - Click `Console` tab to access the console command line
 - Login as `vyos`/`vyos`
 - `install image`
@@ -69,7 +71,7 @@ Or, if you created local storage, upload the ISO there.
   - Enter the new password for the `vyos` user
     - Fun fact, it allows you to set the password to `vyos`
 - When done reboot: `reboot`
-- Eject the VyOS iso
+- Eject the VyOS ISO (ejectd icon)
 - Log back in with your updated password
 - Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
   - `configure`
@@ -83,7 +85,7 @@ Or, if you created local storage, upload the ISO there.
 - You can now configure your router from another device in your Lab; SSH to this IP address
 
 # Configure Router
-IMPORTANT note the version is VyOS 1.5-rolling-2024xxxxxxxx, and the syntax has changed from previous versions you may be familiar with.
+IMPORTANT note the version is 2025-xx.xx0xxxx-rolling-xxxxx, and the syntax has changed from previous versions you may be familiar with.
 - ssh to the router and login as user `vyos` with the password you selected
 - enter the configuration below
 ```
@@ -147,7 +149,14 @@ exit
 ```
 
 # Xen Tools
-The VyOS image comes with vyos-xe-guest-utilities.
+The default VyOS rolling release image no longers comes with vyos-xe-guest-utilities.
+
+See the appendix for instructions to build your own ISO with the agents installed
+- [Appendix_Build_VyOS_ISO_with_VM_agents.md](Appendix_Build_VyOS_ISO_with_VM_agents.md)
+
+BROKEN HERE, the file does not exist
+- sudo apt list
+  - no xe-guest-agent, xe-guest,utilities, etc
 
 Here is how to enable it:
 - `sudo sytemctl start xe-guest-utilities`
