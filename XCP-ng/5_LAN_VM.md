@@ -103,13 +103,13 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
 # Ubuntu Server
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
-  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Template: **Ubuntu Noble Numbat 24.04**
   - Name: **ubuntu-server-lan**
   - Description: **Ubuntu server on LAN network**
   - CPU: **1 vCPU**
   - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
+  - Install: ISO/DVD: **Select the Ubuntu 24.04 Server image you uploaded**
   - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
   - Click **Create**
@@ -130,7 +130,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Recommend checking the box Install OpenSSH server
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
-- Log in and check the system using Terminal
+- Use the Console to log in and check the system
   - Is the disk size correct? `df -h`
 - Install guest tools
   - Connect the guest-tools.iso (select it from the dropdown)
