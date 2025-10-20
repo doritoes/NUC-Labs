@@ -175,6 +175,8 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
+IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
   - Template: **Windows 10 (64-bit)**
@@ -189,11 +191,8 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Click **Create**
 - The details for the new VM are now displayed
 - Click Console
-- You will be prompted to press any key to boot from CD or DVD
-  - **Press any key**
-  - If you missed it, power cycle and try again
-- Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
+  - If you get prompted to press any key to boot from the CD or DVD, do so
+  - Confirm Language, formats, and keyboard then **Next**
   - Click **Install now**
   - Activate Windows: Click **I don't have a product key**
   - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
@@ -205,12 +204,12 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - **Eject** the installation ISO
   - **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters
+    - type this exactly, spacing matters (some add /f to force the shutdown)
 - Click **Advanced** tab > **Convert to template**
 - Re-create the VM from the template
   - New > VM
   - Template: win10-lan
-  - Name: Rename from the VM from **win10-lan** to **win10-lan-ready**
+  - Name: Rename the VM from **win10-lan** to **win10-lan-ready**
   - Description: *leave the same*
   - Click **Create**
 - Complete the setup wizard
@@ -237,7 +236,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
       - Installation requires a reboot
-    - In XO, click the Advanced tab
+    - Optionally, in XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
       - This requires a reboot
       - You still need the Xen agent installed
