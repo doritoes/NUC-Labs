@@ -250,6 +250,7 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
 - Shut down the Windows VM
+  - `stop-computer`
 - Convert win10-lan-ready to a template (advanced tab)
 - Questions to ponder:
   - What are the differences between the two templates?
