@@ -333,7 +333,7 @@ Steps:
     - Create security questions for this account: be creative
     - Click **Not now**
     - Privacy: *disable all the settings* and then click **Accept**
-    - Experience: be creative and pick one, then click **Accept* (I chose Business)
+    - Experience: be creative and pick one, then click **Accept** (I chose Business)
     - Cortana: Click **Not now**
     - Configure the browser by clicking continue (opens the Edge web browser)
       - Click **Start without your data**
