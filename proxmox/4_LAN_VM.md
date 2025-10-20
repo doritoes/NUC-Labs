@@ -305,7 +305,7 @@ Steps:
       - Set to "Do not use any media"
   - At the proxmox console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters (some use /f to force the shutdown)
+    - type this exactly, spacing matters (some people add /f to force the shutdown)
 - Clone a new VM from `win10-lan`
   - Click on the VM win10-lan
   - Click More > Clone
@@ -479,7 +479,7 @@ Steps:
       - Do not use any media
   - At the console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters (some people as /f for force shutdown)
+    - type this exactly, spacing matters (some people add /f for force shutdown)
 - Clone a new VM from `win11-lan`
   - Click on the VM win11-lan (it should still be powered off)
   - Click More > Clone
