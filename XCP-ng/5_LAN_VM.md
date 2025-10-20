@@ -258,13 +258,19 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Optionally create another VM from each template and experiment
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. 
+IMPORTANT Windows 11 will not install without a TPM
 
-🌱 These instructions have not been tested and are assumed to be <ins>incorrect and out of date</ins>
+IMPORTANT If you want to set up using a local account instead of a Microsoft account
+- Disconnect Internet during setup
+- https://www.elevenforum.com/t/clean-install-windows-11.99/
+- The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
+works for Windows 11 Home or Pro
+  - need to test at add second keyboard layout screen: start ms-cxh:localonly
+    - follow the wizard, and then follow up with the skipping second keyboard layout
 
 - From the left menu click New > VM
   - Select the pool **xcp-ng-lab1**
-  - Template: **Other Install Media**
+  - Template: **Windows 11**
   - Name: **win11-lan**
   - Description: **Windows 11 on LAN network**
   - CPU: **2 vCPU**
@@ -276,42 +282,61 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console** tab
-- Follow the Install wizard per usual
+  - If you get prompted to press any key to boot from the CD or DVD, do so
   - Confirm Language, formats, and keyboard then Next
-  - Click Install now
-  - Activate Windows: Click I don't have a product key
-  - Select the OS to install: Windows 11 Pro (feel free to experiment)
-  - WARNING You might bet the error: This PC can't run Windows 11
+  - Select **Install Windows 11**, check the box, then click **Next**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 11 Pro** (feel free to experiment)
+  - WARNING You might get the error: This PC can't run Windows 11
     - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
-    - Possible culprits: "Enable TPM 2.0 on your PC"
-    - XCP-ng only supports VTPMs on pools running 8.3 or later (8.3 is currently in beta)
-  - **NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME**
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
+    - Possible culprits: "Enable TPM 2.0 on your PC" (XCP-ng lists this as VTPM, virtual TPM)
+  - Click **Accept**
+  - Accept the installation on Drive 0, click **Next**
+  - Click **Install**
+  - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Eject the installation ISO
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
+  - type this exactly, spacing matters (some people add /f for force shutdown)
+- Click Advanced tab > **Convert to template**
 - Re-create the VM from the template
   - New > VM
   - Template: **win11-lan**
   - Name: **win11-lan-ready**
   - Interface: Note that it's set to **Inside**, which is what we want
+  - Advanced > <i>disable</i> Enable VTPM
+    - If you don't, create will fail with "VTPM_MAX_AMOUNT_REACHED (1)"
+    - Since you cloning a system with a VTPM, ignore the warning
   - Click **Create**
 - Log in complete the setup wizard
-  - Set region and keyboard layout, skip second keyboard layout
-  - Select Set up for personal use (feel free to experiment)
-  - Click **Offline account** then click **Limited experience**
-  - User: **lab**
-  - Password: *select a password*
-  - Create security questions for this account: be creative
-  - Click **Not now**
-  - Privacy: disable all the settings and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept** (I chose Business)
-  - Cortana: **Click Not now**
-  - Close "Browse the web with the best performing browser on Windows"
+  - Start the VM
+    - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connection (as simple as powering down the VyOS router for now)
+  - Set region and click Yes
+  - Accept keyboard and click Yes
+  - At the second keyboard layout screen, STOP, and follow these steps if you haven't "broken" the internet connection
+    - Press shift-F10 to open a command prompt
+    - `start ms-cxh://setaddlocalonly`
+    - See also: `reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f`
+    - Follow prompts to add a local user, password, and security options
+    - This ends at a blank screen. Reboot the VM.
+  - Disable all privacy settings and click Next
+  - Disable all privacy settings and click Accept
+  - Your device will a DESKTOP-xxxxxxx name
+  - If you chose to break the network connectivity insteady of bypassing the account creation
+    - Select Set up for personal use (feel free to experiment)
+    - Disconnect from the Internet and start over
+      - Option 1 - power down the voyos router for a while
+      - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
+    - At *Lets's connect you to a network*
+      - Click **I don't have internet**
+    - Click **Continue with limited setup**
+    - User: **lab**
+    - Password: *select a password*
+    - Create security questions for this account: be creative
+    - Privacy: disable all the settings and then click Next (or might be Accept)
+- Log in
+- Reconnect to the Internet as needed
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
