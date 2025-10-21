@@ -835,6 +835,8 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Open the console to `server2025-lan-prep` and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+      - Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
+      - unable to remove microsoft edge
     - Wait as the process completes and the VM shuts down
 - Convert to a Template
   - Click on the VM `server2025-lan-prep`
