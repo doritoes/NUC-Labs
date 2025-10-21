@@ -249,6 +249,7 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+    - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM
   - `stop-computer`
 - Convert win10-lan-ready to a template (advanced tab)
@@ -422,6 +423,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+    - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM
   - `stop-computer`
 - Convert `server2022-lan-ready` to a template
@@ -436,8 +438,8 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-  - Convert server2022-lan-prep to template
-  - From now on, create Windows Server VMs from the template server2022-lan-prep
+  - Convert `server2022-lan-prep` to template (advanced tab)
+  - From now on, create Windows Server VMs from the template `server2022-lan-prep`
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
   - Does this affect the 180-day evaluation timer?
@@ -454,7 +456,7 @@ This is a bare-bones server with limited resources
 
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Template: **Windows Server 2025 (64-bit)**
+  - Template: **Windows Server 2025**
   - Name: **server2025-lan**
   - Description: **Windows Server 2025 on LAN network**
   - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
@@ -468,13 +470,14 @@ This is a bare-bones server with limited resources
 - Click **Console**
 - If prompted **Press any key to boot from CD or DVD...**, do so
 - Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then **Next**
-  - Click **Install now**
+  - Confirm Language and formats then **Next**
+  - Confirm keyboard then **Next**
+  - Confirm **Install Windows Server**, check the box, then **Next**
   - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
-  - Check the box then **Next**
-  - Click **Custom: Install Windows only (advanced)**
-  - Accept the installation on Drive 0, **Net**
+  - Click **Accept**
+  - Accept the installation on Drive 0, **Next**
+  - Click **Install**
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
   - Eject the installation ISO
   - Shift-F10 to open command prompt
@@ -501,6 +504,7 @@ This is a bare-bones server with limited resources
 - Login in
   - The small keyboard icon allows you to send a Ctrl-Alt-Delete
   - Yes, allow the server to be discovered by other hosts on the network
+- Send diagnostic data to Microsoft: **Required only** then **Accept**
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
