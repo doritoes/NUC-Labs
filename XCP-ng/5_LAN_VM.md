@@ -233,7 +233,7 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
       - Installation requires a reboot
     - Optionally, in XO, click the Advanced tab
@@ -365,6 +365,7 @@ works for Windows 11 Home or Pro
 
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
+
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Windows Server 2022 (64-bit)**
@@ -378,18 +379,16 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Disks: **40GB** (default 32GB)
   - Click **Create**
 - The details for the new VM are now displayed
-- Click **Console** tab
-- You will be prompted to Press any key to boot from CD to DVD
-  - **Press any key**
-  - If you missed it, power cycle and try again
+- Click **Console**
+- If prompted **Press any key to boot from CD or DVD...**, do so
 - Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
-  - Click Install now
+  - Confirm Language, formats, and keyboard then **Next**
+  - Click **Install now**
   - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
+  - Check the box then **Next**
+  - Click **Custom: Install Windows only (advanced)**
+  - Accept the installation on Drive 0, **Net**
 - When the system boots to "Customize settings" and prompts to set the Administrator's password
   - Eject the installation ISO
   - Shift-F10 to open command prompt
@@ -400,12 +399,13 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Template: server2022-lan
   - Name: server2022-lan-ready
   - Click **Create**
-- After booting, set password for Administrator
+- After booting, use console to set the password for Administrator
+- Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
-    - Download MSI and install manually, or install later using group policy
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy, and accept the reboot
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
       - This requires a reboot
@@ -423,7 +423,8 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
 - Shut down the Windows VM
-- Convert server2022-lan-ready to a template
+  - `stop-computer`
+- Convert `server2022-lan-ready` to a template
 - Now let's prepare the template VM for cloning
   - must perform generalization to remove the security identifier (SID)
   - allows us to rapidly clone more servers
@@ -436,6 +437,92 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
   - Convert server2022-lan-prep to template
+  - From now on, create Windows Server VMs from the template server2022-lan-prep
+- Questions to ponder:
+  - What are the differences between the three Windows server templates?
+  - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each template?
+- Optionally create VMs from each template and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
+
+To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
+
+To configure a Domain File Server, see [Appendix - Create Windows File Server](Appendix-Windows_File_Server.md)
+
+# Windows 2025 Server
+This is a bare-bones server with limited resources
+
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Windows Server 2025 (64-bit)**
+  - Name: **server2025-lan**
+  - Description: **Windows Server 2025 on LAN network**
+  - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
+  - Interfaces: select *Inside* from the dropdown
+  - Disks: **40GB** (default 32GB)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click **Console**
+- If prompted **Press any key to boot from CD or DVD...**, do so
+- Follow the Install wizard per usual
+  - Confirm Language, formats, and keyboard then **Next**
+  - Click **Install now**
+  - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Check the box then **Next**
+  - Click **Custom: Install Windows only (advanced)**
+  - Accept the installation on Drive 0, **Net**
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New > VM
+  - Template: server2025-lan
+  - Name: server2025-lan-ready
+  - Click **Create**
+- After booting, use console to set the password for Administrator
+- Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy, and accept the reboot
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
+  - The impact of not having the agent:
+    - management of the OS and advanced features like moving the VM to another pool will not be available
+- Login in
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to server2025-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
+- Shut down the Windows VM
+  - `stop-computer`
+- Convert `server2025-lan-ready` to a template
+- Now let's prepare the template VM for cloning
+  - must perform generalization to remove the security identifier (SID)
+  - allows us to rapidly clone more servers
+  - create a new VM from the template win10-lan-ready
+    - New > VM
+    - Template: server2025-lan-ready
+    - Name: server2025-lan-prep
+    - Click **Create**
+  - Open the console to server2025-lan-prep and log in
+    - Open an administrative CMD or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+  - Convert server2025-lan-prep to template
   - From now on, create Windows Server VMs from the template server2022-lan-prep
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
