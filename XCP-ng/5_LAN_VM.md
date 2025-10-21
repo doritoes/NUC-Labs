@@ -512,20 +512,25 @@ This is a bare-bones server with limited resources
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to server2025-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
+    - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM
   - `stop-computer`
-- Convert `server2025-lan-ready` to a template
+- Convert `server2025-lan-ready` to a template (Advanced tab)
 - Now let's prepare the template VM for cloning
   - must perform generalization to remove the security identifier (SID)
   - allows us to rapidly clone more servers
-  - create a new VM from the template win10-lan-ready
+  - create a new VM from the template` win10-lan-ready`
     - New > VM
-    - Template: server2025-lan-ready
-    - Name: server2025-lan-prep
+    - Template: `server2025-lan-ready`
+    - Name: `server2025-lan-prep`
     - Click **Create**
-  - Open the console to server2025-lan-prep and log in
+  - Open the console to `server2025-lan-prep` and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+      - NOTE in testing got the errors: Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
+      - Tried going back two templates but still have the issue
+      - Get-AppXProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online
+    - Get-AppxPackage -AllUsers | Remove-AppxPackage
   - Convert server2025-lan-prep to template
   - From now on, create Windows Server VMs from the template server2022-lan-prep
 - Questions to ponder:
