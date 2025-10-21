@@ -528,10 +528,12 @@ This is a bare-bones server with limited resources
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
       - NOTE in testing got the errors: Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
-      - Tried going back two templates but still have the issue
-      - Get-AppXProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online
-    - Get-AppxPackage -AllUsers | Remove-AppxPackage
-  - Convert server2025-lan-prep to template
+        - Common cause: Pending Windows updates installation
+        - Tried going back two templates (because the Windows updates kept failing) but still have the issue
+        - These 2 commands error out but the Sysprep succeeded...(!)
+          - `Get-AppXProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online`
+          - `Get-AppxPackage -AllUsers | Remove-AppxPackage`
+  - Convert `server2025-lan-prep` to template
   - From now on, create Windows Server VMs from the template server2022-lan-prep
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
@@ -550,6 +552,11 @@ Now we will configure a Guacamole server to facilitate remote access to the Lab 
 TIP The hotkey to escape a guacamole session is control-alt-shift
 
 See references:
+- https://orcacore.com/installing-apache-guacamole-on-ubuntu-24-04/
+- https://guacamole.apache.org/doc/0.8.3/gug/installing-guacamole.html
+- https://medium.com/@anshumaansingh10jan/unlocking-remote-access-a-comprehensive-guide-to-installing-and-configuring-apache-guacamole-on-30a4fd227fcd
+
+Older references:
 - https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
 - https://dae.me/blog/2698/guacamole-1-4-creation-of-websocket-tunnel-to-guacd-failed/
 
