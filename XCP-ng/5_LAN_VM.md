@@ -552,6 +552,9 @@ Now we will configure a Guacamole server to facilitate remote access to the Lab 
 TIP The hotkey to escape a Guacamole session is control-alt-shift
 
 See references:
+- https://guacamole.apache.org/doc/gug/installing-guacamole.html
+- https://www.youtube.com/watch?v=8WDewbQbDTQ
+- https://blog.51sec.org/2025/08/step-by-step-deploy-guacamole-with.html
 - https://orcacore.com/installing-apache-guacamole-on-ubuntu-24-04/
 - https://guacamole.apache.org/doc/0.8.3/gug/installing-guacamole.html
 - https://medium.com/@anshumaansingh10jan/unlocking-remote-access-a-comprehensive-guide-to-installing-and-configuring-apache-guacamole-on-30a4fd227fcd
@@ -595,130 +598,62 @@ Steps:
 - Extract and Compile Guacamole
   - `tar -xzf guacamole-server-1.6.0.tar.gz`
   - `cd guacamole-server-1.6.0`
-  - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
+  - `./configure sudo ./configure --with-systemd-dir=/usr/local/lib/systemd/system`
   - `make`
   - `sudo make install`
-  - `sudo ldconfig`
+  - Update the installed library cache
+    - `sudo ldconfig`
 - Configure Guacamole Server
   - sudo systemctl daemon-reload
-  - sudo systemctl enable guacd
-  - sudo systemctl start guacd
+  - sudo systemctl enable --now guacd
   - systemctl status guacd
+- Install Tomcat Servlet
+  - By default, Ubuntu 24.04 does not provide package for tomcat9.  we will use Ubuntu 22.04 Jammy Updates universe repos to install Apache Tomcat9
+  - echo 'deb http://ke.archive.ubuntu.com/ubuntu/ jammy-updates universe' > /etc/apt/sources.list.d/tomcat9.list
+  - sudo apt update
+  - sudo apt install tomcat9 tomcat9-admin tomcat9-common tomcat9-user -y
+  - Disable Ubuntu 22.04 Jammy updates universe repos
+  - sed -i 's/^/#/' /etc/apt/sources.list.d/tomcat9.list
+  - sudo apt update
+  - systemctl status tomcat9
+- Intall Guacamole-client
   - sudo mkdir -p /etc/guacamole/{extensions,lib}
-- Download and Install Guacamole Frontend Interface on Ubuntu 24.04 (Guacamole Web App)
-  - sudo add-apt-repository -y -s "deb http://archive.ubuntu.com/ubuntu/ jammy main universe"
-  - sudo wget https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-1.6.0.war
-  - sudo mv guacamole-1.6.0.war /var/lib/tomcat9/webapps/guacamole.war
-  - sudo systemctl restart tomcat9 guacd
-- Set up Guacamole Database Authentication on Ubuntu 24.04
-  - sudo apt install mariadb-server -y
-  - run the MySQL security script to set a password for your MariaDB:
-    - sudo mysql_secure_installation 
-- Download MySQL Java Connector for Apache Guacamole
-  - sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-9.1.0.tar.gz
-  - sudo tar -xf mysql-connector-j-9.1.0.tar.gz
-  - sudo cp mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar /etc/guacamole/lib/
-- Download Apache Guacamole JDBC AUTH Plugin
-  - sudo wget https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-auth-jdbc-1.6.0.tar.gz
-  - sudo tar -xf guacamole-auth-jdbc-1.6.0.tar.gz
-  - sudo mv guacamole-auth-jdbc-1.6.0/mysql/guacamole-auth-jdbc-mysql-1.6.0.jar /etc/guacamole/extensions/
-- Create Apache Guacamole Database and User
-  - Log in to MariaDB shell: sudo mysql -u root -p
-  - CREATE DATABASE guac_db;
-  - GRANT SELECT,INSERT,UPDATE,DELETE ON guac_db.* TO 'guac_user'@'localhost';
-  - FLUSH PRIVILEGES;
-  - EXIT;
-- Import SQL Schema Files For Guacamole
-  - cd guacamole-auth-jdbc-1.6.0/mysql/schema
-  - cat *.sql | mysql -u root -p guac_db
-- Create Properties Files For Apache Guacamole
-  - sudo vi /etc/guacamole/guacamole.properties
-  - Add following to the file with your database credentials
-    - # MySQL properties
-    - mysql-hostname: 127.0.0.1
-    - mysql-port: 3306
-    - mysql-database: guac_db
-    - mysql-username: guac_user
-    - mysql-password: password
-- sudo systemctl restart tomcat9 guacd mysql
-- Access Apache Guacamole Dashboard via Web Interface
-  - http://server-ip:8080/guacamole
-  - You must see the Guacamole login screen. Enter the following credentials to log in:
-    - username: guacadmin
-    - password: guacadmin
-- Change password
-  - Settings  Users > New User
-  - enter new account name add password
-  - <i>Check all</i> the permissions and click **Save***
+  - wget https://downloads.apache.org/guacamole/${VER}/binary/guacamole-${VER}.war -O /etc/guacamole/guacamole.war
+  - ln -s /etc/guacamole/guacamole.war /var/lib/tomcat9/webapps/
+  - systemctl restart tomcat9
+  - systemctl restart guacd
+  - bash /usr/share/tomcat9/bin/version.sh
+- Configure Apache  Guacamole 1.6.0 on Ubuntu 24.04
+  - echo "GUACAMOLE_HOME=/etc/guacamole" >> /etc/default/tomcat9
+  - vim /etc/guacamole/guacamole.properties
+    - guacd-hostname: localhost
+    - guacd-port: 4822
+    - user-mapping: /etc/guacamole/user-mapping.xml
+    - auth-provider: net.sourceforge.guacamole.net.basic.BasicFileAuthenticationProvider
+  - ln -s /etc/guacamole /usr/share/tomcat9/.guacamole
+- Configure Guacamole Authentication Method
+  - vim /etc/guacamole/user-mapping.xml
+```
+    <user-mapping>
+        
+    <!-- Per-user authentication and config information -->
 
-Old notes pending cleanup:
-  - `sudo mkdir /etc/guacamole`
-  - Create new configuration file `/etc/guacamole/guacd.conf`
-    - Example: `sudo vi /etc/guacamole.conf`
-  - Contents:
-    - `[daemon]`
-    - `pid_file = /var/run/guacd.pid`
-- Start and Enable Guacamole Service
-  - `sudo systemctl daemon-reload`
-  - `sudo systemctl start guacd`
-  - `sudo systemctl enable guacd`
-  - `sudo systemctl status guacd`
-- Install the Guacamole Web App
-  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war`
-  - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
-- Configure Apache Guacamole Database Authentication
-  - `sudo mysql_secure_installation`
-    - current root password is none (default)
-    - accept default switch to unix_socket **Y**
-    - accept default and change the root password (i.e., passtoor)
-    - accept default and remove anonymous users
-    - accept default and disallow root login remotely
-    - accept default and remote test database and access to it
-    - accept default and reload privilege tables
-  - `wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz`
-  - `tar -xzf mysql-connector-java-8.0.26.tar.gz`
-  - `sudo mkdir /etc/guacamole/lib/`
-  - `sudo mkdir /etc/guacamole/extensions/`
-  - `sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/`
-  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
-- Create a Guacamole Database, User and Scheme
-  - Copy [create-database.sql](create-database.sql)
-    - `cat create-database.sql | sudo mysql`
-    - Old way (not Unix sockets): `cat create-database.sql | mysql -u root -p`
-  - Import SQL Schema Files and Create Properties Files For Guacamole
-    - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
-    - `cat *.sql | sudo mysql -p guac_db`
-    - press enter (no password) when prompted for the password
-    - Old way (not Unix sockets) : `cat *.sql | mysql -u root -p guac_db`
-- Configure Guacamole properties (new file)
-  - sudo vi /etc/guacamole/guacamole.properties
+    <!-- A user using md5 to hash the password
+         guacadmin user and its md5 hashed password below is used to 
+             login to Guacamole Web UI-->
+    <authorize 
+            username="guacadmin"
+            password="5f4dcc3b5aa765d61d8327deb882cf99"
+            encoding="md5">
 ```
-# MySQL properties
-mysql-hostname: 127.0.0.1
-mysql-port: 3306
-mysql-database: guac_db
-mysql-username: guac_user
-mysql-password: password
-```
-  - `sudo systemctl restart tomcat9 guacd mysql`
-- Configure ssh
-  - on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
-    - `sudo vi /etc/ssh/sshd_config`
-    - `PubkeyAcceptedKeyTypes +ssh-rsa`
-    - `HostKeyAlgorithms +ssh-rsa`
-- `sudo systemctl restart sshd`
-- Create /etc/guacamole/guacd.conf with the following contents
-  - `[server]`
-  - `bind_host = 127.0.0.1`
-  - `bind_port = 4822`
-- Modify /etc/guacamole/guacamole.properties to add
-  - `# guacd properties`
-  - `guacd-hostname: 127.0.0.1`
-  - `guacd-port: 4822`
-- restart guacd
-  - `sudo systemctl restart guacd`
+- Generate the md5 hash for the user used for logging in to guacamole and replace password accordingly
+  - echo -n password | openssl md5
+  - printf '%s' password | md5sum
+- systemctl restart tomcat9 guacd
+- /var/log/syslog or /var/log/tomcat9/CATALINA-*
+- Once Guacamole is setup, you can access it from web browser using the address:  http://192.168.30.132:8080/guacamole/
+  - username: guacadmin
+  - password
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
   - `http://server-ip:8080/guacamole`
@@ -750,11 +685,10 @@ mysql-password: password
     - Disable Authentication: leave default = unchecked
     - Ignore server certificate: **CHECK THIS**
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
-  - NOTE Modify the 192.168.100.40 address to the IP address of the guacamole server
   - `configure`
-  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'`
+  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.1'`
   - `set nat destination rule 70 inbound-interface name 'eth0'`
-  - `set nat destination rule 70 translation address '192.168.100.40'`
+  - `set nat destination rule 70 translation address '192.168.100.1'`
   - `set nat destination rule 70 destination port 8080`
   - `set nat destination rule 70 translation port 8080`
   - `set nat destination rule 70 protocol 'tcp'`
@@ -778,7 +712,6 @@ mysql-password: password
 ```
 
 To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
-
 
 # Important Notes
 How to Set the Screen Size for Windows UEFI VMS on XCP-ng
