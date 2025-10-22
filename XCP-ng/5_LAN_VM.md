@@ -589,17 +589,69 @@ Steps:
 - Install dependencies
   - Copy [guac-dependencies.sh](guac-dependencies.sh)
   - `sudo bash guac-dependencies.sh`
-- Download Apache Guacamole
+- Download Apache Guacamole source code
   - official downloads page: https://downloads.apache.org/guacamole/
-    - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
+    - `wget https://downloads.apache.org/guacamole/1.6.0/source/guacamole-server-1.6.0.tar.gz`
 - Extract and Compile Guacamole
-  - `tar -xzf guacamole-server-1.5.5.tar.gz`
-  - `cd guacamole-server-1.5.5`
+  - `tar -xzf guacamole-server-1.6.0.tar.gz`
+  - `cd guacamole-server-1.6.0`
   - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
   - `make`
   - `sudo make install`
   - `sudo ldconfig`
 - Configure Guacamole Server
+  - sudo systemctl daemon-reload
+  - sudo systemctl enable guacd
+  - sudo systemctl start guacd
+  - systemctl status guacd
+  - sudo mkdir -p /etc/guacamole/{extensions,lib}
+- Download and Install Guacamole Frontend Interface on Ubuntu 24.04 (Guacamole Web App)
+  - sudo add-apt-repository -y -s "deb http://archive.ubuntu.com/ubuntu/ jammy main universe"
+  - sudo wget https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-1.6.0.war
+  - sudo mv guacamole-1.6.0.war /var/lib/tomcat9/webapps/guacamole.war
+  - sudo systemctl restart tomcat9 guacd
+- Set up Guacamole Database Authentication on Ubuntu 24.04
+  - sudo apt install mariadb-server -y
+  - run the MySQL security script to set a password for your MariaDB:
+    - sudo mysql_secure_installation 
+- Download MySQL Java Connector for Apache Guacamole
+  - sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-9.1.0.tar.gz
+  - sudo tar -xf mysql-connector-j-9.1.0.tar.gz
+  - sudo cp mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar /etc/guacamole/lib/
+- Download Apache Guacamole JDBC AUTH Plugin
+  - sudo wget https://downloads.apache.org/guacamole/1.6.0/binary/guacamole-auth-jdbc-1.6.0.tar.gz
+  - sudo tar -xf guacamole-auth-jdbc-1.6.0.tar.gz
+  - sudo mv guacamole-auth-jdbc-1.6.0/mysql/guacamole-auth-jdbc-mysql-1.6.0.jar /etc/guacamole/extensions/
+- Create Apache Guacamole Database and User
+  - Log in to MariaDB shell: sudo mysql -u root -p
+  - CREATE DATABASE guac_db;
+  - GRANT SELECT,INSERT,UPDATE,DELETE ON guac_db.* TO 'guac_user'@'localhost';
+  - FLUSH PRIVILEGES;
+  - EXIT;
+- Import SQL Schema Files For Guacamole
+  - cd guacamole-auth-jdbc-1.6.0/mysql/schema
+  - cat *.sql | mysql -u root -p guac_db
+- Create Properties Files For Apache Guacamole
+  - sudo vi /etc/guacamole/guacamole.properties
+  - Add following to the file with your database credentials
+    - # MySQL properties
+    - mysql-hostname: 127.0.0.1
+    - mysql-port: 3306
+    - mysql-database: guac_db
+    - mysql-username: guac_user
+    - mysql-password: password
+- sudo systemctl restart tomcat9 guacd mysql
+- Access Apache Guacamole Dashboard via Web Interface
+  - http://server-ip:8080/guacamole
+  - You must see the Guacamole login screen. Enter the following credentials to log in:
+    - username: guacadmin
+    - password: guacadmin
+- Change password
+  - Settings  Users > New User
+  - enter new account name add password
+  - <i>Check all</i> the permissions and click **Save***
+
+Old notes pending cleanup:
   - `sudo mkdir /etc/guacamole`
   - Create new configuration file `/etc/guacamole/guacd.conf`
     - Example: `sudo vi /etc/guacamole.conf`
