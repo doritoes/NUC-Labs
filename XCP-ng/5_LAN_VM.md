@@ -549,7 +549,7 @@ To configure a Domain File Server, see [Appendix - Create Windows File Server](A
 # Guacamole Server
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
 
-TIP The hotkey to escape a guacamole session is control-alt-shift
+TIP The hotkey to escape a Guacamole session is control-alt-shift
 
 See references:
 - https://orcacore.com/installing-apache-guacamole-on-ubuntu-24-04/
@@ -562,7 +562,8 @@ Older references:
 
 Steps:
 - Create a Ubuntu server to run Guacamole
-  - New > VM
+  - **New** > **VM**
+  - Pool: **xcg-ng-lab1**
   - Template: **ubuntu-server-lan**
   - Name: **guacamole**
   - Description: *Guacamole server on LAN network*
@@ -573,6 +574,18 @@ Steps:
     - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
+- Set a fixed IP IP address on the VyOS router
+  - Get the MAC address on the guacamole server
+    - `ip a`
+    - Get the MAC address from the enX0 interface, similar to "d6:1c:9b:0f:f3:8f"
+  - Create the reservation on the VyOS router, substituting the MAC address you identified
+    - configure
+    - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole ip-address 192.168.100.1
+    - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole mac-address <mac_address>
+    - commit
+    - save
+    - exit
+  - Reboot the guacamole server and note it gets the IP 192.168.100.1
 - Install dependencies
   - Copy [guac-dependencies.sh](guac-dependencies.sh)
   - `sudo bash guac-dependencies.sh`
