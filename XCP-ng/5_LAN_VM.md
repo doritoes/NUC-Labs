@@ -577,88 +577,63 @@ Steps:
     - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
     - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
+   - Optionally update the password for the user ubuntu
 - Set a fixed IP IP address on the VyOS router
   - Get the MAC address on the guacamole server
     - `ip a`
-    - Get the MAC address from the enX0 interface, similar to "d6:1c:9b:0f:f3:8f"
+    - Get the MAC address from the enX0 interface, similar to "2e:14:f5:3e:98:98"
   - Create the reservation on the VyOS router, substituting the MAC address you identified
     - configure
+    - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole mac <mac_address>
     - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole ip-address 192.168.100.1
-    - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole mac-address <mac_address>
     - commit
     - save
     - exit
   - Reboot the guacamole server and note it gets the IP 192.168.100.1
-- Install dependencies
-  - Copy [guac-dependencies.sh](guac-dependencies.sh)
-  - `sudo bash guac-dependencies.sh`
-- Download Apache Guacamole source code
-  - official downloads page: https://downloads.apache.org/guacamole/
-    - `wget https://downloads.apache.org/guacamole/1.6.0/source/guacamole-server-1.6.0.tar.gz`
-- Extract and Compile Guacamole
-  - `tar -xzf guacamole-server-1.6.0.tar.gz`
-  - `cd guacamole-server-1.6.0`
-  - `./configure sudo ./configure --with-systemd-dir=/usr/local/lib/systemd/system`
-  - `make`
-  - `sudo make install`
-  - Update the installed library cache
-    - `sudo ldconfig`
-- Configure Guacamole Server
-  - sudo systemctl daemon-reload
-  - sudo systemctl enable --now guacd
-  - systemctl status guacd
-- Install Tomcat Servlet
-  - By default, Ubuntu 24.04 does not provide package for tomcat9.  we will use Ubuntu 22.04 Jammy Updates universe repos to install Apache Tomcat9
-  - echo 'deb http://ke.archive.ubuntu.com/ubuntu/ jammy-updates universe' > /etc/apt/sources.list.d/tomcat9.list
-  - sudo apt update
-  - sudo apt install tomcat9 tomcat9-admin tomcat9-common tomcat9-user -y
-  - Disable Ubuntu 22.04 Jammy updates universe repos
-  - sed -i 's/^/#/' /etc/apt/sources.list.d/tomcat9.list
-  - sudo apt update
-  - systemctl status tomcat9
-- Intall Guacamole-client
-  - sudo mkdir -p /etc/guacamole/{extensions,lib}
-  - wget https://downloads.apache.org/guacamole/${VER}/binary/guacamole-${VER}.war -O /etc/guacamole/guacamole.war
-  - ln -s /etc/guacamole/guacamole.war /var/lib/tomcat9/webapps/
-  - systemctl restart tomcat9
-  - systemctl restart guacd
-  - bash /usr/share/tomcat9/bin/version.sh
-- Configure Apache  Guacamole 1.6.0 on Ubuntu 24.04
-  - echo "GUACAMOLE_HOME=/etc/guacamole" >> /etc/default/tomcat9
-  - vim /etc/guacamole/guacamole.properties
-    - guacd-hostname: localhost
-    - guacd-port: 4822
-    - user-mapping: /etc/guacamole/user-mapping.xml
-    - auth-provider: net.sourceforge.guacamole.net.basic.BasicFileAuthenticationProvider
-  - ln -s /etc/guacamole /usr/share/tomcat9/.guacamole
-- Configure Guacamole Authentication Method
-  - vim /etc/guacamole/user-mapping.xml
-```
-    <user-mapping>
-        
-    <!-- Per-user authentication and config information -->
-
-    <!-- A user using md5 to hash the password
-         guacadmin user and its md5 hashed password below is used to 
-             login to Guacamole Web UI-->
-    <authorize 
-            username="guacadmin"
-            password="5f4dcc3b5aa765d61d8327deb882cf99"
-            encoding="md5">
-```
-- Generate the md5 hash for the user used for logging in to guacamole and replace password accordingly
-  - echo -n password | openssl md5
-  - printf '%s' password | md5sum
-- systemctl restart tomcat9 guacd
-- /var/log/syslog or /var/log/tomcat9/CATALINA-*
-- Once Guacamole is setup, you can access it from web browser using the address:  http://192.168.30.132:8080/guacamole/
+- Install using the [Easy Guacamole Installer](https://github.com/itiligent/Easy-Guacamole-Installer)
+  - `wget https://raw.githubusercontent.com/itiligent/Guacamole-Install/main/1-setup.sh && chmod +x 1-setup.sh && ./1-setup.sh`
+    - enter the sudo password when prompted
+    - accept defaults
+    - make note of the mysql root password you select
+    - make note of the mysql guacamole_user password you select
+    - Optionally install TOTP and Duo for Duo MFA (untested)
+    - Optionally install LDAP if you have an LDAP directory server (untested)
+    - Optionally install Quick Connect feature (untested)
+    - Optionally install History Recorded Storage feature (untested)
+    - Optionally protect Guacamole beind Nginx reverse proxy (untested)
+      - this enables https
+    - Optionally redirect http://domain.root:8080 to /guacamole (may break DUO) (untested)
+- Note the location the log files:
+  - /var/log/syslog or /var/log/tomcat9/CATALINA-*
+- Once Guacamole is setup, you can access it from web browser
+  - Address: http://<ipaddress>:8080/guacamole/
   - username: guacadmin
-  - password
+  - password: guacadmin
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
-  - `http://server-ip:8080/guacamole`
-    - If your connection is being directed to https, it will be "Unable to connect". See [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+  - `http://<ipaddress>:8080/guacamole`
+    - We set up a fixed IP address for it in VyOS so it should be http://192.168.100.1:8080/guacamole
   - Login as `guacadmin`/`guacadmin`
+  - You can change the password this using the top-right dropdown, Settings > Preferences
+  - To add a session, top-right dropdown, Settings > Connections > New Connection
+    - Example: a Windows 10 Desktop VM
+      - Name: desktop10
+      - Location: ROOT (you can create folders to organize your connections)
+      - Protocol: RDP
+      - Maximum number of connections: 1
+      - Maximum number of connections per user: 1
+      - Hostname: IP address (or the name if it resolves in DNS)
+      - Post: blank?
+      - Connection timeout: ?
+      - Username: the username (lab)
+      - Pasword: the password
+      - Domain: blank
+      - Security mode: NLA (network level authentication)
+      - Disable Authentication: leave default = unchecked
+      - Ignore server certificate: **CHECK THIS**
+      - Click **Save**
+    - Navigate to the Home page
+    - Click on the new connection (i.e., desktop10)
   - REMEMBER the hotkey to escape a session is control-alt-shift
   - Tips for connection to Windows 10 / Server 2022
     - Protocol: RDP
@@ -696,8 +671,9 @@ Steps:
   - `save`
   - `exit`
 - From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
-- Configure re-direct to the guacamole app
-  - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
+- Configure re-direct to the Guacamole app
+  - On the guacamole server, modify the default root index file:
+    - `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -710,6 +686,17 @@ Steps:
 </body>
 </html>
 ```
+
+To enable HTTPS, enable "Protect Guacamole behind Nginx reverse proxy" during the easy installation script.
+- this enables https on the nginx proxy with a certificate that you can update late
+- you can select a self-signed certifificate or a Let's Encrypt certificate
+  - self-signed: tested
+    - failed initial test. trying A/B with IP vs name
+  - Let's Encrypt: not tested
+    - Yes add Let's Encrypt TLS support to Nginx reverse proxy
+    - Enter the public fqdn for the proxy site
+    - Enter the email address for Let's Encrypt notifications
+- url: https://<ipaddress>/guacamole (http redirects to https)
 
 To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
 
