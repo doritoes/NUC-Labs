@@ -89,7 +89,7 @@ Steps:
   - vCPU's: 2 (default, same as VOA)
   - RAM: 2GB (default, same as VOA)
   - Disks:  20GB
-  - You cannot change the disk size; we will increase it shortly
+    - You cannot change the disk size right now; we will increase it shortly
   - Under Install settings select **Custom config**
     - In "User config" section:
       - add the line: `password: changeme`
@@ -97,8 +97,12 @@ Steps:
       - you can optionally set the hostname here; be aware the "{index}" is index value, starting with "0"; if you uncomment the hostname line the hostname will be set to the "name" of the VM in XO with a zero after it (e.g., XO-Ubuntu0)
   - Click **Show advanced settings**
     - <i>Check</i> **Auto power on** (this is important)
-    - <i>Uncheck</i>: Boot VM after creation; we are going to increase the disk size
+    - <i>Uncheck</i>: Boot VM after creation; we are going to increase the disk size before we power it on
   - Click **Create**
+- In the VM's Disks tab edit the disk size to 20GB
+- Power on the VM
+- Confirm the disk size was updated
+  - `df -h`
 - Apply updates for 24.04
   - Open the VM's Console (click the Console tab)
   - Log in as `ubuntu`/`changeme`
@@ -113,12 +117,12 @@ Steps:
 - Change hostname
   - View current hostname: `hostnamectl`
   - Set the new hostname: `sudo hostnamectl set-hostname xo-ubuntu`
-  - Optionally set the pretty name: `sudhostnamectl set-hostname "XO Ubuntu Server for managing XCP-ng" --pretty`
+  - Optionally set the pretty name: `sudhostnamectl set-hostname "XO Ubuntu server for managing XCP-ng" --pretty`
   - Confirm it has changed: `hostnamectl`
 - Reboot
   - `reboot`
 - Rename the VM from XCP-ng to `xo-ubuntu`
-- Confirm the XEN guest agent is working
+- Confirm the XEN guest agent is working (we are using the image from the Hub)
   - View the VM's general tab
   - Look for "Management agent 1.0.0-proto-0.4.0 detected"
   - To manually install:
@@ -134,7 +138,7 @@ Steps
 1. `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
 2. `cd XenOrchestraInstallerUpdater`
 3. `cp sample.xo-install.cfg xo-install.cfg`
-4. `vim xo-install.cfg`
+4. `vi xo-install.cfg`
     - change PORT to "443"
     - uncomment `PATH_TO_HTTPS_CERT` line
     - uncomment `PATH_TO_HTTPS_KEY` line
