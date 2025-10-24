@@ -56,7 +56,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - reboot after updates are applied
   - Internet access using Firefox
 - Configure sharing your desktop
-  - NOTE See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for older Ubuntu version
+  - NOTE See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for an older Ubuntu version
   - Settings > System > Remote Desktop
   - Enable the Desktop Sharing slider
   - Enable Remote Control slider
