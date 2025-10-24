@@ -16,7 +16,7 @@ How to create a router to our backend "LAN"
     - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
     - Click **Create network**
 - Refresh the page or renavigate to the host's Network tab
-- On the PIF for the Inside network, click on the word "Connected" to change it to Disconnected
+- On the PIF for the Inside network, click on the word "Connected" to change it to **Disconnected**
 
 NOTE in this lab we will use the following VLAN numbers for "internal" networks, not to be trunked on the host's uplink
 - 100 = inside LAN (192.168.100.0/24)
