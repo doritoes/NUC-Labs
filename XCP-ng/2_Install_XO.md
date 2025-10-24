@@ -64,16 +64,17 @@ The default XOA VM was created on Debian 12, 2 vCPUs, 2GB RAM, 20GB storage, 1 i
 NOTE You can also build set up your XO server elsewhere, such as a VM on your Lab laptop
 
 Overview
-- Create new Ubuntu 24.04 using the Hub template
+- Create new Ubuntu 24.04 VM using the Hub template
 - Add more disk space
 - Install XO
-- Remove XOA
+- Remove XOA once it's working
 
 ## Create New Ubuntu Server Using Hub
 We will use the Hub's images to install Ubuntu 24.04.
 
 Steps:
 - Log in to the XOA web page/portal
+  - you can view the IP in the XO-LITE's Dashboard tab for the VM
 - Click **Hub** from menu on the left
 - Under **Ubuntu 24.04** click **Install** to install the image
   - accept defaults for pool and storage, and click **OK**
