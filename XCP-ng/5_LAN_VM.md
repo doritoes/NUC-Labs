@@ -153,7 +153,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y    `
     - accept the messages (default values OK)
 - Power down the VM
-  - 'sudo poweroff' or use the XO stop icon
+  - `sudo poweroff` or use the XO stop icon
 - Convert to a Template
   - Click Advanced tab > Convert to template
 - Re-create the VM from the template
