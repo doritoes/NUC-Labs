@@ -55,6 +55,8 @@ NOTES
   - From the left menu Click XOA > Updates
   - If an upgrade is available, click **Upgrade** and wait for the upgrade to complete
     - If it remains Disconnected for too long, try clicking Refresh to re-connect
+- This is a good time to add those additions SSD's for  more VDI storage
+  - New > Storage
 
 IMPORTANT XOA does not allow you to apply patches to the pool devices (the host) unless you start the trial or pay. Therefore we are going to build our own XO Server which will allow to apply patches to hosts.
 
