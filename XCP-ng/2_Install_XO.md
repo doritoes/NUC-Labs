@@ -210,6 +210,28 @@ TIP To tell Ubunutu 24.04 to refesh the IP address, `networkctl renew`
   - note the link enX0
 - `sudo networkctl renew enX0`
 
+NOTE In testing I found xo-ubuntu sometimes took a DHCP IP address from the VyOS router on the LAN, instead of from my Lab dhcp server.
+- Changing from DHCP on xo-ubuntu to static IP
+  - sudo vi /etc/netplan/50-cloud-init.yaml
+  - change `dhcp4: true` to `dhcp4: false`
+  - add the static IP, gateway, and DNS server details (see example below, your file will look different)
+  - `sudo netplan apply`
+
+Example: (modify to use your Lab's network addressing)
+```
+    network:
+      ethernets:
+        enX0:
+          dhcp4: false
+          addresses: [192.168.1.100/24]
+          routes:
+            - to: default
+              via: 192.168.1.1
+          nameservers:
+            addresses: [8.8.8.8, 8.8.4.4]
+      version: 2
+```
+
 ## Reboot the Host
 Rebooting the host will test if xo-ubuntu comes back up as expected.
 
