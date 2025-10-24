@@ -57,7 +57,7 @@ Notes:
       - Name: **SATA Drive** (customize as needed)
       - Description: **Internal SATA 4TB drive**
       - Storage type: **VDI SR** > **ext (local)**
-      - Device: **/dev/sata**
+      - Device: **/dev/sda**
       - Click **Create**
     - Internal second nvme 2TB
       - **New** > **Storage**
