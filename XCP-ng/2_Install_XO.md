@@ -215,7 +215,7 @@ Rebooting the host will test if xo-ubuntu comes back up as expected.
 
 IMPORTANT Note how long it can take for the host and then the guest to come up. Don't panic too early.
 
-- ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
+- ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you selected
 - Option 1 - `reboot`
 - Option 2 -  `xsconsole`
   - Reboot or Shutdown
@@ -230,11 +230,16 @@ IMPORTANT Note how long it can take for the host and then the guest to come up. 
 
 ## Install Pool Patches
 This is how the host system (XCP-ng) is updated. The XOA free version does not allow you to apply patches to the host! This is one of the main reasons to run our own XO on Ubuntu.
-
 - Log in to XO again
-- Home > Pools
-- Click on the host xcp-ng-lab1
-- Click the Patches tab
-- Click Install pool patches
+- **Home** > **Pools**
+- Click on the host `xcp-ng-lab1`
+- Click the **Patches** tab
+- Click **Install pool patches**
   - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
   - Click OK
+  - If you get the warning that an error occured, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing.
+- Reboot the host
+  - Click **Home** > **Hosts**
+  - Click on `xcp-ng-lab1`
+  - Click the **Console** tab
+  - `reboot`
