@@ -50,7 +50,7 @@ Notes:
   - thunderbolt nvme 4TB
 - Selecting all the drives during installation caused the system to come up with NO local storage
 - Selecting just the nvme0 4TB installed as expected
-  - To use the additional drxives
+  - To use the additional drives
     - SATA Drive
       - **New** > **Storage**
       - Host: **xcpng-lab1**
