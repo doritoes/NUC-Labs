@@ -211,27 +211,30 @@ TIP To tell Ubunutu 24.04 to refesh the IP address, `networkctl renew`
 - `sudo networkctl renew enX0`
 
 ## Reboot the Host
-1. ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
-2. Option 1 - `reboot`
-3. Option 2 -  `xsconsole`
+Rebooting the host will test if xo-ubuntu comes back up as expected.
+
+IMPORTANT Note how long it can take for the host and then the guest to come up. Don't panic too early.
+
+- ssh to the IP address of the host xcp-ng-lab1 as user root with the root password you select
+- Option 1 - `reboot`
+- Option 2 -  `xsconsole`
   - Reboot or Shutdown
   - Reboot Server
   - Press F8 to confirm
 
-IMPORTANT Note how long it can take for the host and then the guest to come up. Don't panic too early.
-
 ## Log Back In and Confirm
 1. Point browser to the XO IP
     - Example: https://192.168.1.103
-2. Log in with the user you created
+2. Log in with the user you created (i.e., `admin`)
 3. If you are able to log in, your XO server is working!
 
 ## Install Pool Patches
 This is how the host system (XCP-ng) is updated. The XOA free version does not allow you to apply patches to the host! This is one of the main reasons to run our own XO on Ubuntu.
-1. Log in to XO again
-2. Home > Pools
-3. Click on the host xcp-ng-lab1
-4. Click the Patches tab
-5. Click Install pool patches
-    - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
-    - Click OK
+
+- Log in to XO again
+- Home > Pools
+- Click on the host xcp-ng-lab1
+- Click the Patches tab
+- Click Install pool patches
+  - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
+  - Click OK
