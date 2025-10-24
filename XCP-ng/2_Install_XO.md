@@ -36,7 +36,7 @@ NOTES
     - Login: `xoa` (default)
     - Password: `labboss`
  - Click **Deploy**
- - Wait *patiently* as the XOA deployment completes (10-15 minutes)
+ - Wait *patiently* as the XOA deployment completes (10-15 minutes... well in my testing much longer 20-30 minutes))
    - downloads XOA image
    - VM deployed
    - TIP log in to the host's web portal again, and scroll to the bottom to watch the progress of these tasks (it give you and estimated completing time which is helpful)
