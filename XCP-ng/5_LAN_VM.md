@@ -229,7 +229,7 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
     - <ins>Uncheck</ins> bring over your data and continue
     - Click **Continue without this data**
     - <ins>Uncheck</ins> Make your Microsoft experience more useful and continue
-    - Flick Finish
+    - Click Finish
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
@@ -327,7 +327,7 @@ works for Windows 11 Home or Pro
   - If you chose to break the network connectivity insteady of bypassing the account creation
     - Select Set up for personal use (feel free to experiment)
     - Disconnect from the Internet and start over
-      - Option 1 - power down the voyos router for a while
+      - Option 1 - power down the VyOS router for a while
       - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
     - At *Lets's connect you to a network*
       - Click **I don't have internet**
