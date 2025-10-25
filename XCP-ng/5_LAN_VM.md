@@ -358,7 +358,6 @@ works for Windows 11 Home or Pro
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
   - `stop-computer`
-- Rename from the VM from win11-lan to win11-lan-ready
 - Convert win11-lan-ready to a template
 - Questions to ponder:
   - What are the differences between the two templates?
