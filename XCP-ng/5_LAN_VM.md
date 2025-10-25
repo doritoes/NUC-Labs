@@ -389,13 +389,13 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
   - Check the box then **Next**
-  - Click **Custom: Install Windows only (advanced)**
-  - Accept the installation on Drive 0, **Net**
-- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Click **Custom: Install Windows Operating System only (advanced)**
+  - Accept the installation on Drive 0, **Next**
+- When the system boots to "**Customize settings**" and prompts to set the Administrator's password
   - Eject the installation ISO
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
+- Click **Advanced** > **Convert to template**
 - Re-create the VM from the template
   - New > VM
   - Template: server2022-lan
@@ -403,6 +403,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Click **Create**
 - After booting, use console to set the password for Administrator
 - Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
+  - Yes, allow the server to be discovered by other hosts on the network
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
@@ -414,9 +415,6 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
       - You still need the Xen agent installed
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
-- Login in
-  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
-  - Yes, allow the server to be discovered by other hosts on the network
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -465,7 +463,7 @@ This is a bare-bones server with limited resources
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
   - Interfaces: select *Inside* from the dropdown
-  - Disks: **40GB** (default 32GB)
+  - Disks: **40GB** (default 64GB)
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console**
@@ -486,8 +484,8 @@ This is a bare-bones server with limited resources
 - Click Advanced > Convert to template
 - Re-create the VM from the template
   - New > VM
-  - Template: server2025-lan
-  - Name: server2025-lan-ready
+  - Template: `server2025-lan`
+  - Name: **server2025-lan-ready**
   - Click **Create**
 - After booting, use console to set the password for Administrator
 - Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
