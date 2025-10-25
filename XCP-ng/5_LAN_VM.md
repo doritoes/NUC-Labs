@@ -431,8 +431,8 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - allows us to rapidly clone more servers
   - create a new VM from the template win10-lan-ready
     - New > VM
-    - Template: server2022-lan-ready
-    - Name: server2022-lan-prep
+    - Template: `server2022-lan-ready`
+    - Name: **server2022-lan-prep**
     - Click **Create**
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
@@ -489,6 +489,10 @@ This is a bare-bones server with limited resources
   - Click **Create**
 - After booting, use console to set the password for Administrator
 - Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
+- Login in
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
+- Send diagnostic data to Microsoft: **Required only** then **Accept**
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
@@ -500,10 +504,6 @@ This is a bare-bones server with limited resources
       - You still need the Xen agent installed
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
-- Login in
-  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
-  - Yes, allow the server to be discovered by other hosts on the network
-- Send diagnostic data to Microsoft: **Required only** then **Accept**
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
