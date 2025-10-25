@@ -114,7 +114,7 @@ Steps:
   - `sudo apt remove -y open-vm-tools`
   - `sudo rm -r /etc/vmware-tools`
   - `sudo rm /etc/systemd/system/vmtoolsd.service`
-  - `sudo rm -r /etc/systemd/system/open-vm-tools.service.requires`
+  - `sudo rm -r /etc/systemd/system/open-vm-tools.service.requires/`
   - `sudo apt autoremove -y`
 - Change hostname
   - View current hostname: `hostnamectl`
@@ -135,6 +135,8 @@ Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
 
 TIP ssh to the server for easier copy/paste of commands
 - the IP address is shown on the General tab
+
+NOTE if you are going to change the IP address of the xo-ubuntu server (fixed IP, static), consider doing that before you start this process
 
 Steps
 1. `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
@@ -247,10 +249,10 @@ IMPORTANT Note how long it can take for the host and then the guest to come up. 
   - Press F8 to confirm
 
 ## Log Back In and Confirm
-1. Point browser to the XO IP
-    - Example: https://192.168.1.103
-2. Log in with the user you created (i.e., `admin`)
-3. If you are able to log in, your XO server is working!
+- Point browser to the XO IP
+  - Example: https://192.168.1.103
+- Log in with the user you created (i.e., `admin`)
+- If you are able to log in, your XO server is working!
 
 ## Install Pool Patches
 This is how the host system (XCP-ng) is updated. The XOA free version does not allow you to apply patches to the host! This is one of the main reasons to run our own XO on Ubuntu.
@@ -261,7 +263,7 @@ This is how the host system (XCP-ng) is updated. The XOA free version does not a
 - Click **Install pool patches**
   - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
   - Click OK
-  - If you get the warning that an error occured, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing.
+  - If you get the warning that an error occured, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing
 - Reboot the host
   - Click **Home** > **Hosts**
   - Click on `xcp-ng-lab1`
