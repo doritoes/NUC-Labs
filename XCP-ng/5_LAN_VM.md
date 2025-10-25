@@ -96,7 +96,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Desktop on LAN" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu desktop on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Optionally create another VM from the same template and experiment
 
