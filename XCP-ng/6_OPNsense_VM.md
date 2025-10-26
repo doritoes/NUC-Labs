@@ -1,7 +1,7 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
 
-📓 This Lab was built using OPNsense-24.1. Soon after 24.7 was released with a complete re-work of the interface. Re-deploying the lab using 
+In this lab we will be using OPNsense 25.7
 
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
@@ -27,7 +27,7 @@ References:
       - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
       - Click **Create network**
     - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-    - Under the list of PIFs (physical interfaces), find the new Pentesting interface, click **Status** to  disconnect it from your the eth0 interface
+    - Under the list of PIFs (physical interfaces), find the new Pentesting interface, click **Status** to  <i>disconnect</i> it from your the eth0 interface
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
