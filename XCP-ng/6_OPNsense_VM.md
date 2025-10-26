@@ -258,10 +258,6 @@ Steps:
     - Destination port range: any to any
     - Redirect target IP: 127.0.0.1
     - Redirect target port: other: 9040
-    - Quick: Checked
-    - Interface: LAN
-    - Direction: in
-    - TCP/IP Version: IPv4
     - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
     - Description: Use Tor for tcp traffic
   - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
@@ -275,6 +271,8 @@ Steps:
   - While we are here, we can clean up the logs by NOT logging our lab network mDNS to get logged on the OPNsense firewall
   - Add rule
     - Action: Block
+    - Disabled: Unchecked
+    - Quick: Checked
     - Disabled: No
     - Interface: WAN
     - Direction: in
@@ -287,7 +285,7 @@ Steps:
     - Description: Do not log mDNS drops
     - Click **Save** then click **Apply changes**
 - Reboot the firewall
-  - Power > Reboot > confirm
+  - Power > Reboot > **Yes**
 
 ### Test TOR access
 - Using the pentest VM's browser connect to https://check.torproject.org
@@ -309,4 +307,4 @@ Steps:
     - Click Relaunch at the bottom to restart Chrome
     - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
     - `tcpdump -nni vtnet0 proto 17 and port 443`
-- REMEMBER Tor supports TCP only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor
+- REMEMBER Tor supports tcp only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor
