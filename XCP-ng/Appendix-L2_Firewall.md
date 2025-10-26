@@ -27,6 +27,9 @@ Overview:
 - Set LAN and WAN interfaces to type "none"
 - Apply Changes
 
+# Modify the Network
+🌱 do we need to add something to XCP-ng here?
+
 # Create OPNSense VM
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
@@ -34,26 +37,28 @@ Overview:
   - Name: **opnsenseL2**
   - Description: *opnsense Layer 2 firewall*
   - CPU: **4 vCPU**
-  - RAM: **2GB**
+  - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB, warnings appear for less than 3GB)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interfaces:
     - Network: from the dropdown select the **pool-wide host network (eth0)**
+    - Management interface
+  - 🌱 Revaluating the L2 bridge requirements, set up OPNsense with single LAN, then add extra NICs during installation
   - Second Interface: Click **Add interface**
-    - Network: from the dropdown select the **Inside**
+    - Network: from the dropdown select the **Bridge Inside**
+  - Third Interface: Click **Add interface**
+    - Network: from the dropdown select the **Bridge Outside**
   - Disks: Click **Add disk**
-    - Add **20GB** disk
+    - Add **32GB** disk
   - Click **Show advanced settings**
     - Check **Auto power on**
   - Click **Create**
-- The details for the new VyOS VM are now displayed
+- The details for the new OPNsense VM are now displayed
 - Click the **Network** tab
   - Next to each interface is a small settings icon with a blue background
   - For every interface click the gear icon then <ins>disable TX checksumming</ins>
 - Click **Console** tab and watch as the system boots
 - Click the **Network** tab
-  - Next to each interface there is a gear icon
-  - Click each gear icon and <ins>disable TX checksumming</ins>
 
 # Install OPNsense
 - Log in as `installer`/`opnsense`
@@ -64,20 +69,23 @@ Overview:
   - much more stable under power failure or hard reboots
 - Accept the disk to install on
   - You need to check the box (use space bar)
-  - Accept erasing the disk
-- Select a root password when prompted
-- Select Complete Install
-- Eject the ISO (click the icon on Console tab)
+  - **Yes**, accept erasing the disk
+- Select a **Root Password** when prompted
+- Select **Complete Install**
+- Select **Reboot now**
+- Eject the ISO once the reboot starts (click the icon on Console tab)
 - Wait for the system to boot
-- The firewall is now configured with default settings
 
-# Configure OPNsense LAN DHCP
+# Configure OPNsense
 - Log in to Console user `root` with the password you selected
 - 1) Assign interfaces
   - LAGGs? **No**
   - VLANs? **No**
-  - WAN interface name: **xn0**
-  - LAN interface name: **xn1**
+  - WAN interface name: **none**
+  - LAN interface name: **xn0**
+  - Optional interface:
+  - OPT1 interface name: **xn1**
+  - OPT2 interface name: **xn2**
   - Optional interface: *just press enter*
   - Proceed: **Yes**
 - 2) Set interface IP addresses
@@ -87,12 +95,43 @@ Overview:
     - Mask bits: **24**
     - Upstream gateway: *press Enter to accept no gateway*
     - IPv6 address: **No**, **No**, and **None** (press Enter)
-    - Enable DHCP server on LAN: **Yes**
-    - Start of range: **192.168.1.10**
-    - End of range: **192.168.1.250**
+    - Enable DHCP server on LAN: **No**
     - Change to HTTP: **No**
     - Generate new self-signed web GUI certificate? **No**
     - Restore web GUI defaults? **No**
+  - WAN
+    - there is no WAN
+- Create the bridge
+  - Interfaces > Devices > Bridge
+  - ADD a new bridge, select the other 2 interfaces OPT1, OPT2 (for example)
+  - Save the new bridge
+- The OPT1 and OPT2 interfaces should NOT have any IP address configuration
+  - they should be enabled, that's it
+- Interfaces > Assignments
+  - Change LAN to bridge0 (Bridge)
+  - Swap LAN cable from LAN to one of the NICs added to the bridge, wait for the interfaces comes back up (refresh web page)
+  - Reassign the original LAN interfaces to ibg0, or whether the physical is; add new interface and select it
+- Configure the Bridge
+  - Interfaces > Devices > Bridge
+  - Add the newly created interface to the bridge
+  - (if using IPv6, check Enable link-local address
+  - Remember the new interface needs to be enabled
+- System Tunables
+  - System > Settings > Tunables
+    - net.link.bridge.pfil_member = 0
+      - Set to 0 to disable filtering on the incoming and outgoing member interfaces
+    - net.link.bridge.pfil_bridge = 1
+      - Set to 1 to enable filtering on the bridge interfaces
+    - Save
+- Confirm interface assignments
+  - LAN bridge0
+  - OPT1 igb2 (mac)
+  - OPT2 igb3 (mac)
+  - OTP3 igb1 (mac)
+  - WAN igb0 (mac)
+  - New interface ovpns1 (00:00:00:00:00:00)
+- Reboot
+- Test
 
 # Create a Desktop VM
 - New > VM
@@ -191,6 +230,7 @@ Overview:
     - IPv4 Configuration Type: **None**
     - Click **Save**
 - Apply the Changes
+
 # Testing
 In lab testing this did NOT work. DHCP does not work to pass through the IP address from outside the L2 firewall.
 
