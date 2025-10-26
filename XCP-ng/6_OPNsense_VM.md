@@ -56,9 +56,9 @@ Or, if you created local storage, upload the ISO there.
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **opnsense**
-  - Description: *opnsense pentesting lab firewall*
+  - Description: *opnsense pentesting Lab firewall*
   - CPU: **4 vCPU**
-  - RAM: **2GB**
+  - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB, warnings appear for less than 3GB)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interface:
@@ -66,7 +66,7 @@ Or, if you created local storage, upload the ISO there.
   - Second Interface: Click **Add interface**
     - Network: from the dropdown select the **Pentesting** network you created earlier
   - Disks: Click **Add disk**
-    - Add **20GB** disk
+    - Add **32GB** disk
   - Click **Show advanced settings**
     - Check **Auto power on**
   - Click **Create**
@@ -85,10 +85,11 @@ Or, if you created local storage, upload the ISO there.
   - much more stable under power failure or hard reboots
 - Accept the disk to install on
   - You need to check the box (use space bar)
-  - Accept erasing the disk
-- Select a root password when prompted
-- Select Complete Install
-- Eject the ISO once the reboot starts (click the icon on Console tab)
+  - **Yes**, accept erasing the disk
+- Select a **Root Password** when prompted
+- Select **Complete Install**
+- Select **Reboot now**
+- Eject the ISO once the reboot starts (click the eject icon on Console tab)
 - Wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) **Assign interfaces**
@@ -121,7 +122,7 @@ Or, if you created local storage, upload the ISO there.
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
+  - Select the **win11-lan-ready** or **ubuntu-desktop-lab** template
   - Name: **pentest-workstation**
   - <ins>Change</ins> the Interface to **Pentesting**
   - Click **Create**
@@ -132,24 +133,20 @@ Or, if you created local storage, upload the ISO there.
     - General information
       - Hostname: **pentestfw**
       - Domain: **xcpng.lab**
-      - Primary DNS Server: **8.8.8.8** (we want unfiltered DNS for this network)
-      - Secondary DNS Server: **8.8.4.4**
+      - DNS Servers: **8.8.8.8** and **8.8.4.4** (we want unfiltered DNS for this network)
       - <ins>Uncheck</ins> Override DNS
       - Click **Next**
-    - Time server information
-      - Leave the default time server
-      - Optionally adjust the Timezone
-      - Click **Next**
     - Configure WAN Interface
-      - Review the information, default values are OK
-      - Click **Next**
+      - Type DHCP
+      - <i>Uncheck</i> Block RFC1918 Private Networks since the "WAN" is connected to our lab which uses private RFC1918 address space
+        - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
+        - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
     - Configure LAN Interface
       - Review and click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
     - Click **Reload**
   - Update OPNsense
-    - Log back in
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
     - Read and accept the information provided
@@ -159,9 +156,12 @@ Or, if you created local storage, upload the ISO there.
   - Install Xen guest utilities
     - System > Firmware > Plugins
       - os-xen - click "+" to install
-      - Reboot (Power > Reboot > Yes)
+      - Reboot (**Power** > **Reboot** > **Yes**)
     - In XO, look at the opnsense VM general tab; management agent is now detected
+- Test Internet access from the pentesting network computer to confirm Internet access is still working
 - Configure Firewall Rules
+  - Log back in to OPNsense web GUI
+    - https://192.168.101.254
   - Firewall > Rules
     - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
@@ -174,6 +174,7 @@ Or, if you created local storage, upload the ISO there.
     - Click Save
     - Click Apply Changes
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
+  - In a later step we will create rules to further isolate the pentesting network from the Lab network
 
 # Isolate the Pentesting Lab
 It is always best practice to operate in an isolated Pentesting network. If you must access the internet, take precautions:
