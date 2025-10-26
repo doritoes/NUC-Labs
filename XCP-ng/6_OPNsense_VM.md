@@ -169,11 +169,11 @@ Or, if you created local storage, upload the ISO there.
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Because our "WAN" is on a RFC1918 network
+  - Because our "WAN" is on a RFC1918 network, double check this setting
     - Click Interfaces > WAN
-    - Uncheck Block private networks
-    - Click Save
-    - Click Apply Changes
+    - <i>Uncheck</i> Block private networks
+    - Click **Save**
+    - Click **Apply Changes**
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
   - In a later step we will create rules to further isolate the pentesting network from the Lab network
 
@@ -188,14 +188,19 @@ Best practice is to stop and finish setting up any parts you want to update over
 Then continue with the following steps to lock things down safely.
 
 ## Disable Internet and DNS
-1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
-2. Block DNS traffic from 192.168.101.0/24 to the firewall
-    - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
+Why are we disabling Internet including DNS access? Because we only want traffic to get to the Internet via Tor. DNS leaks data about your activity and is used as a covert channel that operate through DNS to the Internet.
+
+- Log in to the console of the system on the pentesting network that you are using to configure OPNsense
+- Firewall > Rules LAN
+  - Change the IPv4 rule to be a Block action
+  - Change the IPv6 rule to be a Block action
+  - Click **Apply changes**
+
 ## Configure TOR
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
-- You many choose to configure the firewall to instead use a VON service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
+- You many choose to configure the firewall to instead use a VPN service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
 
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
@@ -205,9 +210,7 @@ References:
 - https://docs.huihoo.com/m0n0wall/opnsense/manual/how-tos/tor.html
 
 Steps:
-- From VM's browser, check the current public IP address, without TOR
-  - http://ipchicken.com
-- Log in to firewall https://192.168.101.254
+- From the pentest network VM's browser log in to OPNsense (https://192.168.101.254)
 - System > Firmware > Plugins
   - os-OPNproxy - click "+" to install
     - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
