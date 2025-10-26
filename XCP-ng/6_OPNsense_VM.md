@@ -155,7 +155,8 @@ Or, if you created local storage, upload the ISO there.
     - Log back in and check if there are any more updates
   - Install Xen guest utilities
     - System > Firmware > Plugins
-      - os-xen - click "+" to install
+      - Check **Show community plugins**
+      - **os-xen** - click "+" to install
       - Reboot (**Power** > **Reboot** > **Yes**)
     - In XO, look at the opnsense VM general tab; management agent is now detected
 - Test Internet access from the pentesting network computer to confirm Internet access is still working
