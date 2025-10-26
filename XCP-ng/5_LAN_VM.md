@@ -518,15 +518,15 @@ This is a bare-bones server with limited resources
 - Now let's prepare the template VM for cloning
   - must perform generalization to remove the security identifier (SID)
   - allows us to rapidly clone more servers
-  - create a new VM from the template` win10-lan-ready`
+  - create a new VM from the template `server2025-lan-ready`
     - New > VM
     - Template: `server2025-lan-ready`
     - Name: `server2025-lan-prep`
     - Click **Create**
   - Open the console to `server2025-lan-prep` and log in
-    - Open an administrative CMD or powershell window
+    - Open an administrative cmd or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-      - NOTE in testing got the errors: Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
+      - NOTE once in testing got the errors Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
         - Common cause: Pending Windows updates installation
         - Tried going back two templates (because the Windows updates kept failing) but still have the issue
         - These 2 commands error out but the Sysprep succeeded...(!)
@@ -540,6 +540,7 @@ This is a bare-bones server with limited resources
   - What are the advantages of each template?
 - Optionally create VMs from each template and experiment
   - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
+  - How would you manage licensing in a production environment?
 
 To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
 
@@ -574,13 +575,13 @@ Steps:
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
    - Optionally update the password for the user ubuntu
 - Set a fixed IP IP address on the VyOS router
   - Get the MAC address on the guacamole server
     - `ip a`
-    - Get the MAC address from the enX0 interface, similar to "2e:14:f5:3e:98:98"
+    - Get the MAC address from the enX0 interface, similar to "7a:6e:98:43:b1:26"
   - Create the reservation on the VyOS router, substituting the MAC address you identified
     - configure
     - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole mac <mac_address>
@@ -670,7 +671,7 @@ Steps:
   - `save`
   - `exit`
 - From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
-- Configure re-direct to the Guacamole app
+- Configure re-direct to the Guacamole app with http and port 80/http:
   - On the guacamole server, modify the default root index file:
     - `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
 ```
@@ -689,18 +690,17 @@ Steps:
 To enable HTTPS, enable "Protect Guacamole behind Nginx reverse proxy" during the easy installation script.
 - this enables https on the nginx proxy with a certificate that you can update late
 - you can select a self-signed certifificate or a Let's Encrypt certificate
-  - self-signed: tested
-    - failed initial test. trying A/B with IP vs name
+  - self-signed: tested ✅
   - Let's Encrypt: not tested
     - Yes add Let's Encrypt TLS support to Nginx reverse proxy
     - Enter the public fqdn for the proxy site
     - Enter the email address for Let's Encrypt notifications
-- url: https://<ipaddress>/guacamole (http redirects to https)
-
-To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+    - etc., etc.
+- url: https://<ipaddress> (http redirects to https, no need to add /guacamole)
+- because the port changes from 8080 to 443, you will need to update the VyOS router config from 8080 to 443
 
 # Important Notes
-How to Set the Screen Size for Windows UEFI VMS on XCP-ng
+How to Set the Screen Size for Windows UEFI VMs on XCP-ng
 - Modify the VM advanced settings to increase Video RAM from 8MB to 16MB
 - Open the console of the virtual machine.
 - Start the virtual machine.
