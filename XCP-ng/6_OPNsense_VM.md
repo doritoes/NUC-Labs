@@ -212,104 +212,101 @@ References:
 Steps:
 - From the pentest network VM's browser log in to OPNsense (https://192.168.101.254)
 - System > Firmware > Plugins
-  - os-OPNproxy - click "+" to install
-    - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
-    - Services > Squid Web Proxy > Administration
-      - Enable proxy and click Apply
-      - Click Forward proxy
-        - Proxy interfaces: LAN
-        - Check Enable Transparent HTTP proxy
-        - Click Apply
+  - Check Show community plugins
   - os-tor - click "+" to install
 - Refresh the page
-- Click **Services** > **Tor** > **Configuration**
-  - General Tab
-    - Enable: Yes
-    - Listen Interfaces: LAN
-    - Enable Advanced Mode
-      - Check **Enable Transparent Proxy**
-      - Confirm SOCKS port number: 9050
-      - Confirm Control Port: 9051
-      - Confirm Transparent port: 9040
-      - Confirm Transparent DNS port: 9053
-  - Click **Save**
-- **Firewall** > **Rules** > **LAN**
-  - Add rule to top of policy
-    - Action: Pass
+- Click Services > Tor > Configuration > General
+  - Enable: Yes
+  - Listen Interfaces: LAN (only)
+  - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
+  - Enable Advanced Mode
+    - Confirm SOCKS port number: 9050
+    - Confirm Control Port: 9051
+    - Check Enable Transparent Proxy
+    - Confirm Transparent port: 9040
+    - Confirm Transparent DNS port: 9053
+  - Click Save
+- Services > Tor > Configuration > SOCKS Proxy ACL
+    - Add a new ACL
+      - Enable: Yes
+      - Protocol: IPv4
+      - Network: 192.168.101.0/24
+      - Action: Accept
+      - Click Save
+      - Click Reload Service
+  - Firewall > NAT  > Port Forward
+    - Add a rule
+    - Disabled: No
+    - Interface: LAN (only)
+    - TCP/IP Version: IPv4
+    - Protocol: TCP/IP
+    - Source: Advanced > LAN net
+    - Destination: any
+    - Destination port range: DNS to DNS
+    - Redirect target IP: 127.0.0.1
+    - Redirect target port: other: 9053
+    - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
+    - Description: Use Tor for DNS
+    - Click **Save**
+  - Add rule below (at the end)
+    - Disabled: No
+    - Interface: LAN (only)
+    - TCP/IP Version: IPv4
+    - Protocol: TCP
+    - Source: Advanced > LAN net
+    - Destination: any
+    - Destination port range: any to any
+    - Redirect target IP: 127.0.0.1
+    - Redirect target port: other: 9040
     - Quick: Checked
     - Interface: LAN
     - Direction: in
     - TCP/IP Version: IPv4
-    - Protocol: TCP/UDP
-    - Source: LAN net
-    - Destination: This Firewall
-    - Destination port range: From 53 to 53 (DNS)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: Allow DNS to firewall
-    - Click Save
-    - Move the new rule to the top if necessary
-      - Put a Check next to new rule Allow DNS to Firewall
-      - Click the arrow icon to the right of the first rule to move it to the top
-    -  Allow LAN net to This Firewall IP for TCP/IP DNS
-  -  Add a second rule just below it
-      - Action: Block
-      - Quick: Checked
-      - Interface: LAN
-      - Direction: in
-      - TCP/IP Version: IPv4
-      - Protocol: TCP/UDP
-      - Source: LAN net
-      - Destination: any
-      - Destination port range: From 53 to 53 (DNS)
-      - Log: This is not recommended for this Lab, but enable if you wish
-      - Description: Deny unsanctioned DNS
-      - Click Save
-    - Move the new rule below the first rule if necessary
-      - Put a Check next to new rule Deny unsanctioned DNS
-      - Click the arrow icon to the right of the <ins>second</ins> rule to move it to the second position
-    -  Allow LAN net to This Firewall IP for TCP/IP DNS
-  - Click Apply Changes
-- **Firewall** > **NAT** > **Port Forward**
+    - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
+    - Description: Use Tor for tcp traffic
+  - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
+  - Click **Apply changes**
+- Firewall > Rules > LAN
+  - Move the automatic rules to the top
+  - First, allow any to 127.0.0.1 port 9053
+  - Next, allow any to 127.0.0.1 port 9040
+  - The last two rules should be block rules
+- Firewall > Rules > WAN
+  - While we are here, we can clean up the logs by NOT logging our lab network mDNS to get logged on the OPNsense firewall
   - Add rule
-    - Click the "+" to add a rule
-    - Interface: **LAN** (be sure you ONLY select LAN)
-    - TCP/IP Version: **IPv4**
-    - Protocol: **TCP** (TOR rejects UDP packets except for DNS requests)
-    - Source: **LAN net**
-    - Source port range: **any**
-    - Destination: **ANY**
-    - Destination Port: **ANY**
-    - Redirect Target IP: Single Host or Network: **127.0.0.1**
-    - Redirect Target Port: (other) **9040** (this is the Transparent TOR port)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: **Port forward to Tor**
-    - NAT reflection:
-      - System default ?
-    - Filter rule association:
-      - (default) add associated filter rule, didn't work
-      - trying None
-    - Click **Save**
-    - Click **Apply changes**
+    - Action: Block
+    - Disabled: No
+    - Interface: WAN
+    - Direction: in
+    - TCP/IP Version: IPv4
+    - Protocol: UDP
+    - Source: any
+    - Destination: Single host or Network: 224.0.0.251
+    - Destination port range: (other) 5353 to (other) 5353
+    - Log: No
+    - Description: Do not log mDNS drops
+    - Click **Save** then click **Apply changes**
 - Reboot the firewall
   - Power > Reboot > confirm
-- Using your browser connect to https://check.torproject.org
-  - You should see "Congratulations. This browser is configured to use Tor."
-  - Having issues connecting to the Internet?
-    - If may take a moment for the Tor circuits to be build
-      - Services > Tor > Diagnostics > Circuits
-    - Is DNS working from the command line, but you don't have web access?
-      - check the NAT: Port Forward rule <ins>carefully<ins>
-      - check Tor configuration
-    - restart Tor: Lobby > Dashboard > Under services, find the restart button next to tor
 
 ### Test TOR access
-- From VM's browser, check the public IP address <ins>with</ins> TOR
+- Using the pentest VM's browser connect to https://check.torproject.org
+  - You should see "Congratulations. This browser is configured to use Tor."
+- From VM's browser, check the public IP address <ins>with</ins> Tor
   - http://ipchicken.com
-- Try updating your VM's OS
+- Try updating your VM's OS using toor (Linux example below)
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
-
-### Confirm privacy
-TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
-
-Now test `ping` commands to the Internet. Are they leaking outside the tunnel?
+- Check for leaks (privacy issues)
+  - on firweall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
+    - `tcpdump -nni vtnet0 port 53`
+  - next check for icmp ping leak by running tcpdump while you test pings to the Internet (i.e., `ping 8.8.8.8`)
+    - `tcpdump -nni vtnet0 icmp`
+  - finally check for udp leaks by running tcpdump and generating QUIC udp/443 traffic
+    - install Chrome
+    - chrome://flags
+    - Search for Experimental QUIC protocol; in the dropdown next to it select Enabled
+    - Click Relaunch at the bottom to restart Chrome
+    - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
+    - `tcpdump -nni vtnet0 proto 17 and port 443`
+- REMEMBER Tor supports TCP only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor
