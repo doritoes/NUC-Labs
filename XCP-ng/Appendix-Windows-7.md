@@ -25,9 +25,11 @@ Steps:
 - **Ask me later** since Windows 7 is out of support
 - Update timed/date settings and **Next**
 - Computer's location **Work network** (feel free to experiment)
+- Eject the installation ISO
 
 Testing:
-- got IP address from OPNsense ok
+- got IP address from OPNsense firewall OK
+- the tools ISO didn't install the tools correctly, can't reach the web site to download
 - http access "works" like http://icanhazip.com and somewhat abcnews.com
 - but a lot of things are broken like http://sethholcomb.com
 - https things break because IE 8 is REALLY insecure
