@@ -36,4 +36,4 @@ Testing:
   - Chrome 107 was last to support Windows 7
   - https://github.com/e3kskoy7wqk for forks
   - https://github.com/win32ss/supermium
-- does it work outside the pentesting lab?
+- 🌱 Does it work outside the pentesting lab?
