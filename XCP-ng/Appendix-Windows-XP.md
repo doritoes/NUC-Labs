@@ -1,7 +1,7 @@
 # Tested Windows XP Installations
 NOTE This is for the pentesting Lab environment.
 
-IMPORTANT Requires and XP Pro licence key (https://github.com/fuwn/xp)
+IMPORTANT Requires an XP Pro licence key (https://github.com/fuwn/xp)
 
 ISO: en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso
 - Template: Other install media
