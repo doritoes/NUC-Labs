@@ -1,0 +1,28 @@
+# Tested Ununtu 4.10 Wary Warthog Installation
+NOTE This is for the pentesting Lab environment.
+
+ISO: warty-release-install-amd64.iso
+- Template: Other install media
+- 1 vCPU
+- 2 GB RAM
+- 128GB hard drive
+- Boot firmware: bios
+
+Examining advanced settings:
+- NIC Realtek RTL8139
+- Viridian: enabled
+- VGA: disabled
+
+Steps:
+- Press ENTER to boot
+- Confirm language, Location, Keyboard
+- Enter the hostame and press enter
+- Accept "Erase entire disk"
+- **Yes**, write these changes to disk
+- **Continue** to finish installation
+- Eject the installation ISOchom
+
+Testing:
+- Extremely slow first boot
+- :?: got IP address from OPNsense firewall
+- :?: Internet access works
