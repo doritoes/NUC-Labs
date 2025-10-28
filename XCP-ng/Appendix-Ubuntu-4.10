@@ -20,9 +20,16 @@ Steps:
 - Accept "Erase entire disk"
 - **Yes**, write these changes to disk
 - **Continue** to finish installation
-- Eject the installation ISOchom
+- Eject the installation ISO
+- Extremely slow first boot
+- Select time zone and OK
+- Full name for the new user
+- Username for your account
+- Password
+- Download software from the Internet? **No**, this version is unsupported
+
 
 Testing:
-- Extremely slow first boot
+- :?: so slow haven't tested yet
 - :?: got IP address from OPNsense firewall
 - :?: Internet access works
