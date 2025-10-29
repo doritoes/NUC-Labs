@@ -30,10 +30,12 @@ Steps:
 - Video: add or remove video resolutions for the X server to support, then **OK**
 - When setup is complete, **Ok**
 
-
 Testing:
-- mouse control was broken; after reboot....
-- :?: does ctrl at F3-F6 switch to console, and ctrl-alt F2 or F7 switch back to GUI?
-- :?: so slow haven't tested yet
-- :?: got IP address from OPNsense firewall
-- :?: Internet access works
+- mouse control was broken is uncontrollable
+  - press Ctrl-Alt-F2 (through F6) to switch to console and log in
+  - press Ctrl-Alt-F7 to switch back to gui
+  - to fix this in VirtualBox, you switch the pointing device to PS/2
+  - not able to figure out how to do this in XCP-ng
+- got IP address from OPNsense firewall
+- nslookup works
+- wget can read http sites like http://icanhazip.com but not https sites
