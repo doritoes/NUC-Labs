@@ -27,9 +27,13 @@ Steps:
 - Username for your account
 - Password
 - Download software from the Internet? **No**, this version is unsupported
+- Video: add or remove video resolutions for the X server to support, then **OK**
+- When setup is complete, **Ok**
 
 
 Testing:
+- mouse control was broken; after reboot....
+- :?: does ctrl at F3-F6 switch to console, and ctrl-alt F2 or F7 switch back to GUI?
 - :?: so slow haven't tested yet
 - :?: got IP address from OPNsense firewall
 - :?: Internet access works
