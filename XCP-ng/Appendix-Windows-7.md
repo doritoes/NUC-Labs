@@ -35,5 +35,5 @@ Testing:
 - https things break because IE 8 is REALLY insecure
   - Chrome 107 was last to support Windows 7
   - https://github.com/e3kskoy7wqk for forks
-  - https://github.com/win32ss/supermium
+  - https://github.com/win32ss/supermium - https://www.win32subsystem.live/supermium/
 - 🌱 Does it work outside the pentesting lab?
