@@ -61,15 +61,13 @@ IMPORTANT NOTES
         - Click **Create network**
 
 # Download the ISO and SmartConsole Client
-For this lab we are using [R81.20](https://support.checkpoint.com/results/sk/sk173903)
-
-- Download Check Point R81.20 Gaia Fresh Install iso
-  - https://support.checkpoint.com/results/download/124397
-- Download the R81.20 SmartConsole package
-  - https://sc1.checkpoint.com/documents/Jumbo_HFA/R81.20_SC/R81.20/R81.20_Downloads.htm
-  - Check Point has begun blocking SmartConsole client downloads if you don't have
+For this lab we are using [R820](https://support.checkpoint.com/results/sk/sk181127)
+- Download Check Point R82 Gaia Fresh Install iso
+  - https://support.checkpoint.com/results/download/135012
+- Download Check Point R82 SmartConsole package
+  - https://support.checkpoint.com/results/download/139568
+- Check Point has begun blocking SmartConsole client downloads if you don't have
     - an account
-    - a "software subscription" to download the file (my private account has CCSE and CCSM but it can't download the client any more
   - We will cover the workarounds
     - Use the link from within the SMS Web GUI
     - Use the web version of SmartConsole
@@ -84,13 +82,13 @@ Or, if you created local storage, upload the ISO there.
 - Click Import
 
 # Create Windows Workstation
-This Windows 10 workstation will be used to build  the environment and later manage it.
+This Windows 11 workstation will be used to build  the environment and later manage it.
 
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
-  - Template: **win10-lan-ready**
+  - Template: **win11-lan-ready**
   - Name: **checkpoint-console**
-  - Description: **R81.20 Check Point SmartConsole**
+  - Description: **R82 Check Point SmartConsole**
   - First Interface:
     - Network: from the dropdown select the **Pool-wide network associated with eth0**
     - This will allow us to download files and packages all allow setting up the Check Point management network
@@ -120,18 +118,17 @@ This Windows 10 workstation will be used to build  the environment and later man
 
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
-- https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_RN/Content/Topics-RN/Open-Server-Hardware-Requirements.htm
+- https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_RN/Content/Topics-RN/Open-Server-Hardware-Requirements.htm
 
 Steps:
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **R81.20 Check Point Template**
+  - Description: **R82 Check Point Template**
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
-  - RAM: **4GB**
-    - SMS requires more; we will increase this later
+  - RAM: **8GB** (more than R81.20)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface:
@@ -218,7 +215,7 @@ Steps:
   - Select the pool **xcgp-ng-lab1**
   - Template: **checkpoint-template**
   - Name: **checkpoint-sms**
-  - Description: **R81.20 Check Point SMS**
+  - Description: **R82 Check Point SMS**
   - CPU: **4 vCPU**
   - RAM: **6GB** minimum in a Lab; do 8GB if you can
   - Interfaces: Remove all interfaces except **Check Point Management**
@@ -238,7 +235,7 @@ Steps:
     - Select the pool **xcgp-ng-lab1**
     - Template: **checkpoint-template**
     - Name: **checkpoint-gw1**
-    - Description: **R81.20 Check Point Gateway 1**
+    - Description: **R82 Check Point Gateway 1**
     - CPU: **4 vCPU**
     - RAM: **4GB**
     - Click **Create**
@@ -259,7 +256,7 @@ Steps:
     - Select the pool **xcgp-ng-lab1**
     - Template: **checkpoint-template**
     - Name: **checkpoint-gw2**
-    - Description: **R81.20 Check Point Gateway 2**
+    - Description: **R82 Check Point Gateway 2**
     - CPU: **4 vCPU**
     - RAM: **4GB**
     - Click **Create**
@@ -280,7 +277,7 @@ Steps:
 - On the Windows workstation, point browser to https://192.168.103.4
 - Log in as `admin` and the password you selected
 - Complete First Time Configuration Wizard (FTCW) aka 'FTW'
-  - Continue with R81.20 configuration
+  - Continue with R82 configuration
   - Accept the Management connection configuration
     - Add Default gateway **192.168.103.1**
   - Host Name: **SMS**
@@ -327,7 +324,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
 ## GW1
 - On the Windows workstation, point browser to https://192.168.103.2
 - Complete First Time Configuration Wizard (FTCW)
-  - Continue with R81.20 configuration
+  - Continue with R82 configuration
   - Accept the Management Connection configuration (eth3)
     - Leave Default gateway blank
   - Configure Internet connection
@@ -384,7 +381,7 @@ Alternate management method: https://support.checkpoint.com/results/sk/sk170314
 ## GW2
 - On the Windows workstation, point browser to https://192.168.103.3
 - Complete First Time Configuration Wizard (FTCW)
-  - Continue with R81.20 configuration
+  - Continue with R82 configuration
   - Accept the eth3 configuration (Management)
     - Leave Default gateway blank
   - Configure Internet connection
