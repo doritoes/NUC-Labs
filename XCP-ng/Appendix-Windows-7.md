@@ -36,4 +36,5 @@ Testing:
   - Chrome 107 was last to support Windows 7
   - https://github.com/e3kskoy7wqk for forks
   - https://github.com/win32ss/supermium - https://www.win32subsystem.live/supermium/
-- 🌱 Does it work outside the pentesting lab?
+    - Customized IE settings, was able to download and install supermium
+    - Supermium worked well
