@@ -36,4 +36,6 @@ Testing:
 - http access "works" like http://icanhazip.com and somewhat abcnews.com
 - but a lot of things are broken like http://sethholcomb.com
 - https things break because IE 7 is REALLY insecure
-- 🌱 Does it work outside the pentesting lab?
+- https://www.win32subsystem.live/supermium/
+  - downloaded and installed fine
+  - worked well in testing
