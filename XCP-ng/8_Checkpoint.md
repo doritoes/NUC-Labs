@@ -166,7 +166,7 @@ Steps:
 - Accept the installation message **OK**
 - Confirm the keyboard type **OK**
 - Accept the default partitions sizing for 128GB drive
-  - Swap: 7GB (6%)
+  - Swap: 8GB (6%)
   - Root: 20GB (16%)
   - Logs: 20GB (16%)
   - Backup and upgrade: 79GB (62%)
@@ -180,36 +180,42 @@ Steps:
   - Default gateway: **blank**
     - *will auto populate with 192.168.103.254, clear it*
   - NO DHCP server on the management interface
+  - Select **OK**
 - Confirm you want to continue with formatting the drive **OK**
 - When the message `Installation complete.` message appears
   - Press enter
   - Wait for the system to start to reboot, then eject the ISO
 
 ## Set the Hostname
-- Log in from the Console
+- Log in from the Console (username `admin` and the password you selected)
 - `set hostname CPTEMPLATE`
 - `save config`
 
 ## Install Guest Tools
-- Set the user shell to bash
-  - `set expert-password`
-    - select a password for "expert mode"
-  - `expert`
-    - enter the password when prompted
-  - `chsh -s /bin/bash admin`
-- From the Windows machine point WinSCP to the device:
-  - 192.168.103.254
-  - Username: admin
-  - Password: the password you selected
-  - Accept the warnings
-  - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
+- Configure the Check Point VM for copying the guest tools
+  - Set the user shell to bash
+    - `set expert-password`
+      - select a password for "expert mode"
+    - `expert`
+      - enter the password when prompted
+    - `chsh -s /bin/bash admin`
+- From the Windows 11 machine copy the guest tools to the Check Point VM
+  - https://www.xenserver.com/downloads
+  - Download XenServer VM Tools for Linux 8.4.0-1
+  - Use WinSCP to copy the file to the Check Point VM
+    - Open WinSCP
+    - 192.168.103.254
+    - Username: admin
+    - Password: the password you selected
+    - Accept the warnings
+    - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
   - Close WinSCP
-- Revert to clish shell
+- Configure Check Point VM to use the normal clish shell
   - `chsh -s /etc/cli.sh admin`
-- Install guest tools
+- Install guest tools on the Check Point VM
   - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
   - `cd LinuxGuestTools-8.4.0-1`
-  - `./install.sh -d rhel -m el7`
+  - `./install.sh -d rhel -m el8`
 
 ## Halt the system
 - `halt`
