@@ -97,24 +97,33 @@ This Windows 11 workstation will be used to build  the environment and later man
     - Click **Add Interface**
     - Network: from the dropdown select the **Check Point Management**
     - This is the management network for the Check Point appliances
+  - Advanced Settings
+    - <i>Disable</i> "Enable VTPM" as we we cloning from an image that already has one
   - Click **Create**
 - The details for the new Check Point VM are now displayed
-- Click the **Console** tab
+- Click the **Console** tab and log in
 - Change the IP address of the second interface to a static IP 192.168.103.100/24
   - Start > Settings > Network & internet
-  - From the left menu click Ethernet
-  - Click Change adapter options
-  - Right-click Ethernet 3 (Unidentified network) and click Properties
-  - Click Internet Protocol Version 4 (TCP/IPv4) and then click Properties
-  - Select **Use the following IP address**
+  - From the center pane click Ethernet
+  - Network 2: set to Private network
+  - Network 3: click on "Unidentified network"
+  - IP assignment: click Edit
+    - Set to Manual
+    - Enable IPv4
     - IP address: 192.168.103.100
     - Subnet mask: 255.255.255.0
     - Gateway: blank
     - Preferred DNS: blank
-    - Alternate DNS: blank
-    - Click OK and then click OK
+    - DNS over HTTPS: off
+    - click Save
+  - DNS server assignment: Click Edit
+    - Set to Manual
+    - Enable IPv4
+    - Preferred DNS: blank, DNS over https Off
+    - Alternate DNS: blank, DNS over HTTPS Off
+    - Click Save
 - Download and install Winscp: https://winscp.net/eng/download.php
-  - Typical installation with default settings suites our purposes
+  - Typical installation with default settings suits our purposes
 
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
