@@ -7,6 +7,7 @@ I strongly recommend reading the book **Check Point Firewall Administration R81.
 This section will walk you through setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
 
 IMPORTANT NOTES
+- This Lab uses R82 with the <i>cluster method ElasticXL</i>. This is VERY DIFFERENT from the traditional ClusterXL method.
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
 - Getting Check Point images
 - Trials and Evaluations
@@ -293,77 +294,134 @@ Steps:
   - You can now ping the SMS: `ping 192.168.103.4`
 
 # Set up SMS
-- On the Windows workstation, point browser to https://192.168.103.4
+- From `checkpoint-console` point browser to https://192.168.103.4 (the SMS web GUI)
+  - Accept the self-signed certificate
 - Log in as `admin` and the password you selected
 - Complete First Time Configuration Wizard (FTCW) aka 'FTW'
-  - Continue with R82 configuration
-  - Accept the Management connection configuration
+  - Click **Next**
+  - Continue with R82 configuration and **Next**
+  - Management Connection
     - Add Default gateway **192.168.103.1**
-  - Host Name: **SMS**
-  - Domain Name: **xcpng.lab**
-  - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
-  - Secondary DNS Server: 1.1.1.1
-  - Select Use Network Time Protocol (NTP) and select a time zone
-  - Select **Security Gateway and/or Security Management**
-  - Leave **Security Management** selected
-  - <ins>Uncheck</ins> Security Gateway
-  - Leave Security Management set to **Primary**
-  - Select **Define a new administrator**
-    - Administrator: **cpadmin**
-    - Password: *select a password*
-  - Leave **Any IP Address** can log in for now
+    - Leave IPv6 Off
+    - Click **Next**
+  - Device Information
+    - Host Name: **SMS**
+    - Domain Name: **xcpng.lab**
+    - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
+    - Secondary DNS Server: 1.1.1.1
+    - Click **Next**
+  - Date and Time Settings
+    - Select **Use Network Time Protocol (NTP)** and select a time zone
+    - Click **Next**
+  - Select **Security Gateway and/or Security Management** and click **Next**
+  - Products
+    - Leave **Security Management** selected
+    - <ins>Uncheck</ins> Security Gateway
+    - Leave **Define Security Management as** set to **Primary**
+    - Click **Next**
+  - Security Management Administrator
+    - Select **Define a new administrator**
+      - Administrator: **cpadmin**
+      - Password: *select a password*
+      - Click **Next**
+  - Security Management GUI Clients
+    - Leave **Any IP Address** can log in for now
     - Will secure to the internal network or perhaps specific administrator IP addresses later
-  - Click **Finish**
+    - Click **Next**
+  - Click **Finish**, then **Yes**
   - Wait patiently as the configuration is applied
   - When Configuration completed successfully is displayed, click **OK**
 - You are now logged in to the Web GUI
 - Next to *Manage Software Blades using SmartConsole* click **Download Now**
 
 # Connect to the SMS
-- Install the SmartConsole you downloaded from the Web GUI on the Windows 10 workstation
+- Install the SmartConsole you downloaded from the Web GUI on the`checkpoint-console`
   - Check the box and click **Install**
+  - Click **Finish**
 - Login
   - Username: **cpadmin**
   - Password: *the password you selected*
   - Server Name or IP Address: **192.168.103.4**
-  - Accept the server fingerprint and **Proceed**
-  - SmartConsole will update itself; click **Relaunch Now** when prompted
-
-NOTE The SMS takes some time to start all the management processes after a reboot
-- Check on SMS: `api status`
+  - Click **LOGIN**
+- Accept the server fingerprint and **PROCEED**
+- SmartConsole will update itself; click **Relaunch Now** when prompted
+- NOTE There are a lot of "nag screens" to close out
 
 Alternate management method: https://support.checkpoint.com/results/sk/sk170314
 - Point your browser to https://192.168.103.4/smartconsole
 - This is the web version of SmartConsole
-- In our Lab testing, Web SmartConsole did not work at this point
-  - Once the management server can get to the Internet it can update and install Web SmartConsole
+- In our Lab testing, Web SmartConsole now works under R82
+  - In R81.20, once the management server is connected to the Internet it can update and install Web SmartConsole
   - Web SmartConsole apparently runs in a Docker container
 
+NOTE The SMS takes some time to start all the management processes after a reboot
+- Check on SMS status from the checkpoint-sms command line: `api status`
+
 # Set up Firewalls
+https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/Working-with-ElasticXL.htm
+
 ## GW1
-- On the Windows workstation, point browser to https://192.168.103.2
-- Complete First Time Configuration Wizard (FTCW)
-  - Continue with R82 configuration
-  - Accept the Management Connection configuration (eth3)
+- From `checkpoint-console`, point browser to https://192.168.103.2
+  - Accept the self-signed certificate
+- Log in as `admin` and the password you selected
+- Complete First Time Configuration Wizard (FTCW) aka 'FTW'
+  - Click **Next**
+  - Continue with R82 configuration and **Next**
+  - Management Connection
     - Leave Default gateway blank
-  - Configure Internet connection
+    - Leave IPv6 Off
+    - Click **Next**
+  - Internet Connection
     - Set interface to **eth0**
     - Configure IPv4: **Manually**
       - IPv4 address: *Select an IP address from your Lab network*
       - Subnet mask: *Use the same mask as your Lab network*
       - NOTE It is not recommended to use DHCP on the external interface
           - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
-  - Host Name: gw1
-  - Domain Name: xcpng.lab
-  - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
-  - Secondary DNS Server: 1.1.1.1
-  - Select Use Network Time Protocol (NTP) and select a time zone
-  - Select **Security Gateway and/or Security Management**
-  - Leave Security Gateway selected
-  - <ins>Uncheck</ins> Security Management
-  - Select **Unit is part of a cluster** and leave type as **ClusterXL**
-  - Enter an Activation key
-    - `xcplab123!`
+    - Click **Next**
+  - Device Information
+    - Host Name: **gw1**
+    - Domain Name: **xcpng.lab**
+    - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
+    - Secondary DNS Server: 1.1.1.1
+    - Click **Next**
+  - Date and Time Settings
+    - Select **Use Network Time Protocol (NTP)** and select a time zone
+    - Click **Next**
+  - Select **Security Gateway and/or Security Management** and click **Next**
+  - Products
+    - Leave **Security Gateway** selected
+    - <ins>Uncheck</ins> Security Mangement
+    - Clustering
+      - <i>Check</i> Unit is part of a cluster, type: **ElasticXL** (this is the new cluster mechanism; the old one in R81.20 is ClusterXL)
+    - Click **Next**
+  - Secure Communication to Management Server
+    - Enter the SIC/Activation key twice (this is one time password, you will use it later)
+      - Example: `xcplab123!`
+    - Click **Next**
+  - Wait patiently as the configuration is applied
+  - Click **Finish** then **OK** to accept the reboot
+  - It shouldn't take more than 5 minutes. Navigate back to https://192.168.103.2 again as needed.
+  - PROBLEM not able to log in with that url
+  - logging in at gw1 console you get a ElasticXL prompt
+  - first time interface list
+    - Mgmt
+    - eth2
+    - eth3
+    - eth4
+    - lo
+    - magg1
+  - later interface list
+    - Mgmt
+    - Sync
+    - eth1-Sync
+    - lo
+    - magg1
+  - magg1 has the management IP address
+  - Cannot log in any more
+
+  PROBLEM stuck here
+  
   - Click Finish and Yes to start the process
   - Accept the Reboot
   - Log back in
