@@ -199,23 +199,27 @@ Steps:
     - `expert`
       - enter the password when prompted
     - `chsh -s /bin/bash admin`
-- From the Windows 11 machine copy the guest tools to the Check Point VM
+- From checkpoint-console copy the guest tools to the Check Point VM
   - https://www.xenserver.com/downloads
   - Download XenServer VM Tools for Linux 8.4.0-1
   - Use WinSCP to copy the file to the Check Point VM
     - Open WinSCP
-    - 192.168.103.254
+    - Hostname: 192.168.103.254
     - Username: admin
     - Password: the password you selected
-    - Accept the warnings
+    - Click **Login**
+    - **Accept** the warnings, and **Contine**
     - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
+      - Click OK
   - Close WinSCP
 - Configure Check Point VM to use the normal clish shell
+  - continue where you were in expert mode
   - `chsh -s /etc/cli.sh admin`
 - Install guest tools on the Check Point VM
   - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
   - `cd LinuxGuestTools-8.4.0-1`
   - `./install.sh -d rhel -m el8`
+  - Press y to continue
 
 ## Halt the system
 - `halt`
@@ -232,7 +236,7 @@ Steps:
   - Name: **checkpoint-sms**
   - Description: **R82 Check Point SMS**
   - CPU: **4 vCPU**
-  - RAM: **6GB** minimum in a Lab; do 8GB if you can
+  - RAM: **8GB** (you may be able to test as low as 6GB in a Lab)
   - Interfaces: Remove all interfaces except **Check Point Management**
   - Click **Create**
 - Log in at the console
