@@ -193,7 +193,7 @@ Steps:
 - Select a password for the "admin" account
 - Select a password for <ins>maintenance mode "admin" user</ins>
 - Select **eth0** as the management port
-  - IP address: **192.168.103.254"
+  - IP address: **192.168.103.254**
   - Netmask: **255.255.255.0**
   - Default gateway: **blank**
     - *will auto populate with 192.168.103.254, clear it*
