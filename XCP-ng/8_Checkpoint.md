@@ -17,6 +17,11 @@ IMPORTANT NOTES
     - ElasticXL Cluster sends all traffic over the Sync network in clear-text (non-encrypted)
     - ElasticXL Cluster automatically configures the IP address of the sync network to 192.0.2.0/24. If needed, later it is possible to change the IP address of the sync network.
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
+- eth0 Mgmt
+- eth1 eth1 Internet
+- eth2 eth2 Inside
+- eth3 eth3 DMZ
+- eth4 eth1-Sync
 - Getting Check Point images may require creating an account on Check Point's web site
 - Trials and Evaluations
   - 15 day trial
@@ -149,16 +154,20 @@ Steps:
   - RAM: **8GB** (more than R81.20)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
-  - First Interface:
+  - First Interface: eth0  = Mgmt
+    - Network: from the dropdown select the **Check Point Management** network you created earlier
+  - Second Interface: eth1 = eth1
+    - Click **Add interface**
     - Network: from the dropdown select the **pool-wide network associated with eth0**
     - This is the "Internet" for the Lab
-  - Second Interface: Click **Add interface**
+  - Third Interface: eth2 = eth2
+    - Click **Add interface**
     - Network: from the dropdown select the **Check Point Inside** network you created earlier
-  - Third Interface: Click **Add interface**
+  - Fourth Interface: eth3 = eth3
+    - Click **Add interface**
     - Network: from the dropdown select the **Check Point DMZ** network you created earlier
-  - Fourth Interface: Click **Add interface**
-    - Network: from the dropdown select the **Check Point Management** network you created earlier
-  - Fifth Interface: Click **Add interface**
+  - Fifth Interface: eth4 = eth1-Sync
+    - Click **Add interface**
     - Network: from the dropdown select the **Check Point Sync** network you created earlier
   - Disks: Click **Add disk**
     - Add **128GB** disk
@@ -366,9 +375,13 @@ NOTE The SMS takes some time to start all the management processes after a reboo
 - Check on SMS status from the checkpoint-sms command line: `api status`
 
 # Set up Firewalls
-https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/Working-with-ElasticXL.htm
+References:
+- https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/Working-with-ElasticXL.htm
+- https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/ElasticXL-Getting-Started.htm
 
-## GW1
+Here we will configure the first firewall, add the second to the group, then add to the SMS.
+
+## GW1 first Member
 - From `checkpoint-console`, point browser to https://192.168.103.2
   - Accept the self-signed certificate
 - Log in as `admin` and the password you selected
@@ -411,49 +424,51 @@ https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatfo
   - Click **Finish** then **OK** to accept the reboot
   - It shouldn't take more than 5 minutes. Navigate back to https://192.168.103.2 again as needed.
   - PROBLEM not able to log in with that url
-  - logging in at gw1 console you get a ElasticXL prompt
-  - first time interface list
-    - Mgmt
-    - eth2
-    - eth3
-    - eth4
-    - lo
-    - magg1
-  - later interface list
-    - Mgmt
-    - Sync
-    - eth1-Sync
-    - lo
-    - magg1
-  - magg1 has the management IP address
-  - Cannot log in any more
+    - logging in at gw1 console you get a ElasticXL prompt
+    - first time interface list
+      - Mgmt
+      - eth2
+      - eth3
+      - eth4
+      - lo
+      - magg1
+    - later interface list
+      - Mgmt
+      - Sync
+      - eth1-Sync
+      - lo
+      - magg1
+    - magg1 has the management IP address
+    - Cannot log in any more
 
   PROBLEM stuck here
-  
-  - Click Finish and Yes to start the process
-  - Accept the Reboot
-  - Log back in
+
   - Configure interfaces
     - From the left menu click Network Management > **Network Interfaces**
+    - Mgmt - no IP address
+    - interaces eth1, eth2, eth3
+    - lo
+    - magg1 - has the management IP address you entered
     - Edit **eth1**
       - Enable: **Checked**
       - Comment: **Inside**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **10.1.1.2**
+        - IPv4 address: **10.1.1.1**
         - Subnet mask: **255.255.255.0**
+        - Yes this is the cluster virtual IP address
       - Click **OK**
     - Edit **eth2**
       - Enable: **Checked**
       - Comment: **DMZ**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.168.102.2**
+        - IPv4 address: **192.168.102.1**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
     - Edit **eth4**
       - Enable: **Checked**
       - Comment: **Sync**
       - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.168.104.2**
+        - IPv4 address: **192.168.104.1** (WAIT this is autoconfigured? change to this IP later?
         - Subnet mask: **255.255.255.0**
       - Click **OK**
   - Edit the Default Route
@@ -463,104 +478,28 @@ https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatfo
     - Enter the default gateway for your Lab network
     - Click **OK**
 
-## GW2
-- On the Windows workstation, point browser to https://192.168.103.3
-- Complete First Time Configuration Wizard (FTCW)
-  - Continue with R82 configuration
-  - Accept the eth3 configuration (Management)
-    - Leave Default gateway blank
-  - Configure Internet connection
-    - Set interface to **eth0**
-    - Configure IPv4: **Manually**
-      - IPv4 address: *Select an IP address from your Lab network*
-      - Subnet mask: *Use the same mask as your Lab network*
-      - NOTE It is not recommended to use DHCP on the external interface
-          - Before considering this, read up on [Dynamically Assigned IP Address (DAIP)](https://support.checkpoint.com/results/sk/sk167473)
-  - Host Name: GW2
-  - Domain Name: xcpng.lab
-  - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
-  - Secondary DNS Server: 1.1.1.1
-  - Select Use Network Time Protocol (NTP) and select a time zone
-  - Select **Security Gateway and/or Security Management**
-  - Leave Security Gateway selected
-  - <ins>Uncheck</ins> Security Management
-  - Select **Unit is part of a cluster** and leave type as **ClusterXL**
-  - Enter an Activation key
-    - `xcplab123!`
-  - Click Finish and Yes to start the process
-  - Accept the Reboot
-  - Log back in
-   - From the left menu click Network Management: **Network Interfaces**
-    - Edit **eth1**
-      - Enable: **Checked**
-      - Comment: **Inside**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **10.1.1.3**
-        - Subnet mask: **255.255.255.0**
-      - Click **OK**
-    - Edit **eth2**
-      - Enable: **Checked**
-      - Comment: **DMZ**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.168.102.3**
-        - Subnet mask: **255.255.255.0**
-      - Click **OK**
-    - Edit **eth4**
-      - Enable: **Checked**
-      - Comment: **Sync**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.168.104.3**
-        - Subnet mask: **255.255.255.0**
-      - Click **OK**
-  - Edit the Default Route
-    - From the left menu click Network Management > **IPv4 Static Routes**
-    - Click the "Default" route and then click **Edit**
-    - Click **Add Gateway** > **IP Address**
-    - Enter the default gateway for your Lab network
-    - Click **OK**
 
-# Create Firewall Cluster
-## Testing Connectivity
-- From the Windows workstation try to ping the firewalls (from command line)
-  - `ping 192.168.103.2`
-  - `ping 192.168.103.3`
-- Now try to connect to TCP port 18191 (required for communication) using powershell
-  - `tnc -p 18191 192.168.103.2`
-  - `tnc -p 18191 192.168.103.3`
-- Try to ping the SMS
-  - `ping 192.168.103.4`
-- If you want to ping the Windows 10 machine you will need to allow ping in the Windows Firewall
-- Note that you can't ping the firewall gateways. If you run the command `fw unload local`, they become pingable because the firewall policy "InitialPolicy" is removed.
+
+# Create Firewall Cluster in Smart Console
+Yes, fully configure with one firewall. Will add the second gateway later.
 
 ## Create Cluster Object
 - On the Windows workstation, Log in to SmartConsole again
 - From the left menu, click **Gateways & Servers** (the default view when using SmartConsole for the first time)
 - The **New** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
-- Click **New**  > **Cluster** > **Cluster**
-- Click **Wizard Mode**
-  - Cluster Name: **Gateway_Cluster**
+- Click **New**  > **Gateway**
+- Click **Classic Mode**
+  - Cluster Name: **GW1** (best practice: same name as the appliance)
   - Cluster IPv4 Address: *select an IP address from your Lab network* (the external cluster IP and the "real" external IP addresses of the cluster members are all on the same subnet)
   - Leave cluster settings at the default (ClusterXL and High Availability)
   - Click **Add** > **New Cluster Member** to add the first firewall, GW1
-    - Name: **GW1**
+    - Name: **gw1**
     - IPv4 Address: **192.168.103.2** (the management IP)
+    - Click **Communication**
     - Activation Key: `xcplab123!` and confirm it
     - Click **Initialize**
     - Click **OK**
-  - Click **Add** > **New Cluster Member** to add the second firewall, GW2
-    - Name: **GW1**
-    - IPv4 Address: **192.168.103.2** (the management IP)
-    - Activation Key: `xcplab123!` and confirm it
-    - Click **Initialize**
-    - Click **OK**
-  - Configure Cluster Topology
-    - 192.168.104.0/255.255.255.0 = Cluster Synchronization Primary
-    - 192.168.103.0/255.255.255.0 = Representing a cluster interface **192.168.103.1** **255.255.255.0**
-      - management interfaces can be a cluster or non-monitored private interfaces; for this Lab setup a clustered interface is used
-    - 192.168.102.0/255.255.255.0 = Representing a cluster interface **192.168.102.1** **255.255.255.0**
-    - 10.1.1.0/255.255.255.0 = Representing a cluster interface **10.1.1.1** **255.255.255.0**
-    - Your Lab network = Representing a cluster interface withe cluster IP address you selected and your Lab's subnet mask
-    - Click Finish
+  - Click to close the Topology information
 - Double-Click the new **Gateway_Cluster** you created
   - From the tree on the left, click **Network Management**
   - Click **Get Interfaces** > **Get Interfaces Without Topology**
@@ -677,6 +616,69 @@ This policy is overly permissive, but it's a place to start.
 - From the ribbon, click **Logs**
 - From the Windows VM, open a public web page such as https://ipchicken.com
 - Note that the management network is in the "InternalZone"
+
+# Install Jumbo Hotfix
+In ElasticXL you need to follow the new rule:
+- Do not install the hotfix on all the Security Group Members in a Security Group at the same time
+- Prepare the package
+  - Make sure you have the applicable CPUSE Offline package, put in /var/log
+  - Connect to the command line on the Security Group
+  - if you are in expert mode, run gclish
+  - installer import local /<Full Path>/<Name of the CPUSE Offline Package>
+  - show installer packages imported
+  - installer verify [Tab]
+  - installer verify <number of the CPUSE package> memder_ids all
+- Disable SMO image cloning feature
+  - show cluster configuration image auto-clone state
+  - set cluster configuration image auto-clone state off
+  - show cluster configuration image auto-clone state
+- Install the Hotfix on Security Group Members in logical group "A"
+  - Connect to one of the security group members in the logical group "A" through the console
+  - Connect to one of the security group members in the logical group "B" over SSH
+  - set cluster members-admin-state ids <SGM IDs in Group "A"> down
+    - set cluster members-admin-state ids ids 1_1-1_4 down
+  - Connect to one of the Security Group Mmebers in the Logical Group "A"
+    - member <Member ID>
+    - Ex. member 1_1
+  - gclish
+  - installer install [Tab]
+  - installer install <Number of CPUSE Package> member_ids <SGM IDs in Group "A">
+    - Example: installer install 2 member_ids 1_1-1_4
+  - Accept the warning members will automatically reboot: y
+  - Monitor the system until security group members in logical group "A" are in the "UP" state
+    - show cluster info overview live
+- Install the Hotfix on Security Group Members in logical group "B"
+  - Connect to one of the security group members in the logical group "B" through the console
+  - Connect to one of the security group members in the logical group "A" over SSH
+  - set cluster members-admin-state ids <SGM IDs in Group "B"> down
+    - set cluster members-admin-state ids ids 1_5-1_8 down
+  - Connect to one of the Security Group Mmebers in the Logical Group "B"
+    - member <Member ID>
+    - Ex. member 1_5
+  - gclish
+  - installer install [Tab]
+  - installer install <Number of CPUSE Package> member_ids <SGM IDs in Group "A">
+    - Example: installer install 2 member_ids 1_5-1_8
+  - Accept the warning members will automatically reboot: y
+  - Monitor the system until security group members in logical group "B" are in the "UP" state
+    - show cluster info overview live
+- Make sure the Hotfix is installed on all Security Group Members
+  - gclish
+  - use of of these tools:
+    - insights
+    - hcp
+- Enable the SMO Image Cloning feature
+  - gclish
+  - show cluster configuration image auto-clone state
+  - set cluster configuration image auto-clone state on
+  - show cluster configuration image auto-clone state
+# GW1 Second Member
+- Log in to the first gateway's managment IP add to access the Web GUI
+- Click **Cluster Management**
+- View Pending Gateways: 1
+- Add pending Gateways
+- Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)
+- Click OK and wait for the new appliance to join the existing cluster
 
 # Add Windows 10 Workstation
 - New > VM
