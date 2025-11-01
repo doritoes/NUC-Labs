@@ -9,7 +9,7 @@ This section will walk you through setting up a simple Check Point firewall envi
 IMPORTANT NOTES
 - This Lab uses R82 with the <i>cluster method ElasticXL</i>. This is VERY DIFFERENT from the traditional ClusterXL method.
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
-- Getting Check Point images
+- Getting Check Point images may require creating an account on Check Point's web site
 - Trials and Evaluations
   - 15 day trial
   - 30 evaluation license
