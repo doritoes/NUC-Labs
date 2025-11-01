@@ -8,6 +8,14 @@ This section will walk you through setting up a simple Check Point firewall envi
 
 IMPORTANT NOTES
 - This Lab uses R82 with the <i>cluster method ElasticXL</i>. This is VERY DIFFERENT from the traditional ClusterXL method.
+  - https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/ElasticXL-Important-Notes.htm
+  - ElasticXL Cluster requires at least 4 interfaces on each ElasticXL Cluster Member:
+    - A dedicated management interface (the port "Mgmt" is selected automatically)
+    - A dedicated sync interface (the port "Sync" is selected automatically)
+    - Only one ElasticXL Cluster is supported in the same Layer 2 broadcast domain (connecting Sync interfaces of different ElasticXL Clusters is not supported)
+    - Configuring the Sync interface as VLAN Trunk is not supported
+    - ElasticXL Cluster sends all traffic over the Sync network in clear-text (non-encrypted)
+    - ElasticXL Cluster automatically configures the IP address of the sync network to 192.0.2.0/24. If needed, later it is possible to change the IP address of the sync network.
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
 - Getting Check Point images may require creating an account on Check Point's web site
 - Trials and Evaluations
