@@ -239,6 +239,7 @@ Steps:
   - `cd LinuxGuestTools-8.4.0-1`
   - `./install.sh -d rhel -m el8`
   - Press y to continue
+- Optionally remove the guest tools tar file and the directory
 
 ## Halt the system
 - `halt`
@@ -310,6 +311,7 @@ Steps:
     - `set interface eth0 state on`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
+  - IMPORTANT the second gateway will be detected using LLDP; the details of the configuration do note matter
 
 # Set up SMS
 - From `checkpoint-console` point browser to https://192.168.103.4 (the SMS web GUI)
@@ -380,7 +382,7 @@ References:
 - https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/Working-with-ElasticXL.htm
 - https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/ElasticXL-Getting-Started.htm
 
-Here we will configure the first firewall, add the second to the group, then add to the SMS.
+Here we will configure the first firewall in the cluster, then add to the SMS. Later add the second gateway to the ElasticXL cluster
 
 ## GW1 first Member
 - From `checkpoint-console`, point browser to https://192.168.103.1
@@ -394,7 +396,7 @@ Here we will configure the first firewall, add the second to the group, then add
     - Leave IPv6 Off
     - Click **Next**
   - Internet Connection
-    - Set interface to **eth1**
+    - Set interface to **eth2**
     - Configure IPv4: **Manually**
       - IPv4 address: *Select an IP address from your Lab network*
       - Subnet mask: *Use the same mask as your Lab network*
@@ -433,7 +435,7 @@ Here we will configure the first firewall, add the second to the group, then add
     - Compare with console interfaces:
       - Mgmt, Sync, eth1-Sync, lo, magg1
       - But when you try to use show interface, you can only select Mgmt, eth2, eth3, eth4, lo, magg1
-    - Edit **eth1**
+    - Edit **eth3**
       - Enable: **Checked**
       - Comment: **Inside**
       - IPv4: Select **Use the following IPv4 address**
@@ -441,14 +443,14 @@ Here we will configure the first firewall, add the second to the group, then add
         - Subnet mask: **255.255.255.0**
         - Yes this is the cluster virtual IP address
       - Click **OK**
-    - Edit **eth2**
+    - Edit **eth4**
       - Enable: **Checked**
       - Comment: **DMZ**
       - IPv4: Select **Use the following IPv4 address**
         - IPv4 address: **192.168.102.1**
         - Subnet mask: **255.255.255.0**
       - Click **OK**
-    - Edit **eth4**
+    - Edit **eth1**
       - Enable: **Checked**
       - Comment: **Sync**
       - IPv4: Select **Use the following IPv4 address**
