@@ -425,46 +425,39 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
     - Click **Next**
   - Wait patiently as the configuration is applied
   - Click **Finish** then **OK** to accept the reboot
-  - Configure interfaces
-    - From the left menu click Network Management > **Network Interfaces**
-    - Mgmt - no IP address
-    - where is eth1, Internet? was it taken for sync?
-    - interaces eth2, eth3, eth4
-    - lo
-    - magg1 - has the management IP address you entered
-    - Compare with console interfaces:
-      - Mgmt, Sync, eth1-Sync, lo, magg1
-      - But when you try to use show interface, you can only select Mgmt, eth2, eth3, eth4, lo, magg1
-    - Edit **eth3**
-      - Enable: **Checked**
-      - Comment: **Inside**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **10.1.1.1**
-        - Subnet mask: **255.255.255.0**
-        - Yes this is the cluster virtual IP address
-      - Click **OK**
-    - Edit **eth4**
-      - Enable: **Checked**
-      - Comment: **DMZ**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.168.102.1**
-        - Subnet mask: **255.255.255.0**
-      - Click **OK**
-    - Edit **eth1**
-      - Enable: **Checked**
-      - Comment: **Sync**
-      - IPv4: Select **Use the following IPv4 address**
-        - IPv4 address: **192.168.104.1** (WAIT this is autoconfigured? change to this IP later?
-        - Subnet mask: **255.255.255.0**
-      - Click **OK**
-  - Edit the Default Route
-    - From the left menu click Network Management > **IPv4 Static Routes**
-    - Click the "Default" route and then click **Edit**
-    - Click **Add Gateway** > **IP Address**
-    - Enter the default gateway for your Lab network
+- Configure interfaces
+  - From the left menu click Network Management > **Network Interfaces**
+  - Mgmt - no IP address, member of bond magg1 (which has the management IP address)
+  - eth2 is the Internet, already has IP address
+  - where is eth1? used for Sync
+  - Compare with console interfaces:
+    - Mgmt, Sync, eth1-Sync, eth2, lo, magg1
+    - But when you try to use show interface, you can only select Mgmt, eth2, eth3, eth4, lo, magg1
+  - Edit **eth3**
+    - Enable: **Checked**
+    - Comment: **Inside**
+    - IPv4: Select **Use the following IPv4 address**
+      - IPv4 address: **10.1.1.1**
+      - Subnet mask: **255.255.255.0**
+      - Yes this is the cluster virtual IP address
     - Click **OK**
-
-
+  - Edit **eth4**
+    - Enable: **Checked**
+    - Comment: **DMZ**
+    - IPv4: Select **Use the following IPv4 address**
+      - IPv4 address: **192.168.102.1**
+      - Subnet mask: **255.255.255.0**
+    - Click **OK**
+- Edit the Default Route
+  - From the left menu click Network Management > **IPv4 Static Routes**
+  - Click the "Default" route and then click **Edit**
+  - Click **Add Gateway** > **IP Address**
+  - Enter the default gateway for your Lab network
+  - Click **OK**
+  - Click **Save**
+- Test
+  - From the gateway you can now ping the Internet and do nslookups
+  - 
 
 # Create Firewall Cluster in Smart Console
 Yes, fully configure with one firewall. Will add the second gateway later.
@@ -476,51 +469,48 @@ Yes, fully configure with one firewall. Will add the second gateway later.
 - Click **New**  > **Gateway**
 - Click **Classic Mode**
   - Cluster Name: **GW1** (best practice: same name as the appliance)
-  - Cluster IPv4 Address: *select an IP address from your Lab network* (the external cluster IP and the "real" external IP addresses of the cluster members are all on the same subnet)
+  - Cluster IPv4 Address: use the managment IP address 192.168.103.1
   - Leave cluster settings at the default (ClusterXL and High Availability)
   - Click **Add** > **New Cluster Member** to add the first firewall, GW1
     - Name: **gw1**
-    - IPv4 Address: **192.168.103.2** (the management IP)
-    - Click **Communication**
+    - IPv4 Address: **192.168.103.1** (the management IP)
+    - Comment: **ElasticXL cluster**
+    - Click **Communication...**
     - Activation Key: `xcplab123!` and confirm it
     - Click **Initialize**
     - Click **OK**
-  - Click to close the Topology information
-- Double-Click the new **Gateway_Cluster** you created
+  - Click to **Close** the topology information
+  - Click **OK**, **Yes** to accept the portal message
+- Double-Click the new **gw1** gateway you created
   - From the tree on the left, click **Network Management**
   - Click **Get Interfaces** > **Get Interfaces Without Topology**
-  - Edit eth0
+  - Edit eth2
+    - Comments: Internet
     - Under Topology click Modify
     - Leads To: **Override** > **Internet**
     - Security Zone: **According to topology: ExternalZone**
     - Click **OK** and **OK**
-  - Edit eth1
-   - Under Topology click Modify
-    - Security Zone: **According to topology: InternalZone**
-    - Click **OK** and **OK**
-  - Edit eth2
-    - Under Topology click Modify
-    - Leads To: **Override** > **This Network (Internal)** **Network defined by the interface IP and Net Mask**
-    - Check **Interface leads to DMS**
-    - Security Zone: **According to topology: DMZZone**
-    - Click **OK** and **OK**
   - Edit eth3
-   - Under Topology click Modify
+    - Comments: Inside
+    - Under Topology click Modify
     - Security Zone: **According to topology: InternalZone**
     - Click **OK** and **OK**
   - Edit eth4
-   - Under Topology click Modify
-    - Security Zone: **According to topology: InternalZone**
+    - Comments: DMZ
+    - Under Topology click Modify
+    - Leads To: **Override** > **This Network (Internal)** **Network defined by the interface IP and Net Mask**
+    - Check **Interface leads to DMZ**
+    - Security Zone: **According to topology: DMZZone**
     - Click **OK** and **OK**
-- Re-open **Gateway_Cluster**
+  - Click **OK**
+- Re-open **gw1**
 - General Properties
-  - Uncheck IPSec VPN for this lab (feel free to leave it on a experiment)
-  - Check Monitoring
+  - Check **Monitoring**
+  -  Leave IPSec VPN unchecked for this lab (feel free to experiment)
   - Optionally Check Application Control and URL Filtering if you would like to experiment 
 - NAT
   - Check Hide internal networks behind the Gateway's external IP
-    - This is acceptable for this Lab and cases where there are less that 50 hosts behind the firewall
-  - Click **OK**
+    - This is acceptable for this Lab and cases where there are less than 50 hosts behind the firewall
 - Network Management
   - To calculate the network topology from routes
     - Click Get Interfaces > Get Interfaces With Topology
