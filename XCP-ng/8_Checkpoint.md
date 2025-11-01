@@ -141,7 +141,7 @@ This Windows 11 workstation will be used to build  the environment and later man
 
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
-- https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_RN/Content/Topics-RN/Open-Server-Hardware-Requirements.htm
+- https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_RN/Content/Topics-8RN/Open-Server-Hardware-Requirements.htm
 
 Steps:
 - From the left menu click **New** > **VM**
@@ -156,19 +156,19 @@ Steps:
   - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
   - First Interface: eth0  = Mgmt
     - Network: from the dropdown select the **Check Point Management** network you created earlier
-  - Second Interface: eth1 = eth1
+  - Second Interface: eth1 = eth1-Sync
+    - Click **Add interface**
+    - Network: from the dropdown select the **Check Point Sync** network you created earlier
+  - Third Interface: eth2 = eth2
     - Click **Add interface**
     - Network: from the dropdown select the **pool-wide network associated with eth0**
     - This is the "Internet" for the Lab
-  - Third Interface: eth2 = eth2
-    - Click **Add interface**
-    - Network: from the dropdown select the **Check Point Inside** network you created earlier
   - Fourth Interface: eth3 = eth3
     - Click **Add interface**
-    - Network: from the dropdown select the **Check Point DMZ** network you created earlier
-  - Fifth Interface: eth4 = eth1-Sync
+    - Network: from the dropdown select the **Check Point Inside** network you created earlier
+  - Fifth Interface: eth4 = eth4
     - Click **Add interface**
-    - Network: from the dropdown select the **Check Point Sync** network you created earlier
+    - Network: from the dropdown select the **Check Point DMZ** network you created earlier
   - Disks: Click **Add disk**
     - Add **128GB** disk
   - Click **Create**
@@ -214,6 +214,7 @@ Steps:
   - Set the user shell to bash
     - `set expert-password`
       - select a password for "expert mode"
+    - `save config`
     - `expert`
       - enter the password when prompted
     - `chsh -s /bin/bash admin`
@@ -271,7 +272,7 @@ Steps:
   - From the left menu click **New** > **VM**
     - Select the pool **xcgp-ng-lab1**
     - Template: **checkpoint-template**
-    - Name: **checkpoint-gw1**
+    - Name: **checkpoint-gw1-1**
     - Description: **R82 Check Point Gateway 1**
     - CPU: **4 vCPU**
     - RAM: **4GB**
@@ -283,16 +284,16 @@ Steps:
   - Log in the console
   - Configure hostname and IP address
     - `set hostname gw1`
-    - `set interface eth3 ipv4-address 192.168.103.2 mask-length 24`
-    - `set interface eth3 comments "Management"`
-    - `set interface eth3 state on`
+    - `set interface eth0 ipv4-address 192.168.103.1 mask-length 24`
+    - `set interface eth0 comments "Management"`
+    - `set interface eth0 state on`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 - Create Gateway 2 (GW2)
   - From the left menu click **New** > **VM**
     - Select the pool **xcgp-ng-lab1**
     - Template: **checkpoint-template**
-    - Name: **checkpoint-gw2**
+    - Name: **checkpoint-gw1-2**
     - Description: **R82 Check Point Gateway 2**
     - CPU: **4 vCPU**
     - RAM: **4GB**
@@ -303,10 +304,10 @@ Steps:
     - For each interface, click the blue gear, click to disable TX checksumming, and click OK
   - Log in at the console
   - Configure hostname and IP address
-    - `set hostname gw2`
-    - `set interface eth3 ipv4-address 192.168.103.3 mask-length 24`
-    - `set interface eth3 comments "Management"`
-    - `set interface eth3 state on`
+    - `set hostname gw1-2`
+    - `set interface eth0 ipv4-address 192.168.103.2 mask-length 24`
+    - `set interface eth0 comments "Management"`
+    - `set interface eth0 state on`
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 
@@ -322,7 +323,7 @@ Steps:
     - Leave IPv6 Off
     - Click **Next**
   - Device Information
-    - Host Name: **SMS**
+    - Host Name: **sms**
     - Domain Name: **xcpng.lab**
     - Primary DNS Server: 9.9.9.9 (for now; set to your internal DNS service later)
     - Secondary DNS Server: 1.1.1.1
@@ -382,7 +383,7 @@ References:
 Here we will configure the first firewall, add the second to the group, then add to the SMS.
 
 ## GW1 first Member
-- From `checkpoint-console`, point browser to https://192.168.103.2
+- From `checkpoint-console`, point browser to https://192.168.103.1
   - Accept the self-signed certificate
 - Log in as `admin` and the password you selected
 - Complete First Time Configuration Wizard (FTCW) aka 'FTW'
@@ -393,7 +394,7 @@ Here we will configure the first firewall, add the second to the group, then add
     - Leave IPv6 Off
     - Click **Next**
   - Internet Connection
-    - Set interface to **eth0**
+    - Set interface to **eth1**
     - Configure IPv4: **Manually**
       - IPv4 address: *Select an IP address from your Lab network*
       - Subnet mask: *Use the same mask as your Lab network*
@@ -422,33 +423,16 @@ Here we will configure the first firewall, add the second to the group, then add
     - Click **Next**
   - Wait patiently as the configuration is applied
   - Click **Finish** then **OK** to accept the reboot
-  - It shouldn't take more than 5 minutes. Navigate back to https://192.168.103.2 again as needed.
-  - PROBLEM not able to log in with that url
-    - logging in at gw1 console you get a ElasticXL prompt
-    - first time interface list
-      - Mgmt
-      - eth2
-      - eth3
-      - eth4
-      - lo
-      - magg1
-    - later interface list
-      - Mgmt
-      - Sync
-      - eth1-Sync
-      - lo
-      - magg1
-    - magg1 has the management IP address
-    - Cannot log in any more
-
-  PROBLEM stuck here
-
   - Configure interfaces
     - From the left menu click Network Management > **Network Interfaces**
     - Mgmt - no IP address
-    - interaces eth1, eth2, eth3
+    - where is eth1, Internet? was it taken for sync?
+    - interaces eth2, eth3, eth4
     - lo
     - magg1 - has the management IP address you entered
+    - Compare with console interfaces:
+      - Mgmt, Sync, eth1-Sync, lo, magg1
+      - But when you try to use show interface, you can only select Mgmt, eth2, eth3, eth4, lo, magg1
     - Edit **eth1**
       - Enable: **Checked**
       - Comment: **Inside**
