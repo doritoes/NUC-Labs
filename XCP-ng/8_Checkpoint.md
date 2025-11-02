@@ -605,7 +605,25 @@ This policy is overly permissive, but it's a place to start.
 - Retry the connection to a public web page
 - Note that the management network is in the "InternalZone" due to the toplogy setting made on interface magg1
 
-# Install Jumbo Hotfix
+
+# Install Jumbo Hotfix on Single Gateway
+For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the single first gateway before adding any more gateways.
+- SmartConsole
+- Gateways & Servers
+- Right-click gw1 > Install Hotfix/Jumbo...
+- Recommended jumbo
+- Verify
+- Install
+
+# GW1 Second Member
+- Log in to the first gateway's managment IP add to access the Web GUI
+- Click **Cluster Management**
+- View Pending Gateways: 1
+- Add pending Gateways
+- Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)
+- Click OK and wait for the new appliance to join the existing cluster
+
+# Install Jumbo Hotfix on All Gateways
 In ElasticXL you need to follow the new rule:
 - Do not install the hotfix on all the Security Group Members in a Security Group at the same time
 - Prepare the package
@@ -660,13 +678,6 @@ In ElasticXL you need to follow the new rule:
   - show cluster configuration image auto-clone state
   - set cluster configuration image auto-clone state on
   - show cluster configuration image auto-clone state
-# GW1 Second Member
-- Log in to the first gateway's managment IP add to access the Web GUI
-- Click **Cluster Management**
-- View Pending Gateways: 1
-- Add pending Gateways
-- Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)
-- Click OK and wait for the new appliance to join the existing cluster
 
 # Add Windows 10 Workstation
 - New > VM
