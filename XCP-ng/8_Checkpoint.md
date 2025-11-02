@@ -458,7 +458,40 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
   - Click **Save**
 - Test
   - From the gateway you can now ping the Internet and do nslookups
-  - 
+## GW1 second Member
+PROBLEM - tried not configuring at this point, and then runnign FTW to set up as cluster member. Second member still doesn't show up.
+
+- From `checkpoint-console`, point browser to https://192.168.103.2
+  - Accept the self-signed certificate
+- Log in as `admin` and the password you selected
+- Complete First Time Configuration Wizard (FTCW) aka 'FTW'
+  - Click **Next**
+  - Continue with R82 configuration and **Next**
+  - Management Connection
+    - Leave Default gateway blank
+    - Leave IPv6 Off
+    - Click **Next**
+  - Internet Connection
+    - Leave unconfigured and click **Next**
+  - Device Information
+    - Host Name: **gw1-2**
+    - Click **Next**
+  - Date and Time Settings
+    - Select **Use Network Time Protocol (NTP)** and select a time zone
+    - Click **Next**
+  - Select **Security Gateway and/or Security Management** and click **Next**
+  - Products
+    - Leave **Security Gateway** selected
+    - <ins>Uncheck</ins> Security Mangement
+    - Clustering
+      - <i>Check</i> Unit is part of a cluster, type: **ElasticXL** (this is the new cluster mechanism; the old one in R81.20 is ClusterXL)
+    - Click **Next**
+  - Secure Communication to Management Server
+    - Enter the SIC/Activation key twice (this is one time password, you will use it later)
+      - Example: `xcplab123!`
+    - Click **Next**
+  - Wait patiently as the configuration is applied
+  - Click **Finish** then **OK** to accept the reboot
 
 # Create Firewall Cluster in Smart Console
 Yes, fully configure with one firewall. Will add the second gateway later.
@@ -628,7 +661,13 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
 
 # GW1 Second Member
 - Log in to the first gateway's managment IP add to access the Web GUI
-- Click **Cluster Management**
+  - https://192.168.103.1
+  - Click **Cluster Management**
+  - Note the first gateway is there gw1-s0-01 (site one, number 1)
+  - There are no pending gateways listed, so the second gateway isn't detected yet
+- Logging in to https://192.168.103.2 it' only sees itself
+- This is not enough to show up as a pending gateway
+- PROBLEM NEED TO SOLVE
 - View Pending Gateways: 1
 - Add pending Gateways
 - Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)
@@ -820,3 +859,27 @@ Lab users not familiar with Check Point may wonder about these
 # Ideas for Advanced Labs
 - Create Windows domain and workstations, and use Identity collector to control access by identity
 - Put a VyOS router in front to simulate the ISP, and add another security gateway so you can test VPN
+
+# Appendix
+## Installing licenses on ElasticXL Cluster Members
+- Connect an SSH client to the IP address of the ElasticXL Cluster.
+  - Log in.
+  - If you default shell is the Expert mode, then go to Gaia gClish:
+    - gclish
+- Get the MAC Addresses of the "magg1" interfaces from all ElasticXL Cluster Members and write them down:
+  - show interface magg1 mac-addr
+    - Example:
+    - [Global] EXL-s01-01> show interface magg1 mac-addr
+    - 1_01:
+    - mac-addr XX:XX:XX:11:22:33
+    - 1_02:
+    - mac-addr XX:XX:XX:44:55:66
+    - [Global] EXL-s01-01>
+- In Check Point User Center, generate a license for each Security Appliance using these parameters:
+  - IPv4 address of the ElasticXL Cluster.
+    - This is the IPv4 address of the "Mgmt" interface of the first ElasticXL Cluster Member, on which you ran the Gaia First Time Configuration Wizard.
+    - MAC Address of the "magg1" interface of each ElasticXL Cluster Member.
+- Prepare the list of the required "cplic put" commands - for each generated license, you get an email from the User Center.
+- Connect an SSH client to the IP address of the ElasticXL Cluster.
+  - Log in.
+- Run all the "cplic put" commands to install the licenses.
