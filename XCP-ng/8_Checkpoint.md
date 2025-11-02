@@ -605,6 +605,17 @@ This policy is overly permissive, but it's a place to start.
 - Retry the connection to a public web page
 - Note that the management network is in the "InternalZone" due to the toplogy setting made on interface magg1
 
+# Install Jumbo Hotfix on SMS
+This method is from the command line on `checkpoint-sms`. You will select the hotfix. It is possible to install the jumbo hotfix from the SMS web gui.
+- installer check-for-updates
+- installer download [tab]
+- installer download <number>
+- installer verify [tab]
+- installer verify <number>
+- installer install [tab]
+- installer install <number>
+- accept the reboot
+- after the sms reboots, allow 5 minutes for it to come back up
 
 # Install Jumbo Hotfix on Single Gateway
 For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the single first gateway before adding any more gateways.
