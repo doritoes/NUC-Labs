@@ -503,6 +503,11 @@ Yes, fully configure with one firewall. Will add the second gateway later.
     - Check **Interface leads to DMZ**
     - Security Zone: **According to topology: DMZZone**
     - Click **OK** and **OK**
+  - Edit magg1
+    - Comments: Management
+    - Under Topology click Modify
+    - Security Zone: **According to topology: InternalZone**
+    - Click **OK** and **OK**
   - Click **OK**
 - Re-open **gw1**
 - General Properties
@@ -559,7 +564,7 @@ This policy is overly permissive, but it's a place to start.
   - Track: Log
 - Add third rule - Outbound Web Traffic
   - Name: Outbound Web Traffic
-  - Source: Inside_Network
+  - Source: InternalZone
   - Destinations: ExternalZone
   - Services: http and https
   - Action: Accept
@@ -598,9 +603,7 @@ This policy is overly permissive, but it's a place to start.
 - Change the Ethernet 3 adapter to have default gateway 192.168.103.1
 - Disable Ethernet 2 adapter
 - Retry the connection to a public web page
-- Note that the management network is in the "InternalZone"
-
-PROBLEM traffic is succeeding but being logged as dropped.
+- Note that the management network is in the "InternalZone" due to the toplogy setting made on interface magg1
 
 # Install Jumbo Hotfix
 In ElasticXL you need to follow the new rule:
