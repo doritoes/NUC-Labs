@@ -541,17 +541,18 @@ This policy is overly permissive, but it's a place to start.
   - Click **Close**
 - From the left menu click **Security Policies**
 - If not already selected, click on the policy **AccessPolicy** or click on "+" and open it
+- Under **Access Control** click **Policy**
 - Add first rule (at top) - Management
   - Name: Management rule
   - Source: SmartConsole (192.168.103.100)
-  - Destinations: GW1 and GW2
+  - Destinations: gw1
   - Services: https and ssh_version_2
   - Action: Accept
   - Track: Log
 - Add second rule - Stealth
   - Name: Stealth rule
   - Source: *Any
-  - Destinations: GW1 and GW2
+  - Destinations: gw1
   - Services: *Any
   - Action: Drop
   - Track: Log
@@ -563,7 +564,7 @@ This policy is overly permissive, but it's a place to start.
   - Action: Accept
   - Track: Log
 - Add fourth rule - Inside to DMZ
-  - Name: Outbound Web Traffic
+  - Name: Internal to DMZ Web Traffic
   - Source: InternalZone
   - Destinations: DMZZone
   - Services: http and https
@@ -586,12 +587,19 @@ This policy is overly permissive, but it's a place to start.
 - Modify the last "Cleanup rule" Track from None to Log
 - Click **Publish**
 - Click **Install Policy** and install **AccessPolicy**
+  - First just install access policy
+  - Next install both access policy and threat prevention policy
 
 # Basic Testing
 - From the left menu click **Logs & Monitor**
 - From the ribbon, click **Logs**
-- From the Windows VM, open a public web page such as https://ipchicken.com
+- From the checkpoint-console, open a public web page such as https://ipchicken.com
+- Change the Ethernet 3 adapter to have default gateway 192.168.103.1
+- Disable Ethernet 2 adapter
+- Retry the connection to a public web page
 - Note that the management network is in the "InternalZone"
+
+PROBLEM traffic is succeeding but being logged as dropped.
 
 # Install Jumbo Hotfix
 In ElasticXL you need to follow the new rule:
