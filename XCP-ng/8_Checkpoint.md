@@ -138,6 +138,7 @@ This Windows 11 workstation will be used to build  the environment and later man
     - Click Save
 - Download and install Winscp: https://winscp.net/eng/download.php
   - Typical installation with default settings suits our purposes
+- Increase the display resolution to be able to use the firewall GUI
 
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
