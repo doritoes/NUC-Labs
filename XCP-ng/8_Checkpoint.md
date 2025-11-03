@@ -17,11 +17,6 @@ IMPORTANT NOTES
     - ElasticXL Cluster sends all traffic over the Sync network in clear-text (non-encrypted)
     - ElasticXL Cluster automatically configures the IP address of the sync network to 192.0.2.0/24. If needed, later it is possible to change the IP address of the sync network.
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
-- eth0 Mgmt
-- eth1 eth1 Internet
-- eth2 eth2 Inside
-- eth3 eth3 DMZ
-- eth4 eth1-Sync
 - Getting Check Point images may require creating an account on Check Point's web site
 - Trials and Evaluations
   - 15 day trial
@@ -66,11 +61,11 @@ IMPORTANT NOTES
   - Firewall "Sync" interface
     - Under Private networks click **Manage**
       - Click **Add a Network**
-        - Interface: **eth0**
+        - Interface: *none*
         - Name: **Check Point Sync**
         - Description: **Check Point Sync**
         - MTU: *leave blank* (default 1500)
-        - VLAN: **600**
+        - VLAN: *Leave blank because the Sync interface lldp won't work with a VLAN set*
         - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
         - Click **Create network**
 
