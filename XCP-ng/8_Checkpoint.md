@@ -13,10 +13,11 @@ IMPORTANT NOTES
     - A dedicated management interface (the port "Mgmt" is selected automatically)
     - A dedicated sync interface (the port "Sync" is selected automatically)
     - Only one ElasticXL Cluster is supported in the same Layer 2 broadcast domain (connecting Sync interfaces of different ElasticXL Clusters is not supported)
-    - Configuring the Sync interface as VLAN Trunk is not supported
+    - Configuring the Sync interface as VLAN Trunk is not supported (it's UDP broadcast)
     - ElasticXL Cluster sends all traffic over the Sync network in clear-text (non-encrypted)
     - ElasticXL Cluster automatically configures the IP address of the sync network to 192.0.2.0/24. If needed, later it is possible to change the IP address of the sync network.
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
+- With ElasticXL the FTW should run only on first member (AKA SMO); the rest of the members are installed without any additional steps on them.
 - Getting Check Point images may require creating an account on Check Point's web site
 - Trials and Evaluations
   - 15 day trial
