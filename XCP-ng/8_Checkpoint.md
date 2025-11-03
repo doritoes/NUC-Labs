@@ -61,7 +61,7 @@ IMPORTANT NOTES
   - Firewall "Sync" interface
     - Under Private networks click **Manage**
       - Click **Add a Network**
-        - Interface: *none*
+        - Interface: *none* (this creates a Private network)
         - Name: **Check Point Sync**
         - Description: **Check Point Sync**
         - MTU: *leave blank* (default 1500)
