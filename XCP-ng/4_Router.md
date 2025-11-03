@@ -24,7 +24,7 @@ NOTE in this lab we will use the following VLAN numbers for "internal" networks,
 - 300 = Check Point Inside (10.1.1.0/24)
 - 400 = Check Point DMZ (192.168.102.0/24)
 - 500 = Check Point Management (192.168.103.0/24)
-- 600 = Check Point Sync (192.168.104.0/24)
+- The Sync network is on a virtual switch with no VLAN (192.0.2.0/24 is the default configuruation)
 
 # Download the ISO
 1. Go to https://vyos.io
