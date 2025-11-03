@@ -4,18 +4,20 @@ The Check Point security gateway is a fully-featured firewall. For testing purpo
 I strongly recommend reading the book **Check Point Firewall Administration R81.10+**. The author uses Oracle VirtualBox to build a lab environment. You can adapt the lab to run on XCP-ng.
 - https://github.com/PacktPublishing/Check-Point-Firewall-Administration-R81.10-
 
-This section will walk you through setting up a simple Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
+This section will walk you through setting up a "simple" ElasticXL Check Point firewall environment on XCP-ng. From this, you can expand on the concept to run more complex designs.
 
 IMPORTANT NOTES
-- This Lab uses R82 with the <i>cluster method ElasticXL</i>. This is VERY DIFFERENT from the traditional ClusterXL method.
+- This Lab uses R82 with the new <i>cluster method ElasticXL</i>. This is VERY DIFFERENT from the traditional ClusterXL method.
   - https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/ElasticXL-Important-Notes.htm
+  - https://community.checkpoint.com/t5/Security-Gateways/R82-elasticXL-lab/td-p/219343
   - ElasticXL Cluster requires at least 4 interfaces on each ElasticXL Cluster Member:
-    - A dedicated management interface (the port "Mgmt" is selected automatically)
-    - A dedicated sync interface (the port "Sync" is selected automatically)
+    - A dedicated management interface (the port "Mgmt" is selected automatically) (eth0)
+    - A dedicated sync interface (the port "Sync" is selected automatically) (eth1)
     - Only one ElasticXL Cluster is supported in the same Layer 2 broadcast domain (connecting Sync interfaces of different ElasticXL Clusters is not supported)
     - Configuring the Sync interface as VLAN Trunk is not supported (it's UDP broadcast)
     - ElasticXL Cluster sends all traffic over the Sync network in clear-text (non-encrypted)
     - ElasticXL Cluster automatically configures the IP address of the sync network to 192.0.2.0/24. If needed, later it is possible to change the IP address of the sync network.
+    - Up two 3 members per site, maximum 2 sites (total 6 members)
 - Be sure to disable TX checksumming on the network interfaces connected to the firewall as noted below
 - With ElasticXL the FTW should run only on first member (AKA SMO); the rest of the members are installed without any additional steps on them.
 - Getting Check Point images may require creating an account on Check Point's web site
@@ -76,8 +78,7 @@ For this lab we are using [R820](https://support.checkpoint.com/results/sk/sk181
   - https://support.checkpoint.com/results/download/135012
 - Download Check Point R82 SmartConsole package
   - https://support.checkpoint.com/results/download/139568
-- Check Point has begun blocking SmartConsole client downloads if you don't have
-    - an account
+- Check Point has begun blocking SmartConsole client downloads if you don't have an account
   - We will cover the workarounds
     - Use the link from within the SMS Web GUI
     - Use the web version of SmartConsole
@@ -134,7 +135,7 @@ This Windows 11 workstation will be used to build  the environment and later man
     - Click Save
 - Download and install Winscp: https://winscp.net/eng/download.php
   - Typical installation with default settings suits our purposes
-- Increase the display resolution to be able to use the firewall GUI
+- Increase the display resolution to be able to use the firewall GUI properly
 
 # Create Check Point Template
 Comments on sizing (vCPU, RAM, storage):
@@ -224,7 +225,7 @@ Steps:
     - Username: admin
     - Password: the password you selected
     - Click **Login**
-    - **Accept** the warnings, and **Contine**
+    - **Accept** the warnings, and **Continue**
     - Drag LinuxGuestTools-8.4.0-1.tar.gz file to the Check Point device's `/home/admin` folder
       - Click OK
   - Close WinSCP
@@ -288,27 +289,62 @@ Steps:
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 - Create Gateway 2 (GW2)
+  - We cannot use the same template with ElasticXL!
   - From the left menu click **New** > **VM**
     - Select the pool **xcgp-ng-lab1**
-    - Template: **checkpoint-template**
+    - Template: **Other install media**
     - Name: **checkpoint-gw1-2**
     - Description: **R82 Check Point Gateway 2**
     - CPU: **4 vCPU**
     - RAM: **4GB**
-    - Click **Create**
+      - Topology: *Default behavior*
+  - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
+  - First Interface: eth0  = Mgmt
+    - Network: from the dropdown select the **Check Point Management** network you created earlier
+  - Second Interface: eth1 = eth1-Sync
+    - Click **Add interface**
+    - Network: from the dropdown select the **Check Point Sync** network you created earlier
+  - Third Interface: eth2 = eth2
+    - Click **Add interface**
+    - Network: from the dropdown select the **pool-wide network associated with eth0**
+    - This is the "Internet" for the Lab
+  - Fourth Interface: eth3 = eth3
+    - Click **Add interface**
+    - Network: from the dropdown select the **Check Point Inside** network you created earlier
+  - Fifth Interface: eth4 = eth4
+    - Click **Add interface**
+    - Network: from the dropdown select the **Check Point DMZ** network you created earlier
+  - Disks: Click **Add disk**
+    - Add **128GB** disk
+  - Click **Create**
   - Disable TX Checksumming
     - Click the Network tab
     - Each interface has a blue gear icon to the right
     - For each interface, click the blue gear, click to disable TX checksumming, and click OK
-  - Log in at the console
-  - Configure hostname and IP address
-    - `set hostname gw1-2`
-    - `set interface eth0 ipv4-address 192.168.103.2 mask-length 24`
-    - `set interface eth0 comments "Management"`
-    - `set interface eth0 state on`
-    - `save config`
-  - You can now ping the SMS: `ping 192.168.103.4`
-  - IMPORTANT the second gateway will be detected using LLDP; the details of the configuration do note matter
+  - Click **Console** tab and watch as the system boots
+- At the boot menu, select **Install Gaia on this system**
+- Accept the installation message **OK**
+- Confirm the keyboard type **OK**
+- Accept the default partitions sizing for 128GB drive
+  - Swap: 8GB (6%)
+  - Root: 20GB (16%)
+  - Logs: 20GB (16%)
+  - Backup and upgrade: 79GB (62%)
+  - Feel free to customize
+  - Choose **OK**
+- Select a password for the "admin" account
+- Select a password for <ins>maintenance mode "admin" user</ins>
+- Select **eth0** as the management port
+  - IP address: **192.168.103.254**
+  - Netmask: **255.255.255.0**
+  - Default gateway: **blank**
+    - *will auto populate with 192.168.103.254, clear it*
+  - NO DHCP server on the management interface
+  - Select **OK**
+- Confirm you want to continue with formatting the drive **OK**
+- When the message `Installation complete.` message appears
+  - Press enter
+  - Wait for the system to start to reboot, then eject the ISO
 
 # Set up SMS
 - From `checkpoint-console` point browser to https://192.168.103.4 (the SMS web GUI)
@@ -454,40 +490,6 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
   - Click **Save**
 - Test
   - From the gateway you can now ping the Internet and do nslookups
-## GW1 second Member
-PROBLEM - tried not configuring at this point, and then runnign FTW to set up as cluster member. Second member still doesn't show up.
-
-- From `checkpoint-console`, point browser to https://192.168.103.2
-  - Accept the self-signed certificate
-- Log in as `admin` and the password you selected
-- Complete First Time Configuration Wizard (FTCW) aka 'FTW'
-  - Click **Next**
-  - Continue with R82 configuration and **Next**
-  - Management Connection
-    - Leave Default gateway blank
-    - Leave IPv6 Off
-    - Click **Next**
-  - Internet Connection
-    - Leave unconfigured and click **Next**
-  - Device Information
-    - Host Name: **gw1-2**
-    - Click **Next**
-  - Date and Time Settings
-    - Select **Use Network Time Protocol (NTP)** and select a time zone
-    - Click **Next**
-  - Select **Security Gateway and/or Security Management** and click **Next**
-  - Products
-    - Leave **Security Gateway** selected
-    - <ins>Uncheck</ins> Security Mangement
-    - Clustering
-      - <i>Check</i> Unit is part of a cluster, type: **ElasticXL** (this is the new cluster mechanism; the old one in R81.20 is ClusterXL)
-    - Click **Next**
-  - Secure Communication to Management Server
-    - Enter the SIC/Activation key twice (this is one time password, you will use it later)
-      - Example: `xcplab123!`
-    - Click **Next**
-  - Wait patiently as the configuration is applied
-  - Click **Finish** then **OK** to accept the reboot
 
 # Create Firewall Cluster in Smart Console
 Yes, fully configure with one firewall. Will add the second gateway later.
@@ -661,13 +663,27 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
   - Click **Cluster Management**
   - Note the first gateway is there gw1-s0-01 (site one, number 1)
   - There are no pending gateways listed, so the second gateway isn't detected yet
-- Logging in to https://192.168.103.2 it' only sees itself
-- This is not enough to show up as a pending gateway
-- PROBLEM NEED TO SOLVE
+  - PROBLEM NEED TO SOLVE
+- troubleshoot on gateway gw1-2 (new member)
+  - ifconfig -a
+  - ps auxww | grep exl_detectiond
+  - vi /opt/ElasticXL/exl_detection/src/exl_detectiond.py
+  - from
+    - if __machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm:
+  - to
+    - if False: #__machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm
+  - run this
+    - dbset process:exl_detectiond t
+    - dbset :save
+    - tellpm process:exl_detectiond t
+  - ifconfig will now show eth1 as 192.0.2.254
+    - try ping 192.0.2.1 and from SMO ping 192.0.2.254
+  - if this doesn't work, apply to the SMO too
 - View Pending Gateways: 1
 - Add pending Gateways
 - Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)
 - Click OK and wait for the new appliance to join the existing cluster
+- 🌱 confirm jumbo hotfix applied on both members
 
 # Install Jumbo Hotfix on All Gateways
 In ElasticXL you need to follow the new rule:
