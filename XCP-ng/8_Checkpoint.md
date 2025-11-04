@@ -68,7 +68,7 @@ IMPORTANT NOTES
         - Name: **Check Point Sync**
         - Description: **Check Point Sync**
         - MTU: *leave blank* (default 1500)
-        - VLAN: *Leave blank because the Sync interface lldp won't work with a VLAN set*
+        - VLAN: *Leave blank because the Sync interface is not supposed to be on a VLAN*
         - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
         - Click **Create network**
 
