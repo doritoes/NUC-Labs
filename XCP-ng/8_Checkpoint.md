@@ -456,9 +456,10 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
     - Enter the SIC/Activation key twice (this is one time password, you will use it later)
       - Example: `xcplab123!`
     - Click **Next**
+  - Click **Finish** and then **Yes**
   - Wait patiently as the configuration is applied
-  - Click **Finish** then **OK** to accept the reboot
 - Configure interfaces
+  - Log back in https://192.168.103.1
   - From the left menu click Network Management > **Network Interfaces**
   - Mgmt - no IP address, member of bond magg1 (which has the management IP address)
   - eth2 is the Internet, already has IP address
@@ -480,12 +481,13 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
     - IPv4: Select **Use the following IPv4 address**
       - IPv4 address: **192.168.102.1**
       - Subnet mask: **255.255.255.0**
+      - Yes this is the cluster virtual IP address
     - Click **OK**
 - Edit the Default Route
   - From the left menu click Network Management > **IPv4 Static Routes**
   - Click the "Default" route and then click **Edit**
   - Click **Add Gateway** > **IP Address**
-  - Enter the default gateway for your Lab network
+  - Enter the default gateway IP address for your Lab network
   - Click **OK**
   - Click **Save**
 - Test
@@ -495,27 +497,23 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
 Yes, fully configure with one firewall. Will add the second gateway later.
 
 ## Create Cluster Object
-- On the Windows workstation, Log in to SmartConsole again
+- On `checkpoint-console`, Log in to SmartConsole again
 - From the left menu, click **Gateways & Servers** (the default view when using SmartConsole for the first time)
 - The **New** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
 - Click **New**  > **Gateway**
 - Click **Classic Mode**
-  - Cluster Name: **GW1** (best practice: same name as the appliance)
+  - Cluster Name: **gw1** (best practice: same name as the appliance)
   - Cluster IPv4 Address: use the managment IP address 192.168.103.1
-  - Leave cluster settings at the default (ClusterXL and High Availability)
-  - Click **Add** > **New Cluster Member** to add the first firewall, GW1
-    - Name: **gw1**
-    - IPv4 Address: **192.168.103.1** (the management IP)
-    - Comment: **ElasticXL cluster**
+  - Comment: **ElasticXL cluster**
     - Click **Communication...**
     - Activation Key: `xcplab123!` and confirm it
     - Click **Initialize**
     - Click **OK**
   - Click to **Close** the topology information
+  - Click **OK** to acknowledge the threat preventions blades are active by default
   - Click **OK**, **Yes** to accept the portal message
 - Double-Click the new **gw1** gateway you created
   - From the tree on the left, click **Network Management**
-  - Click **Get Interfaces** > **Get Interfaces Without Topology**
   - Edit eth2
     - Comments: Internet
     - Under Topology click Modify
@@ -543,18 +541,19 @@ Yes, fully configure with one firewall. Will add the second gateway later.
 - Re-open **gw1**
 - General Properties
   - Check **Monitoring**
-  -  Leave IPSec VPN unchecked for this lab (feel free to experiment)
+  - Leave IPSec VPN unchecked for this lab (feel free to experiment)
   - Optionally Check Application Control and URL Filtering if you would like to experiment 
 - NAT
   - Check Hide internal networks behind the Gateway's external IP
     - This is acceptable for this Lab and cases where there are less than 50 hosts behind the firewall
 - Network Management
-  - To calculate the network topology from routes
+  - If you have added additional routes for a complex topology, calculate the network topology from routes
     - Click Get Interfaces > Get Interfaces With Topology
+- Click **OK** to close the gateway object
 - Click **Publish**
 
 # Create Network and Host Objects
-- On the Windows VM log in to Smart Console
+- On `checkpoint-console`, Log in to SmartConsole again
 - From the menu on the left, click **Command Line**
 - Paste in the following text
 ~~~
@@ -567,6 +566,9 @@ add network name "Inside_Network" subnet "10.1.1.0" subnet-mask "255.255.255.0" 
 add network name "DMZ_Network" subnet "192.168.102.0" subnet-mask "255.255.255.0" color "Red"
 add network name "Mgmt_Network" subnet "192.168.103.0" subnet-mask "255.255.255.0"
 ~~~
+- Close the command line api interface
+
+TIP If you open this GitHub page from `checkpoint-console`, it's easy to copy/paste from there.
 
 # Create Initial Policy
 This policy is overly permissive, but it's a place to start.
@@ -574,8 +576,8 @@ This policy is overly permissive, but it's a place to start.
 - Click the Check Point menu button at top left then click **Manage Polices and Layers**
 - Click the New icon under Policies
   - Name: **AccessPolicy**
-  - Click **OK**
-  - Click **Close**
+  - Note that the default has the access control and threat prevention policies enabled
+  - Click **OK** and then click **Close**
 - From the left menu click **Security Policies**
 - If not already selected, click on the policy **AccessPolicy** or click on "+" and open it
 - Under **Access Control** click **Policy**
@@ -628,16 +630,23 @@ This policy is overly permissive, but it's a place to start.
   - Next install both access policy and threat prevention policy
 
 # Basic Testing
-- From the left menu click **Logs & Monitor**
-- From the ribbon, click **Logs**
-- From the checkpoint-console, open a public web page such as https://ipchicken.com
+Test from `checkpoint-console`
 - Change the Ethernet 3 adapter to have default gateway 192.168.103.1
-- Disable Ethernet 2 adapter
-- Retry the connection to a public web page
+- Disable Ethernet 2 adapter (the direct connection to the Lab network)
+- Open a public web page such as https://ipchicken.com and test Internet access
+- In SmartConsole, from the left menu click **Logs & Monitor**
+- From the ribbon, click **Logs**
+  - View the logs from the source "SmartConsole" 192.168.103.100
+  - HHTP, HTTPS, and DNS are allowed
+  - quic (udp/443) is not allowed
+  - ICMP ping is not allowed
+
 - Note that the management network is in the "InternalZone" due to the toplogy setting made on interface magg1
 
 # Install Jumbo Hotfix on SMS
-This method is from the command line on `checkpoint-sms`. You will select the hotfix. It is possible to install the jumbo hotfix from the SMS web gui.
+This method is from the command line on `checkpoint-sms`.It is possible to install the jumbo hotfix from the SMS web gui https://192.168.103.4 Software Update > Available Updates
+
+You will select the jumbo hotfix by the number from the list of available updates.
 - installer check-for-updates
 - installer download [tab]
 - installer download <number>
@@ -650,8 +659,8 @@ This method is from the command line on `checkpoint-sms`. You will select the ho
 
 # Install Jumbo Hotfix on Single Gateway
 For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the single first gateway before adding any more gateways.
-- SmartConsole
-- Gateways & Servers
+- Log in to SmartConsole
+- Click **Gateways & Servers**
 - Right-click gw1 > Install Hotfix/Jumbo...
 - Recommended jumbo
 - Verify
