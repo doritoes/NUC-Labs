@@ -662,20 +662,21 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
 - Log in to SmartConsole
 - Click **Gateways & Servers**
 - Right-click gw1 > Install Hotfix/Jumbo...
-- Recommended jumbo
-- Verify
-- Install
+- Install the recommended Jumbo (or install specific Hotfix/Jumbo)
+- Click Verify
+- Once it succeeds, click **Install**
+- The gateway will reboot, and the update will succeed
 
 # GW1 Second Member
-- Log in to the first gateway's managment IP add to access the Web GUI
+- Log in to the first gateway's managment IP
   - https://192.168.103.1
   - Click **Cluster Management**
   - Note the first gateway is there gw1-s0-01 (site one, number 1)
   - There are no pending gateways listed, so the second gateway isn't detected yet
-  - PROBLEM NEED TO SOLVE
-- troubleshoot on gateway gw1-2 (new member)
-  - ifconfig -a
-  - ps auxww | grep exl_detectiond
+- Log in to the second gateway's console (gw1-2 new member)
+  - `expert`
+  - `ifconfig -a`
+    - note no IP address on eth1
   - vi /opt/ElasticXL/exl_detection/src/exl_detectiond.py
   - from
     - if __machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm:
@@ -686,12 +687,32 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
     - dbset :save
     - tellpm process:exl_detectiond t
   - ifconfig will now show eth1 as 192.0.2.254
+    - in testing, had to reboot the gateway for this to work
     - try ping 192.0.2.1 and from SMO ping 192.0.2.254
-  - if this doesn't work, apply to the SMO too
-- View Pending Gateways: 1
-- Add pending Gateways
-- Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)
-- Click OK and wait for the new appliance to join the existing cluster
+- At this point the second gateway doesn't show up as a Pending Gateway, so repeat the change on the first gateway
+- Log in to the first gateway's console (gw1)
+  - `expert`
+  - vi /opt/ElasticXL/exl_detection/src/exl_detectiond.py
+  - from
+    - if __machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm:
+  - to
+    - if False: #__machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm
+  - run this
+    - dbset process:exl_detectiond t
+    - dbset :save
+    - tellpm process:exl_detectiond t
+- In testing, no reboot was required
+- From `checkpoint-console` log in to https://192.168.103.1
+- Click **Custer Management**
+- Click **Pending Gateways**
+- Select **Add to existing Site (Configuration load sharing with 1 Gateway in Site 1)** and click **Add**
+- Click **OK** for the message *Add member request succeeded, the member's addition is in progress.*
+- Wait patiently for the new member to be configured (including JHF packages)
+  - The new gateway's name starts as *Not available* in the web GUI
+  - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an effor on one or more sites"
+
+CONINTUE HERE
+
 - 🌱 confirm jumbo hotfix applied on both members
 
 # Install Jumbo Hotfix on All Gateways
