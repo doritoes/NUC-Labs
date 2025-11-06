@@ -668,6 +668,8 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
 - The gateway will reboot, and the update will succeed
 
 # GW1 Second Member
+NOTE We will be using the WebGUI method to add the second member. There is also a CLI process you can use.
+
 - Log in to the first gateway's managment IP
   - https://192.168.103.1
   - Click **Cluster Management**
