@@ -712,8 +712,9 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
 - Wait patiently for the new member to be configured (including JHF packages)
   - The new gateway's name starts as *Not available* in the web GUI
   - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an effor on one or more sites"
+  - This takes a very long time
 
-CONINTUE HERE
+CONTINUE HERE
 
 - 🌱 confirm jumbo hotfix applied on both members
 
