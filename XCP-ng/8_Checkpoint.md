@@ -689,8 +689,9 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
     - dbset :save
     - tellpm process:exl_detectiond t
   - ifconfig will now show eth1 as 192.0.2.254
-    - in testing, had to reboot the gateway for this to work
     - try ping 192.0.2.1 and from SMO ping 192.0.2.254
+    - in testing, had to reboot the gateway for the IP to change and the ping test to work
+    - however, the second appliance shows up as a pending gateway without requiring the reboot IF you apply the fix to the first gateway FIRST
 - At this point the second gateway doesn't show up as a Pending Gateway, so repeat the change on the first gateway
 - Log in to the first gateway's console (gw1)
   - `expert`
@@ -714,7 +715,8 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
   - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an effor on one or more sites"
   - This takes a very long time
   - PROBLEM the clone failed see lightshot.log file
-    - tried to remove the second member...
+    - tried to remove the second member without success
+    - during the clone operation there was a device out of space error logged, but all partitions showed space
 
 CONTINUE HERE
 
