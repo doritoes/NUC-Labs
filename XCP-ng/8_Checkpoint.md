@@ -714,9 +714,14 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
   - The new gateway's name starts as *Not available* in the web GUI
   - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an effor on one or more sites"
   - This takes a very long time
-  - PROBLEM the clone failed see lightshot.log file
-    - tried to remove the second member without success
+  - PROBLEM the clone failed
+    - see /var/log/lightshot.log file "Lightshot Partition is out of space"
     - during the clone operation there was a device out of space error logged, but all partitions showed space
+    - retracing the log actions to view the lightshot partition
+      - mount /dev/vg_splat/lv_log_lightshot /mnt/lightshot
+      - df -h
+      - /dev/mapper/vg_splat-lv_log_lightshot  14G  14G 124K  100% /mnt/lightshot
+  - tried to remove the second member, but it didn't come back to pending; had to destroy and rebuild
 
 CONTINUE HERE
 
