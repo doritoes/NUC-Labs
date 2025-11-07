@@ -8,6 +8,7 @@ This section will walk you through setting up a "simple" ElasticXL Check Point f
 
 IMPORTANT NOTES
 - This Lab uses R82 with the new <i>cluster method ElasticXL</i>. This is VERY DIFFERENT from the traditional ClusterXL method.
+- ElasticXL is <i>only</i> supported on <i>physical appliances</i> with R82 as of the time of this writing; this Lab testing is obviously not for production
   - https://sc1.checkpoint.com/documents/R82/WebAdminGuides/EN/CP_R82_ScalablePlatforms_AdminGuide/Content/Topics-SPG/ElasticXL/ElasticXL-Important-Notes.htm
   - https://community.checkpoint.com/t5/Security-Gateways/R82-elasticXL-lab/td-p/219343
   - ElasticXL Cluster requires at least 4 interfaces on each ElasticXL Cluster Member:
@@ -726,6 +727,7 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
 CONTINUE HERE
 
 - 🌱 confirm jumbo hotfix applied on both members
+- 🌱 check health: "asg stat vs all"
 
 # Install Jumbo Hotfix on All Gateways
 In ElasticXL you need to follow the new rule:
