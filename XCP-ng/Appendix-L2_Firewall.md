@@ -166,6 +166,7 @@ Overview:
     - WAN xn0 (mac)
 - Power > Reboot, click Yes
 - Test again
+- PROBLEM the IP address to the web ui of the OPNsense firewall isn't responding
 - Examine firewall rule
   - Firewall > Rules > LAN
   - Note the rue "Default allow LAN to any rule"
