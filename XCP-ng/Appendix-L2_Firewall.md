@@ -29,6 +29,14 @@ Overview:
 
 # Modify the Network
 🌱 do we need to add something to XCP-ng here?
+- Add a private network for the secured host(s)
+  - Home > Hosts > xcp-ng-lab1
+  - Network > Manager
+  - Add a newwork
+    - Interface: *leave blank*
+    - Name: L2net
+    - Description: Layer 2 bridged network off lab
+    - NBD: No NBD Connection
 
 # Create OPNSense VM
 - From the left menu click **New** > **VM**
@@ -45,9 +53,9 @@ Overview:
     - Management interface
   - 🌱 Revaluating the L2 bridge requirements, set up OPNsense with single LAN, then add extra NICs during installation
   - Second Interface: Click **Add interface**
-    - Network: from the dropdown select the **Bridge Inside**
+    - Network: from the dropdown select the **L2net**
   - Third Interface: Click **Add interface**
-    - Network: from the dropdown select the **Bridge Outside**
+    - Network: from the dropdown select the **pool-wide host network (eth0)**
   - Disks: Click **Add disk**
     - Add **32GB** disk
   - Click **Show advanced settings**
@@ -58,7 +66,6 @@ Overview:
   - Next to each interface is a small settings icon with a blue background
   - For every interface click the gear icon then <ins>disable TX checksumming</ins>
 - Click **Console** tab and watch as the system boots
-- Click the **Network** tab
 
 # Install OPNsense
 - Log in as `installer`/`opnsense`
@@ -73,7 +80,7 @@ Overview:
 - Select a **Root Password** when prompted
 - Select **Complete Install**
 - Select **Reboot now**
-- Eject the ISO once the reboot starts (click the icon on Console tab)
+- Eject the ISO once the reboot starts (click the eject icon on Console tab)
 - Wait for the system to boot
 
 # Configure OPNsense
@@ -91,8 +98,8 @@ Overview:
 - 2) Set interface IP addresses
   - LAN
     - Configure IP via DHCP? **No**
-    - LAN IPv4 Address: **192.168.1.1**
-    - Mask bits: **24**
+    - LAN IPv4 Address: **192.168.1.150** (an IP address on your Lab network)
+    - Mask bits: **24** (to match your Lab network)
     - Upstream gateway: *press Enter to accept no gateway*
     - IPv6 address: **No**, **No**, and **None** (press Enter)
     - Enable DHCP server on LAN: **No**
@@ -101,10 +108,33 @@ Overview:
     - Restore web GUI defaults? **No**
   - WAN
     - there is no WAN
+- System: Configuration: Wizard
+  - Log in to the firewall using the IP address you set (i.e., https://192.168.1.150)
+  - Next
+  - General Information tab
+    - Hostname: l2firewall
+    - Domain: xcpng.lab
+    - Optionally set Timezone
+    - DMZ: 9.9.9.9, 1.1.1.1
+    - Uncheck Override DNS
+    - Uncheck Enable Resolver
+    - Click Next
+  - Network [WAN] tab
+    - Type: DHCP (since there is no WAN interface, this is the easiest option)
+    - Oddly it still asks for an IP address(!); in Lab used 1.1.1.1/32
+    - Click Next
+  - Network [LAB] tab
+    - Uncheck Configure DHCP server
+    - Click Next
+  - Set initial password tab
+    - Click Next to leave password the same
+  - Click Apply
 - Create the bridge
   - Interfaces > Devices > Bridge
-  - ADD a new bridge, select the other 2 interfaces OPT1, OPT2 (for example)
-  - Save the new bridge
+  - ADD a new bridge
+  - Select OPT1 and OPT2
+  - Optionally add a descriptiohn
+  - Click Save
 - The OPT1 and OPT2 interfaces should NOT have any IP address configuration
   - they should be enabled, that's it
 - Interfaces > Assignments
@@ -114,7 +144,7 @@ Overview:
 - Configure the Bridge
   - Interfaces > Devices > Bridge
   - Add the newly created interface to the bridge
-  - (if using IPv6, check Enable link-local address
+  - (if using IPv6, check Enable link-local address)
   - Remember the new interface needs to be enabled
 - System Tunables
   - System > Settings > Tunables
@@ -123,15 +153,27 @@ Overview:
     - net.link.bridge.pfil_bridge = 1
       - Set to 1 to enable filtering on the bridge interfaces
     - Save
+    - Apply
+- Set static IP on the Windows test machine on the L2net network
+- At this point network connectivity is working (ping, nsloookup), Internet
+- BUT the firewall isn't filtering the traffic
+- Setting the Windows test machine to DHCP breaks everything
 - Confirm interface assignments
-  - LAN bridge0
-  - OPT1 igb2 (mac)
-  - OPT2 igb3 (mac)
-  - OTP3 igb1 (mac)
-  - WAN igb0 (mac)
-  - New interface ovpns1 (00:00:00:00:00:00)
-- Reboot
-- Test
+  - Interfaces > Assignments
+  - LAN bridge0 (L2 bridge)
+  - OPT1 xn1 (mac)
+  - OPT2 xn2 (mac)
+    - WAN xn0 (mac)
+- Power > Reboot, click Yes
+- Test again
+- Examine firewall rule
+  - Firewall > Rules > LAN
+  - Note the rue "Default allow LAN to any rule"
+  - Edit it, check Log packets that are handled to this rule, click Save
+  - Click Apply changes
+- View the firewall logs
+  - Firewall > Log Files > Live View
+  - Repeat your tests of the Internet connection
 
 # Create a Desktop VM
 - New > VM
