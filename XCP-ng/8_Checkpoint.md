@@ -671,6 +671,11 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
 # GW1 Second Member
 NOTE We will be using the WebGUI method to add the second member. There is also a CLI process you can use.
 
+- Prepare first gateway from console
+  - set lightshot-partition size 20
+  - save config
+  - reboot
+
 - Log in to the first gateway's managment IP
   - https://192.168.103.1
   - Click **Cluster Management**
@@ -723,7 +728,15 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
       - df -h
       - /dev/mapper/vg_splat-lv_log_lightshot  14G  14G 124K  100% /mnt/lightshot
   - tried to remove the second member, but it didn't come back to pending; had to destroy and rebuild
-
+- At this point we ran into some issues with the Lightshot partition running out of space
+  - show lightshot-partition
+    - gw1-1: availble 5.5G, required 10.684G, size 14G, used: 8.1G
+    - gw1-2: available 0, required 9.004G, size 0, used: 0
+  - Set lightshot partition on gw1-2
+    - set lightshot-partition size 20
+  - Set lightshot partion on SMO from gclish
+    - set lightshot-partition size 20
+    - save config
 CONTINUE HERE
 
 - 🌱 confirm jumbo hotfix applied on both members
