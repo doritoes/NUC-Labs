@@ -921,10 +921,11 @@ Since the Lab network is our simulated Internet, we are going to use another IP 
   - `http://<the IP address you assigned>`- *works*
 - From a device in your Lab
   - `http://<the IP address you assigned>`
-    - In Lab testing this used to work with R81.20 and ClusterXL
     - With ElasticXL I see the firewall logging accepted traffic
-      - web page does not load
-      - tcpdump on the web server shows the SYN and SYN/ACK packets
+    - web page loaded after I cleared the cache/incognito mode
+    - tcpdump on the web server shows the SYN and SYN/ACK packets
+    - `fw ctl arp` shows the ARP entries for each member (yes two different proxy arps, one on each member)
+    - Expert mode: g_tcpdump host 192.168.102.10
 - Review the logs to see what rule was matched for each connection
   - Do you see any drops? What could be the cause of out-of-state drops?
 
