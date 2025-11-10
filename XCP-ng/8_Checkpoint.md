@@ -726,7 +726,7 @@ In ElasticXL you need to follow the new rule:
   - Connect to one of the security group members in the logical group "B" over SSH
   - set cluster members-admin-state ids <SGM IDs in Group "A"> down
     - set cluster members-admin-state ids ids 1_1-1_4 down
-  - Connect to one of the Security Group Mmebers in the Logical Group "A"
+  - Connect to one of the Security Group Members in the Logical Group "A"
     - member <Member ID>
     - Ex. member 1_1
   - gclish
@@ -764,12 +764,70 @@ In ElasticXL you need to follow the new rule:
 
 Testing
 - log in to SMO
-- installer check-for-updates
-- installer download [tab]
-- installer download `<package number>`
-- show installer packages imported
-- installer verify [Tab]
-- installer verify <number of the CPUSE package> member_ids all
+- `installer check-for-updates`
+- Download JHF
+  - `installer download` [tab]
+  - `installer download <package number>`
+  - see also
+    - `installer download <package number>` member_ids all`
+    - `installer download `<package number>` member_ids 1_01`
+    - `installer download `<package number>` member_ids 1_01-1_02`
+    - `installer download `<package number>` member_ids 1_01,1_02`
+- `show installer packages imported`
+  - NOTE in testing it showed in second member, not not the first
+- Verify JHF
+  - installer verify [Tab]
+  - installer verify `<number of the CPUSE package>`
+  - see also
+    - installer verify `<number of the CPUSE package>` member_ids all
+    - installer verify `<number of the CPUSE package>` member_ids 1_01
+    - installer verify `<number of the CPUSE package>` member_ids 1_01-1_02
+    - installer verify `<number of the CPUSE package>` member_ids 1_01,1_02
+- Disable SMO image cloning feature
+  - show cluster configuration image auto-clone state
+  - set cluster configuration image auto-clone state off
+  - show cluster configuration image auto-clone state
+  - NOTE In Lab testing the state was already off, not sure why
+- Install the Hotfix on Security Group Members 1_01 (group "A")
+  - log in to the console of gw1-1
+  - `set cluster members-admin-state ids 1_01 down` and confirm
+  - installer install [Tab]
+  - installer install `<Number of CPUSE Package>` member_ids 1_01`
+  - Accept the warning members will automatically reboot: y
+  - Confirm that auto-clone is off: y
+  - Confirm package installation: y
+  - Enter your name when prompted
+  - Enter a reason: Apply JHF
+  - Monitor the system until security group members in logical group "A" are in the "UP" state
+    - View from the SMO's WebGUI: https://192.168.103.1 > Cluster Management
+    - Log in to gw1-2, the other member and monitor from CLI
+      - `show cluster info overview live`
+        - see also `show cluster`
+- Install the Hotfix on Security Group Members 1_02 (group "B")
+  - log in to the console of gw1-2
+  - `set cluster members-admin-state ids 1_02 down`
+  - installer install [Tab]
+  - installer install `<Number of CPUSE Package>` member_ids 1_02`
+  - Accept the warning members will automatically reboot: y
+  - Confirm that auto-clone is off: y
+  - Confirm package installation: y
+  - Enter your name when prompted
+  - Enter a reason: Apply JHF
+  - Monitor the system until security group members in logical group "B" are in the "UP" state
+    - View from the SMO's WebGUI: https://192.168.103.1 > Cluster Management
+    - Log in to gw1-1, the other member and monitor from CLI
+      - `show cluster info overview live`
+        - see also `show cluster`
+- Enable SMO image cloning feature
+  - show cluster configuration image auto-clone state
+  - set cluster configuration image auto-clone state on
+  - show cluster configuration image auto-clone state
+  - NOTE In Lab testing the state was already off, not sure why
+- Make sure the Hotfix is installed on all Security Group Members
+  - Log in to the WebGUI
+  - Click Cluster Management
+  - Note the version is listed for each member
+  - NOTE running `cpinfo -y all` from the command line on each member works too
 
 # Add Windows 10 Workstation
 - New > VM
@@ -792,8 +850,7 @@ Testing
 - Test access
   - Access to the internet should work
   - Access to the Web GUI of the firewall servers will not work
-    - https://192.168.103.2
-    - https://192.168.103.3
+    - https://192.168.103.1
     - https://192.168.103.4
   - Review the logs to confirm
 - Add a firewall rule to allow InsideZone to Inside zone for https and ssh
