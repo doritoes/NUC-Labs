@@ -917,16 +917,19 @@ Since the Lab network is our simulated Internet, we are going to use another IP 
     - IPv4 address: the IP address you assigned in your Lab
 - Publish and push policy
 - From workstation1 (10.1.1.100)
-  - http://192.168.102.10
-  - `http://<the IP address you assigned>`
+  - http://192.168.102.10 - *works*
+  - `http://<the IP address you assigned>`- *works*
 - From a device in your Lab
   - `http://<the IP address you assigned>`
+    - In Lab testing this used to work with R81.20 and ClusterXL
+    - With ElasticXL I see the firewall logging accepted traffic
+      - web page does not load
+      - tcpdump on the web server shows the SYN and SYN/ACK packets
 - Review the logs to see what rule was matched for each connection
   - Do you see any drops? What could be the cause of out-of-state drops?
 
 # Advanced Notes
 Lab users not familiar with Check Point may wonder about these
-
 - Does the Check Point management interface provide management/data plan separation?
   - Not by default. Management Data Plane Separation (MDPS) must be enabled and has requirements - https://support.checkpoint.com/results/sk/sk138672
 - Does Check Point offer application control and URL filtering?
