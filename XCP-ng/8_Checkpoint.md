@@ -461,10 +461,10 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
   - Wait patiently as the configuration is applied
 - Configure interfaces
   - Log back in https://192.168.103.1
-  - From the left menu click Network Management > **Network Interfaces**
+  - From the left menu click **Network Management** > **Network Interfaces**
   - Mgmt - no IP address, member of bond magg1 (which has the management IP address)
   - eth2 is the Internet, already has IP address
-  - where is eth1? used for Sync
+  - Where is eth1? used for Sync
   - Compare with console interfaces:
     - Mgmt, Sync, eth1-Sync, eth2, lo, magg1
     - But when you try to use show interface, you can only select Mgmt, eth2, eth3, eth4, lo, magg1
@@ -485,7 +485,7 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
       - Yes this is the cluster virtual IP address
     - Click **OK**
 - Edit the Default Route
-  - From the left menu click Network Management > **IPv4 Static Routes**
+  - From the left menu click **Network Management** > **IPv4 Static Routes**
   - Click the "Default" route and then click **Edit**
   - Click **Add Gateway** > **IP Address**
   - Enter the default gateway IP address for your Lab network
@@ -503,7 +503,7 @@ Yes, fully configure with one firewall. Will add the second gateway later.
 - The **New** icon doesn't appear on smaller screens, click the "..." icon next to the Search bar to review more actions
 - Click **New**  > **Gateway**
 - Click **Classic Mode**
-  - Cluster Name: **gw1** (best practice: same name as the appliance)
+  - Cluster Name: **gw1** (best practice: same name as the appliance name)
   - Cluster IPv4 Address: use the managment IP address 192.168.103.1
   - Comment: **ElasticXL cluster**
     - Click **Communication...**
@@ -516,26 +516,26 @@ Yes, fully configure with one firewall. Will add the second gateway later.
 - Double-Click the new **gw1** gateway you created
   - From the tree on the left, click **Network Management**
   - Edit eth2
-    - Comments: Internet
-    - Under Topology click Modify
-    - Leads To: **Override** > **Internet**
+    - Comments: **Internet**
+    - Under Topology click **Modify**
+    - Leads To:**Internet**
     - Security Zone: **According to topology: ExternalZone**
     - Click **OK** and **OK**
   - Edit eth3
-    - Comments: Inside
-    - Under Topology click Modify
+    - Comments: **Inside**
+    - Under Topology click **Modify**
     - Security Zone: **According to topology: InternalZone**
     - Click **OK** and **OK**
   - Edit eth4
-    - Comments: DMZ
-    - Under Topology click Modify
+    - Comments: **DMZ**
+    - Under Topology click **Modify**
     - Leads To: **Override** > **This Network (Internal)** **Network defined by the interface IP and Net Mask**
     - Check **Interface leads to DMZ**
     - Security Zone: **According to topology: DMZZone**
     - Click **OK** and **OK**
   - Edit magg1
-    - Comments: Management
-    - Under Topology click Modify
+    - Comments: **Management**
+    - Under Topology **click Modify**
     - Security Zone: **According to topology: InternalZone**
     - Click **OK** and **OK**
   - Click **OK**
