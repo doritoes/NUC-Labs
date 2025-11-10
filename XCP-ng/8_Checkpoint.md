@@ -505,7 +505,7 @@ Yes, fully configure with one firewall. Will add the second gateway later.
   - Click **OK**
 - Re-open **gw1**
 - General Properties
-  - Check **Monitoring**
+  - Leave **Monitoring** unchecked as it's not supported with ElasticXL
   - Leave IPSec VPN unchecked for this lab (feel free to experiment)
   - Optionally Check Application Control and URL Filtering if you would like to experiment 
 - NAT
@@ -636,10 +636,9 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
 NOTE We will be using the WebGUI method to add the second member. There is also a CLI process you can use.
 
 - Prepare first gateway from console
-  - set lightshot-partition size 20
-  - save config
-  - reboot
-
+  - `set lightshot-partition size 20`
+  - `save config`
+  - `reboot`
 - Log in to the first gateway's managment IP
   - https://192.168.103.1
   - Click **Cluster Management**
@@ -674,7 +673,8 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
     - dbset process:exl_detectiond t
     - dbset :save
     - tellpm process:exl_detectiond t
-- In testing, no reboot was required
+- `reboot`
+  - In testing, no reboot was required
 - From `checkpoint-console` log in to https://192.168.103.1
 - Click **Custer Management**
 - Click **Pending Gateways**
@@ -701,10 +701,24 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
   - Set lightshot partion on SMO from gclish
     - set lightshot-partition size 20
     - save config
-CONTINUE HERE
-
-- 🌱 confirm jumbo hotfix applied on both members
-- 🌱 check health: "asg stat vs all"
+- Revert the changes to the exl_detectiond.py script
+- Repeat on each member
+  - `expert`
+  - vi /opt/ElasticXL/exl_detection/src/exl_detectiond.py
+  - from
+    - if False: #__machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm
+  - to
+    - if __machine_info.sync_ifn != 'Sync' and not __machine_info.is_vmware and not __machine_info.is_kvm:
+  - run this
+    - dbset process:exl_detectiond t
+    - dbset :save
+    - tellpm process:exl_detectiond t
+- `reboot`
+- Health checks
+  - if you applied the jumbo hot fix prior to adding the second members, is the hotfix applied on both members?
+    - Log in to WebGUI https://192.168.103.1 and check **Cluster Management**
+  - `asg stat vs all`
+  - from expert mode `hcp -r all`
 
 # Install Jumbo Hotfix on All Gateways
 In ElasticXL you need to follow the new rule:
@@ -713,56 +727,15 @@ In ElasticXL you need to follow the new rule:
   - Make sure you have the applicable CPUSE Offline package, put in /var/log
   - Connect to the command line on the Security Group
   - if you are in expert mode, run gclish
-  - installer import local /<Full Path>/<Name of the CPUSE Offline Package>
-  - show installer packages imported
-  - installer verify [Tab]
-  - installer verify <number of the CPUSE package> member_ids all
+  - `installer import local /<Full Path>/<Name of the CPUSE Offline Package>`
+  - `show installer packages imported`
+  - `installer verify [Tab]`
+  - `installer verify <number of the CPUSE package> member_ids all`
 - Disable SMO image cloning feature
-  - show cluster configuration image auto-clone state
-  - set cluster configuration image auto-clone state off
-  - show cluster configuration image auto-clone state
-- Install the Hotfix on Security Group Members in logical group "A"
-  - Connect to one of the security group members in the logical group "A" through the console
-  - Connect to one of the security group members in the logical group "B" over SSH
-  - set cluster members-admin-state ids <SGM IDs in Group "A"> down
-    - set cluster members-admin-state ids ids 1_1-1_4 down
-  - Connect to one of the Security Group Members in the Logical Group "A"
-    - member <Member ID>
-    - Ex. member 1_1
-  - gclish
-  - installer install [Tab]
-  - installer install <Number of CPUSE Package> member_ids <SGM IDs in Group "A">
-    - Example: installer install 2 member_ids 1_1-1_4
-  - Accept the warning members will automatically reboot: y
-  - Monitor the system until security group members in logical group "A" are in the "UP" state
-    - show cluster info overview live
-- Install the Hotfix on Security Group Members in logical group "B"
-  - Connect to one of the security group members in the logical group "B" through the console
-  - Connect to one of the security group members in the logical group "A" over SSH
-  - set cluster members-admin-state ids <SGM IDs in Group "B"> down
-    - set cluster members-admin-state ids ids 1_5-1_8 down
-  - Connect to one of the Security Group Mmebers in the Logical Group "B"
-    - member <Member ID>
-    - Ex. member 1_5
-  - gclish
-  - installer install [Tab]
-  - installer install <Number of CPUSE Package> member_ids <SGM IDs in Group "A">
-    - Example: installer install 2 member_ids 1_5-1_8
-  - Accept the warning members will automatically reboot: y
-  - Monitor the system until security group members in logical group "B" are in the "UP" state
-    - show cluster info overview live
-- Make sure the Hotfix is installed on all Security Group Members
-  - gclish
-  - use of of these tools:
-    - insights
-    - hcp
+- Install the Hotfix on Security Group Members in logical group "A", then the remainder in logical group "B"
 - Enable the SMO Image Cloning feature
-  - gclish
-  - show cluster configuration image auto-clone state
-  - set cluster configuration image auto-clone state on
-  - show cluster configuration image auto-clone state
 
-Testing
+Lab Instructions
 - log in to SMO
 - `installer check-for-updates`
 - Download JHF
@@ -825,9 +798,13 @@ Testing
   - NOTE In Lab testing the state was already off, not sure why
 - Make sure the Hotfix is installed on all Security Group Members
   - Log in to the WebGUI
-  - Click Cluster Management
-  - Note the version is listed for each member
-  - NOTE running `cpinfo -y all` from the command line on each member works too
+    - Click Cluster Management
+    - Note the version is listed for each member
+  - Log in to command line
+    - `show installer packages installed`
+    - NOTE running `cpinfo -y all` from the command line on each member works too
+  - NOTE in Lab testing, SmartConsole showed status of "-" and did not show the jumbo hotfix take
+    - I have seen this in production Maestro environments as well; it seems to be a benign issue
 
 # Add Windows 10 Workstation
 - New > VM
