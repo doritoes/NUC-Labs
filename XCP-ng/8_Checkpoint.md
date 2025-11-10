@@ -290,62 +290,26 @@ Steps:
     - `save config`
   - You can now ping the SMS: `ping 192.168.103.4`
 - Create Gateway 2 (GW2)
-  - We cannot use the same template with ElasticXL!
   - From the left menu click **New** > **VM**
     - Select the pool **xcgp-ng-lab1**
-    - Template: **Other install media**
+    - Template: **checkpoint-template**
     - Name: **checkpoint-gw1-2**
     - Description: **R82 Check Point Gateway 2**
     - CPU: **4 vCPU**
     - RAM: **4GB**
-      - Topology: *Default behavior*
-  - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
-  - First Interface: eth0  = Mgmt
-    - Network: from the dropdown select the **Check Point Management** network you created earlier
-  - Second Interface: eth1 = eth1-Sync
-    - Click **Add interface**
-    - Network: from the dropdown select the **Check Point Sync** network you created earlier
-  - Third Interface: eth2 = eth2
-    - Click **Add interface**
-    - Network: from the dropdown select the **pool-wide network associated with eth0**
-    - This is the "Internet" for the Lab
-  - Fourth Interface: eth3 = eth3
-    - Click **Add interface**
-    - Network: from the dropdown select the **Check Point Inside** network you created earlier
-  - Fifth Interface: eth4 = eth4
-    - Click **Add interface**
-    - Network: from the dropdown select the **Check Point DMZ** network you created earlier
-  - Disks: Click **Add disk**
-    - Add **128GB** disk
-  - Click **Create**
+    - Click **Create**
   - Disable TX Checksumming
     - Click the Network tab
     - Each interface has a blue gear icon to the right
     - For each interface, click the blue gear, click to disable TX checksumming, and click OK
-  - Click **Console** tab and watch as the system boots
-- At the boot menu, select **Install Gaia on this system**
-- Accept the installation message **OK**
-- Confirm the keyboard type **OK**
-- Accept the default partitions sizing for 128GB drive
-  - Swap: 8GB (6%)
-  - Root: 20GB (16%)
-  - Logs: 20GB (16%)
-  - Backup and upgrade: 79GB (62%)
-  - Feel free to customize
-  - Choose **OK**
-- Select a password for the "admin" account
-- Select a password for <ins>maintenance mode "admin" user</ins>
-- Select **eth0** as the management port
-  - IP address: **192.168.103.254**
-  - Netmask: **255.255.255.0**
-  - Default gateway: **blank**
-    - *will auto populate with 192.168.103.254, clear it*
-  - NO DHCP server on the management interface
-  - Select **OK**
-- Confirm you want to continue with formatting the drive **OK**
-- When the message `Installation complete.` message appears
-  - Press enter
-  - Wait for the system to start to reboot, then eject the ISO
+  - Log in the console
+  - Configure hostname and IP address
+    - `set hostname gw1-2`
+    - `set interface eth0 ipv4-address 192.168.103.1 mask-length 24`
+    - `set interface eth0 comments "Management"`
+    - `set interface eth0 state on`
+    - `save config`
+  - You can now ping the SMS: `ping 192.168.103.4`
 
 # Set up SMS
 - From `checkpoint-console` point browser to https://192.168.103.4 (the SMS web GUI)
