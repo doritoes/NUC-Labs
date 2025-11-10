@@ -1,6 +1,8 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
+IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R82.10, and Windows 10/Server 2022. Hopefully this can be updated to XCP-ng 8.3, Check Point R82, and Windows 11/Server 2025.
+
 This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A reduced version designed for 64GB of RAM might be in the future.
 - 19 VMs
 - 44 vCPUs (can over subscribe CPUs)
@@ -8,7 +10,7 @@ This appendix outlines building a complete lab designed for testing Check Point 
 - 71 GB storage
 
 Notes:
-- Terraform integrates with the XO server, <ins>not/ins> the XCP-ng <ins>host</ins>
+- Terraform integrates with the XO server, <ins>not</ins> the XCP-ng <ins>host</ins>
 - Once built, the Windows 10 desktop systems have a month to operate without activation
   - Some personalization features in Windows Settings are disabled if you don’t activate (cannot change desktop wallpapers, windows colors and themes, customize Start menu/taskbar/lock screen/title bar/fonts, etc.)
   - Without activation, Windows may only download critical updates; some updates like optional updates, drivers, or security updates may be missed
