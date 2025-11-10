@@ -716,7 +716,7 @@ In ElasticXL you need to follow the new rule:
   - installer import local /<Full Path>/<Name of the CPUSE Offline Package>
   - show installer packages imported
   - installer verify [Tab]
-  - installer verify <number of the CPUSE package> memder_ids all
+  - installer verify <number of the CPUSE package> member_ids all
 - Disable SMO image cloning feature
   - show cluster configuration image auto-clone state
   - set cluster configuration image auto-clone state off
@@ -761,6 +761,15 @@ In ElasticXL you need to follow the new rule:
   - show cluster configuration image auto-clone state
   - set cluster configuration image auto-clone state on
   - show cluster configuration image auto-clone state
+
+Testing
+- log in to SMO
+- installer check-for-updates
+- installer download [tab]
+- installer download `<package number>`
+- show installer packages imported
+- installer verify [Tab]
+- installer verify <number of the CPUSE package> member_ids all
 
 # Add Windows 10 Workstation
 - New > VM
