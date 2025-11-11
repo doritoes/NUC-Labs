@@ -305,7 +305,7 @@ Steps:
   - Log in the console
   - Configure hostname and IP address
     - `set hostname gw1-2`
-    - `set interface eth0 ipv4-address 192.168.103.1 mask-length 24`
+    - `set interface eth0 ipv4-address 192.168.103.2 mask-length 24`
     - `set interface eth0 comments "Management"`
     - `set interface eth0 state on`
     - `save config`
@@ -635,16 +635,16 @@ For new ElasticXL clusters, it is recommended to install a jumbo hotbox on the s
 # GW1 Second Member
 NOTE We will be using the WebGUI method to add the second member. There is also a CLI process you can use.
 
-- Prepare first gateway from console
+- Prepare **first gateway** from console
   - `set lightshot-partition size 20`
   - `save config`
   - `reboot`
-- Log in to the first gateway's managment IP
+- Log in to the **first gateway's** management IP
   - https://192.168.103.1
   - Click **Cluster Management**
   - Note the first gateway is there gw1-s0-01 (site one, number 1)
   - There are no pending gateways listed, so the second gateway isn't detected yet
-- Log in to the second gateway's console (gw1-2 new member)
+- Log in to the **second gateway's** console (gw1-2 new member)
   - `expert`
   - `ifconfig -a`
     - note no IP address on eth1
@@ -682,25 +682,34 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
 - Click **OK** for the message *Add member request succeeded, the member's addition is in progress.*
 - Wait patiently for the new member to be configured (including JHF packages)
   - The new gateway's name starts as *Not available* in the web GUI
-  - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an effor on one or more sites"
-  - This takes a very long time
-  - PROBLEM the clone failed
-    - see /var/log/lightshot.log file "Lightshot Partition is out of space"
-    - during the clone operation there was a device out of space error logged, but all partitions showed space
-    - retracing the log actions to view the lightshot partition
-      - mount /dev/vg_splat/lv_log_lightshot /mnt/lightshot
-      - df -h
-      - /dev/mapper/vg_splat-lv_log_lightshot  14G  14G 124K  100% /mnt/lightshot
+  - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an error on one or more sites"
+- Lab testing showed the issue is the clone failed
+  - see /var/log/lightshot.log file "Lightshot Partition is out of space"
+  - during the clone operation there was a device out of space error logged, but all partitions showed space
+  - retracing the log actions to view the lightshot partition
+    - mount /dev/vg_splat/lv_log_lightshot /mnt/lightshot
+    - df -h
+    - /dev/mapper/vg_splat-lv_log_lightshot  14G  14G 124K  100% /mnt/lightshot
   - tried to remove the second member, but it didn't come back to pending; had to destroy and rebuild
-- At this point we ran into some issues with the Lightshot partition running out of space
-  - show lightshot-partition
-    - gw1-1: availble 5.5G, required 10.684G, size 14G, used: 8.1G
-    - gw1-2: available 0, required 9.004G, size 0, used: 0
-  - Set lightshot partition on gw1-2
+- The working solution is
+  - before adding gw1-2, run on gw1-1
     - set lightshot-partition size 20
-  - Set lightshot partion on SMO from gclish
+  - Add gw1-2 and let it fail
+  - run on gw1-2
     - set lightshot-partition size 20
-    - save config
+    - reboot
+    - log back in 
+    - set lightshot restore name fcd_Check_Point_Gaia_R82
+    - expert
+    - shutdown -r now
+  - from first gateway the new gateway still showing status "JOINING_CLUSTER"
+    - run on gw-12
+      - expert
+      - dbset process:exl_detectiond t
+      - dbset :save
+      - tellpm process:exl_detectiond t
+  - Monitoring the state of "show cluster" from gw1-1
+  - Waited an hour for the status to change from JOINING_CLUSTER to request to join
 - Revert the changes to the exl_detectiond.py script
 - Repeat on each member
   - `expert`
@@ -715,10 +724,11 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
     - tellpm process:exl_detectiond t
 - `reboot`
 - Health checks
-  - if you applied the jumbo hot fix prior to adding the second members, is the hotfix applied on both members?
-    - Log in to WebGUI https://192.168.103.1 and check **Cluster Management**
+  - Log in to WebGUI https://192.168.103.1 and check **Cluster Management**
   - `asg stat vs all`
   - from expert mode `hcp -r all`
+  - Check if jumbo hot fixes applied to to the SMO are also applied to the new member
+    - In testing, the hotfixes were NOT applied
 
 # Install Jumbo Hotfix on All Gateways
 In ElasticXL you need to follow the new rule:
