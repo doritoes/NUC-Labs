@@ -709,7 +709,7 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
       - dbset :save
       - tellpm process:exl_detectiond t
   - Monitoring the state of "show cluster" from gw1-1
-  - Waited an hour for the status to change from JOINING_CLUSTER to request to join
+  - Waited an hour for the status to change from JOINING_CLUSTER to REQUEST_TO_JOIN
 - Revert the changes to the exl_detectiond.py script
 - Repeat on each member
   - `expert`
@@ -728,7 +728,10 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
   - `asg stat vs all`
   - from expert mode `hcp -r all`
   - Check if jumbo hot fixes applied to to the SMO are also applied to the new member
-    - In testing, the hotfixes were NOT applied
+    - In testing, the did not show as applied in the SMO WebGUI but they DID show from command line
+    - show cluster configuration image md5sum
+    - set cluster configuration image md5sum
+    - show installer packages installed
 
 # Install Jumbo Hotfix on All Gateways
 In ElasticXL you need to follow the new rule:
