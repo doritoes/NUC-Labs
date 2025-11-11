@@ -819,6 +819,13 @@ Lab Instructions
   - NOTE in Lab testing, SmartConsole showed status of "-" and did not show the jumbo hotfix take
     - I have seen this in production Maestro environments as well; it seems to be a benign issue
 
+OPTIONAL - remove the second cluster member using the WebGUI
+- Watch the console as the receive is rebooted and the device returns to "Pending Gateways"
+- Note how the original hostname is restored
+- Note how the jumbo hotfixes are removed
+- Now re-add the second gateway and note how it reboots and comes back up
+- Run `show cluster` on the first gateway (the SMO) and watch as the messages show progress until it comes back online as active
+
 # Add Windows 10 Workstation
 - New > VM
 - Pool **xcp-ng-lab1**
