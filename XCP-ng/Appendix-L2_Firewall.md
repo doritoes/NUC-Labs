@@ -75,6 +75,7 @@ Overview:
 - Accept the disk to install on
   - You need to check the box (use space bar)
   - **Yes**, accept erasing the disk
+- Be patient as installation proceeds
 - Select **Root Password** and select a password
 - Select **Complete Install**
 - Select **Reboot now**
@@ -133,13 +134,6 @@ Overview:
 - Interfaces > Assignments
   - Delete WAN interface
   - Click Save
-- Undate Firmware and Enable Guest Tools
-  - NOTE in testing, the firewall had issues downloading updates
-    - Unable to resolve pkg.opnsense.org
-  - System > Firmware > Status > Check for Updates
-  - System > Firmware > Plugins
-  - Check Show community plugins
-  - os-xen-guest-agent - click "+" to install
 - Create the bridge
   - Interfaces > Devices > Bridge
   - ADD a new bridge
@@ -155,26 +149,60 @@ Overview:
   - Delete the WAN interface
 - System Tunables
   - System > Settings > Tunables
+    - Add two tunables, saving each
     - net.link.bridge.pfil_member = 0
       - Set to 0 to disable filtering on the incoming and outgoing member interfaces
     - net.link.bridge.pfil_bridge = 1
       - Set to 1 to enable filtering on the bridge interfaces
-    - Save
-    - Apply
+    - Click Apply
 - Firewall > Rules > LAN
   - Modify the Default allow LAN to any rule
     - Change source to Any
     - Enable logging
-    - This change is to allow broadcasts and DHCP to work
+    - Description: allow all traffic on bridge
+    - This change is to allow multicast, broadcasts and DHCP to work
+    - Click **Save**
   - Disable the IPv6 rule
+    - Edit
+    - Check Disable this rule
+    - Click **Save**
+  - Click **Apply changes**
+
+# Update Firmware and Enable Guest Tools
+- Add gateway to Internet
+  - System > Gateways > Configuration
+  - Add
+    - Name: **Lab gateway**
+    - Interface: **LAN**
+    - IP Address: *your Lab gateway IP (the router)*
+    - Description: **Internet gateway**
+    - Click **Save**
+    - Click **Apply**
+- Add gateway to LAN
+  - Interfaces > LAN
+  - IPv4 gateway rules: **Lab gateway**
+  - Click **Save**
+  - Click **Apply changes**
+- Update Firmware
+  - System > Firmware > Status > Check for Updates
+  - NOTE this will fail the first time; it's known bug
+  - Check for Updates again, read the long message, and click Close
+  - Scroll down to the end, and click **Update**
+  - Click **OK** to accept the reboot
+- Enable Guest Tools
+  - System > Firmware > Plugins
+  - Check Show community plugins
+  - os-xen - click "+" to install
+  - Power > Reboot > Yes
 
 # Create a Desktop VM
 - New > VM
 - Pool **xcp-ng-lab1`
-- Template: choose either **Win10-lan-ready** or **Ubuntu-desktop-lan**
+- Template: choose from **win10-lan-ready**, **win11-lan-ready** or **ubuntu-desktop-lan**
 - Name: **l2test**
 - Decription: testing L2 firewall
 - Make sure network is **L2net**
+- If you choose Window 11 template, remember to use Advanced settings to disable adding a VTPM
 - Click **Create**
 
 # Testing
