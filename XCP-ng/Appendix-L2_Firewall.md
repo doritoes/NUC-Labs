@@ -45,7 +45,7 @@ Overview:
   - Name: **opnsenseL2**
   - Description: *OPNsense Layer 2 firewall*
   - CPU: **4 vCPU**
-  - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB, warnings appear for less than 3GB)
+  - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB; warnings appear for less than 3GB)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interfaces:
@@ -131,6 +131,11 @@ Overview:
   - Set initial password tab
     - Click **Next** to leave password the same
   - Click **Apply** to finish the wizard
+- Enable Guest Tools
+  - System > Firmware > Status > Check for Updates
+  - System > Firmware > Plugins
+  - Check Show community plugins
+  - os-xen-guest-agent - click "+" to install
 - Create the bridge
   - Interfaces > Devices > Bridge
   - ADD a new bridge
