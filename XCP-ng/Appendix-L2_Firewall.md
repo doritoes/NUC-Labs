@@ -17,7 +17,7 @@ Warnings:
 - Most L2 firewalls cannot do IPS; needs confirmation for OPNsense
 
 Overview:
-- Start from a default installation on a virtual device with 2 interfaces
+- Start from a default installation on a virtual device with 3 interfaces
 - Disable NAT
 - Enable setting to allow filtering on bridge interfaces
 - Create a Bridge interface and assign a management IP address to it
@@ -26,6 +26,11 @@ Overview:
 - Disable Default Anti-Lockout Rule
 - Set LAN and WAN interfaces to type "none"
 - Apply Changes
+
+# Download the ISO
+- https://opnsense.org/download/
+- select image type: dvd and click **Download OPNsense**
+- Add the ISO file to the ISO store in XCP-ng
 
 # Modify the Network
 🌱 do we need to add something to XCP-ng here?
@@ -108,7 +113,7 @@ Overview:
   - WAN
     - there is no WAN
   - OPT
-    - no IP addresses on the OPT interface
+    - no IP addresses on the OPT interfaces
 - System: Configuration: Wizard
   - Log in to the firewall using the IP address you set (i.e., https://192.168.1.150)
   - Click **Next** to start the Wizard
@@ -125,7 +130,7 @@ Overview:
     - Oddly it still asks for an IP address(!); in Lab use **4.4.4.4/32** (yes it's a DNS server, we will delete the WAN interface completely)
     - **Don't block** RFC1918 private networks or bogon networks
     - Click **Next**
-  - Network [LAB] tab
+  - Network [LAN] tab
     - <ins>Uncheck</ins> Configure DHCP server
     - Click **Next**
   - Set initial password tab
@@ -146,7 +151,7 @@ Overview:
   - they should be enabled, that's it
 - Interfaces > Assignments
   - Change LAN to bridge0 (Bridge)
-  - Delete the WAN interface
+  - Click **Save**
 - System Tunables
   - System > Settings > Tunables
     - Add two tunables, saving each
