@@ -50,7 +50,6 @@ Overview:
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interfaces:
     - Network: from the dropdown select the **pool-wide host network (eth0)**
-    - Management interface
   - Second Interface: Click **Add interface**
     - Network: from the dropdown select the **L2net**
   - Third Interface: Click **Add interface**
@@ -76,7 +75,7 @@ Overview:
 - Accept the disk to install on
   - You need to check the box (use space bar)
   - **Yes**, accept erasing the disk
-- Select a **Root Password** when prompted
+- Select **Root Password** and select a password
 - Select **Complete Install**
 - Select **Reboot now**
 - Eject the ISO once the reboot starts (click the eject icon on Console tab)
@@ -84,23 +83,23 @@ Overview:
 
 # Configure OPNsense
 - Log in to Console user `root` with the password you selected
-- 1) Assign interfaces
+- `1) Assign interfaces`
   - LAGGs? **No**
   - VLANs? **No**
-  - WAN interface name: **none**
+  - WAN interface name: **none** (press enter)
   - LAN interface name: **xn0**
-  - Optional interface:
+  - Optional interfaces:
   - OPT1 interface name: **xn1**
   - OPT2 interface name: **xn2**
   - Optional interface: *just press enter*
   - Proceed: **Yes**
-- 2) Set interface IP addresses
+- `2) Set interface IP addresses`
   - LAN
     - Configure IP via DHCP? **No**
     - LAN IPv4 Address: **192.168.1.150** (an IP address on your Lab network)
     - Mask bits: **24** (to match your Lab network)
     - Upstream gateway: *press Enter to accept no gateway*
-    - IPv6 address: **No**, **No**, and **None** (press Enter)
+    - IPv6 address: **No**, **None** (press Enter)
     - Enable DHCP server on LAN: **No**
     - Change to HTTP: **No**
     - Generate new self-signed web GUI certificate? **No**
@@ -108,30 +107,35 @@ Overview:
   - WAN
     - there is no WAN
   - OPT
-    - no IP addresses on the OPT interfaces
+    - no IP addresses on the OPT interface
 - System: Configuration: Wizard
   - Log in to the firewall using the IP address you set (i.e., https://192.168.1.150)
-  - Click **Next**
+  - Click **Next** to start the Wizard
   - General Information tab
-    - Hostname: l2firewall
-    - Domain: xcpng.lab
+    - Hostname: **l2firewall**
+    - Domain: **xcpng.lab**
     - Optionally set Timezone
-    - DMZ: 9.9.9.9, 1.1.1.1
-    - Uncheck Override DNS
-    - Uncheck Enable Resolver
+    - DMZ: **9.9.9.9**, **1.1.1.1** (feel free to customize)
+    - <ins>Uncheck</ins> Override DNS
+    - <ins>Uncheck</ins> Enable Resolver
     - Click **Next**
   - Network [WAN] tab
     - Type: DHCP (since there is no WAN interface, this is the easiest option)
-    - Oddly it still asks for an IP address(!); in Lab used 1.1.1.1/32
-    - Don't block RFC1918 private networks or bogon networks
+    - Oddly it still asks for an IP address(!); in Lab use **4.4.4.4/32** (yes it's a DNS server, we will delete the WAN interface completely)
+    - **Don't block** RFC1918 private networks or bogon networks
     - Click **Next**
   - Network [LAB] tab
-    - Uncheck Configure DHCP server
+    - <ins>Uncheck</ins> Configure DHCP server
     - Click **Next**
   - Set initial password tab
     - Click **Next** to leave password the same
   - Click **Apply** to finish the wizard
-- Enable Guest Tools
+- Interfaces > Assignments
+  - Delete WAN interface
+  - Click Save
+- Undate Firmware and Enable Guest Tools
+  - NOTE in testing, the firewall had issues downloading updates
+    - Unable to resolve pkg.opnsense.org
   - System > Firmware > Status > Check for Updates
   - System > Firmware > Plugins
   - Check Show community plugins
