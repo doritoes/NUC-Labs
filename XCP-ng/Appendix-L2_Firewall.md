@@ -3,14 +3,10 @@ OPNsense supports a "transparent filtering bridge", which is elsewhere called a 
 
 For example, you want to isolate a device while keeping it on the same LAN.
 
-💣However, attempts to reproduce the tutorial were not immediately successful.
-- Need to try a new approach based on https://docs.opnsense.org/manual/how-tos/lan_bridge.html
-
 References:
 - https://docs.opnsense.org/manual/how-tos/transparent_bridge.html
-- https://www.zenarmor.com/docs/network-security-tutorials/how-to-configure-transparent-filtering-bridge-on-opnsense
-
-See also: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
+- https://forum.opnsense.org/index.php?topic=49704.0
+- https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
 Warnings:
 - L2 firewall not compatible with traffic shaping
@@ -18,25 +14,20 @@ Warnings:
 
 Overview:
 - Start from a default installation on a virtual device with 3 interfaces
-- Disable NAT
-- Enable setting to allow filtering on bridge interfaces
-- Create a Bridge interface and assign a management IP address to it
 - Disable DHCP server on LAN
-- Add Allow rules
-- Disable Default Anti-Lockout Rule
-- Set LAN and WAN interfaces to type "none"
-- Apply Changes
+- Create a Bridge interface and assign a management IP address to it
+- Enable setting to allow filtering on bridge interfaces
+- Modify Allow rules
 
 # Download the ISO
 - https://opnsense.org/download/
-- select image type: dvd and click **Download OPNsense**
+  - select image type: **dvd** and click **Download OPNsense**
 - Add the ISO file to the ISO store in XCP-ng
 
 # Modify the Network
-🌱 do we need to add something to XCP-ng here?
 - Add a private network for the secured host(s)
   - Home > Hosts > xcp-ng-lab1
-  - Network > Manager
+  - Network > Manage
   - Add a newwork
     - Interface: *leave blank*
     - Name: L2net
