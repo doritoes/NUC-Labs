@@ -13,6 +13,7 @@ Warnings:
 - Most L2 firewalls cannot do IPS; needs confirmation for OPNsense
 
 Overview:
+- Using OPNsesnse 25.7
 - Start from a default installation on a virtual device with 3 interfaces
 - Disable DHCP server on LAN
 - Create a Bridge interface and assign a management IP address to it
@@ -22,6 +23,7 @@ Overview:
 # Download the ISO
 - https://opnsense.org/download/
   - select image type: **dvd** and click **Download OPNsense**
+- Extract the ISO file from the .bz2 archive using a tool like 7-Zip
 - Add the ISO file to the ISO store in XCP-ng
 
 # Modify the Network
