@@ -9,11 +9,13 @@ References:
 
 Preparing your Ansible workstation
 - We are going to use Ansible on `ubuntu-xo`. You can also run under WSL (Windows Subsystem for Linux) or on a Linux box
-- `sudo apt update && sudo apt install -y ansible`
+- `sudo apt update && sudo apt install -y ansible python3-pip python3-full`
 - `ansible-galaxy collection install community.general`
-- `python3 -m pip install XenAPI`
+- `python3 -m venv ~/venv`
+- `source ~/venv/bin/activate`
+- `pip install XenAPI`
 
-Simple Playbook `poweronvm.yml`: `ansible-playbook poweronvm.yml`
+Simple Playbook `poweronvm.yml`: `ansible-playbook poweronvm.yml`. Provide the credentials by variables or simple put the values directly into the playbook for this test.
 ~~~
 ---
 - hosts: localhost
