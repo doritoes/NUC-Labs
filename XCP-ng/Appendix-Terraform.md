@@ -3,7 +3,7 @@ References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
 IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R82.10, and Windows 10/Server 2022. Hopefully this can be updated to XCP-ng 8.3, Check Point R82, and Windows 11/Server 2025.
 
-This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB or storage. A reduced version designed for 64GB of RAM might be in the future.
+This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB of storage. A reduced version designed for 64GB of RAM might be in the future.
 - 19 VMs
 - 44 vCPUs (can over subscribe CPUs)
 - 80 GB RAM
