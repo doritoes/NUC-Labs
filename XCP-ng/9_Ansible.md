@@ -88,3 +88,9 @@ More advanced playbook that powers on the `opnsense` firewall, waits for it to c
     delegate_to: localhost
     register: facts
 ~~~
+
+# Ansible to the XO
+XCP-ng API is also called XAPI.
+
+🌱 I am looking to document how to do the same simple tasks using Ansible and XAPI.
+- https://xcp-ng.org/forum/topic/11547/ansible-and-xapi-first-playbook-ansible
