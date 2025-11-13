@@ -137,13 +137,12 @@ Overview:
   - ADD a new bridge
   - Select OPT1 and OPT2
   - Optionally add a description
-  - The bridge needs to be enabled
   - Click **Save**
   - Click **Apply**
 - The OPT1 and OPT2 interfaces should NOT have any IP address configuration
-  - they should be enabled, that's it
+  - they should be enabled by default, that's it
 - Interfaces > Assignments
-  - Change LAN to bridge0 (Bridge)
+  - Change LAN to bridge0 (bridge)
   - Click **Save**
 - System Tunables
   - System > Settings > Tunables
@@ -152,10 +151,10 @@ Overview:
       - Set to 0 to disable filtering on the incoming and outgoing member interfaces
     - net.link.bridge.pfil_bridge = 1
       - Set to 1 to enable filtering on the bridge interfaces
-    - Click Apply
+    - Click **Apply**
 - Firewall > Rules > LAN
   - Modify the Default allow LAN to any rule
-    - Change source to Any
+    - Change source to **Any**
     - Enable logging
     - Description: allow all traffic on bridge
     - This change is to allow multicast, broadcasts and DHCP to work
@@ -170,7 +169,7 @@ Overview:
 - Add gateway to Internet
   - System > Gateways > Configuration
   - Add
-    - Name: **Lab gateway**
+    - Name: **Lab_gateway**
     - Interface: **LAN**
     - IP Address: *your Lab gateway IP (the router)*
     - Description: **Internet gateway**
@@ -178,7 +177,7 @@ Overview:
     - Click **Apply**
 - Add gateway to LAN
   - Interfaces > LAN
-  - IPv4 gateway rules: **Lab gateway**
+  - IPv4 gateway rules: **Lab_gateway**
   - Click **Save**
   - Click **Apply changes**
 - Update Firmware
@@ -188,6 +187,7 @@ Overview:
   - Scroll down to the end, and click **Update**
   - Click **OK** to accept the reboot
 - Enable Guest Tools
+  - Log back in
   - System > Firmware > Plugins
   - Check Show community plugins
   - os-xen - click "+" to install
