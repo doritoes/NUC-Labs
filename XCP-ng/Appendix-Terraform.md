@@ -11,20 +11,21 @@ This appendix outlines building a complete lab designed for testing Check Point 
 
 Notes:
 - Terraform integrates with the XO server, <ins>not</ins> the XCP-ng <ins>host</ins>
-- Once built, the Windows 10 desktop systems have a month to operate without activation
-  - Some personalization features in Windows Settings are disabled if you don’t activate (cannot change desktop wallpapers, windows colors and themes, customize Start menu/taskbar/lock screen/title bar/fonts, etc.)
-  - Without activation, Windows may only download critical updates; some updates like optional updates, drivers, or security updates may be missed
+- Once built, the Windows 11 desktop systems can be used indefinitely, but the "Activate Windows" watermark will be present and personalization settings are disabled. There is no mandatory 30-day "grace period" anymore, as seen in older Windows versions. 
 - Windows Servers have a standard 180 evaluation period
 - Check Point systems have a 15-day trial by default (request a [30-day evaluation license](https://community.checkpoint.com/t5/General-Topics/How-to-Request-an-Evaluation-License-for-Security-Gateways-and/td-p/40391) as needed)
 - Creating your original templates from "Other installation media" was required for Windows systems
+  - 🌱 need to test if this is still an issue with XCP-ng 8.3
   - creating Windows systems from the built-in "Windows" templates fail to boot when created using Terraform
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 - The are known issues with Identity Awareness
-  - The Identity Collector current version R82 sees to be required; it's not easily available from R81.20 systems. You might need a paid support account with Check Point, or try to grab from a R82 systems
+  - 🌱 The Identity Collector current version R82 sees to be required; it's not easily available from R81.20 systems. You might need a paid support account with Check Point, or try to grab from a R82 systems
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
+We are going to install Terrafrom on `ubuntu-xo`.
+
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
 
 - Install prerequisites
