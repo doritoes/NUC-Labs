@@ -11,6 +11,7 @@ This appendix outlines building a complete lab designed for testing Check Point 
 
 Notes:
 - Terraform integrates with the XO server, <ins>not</ins> the XCP-ng <ins>host</ins>
+  - In contrast, the Ansible collection only integrates with the XCP-ng host
 - Once built, the Windows 11 desktop systems can be used indefinitely, but the "Activate Windows" watermark will be present and personalization settings are disabled. There is no mandatory 30-day "grace period" anymore, as seen in older Windows versions. 
 - Windows Servers have a standard 180 evaluation period
 - Check Point systems have a 15-day trial by default (request a [30-day evaluation license](https://community.checkpoint.com/t5/General-Topics/How-to-Request-an-Evaluation-License-for-Security-Gateways-and/td-p/40391) as needed)
