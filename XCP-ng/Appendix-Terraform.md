@@ -310,8 +310,11 @@ Steps:
 ## Create Windows Server 2025 Template
 🌱 NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
 
-This is a bare-bones server with limited resources. Images created from this template can given more resources.
+NOTE These steps do not create a virtual TPM. Without a VTPM some enhanced security features like bitlocker are not available.
 
+NOTE This is a bare-bones server with limited resources. Images created from this template can given more resources.
+
+Steps:
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Windows Server 2025**
@@ -321,12 +324,12 @@ This is a bare-bones server with limited resources. Images created from this tem
   - RAM: **2GB**
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows Server 2025 evaluation iso you uploaded*
-  - Interfaces: select *Pool-wide network associated with eth0*
-  - Disks: Click **Add disk** and select **128GB** (default is 64GB)
+  - Interfaces: select **Pool-wide network associated with eth0**
+  - Disks: Click **Add disk** and select **64GB** (default)
   - Click **Create**
 - The details for the new VM are now displayed
-- Optionally enable higher desktop resolution
-  - Advanced tab > Enable VGA, set Video RAM to 16MiB
+- Enable higher desktop resolution
+  - Advanced tab > Enable VGA, set Video RAM to **16MiB**
 - Click **Console** tab
 - If prompted **Press any key to boot from CD to DVD...**, do so
   - If you missed it, power cycle and try again
@@ -339,6 +342,7 @@ This is a bare-bones server with limited resources. Images created from this tem
   - Click **Accept**
   - Accept the installation on Drive 0, **Next**
   - Click **Install**
+- Wait patiently for Windows Server to install - "Your PC will restart several times. This might take a while."
 - Set password for user `Administrator`
 - Disconnect the ISO
 - Login in
