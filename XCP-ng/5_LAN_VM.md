@@ -265,9 +265,13 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - Disconnect Internet during setup
 - https://www.elevenforum.com/t/clean-install-windows-11.99/
 - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
-works for Windows 11 Home or Pro
-  - need to test at add second keyboard layout screen: start ms-cxh:localonly
-    - follow the wizard, and then follow up with the skipping second keyboard layout
+- This worked for Windows 11 Home or Pro
+  - add second keyboard layout screen
+    - Shift-F10
+    - start ms-cxh:localonly
+    - follow the Wizard
+    - If the screen is black, wait a few minutes and reboot
+    - Follow up with the skipping second keyboard layout
 
 - From the left menu click New > VM
   - Select the pool **xcp-ng-lab1**
@@ -341,7 +345,7 @@ works for Windows 11 Home or Pro
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
