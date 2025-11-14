@@ -3,12 +3,14 @@ Automation with XCP-ng is centered around Ansible. In this Lab we look at ways t
 
 NOTE If you are looking at using Python, you might be able to adapt https://github.com/Stella-IT/XenGarden/tree/main
 
+NOTE There is no Ansible collection to manuluate XO
+
 References:
 - https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/
 - https://docs.ansible.com/ansible/latest/collections/community/general/xenserver_guest_module.html
 - https://docs.ansible.com/ansible/latest/collections/community/general/xenserver_guest_powerstate_module.html
 
-Preparing your Ansible workstation
+# Preparing your Ansible workstation
 - We are going to use Ansible on `ubuntu-xo`. You can also run under WSL (Windows Subsystem for Linux) or on a Linux box
 - `sudo apt update && sudo apt install -y ansible python3-pip python3-full`
 - `ansible-galaxy collection install community.general`
@@ -21,8 +23,9 @@ Preparing your Ansible workstation
     - `python3 -m venv ~/venv`
     - `source ~/venv/bin/activate`
     - `pip install XenAPI`
+    - modify your playbooks specify the location of python
 
-# Ansible to the XCP-ng Host
+# Simple Playbooks
 Simple Playbook `poweronvm.yml`: `ansible-playbook poweronvm.yml`. Provide the credentials by variables or simple put the values directly into the playbook for this test.
 ~~~
 ---
@@ -88,9 +91,3 @@ More advanced playbook that powers on the `opnsense` firewall, waits for it to c
     delegate_to: localhost
     register: facts
 ~~~
-
-# Ansible to the XO
-XCP-ng API is also called XAPI.
-
-🌱 I am looking to document how to do the same simple tasks using Ansible and XAPI.
-- https://xcp-ng.org/forum/topic/11547/ansible-and-xapi-first-playbook-ansible
