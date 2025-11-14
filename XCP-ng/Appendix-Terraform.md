@@ -349,14 +349,15 @@ Steps:
 - Login in
   - The small keyboard icon allows you to send a Ctrl-Alt-Delete
   - Yes, allow the server to be discovered by other hosts on the network
-- Send diagnostic data to Microsoft: Required only then Accept
+- Send diagnostic data to Microsoft: **Required only** then **Accept**
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
     - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
   - Download MSI and install manually (or install later using group policy)
-    - Accept the reboot; upon logging back in note the confirmation
+    - Accept the reboot; upon logging back in note the confirmation message
     - Remove the downloaded file when done
+    - Configure Edge to start without your data, uncheck bring over your data and continue, continue without this data, uncheck "Make your Microsoft experience more useful to you" and confirm, close the themes window
 - Apply Windows Updates (reboots required)
   - Note that at some boots, certain services are on a delayed start, impacting the updates
 - Enable RDP
@@ -364,8 +365,9 @@ Steps:
   - Slide to Enable Remote Desktop then accept the message
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Optionally, set the correct timezone
-- Change the hostname to server2025-template
+- Change the hostname to `server2025-template`
   - From administrative powershell: `Rename-Computer -NewName server2025-template`
+  - Accept the warning about NetBIOS names
 - Reboot the computer
   - `restart-computer`
 - Now let's prepare the template VM for cloning
@@ -373,6 +375,8 @@ Steps:
   - allows us to rapidly clone more servers
   - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+    - If you have an issue with Edge (see error logs)
+    - `Get-AppxPackage -Name Microsoft.MicrosoftEdge.Stable | Remove-AppxPackage` then try again
 - Convert `server2025-template` to template
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm
