@@ -343,7 +343,8 @@ Steps:
   - Accept the installation on Drive 0, **Next**
   - Click **Install**
 - Wait patiently for Windows Server to install - "Your PC will restart several times. This might take a while."
-- Set password for user `Administrator`
+- Customize settings
+  - Set password for user `Administrator`
 - Disconnect the ISO
 - Login in
   - The small keyboard icon allows you to send a Ctrl-Alt-Delete
