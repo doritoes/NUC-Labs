@@ -283,7 +283,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - Optionally, [debloat Windows 11](Appendix-Debloat-Windows11.md)
 - Optionally disable Windows Update Delivery Optimization to remove strange looking traffic from your logs
   - Start > Settings > Update & Security > Windows Update > Advanced options > Delivery Optimization
-  - Turn off Allow downloads from other PCs
+  - Turn off Allow downloads from other devices
 - Optionally clear all browser settings (including history) by deleting the default profile
   - Open Edge
   - Settings > Settings
