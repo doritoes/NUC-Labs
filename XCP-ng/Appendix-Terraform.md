@@ -392,7 +392,7 @@ Steps:
   - Topology: Default behavior
   - Install: ISO/DVD: **Select the Ubuntu 24.04 Server image you uploaded**
   - Interfaces: select **Pool-wide network associated with eth0**
-  - Disks: Click **Add disk** and select **20GB**
+  - Disks: Change to **20GB**
   - Click **Create**
 - The details for the new VM are now displayed
 - Click the **Console** tab and follow the Install wizard per usual  
@@ -409,6 +409,7 @@ Steps:
         - Adjust the mount point (/home by default)
   - Check the box **Install OpenSSH server**
   - Do not select any snaps
+- Wait patiently for installation to complete
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
 - Log in to the console and check the system
