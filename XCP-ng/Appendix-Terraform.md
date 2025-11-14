@@ -84,7 +84,7 @@ sudo apt update && sudo apt install -y terraform
   - `install image`
   - Allow installation to continue with default values
   - When you are asked to set the password just use `vyos`
-  - When prompted, `reboot`
+  - When prompted, `reboot`, and confirm the reboot
   - After the reboot starts, eject the VyOS iso
 - Log back in (`vyos`/`vyos`)
 - Add user `ansible` for management
@@ -98,6 +98,7 @@ sudo apt update && sudo apt install -y terraform
   - `save`
   - `exit`
 - Enable guest utilities
+  - See [Appendix Build VyOS ISO with VMagents](Appendix_Build_VyOS_ISO_with_VM_agents.md) for instructions to build your own ISO with guest utilities; VyOS stopped shipping with them
   - `sudo systemctl start xe-guest-utilities`
   - `sudo systemctl enable xe-guest-utilties`
   - `poweroff`
