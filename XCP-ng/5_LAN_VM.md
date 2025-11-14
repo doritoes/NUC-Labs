@@ -465,7 +465,7 @@ This is a bare-bones server with limited resources
   - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
   - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
+  - Install: ISO/DVD: *Select the Windows Server 2025 evaluation iso you uploaded*
   - Interfaces: select *Inside* from the dropdown
   - Disks: **40GB** (default 64GB)
   - Click **Create**
