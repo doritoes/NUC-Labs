@@ -97,12 +97,11 @@ sudo apt update && sudo apt install -y terraform
   - `commit`
   - `save`
   - `exit`
-- Enable guest utilities
+- Confirm guest utilities
   - See [Appendix Build VyOS ISO with VMagents](Appendix_Build_VyOS_ISO_with_VM_agents.md) for instructions to build your own ISO with guest utilities; VyOS stopped shipping with them
-  - `sudo systemctl start xe-guest-utilities`
-  - `sudo systemctl enable xe-guest-utilties`
-  - `poweroff`
+  - `systemctl status xen-guest-agent`
 - Convert `vyos-template` to template
+  - `poweroff`
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm
 
