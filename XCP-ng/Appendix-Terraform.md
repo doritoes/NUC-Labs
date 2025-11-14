@@ -202,7 +202,7 @@ NOTE The interface ip change change and setting the expert password were not sav
 
 IMPORTANT Windows 11 will not install without a TPM
 
-IMPORTANT If you want to set up using a local account instead of a Microsoft account
+IMPORTANT If you want to set up using a local account instead of a Microsoft account:
 - Disconnect Internet during setup
 - https://www.elevenforum.com/t/clean-install-windows-11.99/
 - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
@@ -214,6 +214,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
     - If the screen is black, wait a few minutes and reboot
     - Follow up with the skipping second keyboard layout
 
+Steps:
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
   - Template: **Other install media**
@@ -281,6 +282,8 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
     - Edge settings: Don't bring over data, Continue without Google data, don't "Make your Microsoft experience more useful to you", Confirm and start browsing, close customization window
 - Apply Windows Updates (reboots included)
 - Optionally, [debloat Windows 11](Appendix-Debloat-Windows11.md)
+  - Copy and paste the below command into PowerShell
+  - `& ([scriptblock]::Create((irm "https://debloat.raphi.re/")))`
 - Optionally disable Windows Update Delivery Optimization to remove strange looking traffic from your logs
   - Start > Settings > Update & Security > Windows Update > Advanced options > Delivery Optimization
   - Turn off Allow downloads from other devices
@@ -289,10 +292,6 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
   - Settings > Settings
   - Click the trash can next to **Profile 1** and then click **Remove profile**
   - Close Edge
-- Optionally enable higher desktop resolution
-  - Advanced tab > Enable VGA, set Video RAM to 16MiB
-  - Will be able to set to higher resolutions after reboot
-  - Follow the steps in [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Enable Remote Desktop (RDP)
   - **Start** > **Settings** > **System** > **Remote Desktop**
   - Slide to enable and Confirm
@@ -308,66 +307,60 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm
 
-## Create Windows Server 2022 Template
-This is a bare-bones server with limited resources. Images created from this template can given more resources.
+## Create Windows Server 2025 Template
+🌱 NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
 
-NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
+This is a bare-bones server with limited resources. Images created from this template can given more resources.
 
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Template: **Other install media**
-  - Name: **server2022-template**
-  - Description: **Windows Server 2022**
+  - Template: **Windows Server 2025**
+  - Name: **server2025-template**
+  - Description: **Windows Server 2025**
   - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
   - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
+  - Install: ISO/DVD: *Select the Windows Server 2025 evaluation iso you uploaded*
   - Interfaces: select *Pool-wide network associated with eth0*
-  - Disks: Click **Add disk** and select **128GB**
+  - Disks: Click **Add disk** and select **128GB** (default is 64GB)
   - Click **Create**
 - The details for the new VM are now displayed
 - Optionally enable higher desktop resolution
   - Advanced tab > Enable VGA, set Video RAM to 16MiB
 - Click **Console** tab
-- If you are prompted to Press any key to boot from CD to DVD
-  - **Press any key**
+- If prompted **Press any key to boot from CD to DVD...**, do so
   - If you missed it, power cycle and try again
 - Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then **Next**
-  - Click **Install now**
-  - Select the OS to install: **Windows Server 2022 Standard Edition Evaluation (Desktop Experience)**
+  - Confirm Language and formats then **Next**
+  - Confirm keyboard then **Next**
+  - Confirm **Install Windows Server**, check the box, then **Next**
+  - Select the OS to install: **Windows Server 2025 Standard Edition Evaluation (Desktop Experience)**
     - feel free to experiment
-  - Check the box then click **Next**
-  - Click Custom: **Install Windows only (advanced)**
-  - Accept the installation on Drive 0
+  - Click **Accept**
+  - Accept the installation on Drive 0, **Next**
+  - Click **Install**
 - Set password for user `Administrator`
 - Disconnect the ISO
 - Login in
   - The small keyboard icon allows you to send a Ctrl-Alt-Delete
   - Yes, allow the server to be discovered by other hosts on the network
+- Send diagnostic data to Microsoft: Required only then Accept
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
   - Download MSI and install manually (or install later using group policy)
     - Accept the reboot; upon logging back in note the confirmation
     - Remove the downloaded file when done
 - Apply Windows Updates (reboots required)
   - Note that at some boots, certain services are on a delayed start, impacting the updates
-- Optionally clear all browser settings (including history) by deleting the default profile
-  - Open Edge
-  - Settings > Settings
-  - Click the trash can next to **Profile 1** and then click **Remove profile**
-  - Close Edge
-- Optionally enable higher desktop resolution
-  - Advanced > Enable VGA, set Video RAM to 16MiB
 - Enable RDP
   - Start > Settings > System > Remote Desktop
   - Slide to Enable Remote Desktop then accept the message
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Optionally, set the correct timezone
-- Change the hostname to server2022-template
-  - From administrative powershell: `Rename-Computer -NewName server2022-template`
+- Change the hostname to server2025-template
+  - From administrative powershell: `Rename-Computer -NewName server2025-template`
 - Reboot the computer
   - `restart-computer`
 - Now let's prepare the template VM for cloning
@@ -375,20 +368,20 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
   - allows us to rapidly clone more servers
   - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-- Convert `server2022-template` to template
+- Convert `server2025-template` to template
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm
 
-## Create Ubuntu Server 22.04 LTS Template
+## Create Ubuntu Server 24.04 LTS Template
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
-  - Template: **Other install media**
+  - Template: **Ubuntu Noble Numbat 24.04**
   - Name: **ubuntu-server-template**
-  - Description: **Ubuntu Server 22.04**
+  - Description: **Ubuntu Server 24.04**
   - CPU: **1 vCPU**
   - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
+  - Install: ISO/DVD: **Select the Ubuntu 24.04 Server image you uploaded**
   - Interfaces: select **Pool-wide network associated with eth0**
   - Disks: Click **Add disk** and select **20GB**
   - Click **Create**
@@ -405,7 +398,7 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
         - Select the free space, then Create Logical Volume
         - Adjust the size to use the free space
         - Adjust the mount point (/home by default)
-  - Check **Install OpenSSH server**
+  - Check the box **Install OpenSSH server**
   - Do not select any snaps
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
@@ -439,7 +432,7 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname ubuntu-server-template`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server 22.04" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server 24.04" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Power down VM
   - `poweroff`
