@@ -1,7 +1,17 @@
 # Appendix - Terraform and XCP-ng
 References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
-IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R82.10, and Windows 10/Server 2022. Hopefully this can be updated to XCP-ng 8.3, Check Point R82, and Windows 11/Server 2025.
+IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R81.20, and Windows 10/Server 2022. Updating to latest versions.
+
+Updated Software Versions:
+- XCP-ng 8.3
+- Ubuntu 24.04
+- XO commit fa020 and later
+- Ansible core 2.16.3
+- Terraform 1.13.5
+- Windows 11
+- Windows Server 2025
+- Check Point R82
 
 This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB of storage. A reduced version designed for 64GB of RAM might be in the future.
 - 19 VMs
@@ -48,6 +58,8 @@ sudo apt update && sudo apt install -y terraform
 - Create file credentials.auto.tfvars from [credentials.auto.tfvars](terraform/credentials.auto.tfvars)
   - Modify to use your XCP-ng host IP address
   - Modify to use a valid username and password
+- Test
+  - `terraform init`
 
 # Create Templates
 ## Create VyOS Template
