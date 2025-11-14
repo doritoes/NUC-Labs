@@ -112,13 +112,13 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **Check Point R81.20 template**
+  - Description: **Check Point R82 template**
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
     - SMS requires more; we will increase this later
   - Topology: *Default behavior*
-  - Install: ISO/DVD: *Select the Check Point Gaia ISO image you uploaded*
+  - Install: ISO/DVD: *Select the Check Point R82 Gaia ISO image you uploaded to an ISO store*
   - Interfaces:
     - Network: from the dropdown select the **pool-wide network associated with eth0**
   - Disks: Click **Add disk**
@@ -144,12 +144,12 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 - Select **eth0** as the management port
   - IP address: **192.168.41.254**
   - Netmask: **255.255.255.0**
-  - Default gateway: **None** (it will auto feel; delete and leave blank)
+  - Default gateway: **None** (it will auto fill; delete and leave blank)
   - <ins>NO</ins> DHCP server on the management interface
 - Confirm you want to continue with formatting the drive **OK**
 - When the message `Installation complete.` message appears
   - Press Enter
-  - Wait for the system to start to reboot, then eject the iso
+  - Wait for the system to start to reboot, then eject the ISO
 - Log in from the Console
   - user `admin` and the password you configured
 - `set hostname CPTEMPLATE`
@@ -185,7 +185,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
     - Install guest tools
       - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
       - `cd LinuxGuestTools-8.4.0-1`
-      - `./install.sh -d rhel -m el7`
+      - `./install.sh -d rhel -m el8`
       - press `y`
       - `cd ..`
       - `rm LinuxGuestTools-8.4.0-1.tar.gz`
@@ -195,60 +195,92 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm that this can't be undone
 
-NOTE The interface change and setting expert password were not saved, preserving the clean template.
+NOTE The interface ip change change and setting the expert password were not saved, preserving the clean template.
 
-## Create Windows 10 Template
-NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
+## Create Windows 11 Template
+🌱 NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
+
+IMPORTANT Windows 11 will not install without a TPM
+
+IMPORTANT If you want to set up using a local account instead of a Microsoft account
+- Disconnect Internet during setup
+- https://www.elevenforum.com/t/clean-install-windows-11.99/
+- The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
+- This worked for Windows 11 Home or Pro
+  - add second keyboard layout screen
+    - Shift-F10
+    - start ms-cxh:localonly
+    - follow the Wizard
+    - If the screen is black, wait a few minutes and reboot
+    - Follow up with the skipping second keyboard layout
+
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
   - Template: **Other install media**
-  - Name: **win10-template**
-  - Description: **Windows 10**
+  - Name: **win11-template**
+  - Description: **Windows 11**
   - CPU: **2 vCPU**
   - RAM: **4GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Windows 10 iso you uploaded*
+  - Install: ISO/DVD: *Select the Windows 11 iso you uploaded*
   - Interfaces: select **Pool-wide network associated with eth0** from the dropdown
-  - Disks: Click **Add disk** and select **128GB**
+  - Disks: Click **Add disk** and select **128GB** (Windows 11 minimum is 64GB; 128GB for lab, 256GB for average user)
   - Click **Create**
 - The details for the new VM are now displayed
-- Optionally enable higher desktop resolution
+- Enable higher desktop resolution
   - Advanced tab > Enable VGA, set Video RAM to 16MiB
 - Click **Console** tab
-- If you are prompted to press any key to boot from CD or DVD
-  - **Press any key**
-  - If you missed it, power cycle and try again
-- Follow the Install wizard per usual
+  - If you get prompted to press any key to boot from the CD or DVD, do so
+    - if you missed it, restart the VM
   - Confirm Language, formats, and keyboard then **Next**
-  - Click **Install now**
+  - Select **Install Windows 11**, check the box, then click **Next**
   - Activate Windows: Click **I don't have a product key**
-  - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and **Next**
-  - Check the box then click **Next**
-  - Click **Custom: Install Windows only (advanced)**
+  - Select the OS to install: **Windows 11 Pro** (feel free to experiment)
+  - WARNING You might get the error: This PC can't run Windows 11
+    - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
+    - Possible culprits: "Enable TPM 2.0 on your PC" (XCP-ng lists this as VTPM, virtual TPM)
+  - Click **Accept**
   - Accept the installation on Drive 0, click **Next**
+  - Click **Install**
   - Wait while the system reboots and gradually installs
-  - Set region and keyboard layout, skip second keyboard layout
-  - Select **Set up for personal use** (feel free to experiment)
-  - Click **Offline account** then click **Limited experience**
-  - User: **lab**
-  - Password: *select a password*
-  - Create security questions for this account (*be creative*)
-  - Click **Not now**
-  - Privacy: *disable all the settings* and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept** (I chose Business)
-  - Cortana: click **Not now**
-  - At the desktop, open the Edge browser
-    - Click **Complete setup**
-    - Click **Continue without signing in**
+  - Set region click **Yes**
+  - Accept keyboard and click **Yes**
+  - At the second keyboard layout screen, STOP, and follow these steps if you haven't "broken" the Internet connection
+    - Press shift-F10 to open a command prompt
+    - `start ms-cxh://setaddlocalonly`
+    - See also: `reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f`
+    - Follow prompts to add a local user, password, and security options
+    - This ends at a blank screen. Wait for a minute and it will return.
+    - Reboot the VM from XCP-ng
+  - Disable all privacy settings and click Next
+  - Your device will have a DESKTOP-xxxxxxx name
+  - If you chose to break the network connectivity insteady of bypassing the account creation
+    - Select Set up for personal use (feel free to experiment)
+    - Disconnect from the Internet and start over
+      - Option 1 - power down the VyOS router for a while
+      - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
+    - At *Lets's connect you to a network*
+      - Click **I don't have internet**
+    - Click **Continue with limited setup**
+    - User: **lab**
+    - Password: *select a password*
+    - Create security questions for this account: be creative
+    - Privacy: disable all the settings and then click Next (or might be Accept)
+  - and keyboard layout, skip second keyboard layout
+- Log in
+- Reconnect to the Internet as needed
+- Eject the installation ISO
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
     - Download .msi file and install manually (or install later using group policy)
     - Permit the reboot and log back in
       - Message confirming tools installed is displayed
     - Delete the downloaded file when done
+    - Edge settings: Don't bring over data, Continue without Google data, don't "Make your Microsoft experience more useful to you", Confirm and start browsing, close customization window
 - Apply Windows Updates (reboots included)
+- Optionally, [debloat Windows 11](Appendix-Debloat-Windows11.md)
 - Optionally disable Windows Update Delivery Optimization to remove strange looking traffic from your logs
   - Start > Settings > Update & Security > Windows Update > Advanced options > Delivery Optimization
   - Turn off Allow downloads from other PCs
@@ -260,7 +292,7 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
 - Optionally enable higher desktop resolution
   - Advanced tab > Enable VGA, set Video RAM to 16MiB
   - Will be able to set to higher resolutions after reboot
-- Eject the installation ISO
+  - Follow the steps in [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Enable Remote Desktop (RDP)
   - **Start** > **Settings** > **System** > **Remote Desktop**
   - Slide to enable and Confirm
@@ -268,11 +300,11 @@ NOTE Using "Other install media" isn't optimal, but is required because we are u
   - increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
   - clean up the taskbar, desktop, etc. to meet your preferences
   - set the correct timezone
-- Change the hostname to **win10-template**
-  - From administrative powershell: `Rename-Computer -NewName win10-template`
+- Change the hostname to **win11-template**
+  - From administrative powershell: `Rename-Computer -NewName win11-template`
 - Shut down the Windows VM
   - `stop-computer`
-- Convert `win10-template` to a template
+- Convert `win11-template` to a template
   - Click the **Advanced** tab
   - Click **Convert to template** and confirm
 
