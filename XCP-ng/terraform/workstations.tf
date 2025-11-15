@@ -19,9 +19,6 @@ resource "xenorchestra_vm" "management-workstation" {
     size       = 137438953472
   }
   network {
-    network_id = data.xenorchestra_network.lan.id
-  }
-  network {
     network_id = data.xenorchestra_network.branch1mgt.id
   }
 }
