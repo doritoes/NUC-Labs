@@ -89,6 +89,13 @@ sudo apt update && sudo apt install -y terraform
   - When prompted, `reboot`, and confirm the reboot
   - After the reboot starts, eject the VyOS iso
 - Log back in (`vyos`/`vyos`)
+- Configure DHCP on the "Internet"/Lab interface
+  - `configure`
+  - `set interfaces ethernet eth0 address dhcp`
+  - `set service ssh`
+  - `commit`
+  - `save`
+  - `exit`
 - Add user `ansible` for management
   - `configure`
   - `set system login user ansible full-name "ansible management"`
