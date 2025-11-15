@@ -46,7 +46,7 @@ resource "xenorchestra_vm" "firewall1a" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-1a-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1mgt.id
@@ -76,7 +76,7 @@ resource "xenorchestra_vm" "firewall1b" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-1b-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1mgt.id
@@ -106,7 +106,7 @@ resource "xenorchestra_vm" "firewall2a" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-2a-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.isp2.id
@@ -130,7 +130,7 @@ resource "xenorchestra_vm" "firewall2b" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-2b-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.isp2.id
@@ -154,7 +154,7 @@ resource "xenorchestra_vm" "firewall3a" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-3a-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.isp3.id
@@ -178,7 +178,7 @@ resource "xenorchestra_vm" "firewall3b" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "cpfw-3b-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.isp3.id
@@ -201,7 +201,7 @@ resource "xenorchestra_vm" "sms" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "sms-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1mgt.id
