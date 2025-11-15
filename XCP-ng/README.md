@@ -84,6 +84,7 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 - [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
 - [Appendix - Debloat Windows 11](Appendix-Debload-Windows11.md)
 - [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- [Appendix - Create SSH Key](Appendix_Create_SSH_Key.md)
 - [Appendix - L2 Firewall](Appendix-L2_Firewall.md)
 - [Appendix - Build VyOS ISO with VM agents](Appendix_Build_VyOS_ISO_with_VM_agents.md)
 - Installing older operating systems for the pentesting lab
