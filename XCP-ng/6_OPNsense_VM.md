@@ -27,7 +27,6 @@ References:
       - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
       - Click **Create network**
     - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-    - Under the list of PIFs (physical interfaces), find the new Pentesting interface, click **Status** to  <i>disconnect</i> it from your the eth0 interface
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
