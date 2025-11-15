@@ -32,7 +32,7 @@ resource "xenorchestra_vm" "dmz-iis" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "dmz-iis-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1dmz.id
@@ -49,7 +49,7 @@ resource "xenorchestra_vm" "dc-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "dc-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1.id
@@ -66,7 +66,7 @@ resource "xenorchestra_vm" "file-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "file-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   disk {
     sr_id      = data.xenorchestra_sr.local.id
@@ -88,12 +88,12 @@ resource "xenorchestra_vm" "sql-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "sql-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "sql-1-datadrive"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1.id
@@ -110,7 +110,7 @@ resource "xenorchestra_vm" "idc-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "idc-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1.id
