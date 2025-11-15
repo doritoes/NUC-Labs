@@ -16,26 +16,44 @@ Notes:
       - will be disabled (or completely removed) after Branch 1 configuration is complete
     - Second one: `branch1mgt`
 - Log in to the console of `manager`
-- Optionally, from the app store install "Windows Terminal" by Microsoft
-  - this makes it easy to switch between CMD, Powershell, and WSL shells
-  - Open Microsoft Store, update it if required
-  - Install **Windows Terminal**
+- Windows 11 has "Windows Terminal " intalled
+  - This makes it easy to switch between CMD, Powershell, and WSL shells
+    - I recommend you pin Terminal to the taskbar for easy access
+  - If you don't have it installed, install from the app store
   - Open Terminal and note the dropdown to select which terminal(s) you want to open
+  - Click down arrow, right click Windows PowerShell, and Click Run as administrator, then click yes
 - Rename the PC to `manager`
   - From administrative powershell
     - `Rename-Computer -NewName manager`
     - `Restart-Computer`
 - Install WSL
+  - Enable nested virtualization for the VM in XO
+    - Power down the `manager` VM
+    - Advanced > slide to enable Nested virtualization
+    - Power on the VM
   - Add optional feature Windows Subsystem for Linux (WSL)
-    - NOTE In Lab testing, skipping this step caused problems
     - From administrative powershell
+      - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All`
+      - Accept the reboot
+      - Log back in to the administrative powershell
       - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
       - Accept the reboot
   - Log back in and open a privileged shell
-    - `wsl --list`
+    - `wsl --install`
+    - PROBLEM fails
+      - WSL2 is not supported with your current machine configuration.
+      - Please enable the "Virtual Platform" optional component and ensure virtualization is enabled in the BIOS.
     - `wsl --list --online`
-    - `wsl --install -d Ubuntu-22.04`
+    - `wsl --install -d Ubuntu-24.04`
       - feel free to customize and choose your favorite Linux
+    - PROBLEM fails again
+    - `wsl --install --no-distribution`
+    - `wsl --install -d Ubuntu-24.04`
+    - PROBLEM fails again
+      - Error code: Wsl/InstallDistro/Service/RegisterDistro/CreateVm/HCS/HCS_E_HYPERV_NOT_INSTALLED
+    - Open Windows Subsystem for Linux  Settings
+      - everything looks good
+    - `restart-computer`
       - a new WSL window is opened and you are prompted set the username and password
         - Username: `ansible`
         - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few presses), prompting you to set the username and password
