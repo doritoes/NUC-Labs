@@ -36,7 +36,7 @@ resource "xenorchestra_vm" "vyos" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "vyos-router-disk"
-    size       = 8589869056
+    size       = 8589934592
   }
   network {
     network_id = data.xenorchestra_network.wan.id
