@@ -26,44 +26,36 @@ Notes:
   - From administrative powershell
     - `Rename-Computer -NewName manager`
     - `Restart-Computer`
-- Install WSL
-  - WARNING It looks like nested virtualization is gone in XCP-ng 8.3
-    - https://docs.xcp-ng.org/compute/#-nested-virtualization
-    - May need to move the Ansible installation off `manager` to a Linux VM
-  - Enable nested virtualization for the VM in XO
-    - Power down the `manager` VM
-    - Advanced > slide to enable Nested virtualization
-    - Power on the VM
+- Install WSL version 1 (WSL2 requires virtualization, nested virtualization isn't supported under XCP-ng 8.3 - https://docs.xcp-ng.org/compute/#-nested-virtualization)
   - Add optional feature Windows Subsystem for Linux (WSL)
     - From administrative powershell
-      - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All`
-      - Accept the reboot
-      - Log back in to the administrative powershell
       - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
-      - Accept the reboot
-  - Log back in and open a privileged shell
-    - `wsl --install`
-    - PROBLEM fails
-      - WSL2 is not supported with your current machine configuration.
-      - Please enable the "Virtual Platform" optional component and ensure virtualization is enabled in the BIOS.
+        - Accept the reboot
+      - Log back in to the administrative powershell
+      - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All`
+        - Accept the reboot
+  - Log back in and open a privileged PowerShell
+    - `wsl --install --no-distribution`
+    - `restart-computer
+  - Log back in and open a privileged PowerShell
+    - `wsl.exe --set-default-version 1`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-24.04`
       - feel free to customize and choose your favorite Linux
-    - PROBLEM fails again
-    - `wsl --install --no-distribution`
-    - `wsl --install -d Ubuntu-24.04`
-    - PROBLEM fails again
-      - Error code: Wsl/InstallDistro/Service/RegisterDistro/CreateVm/HCS/HCS_E_HYPERV_NOT_INSTALLED
-    -  dism.exe /online /get-features /format:table
-    -  HypervisorPlatform is disabled
-    -  Enable Windows Hypervisor Platform
-    - Open Windows Subsystem for Linux  Settings
-      - everything looks good
-    - `restart-computer`
-      - a new WSL window is opened and you are prompted set the username and password
-        - Username: `ansible`
-        - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few presses), prompting you to set the username and password
-- Configure Network interfaces
+    - At the prompt set the username and password
+      - Create a default Unix user account: `ansible`
+      - Select a password (same as the other ansible accounts on systems to be managed with Ansible)
+      - In the Lab an error was displayed: SendMessage:131. This didn't prevent WSL from working.
+  - Close Terminal and re-open
+  - Click the dropdown arrow and click Ubuntu-24.04
+    - This is how you can access WSL in the future; also found as Ubuntu-24.04 in the start menu
+    - sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+    - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passswd lock: Invalid argument*
+      - https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/2069555/comments/12
+      - Here is a fix
+        - `sudo sed -i -e '/systemd-sysusers/s/\.conf$/.conf || true/' /var/lib/dpkg/info/*.postinst`
+
+- Configure Network interfaces on `manager`
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
     - Network profile: **Private**
@@ -72,54 +64,66 @@ Notes:
     - From dropdown select **Manual**
     - Slide to enable **IPv4**
       - We cannot set the IP address without a gateway IP or DNS from this interface!
-  - Click **Start** > **Settings** > **Network & Interface** > **Ethernet**
-    - Click **Change adapter options**
-    - Open the adapter (i.e., **Ethernet 3**) with "Unidentified network"
-    - Click **Properties**
-    - Double-click **Internet Protocol Version 4** (TCP/IPv4)
-    - Change to "Use the following IP address"
-      - Use the following IP address:
-        - IP address: **192.168.41.100**
-        - Subnet mask: **255.255.255.0**
-        - Gateway: Leave empty
-        - Leave DNS entries empty
+  - Click **Start** > **Settings** > **Network & Interface**
+    - Click **Advanced network settings**
+      - Under the connection with no Internet (i.e., **Ethernet 3**), next to **More adapter options**, click **Edit**
+      - Double-click **Internet Protocol Version 4** (TCP/IPv4)
+      - Change to "Use the following IP address"
+        - Use the following IP address:
+          - IP address: **192.168.41.100**
+          - Subnet mask: **255.255.255.0**
+          - Gateway: Leave empty
+          - Leave DNS entries empty
+          - Click **OK**
         - Click **OK**
-      - Click **OK**
-    - Click **Close**
 - Install additional Windows applications
   - [Chrome browser](https://www.google.com/chrome/)
   - [WinSCP](https://winscp.net/eng/download.php)
-- This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Install additional WSL packages
   - Open a WSL shell 
-  - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - `sudo apt install -y python3-paramiko python3-pip`
+  - `sudo apt update && sudo apt install -y python3-paramiko python3-pip`
   - Install Ansible
-    - Option 1 - recommended - Ansible 2.17 (or later)
-      - `sudo apt-add-repository ppa:ansible/ansible`
+    - Option 1 - recommended - Ansible 2.19 (2.17 or later)
+      - `sudo apt install -y software-properties-common`
+      - `sudo apt-add-repository --yes --update ppa:ansible/ansible`
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
       - Normally installing with ppa method is discouraged; however this is is easiest way to get the current Ansible for automation
-    - Option 2 - Ubuntu 22.04 old Ansible 2.10
+    - Option 2 - Ubuntu 24.04 old Ansible 2.16.3
+      - `sudo apt install -y ansible`
+      - `ansible --version`
+      - `sudo apt remove -y ansible`
+      - `sudo apt --purge autoremove -y`
+      - `sudo apt update && sudo apt upgrade -y`
+      - `sudo apt install -y software-properties-common`
+      - `sudo apt-add-repository --yes --update ppa:ansible/ansible`
       - `sudo apt install -y ansible`
       - `ansible --version`
   - Install Ansible collections
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
     - `ansible-galaxy collection install check_point.mgmt --force`
-      - this replaces the very old packaged 5.2.3 with the latest 6.2.1 (or later)
+      - this replaces the old packaged 6.6.0 with the latest 6.7.1 (or later)
   - Install XenAPI python package
-    - `python3 -m pip install XenAPI`
-  - You might use Git to clone the repo to have the files locally on `manager`
+  - Prior to Ubuntu 24.04
+    - 1python3 -m pip install XenAPI1
+  - Ubuntu 24.04 and later quick and dirty
+    - `python3 -m pip install --break-system-packages XenAPI`
+  - Installing "nicely" broken my ansible playbooks running
+    - `python3 -m venv ~/venv`
+    - `source ~/venv/bin/activate`
+    - `pip install XenAPI`
+    - modify your playbooks specify the location of python
+  - TIP You might use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
     - `cp NUC-Labs/XCP-ng/ansible/* .`
 - Generate ssh RSA key for user `ansible`
-  - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
     - <ins>Do not</ins> enter a passphrase
     - Accept all defaults (press enter)
   - The public key you will be using:
     - `cat ~/.ssh/id_rsa.pub`
+    - `cat ~/.ssh/id_ed25519.pub`
 - Set up basic configuration files for Ansible
   - Create `ansible.cfg` from [ansible.cfg](ansible/ansible.cfg)
   - Create `inventory` from [inventory](ansible/inventory)
