@@ -75,12 +75,25 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 
 # Appendices
 - [Appendix - Lab Architecture](Appendix-Architecture.md)
-- [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
 - [Appendix - Active Directory Notes](Appendix-Active_Directory_Notes.md)
-- [Appendix - Ansible Manage Windows](Appendix-Ansible_Manange_Windows.md)
 - [Appendix - Windows Domain Controller](Appendix-Windows_DC.md)
-- [Appendix - Windows Files Server](Windows_File_Server.md)
-- 🌱 [Appendix - Layer 2 Firewall](Appendix-L2_Firewall.md)
+- [Appendix - Windows File Server](Windows_File_Server.md)
+- [Appendix - Layer 2 Firewall](Appendix-L2_Firewall.md)
+- [Appendix - Terraform](Appendix-Terraform.md)
+- [Appendix - Ansible Manage Windows](Appendix-Ansible_Manange_Windows.md)
+- [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
+- [Appendix - Debloat Windows 11](Appendix-Debload-Windows11.md)
+- [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- [Appendix - L2 Firewall](Appendix-L2_Firewall.md)
+- [Appendix - Build VyOS ISO with VM agents](Appendix_Build_VyOS_ISO_with_VM_agents.md)
+- Installing older operating systems
+  - [Ubuntu 4.10](Appendix-Ubuntu-4.10.md)
+  - [Windows XP](Appendix-Windows-XP.md)
+  - [Windows 7](Appendix-Windows-7.md)
+  - [Windows 8.1](Appendix-Windows-8.1.md)
+  - [Windows Vista](Appendix-Windows-Vista.md)
+  - [Windows Server 2003](Appendix-Windows-Server-2003.md)
+  - 
 
 # Other Notes
 ## Other Install Media
