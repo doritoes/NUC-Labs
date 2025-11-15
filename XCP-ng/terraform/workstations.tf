@@ -1,5 +1,5 @@
 data "xenorchestra_template" "workstation-template" {
-  name_label = "win10-template"
+  name_label = "win11-template"
 }
 data "xenorchestra_network" "lan" {
   name_label = "Pool-wide network associated with eth0"
@@ -9,7 +9,7 @@ resource "xenorchestra_vm" "management-workstation" {
   memory_max = 4294934528
   cpus       = 2
   name_label = "manager"
-  name_description = "Windows 10 mangagement workstation"
+  name_description = "Windows 11 mangagement workstation"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_management1]
   disk {
@@ -29,7 +29,7 @@ resource "xenorchestra_vm" "branch1-1" {
   memory_max = 4294934528
   cpus       = 1
   name_label = "branch1-1"
-  name_description = "Windows 10 workstation 1 in branch 1"
+  name_description = "Windows 11 workstation 1 in branch 1"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_branch1]
   disk {
@@ -45,7 +45,7 @@ resource "xenorchestra_vm" "branch2-1" {
   memory_max = 4294934528
   cpus       = 1
   name_label = "branch2-1"
-  name_description = "Windows 10 workstation 1 in branch 2"
+  name_description = "Windows 11 workstation 1 in branch 2"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_branch2]
   disk {
@@ -61,7 +61,7 @@ resource "xenorchestra_vm" "branch3-1" {
   memory_max = 4294934528
   cpus       = 1
   name_label = "branch3-1"
-  name_description = "Windows 10 workstation 1 in branch 3"
+  name_description = "Windows 11 workstation 1 in branch 3"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_branch3]
   disk {
