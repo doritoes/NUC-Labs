@@ -200,8 +200,6 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
 NOTE The interface ip change change and setting the expert password were not saved, preserving the clean template.
 
 ## Create Windows 11 Template
-🌱 NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
-
 IMPORTANT Windows 11 will not install without a TPM
 
 IMPORTANT If you want to set up using a local account instead of a Microsoft account:
@@ -310,8 +308,6 @@ Steps:
   - Click **Convert to template** and confirm
 
 ## Create Windows Server 2025 Template
-🌱 NOTE Using "Other install media" isn't optimal, but is required because we are using Terraform
-
 NOTE These steps do not create a virtual TPM. Without a VTPM some enhanced security features like bitlocker are not available.
 
 NOTE This is a bare-bones server with limited resources. Images created from this template can given more resources.
