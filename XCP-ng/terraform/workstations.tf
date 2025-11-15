@@ -16,7 +16,7 @@ resource "xenorchestra_vm" "management-workstation" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "management-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.lan.id
@@ -37,7 +37,7 @@ resource "xenorchestra_vm" "branch1-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-1-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch1.id
@@ -54,7 +54,7 @@ resource "xenorchestra_vm" "branch2-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-2-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch2.id
@@ -71,7 +71,7 @@ resource "xenorchestra_vm" "branch3-1" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-3-1-disk"
-    size       = 137437904896
+    size       = 137438953472
   }
   network {
     network_id = data.xenorchestra_network.branch3.id
