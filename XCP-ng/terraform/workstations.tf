@@ -9,6 +9,7 @@ resource "xenorchestra_vm" "management-workstation" {
   memory_max = 4294934528
   cpus       = 2
   name_label = "manager"
+  hvm_boot_firmware = "uefi"
   name_description = "Windows 11 mangagement workstation"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_management1]
@@ -29,6 +30,7 @@ resource "xenorchestra_vm" "branch1-1" {
   memory_max = 4294934528
   cpus       = 1
   name_label = "branch1-1"
+  hvm_boot_firmware = "uefi"
   name_description = "Windows 11 workstation 1 in branch 1"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_branch1]
@@ -45,6 +47,7 @@ resource "xenorchestra_vm" "branch2-1" {
   memory_max = 4294934528
   cpus       = 1
   name_label = "branch2-1"
+  hvm_boot_firmware = "uefi"
   name_description = "Windows 11 workstation 1 in branch 2"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_branch2]
@@ -61,6 +64,7 @@ resource "xenorchestra_vm" "branch3-1" {
   memory_max = 4294934528
   cpus       = 1
   name_label = "branch3-1"
+  hvm_boot_firmware = "uefi"
   name_description = "Windows 11 workstation 1 in branch 3"
   template = data.xenorchestra_template.workstation-template.id
   depends_on = [ xenorchestra_network.network_branch3]
