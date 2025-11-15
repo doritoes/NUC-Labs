@@ -27,6 +27,9 @@ Notes:
     - `Rename-Computer -NewName manager`
     - `Restart-Computer`
 - Install WSL
+  - WARNING It looks like nested virtualization is gone in XCP-ng 8.3
+    - https://docs.xcp-ng.org/compute/#-nested-virtualization
+    - May need to move the Ansible installation off `manager` to a Linux VM
   - Enable nested virtualization for the VM in XO
     - Power down the `manager` VM
     - Advanced > slide to enable Nested virtualization
@@ -51,6 +54,9 @@ Notes:
     - `wsl --install -d Ubuntu-24.04`
     - PROBLEM fails again
       - Error code: Wsl/InstallDistro/Service/RegisterDistro/CreateVm/HCS/HCS_E_HYPERV_NOT_INSTALLED
+    -  dism.exe /online /get-features /format:table
+    -  HypervisorPlatform is disabled
+    -  Enable Windows Hypervisor Platform
     - Open Windows Subsystem for Linux  Settings
       - everything looks good
     - `restart-computer`
