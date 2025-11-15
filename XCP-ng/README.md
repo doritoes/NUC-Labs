@@ -86,14 +86,13 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 - [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - [Appendix - L2 Firewall](Appendix-L2_Firewall.md)
 - [Appendix - Build VyOS ISO with VM agents](Appendix_Build_VyOS_ISO_with_VM_agents.md)
-- Installing older operating systems
+- Installing older operating systems for the pentesting lab
   - [Ubuntu 4.10](Appendix-Ubuntu-4.10.md)
   - [Windows XP](Appendix-Windows-XP.md)
   - [Windows 7](Appendix-Windows-7.md)
   - [Windows 8.1](Appendix-Windows-8.1.md)
   - [Windows Vista](Appendix-Windows-Vista.md)
   - [Windows Server 2003](Appendix-Windows-Server-2003.md)
-  - 
 
 # Other Notes
 ## Other Install Media
@@ -112,7 +111,7 @@ With Windows, install the tools from https://www.xenserver.com/downloads
 
 If your distribution of Linux is not recognized by the install script
 - Download the tools for Linux from https://www.xenserver.com/downloads
-- Install while specifying the distribution and major release when installing. Here is an example for Check Point Gaia OS, based on RHEL EL7.
+- Install while specifying the distribution and major release when installing. Here is an example for Check Point Gaia OS R82, based on RHEL EL8.
 - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
 - `cd LinuxGuestTools-8.4.0-1`
-- `./install -d rhel -m el7`
+- `./install -d rhel -m el8`
