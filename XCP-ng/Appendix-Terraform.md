@@ -3,6 +3,8 @@ References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
 IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R81.20, and Windows 10/Server 2022. Updating to latest versions.
 
+NOTE When you are deploying to a different SR than where the template is storaged, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
+
 Updated Software Versions:
 - XCP-ng 8.3
 - Ubuntu 24.04
