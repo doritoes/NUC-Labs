@@ -12,7 +12,7 @@ resource "xenorchestra_vm" "management-workstation" {
   hvm_boot_firmware = "uefi"
   name_description = "Windows 11 mangagement workstation"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.network_management1]
+  depends_on = [xenorchestra_network.network_management1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "management-disk"
@@ -33,7 +33,7 @@ resource "xenorchestra_vm" "branch1-1" {
   hvm_boot_firmware = "uefi"
   name_description = "Windows 11 workstation 1 in branch 1"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.network_branch1]
+  depends_on = [xenorchestra_network.network_branch1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-1-1-disk"
@@ -50,7 +50,7 @@ resource "xenorchestra_vm" "branch2-1" {
   hvm_boot_firmware = "uefi"
   name_description = "Windows 11 workstation 1 in branch 2"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.network_branch2]
+  depends_on = [xenorchestra_network.network_branch2]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-2-1-disk"
@@ -67,7 +67,7 @@ resource "xenorchestra_vm" "branch3-1" {
   hvm_boot_firmware = "uefi"
   name_description = "Windows 11 workstation 1 in branch 3"
   template = data.xenorchestra_template.workstation-template.id
-  depends_on = [ xenorchestra_network.network_branch3]
+  depends_on = [xenorchestra_network.network_branch3]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "workstation-3-1-disk"
