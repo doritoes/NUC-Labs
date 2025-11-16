@@ -387,9 +387,11 @@ Steps:
   - Click **Convert to template** and confirm
 
 ## Create Ubuntu Server 24.04 LTS Template
+IMPORTANT Although not ideal, we are using "Other install media" as the base temmplate. In testing, when we used the base template "Ubuntu Noble Numbat 24.04", Terraform created VMs that failed to find the boot drive.
+
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
-  - Template: **Ubuntu Noble Numbat 24.04**
+  - Template: **Other install media**
   - Name: **ubuntu-server-template**
   - Description: **Ubuntu Server 24.04**
   - CPU: **1 vCPU**
