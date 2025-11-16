@@ -102,16 +102,16 @@ Notes:
     - `ansible-galaxy collection install check_point.mgmt --force`
       - this replaces the old packaged 6.6.0 with the latest 6.7.1 (or later)
   - Install XenAPI python package
-  - Prior to Ubuntu 24.04
-    - `python3 -m pip install XenAPI`
-  - Ubuntu 24.04 and later quick and dirty
-    - `python3 -m pip install --break-system-packages XenAPI`
-  - Installing "nicely" broken my ansible playbooks running
-    - `python3 -m venv ~/venv`
-    - `source ~/venv/bin/activate`
-    - `pip install XenAPI`
-    - modify your playbooks specify the location of python
-  - TIP You might use Git to clone the repo to have the files locally on `manager`
+    - Prior to Ubuntu 24.04
+      - `python3 -m pip install XenAPI`
+    - Ubuntu 24.04 and later quick and dirty
+      - `python3 -m pip install --break-system-packages XenAPI`
+    - Installing "nicely" broken my ansible playbooks running
+      - `python3 -m venv ~/venv`
+      - `source ~/venv/bin/activate`
+      - `pip install XenAPI`
+      - modify your playbooks specify the location of python
+  - TIP Use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
     - `cp NUC-Labs/XCP-ng/ansible/* .`
@@ -183,9 +183,10 @@ Steps:
   - `chmod u=rwx,g=,o= ~/.ssh`
   - `touch ~/.ssh/authorized_keys`
   - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-  - Add the public key from `manager` to the files
+  - Add the entire public key from `manager` to the files
     - `cat > ~/.ssh/authorized_keys`
       - paste in the key
+      - press enter
       - press Control-D
   - `exit`
   - You can now ssh without a password
