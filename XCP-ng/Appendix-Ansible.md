@@ -33,7 +33,7 @@ Notes:
         - Accept the reboot
   - Log back in and open a privileged PowerShell
     - `wsl --install --no-distribution`
-    - `restart-computer
+    - `Restart-Computer`
   - Log back in and open a privileged PowerShell
     - `wsl --set-default-version 1`
     - `wsl --list --online`
