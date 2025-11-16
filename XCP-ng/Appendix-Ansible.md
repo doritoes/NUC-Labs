@@ -103,7 +103,7 @@ Notes:
       - this replaces the old packaged 6.6.0 with the latest 6.7.1 (or later)
   - Install XenAPI python package
   - Prior to Ubuntu 24.04
-    - 1python3 -m pip install XenAPI1
+    - `python3 -m pip install XenAPI`
   - Ubuntu 24.04 and later quick and dirty
     - `python3 -m pip install --break-system-packages XenAPI`
   - Installing "nicely" broken my ansible playbooks running
@@ -120,7 +120,6 @@ Notes:
     - <ins>Do not</ins> enter a passphrase
     - Accept all defaults (press enter)
   - The public key you will be using:
-    - `cat ~/.ssh/id_rsa.pub`
     - `cat ~/.ssh/id_ed25519.pub`
 - Set up basic configuration files for Ansible
   - Create `ansible.cfg` from [ansible.cfg](ansible/ansible.cfg)
@@ -132,25 +131,19 @@ Notes:
 
 # Configure VyOS Router
 - Open the `vyos` router VM and log in to console
-- Configure eth0 interface
-  - `configure`
-  - `set interfaces ethernet eth0 address dhcp`
-  - `set service ssh`
-  - `commit`
-  - `save`
-  - `exit`
-  - Get the IP address on eth0
-    - `show interfaces ethernet eth0 brief`
+- Get the IP address on eth0
+  - `show interfaces ethernet eth0 brief`
 - Put this IP address in the `inventory` file under `[router]`
+  - It is recommended to make this a fixed IP address by adding a DHCP reservation in your Lab router
 - From `manager` VM configure key login in VyOS
   - Log in to VyOS as `ansible`
     - `ssh ansible@<vyos_lab_ip>`
     - accept the key
     - log in with password
   - `configure`
-  - `set system login user ansible authentication public-keys lab type 'ssh-rsa'`
+  - `set system login user ansible authentication public-keys lab type 'ssh-ed25519'`
   - `set system login user ansible authentication public-keys lab key '<valueofkey>'`
-    - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
+    - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-ed25519`</ins> and without the trailing `ansible@manager`
   - `commit`
   - `save`
   - `exit`
@@ -158,6 +151,7 @@ Notes:
   - `exit`
   - Retry: `ssh ansible@<vyos_lab_ip>`
     - no longer requires a password
+    - `exit`
   - Edit the `inventory` files to add the IP address of the router below `[router]`
   - the `inventory` files should have the VyOS "public" IP without the "#" comment character
   - everything else should be "commented out"
