@@ -11,7 +11,7 @@ resource "xenorchestra_vm" "dmz-apache" {
   name_label = "dmz-apache"
   name_description = "Ubuntu server in DMZ running Apache"
   template = data.xenorchestra_template.server-ubuntu-template.id
-  depends_on = [ xenorchestra_network.network_dmz1]
+  depends_on = [xenorchestra_network.network_dmz1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "dmz-apache-disk"
@@ -28,7 +28,7 @@ resource "xenorchestra_vm" "dmz-iis" {
   name_label = "dmz-iis"
   name_description = "Windows Server 2025 in DMZ running IIS"
   template = data.xenorchestra_template.server2025-template.id
-  depends_on = [ xenorchestra_network.network_dmz1]
+  depends_on = [xenorchestra_network.network_dmz1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "dmz-iis-disk"
@@ -45,7 +45,7 @@ resource "xenorchestra_vm" "dc-1" {
   name_label = "dc-1"
   name_description = "Domain Controller Branch 1"
   template = data.xenorchestra_template.server2025-template.id
-  depends_on = [ xenorchestra_network.network_branch1]
+  depends_on = [xenorchestra_network.network_branch1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "dc-1-disk"
@@ -62,7 +62,7 @@ resource "xenorchestra_vm" "file-1" {
   name_label = "file-1"
   name_description = "File Server Branch 1"
   template = data.xenorchestra_template.server2025-template.id
-  depends_on = [ xenorchestra_network.network_branch1]
+  depends_on = [xenorchestra_network.network_branch1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "file-1-disk"
@@ -84,7 +84,7 @@ resource "xenorchestra_vm" "sql-1" {
   name_label = "sql-1"
   name_description = "SQL Server Branch 1"
   template = data.xenorchestra_template.server2025-template.id
-  depends_on = [ xenorchestra_network.network_branch1]
+  depends_on = [xenorchestra_network.network_branch1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "sql-1-disk"
@@ -106,7 +106,7 @@ resource "xenorchestra_vm" "idc-1" {
   name_label = "idc-1"
   name_description = "Identity Collector Server"
   template = data.xenorchestra_template.server2025-template.id
-  depends_on = [ xenorchestra_network.network_branch1]
+  depends_on = [xenorchestra_network.network_branch1]
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "idc-1-disk"
