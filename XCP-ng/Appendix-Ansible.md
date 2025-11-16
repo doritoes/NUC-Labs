@@ -163,7 +163,7 @@ Notes:
   - Testing
     - Login in to the VyOS router
     - `show interfaces`
-    - Spin up a temporary VM based on template `win10-template` on the **build** network
+    - Spin up a temporary VM based on template `win11-template` on the **build** network
       - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
