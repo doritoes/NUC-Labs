@@ -31,14 +31,11 @@ Notes:
     - From administrative powershell
       - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
         - Accept the reboot
-      - Log back in to the administrative powershell
-      - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All`
-        - Accept the reboot
   - Log back in and open a privileged PowerShell
     - `wsl --install --no-distribution`
     - `restart-computer
   - Log back in and open a privileged PowerShell
-    - `wsl.exe --set-default-version 1`
+    - `wsl --set-default-version 1`
     - `wsl --list --online`
     - `wsl --install -d Ubuntu-24.04`
       - feel free to customize and choose your favorite Linux
@@ -49,16 +46,17 @@ Notes:
   - Close Terminal and re-open
   - Click the dropdown arrow and click Ubuntu-24.04
     - This is how you can access WSL in the future; also found as Ubuntu-24.04 in the start menu
-    - sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
-    - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passswd lock: Invalid argument*
-      - https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/2069555/comments/12
-      - Here is a fix
-        - `sudo sed -i -e '/systemd-sysusers/s/\.conf$/.conf || true/' /var/lib/dpkg/info/*.postinst`
-
+    - Update packages
+      - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+      - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passswd lock: Invalid argument*
+        - https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/2069555/comments/12
+        - Here is a fix
+          - `sudo sed -i -e '/systemd-sysusers/s/\.conf$/.conf || true/' /var/lib/dpkg/info/*.postinst`
+          - `sudo apt --fix-broken install`
 - Configure Network interfaces on `manager`
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
-    - Network profile: **Private**
+    - Network profile type: **Private network**
   - Click **Ethernet** > **Second Interface** (No Internet)
     - IP assignment: Click **Edit**
     - From dropdown select **Manual**
@@ -89,7 +87,7 @@ Notes:
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
       - Normally installing with ppa method is discouraged; however this is is easiest way to get the current Ansible for automation
-    - Option 2 - Ubuntu 24.04 old Ansible 2.16.3
+    - Option 2 - Ubuntu 24.04 old Ansible 2.16.3 then fix it
       - `sudo apt install -y ansible`
       - `ansible --version`
       - `sudo apt remove -y ansible`
