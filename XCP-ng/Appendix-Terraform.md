@@ -321,6 +321,8 @@ IMPORTANT Although not ideal, we are using "Other install media" as the base tem
 
 NOTE This is a bare-bones server with limited resources. Images created from this template can given more resources.
 
+See another approach at https://github.com/mtcoffee/xcp-ng-terraform-examples/tree/master/windows%20server
+
 Steps:
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
