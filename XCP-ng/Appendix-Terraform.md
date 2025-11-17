@@ -324,7 +324,7 @@ NOTE This is a bare-bones server with limited resources. Images created from thi
 Steps:
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Template: **Windows Server 2025**
+  - Template: **Other install media**
   - Name: **server2025-template**
   - Description: **Windows Server 2025**
   - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
