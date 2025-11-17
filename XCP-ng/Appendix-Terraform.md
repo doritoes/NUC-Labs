@@ -333,6 +333,8 @@ Steps:
   - Install: ISO/DVD: *Select the Windows Server 2025 evaluation iso you uploaded*
   - Interfaces: select **Pool-wide network associated with eth0**
   - Disks: Click **Add disk** and select **64GB** (default)
+  - Advanced:
+    - Boot firmware: **uefi**
   - Click **Create**
 - The details for the new VM are now displayed
 - Enable higher desktop resolution
