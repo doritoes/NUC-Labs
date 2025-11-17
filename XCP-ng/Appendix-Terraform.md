@@ -374,7 +374,7 @@ Steps:
   - Slide to Enable Remote Desktop then accept the message
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Optionally, set the correct timezone
-- Change the hostname to `server2025-template`
+- Optionally, change the hostname to `server2025-template` (has no lasting effect)
   - From administrative powershell: `Rename-Computer -NewName server2025-template`
   - Accept the warning about NetBIOS names
 - Reboot the computer
