@@ -15,7 +15,7 @@ resource "xenorchestra_vm" "dmz-apache" {
   disk {
     sr_id      = data.xenorchestra_sr.local.id
     name_label = "dmz-apache-disk"
-    size       = 68718952448
+    size       = 68719476736
   }
   network {
     network_id = data.xenorchestra_network.branch1dmz.id
