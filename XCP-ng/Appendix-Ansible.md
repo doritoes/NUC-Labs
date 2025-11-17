@@ -167,6 +167,8 @@ Notes:
       - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
+Using GAiA Mgmt API: https://sc1.checkpoint.com/documents/latest/GaiaAPIs/index.html#cli/set-initial-setup~v1.8%20
+
 Steps:
 - In XO, select the VM `sms`
 - Under **Network** tab, set the network interface settings (blue gear icon) and then disable TX checksumming
@@ -201,6 +203,12 @@ Steps:
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
     - the router should also respond `SUCCESS`
+- Configure SMS using GAiA Managmement CLI
+  - You will be prompted to authenticate with user "admin"
+  - You <ins>must</ins> select a new password for admin user
+  - `mgmt_cli set initial-setup password "<user-admin-password>" grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 --format json`
+  - note the task ID
+  - mgmt_cli show task task-id "<task-id>" --context gaia_api --version 1.8 --format json
 - Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
   - [vars.yml](ansible/vars.yml)
   - [sms.yml](ansible/sms.yml)
