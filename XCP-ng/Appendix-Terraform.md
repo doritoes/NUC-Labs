@@ -317,7 +317,7 @@ Steps:
 ## Create Windows Server 2025 Template
 NOTE These steps do not create a virtual TPM. Without a VTPM some enhanced security features like bitlocker are not available.
 
-IMPORTANT Although not ideal, we are using "Other install media" as the base temmplate. In testing, when we used the base template "Windows 2025", Terraform created VMs that failed to find the boot drive.
+IMPORTANT Although not ideal, we are using "Other install media" as the base template. In testing, when we used the base template "Windows 2025", Terraform created VMs that failed to find the boot drive.
 
 NOTE This is a bare-bones server with limited resources. Images created from this template can given more resources.
 
