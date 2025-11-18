@@ -205,10 +205,15 @@ Steps:
     - the router should also respond `SUCCESS`
 - Configure SMS using GAiA Managmement CLI
   - You will be prompted to authenticate with user "admin"
-  - You <ins>must</ins> select a new password for admin user
-  - `mgmt_cli set initial-setup password "<user-admin-password>" grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 --format json`
+  - `mgmt_cli set initial-setup grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 --format json`
   - note the task ID
   - mgmt_cli show task task-id "<task-id>" --context gaia_api --version 1.8 --format json
+- PROBLEM this is only working as user 'admin', not using ansible playbook
+- 🌱 Need to add tasks set sytem name, default gateway
+- 🌱 Need to add user cpadmin
+  - mgmt_cli -s ~/session.txt add administrator name "{{ ansible_user }}" password "{{ ansible_user_password }}" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json || exit 1
+  - mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"  || exit 1
+  - mgmt_cli -f json -s ~/session.txt publish || exit 1
 - Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
   - [vars.yml](ansible/vars.yml)
   - [sms.yml](ansible/sms.yml)
