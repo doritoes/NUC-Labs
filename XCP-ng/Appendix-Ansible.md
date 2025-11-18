@@ -196,6 +196,9 @@ Steps:
   - TIP you can create your own script file `auth.sh` to repeat this process for all the devices
     - Example at [auth.sh](auth.sh)
     - <ins>Make sure</ins> you edit the file and paste in your own key
+- Enable API access
+  - expert: `gaia_api access --user ansible --enable true`
+  - clish: `show rba user ansible`
 - Test Ansible access
   - Exit back to session on manager
   - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
@@ -203,6 +206,8 @@ Steps:
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
     - the router should also respond `SUCCESS`
+- Configure SMS using Ansible
+  - PROBLEM not wokring yet
 - Configure SMS using GAiA Managmement CLI
   - You will be prompted to authenticate with user "admin"
   - `mgmt_cli set initial-setup grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 --format json`
@@ -214,26 +219,14 @@ Steps:
   - mgmt_cli -s ~/session.txt add administrator name "{{ ansible_user }}" password "{{ ansible_user_password }}" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json || exit 1
   - mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"  || exit 1
   - mgmt_cli -f json -s ~/session.txt publish || exit 1
-- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
-  - [vars.yml](ansible/vars.yml)
-  - [sms.yml](ansible/sms.yml)
-  - [sms.j2](ansible/sms.j2)
-  - [sms-user.j2](ansible/sms-user.j2)
-- Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's management database
-  - `ansible-playbook sms.yml`
-    - ⏲️ This takes a long time to complete
-    - Uses `config_system` tool to perform FTW
-    - Creates user `ansible` using `mgmt_cli`
-      - Creating the user directly using the ansible module `add-administrator` isn't working correctly as of this writing
-    - Allows all IP addresses to connect to the API in our Lab environment
   - Testing
     - Log in to `sms` console (or ssh)
       - `fwm ver`
-        - Should say *Check Point Management Server R81.20*
+        - Should say *Check Point Management Server R82*
     - `api status`
 - Log in to `sms` Web gui from `manager`
   - https://192.168.41.20
-  - Download the SmartConsole R81.20 client using the link "Download Now!"
+  - Download the SmartConsole R82 client using the link "Download Now!"
 - Install SmartConsole using the downloaded file
 - Launch SmartConsole
   - Username: **cpadmin**
