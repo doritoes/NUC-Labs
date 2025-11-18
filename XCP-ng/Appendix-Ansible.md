@@ -198,6 +198,7 @@ Steps:
     - <ins>Make sure</ins> you edit the file and paste in your own key
 - Enable API access
   - expert: `gaia_api access --user ansible --enable true`
+  - expert: `gaia_api access -u unlocal_users -e true`
   - clish: `show rba user ansible`
 - Test Ansible access
   - Exit back to session on manager
@@ -207,7 +208,7 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
     - the router should also respond `SUCCESS`
 - Configure SMS using Ansible
-  - PROBLEM not wokring yet
+  - PROBLEM not working yet
 - Configure SMS using GAiA Managmement CLI
   - You will be prompted to authenticate with user "admin"
   - `mgmt_cli set initial-setup grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 --format json`
