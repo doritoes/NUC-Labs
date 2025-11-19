@@ -180,83 +180,44 @@ Steps:
   - `set interface eth0 ipv4-address 192.168.41.20 mask-length 24`
   - `save config`
 - Log in to `manager` and open a WSL shell
-  - `ssh ansible@192.168.41.20`
+- Enable ssh key login to `sms`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.41.20`
+    - authenticate when prompted
+  - test `ssh ansible@192.168.41.20`
+    - you can now authenticate without a password
     - you will be in the default home directory `/home/ansible`
-- Create new authorized_keys file and add the key
-  - `mkdir .ssh`
-  - `chmod u=rwx,g=,o= ~/.ssh`
-  - `touch ~/.ssh/authorized_keys`
-  - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-  - Add the entire public key from `manager` to the files
-    - `cat > ~/.ssh/authorized_keys`
-      - paste in the key
-      - press enter
-      - press Control-D
-  - `exit`
-  - You can now ssh without a password
-    - `ssh 192.168.41.20`
-  - TIP you can create your own script file `auth.sh` to repeat this process for all the devices
-    - Example at [auth.sh](auth.sh)
-    - <ins>Make sure</ins> you edit the file and paste in your own key
-- Enable API access
-  - expert: `gaia_api access -u ansible -e true`
-  - expert: `gaia_api access -u unlocal_users -e true`
-  - clish: `show rba user ansible`
-- Test Ansible access
-  - Exit back to session on manager
-  - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
-    - leave the variable intact
-  - `ansible all -m ping`
-    - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
-    - the router should also respond `SUCCESS`
-- Configure SMS using Ansible
-  - inventory.gaia
-```
-[check_point]
-sms ansible_host=192.168.41.20
-[check_point:vars]
-ansible_httpapi_use_ssl=True
-ansible_httpapi_validate_certs=False
-ansible_user=ansible
-ansible_password=supersecretpassword
-ansible_network_os=check_point.gaia.checkpoint
-```
-  - sms-gaia.yml
-```
----
-- name: SMS setup
-  hosts: check_point
-  gather_facts: false
-  connection: httpapi
-  tasks:
-    - name: hostname
-      check_point_gaia.cp_gaia_hostname:
-        name: sms
-        version: 1.8
-    - name: initial setup
-      check_point_gaia.cp_gaia_inital_setup:
-        security_management:
-          type: primary
-        wait_for_task: true
-```
-- `ansible-playbook -i inventory-gaia sms-gaia.yml`
-- PROBLEM not working yet https://github.com/CheckPointSW/CheckPointAnsibleGAIACollection/issues/65
-- Configure SMS using GAiA Managmement CLI
-  - `mgmt_cli -f json login --user ansible --password 'Checkpoint123!' --context gaia_api --version 1.8 > ~/session.txt`
-  - `mgmt_cli -s ~/session.txt set hostname name "sms" --context gaia_api --version 1.8 -f json`
-  - `mgmt_cli -s ~/session.txt set static-route address "0.0.0.0" mask-length 0 next-hop.1.gateway "192.168.41.1" --context gaia_api --version 1.8 -f json`
-  - `mgmt_cli -s ~/session.txt set initial-setup grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 -f json`
-  - note the task ID
-  - mgmt_cli -s ~/session.txt show task task-id "<task-id>" --context gaia_api --version 1.8 -f json
-  - rm ~/session.txt
-- 🌱 Need to add users cpadmin and ansible
-  - 🌱 first try mgmt api before reverting to mgmt_cli 🌱
-  - `mgmt_cli -f json login --user admin --password "Checkpoint123!" -d 'Systen Data'> ~/session.txt`
-  - `mgmt_cli -s ~/session.txt add administrator name "cpadmin" password "Checkpoint123!" must-change-password false authentication-method "check point password" permissions-profile "Super User" --domain 'System Data' --format json`
-  - `mgmt_cli -s ~/session.txt add administrator name "ansible" password "Checkpoint123!" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json`
-  - mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"
-  - mgmt_cli -f json -s ~/session.txt publish'
-  - rm ~/session.txt
+- Configure API access, configure basic settings, and complete FTCW
+  -  sms-gaia.sh
+~~~
+#!/usr/bin/env bash
+USERNAME=ansible
+PASSWORD=supersecretpassword
+GRUB_PASSWORD=${PASSWORD}
+ssh ansible@192.168.41.20 "gaia_api access -u ansible -e true"
+ssh ansible@192.168.41.20 "gaia_api access -u unlocal_users -e true"
+ssh ansible@192.168.41.20 "mgmt_cli -f json login --user ${USERNAME} --password '${PASSWORD}' --context gaia_api --version 1.8 > ~/.session.txt"
+ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set hostname name 'sms' --context gaia_api --version 1.8"
+ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '192.168.41.1' type 'gateway' comment 'Default route' --context gaia_api --version 1.8"
+ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set initial-setup grub-password '${GRUB_PASSWORD}' security-management.type 'primary' --context gaia_api --version 1.8"
+ssh ansible@192.168.41.20 "rm -f -- ~/.session.txt"
+~~~
+  - Allow time for the FTCW to complete
+  - sms-config.sh
+~~~
+#!/usr/bin/env bash
+USERNAME=ansible
+PASSWORD=supersecretpassword
+CPADMIN_USERNAME=cpadmin
+CPADMIN_PASSWORD=${PASSWORD}
+ANSIBLE_USERNAME=ansible
+ANSIBLE_PASSWORD=${PASSWORD}
+ssh -q ansible@192.168.41.20 "mgmt_cli -f json login --user ${USERNAME} --password '${PASSWORD}' -d 'System Data'> ~/.session.txt"
+ssh -q ansible@192.168.41.20 "mgmt_cli -s ~/session.txt -f json add administrator name '${CPADMIN_USERNAME}" password '${CPADMIN_PASSWORD}' must-change-password false authentication-method 'check point password' permissions-profile 'Super User' -d 'System Data'"
+ssh -q ansible@192.168.41.20 "mgmt_cli -s ~/session.txt -f json add administrator name '${ANSIBLE_USERNAME}" password '${ANSIBLE_PASSWORD}' must-change-password false authentication-method 'check point password' permissions-profile 'read write all' -d 'System Data'"
+ssh ansible@192.168.41.20 "mgmt_cli -s ~/session.txt -f json set api-settings accepted-api-calls-from 'All IP addresses' -d 'System Data'"
+ssh -q ansible@192.168.41.20 "mgmt_cli -s -f json ~/session.txt publish"
+ssh -q ansible@192.168.41.20 "rm -f -- ~/.session.txt"
+~~~
   - Testing
     - Log in to `sms` console (or ssh)
       - `fwm ver`
@@ -275,15 +236,7 @@ ansible_network_os=check_point.gaia.checkpoint
     - In Lab testing sometimes a pop-up error appeared after trying to launch while staying logged in
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
-- Update Gaia (if you have proper eval licenses)
-  - Wait until the Branch 1 firewalls are configured and providing Internet access
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requirement); however once Internet access is working, you can use CPUSE to apply jumbo hotfixes
-  - SMS updates are best applied manually (whereas firewalls are updated using management API)
-    - clish
-      - installer check-for-updates
-      - installer download [tab]
-      - installer install [tab]
-    - Web GUI > Upgrades (CPUSE)
+- We will be Updating Gaia on the SMS later, once Internet access is working
 - Create objects in the Check Point database related to management
   - Create files on the manager (inventory, playbook)
     - [inventory-api](ansible/inventory-api)
@@ -294,6 +247,7 @@ ansible_network_os=check_point.gaia.checkpoint
   - `ansible-playbook -i inventory-api management-objects.yml`
   - Testing
     - In SmartConsole press Control-E to open the Object explorer
+      - Test logging in as users `cpadmin` and `ansible`
       - Expand Network Objects
       - Note that the new hosts and network appear when you select Networks and/or Hosts
       - Close the Object explorer
@@ -313,6 +267,7 @@ References:
 # Configure Branch 1
 The following steps configure Branch 1
 ## Configure Branch 1 firewalls
+NOTE Home > VMs > Click the (X) to clear the filter; this shows the firewalls which are created powered down ("halted")
 Steps:
 - BEFORE you POWER ON the firewalls **firewall1a** and **firewall1b**
   - Turn off TX checksumming on each interface
@@ -328,23 +283,12 @@ Steps:
   - firewall1b
     - `set interface eth0 ipv4-address 192.168.41.3 mask-length 24`
     - `save config`
-- Add `manager`'s RSA keys to each firewall's authorized_keys file
-  - Log in to `manager` and open a WSL shell
-    - ssh to firewall1a and firewall1b
-      - `ssh ansible@192.168.41.2`
-      - `ssh ansible@192.168.41.3`
-      - you will be in the default home directory `/home/ansible`
-  - Create new authorized_keys file and add the key
-    - `mkdir .ssh`
-    - `chmod u=rwx,g=,o= ~/.ssh`
-    - `touch ~/.ssh/authorized_keys`
-    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-    - Add the public key from `manager` to the files
-      - `cat > ~/.ssh/authorized_keys`
-        - paste in the key
-        - press Control-D
-    - `exit`
-  - You can now ssh without a password
+- Enable ssh key login to `firewall1a` and `firewall1b` from `manager`
+  - Open WSL shell on `manager`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.41.2`
+    - authenticate when prompted
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.41.3`
+    - authenticate when prompted
 - Test Ansible access
   - Exit back to session on `manager`
   - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
