@@ -197,7 +197,7 @@ Steps:
     - Example at [auth.sh](auth.sh)
     - <ins>Make sure</ins> you edit the file and paste in your own key
 - Enable API access
-  - expert: `gaia_api access --user ansible --enable true`
+  - expert: `gaia_api access -u ansible -e true`
   - expert: `gaia_api access -u unlocal_users -e true`
   - clish: `show rba user ansible`
 - Test Ansible access
@@ -208,15 +208,49 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
     - the router should also respond `SUCCESS`
 - Configure SMS using Ansible
-  - PROBLEM not working yet
+  - inventory.gaia
+```
+[check_point]
+sms ansible_host=192.168.41.20
+[check_point:vars]
+ansible_httpapi_use_ssl=True
+ansible_httpapi_validate_certs=False
+ansible_user=ansible
+ansible_password=supersecretpassword
+ansible_network_os=check_point.gaia.checkpoint
+```
+- sms-gaia.yml
+```
+---
+- name: SMS setup
+  hosts: check_point
+  gather_facts: false
+  connection: httpapi
+  tasks:
+    - name: hostname
+      check_point_gaia.cp_gaia_hostname:
+        name: sms
+        version: 1.8
+    - name: initial setup
+      check_point_gaia.cp_gaia_inital_setup:
+        security_management:
+          type: primary
+        wait_for_task: true
+```
+- `ansible-playbook -i inventory-gaia sms-gaia.yml`
+- PROBLEM not working yet https://github.com/CheckPointSW/CheckPointAnsibleGAIACollection/issues/65
 - Configure SMS using GAiA Managmement CLI
   - You will be prompted to authenticate with user "admin"
-  - `mgmt_cli set initial-setup grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 --format json`
+  - `mgmt_cli -f json login --user ansible --password 'Checkpoint123!' --context gaia_api --version 1.8 > ~/session.txt`
+  - `mgmt_cli -s ~/session.txt set hostname name "sms" --context gaia_api --version 1.8 -f json`
+  - `mgmt_cli -s ~/session.txt set static-route address "0.0.0.0" mask-length 0 next-hop.1.gateway "192.168.41.1" --context gaia_api --version 1.8 -f json`
+  - `mgmt_cli -s ~/session.txt set initial-setup grub-password "<grub-password>" security-management.type "primary" --context gaia_api --version 1.8 -f json`
   - note the task ID
-  - mgmt_cli show task task-id "<task-id>" --context gaia_api --version 1.8 --format json
-- PROBLEM this is only working as user 'admin', not using ansible playbook
-- 🌱 Need to add tasks set sytem name, default gateway
+  - mgmt_cli -s ~/session.txt show task task-id "<task-id>" --context gaia_api --version 1.8 -f json
+  - rm ~/session.txt
 - 🌱 Need to add user cpadmin
+  - 🌱 first try mgmt api before reverting to mgmt_cli 🌱
+  - `mgmt_cli -f json login --user admin --password 'Checkpoint123!' --context gaia_api --version 1.8 > ~/session.txt`
   - mgmt_cli -s ~/session.txt add administrator name "{{ ansible_user }}" password "{{ ansible_user_password }}" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json || exit 1
   - mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"  || exit 1
   - mgmt_cli -f json -s ~/session.txt publish || exit 1
