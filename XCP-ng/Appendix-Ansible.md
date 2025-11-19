@@ -169,6 +169,8 @@ Notes:
 # Configure SMS
 Using GAiA Mgmt API: https://sc1.checkpoint.com/documents/latest/GaiaAPIs/index.html#cli/set-initial-setup~v1.8%20
 
+See https://www.youtube.com/@EdgeCaseScenario
+
 Steps:
 - In XO, select the VM `sms`
 - Under **Network** tab, set the network interface settings (blue gear icon) and then disable TX checksumming
@@ -240,7 +242,6 @@ ansible_network_os=check_point.gaia.checkpoint
 - `ansible-playbook -i inventory-gaia sms-gaia.yml`
 - PROBLEM not working yet https://github.com/CheckPointSW/CheckPointAnsibleGAIACollection/issues/65
 - Configure SMS using GAiA Managmement CLI
-  - You will be prompted to authenticate with user "admin"
   - `mgmt_cli -f json login --user ansible --password 'Checkpoint123!' --context gaia_api --version 1.8 > ~/session.txt`
   - `mgmt_cli -s ~/session.txt set hostname name "sms" --context gaia_api --version 1.8 -f json`
   - `mgmt_cli -s ~/session.txt set static-route address "0.0.0.0" mask-length 0 next-hop.1.gateway "192.168.41.1" --context gaia_api --version 1.8 -f json`
@@ -248,12 +249,14 @@ ansible_network_os=check_point.gaia.checkpoint
   - note the task ID
   - mgmt_cli -s ~/session.txt show task task-id "<task-id>" --context gaia_api --version 1.8 -f json
   - rm ~/session.txt
-- 🌱 Need to add user cpadmin
+- 🌱 Need to add users cpadmin and ansible
   - 🌱 first try mgmt api before reverting to mgmt_cli 🌱
-  - `mgmt_cli -f json login --user admin --password 'Checkpoint123!' --context gaia_api --version 1.8 > ~/session.txt`
-  - mgmt_cli -s ~/session.txt add administrator name "{{ ansible_user }}" password "{{ ansible_user_password }}" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json || exit 1
-  - mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"  || exit 1
-  - mgmt_cli -f json -s ~/session.txt publish || exit 1
+  - `mgmt_cli -f json login --user admin --password "Checkpoint123!" -d 'Systen Data'> ~/session.txt`
+  - `mgmt_cli -s ~/session.txt add administrator name "cpadmin" password "Checkpoint123!" must-change-password false authentication-method "check point password" permissions-profile "Super User" --domain 'System Data' --format json`
+  - `mgmt_cli -s ~/session.txt add administrator name "ansible" password "Checkpoint123!" must-change-password false authentication-method "check point password" permissions-profile "read write all" --domain 'System Data' --format json`
+  - mgmt_cli -f json -s ~/session.txt set api-settings accepted-api-calls-from "All IP addresses" -d "System Data"
+  - mgmt_cli -f json -s ~/session.txt publish'
+  - rm ~/session.txt
   - Testing
     - Log in to `sms` console (or ssh)
       - `fwm ver`
