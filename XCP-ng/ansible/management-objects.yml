@@ -1,6 +1,7 @@
 ---
 - name: Create management objects
   hosts: check_point
+  gather_facts: False
   connection: httpapi
   collections:
     - check_point.mgmt
