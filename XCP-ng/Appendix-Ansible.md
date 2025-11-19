@@ -221,7 +221,7 @@ ansible_user=ansible
 ansible_password=supersecretpassword
 ansible_network_os=check_point.gaia.checkpoint
 ```
-- sms-gaia.yml
+  - sms-gaia.yml
 ```
 ---
 - name: SMS setup
