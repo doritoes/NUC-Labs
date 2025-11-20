@@ -11,8 +11,12 @@
     - vars.yml
 
   tasks:
+    - name: Allow user ansible to access api
+      command: "gaia_api access -u ansible -e true"
+    - name: Allow unlocal userss to access api
+      command: "gaia_api access -u unlocal_users -e true"
     - name: Create a session key
-      command: "mgmt_cli -f json login --user 'admin' --password '{{ ansible_user_password }}' --context gaia_api --version 1.8"
+      command: "mgmt_cli -f json login --user 'ansible' --password '{{ ansible_user_password }}' --context gaia_api --version 1.8"
       register: session_key
     - name: Save session key
       copy:
@@ -57,6 +61,10 @@
     - name: Remove the session key
       file:
         path: /tmp/.session.txt
+        state: absent
+    - name: Remove the network configuration file
+      file:
+        path: network.cfg
         state: absent
     - name: Wait 15 seconds before reboot
       pause:
