@@ -1,5 +1,6 @@
 sic_pw: "vpn123"
 timezone: "US / Eastern"
+admin_password: "Checkpoint123!"
 mgmt_user: "cpadmin"
 mgmt_password: "Checkpoint123!"
 ansible_user: "ansible"
