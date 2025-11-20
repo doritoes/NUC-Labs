@@ -195,7 +195,7 @@ PASSWORD=supersecretpassword
 GRUB_PASSWORD=${PASSWORD}
 ssh ansible@192.168.41.20 "gaia_api access -u ansible -e true"
 ssh ansible@192.168.41.20 "gaia_api access -u unlocal_users -e true"
-ssh ansible@192.168.41.20 "mgmt_cli -f json login --user ${USERNAME} --password '${PASSWORD}' --context gaia_api --version 1.8 > ~/.session.txt"
+ssh ansible@192.168.41.20 "mgmt_cli -f json login --user '${USERNAME}' --password '${PASSWORD}' --context gaia_api --version 1.8 > ~/.session.txt"
 ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set hostname name 'sms' --context gaia_api --version 1.8"
 ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '192.168.41.1' type 'gateway' comment 'Default route' --context gaia_api --version 1.8"
 ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set initial-setup grub-password '${GRUB_PASSWORD}' security-management.type 'primary' --context gaia_api --version 1.8"
