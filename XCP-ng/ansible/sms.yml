@@ -32,7 +32,7 @@
     - name: Set DNS
       command: "mgmt_cli -s /tmp/.session.txt -f json set dns primary '{{ dns_server_primary }}' suffix '{{ domain_name }}' secondary '{{ dns_server_secondary }}' tertiary '{{ dns_server_tertiary }}' --context gaia_api --version 1.8"      
     - name: Set FTCW
-      command: "mgmt_cli -s /tmp/.session.txt -f json set initial-setup grub-password '{{ grub_password }}' secruity-management.type 'primary' --context gaia_api --version 1.8"
+      command: "mgmt_cli -s /tmp/.session.txt -f json set initial-setup grub-password '{{ grub_password }}' security-management.type 'primary' --context gaia_api --version 1.8"
       ignore_errors: True
     - name: Wait until FTW completes
       stat:
