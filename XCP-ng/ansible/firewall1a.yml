@@ -49,7 +49,7 @@
     - name: Save network configuration
       command: "clish -c 'save config'"
     - name: Set FTCW
-      command: "mgmt_cli -s /tmp/.session.txt -f json set initial-setup grub-password '{{ grub_password }}' secruity-gateway.cluster-member True security-gateway.activation-key '{{ sic_pw }}' --context gaia_api --version 1.8"
+      command: "mgmt_cli -s /tmp/.session.txt -f json set initial-setup grub-password '{{ grub_password }}' security-gateway.cluster-member True security-gateway.activation-key '{{ sic_pw }}' --context gaia_api --version 1.8"
       ignore_errors: True
     - name: Wait until FTCW completes
       stat:
