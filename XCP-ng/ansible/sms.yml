@@ -66,9 +66,9 @@
         content: "{{ session_key.stdout }}"
         dest: "/tmp/.session.txt"
     - name: Add super user
-      command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name  '{{ mgmt_user }}' --password '{{ mgmt_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'Super User' -d 'System Data'"
+      command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name '{{ mgmt_user }}' --password '{{ mgmt_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'Super User' -d 'System Data'"
     - name: Add user ansible
-      command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name  'ansible' --password '{{ ansible_user_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'read write all' -d 'System Data'"
+      command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name 'ansible' --password '{{ ansible_user_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'read write all' -d 'System Data'"
     - name: Allow remote API calls
       command: "mgmt_cli -s /tmp/.session.txt -f json set api-settings accepted-api-calls-from 'All IP addresses' -d 'System Data'"
     - name: Publish changes
