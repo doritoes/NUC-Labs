@@ -1,6 +1,7 @@
 ---
 - name: Push branch1 policy
   hosts: check_point
+  gather_facts: False
   connection: httpapi
   collections:
     - check_point.mgmt
