@@ -25,7 +25,7 @@
     - name: Set system name
       command: "mgmt_cli -s /tmp/.session.txt -f json set hostname name '{{ system_name }}' --context gaia_api --version 1.8"
     - name: Set default route
-      command: "mgmt_cli -s /tmp/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '{{ system_default_gateway }}' type 'gateway' 'comment 'Default route' --context gaia_api --version 1.8"
+      command: "mgmt_cli -s /tmp/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '{{ system_default_gateway }}' type 'gateway' comment 'Default route' --context gaia_api --version 1.8"
     - name: Set timezone
       command: "mgmt_cli -s /tmp/.session.txt -f json set time-and-date timezone '{{ timezone }}' --context gaia_api --version 1.8"
       ignore_errors: True
