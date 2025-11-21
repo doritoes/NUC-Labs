@@ -292,7 +292,7 @@ Steps:
   - https://192.168.41.2
   - https://192.168.41.3
 - Update Gaia (if you have proper eval licenses)
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requirement)
+  - A valid license is required for downloads and updates (the 15-day trial license meets this requirement)
   - Firewalls are best updated using the management API
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
@@ -309,8 +309,11 @@ Steps:
 - Push policy
   - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
-- At this point you should be able to install a JHF on the SMS and on the firewalls
-  - SSH or console to each device (sms, firewall1a, firewall1b)
+## Apply Jumbo Hotfixs to SMS and firewalls
+At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivty you configured in branch 1.
+
+CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole ot upgrade firewalls)
+  - SSH or console to sms
   - `clish`
   - `installer check-for-updates`
   - `installer download-and-install [tab]`
@@ -323,22 +326,32 @@ Steps:
     - `installer check-for-updates`
     - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
+SmartConsole process for `firewall1` cluster
+- Log in to SmartConsole
+- Click **GATEWAYS & SERVERS**
+- Right-click `firewall1` > Actions > Install Hotfix/Jumbo...
+- Leave it set to recommended jumbo
+- Click **Verify**
+- Click **Install**
+  - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
+
 ## Remove management workstation from the Lab network
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
 - Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
-- Click **Change adapter options**
-- Configure Ethernet 3 interface
-  - Double-click the Ethernet 3 interface, which is connected to the Management network
+- Click **Advanced network settings**
+- Click Ethernet (unidentified newtork)
+- More adapter options: click **Edit**
   - Properties > Internet Protocol Version 4 (TCP/IP/IPv4)
   - Configure default gateway: **192.168.41.1**
   - Enter DNS servers
     - 8.8.8.8
     - 8.8.4.4
-  - Click **OK** > **OK** > **Close**
-- Disable Ethernet 2 interface
-  - Right-click **Ethernet 2**
-  - Click **Disable**
+  - Click **OK** > **OK**
+- Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
+- Click **Advanced network settings**
+- Disable Ethernet 2 interface (click Disable)
 - Test Internet connectivity to confirm it is still working
+- Test SmartConsole access to confirm it is still working
 
 ## Configure Domain Controller
 - Open console for `dc-1`
