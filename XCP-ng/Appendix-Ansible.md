@@ -165,7 +165,7 @@ Notes:
   - `ansible-playbook router.yml`
   - Testing
     - Login in to the VyOS router
-    - `show interfaces`
+    - `show interfaces` will show the fully configured settings
     - Spin up a temporary VM based on template `win11-template` on the **build** network
       - it should be get DHCP information and be able to connect to the Internet
 
@@ -189,8 +189,12 @@ Steps:
   - test `ssh ansible@192.168.41.20`
     - you can now authenticate without a password
     - you will be in the default home directory `/home/ansible`
+    - exist back to `manager`
 - Configure API access, configure basic settings, and complete FTCW
-  -  sms-gaia.sh
+  - Create file on the manager [sms.yml](ansible/sms.yml)
+  - Run the playbook `ansible-playbook sms.yml`
+
+sms-gaia.sh
 ~~~
 #!/usr/bin/env bash
 USERNAME=ansible
