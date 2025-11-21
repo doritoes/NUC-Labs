@@ -199,7 +199,7 @@ Steps:
   - set the ansible_user_password to match what you are using in your Lab
   - feel free to customize and experiment
 - Configure API access, configure basic settings, and complete FTCW
-  - Create file on the manager [sms.yml](ansible/sms.yml)
+  - Create file on `manager`: [sms.yml](ansible/sms.yml)
   - Run the playbook `ansible-playbook sms.yml`
   - Note how errors are ignored on specific steps because the actions were actually successful
 - Testing
@@ -222,7 +222,7 @@ Steps:
       - Click **OK** and continue using the application normally
 - We will be Updating Gaia on the SMS later, once Internet access is working
 - Create objects in the Check Point database related to management
-  - Create files on the manager (inventory, playbook)
+  - Create files on `manager` (inventory, playbook)
     - [inventory-api](ansible/inventory-api)
       - Customize to update the credentials as needed
       - Lab testing to move the login credentials to the playbook was not successful in Ansible 2.10.8
@@ -278,7 +278,7 @@ Steps:
   - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
-- Create files on the manager (configuration file, playbooks to create firewalls, and the jinja template)
+- Create files on `manager` (configuration file, playbooks to create firewalls, and the jinja template)
   - [firewall1a.yml](ansible/firewall1a.yml)
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
@@ -1375,7 +1375,7 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on the manager (configuration files, playbooks to create firewalls, and the jinja template)
+- Create files on `manager` (configuration files, playbooks to create firewalls, and the jinja template)
   - [firewall3a.yml](ansible/firewall3a.yml)
   - [firewall3a.cfg](ansible/firewall3a.cfg)
   - [firewall3b.yml](ansible/firewall3b.yml)
