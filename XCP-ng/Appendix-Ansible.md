@@ -111,6 +111,9 @@ Notes:
       - `source ~/venv/bin/activate`
       - `pip install XenAPI`
       - modify your playbooks specify the location of python
+  - Optionally install ansible-pylibssh for better performance
+    - `python3 -m pip install ansible-pylibssh`
+    - Same installation issues apply as XenAPI
   - TIP Use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
