@@ -65,8 +65,8 @@
       copy:
         content: "{{ session_key.stdout }}"
         dest: "/tmp/.session.txt"
-    - name: Add super user cpadmin
-      command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name  '{{ cpadmin_username }}' --password '{{ cpadmin_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'Super User' -d 'System Data'"
+    - name: Add super user
+      command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name  '{{ mgmt_user }}' --password '{{ mgmt_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'Super User' -d 'System Data'"
     - name: Add user ansible
       command: "mgmt_cli -s /tmp/.session.txt -f json add administrator name  'ansible' --password '{{ ansible_user_password }}' must-change-password false authentication-method 'check point password' permissions-profile 'read write all' -d 'System Data'"
     - name: Allow remote API calls
