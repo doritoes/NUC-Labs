@@ -193,7 +193,7 @@ Steps:
 - Test Ansible access
   - update file `inventory`, uncomment the IP of sms (192.168.41.20)
   - `ansible all -m ping`
-    - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
+    - You are expecting `SUCCESS` and `"ping": "pong"` for `vyos` and `sms`
 - Update `vars.yml` with the settings you want
   - set the admin_password to match what you are using in your Lab
   - set the ansible_user_password to match what you are using in your Lab
