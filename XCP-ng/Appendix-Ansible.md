@@ -276,10 +276,10 @@ Steps:
     - authenticate when prompted
 - Test Ansible access
   - Exit back to session on `manager`
-  - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
+  - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.2) and firewall1b (192.168.41.3)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
-- Create files on `manager` (configuration file, playbooks to create firewalls, and the jinja template)
+- Create files on `manager` (configuration files and playbooks to create firewalls)
   - [firewall1a.yml](ansible/firewall1a.yml)
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
