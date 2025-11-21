@@ -57,7 +57,7 @@
       ansible.builtin.wait_for_connection:
         delay: 75
     - name: Create a session key
-      command: "mgmt_cli -f json login --user 'ansible' --password '{{ ansible_user_password }}' -d 'System Data' --context gaia_api --version 1.8"
+      command: "mgmt_cli -f json login --user 'ansible' --password '{{ ansible_user_password }}' -d 'System Data'"
       register: session_key
       retries: 20
       delay: 15
