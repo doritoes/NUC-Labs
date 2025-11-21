@@ -1,10 +1,8 @@
 ---
 - name: Create Branch 1 policy
   hosts: check_point
+  gather_facts: False
   connection: httpapi
-  collections:
-    - check_point.mgmt
-  # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: add a policy package
       check_point.mgmt.cp_mgmt_package:
@@ -104,7 +102,7 @@
         track:
           type: Log
         state: present
-    - name: add gateways managment rule
+    - name: add gateways management rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: SMS manage gateways
@@ -125,7 +123,7 @@
         track:
           type: Log
         state: present
-    - name: add gateways managment rule reverse
+    - name: add gateways management rule reverse
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: SMS manage gateways reverse
