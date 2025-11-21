@@ -189,47 +189,24 @@ Steps:
   - test `ssh ansible@192.168.41.20`
     - you can now authenticate without a password
     - you will be in the default home directory `/home/ansible`
-    - exist back to `manager`
+    - exit back to `manager`
+- Test Ansible access
+  - update file `inventory`, uncomment the IP of sms (192.168.41.20)
+  - `ansible all -m ping`
+    - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
+- Update `vars.yml` with the settings you want
+  - set the admin_password to match what you are using in your Lab
+  - set the ansible_user_password to match what you are using in your Lab
+  - feel free to customize and experiment
 - Configure API access, configure basic settings, and complete FTCW
   - Create file on the manager [sms.yml](ansible/sms.yml)
   - Run the playbook `ansible-playbook sms.yml`
-
-sms-gaia.sh
-~~~
-#!/usr/bin/env bash
-USERNAME=ansible
-PASSWORD=supersecretpassword
-GRUB_PASSWORD=${PASSWORD}
-ssh ansible@192.168.41.20 "gaia_api access -u ansible -e true"
-ssh ansible@192.168.41.20 "gaia_api access -u unlocal_users -e true"
-ssh ansible@192.168.41.20 "mgmt_cli -f json login --user '${USERNAME}' --password '${PASSWORD}' --context gaia_api --version 1.8 > ~/.session.txt"
-ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set hostname name 'sms' --context gaia_api --version 1.8"
-ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '192.168.41.1' type 'gateway' comment 'Default route' --context gaia_api --version 1.8"
-ssh ansible@192.168.41.20 "mgmt_cli -s ~/.session.txt -f json set initial-setup grub-password '${GRUB_PASSWORD}' security-management.type 'primary' --context gaia_api --version 1.8"
-ssh ansible@192.168.41.20 "rm -f -- ~/.session.txt"
-~~~
-  - Allow time for the FTCW to complete
-  - sms-config.sh
-~~~
-#!/usr/bin/env bash
-USERNAME=ansible
-PASSWORD=supersecretpassword
-CPADMIN_USERNAME=cpadmin
-CPADMIN_PASSWORD=${PASSWORD}
-ANSIBLE_USERNAME=ansible
-ANSIBLE_PASSWORD=${PASSWORD}
-ssh -q ansible@192.168.41.20 "mgmt_cli -f json login --user ${USERNAME} --password '${PASSWORD}' -d 'System Data'> ~/.session.txt"
-ssh -q ansible@192.168.41.20 "mgmt_cli -s ~/session.txt -f json add administrator name '${CPADMIN_USERNAME}" password '${CPADMIN_PASSWORD}' must-change-password false authentication-method 'check point password' permissions-profile 'Super User' -d 'System Data'"
-ssh -q ansible@192.168.41.20 "mgmt_cli -s ~/session.txt -f json add administrator name '${ANSIBLE_USERNAME}" password '${ANSIBLE_PASSWORD}' must-change-password false authentication-method 'check point password' permissions-profile 'read write all' -d 'System Data'"
-ssh ansible@192.168.41.20 "mgmt_cli -s ~/session.txt -f json set api-settings accepted-api-calls-from 'All IP addresses' -d 'System Data'"
-ssh -q ansible@192.168.41.20 "mgmt_cli -s -f json ~/session.txt publish"
-ssh -q ansible@192.168.41.20 "rm -f -- ~/.session.txt"
-~~~
-  - Testing
-    - Log in to `sms` console (or ssh)
-      - `fwm ver`
-        - Should say *Check Point Management Server R82*
-    - `api status`
+  - Note how error are ignored on specifc steps because the actions were actually successful
+- Testing
+  - Log in to `sms` console (or ssh from `manager`)
+    - `fwm ver`
+      - Should say *Check Point Management Server R82*
+  - `api status`
 - Log in to `sms` Web gui from `manager`
   - https://192.168.41.20
   - Download the SmartConsole R82 client using the link "Download Now!"
