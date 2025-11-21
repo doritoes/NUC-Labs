@@ -201,7 +201,7 @@ Steps:
 - Configure API access, configure basic settings, and complete FTCW
   - Create file on the manager [sms.yml](ansible/sms.yml)
   - Run the playbook `ansible-playbook sms.yml`
-  - Note how error are ignored on specifc steps because the actions were actually successful
+  - Note how errors are ignored on specific steps because the actions were actually successful
 - Testing
   - Log in to `sms` console (or ssh from `manager`)
     - `fwm ver`
