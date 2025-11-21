@@ -1,8 +1,8 @@
 ---
 - name: Create branch1 objects
   hosts: check_point
+  gather_facts: False
   connection: httpapi
-  # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: ISP router
       check_point.mgmt.cp_mgmt_host:
