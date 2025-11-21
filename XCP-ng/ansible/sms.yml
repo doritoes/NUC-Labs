@@ -13,7 +13,7 @@
   tasks:
     - name: Allow user ansible to access api
       command: "gaia_api access -u ansible -e true"
-    - name: Allow unlocal userss to access api
+    - name: Allow unlocal users to access api
       command: "gaia_api access -u unlocal_users -e true"
     - name: Create a session key
       command: "mgmt_cli -f json login --user 'ansible' --password '{{ ansible_user_password }}' --context gaia_api --version 1.8"
