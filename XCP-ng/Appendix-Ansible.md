@@ -705,7 +705,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - From a test machine on build network: http://192.168.101.6
 - Configure IIS web server **dmz-iis**
   - Complete initial setup and set administrator password
-  - Log in for the first time at the console
+  - Select **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName dmz-iis`
@@ -715,7 +715,6 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-      - **Yes** allow your PC to be discoverable by other PCs and devices on this network
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
   - Join to domain
     - `Add-Computer -DomainName xcpng.lab -restart`
@@ -726,15 +725,19 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Log back in as `AD\Juliette.LaRocco2`
     - Open administrative powershell
     - `Install-WindowsFeature Web-Server -IncludeManagementTools`
+    - `Install-WindowsFeature -Name Web-ASP`
   - Test:
-    - From dmz-iis: http://localhost
-    - From branch1-1:
+    - From `dmz-iis`: http://localhost
+    - From `branch1-1`:
       - http://dmz-iis
       - http://192.168.31.10
       - http://192.168.101.5
-    - From manager: http://192.168.31.10
+    - From `manager`: http://192.168.31.10
     - From a test machine on build network: http://192.168.101.5
-    - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
+    - You can also test IIS by
+      - creating an index.html file in C:\inetpub\wwwroot and repeat the test
+      - Rename the same file to default.asp and repeat the test (exercises the ASP.NET feature)
+    - NOTE More ASP.NET examples at https://www.tutorialspoint.com/asp.net/asp.net_first_example.htm
 
 ## HTTPS Inspection
 - Enable application control and url filtering blades, and create outbound https inspection certificate
