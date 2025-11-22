@@ -22,18 +22,30 @@
         valid_from: "{{ valid_from }}"
         valid_to: "{{ valid_to }}"
       register: certificate_output
-    # enable https inspection on cluster (missing from Ansible collection)
-    # export the certificate for use on Windows systems (missing)
-    - name: extract base64 certificate (not suitable for importing as root CA certificate)
+    - name: extract base64 certificate for importing as root CA certificate
       set_fact:
-          certificate: "{{ certificate_output['add-outbound-inspection-certificate']['base64-certificate'] }}"
+          certificate: "{{ certificate_output['add-outbound-inspection-certificate']['base64-public-certificate'] }}"
     - name: write certificate to file certificate.cer
       copy:
         content: "{{ certificate }}"
         dest: certificate.cer
-        # doesnt seem to be working on windows
+        # need to re-test
         # certutil -decode certificate.cer decoded.cer
         # manually exporting the cert and then enabling https seems the best route
         # $FWDIR/bin/export_https_cert -local -f mycompany.cer
+    # enable https inspection on cluster (missing from Ansible collection)
+    # workaround is to do it with another playbook using mgmt_cli
     - name: publish changes
       check_point.mgmt.cp_mgmt_publish:
+    - name: fetch outbound inspection certificate
+      check_point.mgmt.cp_mgmt_outbout_inspection_certificate_facts:
+        name: outbound_cert
+        details_level: full
+    - name: extract base64 public certificate for importing as root CA certificate
+      set_fact:
+        certificate: "{{ outbound_inspection_certificate['base64-public-certificate'] }}"
+    - name: write certificate to file certificate_public.cer
+      copy:
+        content: "{{ certificate }}"
+        dest: certificate_public.cer
+        
