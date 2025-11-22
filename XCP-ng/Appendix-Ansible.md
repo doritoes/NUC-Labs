@@ -746,14 +746,17 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `ansible-playbook -i inventory-api branch1-https.yml`
     - Enables blades, creates outbound inspection certificate and saves public certificate to `certificate.cer`
 - We are using some manual solutions (not Ansible collection, but mgmt_cli) here since Ansible check_point.mgmt doesn't support all the commands
-- Export the certificate using SmartConsole gui
-  - Open the cluster `firewall1`
-  - Click **HTTPS Inspection**
-  - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
-  - Step two > click **Export certificate**
-    - Name it **outbound**
-- Step 3 Enable HTTPS inspection is in the R82 API, but not in the ansible collection 6.7.0
-  - 🌱 manually enable the check box or use mgmt_cli and publish
+- If the exported certificate.cer and certificate_public.cer both don't work (same certificate)
+  - Export the certificate using SmartConsole gui
+    - Open the cluster `firewall1`
+    - Click **HTTPS Inspection**
+    - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
+    - Step two > click **Export certificate**
+      - Name it **outbound**
+- Step 3 Enable HTTPS inspection
+  - Download and run branch1-https-enable.yml [branch1-https-enable.yml](ansible/branch1-https.yml-enable)
+  - `ansible-playbook -branch1-https-enable.yml`
+  -  is in the R82 API, but not in the ansible collection 6.7.0
 - Distribute the https inspection certificate using GPO on `dc-1`
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
     - for example, copy the certificate to the \\file-1\it share from `manager`, and pick it up from there from `dc-1`
@@ -767,46 +770,17 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
       - Import `c:\outbound.cer`
-      - Accept the defaults
-  - Update `Lab_Policy` to enable https inspection
-    - 🌱 Ansible version
-    - From `manager` open SmartConsole
-    - **SECURITY POLICIES** > Open **Lab_Policy** > **HTTPS Inspection** > **Policy**
-    - Change the default rule **Track** value to **Log**
-  - Add more https bypass rules manually
-    - Not possible with API in R81.20, but available on R82 API
-    - First rule
+      - Accept the defaults Next, Next, Finish
+  - Update `Lab_Policy` https inspection rules
+    - Download and run branch1-https-enable.yml [branch1-https-enable.yml](ansible/branch1-https-enable.yml)
+      - `ansible-playbook -i inventory-api branch1-https-policy.yml`
+      - Bypass by source host
+    - Add second rule ("HTTPS services - recommended bypass" did not show in the updatable objects list)
       - Name: Exceptions for recommended imported services
       - Source:
         - *Any
       - Destination:
         - Import > Updatable Objects >  **HTTPS services - recommended bypass**
-      - Services:
-        - HTTPS default services
-      - Action:
-        - Bypass
-      - Track: Log
-    - Second rule
-      - Name: Exceptions for categories
-      - Source:
-        - *Any
-      - Destination:
-        - Internet
-      - Services:
-        - HTTPS default services
-      - Category/Custom Application:
-        - Financial Services
-        - Health
-      - Action:
-        - Bypass
-      - Track: Log
-    - Third rule (important to allow SMS to download Updatable objects)
-      - Name: Bypass inspection
-      - Sources:
-        - dmz-apache
-        - sms
-      - Destination:
-        - Internet
       - Services:
         - HTTPS default services
       - Action:
@@ -826,7 +800,7 @@ In this step we will import the Check Point ICA certificate and also distribute 
   - Export/Copy to File
   - Save as type: Base64-encoded ASCII, single certificate
   - Name as you wish
-- Copy the file to `DC-1` (e.g., copy to \\file-1\it\ and access it from there)
+- Copy the file to `DC-1` C:\ (e.g., copy to \\file-1\it\ and access it from there)
 - Import the certificate to the GPO for trusted certificates
   - Log in to `DC-1` as administrator juliette.larocco2
   - Open Group Policy Management Console (GPMC)
@@ -837,7 +811,7 @@ In this step we will import the Check Point ICA certificate and also distribute 
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
       - By default the certificate you exported is a .der file; select all file types to see the certificate you downloaded
-      - Import the file
+      - Import the file, Next, Next, Finish
 - You will now be able to view User Check pages correctly (for blocked site message, etc.)
   - `gpupdate /force` will trigger an update
   - closing/re-opening the browser can solve caching issues
@@ -847,11 +821,9 @@ NOTE As this point no HTTPS inspection will occur, until we enable the applicati
 
 ## Change website categorization to Hold mode
 By default URL categorization occurs in the background. First attempts to a previously unknown URL will succeed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
-- Back on `manager`, log in to SmartConsole
-- MANAGE & SETTINGS > Blades > Application Control & URL Filtering > Advanced Settings
-- Click **Check Point online web service**
-- Change **Website categorization mode** to **Hold**
-- Click **OK**, **Publish**, and install policy
+
+- Download and run branch1-https-advanced.yml [branch1-https-advanced.yml](ansible/branch1-https-advanced.yml)
+      - `ansible-playbook -i inventory-api branch1-https-policy.yml`
 
 ## Add Application Control layer
 NOTE These changes can likely be done using Ansible and the API. This is not included in this Lab at this time.
