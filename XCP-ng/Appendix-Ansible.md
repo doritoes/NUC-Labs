@@ -828,16 +828,16 @@ By default URL categorization occurs in the background. First attempts to a prev
 ## Add Application Control layer
 NOTE These changes can likely be done using Ansible and the API. This is not included in this Lab at this time.
 - Open the Access Policy and find the section **General Internet access**
-- Find the rule **General Internet access**
+- Find the rule **Web access**
 - Change action from **Accept** to **Inline Layer > New Layer**
   - Name: **Internet Control**
   - Blades:
     - **Firewall** (checked)
     - **Applications & URL Filtering** (checked)
-  - <ins>Check</ins> Multiple policies and rules can use this layer
+  - Sharing: <ins>Check</ins> Multiple policies and rules can use this layer
   - Advanced > Implicit Cleanup Action: **Accept**
   - Click **OK**
-- Update the cleanup rule
+- Update the cleanup sub-rule
   - Rename **Allow remaining traffic**
   - Action: **Accept**
   - Track: **Log**
@@ -876,13 +876,13 @@ NOTE These changes can likely be done using Ansible and the API. This is not inc
       - If available, Unknown Risk
     - Action:
       - Ask
-        - Access Approval
+        - Company Policy
         - Once a day
-        - Per applications
+        - Per application/site
     - Track: Log > Accounting
 - Publish and install Lab_Policy
   - This will enable https inspection!
-- Test from branch1-1
+- Test from `branch1-1`
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
   - Browse to an Internet site like https://github.com and examine the https certificate
     - Edge browser: click the lock next to the URL > Connection is secure
