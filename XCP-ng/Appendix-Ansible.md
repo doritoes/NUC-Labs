@@ -649,7 +649,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - Enter Network **10.0.1.0/24** and comment **Branch 1 LAN**
             - Click "**+**" to add it
             - Click **OK** then click **OK**
-      - Left menu > **Gateways*
+      - Left menu > **Gateways**
         - Right click in the open spec and then click **Add**
           - Name: **firewall1**
           - IP Address: **10.0.1.1**
@@ -981,6 +981,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - From the left menu click **Logins Monitor**
     - Click the small power icon next to the text "Logins Monitor"
     - Log in to `branch1-1` using a domain user account (i.e., `AD\juliette.larocco`)
+      - Just unlocking the screen may not be enough; log out and back in
     - Back in the Identity Collector, click the refresh icon (might be partly hidden behind the red text)
     - The login will show in the top pane and the related machine and user in the bottom pane
     - Confirm identities are passed to the firewalls
@@ -988,8 +989,14 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
       - from expert prompt: `pep show user all`
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
-      - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
+      - recheck: DC-1 windows firewall disabled for domain; IDC-1 fireall allows IDC apps through windows firewall or turn off windows firewall for Domain
+      - Check logs for logs sourcing from `idc-1` failed to log in to AD; check account unit, try resetting password; check if user adquery exists in AD
+      - Try install database in SmartConsole
       - Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
+      - Installing WirShark portable without Npcap didn't seem to resolve
+      - Installing Npcap alone: https://npcap.com/#download didn't seem to resolve
+        - default settings, including Install Npcap in WinPcap API-compatible Mode
+      - Recap: R81.20 with newest IDC worked with this workaround; R82 with the older IDC didn't seem to work with this workaround
   - Create Access role
     - Back on `manager` open SmartConsole
     - Add a subrule above the rule "Allow general categories" which allows medium/low/very low risk applications
@@ -1257,6 +1264,7 @@ Steps:
 - Update **Support** access role
   - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**- 
     - Click **OK**
+
 ## HTTPS inspection
 - Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
   - creating https rules, etc not supported until R82
