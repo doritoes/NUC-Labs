@@ -1,7 +1,7 @@
 network:
   version: 2
   ethernets:
-    eth0:
+    enX0:
       dhcp4: no
       addresses:
         - 192.168.31.11/24
