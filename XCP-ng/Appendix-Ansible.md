@@ -744,19 +744,16 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Log back in to `manager`
   - Download and run branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
     - `ansible-playbook -i inventory-api branch1-https.yml`
-- We are using manual solutions (not Ansible) here since Ansible check_point.mgmt doesn't support all the commands until R82
-  - creating https rules, etc not supported until R82
-  - some outbound certificate commands function differently pre-R82
-  - `enable-https-inspection` will be added in the next version
+    - Enables blades, creates outbound inspection certificate and saves public certificate to `certificate.cer`
+- We are using some manual solutions (not Ansible collection, but mgmt_cli) here since Ansible check_point.mgmt doesn't support all the commands
 - Export the certificate using SmartConsole gui
   - Open the cluster `firewall1`
   - Click **HTTPS Inspection**
   - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
   - Step two > click **Export certificate**
     - Name it **outbound**
-- Step 3 > check **Enable HTTPS inspection**
-- Click **OK**
-- Click **Publish**
+- Step 3 Enable HTTPS inspection is in the R82 API, but not in the ansible collection 6.7.0
+  - 🌱 manually enable the check box or use mgmt_cli and publish
 - Distribute the https inspection certificate using GPO on `dc-1`
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
     - for example, copy the certificate to the \\file-1\it share from `manager`, and pick it up from there from `dc-1`
@@ -772,6 +769,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Import `c:\outbound.cer`
       - Accept the defaults
   - Update `Lab_Policy` to enable https inspection
+    - 🌱 Ansible version
     - From `manager` open SmartConsole
     - **SECURITY POLICIES** > Open **Lab_Policy** > **HTTPS Inspection** > **Policy**
     - Change the default rule **Track** value to **Log**
