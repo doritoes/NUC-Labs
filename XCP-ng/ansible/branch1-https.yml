@@ -1,9 +1,8 @@
 ---
 - name: Enable https inspection
   hosts: check_point
+  gather_facts: False
   connection: httpapi
-  collections:
-    - check_point.mgmt
   vars:
     b64_password: "{{ sic_pw | b64encode }}"
     valid_from: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
