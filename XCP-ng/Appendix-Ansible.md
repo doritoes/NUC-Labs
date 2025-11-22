@@ -302,6 +302,7 @@ Steps:
 - Create objects in the Check Point database related to Branch 1
   - Create file on `manager`
     - [branch1-objects.yml](ansible/branch1-objects.yml)
+    - IMPORTANT Modify the object `isp_router` to use your actual Lab router IP address
   - `ansible-playbook -i inventory-api branch1-objects.yml`
 - Create new policy using API
   - [branch1-policy.yml](ansible/branch1-policy.yml)
@@ -309,6 +310,7 @@ Steps:
 - Push policy
   - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
+
 ## Apply Jumbo Hotfixs to SMS and firewalls
 At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivty you configured in branch 1.
 
@@ -352,6 +354,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Disable Ethernet 2 interface (click Disable)
 - Test Internet connectivity to confirm it is still working
 - Test SmartConsole access to confirm it is still working
+- Test `ansible all -m ping` to confirm still working
 
 ## Configure Domain Controller
 - Open console for `dc-1`
