@@ -20,9 +20,16 @@ How to
 4. Retrieve passwords during Windows Server Active Directory disaster recovery scenarios
 
 ## Extend AD schema
-- Log in to `dc-1` and open administrative PowerShell
-- Update-LapsADSchema
+- Log in to `dc-1` as `AD\Administrator` and open administrative PowerShell
+- `Update-LapsADSchema`
+- Accept adding the 9 attributes and **Yes**
+- Note that user juliette.larocco2 does not have sufficient permissions
 
 ## Set Computer Permissions
+PROBLEM stuck here
+
+- Set-LapsADComputerSelfPermission -Identity DC=xcpng,DC=com
+  - This sets the inheritable permission at the root of the domain
+  - You can also choose an OU (e.g., OU=Workstations,DC=xcpng,DC=lab)
 
 TODO engineer this document
