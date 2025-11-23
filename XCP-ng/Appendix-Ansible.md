@@ -591,7 +591,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
         - This link was a broken link in my testing, but might work eventually
     - Log in to `idc-1` as `AD\Juliette.LaRocco2`
-    - Copy the installation package to `idc-1   and install the Identity Collector
+    - Copy the installation package to `idc-1` and install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on `idc-1`
       - Click **Start** > type **Windows Defender Firewall**
       - Click **Allow an app or feature through Windows Defender Firewall**
@@ -1007,17 +1007,18 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
         - Users: **Specific users/groups**
           - Click "**+**" to add, and search for **support**
           - Click on **Support**
+          - PROBLEM testing is broken at this point
         - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
         - Remote Access Clients: Leave at Any Client
         - Click **OK**
-    - Destination: **New** > **Other** > **Domain..** > **.ipgiraffe.com** (FQDN)
+    - Destination: **New** > **Other** > **Domain..** > **.ipchicken.com** (FQDN)
     - Services: ***Any**
     - Action: **Accept**
     - Track: **Log**
   - Add another subrule just below to deny all access to ipgiraffe.com
     - Name: **Deny all nonsupport access to sites**
     - Source: ***Any**
-    - Destination **.ipgiraffe.com**
+    - Destination **.ipchicken.com**
     - Services: **Any**
     - Action: **Drop** > **Blocked Message**
     - Track: **Log** > **Accounting**
@@ -1025,7 +1026,8 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
   - Test access, access control, enforcement of user identity works and is logged
     - http://maliciouswebsitetest.com/ should be blocked
     - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
-    - https://ipgiraffe.com should be blocked when user Lab is logged in on `manager`
+    - https://ipchicken.com should be blocked when user Lab is logged in on `manager`
+    - PROBLEM at this point the lab is broken, as the identity lookup from the firewall to AD may not be working
 
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
