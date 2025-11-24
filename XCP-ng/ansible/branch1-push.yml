@@ -3,10 +3,8 @@
   hosts: check_point
   gather_facts: False
   connection: httpapi
-  collections:
-    - check_point.mgmt
   tasks:
-    - name: push policy
+    - name: Push policy
       check_point.mgmt.cp_mgmt_install_policy:
         access: true
         threat_prevention: false
