@@ -6,7 +6,7 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: create cluster firewall2
+    - name: Create cluster firewall2
       check_point.mgmt.cp_mgmt_simple_cluster:
         ignore_warnings: true
         cluster_mode: cluster-xl-ha
@@ -70,5 +70,5 @@
         state: present
         cluster_version: R81.20
         comments: firewall2 cluster for Branch 2
-    - name: publish changes
+    - name: Publish changes
       cp_mgmt_publish:
