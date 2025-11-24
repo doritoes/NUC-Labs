@@ -2,9 +2,7 @@
 - name: Modify SMS to enable static NAT and manage remote gateways
   hosts: check_point
   connection: httpapi
-  collections:
-    - check_point.mgmt
-  # include_vars: vars.yml # introduced in Ansible 2.11
+  gather_facts: False
   tasks:
     - name: enable static NAT on sms
       check_point.mgmt.cp_mgmt_checkpoint_host:
