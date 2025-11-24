@@ -1044,7 +1044,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
   - [branch2-enablesms.yml](ansible/branch2-enablesms.yml)
 - Apply the changes
   - `ansible-playbook -i inventory-api branch2-enablesms.yml`
-- R81.20: Enable "Apply for Security Gateway control connections"
+- R82: Enable "Apply for Security Gateway control connections"
   - Edit `sms` object
   - Under NAT, <ins>check</ins> "Apply for Security Gateway control connections"
   - Click **OK**
@@ -1085,22 +1085,9 @@ Steps:
     - `set interface eth0 ipv4-address 192.168.102.3 mask-length 24`
     - `set static-route default nexthop gateway address 192.168.102.254 on`
     - `save config`
-- Add `manager`'s RSA keys to each firewall's authorized_keys file
-  - Log in to `manager` and open a WSL shell
-    - ssh to firewall1a and firewall1b
-      - `ssh ansible@192.168.102.2`
-      - `ssh ansible@192.168.102.3`
-      - you will be in the default home directory `/home/ansible`
-  - Create new authorized_keys file and add the key
-    - `mkdir .ssh`
-    - `chmod u=rwx,g=,o= ~/.ssh`
-    - `touch ~/.ssh/authorized_keys`
-    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-    - Add the public key from `manager` to the files
-      - `cat > ~/.ssh/authorized_keys`
-        - paste in the key
-        - press Control-D
-    - `exit`
+- Enable ssh key login to `firewall2a` and `firewall2b`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.102.2`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.102.3`
   - You can now ssh without a password
 - Test Ansible access
   - Exit back to session on `manager`
@@ -1125,7 +1112,7 @@ Steps:
 
 ## Configure cluster and policy
 - Create cluster using API
-  - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
+https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
   - `ansible-playbook -i inventory-api firewall2-cluster.yml`
