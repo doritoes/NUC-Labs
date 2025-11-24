@@ -2,8 +2,7 @@
 - name: Create VPN community
   hosts: check_point
   connection: httpapi
-  collections:
-    - check_point.mgmt
+  gather_facts: false
   tasks:
     - name: add-vpn-community-star
       check_point.mgmt.cp_mgmt_vpn_community_star:
