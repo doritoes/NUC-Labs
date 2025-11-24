@@ -1161,20 +1161,29 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 
 ## VPN
 - New on R82: Default Enhanced Link Selection interfaces are missing from firewall1
-  - Open firewall1 object
-  - IPSec VPN > Enhanced Link Selection
-  - Interfaces > Add
-    - External Interface: eth1: 192.168.101.1
-    - Next Hop IP Addresses: blank
-    - Static NAT IP Addresss: blank
-    - Redundancy Mode: Active
-    - Priority: blank
+  - firewall1 object
+    - IPSec VPN > Enhanced Link Selection
+    - Interfaces > Add
+      - External Interface: eth1: 192.168.101.1
+      - Next Hop IP Addresses: blank
+      - Static NAT IP Addresss: blank
+      - Redundancy Mode: Active
+      - Priority: blank
+    - Publish changes, push policy **Lab_Policy_Branches**
+  - firewall2 object
+    - IPSec VPN > Enhanced Link Selection
+    - Interfaces > Add
+      - External Interface: eth0: 192.168.102.1
+      - Next Hop IP Addresses: blank
+      - Static NAT IP Addresss: blank
+      - Redundancy Mode: Active
+      - Priority: blank
+    - Publish changes, push policy **Lab_Policy**
 - Create file on `manager`
   - [branch2-vpn.yml](ansible/branch2-vpn.yml)
-  - PROBLEM Default Enhanced Link Selection interfaces are missing from firewall1
 - `ansible-playbook -i inventory-api branch2-vpn.yml`
 - Use SmartConsole to edit the community **Branch_Community**
-  - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
+  - Advanced > Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
   - Click **OK**
 - **Publish** changes
 - Push policies Lab_Policy and Lab_Policy_Branches
@@ -1187,13 +1196,15 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
   - DHCP traffic from `branch2-1` will automatically bring up the tunnel
     - Give it a little time, or reboot `branch2-1` from console
   - In SmartConsole open a new Log tab
-  - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
-  - SmartView Monitor will open
-  - From the tree on the left expand **Tunnels** and click **Tunnels on Gateway**
-    - Select **firewall1** to view active tunnels at firewall1
-    - Repeat and select **firewall2** to view active tunnels at firewall2
-    - Click the refresh icon to update the information and see the tunnels come up
-    - Also, from the firewall cluster active member, use `vpn tu`
+    - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
+    - SmartView Monitor will open
+    - From the tree on the left expand **Tunnels** and click **Tunnels on Community**
+      - Select **Branch_Community** to view active tunnels
+      - Repeat and select **firewall2** to view active tunnels at firewall2
+      - Click the refresh icon to update the information and see the tunnels come up
+      - Also, from the firewall cluster active member, use `vpn tu`
+        - `vpn tu` opens an interactive menu
+        - `vpn tu tlist` lists all the tunnels at once
 - SSH to each firewall and accept the keys
   - `ssh 10.0.2.2`
   - `ssh 10.0.2.3`
@@ -1204,12 +1215,25 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 
 ## Configure branch2-1
 - Log in for the first time at the console
-- Rename workstation
-  - Open administrative powershell
-  - `Rename-Computer -NewName branch2-1`
-  - `Restart-Computer`
+- Open administrative powershell
+  - Confirm IP address via DHCP is working
+  - Rename workstation
+    - `Rename-Computer -NewName branch2-1`
+    - `Restart-Computer`
+- Test internet access
+  - PROBLEM starting R82 with dropping invalid UDP checksums
+  - Usually a reboot solves the issue
+  - Further steps you can take:
+    - fw ctl set int udp_is_verify_cksum 0
+    - fw ctl get int udp_is_verify_cksum
+    - udp_is_verify_cksum = 0
+    - make it permanent
+      - fw ctl set -f int udp_is_verify_cksum 0
+      - "fwkern.conf" was updated successfully
+      - more /opt/CPsuite-R82/fw1/boot/modules/fwkern.conf
+      - udp_is_verify_cksum=0
 - Join to domain
-  - Open administrative powershell
+  - Log back in and open administrative powershell
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
@@ -1220,6 +1244,8 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
   - Try connecting to the file server at `\\file-1`
   - Review logs in SmartConsole
     - Note that the Internet web traffic goes out the branch2 ISP connection
+    - Note that each branch can go out its own Internet connection
+    - Traffic like DNS and access to file-1 go over the VPN tunnel
 
 ## Enable Application Control and Identity Awareness
 - Edit cluster **firewall2**
