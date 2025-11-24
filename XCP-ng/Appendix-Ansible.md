@@ -1134,26 +1134,35 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Test that ansible can still manage firewall2 cluster members
   - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (firewall2a, firewall2b)
-  - `clish`
-  - `installer check-for-updates`
-  - `installer download-and-install [tab]`
-  - select the applicable JHF hotfix bundle by number
-  - Approve the reboot
-  - If fails to check for updates "The administrator did not authorize downloads"
-    - `installer agent disable`
-    - `installer agent enable`
-    - then check for updates again
-    - See https://support.checkpoint.com/results/sk/sk181557
-      - Check using clish: show consent-flags allow-receiving-data
-      - To override and enable:
-        - `set consent-flags allow-receiving-data true`
-        - `save config`
-        - then check for updates again
+  - SmartConsole process for firewall1 cluster
+    - Log in to SmartConsole
+    - Click GATEWAYS & SERVERS
+    - Right-click firewall2 > Actions > Install Hotfix/Jumbo...
+    - Leave it set to recommended jumbo
+    - Click Verify
+      - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
+    - Click Install
+      - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
+    - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole ot upgrade firewalls)
+  - Manual  process for firewall2a and fireall2b
+    - SSH or console to sms
+    - `clish`
+    - `installer check-for-updates`
+    - `installer download-and-install [tab]`
+    - `installer download-and-install <package-number>`
+      - select the applicable JHF hotfix bundle by number
+    - Approve the reboot
+    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorize downloads, not performing update`
+      - `installer agent update`
+      - `installer agent disable`
+      - `installer agent enable`
+      - `installer check-for-updates`
+      - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
 ## VPN
 - Create file on `manager`
   - [branch2-vpn.yml](ansible/branch2-vpn.yml)
+  - PROBLEM Default Enhanced Link Selection interfaces are missing from firewall1
 - `ansible-playbook -i inventory-api branch2-vpn.yml`
 - Use SmartConsole to edit the community **Branch_Community**
   - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
