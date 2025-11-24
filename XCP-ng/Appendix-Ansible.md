@@ -1160,6 +1160,15 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
 ## VPN
+- New on R82: Default Enhanced Link Selection interfaces are missing from firewall1
+  - Open firewall1 object
+  - IPSec VPN > Enhanced Link Selection
+  - Interfaces > Add
+    - External Interface: eth1: 192.168.101.1
+    - Next Hop IP Addresses: blank
+    - Static NAT IP Addresss: blank
+    - Redundancy Mode: Active
+    - Priority: blank
 - Create file on `manager`
   - [branch2-vpn.yml](ansible/branch2-vpn.yml)
   - PROBLEM Default Enhanced Link Selection interfaces are missing from firewall1
