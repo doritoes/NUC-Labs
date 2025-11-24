@@ -68,7 +68,7 @@
           one_time_password: "{{ sic_pw }}"
         os_name: Gaia
         state: present
-        cluster_version: R81.20
+        cluster_version: R82
         comments: firewall2 cluster for Branch 2
     - name: Publish changes
       cp_mgmt_publish:
