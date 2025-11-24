@@ -4,7 +4,7 @@
   connection: httpapi
   gather_facts: false
   tasks:
-    - name: add a policy package
+    - name: Add policy package
       check_point.mgmt.cp_mgmt_package:
         access: true
         color: forest green
@@ -14,7 +14,7 @@
         installation_targets:
           - firewall2
         state: present
-    - name: modify cleanup rule
+    - name: Modify cleanup rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Cleanup rule
@@ -24,59 +24,59 @@
           type: Log
         comments: Cleanup rule drop any/any/any
         state: present
-    - name: create cleanup section
+    - name: Create cleanup section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Cleanup section
         relative_position:
           above: Cleanup rule
         state: present
-    - name: create gateways access section
+    - name: Create gateways access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Gateways access
         position: top
         state: present
-    - name: create DHCP section
+    - name: Create DHCP section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: DHCP
         relative_position:
           below: Gateways access
         state: present
-    - name: create stealth section
+    - name: Create stealth section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Stealth rules
         relative_position:
           below: DHCP
         state: present
-    - name: create DMZ section
+    - name: Create DMZ section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: DMZ
         relative_position:
           below: Stealth rules
         state: present
-    - name: create core services section
+    - name: Create core services section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Core Services
         relative_position:
           below: DMZ   
-    - name: create general Internet access section
+    - name: Create general Internet access section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: General Internet access
         relative_position:
           below: Core Services
-    - name: create noise suppression section
+    - name: Create noise suppression section
       check_point.mgmt.cp_mgmt_access_section:
         layer: Lab_Policy_Branches Network
         name: Noise suppression
         relative_position:
           below: General Internet access
-    - name: add gateways access rule
+    - name: Add gateways access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Manage gateways
@@ -96,7 +96,7 @@
         track:
           type: Log
         state: present
-    - name: add IDC to firewall rule
+    - name: Add IDC to firewall rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: IDC to gateways
@@ -131,7 +131,7 @@
         track:
           type: Log
         state: present
-    - name: add a DHCP broadcasts rule
+    - name: Add a DHCP broadcasts rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DHCP Broadcasts
@@ -148,7 +148,7 @@
         track:
           type: Log
         state: present
-    - name: add a DHCP requests rule
+    - name: Add a DHCP requests rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DHCP Requests
@@ -165,7 +165,7 @@
         track:
           type: Log
         state: present
-    - name: add a DHCP replies rule
+    - name: Add a DHCP replies rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DHCP Replies
@@ -182,7 +182,7 @@
         track:
           type: Log
         state: present
-    - name: add a stealth rule
+    - name: Add a stealth rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Stealth rule
@@ -199,7 +199,7 @@
         track:
           type: Log
         state: present
-    - name: add DMZ rule
+    - name: Add DMZ rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DMZ applications
@@ -218,7 +218,7 @@
         track:
           type: Log
         state: present
-    - name: add core services ntp allowed
+    - name: Add core services ntp allowed
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: NTP allowed
@@ -238,7 +238,7 @@
         track:
           type: Log
         state: present
-    - name: add core services domain controller
+    - name: Add core services domain controller
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Domain Services
@@ -255,7 +255,7 @@
         track:
           type: Log
         state: present
-    - name: add core services file server
+    - name: Add core services file server
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: File Server
@@ -273,7 +273,7 @@
         track:
           type: Log
         state: present
-    - name: add temporary external DNS
+    - name: Add temporary external DNS
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: External DNS
@@ -291,7 +291,7 @@
         track:
           type: Log
         state: present
-    - name: add Internet access rule
+    - name: Add Internet access rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Web access
@@ -310,7 +310,7 @@
         track:
           type: Log
         state: present
-    - name: add noise suppression rule netbios
+    - name: Add noise suppression rule netbios
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: netbios broadcasts
@@ -329,7 +329,7 @@
         track:
           type: None
         state: present
-    - name: add noise suppression rule multicast 224.0.0.251
+    - name: Add noise suppression rule multicast 224.0.0.251
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: mDNS multicast
@@ -346,7 +346,7 @@
         track:
           type: None
         state: present
-    - name: add noise suppression rule multicast 239.255.255.250 224.0.0.251 224.0.0.252
+    - name: Add noise suppression rule multicast 239.255.255.250 224.0.0.251 224.0.0.252
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: llmnr and ssdp multicast
@@ -368,7 +368,7 @@
         track:
           type: None
         state: present
-    - name: add noise suppression rule multicast 224.0.0.22
+    - name: Add noise suppression rule multicast 224.0.0.22
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: IGMP multicast
@@ -385,7 +385,7 @@
         track:
           type: None
         state: present
-    - name: add noise suppression rule quic
+    - name: Add noise suppression rule quic
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: quic
@@ -402,13 +402,13 @@
         track:
           type: Log
         state: present
-    - name: create NAT rule section No-NAT
+    - name: Create NAT rule section No-NAT
       check_point.mgmt.cp_mgmt_nat_section:
         package: Lab_Policy_Branches
         name: No-NAT
         position: top
         state: present
-    - name: add No-NAT LAN to LAN rule
+    - name: Add No-NAT LAN to LAN rule
       check_point.mgmt.cp_mgmt_nat_rule:
         package: Lab_Policy_Branches
         name: Internal No-NAT
@@ -418,5 +418,5 @@
         relative_position:
           below: No-NAT
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
