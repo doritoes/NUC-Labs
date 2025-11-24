@@ -3,7 +3,7 @@
   hosts: 192.168.102.3
   gather_facts: False
   vars:
-    system_name: firewall2b
+    system_name: firewall1b
     system_ip: 192.168.102.3
     system_ip_masklen: 24
     system_default_gateway: 192.168.102.254
@@ -11,11 +11,26 @@
     - vars.yml
 
   tasks:
-    - name: Create FTW template
-      ansible.builtin.template:
-        src: branch2.j2
-        dest: ftw.tpl
-        mode: u=rw,g=r,o=r
+    - name: Allow user ansible to access api
+      command: "gaia_api access -u ansible -e true"
+    - name: Allow unlocal userss to access api
+      command: "gaia_api access -u unlocal_users -e true"
+    - name: Create a session key
+      command: "mgmt_cli -f json login --user 'ansible' --password '{{ ansible_user_password }}' --context gaia_api --version 1.8"
+      register: session_key
+    - name: Save session key
+      copy:
+        content: "{{ session_key.stdout }}"
+        dest: "/tmp/.session.txt"
+    - name: Set system name
+      command: "mgmt_cli -s /tmp/.session.txt -f json set hostname name '{{ system_name }}' --context gaia_api --version 1.8"
+    - name: Set default route
+      command: "mgmt_cli -s /tmp/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '{{ system_default_gateway }}' type 'gateway' comment 'Default route' --context gaia_api --version 1.8"
+    - name: Set timezone
+      command: "mgmt_cli -s /tmp/.session.txt -f json set time-and-date timezone '{{ timezone }}' --context gaia_api --version 1.8"
+      ignore_errors: True
+    - name: Set DNS
+      command: "mgmt_cli -s /tmp/.session.txt -f json set dns primary '{{ dns_server_primary }}' suffix '{{ domain_name }}' secondary '{{ dns_server_secondary }}' tertiary '{{ dns_server_tertiary }}' --context gaia_api --version 1.8"    
     - name: Create network configuration
       ansible.builtin.copy:
         src: firewall2b.cfg
@@ -33,17 +48,24 @@
       command: "clish -c 'set clienv on-failure stop'"
     - name: Save network configuration
       command: "clish -c 'save config'"
-    - name: Apply FTW template
-      command: "/usr/bin/config_system -f /home/ansible/ftw.tpl"
-      async: 3600 # run in background up to 1 hour
-      poll: 60 # check status every 60 seconds
-    - name: Wait until FTW completes
+    - name: Set FTCW
+      command: "mgmt_cli -s /tmp/.session.txt -f json set initial-setup grub-password '{{ grub_password }}' security-gateway.cluster-member True security-gateway.activation-key '{{ sic_pw }}' --context gaia_api --version 1.8"
+      ignore_errors: True
+    - name: Wait until FTCW completes
       stat:
         path: /etc/.wizard_accepted
       register: file_data
       until: file_data.stat.exists
       retries: 20
       delay: 15
+    - name: Remove the session key
+      file:
+        path: /tmp/.session.txt
+        state: absent
+    - name: Remove the network configuration file
+      file:
+        path: network.cfg
+        state: absent
     - name: Wait 15 seconds before reboot
       pause:
         seconds: 15
