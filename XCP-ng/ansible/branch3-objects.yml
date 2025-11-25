@@ -2,8 +2,7 @@
 - name: Create branch3 objects
   hosts: check_point
   connection: httpapi
-  collections:
-    - check_point.mgmt
+  gather_facts: false
   tasks:
     - name: branch 3 outbound NAT
       check_point.mgmt.cp_mgmt_host:
