@@ -1,5 +1,5 @@
 ---
-- name: enable branch1 https inspection on firewall1
+- name: Enable branch1 https inspection on firewall1
   hosts: sms
   gather_facts: false
   vars_files:
