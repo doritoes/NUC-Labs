@@ -1,7 +1,7 @@
 ---
 - name: Push branch1 policy
   hosts: check_point
-  gather_facts: False
+  gather_facts: false
   connection: httpapi
   tasks:
     - name: Push policy
