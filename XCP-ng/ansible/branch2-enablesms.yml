@@ -2,9 +2,9 @@
 - name: Modify SMS to enable static NAT and manage remote gateways
   hosts: check_point
   connection: httpapi
-  gather_facts: False
+  gather_facts: false
   tasks:
-    - name: enable static NAT on sms
+    - name: Enable static NAT on sms
       check_point.mgmt.cp_mgmt_checkpoint_host:
         name: sms
         nat_settings:
@@ -13,5 +13,5 @@
           method: static
           install_on: firewall1
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
