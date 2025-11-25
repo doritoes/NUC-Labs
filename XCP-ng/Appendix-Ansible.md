@@ -24,8 +24,7 @@ Notes:
   - Click down arrow, right click Windows PowerShell, and Click Run as administrator, then click yes
 - Rename the PC to `manager`
   - From administrative powershell
-    - `Rename-Computer -NewName manager`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName manager -Restart`
 - Install WSL version 1 (WSL2 requires virtualization, nested virtualization isn't supported under XCP-ng 8.3 - https://docs.xcp-ng.org/compute/#-nested-virtualization)
   - Add optional feature Windows Subsystem for Linux (WSL)
     - From administrative powershell
@@ -362,8 +361,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Log in for the first time
 - Rename server
   - Open administrative powershell
-  - `Rename-Computer -NewName dc-1`
-  - `Restart-Computer`
+  - `Rename-Computer -NewName dc-1 -Restart`
 - Network configuration
   - Log back in
   - Open administrative powershell
@@ -426,12 +424,11 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
-    - `Rename-Computer -NewName branch1-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName branch1-1 -Restart`
   - Join to domain
     - Log back in
     - Open administrative powershell
-    - `Add-Computer -DomainName xcpng.lab -restart`
+    - `Add-Computer -DomainName xcpng.lab -Restart`
       - User name: `AD\Juliette.LaRocco2` (also work: XCPNG.LAB\juliette.larocco2, juliette.larocco2@xcpng.lab)
       - Password: the password you set
     - ⏲️ Wait as the system reboots
@@ -453,8 +450,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName file-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName file-1 -Restart`
   - Network configuration
     - Log back in
     - Open administrative powershell
@@ -495,8 +491,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName sql-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName sql-1 -Restart`
   - Network configuration
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
@@ -539,8 +534,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - **Yes** allow your PC to be discoverable by other PCs and devices on this network
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName idc-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName idc-1 -Restart`
     - Wait for the computer to reboot
   - Network configuration
     - Log back in
@@ -708,8 +702,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Select **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName dmz-iis`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName dmz-iis -Restart`
   - Network configuration
     - Log back in
     - Open administrative powershell
@@ -1169,7 +1162,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - Static NAT IP Addresss: blank
       - Redundancy Mode: Active
       - Priority: blank
-    - Publish changes, push policy **Lab_Policy_Branches**
+    - Publish changes, push policy **Lab_Policy**
   - firewall2 object
     - IPSec VPN > Enhanced Link Selection
     - Interfaces > Add
@@ -1178,7 +1171,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - Static NAT IP Addresss: blank
       - Redundancy Mode: Active
       - Priority: blank
-    - Publish changes, push policy **Lab_Policy**
+    - Publish changes, push policy **Lab_Policy_Branches**
 - Create file on `manager`
   - [branch2-vpn.yml](ansible/branch2-vpn.yml)
 - `ansible-playbook -i inventory-api branch2-vpn.yml`
@@ -1218,8 +1211,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Open administrative powershell
   - Confirm IP address via DHCP is working
   - Rename workstation
-    - `Rename-Computer -NewName branch2-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName branch2-1 -Restart`
 - Test internet access
   - PROBLEM starting R82 with dropping invalid UDP checksums
   - Usually a reboot solves the issue
@@ -1509,10 +1501,22 @@ Steps:
   - Edit cluster **firewall3**
   - From left tree, click **HTTPS inspection**
   - Check **Enable HTTPS inspection**
+  - Set to **Full inspection**
   - Click **OK**
   - Publish and install policy **Lab_Policy_Branches**
+
 ## VPN
-  - Create file on `manager`
+- New on R82: Default Enhanced Link Selection interfaces are missing from firewall1
+  - firewall3 object
+    - IPSec VPN > Enhanced Link Selection
+    - Interfaces > Add
+      - External Interface: eth1: 192.168.103.1
+      - Next Hop IP Addresses: blank
+      - Static NAT IP Addresss: blank
+      - Redundancy Mode: Active
+      - Priority: blank
+    - Publish changes, push policy **Lab_Policy_Branches**
+- Create file on `manager`
     - [branch3-vpn.yml](ansible/branch3-vpn.yml)
   - `ansible-playbook -i inventory-api branch3-vpn.yml`
   - `ansible-playbook -i inventory-api branch3-push.yml`
@@ -1521,15 +1525,20 @@ Steps:
 - Testing
   - Generate some test traffic
     - `ansible all -m ping`
-    - 192.168.103.2 and 192.168.103.3 will fail now (as soon as VPN tunnels come up)
-  - DHCP traffic from `branch3-1` will automatically bring up the tunnel
-    - Give it a little time, or reboot `branch3-1` from console
-  - In SmartConsole open a new Log tab
+- SSH to each firewall and accept the keys
+  - `ssh 10.0.2.2`
+  - `ssh 10.0.2.3`
+- Update `inventory` file
+  - change firewall3a to 10.0.3.2
+  - change firewall3b to 10.0.3.3
+- Retest `ansible all -m ping`
+- DHCP traffic from `branch3-1` will automatically bring up the tunnel
+  - Give it a little time, or reboot `branch3-1` from console
+- In SmartConsole open a new Log tab
   - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
   - SmartView Monitor will open
-  - From the tree on the left expand **Tunnels** and click **Tunnels on Gateway**
-    - Select **firewall1** to view active tunnels at firewall1
-    - Repeat and select **firewall3** to view active tunnels at firewall3
+  - From the tree on the left expand **Tunnels** and click **Tunnels on Community**
+    - Select **Branch_Community** to view active tunnels for the community
     - Click the refresh icon to update the information and see the tunnels come up
     - Also, from the firewall cluster active member, use `vpn tu`
 - Test ssh access to 10.0.3.2 and 10.0.3.3
@@ -1540,11 +1549,10 @@ Steps:
 - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
-    - `Rename-Computer -NewName branch3-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName branch3-1 -Restart`
   - Join to domain
     - Log back in and open administrative powershell
-    - `Add-Computer -DomainName xcpng.lab -restart`
+    - `Add-Computer -DomainName xcpng.lab -Restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
 - Testing
@@ -1571,15 +1579,16 @@ Steps:
   - Auth method: User Identity Propagation
   - User: juliette.larocco2
 - Test access
-  - Test that access to ipgiraffe.com works for `AD\juliette.larocco'
+  - Test that access to ipchicken.com works for `AD\juliette.larocco'
   - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2') from a computer at Branch 1
 
 # Demonstration
 NOTE that the VPN does not allow traffic between Branch 2 and Branch 3
-- Edit VPN community **Branch_Community**
-- Click VPN routing
-- Note the setting **To center only**
-- Change to **To center and other satellites through center** to you want to enable communication between the remote branches (publish and install both policies)
+- To enable `AD\juliette.larocco` to RDP from `branch2-1` to `branch3-1` (and other branch 2<-> branch3 traffic, as long as there is a rule in place)
+  - Edit VPN community **Branch_Community**
+  - Click VPN routing
+  - Note the setting **To center only**
+  - Change to **To center and other satellites through center** to you want to enable communication between the remote branches (publish and install both policies)
 
 Access Demonstration:
 - branch1-1
@@ -1659,7 +1668,7 @@ Optional example how to set Edge browser home page to http://home
 - Allow `dc-1` to connect directly to DNS Root Servers (https://www.iana.org/domains/root/servers)
 - Find rules in the policy that are unused, and remove them
 - Remove unused dummy objects, and test if the firewall objects match for the internal LAN IP addresses
-- Remove the icmp-requests service from the Internet access and deploy a new rule in core services
+- Remove the icmp-requests service from the Internet access and deploy a new rule in core services for icmp-requests/ping
 - Spin up a test app on `dmz-iis` that utilizes `sql-1`
 - Test Quic (udp/443) inspection on R82 (see https://community.checkpoint.com/t5/Management/Is-Quic-UDP-443-supported-for-HTTPS-inspection/m-p/223154#M39532
 - Experiment with the Content Awareness blade
