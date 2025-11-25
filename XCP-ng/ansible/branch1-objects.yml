@@ -1,7 +1,7 @@
 ---
 - name: Create branch1 objects
   hosts: check_point
-  gather_facts: False
+  gather_facts: false
   connection: httpapi
   tasks:
     - name: ISP router
@@ -423,15 +423,15 @@
         is_sub_domain: false
         name: .ntp.checkpoint.com
         state: present
-    - name: add ntp domain ntp2.checkpoint.com
+    - name: Add ntp domain ntp2.checkpoint.com
       check_point.mgmt.cp_mgmt_dns_domain:
         is_sub_domain: false
         name: .ntp2.checkpoint.com
         state: present
-    - name: add ntp domain ntp.ubuntu.com
+    - name: Add ntp domain ntp.ubuntu.com
       check_point.mgmt.cp_mgmt_dns_domain:
         is_sub_domain: false
         name: .ntp.ubuntu.com
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
