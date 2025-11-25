@@ -21,7 +21,8 @@ Notes:
     - I recommend you pin Terminal to the taskbar for easy access
   - If you don't have it installed, install from the app store
   - Open Terminal and note the dropdown to select which terminal(s) you want to open
-  - Click down arrow, right click Windows PowerShell, and Click Run as administrator, then click yes
+  - Click down arrow, right click **Windows PowerShell**, and click **Run as administrator**, then click **Yes**
+    - This is a quick way to open administrative PowerShell
 - Rename the PC to `manager`
   - From administrative powershell
     - `Rename-Computer -NewName manager -Restart`
