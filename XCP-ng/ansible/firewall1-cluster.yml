@@ -2,7 +2,7 @@
 - name: Create cluster
   hosts: check_point
   connection: httpapi
-  gather_facts: False
+  gather_facts: false
   vars_files:
     - vars.yml
   tasks:
@@ -99,5 +99,5 @@
         state: present
         cluster_version: R82
         comments: firewall1 cluster for Branch 1
-    - name: publish changes
+    - name: Publish changes
       cp_mgmt_publish:
