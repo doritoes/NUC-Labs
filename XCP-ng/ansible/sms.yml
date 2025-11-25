@@ -28,12 +28,12 @@
       command: "mgmt_cli -s /tmp/.session.txt -f json set static-route address '0.0.0.0' mask-length 0 next-hop.1.gateway '{{ system_default_gateway }}' type 'gateway' comment 'Default route' --context gaia_api --version 1.8"
     - name: Set timezone
       command: "mgmt_cli -s /tmp/.session.txt -f json set time-and-date timezone '{{ timezone }}' --context gaia_api --version 1.8"
-      ignore_errors: True
+      ignore_errors: true
     - name: Set DNS
       command: "mgmt_cli -s /tmp/.session.txt -f json set dns primary '{{ dns_server_primary }}' suffix '{{ domain_name }}' secondary '{{ dns_server_secondary }}' tertiary '{{ dns_server_tertiary }}' --context gaia_api --version 1.8"      
     - name: Set FTCW
       command: "mgmt_cli -s /tmp/.session.txt -f json set initial-setup grub-password '{{ grub_password }}' security-management.type 'primary' --context gaia_api --version 1.8"
-      ignore_errors: True
+      ignore_errors: true
     - name: Wait until FTW completes
       stat:
         path: /etc/.wizard_accepted
@@ -52,7 +52,7 @@
       command: "shutdown -r now"
       async: 1
       poll: 0
-      ignore_errors: True
+      ignore_errors: true
     - name: Wait for SMS to come back up (ssh)
       ansible.builtin.wait_for_connection:
         delay: 75
