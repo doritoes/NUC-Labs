@@ -1,7 +1,7 @@
 ---
 - name: Branch 1 https policy
   hosts: check_point
-  gather_facts: False
+  gather_facts: false
   connection: httpapi
   tasks:
     - name: Add bypasses by host
