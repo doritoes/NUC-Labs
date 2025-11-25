@@ -1,7 +1,7 @@
 ---
 - name: SMS initial setup playbook
   hosts: sms
-  gather_facts: False
+  gather_facts: false
   vars:
     system_name: "{{ sms_system_name }}"
     system_ip: "{{ sms_ip }}"
