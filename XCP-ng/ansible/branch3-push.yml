@@ -4,7 +4,7 @@
   connection: httpapi
   gather_facts: false
   tasks:
-    - name: push policy
+    - name: Push policy
       check_point.mgmt.cp_mgmt_install_policy:
         access: true
         threat_prevention: false
