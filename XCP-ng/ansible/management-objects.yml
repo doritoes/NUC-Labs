@@ -1,11 +1,8 @@
 ---
 - name: Create management objects
   hosts: check_point
-  gather_facts: False
+  gather_facts: false
   connection: httpapi
-  collections:
-    - check_point.mgmt
-  # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: management workstation
       check_point.mgmt.cp_mgmt_host:
@@ -14,7 +11,7 @@
         color: dark green
         comments: management workstation
         state: present
-    - name: Management network
+    - name: management network
       check_point.mgmt.cp_mgmt_network:
         name: management_192.168.41.0/24
         subnet: 192.168.41.0
@@ -57,5 +54,5 @@
         color: dark orange
         comments: cloudflare dns 1.1.1.1
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
