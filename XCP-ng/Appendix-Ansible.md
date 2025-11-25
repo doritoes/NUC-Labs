@@ -1308,6 +1308,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
   - Click on HTTPS Inspection
   - Steps 1 and 2 are already completed
   - Step 3 <ins>check</ins> **Enable HTTPS inspection**
+  - Select **Full Inspection**
   - Click **OK**
 - **Publish** and install policies **Lab_Policy** and **Lab_Policy_Branches**
   - `ansible-playbook -i inventory-api branch1-push.yml`
@@ -1334,6 +1335,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - You should see login information passed to all the firewalls: firewall1, firewall2, and soon firewall3
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
   - `pep show user all`
+  - PROBLEM in rht R82 lab this is not working
 - Add an access rule to the **Lab_Policy** and **Lab_Policy_Branches** policies
   - TIP You can create in one policy and copy/paste it to the other
   - Section: add it to the section **Core Services**
@@ -1359,10 +1361,10 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1`
     - branch3-site.ps1 ([branch3-site.ps1](powershell/branch3-site.ps1))
-    - `powershell -ExecutionPolicy Bypass branch3-site.ps1`
+    - `powershell -ExecutionPolicy Bypass .\branch3-site.ps1`
 - Configure DC-1 as DHCP server for branch 3
   - branch3-dhcp.ps1 ([branch3-dhcp.ps1](powershell/branch3-dhcp.ps1))
-  - `powershell -ExecutionPolicy Bypass branch3-dhcp.ps1`
+  - `powershell -ExecutionPolicy Bypass .\branch3-dhcp.ps1`
 
 ## Initial Configuration
 Steps:
@@ -1382,22 +1384,10 @@ Steps:
     - `set interface eth0 ipv4-address 192.168.103.3 mask-length 24`
     - `set static-route default nexthop gateway address 192.168.103.254 on`
     - `save config`
-- Add `manager`'s RSA keys to each firewall's authorized_keys file
-  - Log in to `manager` and open a WSL shell
-    - ssh to firewall3a and firewall3b
-      - `ssh ansible@192.168.103.2`
-      - `ssh ansible@192.168.103.3`
-      - you will be in the default home directory `/home/ansible`
-  - Create new authorized_keys file and add the key
-    - `mkdir .ssh`
-    - `chmod u=rwx,g=,o= ~/.ssh`
-    - `touch ~/.ssh/authorized_keys`
-    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-    - Add the public key from `manager` to the files
-      - `cat > ~/.ssh/authorized_keys`
-        - paste in the key
-        - press Control-D
-    - `exit`
+- Back on `manager` at the WSL shell, enable ssh key login to `firewall3a` and `firewall3b`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.103.2`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.103.2`
+  - authenticate when prompted
   - You can now ssh without a password
 - Update file `inventory`, uncomment the IPs of firewall3a (192.168.103.2) and firewall2b (192.168.103.3)
 - Test Ansible access
@@ -1410,15 +1400,9 @@ Steps:
   - [firewall3a.cfg](ansible/firewall3a.cfg)
   - [firewall3b.yml](ansible/firewall3b.yml)
   - [firewall3b.cfg](ansible/firewall3b.cfg)
-  - [branch3.j2](ansible/branch3.j2)
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall3a.yml`
   - `ansible-playbook firewall3b.yml`
-- Enable DHCP relay on firewall3a and firewall3b
-  - `clish`
-  - `set bootp interface eth1 on`
-  - `set bootp interface eth1 relay-to 10.0.1.10 on`
-  - `save config`
 - Test
   - You will be able to connect from manager to
     - https://192.168.103.2
@@ -1463,8 +1447,34 @@ Steps:
       - `ansible-playbook -i inventory-api branch2-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
-  - Once the VPN tunnels are up, you will no longer use the 192.168.3.2 and .3 addresses with ansible; you will need to update `inventory` to use 10.0.3.2 and 10.0.3.3
 - At this point you should be able to install a JHF on the firewalls
+  - SmartConsole process for firewall3 cluster
+    - Log in to SmartConsole
+    - Click GATEWAYS & SERVERS
+    - Right-click firewall3 > Actions > Install Hotfix/Jumbo...
+    - Leave it set to recommended jumbo
+    - Click Verify
+      - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
+    - Click Install
+      - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
+    - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole ot upgrade firewalls)
+  - Manual  process for firewall2a and fireall2b
+    - SSH or console to sms
+    - `clish`
+    - `installer check-for-updates`
+    - `installer download-and-install [tab]`
+    - `installer download-and-install <package-number>`
+      - select the applicable JHF hotfix bundle by number
+    - Approve the reboot
+    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorize downloads, not performing update`
+      - `installer agent update`
+      - `installer agent disable`
+      - `installer agent enable`
+      - `installer check-for-updates`
+      - You may have to wait a few minutes for the installer to find the new package and show them in the list
+
+- At this point you should be able to install a JHF on the firewalls
+  - In testing %%%%%
   - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
   - `installer check-for-updates`
