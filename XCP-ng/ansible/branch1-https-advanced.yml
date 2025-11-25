@@ -1,7 +1,7 @@
 ---
 - name: Branch 1 https advanced settings
   hosts: check_point
-  gather_facts: False
+  gather_facts: false
   connection: httpapi
   tasks:
     - name: Set web site categorizaion to hold
@@ -10,5 +10,5 @@
       internal_error_fail_mode: allow connections
       resource classification:
         mode: hold
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
