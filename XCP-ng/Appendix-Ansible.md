@@ -225,8 +225,6 @@ Steps:
   - Create files on `manager` (inventory, playbook)
     - [inventory-api](ansible/inventory-api)
       - Customize to update the credentials as needed
-      - Lab testing to move the login credentials to the playbook was not successful in Ansible 2.10.8
-      - Starting Ansible 2.11, use new `include_vars` to include the var.yml and use the credentials from there
     - [management-objects.yml](ansible/management-objects.yml)
   - `ansible-playbook -i inventory-api management-objects.yml`
   - Testing
