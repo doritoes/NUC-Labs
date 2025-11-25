@@ -2,7 +2,7 @@
 - name: Create cluster branch 3
   hosts: check_point
   connection: httpapi
-  # include_vars: vars.yml # introduced in Ansible 2.11
+  gather_facts: false
   vars_files:
     - vars.yml
   tasks:
