@@ -1474,7 +1474,6 @@ Steps:
       - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
 - At this point you should be able to install a JHF on the firewalls
-  - In testing %%%%%
   - SSH or console to each device (sms, firewall3a, firewall3b)
   - `clish`
   - `installer check-for-updates`
