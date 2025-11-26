@@ -310,8 +310,9 @@ Steps:
     - IMPORTANT Modify the object `isp_router` to use your actual Lab router IP address
   - `ansible-playbook -i inventory-api branch1-objects.yml`
 - Create new policy using API
-  - [branch1-policy.yml](ansible/branch1-policy.yml)
-    - `ansible-playbook -i inventory-api branch1-policy.yml`
+  - Create file on `manager`
+    - [branch1-policy.yml](ansible/branch1-policy.yml)
+  - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
   - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
