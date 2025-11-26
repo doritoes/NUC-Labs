@@ -132,6 +132,13 @@ Notes:
       - This will be configured in the next step
       - And yes, the simulated Internet IP; the inside interface won't be accessible until later
 
+# Disable TX Checksumming
+The instructions mention manually disabling TX Checksumming. Here is an alternative that uses the XenAPI to disable TX Checksumming on a list of devices running the Gaia OS.
+
+- Download disable-tx-checksummming.py ([disable-tx-checksummming.py](disable-tx-checksummming.py))
+- Modify the file to use your XCP-ng host IP and root password
+- Run `python3 disable-tx-checksummming.py`
+
 # Configure VyOS Router
 - Open the `vyos` router VM and log in to console
 - Get the IP address on eth0
