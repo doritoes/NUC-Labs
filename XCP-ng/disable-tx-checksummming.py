@@ -5,7 +5,6 @@ HOST_IP = "192.168.99.209"
 USERNAME = "root"
 PASSWORD = "hostpasswordsecret"
 VM_LIST = ('sms', 'firewall1a', 'firewall1b', 'firewall2a', 'firewall2b', 'firewall3a', 'firewall3b')
-VM_NAME = "firewall1a"
 
 def main():
     # disable https certificate checking
@@ -21,10 +20,10 @@ def main():
     except Exception as e:
         print(f"General Error: {e}")
     for vm in VM_LIST:
-        print(f"Searching for VM: {VM_NAME}...")
-        vms = session.xenapi.VM.get_by_name_label(VM_NAME)
+        print(f"Searching for VM: {vm}...")
+        vms = session.xenapi.VM.get_by_name_label(vm)
         if len(vms) == 0:
-            print(f"Error: VM '{VM_NAME}' not found.")
+            print(f"Error: VM '{vm}' not found.")
             continue
         vm_ref = vms[0]
         vif_refs = session.xenapi.VM.get_VIFs(vm_ref)
@@ -42,7 +41,7 @@ def main():
             if other_config.get('ethtool-tx') == 'off':
                 print(f"  Interface {device}: TX Checksumming already disabled.")
             else:
-                print(f"Disabling TX checksumming for interface {device}"
+                print(f"Disabling TX checksumming for interface {device}")
                 other_config['ethtool-tx'] = 'off'
                 try:
                     session.xenapi.VIF.set_other_config(vif, other_config)
@@ -54,7 +53,7 @@ def main():
                         print("  [i] VM is Halted. Changes will apply on next boot.")
                     else:
                         print(f"  [i] VM state is {power_state}.")
-                            print("Note: You must reboot the VM or unplug/plug the VIFs for changes to take effect.")
+                        print("Note: You must reboot the VM or unplug/plug the VIFs for changes to take effect.")
                     print("")
                 except XenAPI.Failure as e:
                     print(f"XenAPI Error: {e}")
