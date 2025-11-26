@@ -113,7 +113,7 @@
         track:
           type: Log
         state: present
-    - name: add gateways access rule temporary
+    - name: Add gateways access rule temporary
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Manage gateways over Internet
