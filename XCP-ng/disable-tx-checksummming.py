@@ -17,8 +17,10 @@ def main():
         session.xenapi.login_with_password(USERNAME, PASSWORD, "1.0", "python-script")
     except XenAPI.Failure as e:
         print(f"XenAPI Error: {e}")
+        return
     except Exception as e:
         print(f"General Error: {e}")
+        return
     for vm in VM_LIST:
         print(f"Searching for VM: {vm}...")
         vms = session.xenapi.VM.get_by_name_label(vm)
@@ -59,9 +61,9 @@ def main():
                     print(f"XenAPI Error: {e}")
                 except Exception as e:
                     print(f"General Error: {e}")            
-        try:
-            session.xenapi.logout()
-        except:
-            pass
+    try:
+        session.xenapi.logout()
+    except:
+        pass
 if __name__ == "__main__":
     main()
