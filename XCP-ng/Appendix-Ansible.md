@@ -366,15 +366,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 - Open console for `dc-1`
 - Complete initial setup and set administrator password
 - Log in for the first time
+- **Required only** and **Accept**
 - Rename server
-  - Open administrative powershell
+  - Open administrative PowerShell
   - `Rename-Computer -NewName dc-1 -Restart`
 - Network configuration
   - Log back in
-  - Open administrative powershell
+  - Open administrative PowerShell
   - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
     - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - **Yes** allow PC to be discoverable
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
 - Optionally increase the display resolution (e.g., 1440 x 900)
 - Promote DC-1 from server to Domain Controller
