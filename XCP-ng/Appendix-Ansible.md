@@ -774,6 +774,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Step two > click **Export certificate**
       - Name it **outbound**
 - Step 3 Enable HTTPS inspection
+  - Log back into `manager` and open a WSL shell
   - Download and run branch1-https-enable.yml [branch1-https-enable.yml](ansible/branch1-https.yml-enable)
   - `ansible-playbook branch1-https-enable.yml`
 - Distribute the https inspection certificate using GPO on `dc-1`
@@ -790,11 +791,11 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
       - Import `c:\outbound.cer`
       - Accept the defaults Next, Next, Finish
-  - Update `Lab_Policy` https inspection rules
-    - Download and run branch1-https-enable.yml [branch1-https-enable.yml](ansible/branch1-https-enable.yml)
+  - Update `Lab_Policy` https inspection rules ("Outbound Policy")
+    - Download and run branch1-https-policy.yml [branch1-https-policy.yml](ansible/branch1-https-policy.yml)
       - `ansible-playbook -i inventory-api branch1-https-policy.yml`
       - Bypass by source host
-    - Add second rule ("HTTPS services - recommended bypass" did not show in the updatable objects list)
+    - Add second rule ("HTTPS services - recommended bypass" did not show in the API's updatable objects list)
       - Name: Exceptions for recommended imported services
       - Source:
         - *Any
@@ -818,7 +819,7 @@ In this step we will import the Check Point ICA certificate and also distribute 
   - Click on the root "O=sms.xcpng.labx3fd5d" (the exact name will vary)
   - Export/Copy to File
   - Save as type: Base64-encoded ASCII, single certificate
-  - Name as you wish
+  - Name as you wish (e.g., usercheck.crt)
 - Copy the file to `DC-1` C:\ (e.g., copy to \\file-1\it\ and access it from there)
 - Import the certificate to the GPO for trusted certificates
   - Log in to `DC-1` as administrator juliette.larocco2
@@ -829,7 +830,6 @@ In this step we will import the Check Point ICA certificate and also distribute 
     - Right click **Distribute Root CA Certificate** from the tree and click **Edit**
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
-      - By default the certificate you exported is a .der file; select all file types to see the certificate you downloaded
       - Import the file, Next, Next, Finish
 - You will now be able to view User Check pages correctly (for blocked site message, etc.)
   - `gpupdate /force` will trigger an update
@@ -842,7 +842,7 @@ NOTE As this point no HTTPS inspection will occur, until we enable the applicati
 By default URL categorization occurs in the background. First attempts to a previously unknown URL will succeed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
 
 - Download and run branch1-https-advanced.yml [branch1-https-advanced.yml](ansible/branch1-https-advanced.yml)
-      - `ansible-playbook -i inventory-api branch1-https-policy.yml`
+  - `ansible-playbook -i inventory-api branch1-https-advanced.yml`
 
 ## Add Application Control layer
 NOTE These changes can likely be done using Ansible and the API. This is not included in this Lab at this time.
