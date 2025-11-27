@@ -37,7 +37,7 @@
       check_point.mgmt.cp_mgmt_outbound_inspection_certificate_facts:
         name: outbound_cert
         details_level: full
-    - name: Extract base64 public certificate for importing as root CA certificate
+    - name: Extract second copy of base64 public certificate for importing as root CA certificate
       set_fact:
         certificate: "{{ outbound_inspection_certificate['base64-public-certificate'] }}"
     - name: Write certificate to file certificate_public.cer
