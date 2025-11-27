@@ -570,6 +570,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Open an administrative powershell prompt
         - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
         - How to re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
+    - Install Wireshark (with default settings including Npcap) [Wireshark](https://www.wireshark.org/download.html) on `dc-1` (default settings)
+      - In testing this FAILED to install :(
     - Create a domain account with permissions needed for the identity collector
       - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
         - `powershell -ExecutionPolicy bypass idc-user.ps1`
