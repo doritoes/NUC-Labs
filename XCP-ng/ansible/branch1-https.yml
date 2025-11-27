@@ -34,7 +34,7 @@
     - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
     - name: fetch outbound inspection certificate
-      check_point.mgmt.cp_mgmt_outbout_inspection_certificate_facts:
+      check_point.mgmt.cp_mgmt_outbound_inspection_certificate_facts:
         name: outbound_cert
         details_level: full
     - name: Extract base64 public certificate for importing as root CA certificate
