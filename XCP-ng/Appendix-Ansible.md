@@ -448,7 +448,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - juliette.larocco2 account works, but will fail if "Administrator" is still logged in on DC-1
     - Confirm web browsing works
     - Log in to SmartConsole on `manager` to view the firewall logs
-      - Click **LOGS & MONITOR** and then click the open **Logs** tab to the left
+      - Click **LOGS & EVENTS** and then click the open **Logs** tab to the left
         - note the limited information provided for Internet web traffic
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
