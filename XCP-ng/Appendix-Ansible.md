@@ -454,7 +454,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as administrator with the password you set
     - Use the XCP-ng Ctrl+Alt+Del icon to bring up the login prompt
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+  - **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName file-1 -Restart`
@@ -479,7 +479,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Select **GPT** (GUID Partition Table)
       - Click **OK**
       - Right-click Disk 1's Unallocated space and then click **New Simple Volume**
-        - Follow the wizard and use defaults (e.g., assign letter E:)
+        - Follow the wizard and use defaults (e.g., assign letter F:)
         - Set the volume label to **NETDRIVE**
     - Download and run file-shares.ps1 from an administrative powershell [file-shares.ps1](powershell/file-shares.ps1)
       - `powershell -ExecutionPolicy Bypass file-shares.ps1`
@@ -492,10 +492,11 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - For example, with juliette.larocco
         - \\file-1
         - \\file-1\IT
+        - create a text file to confirm read/write permissions
 - Configure SQL server **sql-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+    - **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName sql-1 -Restart`
@@ -509,9 +510,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Click **Start** > **Create and format hard disk partitions**
       - You will be prompted to initialize the disk (Disk 1)
       - Select **GPT** (GUID Partition Table)
-      - Click OK
+      - Click **OK**
       - Right-click Disk 1 Unallocated space and then click **New Simple Volume**
-      - Assign letter E:
+      - Assign letter F:
       - Follow the wizard with its defaults and set the volume label to **SQL**
   - Join to domain
     - Open administrative powershell
@@ -519,6 +520,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
       - Wait as the system reboots
+  - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
   - Install MS SQL server ([more information](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16))
     - Log in as AD\juliette.larocco2
     - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
@@ -531,14 +533,20 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Click **Close** and confirm
   - Test
     - Launch **SQL Server Management Studio (SSMS)**
+      - Server Name: .\SQLEXPRESS
       - Check **Trust server certificate**
       - Click **Connect**
-    - NOTE For a production environment, use proper authentication
-- This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
+    - Create folder: F:\MSSQL\DATA
+    - In object explorer, right click Databases > New Database
+      - Database name: product_dev
+        - product_dev path: F:\MSSQL\DATA
+        - product_dev_log path: F:\MSSQL\DATA
+      - Click OK
+
 - Configure Check Point Identity Collector server **idc-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as Administrator
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+  - **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
     - `Rename-Computer -NewName idc-1 -Restart`
