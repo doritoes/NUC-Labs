@@ -775,8 +775,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Name it **outbound**
 - Step 3 Enable HTTPS inspection
   - Download and run branch1-https-enable.yml [branch1-https-enable.yml](ansible/branch1-https.yml-enable)
-  - `ansible-playbook -branch1-https-enable.yml`
-  -  is in the R82 API, but not in the ansible collection 6.7.0
+  - `ansible-playbook branch1-https-enable.yml`
 - Distribute the https inspection certificate using GPO on `dc-1`
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
     - for example, copy the certificate to the `\\file-1\it` share from `manager`, and pick it up from there from `dc-1`
