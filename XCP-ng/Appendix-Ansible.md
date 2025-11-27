@@ -572,9 +572,19 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - How to re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
     - Install Wireshark (with default settings including Npcap) [Wireshark](https://www.wireshark.org/download.html) on `dc-1` (default settings)
       - In testing this FAILED to install :(
+      - Book to Safe Mode with Networking didn't seem to work
+        - Click Start > Power button
+        - Hold shift and click **Restart**
+        - Choose an explanation
+        - When **Choose an option appears**, select **Troubleshoot**
+        - **Advanced options** > **Startup Settings**
+        - Click **Restart**
+        - After the server starts to the Startup Settings menu, choose Enable Safe Mode with Networking
+        - Tried installing Visual C runtimes logged in as AD\Administrator
+          - While appeared to freeze while installing, successfully installed Wireshark, though Npcap is probably broken
     - Create a domain account with permissions needed for the identity collector
       - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
-        - `powershell -ExecutionPolicy bypass idc-user.ps1`
+        - `powershell -ExecutionPolicy .\bypass idc-user.ps1`
   - Install Check Point Identity Collector for Windows
     - How to Download / Obtain the Identity Collector
       - From the SMS
@@ -582,10 +592,10 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Log in to `sms to the expert prompt (e.g., log in as `ansible`)
           - `find / -name \*msi`
           - Note a couple of Identity Collector msi files (Windows installation pacakges); the file name varies between R18 and R80
-          - Example: `/var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi`
-          - Go back to `manager` WSL shell
+          - Example: `/var/log/opt/CPsuite-R82/fw1/tmp/nacClients/CPIdentityCollector.msi`
+        - Go back to `manager` WSL shell
           - Copy the client file: (modify the path the actual path you found)
-            - `scp ansible@192.168.41.20:/var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi .`
+            - `scp ansible@192.168.41.20:/var/log/opt/CPsuite-R82/fw1/tmp/nacClients/CPIdentityCollector.msi .`
           - On `manager` use the file explorer to open the Linux > Ubuntu-22.04 > home > ansible path
           - Copy the installation package file (e.g. R81 file name is CPIdentityCollector.msi) to your desktop or another convenient location
           - Next open a connection to \\10.0.1.11
