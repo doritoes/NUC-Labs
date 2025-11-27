@@ -899,7 +899,7 @@ NOTE These changes can likely be done using Ansible and the API. This is not inc
         - Once a day
         - Per application/site
     - Track: Log > Accounting
-- Publish and install Lab_Policy
+- **Publish** and install Lab_Policy
   - This will enable https inspection!
 - Test from `branch1-1`
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
