@@ -779,7 +779,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   -  is in the R82 API, but not in the ansible collection 6.7.0
 - Distribute the https inspection certificate using GPO on `dc-1`
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
-    - for example, copy the certificate to the \\file-1\it share from `manager`, and pick it up from there from `dc-1`
+    - for example, copy the certificate to the `\\file-1\it` share from `manager`, and pick it up from there from `dc-1`
   - create the GPO using administrative powershell
     - `New-GPO -Name "Distribute Root CA Certficate" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Open Group Policy Management Console (GPMC)
