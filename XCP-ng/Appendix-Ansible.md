@@ -698,7 +698,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
   - Log in at the console
-    - As the default use or the `ansible` user
+    - As the default user or the `ansible` user
   - Configure Static IP address
     - `sudo vi /etc/netplan/01-netcfg.yaml`
     - Paste in the contents of [01-netcfg.yaml](01-netcfg.yaml)
