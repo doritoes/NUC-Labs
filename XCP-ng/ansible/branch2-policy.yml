@@ -131,7 +131,7 @@
         track:
           type: Log
         state: present
-    - name: Add a DHCP broadcasts rule
+    - name: Add DHCP broadcasts rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DHCP Broadcasts
@@ -148,7 +148,7 @@
         track:
           type: Log
         state: present
-    - name: Add a DHCP requests rule
+    - name: Add DHCP requests rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DHCP Requests
@@ -165,7 +165,7 @@
         track:
           type: Log
         state: present
-    - name: Add a DHCP replies rule
+    - name: Add DHCP replies rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: DHCP Replies
@@ -182,7 +182,7 @@
         track:
           type: Log
         state: present
-    - name: Add a stealth rule
+    - name: Add stealth rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy_Branches Network
         name: Stealth rule
