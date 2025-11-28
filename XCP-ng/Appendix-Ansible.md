@@ -612,7 +612,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Not sure if a support contract is required, or if setting up up a proper eval license will take care of this
       - From SmartConsole
         - Try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
-        - This link was a broken link in my testing, but might work eventually
+        - This is the same paywalled client
     - Log in to `idc-1` as `AD\Juliette.LaRocco2`
     - Copy the installation package to `idc-1` and install the Identity Collector
     - Allow Identity Collector in the Windows Firewall on `idc-1`
@@ -1029,6 +1029,10 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
         - tried Citrix PV drivers via Windows Update
         - tried Security settings > disable real time protection
         - https://forums.lenovo.com/t5/Windows-11/Visual-C-2015-2022-Installation-freezes/m-p/5395162
+        - troubleshooting
+          - pdp monitor all
+          - pdp control sync
+          - pdp network registered
       - Recap: R81.20 with newest IDC worked with this workaround; R82 with the older IDC didn't seem to work with this workaround
   - Create Access role
     - Back on `manager` open SmartConsole
