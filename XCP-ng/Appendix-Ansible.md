@@ -1029,7 +1029,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
         - tried Citrix PV drivers via Windows Update
         - tried Security settings > disable real time protection
         - https://forums.lenovo.com/t5/Windows-11/Visual-C-2015-2022-Installation-freezes/m-p/5395162
-        - troubleshooting
+        - troubleshooting https://support.checkpoint.com/results/sk/sk101369
           - pdp monitor all
           - pdp control sync
           - pdp network registered
