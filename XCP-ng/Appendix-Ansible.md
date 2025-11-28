@@ -4,6 +4,8 @@ This appendix follows the next steps after completing [Appendix - Terraform and 
 Notes:
 - The Linux-based VM templates have the user `ansible` created. SSH with RSA keys still needs to be enabled.
 
+IMPORTANT In the R81.20 version of this Lab, Identity Awareness was fully functional. So far it's not working in R82, well at least not without IDC R82, which is paywalled.
+
 # Build the Environment using Terraform
 - `terraform plan`
 - `terraform apply -auto-approve`
