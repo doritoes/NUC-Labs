@@ -195,7 +195,7 @@
         track:
           type: Log
         state: present
-    - name: Add a stealth rule
+    - name: Add stealth rule
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Stealth rule
@@ -212,7 +212,7 @@
         track:
           type: Log
         state: present
-    - name: add management rule domain
+    - name: Add management rule domain
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: manager to DC
@@ -328,7 +328,7 @@
         track:
           type: Log
         state: present
-    - name: add core services domain controller
+    - name: Add core services domain controller
       check_point.mgmt.cp_mgmt_access_rule:
         layer: Lab_Policy Network
         name: Domain Controller allowed
