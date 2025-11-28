@@ -1011,10 +1011,22 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
       - recheck: DC-1 windows firewall disabled for domain; IDC-1 fireall allows IDC apps through windows firewall or turn off windows firewall for Domain
       - Check logs for logs sourcing from `idc-1` failed to log in to AD; check account unit, try resetting password; check if user adquery exists in AD
       - Try install database in SmartConsole
-      - Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
-      - Installing WirShark portable without Npcap didn't seem to resolve
-      - Installing Npcap alone: https://npcap.com/#download didn't seem to resolve
-        - default settings, including Install Npcap in WinPcap API-compatible Mode
+      - R81.20: Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
+      - R82: haven't found a solution yet
+        - Installing WireShark portable without Npcap didn't seem to resolve
+        - Installing Npcap alone: https://npcap.com/#download didn't seem to resolve
+          - locks up installing VS C++ Redistributable
+            - tried installing VS C++ Redistributable on its own, still locks up
+            - tried 32-bit version
+        - Since Check Point's implied rules only allow ldap, not ldaps (636, ldap-ssl) from gateways to `LDAP-Servers`
+          - default action is the gateways will try to use the Account unit with ldaps, fail, and try unencrypted ldap
+          - you can change this behavior in the account unit
+          - you can add a rule in section "Gateways access" to allow firewall1 to dc-1 for ldap-ssl
+        - tried logging implied rules, but didn't see the access for ldap account from gateway to ldap server
+        - tried installing Wireshark from safe mode with networking
+        - tried Citrix PV drivers via Windows Update
+        - tried Security settings > disable real time protection
+        - https://forums.lenovo.com/t5/Windows-11/Visual-C-2015-2022-Installation-freezes/m-p/5395162
       - Recap: R81.20 with newest IDC worked with this workaround; R82 with the older IDC didn't seem to work with this workaround
   - Create Access role
     - Back on `manager` open SmartConsole
