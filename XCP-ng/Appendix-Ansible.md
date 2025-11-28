@@ -1071,10 +1071,10 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1` from an administrative powershell
     - branch2-site.ps1 ([branch2-site.ps1](powershell/branch2-site.ps1))
-    - `powershell -ExecutionPolicy Bypass branch2-site.ps1`
+    - `powershell -ExecutionPolicy Bypass .\branch2-site.ps1`
 - Configure DC-1 as DHCP server for branch 2
   - branch2-dhcp.ps1 ([branch2-dhcp.ps1](powershell/branch2-dhcp.ps1))
-  - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
+  - `powershell -ExecutionPolicy Bypass .\branch2-dhcp.ps1`
 
 ## Enable SMS to manage remote gateways
 - Create file on `manager`
