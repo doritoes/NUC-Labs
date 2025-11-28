@@ -322,7 +322,7 @@ Steps:
 ## Apply Jumbo Hotfixs to SMS and firewalls
 At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivty you configured in branch 1.
 
-CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole ot upgrade firewalls)
+CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
   - SSH or console to sms
   - `clish`
   - `installer check-for-updates`
@@ -1171,7 +1171,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Test that ansible can still manage firewall2 cluster members
   - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
-  - SmartConsole process for firewall1 cluster
+  - SmartConsole process for firewall2 cluster
     - Log in to SmartConsole
     - Click GATEWAYS & SERVERS
     - Right-click firewall2 > Actions > Install Hotfix/Jumbo...
@@ -1180,7 +1180,6 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
     - Click Install
       - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
-    - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole ot upgrade firewalls)
   - Manual  process for firewall2a and fireall2b
     - SSH or console to sms
     - `clish`
@@ -1493,7 +1492,7 @@ Steps:
       - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
     - Click Install
       - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
-    - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole ot upgrade firewalls)
+    - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
   - Manual  process for firewall2a and fireall2b
     - SSH or console to sms
     - `clish`
