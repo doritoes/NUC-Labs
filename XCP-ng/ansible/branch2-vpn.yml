@@ -4,7 +4,7 @@
   connection: httpapi
   gather_facts: false
   tasks:
-    - name: add-vpn-community-star
+    - name: Add VPN star community
       check_point.mgmt.cp_mgmt_vpn_community_star:
         center_gateways: firewall1
         satellite_gateways: firewall2
