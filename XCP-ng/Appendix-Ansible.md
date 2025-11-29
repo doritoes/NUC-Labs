@@ -355,6 +355,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - 8.8.4.4
   - Click **OK** > **OK**
 - Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
+- Set both Networks to **Private network** profile
 - Click **Advanced network settings**
 - Disable Ethernet 2 interface (click Disable)
 - Test Internet connectivity to confirm it is still working
@@ -376,6 +377,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
 - Optionally increase the display resolution (e.g., 1440 x 900)
+- Install all software that comes as MSI files before promoting to a domain controller
+  - set DNS server to 8.8.8.8 then switch back when done
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 8.8.8.8`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+  - If you forget to do this, see https://www.reddit.com/r/WindowsServer/comments/1iq9b4f/applications_wont_install_2025/ and disable UAC
+  - Install Wireshark now, because it relies on Npcap and Visual C++ distributables
+    - with default settings including Npcap) [Wireshark](https://www.wireshark.org/download.html) on `dc-1` (default settings)
 - Promote DC-1 from server to Domain Controller
   - `Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
@@ -401,13 +409,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Since you will be using a different user later, you could store these in C:\ or another handy location
 - Configure DC-1 as DHCP server
   - Download branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
-  - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
+  - `powershell -ExecutionPolicy Bypass .\branch1-dhcp.ps1`
   - Test
     - `Get-DhcpServerInDC`
     - spin up a test workstation on branch1 subnet
       - confirm it receives an IP address via DHCP
       - test Internet access
-  - NOTE Server manager will complain: "Configuration required for DHCP Server at DC-1"
+  - NOTE `Server manager` will complain: "Configuration required for DHCP Server at DC-1"
     - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. The powershell script already authorizes DHCP, but you might find a way to improve it.
 - Configure AD users, groups, roles, and permissions
   - download and copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
