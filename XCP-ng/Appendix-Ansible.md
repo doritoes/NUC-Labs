@@ -955,9 +955,9 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
         - Profile: Microsoft_AD
         - Domain: xcpng.lab
         - Account Unit usage
-          - CRL retrieval: Not checked
+          - CRL retrieval: Not checked (default)
           - User management: Checked (default)
-          - Activity Directory Query: default not checked
+          - Activity Directory Query: Not checked (default)
       - Servers tab
         - Add
           - Host: dc-1
@@ -1006,11 +1006,11 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Click **OK** to close the firewall cluster settings
     - **Publish** and install Lab_Policy
   - Finish Identity Collector configuration
-    - Log in to IDC-1
+    - Log in to `idc-1`
     - Launch Identity Collector
     - From the left, click **Gateways**
       - Edit **firewall1**
-      - Click **Test** and then click **Trust** under Certificate Info
+      - Click **Trust** under Certificate Info
       - Click **OK**
   - Testing
     - Confirm Identity Sources > `dc-1` is working
@@ -1025,27 +1025,33 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Confirm identities are passed to the firewalls
       - Log in to firewall1a and firewall1b
       - from expert prompt: `pep show user all`
+      - and then: `pdp monitor all`
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
-      - recheck: DC-1 windows firewall disabled for domain; IDC-1 fireall allows IDC apps through windows firewall or turn off windows firewall for Domain
+      - recheck: `dc-1` windows firewall disabled for domain; `idc-1` firewall allows IDC apps through windows firewall or turn off windows firewall for Domain
       - Check logs for logs sourcing from `idc-1` failed to log in to AD; check account unit, try resetting password; check if user adquery exists in AD
-      - Try install database in SmartConsole
+      - Try install database in SmartConsole, then re-push policy
       - R81.20: Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
       - R82: haven't found a solution yet
-        - Installing WireShark portable without Npcap didn't seem to resolve
-        - Installing Npcap alone: https://npcap.com/#download didn't seem to resolve
-          - locks up installing VS C++ Redistributable
-            - tried installing VS C++ Redistributable on its own, still locks up
-            - tried 32-bit version
+        - Installing WireShark must be done before promoting to DC (or you must disabled UAC to install after promoting DC)
+          - didn't work
+        - Windows Server 2025 requries LDAP signing
+          - gpmc.msc
+          - Edit default domain controllers policy
+            - Forest > Domains > xcpng.lab > Domain Controllers
+            - Expand Domain Controllerss, right-click Default Domain Controllers Policy > Edit
+            - Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options
+            - In right pane, find and double-click Domain Controller: LDAP server signing requirements Enforcement
+            - Select Define this policy setting checkbox
+            - Select Disabled
+            - Click Apply then OK
+        - Enable Log Implied Rules (GLobal Properties > FireWall)
+          - You will see implied traffic logged source firewall1 10.0.1.2 to dc-1 (10.0.1.10) for ldap (tcp/389) (and a hit on tcp/135 earlier)
         - Since Check Point's implied rules only allow ldap, not ldaps (636, ldap-ssl) from gateways to `LDAP-Servers`
           - default action is the gateways will try to use the Account unit with ldaps, fail, and try unencrypted ldap
           - you can change this behavior in the account unit
           - you can add a rule in section "Gateways access" to allow firewall1 to dc-1 for ldap-ssl
-        - tried logging implied rules, but didn't see the access for ldap account from gateway to ldap server
-        - tried installing Wireshark from safe mode with networking
-        - tried Citrix PV drivers via Windows Update
-        - tried Security settings > disable real time protection
-        - https://forums.lenovo.com/t5/Windows-11/Visual-C-2015-2022-Installation-freezes/m-p/5395162
+        - What finally worked was modify the LDAP Account unit `Microsoft _AD` > Objects Management > Network is secured, establish clear communication
         - troubleshooting https://support.checkpoint.com/results/sk/sk101369
           - pdp monitor all
           - pdp control sync
@@ -1061,14 +1067,14 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
         - Users: **Specific users/groups**
           - Click "**+**" to add, and search for **support**
           - Click on **Support**
-          - PROBLEM testing is broken at this point
         - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
+          - this is mean to disallow non-domain-joined workstations
         - Remote Access Clients: Leave at Any Client
         - Click **OK**
     - Destination: **New** > **Other** > **Domain..** > **.ipchicken.com** (FQDN)
     - Services: ***Any**
     - Action: **Accept**
-    - Track: **Log**
+    - Track: **Log** > **Accounting**
   - Add another subrule just below to deny all access to ipgiraffe.com
     - Name: **Deny all nonsupport access to sites**
     - Source: ***Any**
@@ -1076,12 +1082,12 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Services: **Any**
     - Action: **Drop** > **Blocked Message**
     - Track: **Log** > **Accounting**
-  - **Publish** changes and push policy
+  - **Publish** changes and push Lab_Policy
   - Test access, access control, enforcement of user identity works and is logged
     - http://maliciouswebsitetest.com/ should be blocked
     - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
     - https://ipchicken.com should be blocked when user Lab is logged in on `manager`
-    - PROBLEM at this point the lab is broken, as the identity lookup from the firewall to AD may not be working
+    - curl https://ipchicken.com from dmz-apache is also blocked
 
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
@@ -1139,9 +1145,9 @@ Steps:
     - `set interface eth0 ipv4-address 192.168.102.3 mask-length 24`
     - `set static-route default nexthop gateway address 192.168.102.254 on`
     - `save config`
-- Enable ssh key login to `firewall2a` and `firewall2b`
-  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.102.2`
-  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.102.3`
+- Enable ssh key login to `firewall2a` and `firewall2b` from `manager` using WSL shell
+  - `ssh-copy-id 192.168.102.2`
+  - `ssh-copy-id 192.168.102.3`
   - You can now ssh without a password
 - Test Ansible access
   - Exit back to session on `manager`
@@ -1150,7 +1156,7 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on `manager` (configuration files, playbook to create firewalls , and the jinja template)
+- Create files on `manager` (configuration files and playbooks to create firewalls)
   - [firewall2a.yml](ansible/firewall2a.yml)
   - [firewall2a.cfg](ansible/firewall2a.cfg)
   - [firewall2b.yml](ansible/firewall2b.yml)
@@ -1183,7 +1189,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
     - [branch2-push.yml](ansible/branch2-push.yml)
   - `ansible-playbook -i inventory-api branch2-push.yml`
     - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
-      - For example, create a Windows 10 workstation on branch2 and set static IP information
+      - For example, create a Windows 11 workstation on branch2 and set static IP information
       - 10.0.2.25/24 DNS 8.8.8.8 and gateway 10.0.2.1
 - Test that ansible can still manage firewall2 cluster members
   - `ansible all -m ping`
