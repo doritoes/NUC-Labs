@@ -859,9 +859,12 @@ By default URL categorization occurs in the background. First attempts to a prev
 
 ## Add Application Control layer
 NOTE These changes can likely be done using Ansible and the API. This is not included in this Lab at this time.
-- Open the Access Policy and find the section **General Internet access**
+- From `manager` open SmartConsole and click **SECURITY POLICIES**
+- Open the **Lab Policy** and click Access Control > Poliy
+  - If you don't see the Lab_Policy tab, click the `+` icon, and select Lab_Policy from the list
+- Find the section **General Internet access**
 - Find the rule **Web access**
-- Change action from **Accept** to **Inline Layer > New Layer**
+- Change action from **Accept** to **Inline Layer > New layer**
   - Name: **Internet Control**
   - Blades:
     - **Firewall** (checked)
@@ -869,11 +872,11 @@ NOTE These changes can likely be done using Ansible and the API. This is not inc
   - Sharing: <ins>Check</ins> Multiple policies and rules can use this layer
   - Advanced > Implicit Cleanup Action: **Accept**
   - Click **OK**
-- Update the cleanup sub-rule
+- Update the new cleanup sub-rule
   - Rename **Allow remaining traffic**
   - Action: **Accept**
-  - Track: **Log**
-- Add these sub rules above the cleanup rule
+  - Track: **Log**, then enable **Accounting**
+- Add these sub rules <ins>above</ins> the cleanup rule
   - Subrule 1
     - Name: Block bad sites
     - Source: *Any
