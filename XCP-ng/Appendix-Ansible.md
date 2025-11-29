@@ -497,8 +497,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Testing
     - Test access from `branch1-1` to the shared folders by different domain users
       - For example, with juliette.larocco
-        - \\file-1
-        - \\file-1\IT
+        - `\\file-1`
+        - `\\file-1\IT`
         - create a text file to confirm read/write permissions
 - Configure SQL server **sql-1**
   - Complete initial setup and set administrator password
