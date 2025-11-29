@@ -569,6 +569,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
+  - This is a good opportunity to increase the display resolution (e.g. 1440 x 900)
   - Set up Domain Controller for IDC
     - Log in to `dc-1`
     - Disable the Windows Firewall on `dc-1`
@@ -591,7 +592,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - While appeared to freeze while installing, successfully installed Wireshark, though Npcap is probably broken
     - Create a domain account with permissions needed for the identity collector
       - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
-        - `powershell -ExecutionPolicy .\bypass idc-user.ps1`
+        - run on `dc-1`
+        - `powershell -ExecutionPolicy bypass .\idc-user.ps1`
   - Install Check Point Identity Collector for Windows
     - How to Download / Obtain the Identity Collector
       - From the SMS
