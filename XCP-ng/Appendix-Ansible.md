@@ -605,10 +605,10 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Go back to `manager` WSL shell
           - Copy the client file: (modify the path the actual path you found)
             - `scp ansible@192.168.41.20:/var/log/opt/CPsuite-R82/fw1/tmp/nacClients/CPIdentityCollector.msi .`
-          - On `manager` use the file explorer to open the Linux > Ubuntu-22.04 > home > ansible path
+          - On `manager` use the file explorer to open the Linux > Ubuntu-24.04 > home > ansible path
           - Copy the installation package file (e.g. R81 file name is CPIdentityCollector.msi) to your desktop or another convenient location
-          - Next open a connection to \\10.0.1.11
-          - Athenticated as `AD\juliette.larocco`
+          - Next open a connection to `\\10.0.1.11`
+          - Athenticate as `AD\juliette.larocco`
           - Change to the IT folder
           - Paste the file here so it can be accessed from other systems
       - Official source
@@ -622,6 +622,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - This is the same paywalled client
     - Log in to `idc-1` as `AD\Juliette.LaRocco2`
     - Copy the installation package to `idc-1` and install the Identity Collector
+      - Copy from `\\File-1\IT` to local system before installing
     - Allow Identity Collector in the Windows Firewall on `idc-1`
       - Click **Start** > type **Windows Defender Firewall**
       - Click **Allow an app or feature through Windows Defender Firewall**
@@ -632,7 +633,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Note the apps should be allowed for the Domain profile (checked)
       - Click **OK**
     - Configure Identity Collector
-      - Back on `IDC-1`, launch the Identity Collector app (it requires Administrative permissions to run)
+      - Stil on `idc-1`, launch the Identity Collector app (it requires Administrative permissions to run)
       - Ribbon menu > **Domains**
         - Click icon for New domain
           - Name: **xcpng.lab**
@@ -670,7 +671,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Ribbon menu > **Query Pools**
         - Click the **New** icon
           - Name: **Corp AD**
-          - Select all Identity Sources (check **DC-1**)
+          - Select all Identity Sources (check **dc-1**)
           - Click **OK** and then click **OK**
       - Ribbon menu > **Filters**
         - Click the **New** icon
@@ -680,7 +681,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - Click "**+**" to add it
             - Click **OK** then click **OK**
       - Left menu > **Gateways**
-        - Right click in the open spec and then click **Add**
+        - Right click in the open space and then click **Add**
           - Name: **firewall1**
           - IP Address: **10.0.1.1**
           - Shared secret: **Checkpoint123!**
@@ -697,11 +698,12 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Preferred DNS: **10.0.1.10**
   - Alternate DNS: *blank*
 - Join to domain
+  - Close out all the open programs (i.e., SmartConsole)
   - Open administrative powershell
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
-- Generally, you will still use the local account on `manager`
+- Generally, you will still use the local account on `manager` for the rest of this Lab
   - this gives easy access to the files and configuration you have already built
 
 ## Configure DMZ Servers
@@ -714,10 +716,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
       - It is OK for a warning to display that it was unable to call Open vSwitch: https://ubuntuforums.org/showthread.php?t=2495406
-  - Give permissions to user ansible
-    - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
+      - Confirm: `ip a`
   - set up ssh key auth
-    - from `manager`
+    - from `manager` WSL shell
       - `ssh-copy-id 192.168.31.11`
   - Update file `inventory`
     - uncomment dmzserver 192.168.31.11
@@ -727,6 +728,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - [ssl.conf.j2](ansible/ssl.conf.j2)
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
+      - In testing had to re-run this playbook. The package updates are slow through our lab firewall1, and the first run it gets hash mismatches.
   - Testing
       - From `branch1-1`:
         - https://192.168.31.11
@@ -754,7 +756,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Log back in as `AD\Juliette.LaRocco2`
     - Open administrative powershell
     - `Install-WindowsFeature Web-Server -IncludeManagementTools`
-    - `Install-WindowsFeature -Name Web-ASP`
+    - `Install-WindowsFeature Web-ASP`
   - Test:
     - From `dmz-iis`: http://localhost
     - From `branch1-1`:
