@@ -30,5 +30,5 @@
         name: Branch_Community
         comments: VPN connects branch2 and branch3 to branch1
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
