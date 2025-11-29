@@ -543,12 +543,12 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Server Name: **.\SQLEXPRESS**
       - Check **Trust server certificate**
       - Click **Connect**
-    - Create folder: F:\MSSQL\DATA
-    - In object explorer, right click Databases > New Database
-      - Database name: product_dev
-        - product_dev path: F:\MSSQL\DATA
-        - product_dev_log path: F:\MSSQL\DATA
-      - Click OK
+    - Create folder: **F:\MSSQL\DATA**
+    - In object explorer, right click **Databases** > **New Database**
+      - Database name: **product_dev**
+        - product_dev path: **F:\MSSQL\DATA**
+        - product_dev_log path: **F:\MSSQL\DATA**
+      - Click **OK**
 
 - Configure Check Point Identity Collector server **idc-1**
   - Complete initial setup and set administrator password
