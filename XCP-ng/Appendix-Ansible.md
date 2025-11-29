@@ -797,21 +797,25 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab
     - Expand Domains: xcpng.lab
+    - Expand xcpng.lab
     - Right-click **Distribute Root CA Certificate** from the tree, then click **Edit**
     - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
-      - Import `c:\outbound.cer`
-      - Accept the defaults Next, Next, Finish
+      - Import `c:\outbound.cer`, **OK**
+      - Accept the defaults **Next**, **Next**, **Finish**
   - Update `Lab_Policy` https inspection rules ("Outbound Policy")
+    - Log back into `manager`
     - Download and run branch1-https-policy.yml [branch1-https-policy.yml](ansible/branch1-https-policy.yml)
       - `ansible-playbook -i inventory-api branch1-https-policy.yml`
-      - Bypass by source host
+      - This creates bypass rule by source host
     - Add second rule ("HTTPS services - recommended bypass" did not show in the API's updatable objects list)
+      - SECURITY_POLICIES > HTTPS Inspetion > Outbound Policy
       - Name: Exceptions for recommended imported services
       - Source:
         - *Any
       - Destination:
         - Import > Updatable Objects >  **HTTPS services - recommended bypass**
+        - Make sure you remove "Internet" from the destination column
       - Services:
         - HTTPS default services
       - Action:
@@ -841,17 +845,15 @@ In this step we will import the Check Point ICA certificate and also distribute 
     - Right click **Distribute Root CA Certificate** from the tree and click **Edit**
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
-      - Import the file, Next, Next, Finish
+      - Import the file, **OK**, **Next**, **Next**, **Finish**
 - You will now be able to view User Check pages correctly (for blocked site message, etc.)
-  - `gpupdate /force` will trigger an update
-  - closing/re-opening the browser can solve caching issues
-  - logging out and back in may also help
  
 NOTE As this point no HTTPS inspection will occur, until we enable the application control layer, below.
 
 ## Change website categorization to Hold mode
 By default URL categorization occurs in the background. First attempts to a previously unknown URL will succeed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
 
+- Log back in to `manager` and open a WSL shell
 - Download and run branch1-https-advanced.yml [branch1-https-advanced.yml](ansible/branch1-https-advanced.yml)
   - `ansible-playbook -i inventory-api branch1-https-advanced.yml`
 
