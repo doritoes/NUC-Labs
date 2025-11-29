@@ -9,7 +9,7 @@
         feed_retrieving_interval: 00:05
         httpi_non_standard_ports: true
         internal_error_fail_mode: allow connections
-        resource classification:
+        resource_classification:
           mode: hold
     - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
