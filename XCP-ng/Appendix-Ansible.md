@@ -489,7 +489,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Follow the wizard and use defaults (e.g., assign letter F:)
         - Set the volume label to **NETDRIVE**
     - Download and run file-shares.ps1 from an administrative powershell [file-shares.ps1](powershell/file-shares.ps1)
-      - `powershell -ExecutionPolicy Bypass file-shares.ps1`
+      - `powershell -ExecutionPolicy Bypass .\file-shares.ps1`
       - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file
         - this causes an error when running the script, but the rest is successfully configured
         - you can add another test user in Finance OU if you want; that would avoid this message
