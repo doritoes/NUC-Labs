@@ -1219,7 +1219,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
 ## VPN
-- New on R82: Default Enhanced Link Selection interfaces are missing from firewall1
+- New on R82: Default Enhanced Link Selection interfaces are missing from firewall1 and firewall2
   - firewall1 object
     - IPSec VPN > Enhanced Link Selection
     - Interfaces > Add
@@ -1251,7 +1251,6 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Testing
   - Generate some test traffic
     - `ansible all -m ping`
-    - 192.168.102.2 and 192.168.102.3 will fail now (as soon as VPN tunnels come up)
   - DHCP traffic from `branch2-1` will automatically bring up the tunnel
     - Give it a little time, or reboot `branch2-1` from console
   - In SmartConsole open a new Log tab
@@ -1264,7 +1263,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - Also, from the firewall cluster active member, use `vpn tu`
         - `vpn tu` opens an interactive menu
         - `vpn tu tlist` lists all the tunnels at once
-- SSH to each firewall and accept the keys
+- From `manager` ssh to to firewall2a and firewall2b on their internal IP addresses and accept the keys
   - `ssh 10.0.2.2`
   - `ssh 10.0.2.3`
 - Update `inventory` file
@@ -1273,14 +1272,15 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Retest `ansible all -m ping`
 
 ## Configure branch2-1
-- Log in for the first time at the console
+- Log in to `branch2-1` for the first time at the console
 - Open administrative powershell
   - Confirm IP address via DHCP is working
+    - from commandline: `ipconfig /all`
   - Rename workstation
     - `Rename-Computer -NewName branch2-1 -Restart`
 - Test internet access
-  - PROBLEM starting R82 with dropping invalid UDP checksums
-  - Usually a reboot solves the issue
+  - PROBLEM starting R82 with dropping invalid UDP checksums, breaking DNS lookups and Internet access
+  - Usually a reboot of the firewalls solves the issue
   - Further steps you can take:
     - fw ctl set int udp_is_verify_cksum 0
     - fw ctl get int udp_is_verify_cksum
@@ -1303,7 +1303,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
   - Review logs in SmartConsole
     - Note that the Internet web traffic goes out the branch2 ISP connection
     - Note that each branch can go out its own Internet connection
-    - Traffic like DNS and access to file-1 go over the VPN tunnel
+    - Traffic like DNS and access to `file-1` go over the VPN tunnel
 
 ## Enable Application Control and Identity Awareness
 - Edit cluster **firewall2**
