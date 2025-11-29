@@ -936,13 +936,16 @@ NOTE These changes can likely be done using Ansible and the API. This is not inc
   - Test confirm that Health and Financial Sites are not inspected
     - https://webmd.com - the certificate will be the original certificate, not from xcpng.lab
     - https://chase.com - the certificate will be the original certificate, not from xcpng.lab
+    - Review the logs in SmartConsole, paying attention to the logs where the action is HTTPS Bypass
+      - Note some deploy.static.akamaitechnologies.com hitting the recommended bypass list
+      - Note that connections to https://192.168.31.11 with the self-signed cert are bypassed, since they match the rule "Internal web access to DMZ", which doesn't have the inline layer with application control and URL filtering enabled
 
 ## Identify Awareness and access roles
 The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
 
 A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
 
-Here are the steps for configuring IDC in our Lab. **Please Note** you will need to apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) for the remote firewalls firewall2 and firewall3 to work.
+Here are the steps for configuring IDC in our Lab. **Please Note** you will need to apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) for the remote firewalls firewall2 and firewall3 to work. These steps are included below.
 
 - Configure in SmartConsole on `manager`
   - Create LDAP account unit
