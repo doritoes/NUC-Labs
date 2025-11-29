@@ -1203,7 +1203,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
     - Click Install
       - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
-  - Manual  process for firewall2a and fireall2b
+  - Manual  process for firewall2a and firewall2b
     - SSH or console to sms
     - `clish`
     - `installer check-for-updates`
