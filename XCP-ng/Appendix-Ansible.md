@@ -540,7 +540,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Click **Close** and confirm
   - Test
     - Launch **SQL Server Management Studio (SSMS)**
-      - Server Name: .\SQLEXPRESS
+      - Server Name: **.\SQLEXPRESS**
       - Check **Trust server certificate**
       - Click **Connect**
     - Create folder: F:\MSSQL\DATA
