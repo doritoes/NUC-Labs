@@ -4,7 +4,26 @@ This appendix follows the next steps after completing [Appendix - Terraform and 
 Notes:
 - The Linux-based VM templates have the user `ansible` created. SSH with RSA keys still needs to be enabled.
 
-IMPORTANT In the R81.20 version of this Lab, RDP was fully functional. So far it's not working in Windows Server 2025/Windows 11. Could be a GPO issue. Turning off require NLA on the destination workstation didn't solve the issue.
+IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully functional. So far it's not working in this  Windows Server 2025/Windows 11 environment. Could be a GPO issue.
+- Can RDP from branch1-1 to file-1 as AD\juliette.larocco2, not branch3-1 (for example)
+- Turning off require NLA on the destination workstation didn't solve the issue
+- Run rsop.msc on the target system
+  - Computer configuration > Windows Settings > Secruity Settings > Local Policies
+    - User Rights Assignments > Allow log on through Remote Desktop Services Properties
+    - Security Options
+- Review Default Domain Policy
+  - Computer Configuration > Policies > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host
+- Check Get-NetConnectionProfile, DomainAuthenticated
+- Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > User Rights Assignment
+  - Policy: Allow log on through Remote Desktop Service
+    - default: on workstation and servers: administrators, remote desktop users
+    - default: on domain controllers: administrators
+- on `DC-1`, `setspn -L dc-1`, not krbtgt not in list
+  - ipconfig /flushdns
+  - ipconfig /registerdns
+  - net stop netlogon
+  - net start netlogon
+- Confirm credential guard is not enabled
 
 # Build the Environment using Terraform
 - `terraform plan`
