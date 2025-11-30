@@ -59,7 +59,7 @@ Members of the Domain Admins group already have password query permission by def
   - Open `branch1-1` and click on tab LAPS
   - Click Show password to reveal the randomized password
   - If you try to log in to `branch1-1` console as .\Administrator with this password, you will find the local Administrator account is Disabled
-    - The main benefit is servers and PCs a local Administrator account
+    - The main benefit in this lab is for servers and PCs a local Administrator account
     - It doesn't take care of other local accounts with administrator rights on the Windows 11 systems (for example I used the user "Lab" to intially set up Windows 11; that account is not affected by LAPS with these settings)
 
 NOTES
@@ -67,3 +67,22 @@ NOTES
 - You can enable encryption of the password and lock down who can decrypt it
 - You can force expiration of the LAPS password so it will update sooner
 - You can use power shell to receive passwords and expire them
+- Use Ansbible or powershell to enable local Administrator accounts on all Windows 11 workstations and default the local user we created when we originally built the workstations
+
+Example tasks:
+```
+- name: Enable the local administrator account
+  ansible.windows.win_user:
+    name: administrator
+    password: 'YourStrongPassword!'
+    account_disabled: false
+    password_never_expires: true
+    state: present
+- name: Disable the local administrator account
+  ansible.windows.win_user:
+    name: Lab
+    password: 'YourStrongPassword!'
+    account_disabled: true
+    password_never_expires: false
+    state: present # or absent to remove it
+```
