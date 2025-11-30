@@ -31,7 +31,7 @@ Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed. In th
   - Example Lab_Policy_Branches:
     - Add rule to Core Services section
       - Name: Allow WinRM for Ansible
-      - Source: support
+      - Source: Manager (you would use "support" there, and log in as Juliette.Larocco instead of "Lab")
       - Destination: LAN_Networks_NO_NAT
       - Services:
         - winrm_http_5985
