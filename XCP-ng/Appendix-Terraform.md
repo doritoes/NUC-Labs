@@ -28,12 +28,11 @@ Notes:
 - Windows Servers have a standard 180 evaluation period
 - Check Point systems have a 15-day trial by default (request a [30-day evaluation license](https://community.checkpoint.com/t5/General-Topics/How-to-Request-an-Evaluation-License-for-Security-Gateways-and/td-p/40391) as needed)
 - Creating your original templates from "Other installation media" was required for Windows systems
-  - 🌱 need to test if this is still an issue with XCP-ng 8.3
   - creating Windows systems from the built-in "Windows" templates fail to boot when created using Terraform
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 - The are known issues with Identity Awareness
-  - 🌱 The Identity Collector current version R82 sees to be required; it's not easily available from R81.20 systems. You might need a paid support account with Check Point, or try to grab from a R82 systems
+  - The Identity Collector current version R82 is not easily available; you need a paid support account with Check Point
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
