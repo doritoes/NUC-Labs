@@ -70,5 +70,5 @@
         state: present
         cluster_version: R82
         comments: firewall3 cluster for Branch 3
-    - name: publish changes
+    - name: Publish changes
       cp_mgmt_publish:
