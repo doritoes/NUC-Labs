@@ -4,7 +4,7 @@ This appendix follows the next steps after completing [Appendix - Terraform and 
 Notes:
 - The Linux-based VM templates have the user `ansible` created. SSH with RSA keys still needs to be enabled.
 
-IMPORTANT In the R81.20 version of this Lab, RDP was fully functional. So far it's not working in Windows Server 2025/Windows 11. Could be a GPO issue.
+IMPORTANT In the R81.20 version of this Lab, RDP was fully functional. So far it's not working in Windows Server 2025/Windows 11. Could be a GPO issue. Turning off require NLA on the destination workstation didn't solve the issue.
 
 # Build the Environment using Terraform
 - `terraform plan`
@@ -1075,7 +1075,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Services: ***Any**
     - Action: **Accept**
     - Track: **Log** > **Accounting**
-  - Add another subrule just below to deny all access to ipgiraffe.com
+  - Add another subrule just below to deny all access to ipchicken.com
     - Name: **Deny all nonsupport access to sites**
     - Source: ***Any**
     - Destination **.ipchicken.com**
@@ -1085,7 +1085,7 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
   - **Publish** changes and push Lab_Policy
   - Test access, access control, enforcement of user identity works and is logged
     - http://maliciouswebsitetest.com/ should be blocked
-    - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
+    - https://ipchicken.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
     - https://ipchicken.com should be blocked when user Lab is logged in on `manager`
     - curl https://ipchicken.com from dmz-apache is also blocked
 
@@ -1415,6 +1415,7 @@ The following manual changes can likely be done using Ansible and the API. That 
   - From systems where you are logged in from as `AD\juliette.larocco` you should be able to:
     - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
       - PROBLEM Windows Server 2025 and Windows 11 seem to have change to Remote Desktop that requires a GPO update
+      - Turning off require NLA on the destination workstation didn't solve the issue.
     - Access https://ipchicken.com
   - RDP to a system where the same user is already logged in will fail
   - If branch2 identities are not working, check if they are showing on the gateways (pep show user all)
@@ -1643,6 +1644,7 @@ Steps:
   - Test that access to ipchicken.com works for `AD\juliette.larocco'
   - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2') from a computer at Branch 1
   - PROBLEM the firewall allows it but Windows Server 2025/Windows 11 is not allowing the access. Could be GPO issue.
+    - Turning off require NLA on the destination workstation didn't solve the issue.
 
 # Demonstration
 NOTE that the VPN does not allow traffic between Branch 2 and Branch 3
@@ -1662,8 +1664,8 @@ Access Demonstration:
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall1 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
-  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
-  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+  - https://ipchicken.com should be allowed when Juliette.Larocco is logged in ✅
+  - https://ipchicken.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch1-1 even though user Lab shouldn't work
 - branch2-1
   - http://192.168.31.10 ✅
@@ -1676,8 +1678,8 @@ Access Demonstration:
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall2 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
-  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
-  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+  - https://ipchicken.com should be allowed when Juliette.Larocco is logged in ✅
+  - https://ipchicken.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch2-1 even though user Lab shouldn't work
 - branch3-1
   - http://192.168.31.10 ✅
@@ -1690,8 +1692,8 @@ Access Demonstration:
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall3 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
-  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
-  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+  - https://ipchicken.com should be allowed when Juliette.Larocco is logged in ✅
+  - https://ipchicken.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch3-1 even though user Lab shouldn't work
 
 Optional example how to set Edge browser home page to http://home
