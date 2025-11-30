@@ -42,7 +42,7 @@ Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed. In th
 ## Enable WinRM using GPO
 See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/watch?v=M18yDGAd9TU
 - Log in to `the domain controller (`dc-1`)
-- create the GPO using administrative powershell
+- Create the GPO using administrative powershell
   - `New-GPO -Name "Enable WinRM for Ansible Management" | New-GPLink -Target "DC=xcpng,DC=lab"`
 - Open Group Policy Management Console (GPMC)
   - Click **Start**, search for **Group Policy Management** and click on it
@@ -50,7 +50,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
   - Expand Domains: xcpng.lab
   - Right-click **Enable WinRM for Ansible Management** from the tree, then click **Edit**
   - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\System Services
-  - Find **Windows Remote Service (WS-Managmeent)** and enable automatic startup
+  - Find **Windows Remote Management (WS-Managmeent)** and enable automatic startup
     - <ins>Check</ins> Define this policy setting
     - Select **Automatic**
     - Click **Apply** and then click **OK**
@@ -62,7 +62,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
     - Second failure: Restart the Service
     - Subsequent failure: Restart the Service
     - Restart file counter after: 0 days
-    - Restart service after : 1 minutes
+    - Restart service after: 1 minutes
     - Click **Apply** then click **OK**
   - Go to Computer Configuration -> Policies -> Administrative Templates -> Windows Components -> Windows Remote Management (WinRM) -> WinRM Service
   - Enable **Allow remote server management through WinRM**
@@ -80,18 +80,18 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
       - Enable **Allow Remote Shell Access**
       - Click **Apply** and then click **OK**
 - Enabling https
-  - Sadly as of this writing there is no ay to enable HTTPS using GPO
+  - Sadly as of this writing there is no way to enable HTTPS using GPO
   - There is the command to enable it; you could place it in a login script to enable WinRM and make it only use HTTPS
     - `winrm quickconfig -transport:https`
     - this requires a certificate to already be created
 - Testing
-  - Log in to a workstation (`branch1-1`)
+  - Log in to a workstation (`branch1-1`, `branch2-1`, `branch3-1`)
     - Wait for group policy to roll out, or run `gpupdate /force`
     - To check that WinRM settings on the computer are configured thorugh GPO
       - open administrative shell
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
-  - Log in to a workstation (`branch2-1`)
+  - Log in to a server (`file-1`, `sql-1`)
     - Wait for group policy to roll out, or run `gpupdate /force`
     - To check that WinRM settings on the computer are configured thorugh GPO
       - open administrative shell
