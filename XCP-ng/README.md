@@ -17,16 +17,7 @@ Mission:
 - Test automation that is available
 
 Left to do:
-- 🌱 Tor transparent proxy
 - 🌱 VPN transparent proxy
-- 🌱 L2 OPNsense firewall
-- 🌱 Get Windows 11 working
-
-Out of scope:
-- XCP-ng Center
-  - Windows-based management tool for XCP-ng and Citrix® XenServer® environments
-  - Center is no longer end of life/EOL
-  - https://github.com/xcp-ng/xenadmin
 
 Materials:
 - Lab router  providing DHCP and internet access
