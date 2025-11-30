@@ -18,7 +18,7 @@
         color: dark blue
         comments: branch3 broadcast address
         state: present
-    - name: Branch 3 LAN network
+    - name: branch 3 LAN network
       check_point.mgmt.cp_mgmt_network:
         name: branch3_lan
         subnet: 10.0.3.0
@@ -32,7 +32,7 @@
           method: hide
           install_on: firewall3
         state: present
-    - name: Branch 3 LAN DHCP workstations
+    - name: branch 3 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
         name: Branch 3 LAN Workstation DHCP scope
         ip_address_first: 10.0.3.20
@@ -55,5 +55,5 @@
         - firewall3
         name: remote_branch_firewalls
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
