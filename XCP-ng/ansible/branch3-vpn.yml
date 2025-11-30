@@ -4,7 +4,7 @@
   connection: httpapi
   gather_facts: false
   tasks:
-    - name: set-vpn-community-star
+    - name: Add VPN star community
       check_point.mgmt.cp_mgmt_vpn_community_star:
         center_gateways: firewall1
         satellite_gateways:
@@ -32,5 +32,5 @@
         name: Branch_Community
         comments: VPN connects branch2 and branch3 to branch1
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:
