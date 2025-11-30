@@ -30,7 +30,7 @@ How to
   - This sets the inheritable permission at the root of the domain
   - You can also choose an OU (e.g., OU=Workstations,DC=xcpng,DC=lab)
 
-## Grant password query and expirtion permissions
+## Grant password query and expiration permissions
 Members of the Domain Admins group already have password query permission by default.
 - `Set-LapsADReadPasswordPermission -Identity "DC=xcpng,DC=lab" -AllowedPrincipals @("AD\ITGroup")`
 - `Set-LapsADResetPasswordPermission -Identity "DC=xcpng,DC=lab" -AllowedPrincipals @("AD\ITGroup")`
