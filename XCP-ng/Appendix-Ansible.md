@@ -4,7 +4,7 @@ This appendix follows the next steps after completing [Appendix - Terraform and 
 Notes:
 - The Linux-based VM templates have the user `ansible` created. SSH with RSA keys still needs to be enabled.
 
-IMPORTANT In the R81.20 version of this Lab, Identity Awareness was fully functional. So far it's not working in R82, well at least not without IDC R82, which is paywalled.
+IMPORTANT In the R81.20 version of this Lab, RDP was fully functional. So far it's not working in Windows Server 2025/Windows 11. Could be a GPO issue.
 
 # Build the Environment using Terraform
 - `terraform plan`
@@ -1642,6 +1642,7 @@ Steps:
 - Test access
   - Test that access to ipchicken.com works for `AD\juliette.larocco'
   - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2') from a computer at Branch 1
+  - PROBLEM the firewall allows it but Windows Server 2025/Windows 11 is not allowing the access. Could be GPO issue.
 
 # Demonstration
 NOTE that the VPN does not allow traffic between Branch 2 and Branch 3
