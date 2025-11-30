@@ -1306,10 +1306,11 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
     - Traffic like DNS and access to `file-1` go over the VPN tunnel
 
 ## Enable Application Control and Identity Awareness
+- Log back in to `manager` and open SmartConsole
 - Edit cluster **firewall2**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
-    - AD Query
+    - **AD Query** and **Next**
     - Select an Active Directory: **xcpng.lab**
     - Username: **adquery**
     - Password: **YourStrongPassword123!**
@@ -1317,6 +1318,7 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - Failure message: User is not a domain administrator, as such AD Query will not work.
       - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
+      - Click **Finish**
     - Click **Identity Awareness** from tree on the left
     - <ins>Check</ins> Identity Collector, and click **Settings**
     - Click the "**+**" and add **idc-1**
@@ -1346,21 +1348,17 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - Click **OK**
       - Edit the new gateway and click **Test**
       - Click **Trust** and then click **OK**
-🌱 The following manual changes can likely be done using Ansible and the API. That could be a future effort.
+The following manual changes can likely be done using Ansible and the API. That could be a future effort.
 - Log back in to `manager` and log in to SmartConsole
 - Open policy **Lab_Policy_Branches**
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > Internet Control**
 - Update **Support** access role
-  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**- 
-    - Click **OK**
+  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
+  - Click **OK**
 
 ## HTTPS inspection
-- Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
-  - creating https rules, etc not supported until R82
-  - some outbound certificate commands function differently pre-R82
-  - `enable-https-inspection` will be added in the next version
 - Enable HTTPS inspection on **firewall2**
   - Open the cluster `firewall2`
   - Click on HTTPS Inspection
@@ -1386,16 +1384,20 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
       - Click Certificates and select the Trusted Root Certification Authorities tab
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
-  - Test identity access by visiting https://ipgiraffe.com
+  - Test https inspection bypass
+    - https://webmd.com
+    - https://chase.com
+  - Test identity access by visiting https://ipchicken.com
   - Test blocking of bad web sites: http://maliciouswebsitetest.com/
 
 ## Add Identity-Based Management
 - You should see login information passed to all the firewalls: firewall1, firewall2, and soon firewall3
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
-  - `pep show user all`
-  - PROBLEM in rht R82 lab this is not working
+  - from firewall expert mode:
+    - `pep show user all`
 - Add an access rule to the **Lab_Policy** and **Lab_Policy_Branches** policies
-  - TIP You can create in one policy and copy/paste it to the other
+  - Log back in to `manager` and open SmartConsole
+  - TIP You can create the rule in one policy and copy/paste it to the other
   - Section: add it to the section **Core Services**
   - Name: **RDP access for Support**
   - Source: **Support** (access role)
@@ -1412,7 +1414,11 @@ https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_
 - Test
   - From systems where you are logged in from as `AD\juliette.larocco` you should be able to:
     - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
-    - Access https://ipgiraffe.com
+      - PROBLEM Windows Server 2025 and Windows 11 seem to have change to Remote Desktop that requires a GPO update
+    - Access https://ipchicken.com
+  - RDP to a system where the same user is already logged in will fail
+  - If branch2 identities are not working, check if they are showing on the gateways (pep show user all)
+  - Made sure the implied_rules SK fix was applied
 
 # Configure Branch 3
 ## Add branch 3 to Domain Controller
@@ -1443,8 +1449,8 @@ Steps:
     - `set static-route default nexthop gateway address 192.168.103.254 on`
     - `save config`
 - Back on `manager` at the WSL shell, enable ssh key login to `firewall3a` and `firewall3b`
-  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.103.2`
-  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.103.2`
+  - `ssh-copy-id 192.168.103.2`
+  - `ssh-copy-id 192.168.103.3`
   - authenticate when prompted
   - You can now ssh without a password
 - Update file `inventory`, uncomment the IPs of firewall3a (192.168.103.2) and firewall2b (192.168.103.3)
@@ -1482,8 +1488,8 @@ Steps:
 - Edit cluster **firewall3**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
-    - AD Query
-    - Select and Active Directory: xcpng.lab
+    - **AD Query** and **Next**
+    - Select an Active Directory: **xcpng.lab**
     - Username: adquery
     - Password: YourStrongPassword123!
     - Click **Connect**
@@ -1512,11 +1518,11 @@ Steps:
     - Right-click firewall3 > Actions > Install Hotfix/Jumbo...
     - Leave it set to recommended jumbo
     - Click Verify
-      - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
+      - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.103.2, State=unititialized
     - Click Install
       - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
     - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
-  - Manual  process for firewall2a and fireall2b
+  - Manual  process for firewall3a and fireall3b
     - SSH or console to sms
     - `clish`
     - `installer check-for-updates`
@@ -1531,19 +1537,7 @@ Steps:
       - `installer check-for-updates`
       - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
-- At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (sms, firewall3a, firewall3b)
-  - `clish`
-  - `installer check-for-updates`
-  - `installer download-and-install [tab]`
-  - select the applicable JHF hotfix bundle by number
-  - Approve the reboot
-    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorized downloads, not performing update`
-      - `installer agent update`
-      - `installer agent disable`
-      - `installer angent enable`
-      - `installer check-for-updates`
-- Configure `idc-1`- for the  new firewall
+- Configure `idc-1`- for the  new firewall3 
   - Log in to `idc-1` as `AD\juliette.larocco2`
   - From the ribbon menu click Filters
     - Edit filter **Prod**
@@ -1569,7 +1563,7 @@ Steps:
   - Check **Enable HTTPS inspection**
   - Set to **Full inspection**
   - Click **OK**
-  - Publish and install policy **Lab_Policy_Branches**
+  - Publish and install policy **Lab_Policy_Branches** (both firewall2 and firewall3)
 
 ## VPN
 - New on R82: Default Enhanced Link Selection interfaces are missing from firewall1
@@ -1591,9 +1585,10 @@ Steps:
 - Testing
   - Generate some test traffic
     - `ansible all -m ping`
+    - rebooting branch3-1 also generates DHCP traffic to bring the tunnel up
 - SSH to each firewall and accept the keys
-  - `ssh 10.0.2.2`
-  - `ssh 10.0.2.3`
+  - `ssh 10.0.3.2`
+  - `ssh 10.0.3.3`
 - Update `inventory` file
   - change firewall3a to 10.0.3.2
   - change firewall3b to 10.0.3.3
