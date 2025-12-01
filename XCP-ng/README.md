@@ -1,6 +1,8 @@
 # XCP-ng Lab
 The mission in this Lab is to set up a virtual Lab environment hosted on a NUC running XCP-ng. This replaces the previous Lab running on ESXi, which is not longer an option for home labs after the Broadcom acquisition of VMware.
 
+UPDATE This lab is getting a refresh for XCP-ng 8.3 LTS. This is imporant since prior versions did not support a virtual VTPM, which affects Windows 11 and Windows server.
+
 Why it's perfect to the lab:
 - Main goal of XCP-ng is to be a fully integrated and dedicated virtualization platform, without requiring any deep Linux or system knowledge
 - Meant to be managed in a centralized manner via Xen Orchestra, regardless the fact you have only one host or thousand of them
@@ -15,20 +17,7 @@ Mission:
 - Test automation that is available
 
 Left to do:
-- 🌱 Tor transparent proxy
 - 🌱 VPN transparent proxy
-- 🌱 L2 OPNsense firewall
-- 🌱 Get Windows 11 working
-
-Out of scope:
-- XCP-ng Center - Windows client
-  - Center is no longer end of life/EOL
-  - https://github.com/xcp-ng/xenadmin
-
-IMPORTANT:
-- You must install XCP-ng 8.3 or later to run Windows 11 (support VTPM)
-  - https://updates.xcp-ng.org/isos/8.3/
-  - Currently in Beta, this may be in scope for you in a Lab environment
 
 Materials:
 - Lab router  providing DHCP and internet access
@@ -77,12 +66,25 @@ IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interface
 
 # Appendices
 - [Appendix - Lab Architecture](Appendix-Architecture.md)
-- [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
 - [Appendix - Active Directory Notes](Appendix-Active_Directory_Notes.md)
-- [Appendix - Ansible Manage Windows](Appendix-Ansible_Manange_Windows.md)
 - [Appendix - Windows Domain Controller](Appendix-Windows_DC.md)
-- [Appendix - Windows Files Server](Windows_File_Server.md)
-- 🌱 [Appendix - Layer 2 Firewall](Appendix-L2_Firewall.md)
+- [Appendix - Windows File Server](Windows_File_Server.md)
+- [Appendix - Layer 2 Firewall](Appendix-L2_Firewall.md)
+- [Appendix - Terraform](Appendix-Terraform.md)
+- [Appendix - Ansible Manage Windows](Appendix-Ansible_Manange_Windows.md)
+- [Appendix - Convert Guacamole to HTTPS](Appendix-Guacamole_https.md)
+- [Appendix - Debloat Windows 11](Appendix-Debload-Windows11.md)
+- [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- [Appendix - Create SSH Key](Appendix_Create_SSH_Key.md)
+- [Appendix - L2 Firewall](Appendix-L2_Firewall.md)
+- [Appendix - Build VyOS ISO with VM agents](Appendix_Build_VyOS_ISO_with_VM_agents.md)
+- Installing older operating systems for the pentesting lab
+  - [Ubuntu 4.10](Appendix-Ubuntu-4.10.md)
+  - [Windows XP](Appendix-Windows-XP.md)
+  - [Windows 7](Appendix-Windows-7.md)
+  - [Windows 8.1](Appendix-Windows-8.1.md)
+  - [Windows Vista](Appendix-Windows-Vista.md)
+  - [Windows Server 2003](Appendix-Windows-Server-2003.md)
 
 # Other Notes
 ## Other Install Media
@@ -101,7 +103,7 @@ With Windows, install the tools from https://www.xenserver.com/downloads
 
 If your distribution of Linux is not recognized by the install script
 - Download the tools for Linux from https://www.xenserver.com/downloads
-- Install while specifying the distribution and major release when installing. Here is an example for Check Point Gaia OS, based on RHEL EL7.
+- Install while specifying the distribution and major release when installing. Here is an example for Check Point Gaia OS R82, based on RHEL EL8.
 - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
 - `cd LinuxGuestTools-8.4.0-1`
-- `./install -d rhel -m el7`
+- `./install -d rhel -m el8`

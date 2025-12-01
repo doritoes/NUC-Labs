@@ -1,0 +1,24 @@
+---
+- name: Branch 1 https policy
+  hosts: check_point
+  gather_facts: false
+  connection: httpapi
+  tasks:
+    - name: Add bypasses by host
+      check_point.mgmt.cp_mgmt_https_rule:
+        layer: Default Layer
+        name: Exceptions by host
+        position: top
+        source:
+          - dmz-apache
+          - sms
+        destination:
+          - Internet
+        service:
+        - HTTPS default services
+        action: Bypass
+        comments: Bypass for certain source hosts
+        track: Log
+        state: present
+    - name: Publish changes
+      check_point.mgmt.cp_mgmt_publish:

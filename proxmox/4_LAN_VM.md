@@ -305,7 +305,7 @@ Steps:
       - Set to "Do not use any media"
   - At the proxmox console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters (some use /f to force the shutdown)
+    - type this exactly, spacing matters (some people add /f to force the shutdown)
 - Clone a new VM from `win10-lan`
   - Click on the VM win10-lan
   - Click More > Clone
@@ -333,7 +333,7 @@ Steps:
     - Create security questions for this account: be creative
     - Click **Not now**
     - Privacy: *disable all the settings* and then click **Accept**
-    - Experience: be creative and pick one, then click **Accept* (I chose Business)
+    - Experience: be creative and pick one, then click **Accept** (I chose Business)
     - Cortana: Click **Not now**
     - Configure the browser by clicking continue (opens the Edge web browser)
       - Click **Start without your data**
@@ -479,7 +479,7 @@ Steps:
       - Do not use any media
   - At the console, press **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters (some people as /f for force shutdown)
+    - type this exactly, spacing matters (some people add /f for force shutdown)
 - Clone a new VM from `win11-lan`
   - Click on the VM win11-lan (it should still be powered off)
   - Click More > Clone
@@ -835,6 +835,8 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Open the console to `server2025-lan-prep` and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+      - Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
+      - unable to remove microsoft edge
     - Wait as the process completes and the VM shuts down
 - Convert to a Template
   - Click on the VM `server2025-lan-prep`

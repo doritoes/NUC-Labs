@@ -1,0 +1,41 @@
+# Tested Ununtu 4.10 Warty Warthog Installation
+NOTE This is for the pentesting Lab environment.
+
+ISO: warty-release-install-amd64.iso
+- Template: Other install media
+- 1 vCPU
+- 2 GB RAM
+- 128GB hard drive
+- Boot firmware: bios
+
+Examining advanced settings:
+- NIC Realtek RTL8139
+- Viridian: enabled
+- VGA: disabled
+
+Steps:
+- Press ENTER to boot
+- Confirm language, Location, Keyboard
+- Enter the hostame and press enter
+- Accept "Erase entire disk"
+- **Yes**, write these changes to disk
+- **Continue** to finish installation
+- Eject the installation ISO
+- Extremely slow first boot
+- Select time zone and OK
+- Full name for the new user
+- Username for your account
+- Password
+- Download software from the Internet? **No**, this version is unsupported
+- Video: add or remove video resolutions for the X server to support, then **OK**
+- When setup is complete, **Ok**
+
+Testing:
+- mouse control was broken is uncontrollable
+  - press Ctrl-Alt-F2 (through F6) to switch to console and log in
+  - press Ctrl-Alt-F7 to switch back to gui
+  - to fix this in VirtualBox, you switch the pointing device to PS/2
+  - not able to figure out how to do this in XCP-ng
+- got IP address from OPNsense firewall
+- nslookup works
+- wget can read http sites like http://icanhazip.com but not https sites

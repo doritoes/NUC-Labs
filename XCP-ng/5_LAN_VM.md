@@ -6,25 +6,28 @@ NOTE You will need to upload/copy the appropriate ISO file to one of the SR's (s
 IMPORTANT Currently the VyOS router is using NAT to access the outside world. This means that the rest of the hosts in my Lab can't get to the 192.168.100.0/24 network. Buuut the inside network 192.168.100.0/24 can reach the Internet and the rest of my Lab network (NAS, printer, etc).
 
 # Ubuntu Desktop
+NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM, 20GB disk installs and runs without problem.
+
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Template: **Ubuntu Noble Numbat  24.04**
   - Name: **ubuntu-desktop-lan**
   - Description: **Ubuntu desktop on LAN network**
-  - CPU: **1 vCPU**
-  - RAM: **2GB**
+  - CPU: **2 vCPU**
+  - RAM: **4GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: *Select the Ubuntu 22.04 Desktop image you uploaded*
+  - Install: ISO/DVD: *Select the Ubuntu 24.04 Desktop image you uploaded*
   - Interfaces: select **Inside** from the dropdown
-  - Disks: **20GB** (default 10GB is NOT enough; minimum is 14.8GB)
+  - Disks: **25GB** (default 10GB is NOT enough; minimum is 25GB)
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console** tab
 - Follow the Install wizard per usual
+  - NOTE installation seemed to freeze at "Copying files" with less than 2 vCPUs, 4GB RAM
   - To remove the installation media, click the Eject icon
   - Press Enter to Reboot
 - Log in to the console and complete the first time wizard
-  - Skip, Skip, No, Next, Done
+  - Next, Skip, No, Next, Finish
 - Optionally let the Software Updater "Install Now"; we will be doing updates later from the command line later
   - However, you will need to let it finish before we can install the guest tools
 - Install guest tools
@@ -46,27 +49,26 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
       - you are reminded to reboot
     - `sudo reboot`
     - Eject guest-tools.iso
-    - Back in XO, the General tab will show the management tools are detected
+    - Back in XO, the VM's General tab will show the management tools are detected
 - Test the VM
   - Updates
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+    - reboot after updates are applied
   - Internet access using Firefox
 - Configure sharing your desktop
-  - See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts
-  - Settings > Sharing
-  - Enable the Sharing slider
-  - Click Remote Desktop
-  - Enable Remote Desktop
-  - Enable Remote Control
-  - Only Enable Legacy VNC Protocol if you must
-  - Under authentication, confirm the username <ins>and password</ins>
-    - a random password is set; you might want to change it to something more memorable  
+  - NOTE See https://askubuntu.com/questions/1482111/remote-desktop-ubuntu-22-04-lts for an older Ubuntu version
+  - Settings > System > Remote Desktop
+  - Enable the Desktop Sharing slider
+  - Enable Remote Control slider
+  - Under authentication, confirm the username and password
+    - a random password is set; you might want to change it to something more memorable
   - BEWARE that remote desktop is disabled when the screen is locked
     - see https://askubuntu.com/questions/1411504/connect-when-remote-desktop-is-on-login-screen-or-screen-locked-without-autolog
     - there are workarounds
 - Enable SSH access
   - `sudo apt install -y openssh-server`
-  - `sudo systemctl status ssh`
+  - `sudo systemctl enable --now ssh`
+  - `systemctl status ssh`
   - To secure it further (enable ufw firewall, etc.) see https://serverastra.com/docs/Tutorials/Setting-Up-and-Securing-SSH-on-Ubuntu-22.04%3A-A-Comprehensive-Guide
 - Power down the VM
 - Take a Snapshot
@@ -94,20 +96,20 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname desktop-lan`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Desktop on LAN" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu desktop on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Optionally create another VM from the same template and experiment
 
 # Ubuntu Server
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
-  - Template: **Ubuntu Jammy Jellyfish 22.04**
+  - Template: **Ubuntu Noble Numbat 24.04**
   - Name: **ubuntu-server-lan**
   - Description: **Ubuntu server on LAN network**
   - CPU: **1 vCPU**
   - RAM: **2GB**
   - Topology: Default behavior
-  - Install: ISO/DVD: **Select the Ubuntu 22.04 Server image you uploaded**
+  - Install: ISO/DVD: **Select the Ubuntu 24.04 Server image you uploaded**
   - Interfaces: select **Inside** from the dropdown
   - Disks: **20GB** (default 10GB is enough for the 4.3GB used)
   - Click **Create**
@@ -128,7 +130,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Recommend checking the box Install OpenSSH server
 - To remove the installation media, click the Eject icon
 - Press Enter to Reboot
-- Log in and check the system using Terminal
+- Use the Console to log in and check the system
   - Is the disk size correct? `df -h`
 - Install guest tools
   - Connect the guest-tools.iso (select it from the dropdown)
@@ -151,7 +153,7 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y    `
     - accept the messages (default values OK)
 - Power down the VM
-  - 'sudo poweroff' or use the XO stop icon
+  - `sudo poweroff` or use the XO stop icon
 - Convert to a Template
   - Click Advanced tab > Convert to template
 - Re-create the VM from the template
@@ -167,12 +169,14 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname server-lan`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu Server on LAN" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Ubuntu server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
 - Optionally create another VM from the same template and experiment
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
+IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
   - Template: **Windows 10 (64-bit)**
@@ -187,11 +191,8 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - Click **Create**
 - The details for the new VM are now displayed
 - Click Console
-- You will be prompted to press any key to boot from CD or DVD
-  - **Press any key**
-  - If you missed it, power cycle and try again
-- Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
+  - If you get prompted to press any key to boot from the CD or DVD, do so
+  - Confirm Language, formats, and keyboard then **Next**
   - Click **Install now**
   - Activate Windows: Click **I don't have a product key**
   - Select the OS to install: **Windows 10 Pro** (feel free to experiment) and click **Next**
@@ -203,12 +204,12 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
   - **Eject** the installation ISO
   - **Shift-F10** to open command prompt
     - `shutdown /t 0 /s`
-    - type this exactly, spacing matters
+    - type this exactly, spacing matters (some add /f to force the shutdown)
 - Click **Advanced** tab > **Convert to template**
 - Re-create the VM from the template
   - New > VM
   - Template: win10-lan
-  - Name: Rename from the VM from **win10-lan** to **win10-lan-ready**
+  - Name: Rename the VM from **win10-lan** to **win10-lan-ready**
   - Description: *leave the same*
   - Click **Create**
 - Complete the setup wizard
@@ -228,14 +229,14 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
     - <ins>Uncheck</ins> bring over your data and continue
     - Click **Continue without this data**
     - <ins>Uncheck</ins> Make your Microsoft experience more useful and continue
-    - Flick Finish
+    - Click Finish
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
       - Installation requires a reboot
-    - In XO, click the Advanced tab
+    - Optionally, in XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
       - This requires a reboot
       - You still need the Xen agent installed
@@ -248,7 +249,9 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to win-10-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win10-lan-ready`
+    - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM
+  - `stop-computer`
 - Convert win10-lan-ready to a template (advanced tab)
 - Questions to ponder:
   - What are the differences between the two templates?
@@ -256,13 +259,23 @@ IMPORTANT Currently the VyOS router is using NAT to access the outside world. Th
 - Optionally create another VM from each template and experiment
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM starting 8.3 which is currently in beta. 
+IMPORTANT Windows 11 will not install without a TPM
 
-🌱 These instructions have not been tested and are assumed to be <ins>incorrect and out of date</ins>
+IMPORTANT If you want to set up using a local account instead of a Microsoft account
+- Disconnect Internet during setup
+- https://www.elevenforum.com/t/clean-install-windows-11.99/
+- The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
+- This worked for Windows 11 Home or Pro
+  - add second keyboard layout screen
+    - Shift-F10
+    - start ms-cxh:localonly
+    - follow the Wizard
+    - If the screen is black, wait a few minutes and reboot
+    - Follow up with the skipping second keyboard layout
 
 - From the left menu click New > VM
   - Select the pool **xcp-ng-lab1**
-  - Template: **Other Install Media**
+  - Template: **Windows 11**
   - Name: **win11-lan**
   - Description: **Windows 11 on LAN network**
   - CPU: **2 vCPU**
@@ -274,46 +287,65 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
   - Click **Create**
 - The details for the new VM are now displayed
 - Click **Console** tab
-- Follow the Install wizard per usual
+  - If you get prompted to press any key to boot from the CD or DVD, do so
   - Confirm Language, formats, and keyboard then Next
-  - Click Install now
-  - Activate Windows: Click I don't have a product key
-  - Select the OS to install: Windows 11 Pro (feel free to experiment)
-  - WARNING You might bet the error: This PC can't run Windows 11
+  - Select **Install Windows 11**, check the box, then click **Next**
+  - Activate Windows: Click **I don't have a product key**
+  - Select the OS to install: **Windows 11 Pro** (feel free to experiment)
+  - WARNING You might get the error: This PC can't run Windows 11
     - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
-    - Possible culprits: "Enable TPM 2.0 on your PC"
-    - XCP-ng only supports VTPMs on pools running 8.3 or later (8.3 is currently in beta)
-  - **NEED TO RESUME REVIEW HERE ONCE THE TPM BLOCKER IS OVERCOME**
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
+    - Possible culprits: "Enable TPM 2.0 on your PC" (XCP-ng lists this as VTPM, virtual TPM)
+  - Click **Accept**
+  - Accept the installation on Drive 0, click **Next**
+  - Click **Install**
+  - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Eject the installation ISO
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
+  - type this exactly, spacing matters (some people add /f for force shutdown)
+- Click Advanced tab > **Convert to template**
 - Re-create the VM from the template
   - New > VM
   - Template: **win11-lan**
   - Name: **win11-lan-ready**
   - Interface: Note that it's set to **Inside**, which is what we want
+  - Advanced > <i>disable</i> Enable VTPM
+    - If you don't, create will fail with "VTPM_MAX_AMOUNT_REACHED (1)"
+    - Since you cloning a system with a VTPM, ignore the warning
   - Click **Create**
 - Log in complete the setup wizard
-  - Set region and keyboard layout, skip second keyboard layout
-  - Select Set up for personal use (feel free to experiment)
-  - Click **Offline account** then click **Limited experience**
-  - User: **lab**
-  - Password: *select a password*
-  - Create security questions for this account: be creative
-  - Click **Not now**
-  - Privacy: disable all the settings and then click **Accept**
-  - Experience: be creative and pick one, then click **Accept** (I chose Business)
-  - Cortana: **Click Not now**
-  - Close "Browse the web with the best performing browser on Windows"
+  - Start the VM
+    - If you don't want to create a Microsoft account during setup, it's convenient to disable the Internet connection (as simple as powering down the VyOS router for now)
+  - Set region and click Yes
+  - Accept keyboard and click Yes
+  - At the second keyboard layout screen, STOP, and follow these steps if you haven't "broken" the internet connection
+    - Press shift-F10 to open a command prompt
+    - `start ms-cxh://setaddlocalonly`
+    - See also: `reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f`
+    - Follow prompts to add a local user, password, and security options
+    - This ends at a blank screen. Reboot the VM.
+  - Disable all privacy settings and click Next
+  - Disable all privacy settings and click Accept
+  - Your device will a DESKTOP-xxxxxxx name
+  - If you chose to break the network connectivity insteady of bypassing the account creation
+    - Select Set up for personal use (feel free to experiment)
+    - Disconnect from the Internet and start over
+      - Option 1 - power down the VyOS router for a while
+      - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
+    - At *Lets's connect you to a network*
+      - Click **I don't have internet**
+    - Click **Continue with limited setup**
+    - User: **lab**
+    - Password: *select a password*
+    - Create security questions for this account: be creative
+    - Privacy: disable all the settings and then click Next (or might be Accept)
+- Log in
+- Reconnect to the Internet as needed
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
@@ -325,10 +357,11 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 - Enable RDP
   - Start > Settings > System > Remote Desktop
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Optionally, [debloat Windows 11](Appendix-Debloat-Windows11.md)
 - Change the hostname to win11-lan-ready
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
-- Rename from the VM from win11-lan to win11-lan-ready
+  - `stop-computer`
 - Convert win11-lan-ready to a template
 - Questions to ponder:
   - What are the differences between the two templates?
@@ -338,6 +371,7 @@ IMPORTANT Windows 11 will not install without a TPM. XCP-ng supports a VTPM star
 
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
+
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Windows Server 2022 (64-bit)**
@@ -351,43 +385,40 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - Disks: **40GB** (default 32GB)
   - Click **Create**
 - The details for the new VM are now displayed
-- Click **Console** tab
-- You will be prompted to Press any key to boot from CD to DVD
-  - **Press any key**
-  - If you missed it, power cycle and try again
+- Click **Console**
+- If prompted **Press any key to boot from CD or DVD...**, do so
 - Follow the Install wizard per usual
-  - Confirm Language, formats, and keyboard then Next
-  - Click Install now
+  - Confirm Language, formats, and keyboard then **Next**
+  - Click **Install now**
   - Select the OS to install: Windows Server 2022 Standard Edition Evaluation (Desktop Experience)
     - feel free to experiment
-  - Check the box then Next
-  - Click Custom: Install Windows only (advanced)
-  - Accept the installation on Drive 0
-- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Check the box then **Next**
+  - Click **Custom: Install Windows Operating System only (advanced)**
+  - Accept the installation on Drive 0, **Next**
+- When the system boots to "**Customize settings**" and prompts to set the Administrator's password
   - Eject the installation ISO
   - Shift-F10 to open command prompt
   - `shutdown /t 0 /s`
-- Click Advanced > Convert to template
+- Click **Advanced** > **Convert to template**
 - Re-create the VM from the template
   - New > VM
   - Template: server2022-lan
   - Name: server2022-lan-ready
   - Click **Create**
-- After booting, set password for Administrator
+- After booting, use console to set the password for Administrator
+- Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
+  - Yes, allow the server to be discovered by other hosts on the network
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.3.3 > Download XenServer VM Tools for Windows
-    - Download MSI and install manually, or install later using group policy
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy, and accept the reboot
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
       - This requires a reboot
       - You still need the Xen agent installed
   - The impact of not having the agent:
     - management of the OS and advanced features like moving the VM to another pool will not be available
-- Login in
-  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
-  - Yes, allow the server to be discovered by other hosts on the network
 - Apply Windows Updates (reboots included)
 - Enable RDP
   - Start > Settings > System > Remote Desktop
@@ -395,21 +426,23 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
 - Change the hostname to server2022-lan-ready
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
+    - Accept the warning about the NetBIOS name being truncated
 - Shut down the Windows VM
-- Convert server2022-lan-ready to a template
+  - `stop-computer`
+- Convert `server2022-lan-ready` to a template
 - Now let's prepare the template VM for cloning
   - must perform generalization to remove the security identifier (SID)
   - allows us to rapidly clone more servers
   - create a new VM from the template win10-lan-ready
     - New > VM
-    - Template: server2022-lan-ready
-    - Name: server2022-lan-prep
+    - Template: `server2022-lan-ready`
+    - Name: **server2022-lan-prep**
     - Click **Create**
   - Open the console to server2022-lan-prep and log in
     - Open an administrative CMD or powershell window
     - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
-  - Convert server2022-lan-prep to template
-  - From now on, create Windows Server VMs from the template server2022-lan-prep
+  - Convert `server2022-lan-prep` to template (advanced tab)
+  - From now on, create Windows Server VMs from the template `server2022-lan-prep`
 - Questions to ponder:
   - What are the differences between the three Windows server templates?
   - Does this affect the 180-day evaluation timer?
@@ -421,18 +454,123 @@ To convert a Windows server to a Domain Controller, see [Appendix - Convert Wind
 
 To configure a Domain File Server, see [Appendix - Create Windows File Server](Appendix-Windows_File_Server.md)
 
+# Windows 2025 Server
+This is a bare-bones server with limited resources
+
+- From the left menu click **New** > **VM**
+  - Select the pool **xcp-ng-lab1**
+  - Template: **Windows Server 2025**
+  - Name: **server2025-lan**
+  - Description: **Windows Server 2025 on LAN network**
+  - CPU: **1 vCPU** (will peg the CPU a lot; if you need better response add a vCPU)
+  - RAM: **2GB**
+  - Topology: Default behavior
+  - Install: ISO/DVD: *Select the Windows Server 2025 evaluation iso you uploaded*
+  - Interfaces: select *Inside* from the dropdown
+  - Disks: **40GB** (default 64GB)
+  - Click **Create**
+- The details for the new VM are now displayed
+- Click **Console**
+- If prompted **Press any key to boot from CD or DVD...**, do so
+- Follow the Install wizard per usual
+  - Confirm Language and formats then **Next**
+  - Confirm keyboard then **Next**
+  - Confirm **Install Windows Server**, check the box, then **Next**
+  - Select the OS to install: Windows Server 2025 Standard Edition Evaluation (Desktop Experience)
+    - feel free to experiment
+  - Click **Accept**
+  - Accept the installation on Drive 0, **Next**
+  - Click **Install**
+- When the system boots to "Customize settings" and prompts to set the Administrator's password
+  - Eject the installation ISO
+  - Shift-F10 to open command prompt
+  - `shutdown /t 0 /s`
+- Click Advanced > Convert to template
+- Re-create the VM from the template
+  - New > VM
+  - Template: `server2025-lan`
+  - Name: **server2025-lan-ready**
+  - Click **Create**
+- After booting, use console to set the password for Administrator
+- Use the keyboard icon in the ribbon bar above the console video to send a Control-Alt-Delete to bring up the login screen, then log in
+- Login in
+  - The small keyboard icon allows you to send a Ctrl-Alt-Delete
+  - Yes, allow the server to be discovered by other hosts on the network
+- Send diagnostic data to Microsoft: **Required only** then **Accept**
+- Install Guest Tools
+  - The Windows tools are not included on the guest-tools.iso
+  - Download from https://www.xenserver.com/downloads
+    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Download MSI and install manually, or install later using group policy, and accept the reboot
+    - In XO, click the Advanced tab
+      - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
+      - This requires a reboot
+      - You still need the Xen agent installed
+  - The impact of not having the agent:
+    - management of the OS and advanced features like moving the VM to another pool will not be available
+- Apply Windows Updates (reboots included)
+- Enable RDP
+  - Start > Settings > System > Remote Desktop
+  - Slide to Enable Remote Desktop then accept the message
+- Optionally, increase the display resolution: [Appendix - Display Resolution](Appendix-Display_Resolution.md)
+- Change the hostname to server2025-lan-ready
+  - From administrative powershell: `Rename-Computer -NewName server2025-lan-ready`
+    - Accept the warning about the NetBIOS name being truncated
+- Shut down the Windows VM
+  - `stop-computer`
+- Convert `server2025-lan-ready` to a template (Advanced tab)
+- Now let's prepare the template VM for cloning
+  - must perform generalization to remove the security identifier (SID)
+  - allows us to rapidly clone more servers
+  - create a new VM from the template `server2025-lan-ready`
+    - New > VM
+    - Template: `server2025-lan-ready`
+    - Name: `server2025-lan-prep`
+    - Click **Create**
+  - Open the console to `server2025-lan-prep` and log in
+    - Open an administrative cmd or powershell window
+    - `cmd /k %WINDIR%\System32\sysprep\sysprep.exe /oobe /generalize /shutdown`
+      - NOTE once in testing got the errors Sysprep was not able to validate your Windows installation. Preview the log file at %WINDIR%\System32\sysprep\Panther\setupact.log for details.
+        - Common cause: Pending Windows updates installation
+        - Tried going back two templates (because the Windows updates kept failing) but still have the issue
+        - These 2 commands error out but the Sysprep succeeded...(!)
+          - `Get-AppXProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online`
+          - `Get-AppxPackage -AllUsers | Remove-AppxPackage`
+  - Convert `server2025-lan-prep` to template
+  - From now on, create Windows Server VMs from the template server2022-lan-prep
+- Questions to ponder:
+  - What are the differences between the three Windows server templates?
+  - Does this affect the 180-day evaluation timer?
+  - What are the advantages of each template?
+- Optionally create VMs from each template and experiment
+  - How could you use Templates to quickly roll out a number of Windows servers with the same function or application? (e.g., a web server)
+  - How would you manage licensing in a production environment?
+
+To convert a Windows server to a Domain Controller, see [Appendix - Convert Windows Server to Domain Controller](Appendix-Windows_DC.md)
+
+To configure a Domain File Server, see [Appendix - Create Windows File Server](Appendix-Windows_File_Server.md)
+
 # Guacamole Server
 Now we will configure a Guacamole server to facilitate remote access to the Lab VMs behind the router.
 
-TIP The hotkey to escape a guacamole session is control-alt-shift
+TIP The hotkey to escape a Guacamole session is control-alt-shift
 
 See references:
+- https://guacamole.apache.org/doc/gug/installing-guacamole.html
+- https://www.youtube.com/watch?v=8WDewbQbDTQ
+- https://blog.51sec.org/2025/08/step-by-step-deploy-guacamole-with.html
+- https://orcacore.com/installing-apache-guacamole-on-ubuntu-24-04/
+- https://guacamole.apache.org/doc/0.8.3/gug/installing-guacamole.html
+- https://medium.com/@anshumaansingh10jan/unlocking-remote-access-a-comprehensive-guide-to-installing-and-configuring-apache-guacamole-on-30a4fd227fcd
+
+Older references:
 - https://orcacore.com/install-apache-guacamole-on-ubuntu-22-04/
 - https://dae.me/blog/2698/guacamole-1-4-creation-of-websocket-tunnel-to-guacd-failed/
 
 Steps:
 - Create a Ubuntu server to run Guacamole
-  - New > VM
+  - **New** > **VM**
+  - Pool: **xcg-ng-lab1**
   - Template: **ubuntu-server-lan**
   - Name: **guacamole**
   - Description: *Guacamole server on LAN network*
@@ -441,94 +579,65 @@ Steps:
   - Change hostname
     - View current hostname: `hostnamectl`
     - Set the new hostname: `sudo hostnamectl set-hostname guacamole`
-    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole Server on LAN" --pretty`
+    - Optionally set the pretty name: `sudo hostnamectl set-hostname "Guacamole server on LAN" --pretty`
     - Confirm it has changed: `hostnamectl`
-- Install dependencies
-  - Copy [guac-dependencies.sh](guac-dependencies.sh)
-  - `sudo bash guac-dependencies.sh`
-- Download Apache Guacamole
-  - official downloads page: https://downloads.apache.org/guacamole/
-    - `wget https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz`
-- Extract and Compile Guacamole
-  - `tar -xzf guacamole-server-1.5.5.tar.gz`
-  - `cd guacamole-server-1.5.5`
-  - `./configure --with-init-dir=/etc/init.d --enable-allow-freerdp-snapshots`
-  - `make`
-  - `sudo make install`
-  - `sudo ldconfig`
-- Configure Guacamole Server
-  - `sudo mkdir /etc/guacamole`
-  - Create new configuration file `/etc/guacamole/guacd.conf`
-    - Example: `sudo vi /etc/guacamole.conf`
-  - Contents:
-    - `[daemon]`
-    - `pid_file = /var/run/guacd.pid`
-- Start and Enable Guacamole Service
-  - `sudo systemctl daemon-reload`
-  - `sudo systemctl start guacd`
-  - `sudo systemctl enable guacd`
-  - `sudo systemctl status guacd`
-- Install the Guacamole Web App
-  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war`
-  - `sudo mv guacamole-1.5.5.war /var/lib/tomcat9/webapps/guacamole.war`
-- Configure Apache Guacamole Database Authentication
-  - `sudo mysql_secure_installation`
-    - current root password is none (default)
-    - accept default switch to unix_socket **Y**
-    - accept default and change the root password (i.e., passtoor)
-    - accept default and remove anonymous users
-    - accept default and disallow root login remotely
-    - accept default and remote test database and access to it
-    - accept default and reload privilege tables
-  - `wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz`
-  - `tar -xzf mysql-connector-java-8.0.26.tar.gz`
-  - `sudo mkdir /etc/guacamole/lib/`
-  - `sudo mkdir /etc/guacamole/extensions/`
-  - `sudo cp mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /etc/guacamole/lib/`
-  - `wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz`
-  - `sudo mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/`
-- Create a Guacamole Database, User and Scheme
-  - Copy [create-database.sql](create-database.sql)
-    - `cat create-database.sql | sudo mysql`
-    - Old way (not Unix sockets): `cat create-database.sql | mysql -u root -p`
-  - Import SQL Schema Files and Create Properties Files For Guacamole
-    - `cd guacamole-auth-jdbc-1.5.5/mysql/schema`
-    - `cat *.sql | sudo mysql -p guac_db`
-    - press enter (no password) when prompted for the password
-    - Old way (not Unix sockets) : `cat *.sql | mysql -u root -p guac_db`
-- Configure Guacamole properties (new file)
-  - sudo vi /etc/guacamole/guacamole.properties
-```
-# MySQL properties
-mysql-hostname: 127.0.0.1
-mysql-port: 3306
-mysql-database: guac_db
-mysql-username: guac_user
-mysql-password: password
-```
-  - `sudo systemctl restart tomcat9 guacd mysql`
-- Configure ssh
-  - on the guacamole server add the following lines to the end of /etc/ssh/sshd_config
-    - `sudo vi /etc/ssh/sshd_config`
-    - `PubkeyAcceptedKeyTypes +ssh-rsa`
-    - `HostKeyAlgorithms +ssh-rsa`
-- `sudo systemctl restart sshd`
-- Create /etc/guacamole/guacd.conf with the following contents
-  - `[server]`
-  - `bind_host = 127.0.0.1`
-  - `bind_port = 4822`
-- Modify /etc/guacamole/guacamole.properties to add
-  - `# guacd properties`
-  - `guacd-hostname: 127.0.0.1`
-  - `guacd-port: 4822`
-- restart guacd
-  - `sudo systemctl restart guacd`
+   - Optionally update the password for the user ubuntu
+- Set a fixed IP IP address on the VyOS router
+  - Get the MAC address on the guacamole server
+    - `ip a`
+    - Get the MAC address from the enX0 interface, similar to "7a:6e:98:43:b1:26"
+  - Create the reservation on the VyOS router, substituting the MAC address you identified
+    - configure
+    - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole mac <mac_address>
+    - set service dhcp-server shared-network-name 'vyoslab' subnet 192.168.100.0/24 static-mapping guacamole ip-address 192.168.100.1
+    - commit
+    - save
+    - exit
+  - Reboot the guacamole server and note it gets the IP 192.168.100.1
+- Install using the [Easy Guacamole Installer](https://github.com/itiligent/Easy-Guacamole-Installer)
+  - `wget https://raw.githubusercontent.com/itiligent/Guacamole-Install/main/1-setup.sh && chmod +x 1-setup.sh && ./1-setup.sh`
+    - enter the sudo password when prompted
+    - accept defaults
+    - make note of the mysql root password you select
+    - make note of the mysql guacamole_user password you select
+    - Optionally install TOTP and Duo for Duo MFA (untested)
+    - Optionally install LDAP if you have an LDAP directory server (untested)
+    - Optionally install Quick Connect feature (untested)
+    - Optionally install History Recorded Storage feature (untested)
+    - Optionally protect Guacamole beind Nginx reverse proxy (untested)
+      - this enables https
+    - Optionally redirect http://domain.root:8080 to /guacamole (may break DUO) (untested)
+- Note the location the log files:
+  - /var/log/syslog or /var/log/tomcat9/CATALINA-*
+- Once Guacamole is setup, you can access it from web browser
+  - Address: http://<ipaddress>:8080/guacamole/
+  - username: guacadmin
+  - password: guacadmin
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
   - Point the web browser to the IP address of the guacamole server
-  - `http://server-ip:8080/guacamole`
-    - If your connection is being directed to https, it will be "Unable to connect". See [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
+  - `http://<ipaddress>:8080/guacamole`
+    - We set up a fixed IP address for it in VyOS so it should be http://192.168.100.1:8080/guacamole
   - Login as `guacadmin`/`guacadmin`
+  - You can change the password this using the top-right dropdown, Settings > Preferences
+  - To add a session, top-right dropdown, Settings > Connections > New Connection
+    - Example: a Windows 10 Desktop VM
+      - Name: desktop10
+      - Location: ROOT (you can create folders to organize your connections)
+      - Protocol: RDP
+      - Maximum number of connections: 1
+      - Maximum number of connections per user: 1
+      - Hostname: IP address (or the name if it resolves in DNS)
+      - Post: blank?
+      - Connection timeout: ?
+      - Username: the username (lab)
+      - Pasword: the password
+      - Domain: blank
+      - Security mode: NLA (network level authentication)
+      - Disable Authentication: leave default = unchecked
+      - Ignore server certificate: **CHECK THIS**
+      - Click **Save**
+    - Navigate to the Home page
+    - Click on the new connection (i.e., desktop10)
   - REMEMBER the hotkey to escape a session is control-alt-shift
   - Tips for connection to Windows 10 / Server 2022
     - Protocol: RDP
@@ -555,11 +664,10 @@ mysql-password: password
     - Disable Authentication: leave default = unchecked
     - Ignore server certificate: **CHECK THIS**
 - Add Port translation to make the Guacamole server accessible from outside the VyOS router
-  - NOTE Modify the 192.168.100.40 address to the IP address of the guacamole server
   - `configure`
-  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.40'`
+  - `set nat destination rule 70 description 'Port forward port 8080 to 192.168.100.1'`
   - `set nat destination rule 70 inbound-interface name 'eth0'`
-  - `set nat destination rule 70 translation address '192.168.100.40'`
+  - `set nat destination rule 70 translation address '192.168.100.1'`
   - `set nat destination rule 70 destination port 8080`
   - `set nat destination rule 70 translation port 8080`
   - `set nat destination rule 70 protocol 'tcp'`
@@ -567,8 +675,9 @@ mysql-password: password
   - `save`
   - `exit`
 - From outside the Lab, point your browser to: `http://<externalip of vyos router>:8080/guacamole`
-- Configure re-direct to the guacamole app
-  - Modify the default root index file: `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
+- Configure re-direct to the Guacamole app with http and port 80/http:
+  - On the guacamole server, modify the default root index file:
+    - `sudo vi /var/lib/tomcat9/webapps/ROOT/index.html`
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -582,11 +691,20 @@ mysql-password: password
 </html>
 ```
 
-To enable https, see [Appendix - Convert Guacamole to https](Appendix-Guacamole_https.md)
-
+To enable HTTPS, enable "Protect Guacamole behind Nginx reverse proxy" during the easy installation script.
+- this enables https on the nginx proxy with a certificate that you can update late
+- you can select a self-signed certifificate or a Let's Encrypt certificate
+  - self-signed: tested ✅
+  - Let's Encrypt: not tested
+    - Yes add Let's Encrypt TLS support to Nginx reverse proxy
+    - Enter the public fqdn for the proxy site
+    - Enter the email address for Let's Encrypt notifications
+    - etc., etc.
+- url: https://<ipaddress> (http redirects to https, no need to add /guacamole)
+- because the port changes from 8080 to 443, you will need to update the VyOS router config from 8080 to 443
 
 # Important Notes
-How to Set the Screen Size for Windows UEFI VMS on XCP-ng
+How to Set the Screen Size for Windows UEFI VMs on XCP-ng
 - Modify the VM advanced settings to increase Video RAM from 8MB to 16MB
 - Open the console of the virtual machine.
 - Start the virtual machine.

@@ -3,17 +3,30 @@ Automation with XCP-ng is centered around Ansible. In this Lab we look at ways t
 
 NOTE If you are looking at using Python, you might be able to adapt https://github.com/Stella-IT/XenGarden/tree/main
 
+NOTE There is no Ansible collection to manuluate XO
+
 References:
+- https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/
 - https://docs.ansible.com/ansible/latest/collections/community/general/xenserver_guest_module.html
 - https://docs.ansible.com/ansible/latest/collections/community/general/xenserver_guest_powerstate_module.html
 
-Preparing your Ansible workstation
-- Run under WSL (Windows Subsystem for Linux) or on a Linux box
-- `sudo apt update && sudo apt install -y ansible`
+# Preparing your Ansible workstation
+- We are going to use Ansible on `ubuntu-xo`. You can also run under WSL (Windows Subsystem for Linux) or on a Linux box
+- `sudo apt update && sudo apt install -y ansible python3-pip python3-full`
 - `ansible-galaxy collection install community.general`
-- `python3 -m pip install XenAPI`
+- Install pip package XenAPI
+  - Prior to Ubuntu 24.04
+    - python3 -m pip install XenAPI
+  - Ubuntu 24.04 and later quick and dirty
+    - `pip install --break-system-packages XenAPI`
+  - Installing "nicely" broken my ansible playbooks running
+    - `python3 -m venv ~/venv`
+    - `source ~/venv/bin/activate`
+    - `pip install XenAPI`
+    - modify your playbooks specify the location of python
 
-Simple Playbook `poweronvm.yml`: `ansible-playbook poweronvm.yml`
+# Simple Playbooks
+Simple Playbook `poweronvm.yml`: `ansible-playbook poweronvm.yml`. Provide the credentials by variables or simple put the values directly into the playbook for this test.
 ~~~
 ---
 - hosts: localhost
@@ -59,21 +72,21 @@ More advanced playbook that powers on the `opnsense` firewall, waits for it to c
       wait_for_ip_address: true
     delegate_to: localhost
     register: facts
-  - name: Power on pen10
+  - name: Power on penwin10
     community.general.xenserver_guest_powerstate:
       hostname: "{{ xenserver_hostname }}"
       username: "{{ xenserver_username }}"
       password: "{{ xenserver_password }}"
-      name: pen10
+      name: penwin10
       state: powered-on
     delegate_to: localhost
     register: facts
-  - name: Power on pentest-workstation
+  - name: Power on pentest workstation
     community.general.xenserver_guest_powerstate:
       hostname: "{{ xenserver_hostname }}"
       username: "{{ xenserver_username }}"
       password: "{{ xenserver_password }}"
-      name: pentest-workstation
+      name: kali
       state: powered-on
     delegate_to: localhost
     register: facts

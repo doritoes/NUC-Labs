@@ -2,10 +2,9 @@
 - name: Create VPN community
   hosts: check_point
   connection: httpapi
-  collections:
-    - check_point.mgmt
+  gather_facts: false
   tasks:
-    - name: add-vpn-community-star
+    - name: Add VPN star community
       check_point.mgmt.cp_mgmt_vpn_community_star:
         center_gateways: firewall1
         satellite_gateways: firewall2
@@ -31,5 +30,5 @@
         name: Branch_Community
         comments: VPN connects branch2 and branch3 to branch1
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:

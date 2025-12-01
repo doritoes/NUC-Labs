@@ -1,57 +1,67 @@
 # Appendix - L2 Firewall
-OPNsense supports a "transparent bridge", which is elsewhere called a Layer 2 (L2) firewall. A Layer 2 firewall does not perform routing nor NAT. It is deployed between two devices on the same LAN, filtering traffic without creating different subnets.
+OPNsense supports a "transparent filtering bridge", which is elsewhere called a Layer 2 (L2) firewall. A Layer 2 firewall does not perform routing nor NAT. It is deployed between two devices on the same LAN, filtering traffic without creating different subnets.
 
-💣However, attempts to reproduce the tutorial were not immediately successful.
-- Need to try a new approach based on https://docs.opnsense.org/manual/how-tos/lan_bridge.html
+For example, you want to isolate a device while keeping it on the same LAN.
 
 References:
 - https://docs.opnsense.org/manual/how-tos/transparent_bridge.html
-- https://www.zenarmor.com/docs/network-security-tutorials/how-to-configure-transparent-filtering-bridge-on-opnsense
-
-See also: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
+- https://forum.opnsense.org/index.php?topic=49704.0
+- https://docs.opnsense.org/manual/how-tos/lan_bridge.html
 
 Warnings:
 - L2 firewall not compatible with traffic shaping
 - Most L2 firewalls cannot do IPS; needs confirmation for OPNsense
 
 Overview:
-- Start from a default installation on a virtual device with 2 interfaces
-- Disable NAT
-- Enable setting to allow filtering on bridge interfaces
-- Create a Bridge interface and assign a management IP address to it
+- Using OPNsesnse 25.7
+- Start from a default installation on a virtual device with 3 interfaces
 - Disable DHCP server on LAN
-- Add Allow rules
-- Disable Default Anti-Lockout Rule
-- Set LAN and WAN interfaces to type "none"
-- Apply Changes
+- Create a Bridge interface and assign a management IP address to it
+- Enable setting to allow filtering on bridge interfaces
+- Modify Allow rules
+
+# Download the ISO
+- https://opnsense.org/download/
+  - select image type: **dvd** and click **Download OPNsense**
+- Extract the ISO file from the .bz2 archive using a tool like 7-Zip
+- Add the ISO file to the ISO store in XCP-ng
+
+# Modify the Network
+- Add a private network for the secured host(s)
+  - Home > Hosts > xcp-ng-lab1
+  - Network > Manage
+  - Add a newwork
+    - Interface: *leave blank*
+    - Name: L2net
+    - Description: Layer 2 bridged network off lab
+    - NBD: No NBD Connection
 
 # Create OPNSense VM
 - From the left menu click **New** > **VM**
-  - Select the pool **xcgp-ng-lab1**
+  - Select the pool **xcp-ng-lab1**
   - Template: **Other install media**
   - Name: **opnsenseL2**
-  - Description: *opnsense Layer 2 firewall*
+  - Description: *OPNsense Layer 2 firewall*
   - CPU: **4 vCPU**
-  - RAM: **2GB**
+  - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB; warnings appear for less than 3GB)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interfaces:
     - Network: from the dropdown select the **pool-wide host network (eth0)**
   - Second Interface: Click **Add interface**
-    - Network: from the dropdown select the **Inside**
+    - Network: from the dropdown select the **L2net**
+  - Third Interface: Click **Add interface**
+    - Network: from the dropdown select the **pool-wide host network (eth0)**
   - Disks: Click **Add disk**
-    - Add **20GB** disk
+    - Add **32GB** disk
   - Click **Show advanced settings**
     - Check **Auto power on**
   - Click **Create**
-- The details for the new VyOS VM are now displayed
+- The details for the new OPNsense VM are now displayed
 - Click the **Network** tab
   - Next to each interface is a small settings icon with a blue background
   - For every interface click the gear icon then <ins>disable TX checksumming</ins>
 - Click **Console** tab and watch as the system boots
-- Click the **Network** tab
-  - Next to each interface there is a gear icon
-  - Click each gear icon and <ins>disable TX checksumming</ins>
 
 # Install OPNsense
 - Log in as `installer`/`opnsense`
@@ -62,149 +72,143 @@ Overview:
   - much more stable under power failure or hard reboots
 - Accept the disk to install on
   - You need to check the box (use space bar)
-  - Accept erasing the disk
-- Select a root password when prompted
-- Select Complete Install
-- Eject the ISO (click the icon on Console tab)
+  - **Yes**, accept erasing the disk
+- Be patient as installation proceeds
+- Select **Root Password** and select a password
+- Select **Complete Install**
+- Select **Reboot now**
+- Eject the ISO once the reboot starts (click the eject icon on Console tab)
 - Wait for the system to boot
-- The firewall is now configured with default settings
 
-# Configure OPNsense LAN DHCP
+# Configure OPNsense
 - Log in to Console user `root` with the password you selected
-- 1) Assign interfaces
+- `1) Assign interfaces`
   - LAGGs? **No**
   - VLANs? **No**
-  - WAN interface name: **xn0**
-  - LAN interface name: **xn1**
+  - WAN interface name: **none** (press enter)
+  - LAN interface name: **xn0**
+  - Optional interfaces:
+  - OPT1 interface name: **xn1**
+  - OPT2 interface name: **xn2**
   - Optional interface: *just press enter*
   - Proceed: **Yes**
-- 2) Set interface IP addresses
+- `2) Set interface IP addresses`
   - LAN
     - Configure IP via DHCP? **No**
-    - LAN IPv4 Address: **192.168.1.1**
-    - Mask bits: **24**
+    - LAN IPv4 Address: **192.168.1.150** (an IP address on your Lab network)
+    - Mask bits: **24** (to match your Lab network)
     - Upstream gateway: *press Enter to accept no gateway*
-    - IPv6 address: **No**, **No**, and **None** (press Enter)
-    - Enable DHCP server on LAN: **Yes**
-    - Start of range: **192.168.1.10**
-    - End of range: **192.168.1.250**
+    - IPv6 address: **No**, **None** (press Enter)
+    - Enable DHCP server on LAN: **No**
     - Change to HTTP: **No**
     - Generate new self-signed web GUI certificate? **No**
     - Restore web GUI defaults? **No**
+  - WAN
+    - there is no WAN
+  - OPT
+    - no IP addresses on the OPT interfaces
+- System: Configuration: Wizard
+  - Log in to the firewall using the IP address you set (i.e., https://192.168.1.150)
+  - Click **Next** to start the Wizard
+  - General Information tab
+    - Hostname: **l2firewall**
+    - Domain: **xcpng.lab**
+    - Optionally set Timezone
+    - DMZ: **9.9.9.9**, **1.1.1.1** (feel free to customize)
+    - <ins>Uncheck</ins> Override DNS
+    - <ins>Uncheck</ins> Enable Resolver
+    - Click **Next**
+  - Network [WAN] tab
+    - Type: DHCP (since there is no WAN interface, this is the easiest option)
+    - Oddly it still asks for an IP address(!); in Lab use **4.4.4.4/32** (yes it's a DNS server, we will delete the WAN interface completely)
+    - **Don't block** RFC1918 private networks or bogon networks
+    - Click **Next**
+  - Network [LAN] tab
+    - <ins>Uncheck</ins> Configure DHCP server
+    - Click **Next**
+  - Set initial password tab
+    - Click **Next** to leave password the same
+  - Click **Apply** to finish the wizard
+- Interfaces > Assignments
+  - Delete WAN interface
+  - Click Save
+- Create the bridge
+  - Interfaces > Devices > Bridge
+  - ADD a new bridge
+  - Select OPT1 and OPT2
+  - Optionally add a description
+  - Click **Save**
+  - Click **Apply**
+- The OPT1 and OPT2 interfaces should NOT have any IP address configuration
+  - they should be enabled by default, that's it
+- Interfaces > Assignments
+  - Change LAN to bridge0 (bridge)
+  - Click **Save**
+- System Tunables
+  - System > Settings > Tunables
+    - Add two tunables, saving each
+    - net.link.bridge.pfil_member = 0
+      - Set to 0 to disable filtering on the incoming and outgoing member interfaces
+    - net.link.bridge.pfil_bridge = 1
+      - Set to 1 to enable filtering on the bridge interfaces
+    - Click **Apply**
+- Firewall > Rules > LAN
+  - Modify the Default allow LAN to any rule
+    - Change source to **Any**
+    - Enable logging
+    - Description: allow all traffic on bridge
+    - This change is to allow multicast, broadcasts and DHCP to work
+    - Click **Save**
+  - Disable the IPv6 rule
+    - Edit
+    - Check Disable this rule
+    - Click **Save**
+  - Click **Apply changes**
+
+# Update Firmware and Enable Guest Tools
+- Add gateway to Internet
+  - System > Gateways > Configuration
+  - Add
+    - Name: **Lab_gateway**
+    - Interface: **LAN**
+    - IP Address: *your Lab gateway IP (the router)*
+    - Description: **Internet gateway**
+    - Click **Save**
+    - Click **Apply**
+- Add gateway to LAN
+  - Interfaces > LAN
+  - IPv4 gateway rules: **Lab_gateway**
+  - Click **Save**
+  - Click **Apply changes**
+- Update Firmware
+  - System > Firmware > Status > Check for Updates
+  - NOTE this will fail the first time; it's known bug
+  - Check for Updates again, read the long message, and click Close
+  - Scroll down to the end, and click **Update**
+  - Click **OK** to accept the reboot
+- Enable Guest Tools
+  - Log back in
+  - System > Firmware > Plugins
+  - Check Show community plugins
+  - os-xen - click "+" to install
+  - Power > Reboot > Yes
 
 # Create a Desktop VM
 - New > VM
 - Pool **xcp-ng-lab1`
-- Template: choose either **Win10-lan-ready** or **Ubuntu-desktop-lan**
-- Name: **dummy**
-- Decription: used for setting up firewall
-- Make sure network is **Inside**
+- Template: choose from **win10-lan-ready**, **win11-lan-ready** or **ubuntu-desktop-lan**
+- Name: **l2test**
+- Decription: testing L2 firewall
+- Make sure network is **L2net**
+- If you choose Window 11 template, remember to use Advanced settings to disable adding a VTPM
 - Click **Create**
-- The VM will get an IP address on 192.168.1.0/24 (the new firewall)
-  - Windows: `ipconfig` and `ipconfig /renew`
-  - Unix-like: `ip a` or `ifconfig`
-  - if not, make sure you shut down any other devices on **Inside** network that could interfere
 
-# Configure OPNsense
-- From VM, log in to https://192.168.1.1
-  - User `root` and default password `opnsense` unless you changed it
-- Complete the General Setup wizard
-  - Hostname: **l2firewall**
-  - Domain: **xcpng.lab**
-  - Primary DNS server: **8.8.8.8** (want unfiltered DNS here)
-  - Secondary DNS: **8.8.4.4**
-  - Click **Next**
-  - Accept default time server and optionally set Timezone
-  - Click **Next**
-  - Accept WAN interface settings and click Next
-  - Accept LAN interface settings and click Next
-  - Set `root` password or leave blank to leave as it was, then click **Next**
-  - Click **Reload**
-- Update the firmware
-  - Click **check for updates**
-  - Read and accept the message
-  - Scroll down to the bottom and click **Update***
-  - Accept the update (and the reboot)
-  - Wait patiently as the updates and the reboot are completed
-  - Log back in to the web interface
-- Configure the filtered bridge interface
-  - *See https://docs.opnsense.org/manual/how-tos/transparent_bridge.html*
-  - Do <ins>NOT</ins> click apply until the instructions tell you to
-    - **Save** your changes after each step
-    - Only **Apply** changes after <ins>completely finished</ins>!
-- Disable Outbound NAT rule generation
-  - **Firewall** > **NAT** > **Outbound**
-    - Select **Disable Outbound NAT rule generation**
-    - Click **Save** (<ins>do not apply!</ins>
-- Change system tuneables
-  - System > Settings > Tuneables
-    - Edit value of **net.link.bridge.pfil_bridge** to **1**
-    - Click **Save**
-- Create the bridge
-  - **Interfaces** > **Other Types** > **Bridge**
-  - Click "+" to add the bridge
-    - Member interfaces: **Select LAN and WAN**
-    - Description: **Bridge**
-    - Click **Save**
-- Create management IP address on Bridge
-  - **Interfaces** > **Assignnents**
-  - Under the new interface **bridge0** add the description **bridge**
-  - Click **Add**
-  - Select the Bridge from the list and click "+"
-  - **Interfaces** > **[bridge]**
-    - Check **Enable Interface**
-    - Do not check "Block private networks" or "Block bogon networks" in this case (see documentation)
-    - IPv4 Configuration Type: **Static IPv4**
-    - IPv4 address:
-      - Select an IP address you want to use; it does not need to be on any particular network, but to reach it, you will need to be routed through the L2 firewall
-      - Example: `192.168.200.1`/`24`
-      - Click **Save** (<ins>do not apply</ins>!)
-- Disable WAN blocking of private networks and bogons
-  - Interfaces > WAN
-  - Make certain "block private networks" and "block bogon networks" are not checked
-- Disable the DHCP server on LAN
-  - Services > ISC DHCPv4 > LAN
-  - **Uncheck** Enable DHCP server on the LAN interface
-  - Click **Save**
-- Add firewall rules to the WAN interface
-  - the tutorial says to add Any/any/allow rules on LAN/WAN
-  - the tutorial also says these are ignored, and only the bridge rules are parsed
-- Add firewall rules to the Bridge interface
-  - Firewall > Rules > bridge
-  - Click "+" to add a rule
-    - Action: **Pass**
-    - Interface: **bridge**
-    - Direction: **in**
-    - TCP/IP version: **IPv4**
-    - Protocol: **any**
-    - Source: **any**
-    - Destination: **any**
-    - Log: *enable logging to allow you to see the traffic and decide on how to tune the rules*
-    - Description: **default allow rule**
-- Set LAN and WAN interface type to `None`
-  - Interfaces > [LAN]
-    - IPv4 Configuration Type: **None**
-    - Click **Save**
-  - Interfaces > WAN
-    - IPv4 Configuration Type: **None**
-    - Click **Save**
-- Apply the Changes
 # Testing
-In lab testing this did NOT work. DHCP does not work to pass through the IP address from outside the L2 firewall.
+- At this point network connectivity is working (ping, nsloookup), Internet
+- Create a rule for the LAN interface to block certain traffic (enable loggingfor the rule)
+  - Place the rule above the allow rule, save and apply changes
+- View the firewall logs
+  - Firewall > Log Files > Live View
+  - Repeat your tests of the Internet connection including the traffic that should be blocked
 
-What works:
-- Setting your VM IP address to an IP on the management subnet (i.e. 192.168.200.100) allows you to manage the firewall (but not traverse the bridge)
-  - Set VP IP to 192.168.200.100/24 (no gateway will help you here)
-  - Example: https://192.168.200.1
-
-Concerns:
-- The documentation has conflicting information: a second author modified the tutorial to dispute some of the settings (e.g., "So you can skip this step" in two places)
-- The documentation has the user set the PC to the subnet that the management IP is on
-  - this allows management of the firewall, but did allow access to the Internet
-- Setting the IP address statically on the VM to match what the DHCP server would have given me did not work either. Traffic over the bridge didn't work.
-- A related How-To gives clues on how it might work: https://docs.opnsense.org/manual/how-tos/lan_bridge.html
-
-# Next Steps
-Once the bridge is working, tune the firewall rules on [bridge] interface
-- review logs of allowed traffic
-- add rules to block and allow traffic as desired
+IMPORTANT with the L2 firewall, it's best to use DHCP reservations or static IP addresses so you can create effective firewall rules

@@ -1,5 +1,5 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor. In contrast, pfSense CE is community based but pfSense+ is closed source. Downloaded even the free community edition requires going though the Netgate Store.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor. In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
 
 In this lab we will be using OPNsense 25.7
 

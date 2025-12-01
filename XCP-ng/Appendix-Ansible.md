@@ -4,6 +4,27 @@ This appendix follows the next steps after completing [Appendix - Terraform and 
 Notes:
 - The Linux-based VM templates have the user `ansible` created. SSH with RSA keys still needs to be enabled.
 
+IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully functional. So far it's not working in this  Windows Server 2025/Windows 11 environment. This appears to be an issue with Windows Server 2025.
+- Can RDP from branch1-1 to file-1 as AD\juliette.larocco2, not branch3-1 (for example)
+- Turning off require NLA on the destination workstation didn't solve the issue
+- Run rsop.msc on the target system
+  - Computer configuration > Windows Settings > Secruity Settings > Local Policies
+    - User Rights Assignments > Allow log on through Remote Desktop Services Properties
+    - Security Options
+- Review Default Domain Policy
+  - Computer Configuration > Policies > Administrative Templates > Windows Components > Remote Desktop Services > Remote Desktop Session Host
+- Check Get-NetConnectionProfile, DomainAuthenticated
+- Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > User Rights Assignment
+  - Policy: Allow log on through Remote Desktop Service
+    - default: on workstation and servers: administrators, remote desktop users
+    - default: on domain controllers: administrators
+- on `DC-1`, `setspn -L dc-1`, not krbtgt not in list
+  - ipconfig /flushdns
+  - ipconfig /registerdns
+  - net stop netlogon
+  - net start netlogon
+- Confirm credential guard is not enabled
+
 # Build the Environment using Terraform
 - `terraform plan`
 - `terraform apply -auto-approve`
@@ -16,86 +37,114 @@ Notes:
       - will be disabled (or completely removed) after Branch 1 configuration is complete
     - Second one: `branch1mgt`
 - Log in to the console of `manager`
-- Optionally, from the app store install "Windows Terminal" by Microsoft
-  - this makes it easy to switch between CMD, Powershell, and WSL shells
-  - Open Microsoft Store, update it if required
-  - Install **Windows Terminal**
+- Windows 11 has "Windows Terminal " intalled
+  - This makes it easy to switch between CMD, Powershell, and WSL shells
+    - I recommend you pin Terminal to the taskbar for easy access
+  - If you don't have it installed, install from the app store
   - Open Terminal and note the dropdown to select which terminal(s) you want to open
+  - Click down arrow, right click **Windows PowerShell**, and click **Run as administrator**, then click **Yes**
+    - This is a quick way to open administrative PowerShell
 - Rename the PC to `manager`
   - From administrative powershell
-    - `Rename-Computer -NewName manager`
-    - `Restart-Computer`
-- Install WSL
+    - `Rename-Computer -NewName manager -Restart`
+- Install WSL version 1 (WSL2 requires virtualization, nested virtualization isn't supported under XCP-ng 8.3 - https://docs.xcp-ng.org/compute/#-nested-virtualization)
   - Add optional feature Windows Subsystem for Linux (WSL)
-    - NOTE In Lab testing, skipping this step caused problems
     - From administrative powershell
       - `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
-      - Accept the reboot
-  - Log back in and open a privileged shell
-    - `wsl --list`
+        - Accept the reboot
+  - Log back in and open a privileged PowerShell
+    - `wsl --install --no-distribution`
+    - `Restart-Computer`
+  - Log back in and open a privileged PowerShell
+    - `wsl --set-default-version 1`
     - `wsl --list --online`
-    - `wsl --install -d Ubuntu-22.04`
+    - `wsl --install -d Ubuntu-24.04`
       - feel free to customize and choose your favorite Linux
-      - a new WSL window is opened and you are prompted set the username and password
-        - Username: `ansible`
-        - NOTE if it sticks at *Installing, this may take a few minutes...*, <ins>press Control-C and it will continue</ins> (might take a few presses), prompting you to set the username and password
-- Configure Network interfaces
+    - At the prompt set the username and password
+      - Create a default Unix user account: `ansible`
+      - Select a password (same as the other ansible accounts on systems to be managed with Ansible)
+      - In the Lab an error was displayed: SendMessage:131. This didn't prevent WSL from working.
+  - Close Terminal and re-open
+  - Click the dropdown arrow and click Ubuntu-24.04
+    - This is how you can access WSL in the future; also found as Ubuntu-24.04 in the start menu
+    - Update packages
+      - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+      - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passswd lock: Invalid argument*
+        - https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/2069555/comments/12
+        - Here is a fix
+          - `sudo sed -i -e '/systemd-sysusers/s/\.conf$/.conf || true/' /var/lib/dpkg/info/*.postinst`
+          - `sudo apt --fix-broken install`
+- Configure Network interfaces on `manager`
   - **Settings** > **Network & Internet**
   - **Click Ethernet** > **First Interface** (connected)
-    - Network profile: **Private**
+    - Network profile type: **Private network**
   - Click **Ethernet** > **Second Interface** (No Internet)
     - IP assignment: Click **Edit**
     - From dropdown select **Manual**
     - Slide to enable **IPv4**
       - We cannot set the IP address without a gateway IP or DNS from this interface!
-  - Click **Start** > **Settings** > **Network & Interface** > **Ethernet**
-    - Click **Change adapter options**
-    - Open the adapter (i.e., **Ethernet 3**) with "Unidentified network"
-    - Click **Properties**
-    - Double-click **Internet Protocol Version 4** (TCP/IPv4)
-    - Change to "Use the following IP address"
-      - Use the following IP address:
-        - IP address: **192.168.41.100**
-        - Subnet mask: **255.255.255.0**
-        - Gateway: Leave empty
-        - Leave DNS entries empty
+  - Click **Start** > **Settings** > **Network & Interface**
+    - Click **Advanced network settings**
+      - Under the connection with no Internet (i.e., **Ethernet 3**), next to **More adapter options**, click **Edit**
+      - Double-click **Internet Protocol Version 4** (TCP/IPv4)
+      - Change to "Use the following IP address"
+        - Use the following IP address:
+          - IP address: **192.168.41.100**
+          - Subnet mask: **255.255.255.0**
+          - Gateway: Leave empty
+          - Leave DNS entries empty
+          - Click **OK**
         - Click **OK**
-      - Click **OK**
-    - Click **Close**
 - Install additional Windows applications
   - [Chrome browser](https://www.google.com/chrome/)
   - [WinSCP](https://winscp.net/eng/download.php)
-- This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
 - Install additional WSL packages
   - Open a WSL shell 
-  - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-  - `sudo apt install -y python3-paramiko python3-pip`
+  - `sudo apt update && sudo apt install -y python3-paramiko python3-pip`
   - Install Ansible
-    - Option 1 - recommended - Ansible 2.17 (or later)
-      - `sudo apt-add-repository ppa:ansible/ansible`
+    - Option 1 - recommended - Ansible 2.19 (2.17 or later)
+      - `sudo apt install -y software-properties-common`
+      - `sudo apt-add-repository --yes --update ppa:ansible/ansible`
       - `sudo apt update && sudo apt install -y ansible`
       - `ansible --version`
       - Normally installing with ppa method is discouraged; however this is is easiest way to get the current Ansible for automation
-    - Option 2 - Ubuntu 22.04 old Ansible 2.10
+    - Option 2 - Ubuntu 24.04 old Ansible 2.16.3 then fix it
+      - `sudo apt install -y ansible`
+      - `ansible --version`
+      - `sudo apt remove -y ansible`
+      - `sudo apt --purge autoremove -y`
+      - `sudo apt update && sudo apt upgrade -y`
+      - `sudo apt install -y software-properties-common`
+      - `sudo apt-add-repository --yes --update ppa:ansible/ansible`
       - `sudo apt install -y ansible`
       - `ansible --version`
   - Install Ansible collections
     - `ansible-galaxy collection install community.general vyos.vyos check_point.mgmt check_point.gaia`
     - `ansible-galaxy collection install check_point.mgmt --force`
-      - this replaces the very old packaged 5.2.3 with the latest 6.2.1 (or later)
+      - this replaces the old packaged 6.6.0 with the latest 6.7.1 (or later)
   - Install XenAPI python package
-    - `python3 -m pip install XenAPI`
-  - You might use Git to clone the repo to have the files locally on `manager`
+    - Prior to Ubuntu 24.04
+      - `python3 -m pip install XenAPI`
+    - Ubuntu 24.04 and later quick and dirty
+      - `python3 -m pip install --break-system-packages XenAPI`
+    - Installing "nicely" broken my ansible playbooks running
+      - `python3 -m venv ~/venv`
+      - `source ~/venv/bin/activate`
+      - `pip install XenAPI`
+      - modify your playbooks specify the location of python
+  - Optionally install ansible-pylibssh for better performance
+    - `python3 -m pip install ansible-pylibssh`
+    - Same installation issues apply as XenAPI
+  - TIP Use Git to clone the repo to have the files locally on `manager`
     - `sudo apt install -y git`
     - `git clone https://github.com/doritoes/NUC-Labs`
     - `cp NUC-Labs/XCP-ng/ansible/* .`
 - Generate ssh RSA key for user `ansible`
-  - Open WSL terminal (Start > search WSL, or open Windows Terminal and click the dropdown carrot and click Ubuntu)
   - `ssh-keygen -o`
     - <ins>Do not</ins> enter a passphrase
     - Accept all defaults (press enter)
   - The public key you will be using:
-    - `cat ~/.ssh/id_rsa.pub`
+    - `cat ~/.ssh/id_ed25519.pub`
 - Set up basic configuration files for Ansible
   - Create `ansible.cfg` from [ansible.cfg](ansible/ansible.cfg)
   - Create `inventory` from [inventory](ansible/inventory)
@@ -104,27 +153,28 @@ Notes:
       - This will be configured in the next step
       - And yes, the simulated Internet IP; the inside interface won't be accessible until later
 
+# Disable TX Checksumming
+The instructions mention manually disabling TX Checksumming. Here is an alternative that uses the XenAPI to disable TX Checksumming on a list of devices running the Gaia OS.
+
+- Download disable-tx-checksummming.py ([disable-tx-checksummming.py](disable-tx-checksummming.py))
+- Modify the file to use your XCP-ng host IP and root password
+- Run `python3 disable-tx-checksummming.py`
+
 # Configure VyOS Router
 - Open the `vyos` router VM and log in to console
-- Configure eth0 interface
-  - `configure`
-  - `set interfaces ethernet eth0 address dhcp`
-  - `set service ssh`
-  - `commit`
-  - `save`
-  - `exit`
-  - Get the IP address on eth0
-    - `show interfaces ethernet eth0 brief`
+- Get the IP address on eth0
+  - `show interfaces ethernet eth0 brief`
 - Put this IP address in the `inventory` file under `[router]`
+  - It is recommended to make this a fixed IP address by adding a DHCP reservation in your Lab router
 - From `manager` VM configure key login in VyOS
   - Log in to VyOS as `ansible`
     - `ssh ansible@<vyos_lab_ip>`
     - accept the key
     - log in with password
   - `configure`
-  - `set system login user ansible authentication public-keys lab type 'ssh-rsa'`
+  - `set system login user ansible authentication public-keys lab type 'ssh-ed25519'`
   - `set system login user ansible authentication public-keys lab key '<valueofkey>'`
-    - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-rsa`</ins>
+    - paste in contents of the id_rsa.pub file on manager <ins>without the leading `ssh-ed25519`</ins> and without the trailing `ansible@manager`
   - `commit`
   - `save`
   - `exit`
@@ -132,6 +182,7 @@ Notes:
   - `exit`
   - Retry: `ssh ansible@<vyos_lab_ip>`
     - no longer requires a password
+    - `exit`
   - Edit the `inventory` files to add the IP address of the router below `[router]`
   - the `inventory` files should have the VyOS "public" IP without the "#" comment character
   - everything else should be "commented out"
@@ -142,11 +193,15 @@ Notes:
   - `ansible-playbook router.yml`
   - Testing
     - Login in to the VyOS router
-    - `show interfaces`
-    - Spin up a temporary VM based on template `win10-template` on the **build** network
+    - `show interfaces` will show the fully configured settings
+    - Spin up a temporary VM based on template `win11-template` on the **build** network
       - it should be get DHCP information and be able to connect to the Internet
 
 # Configure SMS
+Using GAiA Mgmt API: https://sc1.checkpoint.com/documents/latest/GaiaAPIs/index.html#cli/set-initial-setup~v1.8%20
+
+See https://www.youtube.com/@EdgeCaseScenario
+
 Steps:
 - In XO, select the VM `sms`
 - Under **Network** tab, set the network interface settings (blue gear icon) and then disable TX checksumming
@@ -156,50 +211,33 @@ Steps:
   - `set interface eth0 ipv4-address 192.168.41.20 mask-length 24`
   - `save config`
 - Log in to `manager` and open a WSL shell
-  - `ssh ansible@192.168.41.20`
+- Enable ssh key login to `sms`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.41.20`
+    - authenticate when prompted
+  - test `ssh ansible@192.168.41.20`
+    - you can now authenticate without a password
     - you will be in the default home directory `/home/ansible`
-- Create new authorized_keys file and add the key
-  - `mkdir .ssh`
-  - `chmod u=rwx,g=,o= ~/.ssh`
-  - `touch ~/.ssh/authorized_keys`
-  - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-  - Add the public key from `manager` to the files
-    - `cat > ~/.ssh/authorized_keys`
-      - paste in the key
-      - press Control-D
-  - `exit`
-  - You can now ssh without a password
-    - `ssh 192.168.41.20`
-  - TIP you can create your own script file `auth.sh` to repeat this process for all the devices
-    - Example at [auth.sh](auth.sh)
-    - <ins>Make sure</ins> you edit the file and paste in your own key
+    - exit back to `manager`
 - Test Ansible access
-  - Exit back to session on manager
-  - update file `inventory`, uncomment to IP of the SMS 192.168.41.20
-    - leave the variable intact
+  - update file `inventory`, uncomment the IP of sms (192.168.41.20)
   - `ansible all -m ping`
-    - You are expecting `SUCCESS` and `"ping": "pong"` for 192.168.41.20
-    - the router should also respond `SUCCESS`
-- Create files on the manager (variables file, playbook to create SMS, and the jinja template for the SMS)
-  - [vars.yml](ansible/vars.yml)
-  - [sms.yml](ansible/sms.yml)
-  - [sms.j2](ansible/sms.j2)
-  - [sms-user.j2](ansible/sms-user.j2)
-- Run the playbook to complete the first time wizard (FTW), reboot, and add the user "ansible" to the SMS's management database
-  - `ansible-playbook sms.yml`
-    - ⏲️ This takes a long time to complete
-    - Uses `config_system` tool to perform FTW
-    - Creates user `ansible` using `mgmt_cli`
-      - Creating the user directly using the ansible module `add-administrator` isn't working correctly as of this writing
-    - Allows all IP addresses to connect to the API in our Lab environment
-  - Testing
-    - Log in to `sms` console (or ssh)
-      - `fwm ver`
-        - Should say *Check Point Management Server R81.20*
-    - `api status`
+    - You are expecting `SUCCESS` and `"ping": "pong"` for `vyos` and `sms`
+- Update `vars.yml` with the settings you want
+  - set the admin_password to match what you are using in your Lab
+  - set the ansible_user_password to match what you are using in your Lab
+  - feel free to customize and experiment
+- Configure API access, configure basic settings, and complete FTCW
+  - Create file on `manager`: [sms.yml](ansible/sms.yml)
+  - Run the playbook `ansible-playbook sms.yml`
+  - Note how errors are ignored on specific steps because the actions were actually successful
+- Testing
+  - Log in to `sms` console (or ssh from `manager`)
+    - `fwm ver`
+      - Should say *Check Point Management Server R82*
+  - `api status`
 - Log in to `sms` Web gui from `manager`
   - https://192.168.41.20
-  - Download the SmartConsole R81.20 client using the link "Download Now!"
+  - Download the SmartConsole R82 client using the link "Download Now!"
 - Install SmartConsole using the downloaded file
 - Launch SmartConsole
   - Username: **cpadmin**
@@ -210,25 +248,16 @@ Steps:
     - In Lab testing sometimes a pop-up error appeared after trying to launch while staying logged in
       - "Application has experienced a serious problem and must close immediately"
       - Click **OK** and continue using the application normally
-- Update Gaia (if you have proper eval licenses)
-  - Wait until the Branch 1 firewalls are configured and providing Internet access
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requirement); however once Internet access is working, you can use CPUSE to apply jumbo hotfixes
-  - SMS updates are best applied manually (whereas firewalls are updated using management API)
-    - clish
-      - installer check-for-updates
-      - installer download [tab]
-      - installer install [tab]
-    - Web GUI > Upgrades (CPUSE)
+- We will be Updating Gaia on the SMS later, once Internet access is working
 - Create objects in the Check Point database related to management
-  - Create files on the manager (inventory, playbook)
+  - Create files on `manager` (inventory, playbook)
     - [inventory-api](ansible/inventory-api)
       - Customize to update the credentials as needed
-      - Lab testing to move the login credentials to the playbook was not successful in Ansible 2.10.8
-      - Starting Ansible 2.11, use new `include_vars` to include the var.yml and use the credentials from there
     - [management-objects.yml](ansible/management-objects.yml)
   - `ansible-playbook -i inventory-api management-objects.yml`
   - Testing
     - In SmartConsole press Control-E to open the Object explorer
+      - Test logging in as users `cpadmin` and `ansible`
       - Expand Network Objects
       - Note that the new hosts and network appear when you select Networks and/or Hosts
       - Close the Object explorer
@@ -248,6 +277,8 @@ References:
 # Configure Branch 1
 The following steps configure Branch 1
 ## Configure Branch 1 firewalls
+NOTE Home > VMs > Click the (X) to clear the filter; this shows the firewalls which are created powered down ("halted")
+
 Steps:
 - BEFORE you POWER ON the firewalls **firewall1a** and **firewall1b**
   - Turn off TX checksumming on each interface
@@ -263,34 +294,22 @@ Steps:
   - firewall1b
     - `set interface eth0 ipv4-address 192.168.41.3 mask-length 24`
     - `save config`
-- Add `manager`'s RSA keys to each firewall's authorized_keys file
-  - Log in to `manager` and open a WSL shell
-    - ssh to firewall1a and firewall1b
-      - `ssh ansible@192.168.41.2`
-      - `ssh ansible@192.168.41.3`
-      - you will be in the default home directory `/home/ansible`
-  - Create new authorized_keys file and add the key
-    - `mkdir .ssh`
-    - `chmod u=rwx,g=,o= ~/.ssh`
-    - `touch ~/.ssh/authorized_keys`
-    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-    - Add the public key from `manager` to the files
-      - `cat > ~/.ssh/authorized_keys`
-        - paste in the key
-        - press Control-D
-    - `exit`
-  - You can now ssh without a password
+- Enable ssh key login to `firewall1a` and `firewall1b` from `manager`
+  - Open WSL shell on `manager`
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.41.2`
+    - authenticate when prompted
+  - `ssh-copy-id -i ~/.ssh/id_ed25519.pub ansible@192.168.41.3`
+    - authenticate when prompted
 - Test Ansible access
   - Exit back to session on `manager`
-  - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.11) and firewall1b (192.168.41.12)
+  - update file `inventory`, uncomment the IPs of firewall1a (192.168.41.2) and firewall1b (192.168.41.3)
   - `ansible all -m ping`
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
-- Create files on the manager (configuration file, playbooks to create firewalls, and the jinja template)
+- Create files on `manager` (configuration files and playbooks to create firewalls)
   - [firewall1a.yml](ansible/firewall1a.yml)
   - [firewall1a.cfg](ansible/firewall1a.cfg)
   - [firewall1b.yml](ansible/firewall1b.yml)
   - [firewall1b.cfg](ansible/firewall1b.cfg)
-  - [branch1.j2](ansible/branch1.j2)
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall1a.yml`
   - `ansible-playbook firewall1b.yml`
@@ -298,9 +317,6 @@ Steps:
   - You should still be able to connect to the web GUI from `manager`
   - https://192.168.41.2
   - https://192.168.41.3
-- Update Gaia (if you have proper eval licenses)
-  - A valid license is required for downloads and updates (the 15-day trial license does not meet this requirement)
-  - Firewalls are best updated using the management API
 - Create cluster using API
   - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
@@ -309,15 +325,21 @@ Steps:
 - Create objects in the Check Point database related to Branch 1
   - Create file on `manager`
     - [branch1-objects.yml](ansible/branch1-objects.yml)
+    - IMPORTANT Modify the object `isp_router` to use your actual Lab router IP address
   - `ansible-playbook -i inventory-api branch1-objects.yml`
 - Create new policy using API
-  - [branch1-policy.yml](ansible/branch1-policy.yml)
-    - `ansible-playbook -i inventory-api branch1-policy.yml`
+  - Create file on `manager`
+    - [branch1-policy.yml](ansible/branch1-policy.yml)
+  - `ansible-playbook -i inventory-api branch1-policy.yml`
 - Push policy
   - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
-- At this point you should be able to install a JHF on the SMS and on the firewalls
-  - SSH or console to each device (sms, firewall1a, firewall1b)
+
+## Apply Jumbo Hotfixs to SMS and firewalls
+At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivty you configured in branch 1.
+
+CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
+  - SSH or console to sms
   - `clish`
   - `installer check-for-updates`
   - `installer download-and-install [tab]`
@@ -330,39 +352,57 @@ Steps:
     - `installer check-for-updates`
     - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
+SmartConsole process for `firewall1` cluster
+- Log in to SmartConsole
+- Click **GATEWAYS & SERVERS**
+- Right-click `firewall1` > Actions > Install Hotfix/Jumbo...
+- Leave it set to recommended jumbo
+- Click **Verify**
+- Click **Install**
+  - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
+
 ## Remove management workstation from the Lab network
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
 - Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
-- Click **Change adapter options**
-- Configure Ethernet 3 interface
-  - Double-click the Ethernet 3 interface, which is connected to the Management network
+- Click **Advanced network settings**
+- Click Ethernet (unidentified newtork)
+- More adapter options: click **Edit**
   - Properties > Internet Protocol Version 4 (TCP/IP/IPv4)
   - Configure default gateway: **192.168.41.1**
   - Enter DNS servers
     - 8.8.8.8
     - 8.8.4.4
-  - Click **OK** > **OK** > **Close**
-- Disable Ethernet 2 interface
-  - Right-click **Ethernet 2**
-  - Click **Disable**
+  - Click **OK** > **OK**
+- Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
+- Set both Networks to **Private network** profile
+- Click **Advanced network settings**
+- Disable Ethernet 2 interface (click Disable)
 - Test Internet connectivity to confirm it is still working
+- Test SmartConsole access to confirm it is still working
+- Test `ansible all -m ping` to confirm still working
 
 ## Configure Domain Controller
 - Open console for `dc-1`
 - Complete initial setup and set administrator password
 - Log in for the first time
+- **Required only** and **Accept**
 - Rename server
-  - Open administrative powershell
-  - `Rename-Computer -NewName dc-1`
-  - `Restart-Computer`
+  - Open administrative PowerShell
+  - `Rename-Computer -NewName dc-1 -Restart`
 - Network configuration
   - Log back in
-  - Open administrative powershell
+  - Open administrative PowerShell
   - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
     - `New-NetIPAddress -IPAddress 10.0.1.10 -DefaultGateway 10.0.1.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - **Yes** allow PC to be discoverable
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
 - Optionally increase the display resolution (e.g., 1440 x 900)
+- Install all software that comes as MSI files before promoting to a domain controller
+  - set DNS server to 8.8.8.8 then switch back when done
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 8.8.8.8`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
+  - If you forget to do this, see https://www.reddit.com/r/WindowsServer/comments/1iq9b4f/applications_wont_install_2025/ and disable UAC
+  - Install Wireshark now, because it relies on Npcap and Visual C++ distributables
+    - with default settings including Npcap) [Wireshark](https://www.wireshark.org/download.html) on `dc-1` (default settings)
 - Promote DC-1 from server to Domain Controller
   - `Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools`
   - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
@@ -388,13 +428,13 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Since you will be using a different user later, you could store these in C:\ or another handy location
 - Configure DC-1 as DHCP server
   - Download branch1-dhcp.ps1 ([branch1-dhcp.ps1](powershell/branch1-dhcp.ps1))
-  - `powershell -ExecutionPolicy Bypass branch1-dhcp.ps1`
+  - `powershell -ExecutionPolicy Bypass .\branch1-dhcp.ps1`
   - Test
     - `Get-DhcpServerInDC`
     - spin up a test workstation on branch1 subnet
       - confirm it receives an IP address via DHCP
       - test Internet access
-  - NOTE Server manager will complain: "Configuration required for DHCP Server at DC-1"
+  - NOTE `Server manager` will complain: "Configuration required for DHCP Server at DC-1"
     - You can click on the link to create security groups for delegation of DHCP Server Administration and also authorize DHCP server on target computer. The powershell script already authorizes DHCP, but you might find a way to improve it.
 - Configure AD users, groups, roles, and permissions
   - download and copy domain-users.csv [domain-users.csv](powershell/domain-users.csv) to C:\domain-users.csv
@@ -417,12 +457,11 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
-    - `Rename-Computer -NewName branch1-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName branch1-1 -Restart`
   - Join to domain
     - Log back in
     - Open administrative powershell
-    - `Add-Computer -DomainName xcpng.lab -restart`
+    - `Add-Computer -DomainName xcpng.lab -Restart`
       - User name: `AD\Juliette.LaRocco2` (also work: XCPNG.LAB\juliette.larocco2, juliette.larocco2@xcpng.lab)
       - Password: the password you set
     - ⏲️ Wait as the system reboots
@@ -435,17 +474,16 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - juliette.larocco2 account works, but will fail if "Administrator" is still logged in on DC-1
     - Confirm web browsing works
     - Log in to SmartConsole on `manager` to view the firewall logs
-      - Click **LOGS & MONITOR** and then click the open **Logs** tab to the left
+      - Click **LOGS & EVENTS** and then click the open **Logs** tab to the left
         - note the limited information provided for Internet web traffic
 - Configure file server **file-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as administrator with the password you set
     - Use the XCP-ng Ctrl+Alt+Del icon to bring up the login prompt
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+  - **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName file-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName file-1 -Restart`
   - Network configuration
     - Log back in
     - Open administrative powershell
@@ -467,10 +505,10 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Select **GPT** (GUID Partition Table)
       - Click **OK**
       - Right-click Disk 1's Unallocated space and then click **New Simple Volume**
-        - Follow the wizard and use defaults (e.g., assign letter E:)
+        - Follow the wizard and use defaults (e.g., assign letter F:)
         - Set the volume label to **NETDRIVE**
     - Download and run file-shares.ps1 from an administrative powershell [file-shares.ps1](powershell/file-shares.ps1)
-      - `powershell -ExecutionPolicy Bypass file-shares.ps1`
+      - `powershell -ExecutionPolicy Bypass .\file-shares.ps1`
       - NOTE there are no users in OU=Finance,OU=Corp,DC=xcpng,DC=lab in the provided user CSV file
         - this causes an error when running the script, but the rest is successfully configured
         - you can add another test user in Finance OU if you want; that would avoid this message
@@ -478,16 +516,16 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Testing
     - Test access from `branch1-1` to the shared folders by different domain users
       - For example, with juliette.larocco
-        - \\file-1
-        - \\file-1\IT
+        - `\\file-1`
+        - `\\file-1\IT`
+        - create a text file to confirm read/write permissions
 - Configure SQL server **sql-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+    - **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName sql-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName sql-1 -Restart`
   - Network configuration
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
@@ -498,9 +536,9 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Click **Start** > **Create and format hard disk partitions**
       - You will be prompted to initialize the disk (Disk 1)
       - Select **GPT** (GUID Partition Table)
-      - Click OK
+      - Click **OK**
       - Right-click Disk 1 Unallocated space and then click **New Simple Volume**
-      - Assign letter E:
+      - Assign letter F:
       - Follow the wizard with its defaults and set the volume label to **SQL**
   - Join to domain
     - Open administrative powershell
@@ -508,6 +546,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
       - Wait as the system reboots
+  - This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
   - Install MS SQL server ([more information](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16))
     - Log in as AD\juliette.larocco2
     - Download SQL Server Express: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
@@ -520,18 +559,23 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Click **Close** and confirm
   - Test
     - Launch **SQL Server Management Studio (SSMS)**
+      - Server Name: **.\SQLEXPRESS**
       - Check **Trust server certificate**
       - Click **Connect**
-    - NOTE For a production environment, use proper authentication
-- This is a good time to change your display resolution to 1440 x 900 or your resolution of choice
+    - Create folder: **F:\MSSQL\DATA**
+    - In object explorer, right click **Databases** > **New Database**
+      - Database name: **product_dev**
+        - product_dev path: **F:\MSSQL\DATA**
+        - product_dev_log path: **F:\MSSQL\DATA**
+      - Click **OK**
+
 - Configure Check Point Identity Collector server **idc-1**
   - Complete initial setup and set administrator password
   - Log in for the first time at the console as Administrator
-  - **Yes** allow your PC to be discoverable by other PCs and devices on this network
+  - **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName idc-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName idc-1 -Restart`
     - Wait for the computer to reboot
   - Network configuration
     - Log back in
@@ -544,6 +588,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - `Add-Computer -DomainName xcpng.lab -restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
+  - This is a good opportunity to increase the display resolution (e.g. 1440 x 900)
   - Set up Domain Controller for IDC
     - Log in to `dc-1`
     - Disable the Windows Firewall on `dc-1`
@@ -552,9 +597,22 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
         - Open an administrative powershell prompt
         - Disable: `Set-NetFirewallProfile -Profile Domain -Enabled False`
         - How to re-enable: `Set-NetFirewallProfile -Profile Domain -Enabled True`
+    - Install Wireshark (with default settings including Npcap) [Wireshark](https://www.wireshark.org/download.html) on `dc-1` (default settings)
+      - In testing this FAILED to install :(
+      - Book to Safe Mode with Networking didn't seem to work
+        - Click Start > Power button
+        - Hold shift and click **Restart**
+        - Choose an explanation
+        - When **Choose an option appears**, select **Troubleshoot**
+        - **Advanced options** > **Startup Settings**
+        - Click **Restart**
+        - After the server starts to the Startup Settings menu, choose Enable Safe Mode with Networking
+        - Tried installing Visual C runtimes logged in as AD\Administrator
+          - While appeared to freeze while installing, successfully installed Wireshark, though Npcap is probably broken
     - Create a domain account with permissions needed for the identity collector
       - Download and run idc-user.ps1 [idc-user.ps1](powershell/idc-user.ps1)
-        - `powershell -ExecutionPolicy bypass idc-user.ps1`
+        - run on `dc-1`
+        - `powershell -ExecutionPolicy bypass .\idc-user.ps1`
   - Install Check Point Identity Collector for Windows
     - How to Download / Obtain the Identity Collector
       - From the SMS
@@ -562,14 +620,14 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Log in to `sms to the expert prompt (e.g., log in as `ansible`)
           - `find / -name \*msi`
           - Note a couple of Identity Collector msi files (Windows installation pacakges); the file name varies between R18 and R80
-          - Example: `/var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi`
-          - Go back to `manager` WSL shell
+          - Example: `/var/log/opt/CPsuite-R82/fw1/tmp/nacClients/CPIdentityCollector.msi`
+        - Go back to `manager` WSL shell
           - Copy the client file: (modify the path the actual path you found)
-            - `scp ansible@192.168.41.20:/var/log/opt/CPsuite-R81.20/fw1/tmp/nacClients/CPIdentityCollector.msi .`
-          - On `manager` use the file explorer to open the Linux > Ubuntu-22.04 > home > ansible path
+            - `scp ansible@192.168.41.20:/var/log/opt/CPsuite-R82/fw1/tmp/nacClients/CPIdentityCollector.msi .`
+          - On `manager` use the file explorer to open the Linux > Ubuntu-24.04 > home > ansible path
           - Copy the installation package file (e.g. R81 file name is CPIdentityCollector.msi) to your desktop or another convenient location
-          - Next open a connection to \\10.0.1.11
-          - Athenticated as `AD\juliette.larocco`
+          - Next open a connection to `\\10.0.1.11`
+          - Athenticate as `AD\juliette.larocco`
           - Change to the IT folder
           - Paste the file here so it can be accessed from other systems
       - Official source
@@ -580,9 +638,10 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
           - Not sure if a support contract is required, or if setting up up a proper eval license will take care of this
       - From SmartConsole
         - Try enabling Identity Awareness and the Identity Collector. A download link will be shown right in SmartConsole.
-        - This link was a broken link in my testing, but might work eventually
+        - This is the same paywalled client
     - Log in to `idc-1` as `AD\Juliette.LaRocco2`
-    - Copy the installation package to `idc-1   and install the Identity Collector
+    - Copy the installation package to `idc-1` and install the Identity Collector
+      - Copy from `\\File-1\IT` to local system before installing
     - Allow Identity Collector in the Windows Firewall on `idc-1`
       - Click **Start** > type **Windows Defender Firewall**
       - Click **Allow an app or feature through Windows Defender Firewall**
@@ -593,7 +652,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Note the apps should be allowed for the Domain profile (checked)
       - Click **OK**
     - Configure Identity Collector
-      - Back on `IDC-1`, launch the Identity Collector app (it requires Administrative permissions to run)
+      - Stil on `idc-1`, launch the Identity Collector app (it requires Administrative permissions to run)
       - Ribbon menu > **Domains**
         - Click icon for New domain
           - Name: **xcpng.lab**
@@ -631,7 +690,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - Ribbon menu > **Query Pools**
         - Click the **New** icon
           - Name: **Corp AD**
-          - Select all Identity Sources (check **DC-1**)
+          - Select all Identity Sources (check **dc-1**)
           - Click **OK** and then click **OK**
       - Ribbon menu > **Filters**
         - Click the **New** icon
@@ -640,8 +699,8 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
             - Enter Network **10.0.1.0/24** and comment **Branch 1 LAN**
             - Click "**+**" to add it
             - Click **OK** then click **OK**
-      - Left menu > **Gateways*
-        - Right click in the open spec and then click **Add**
+      - Left menu > **Gateways**
+        - Right click in the open space and then click **Add**
           - Name: **firewall1**
           - IP Address: **10.0.1.1**
           - Shared secret: **Checkpoint123!**
@@ -658,27 +717,27 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - Preferred DNS: **10.0.1.10**
   - Alternate DNS: *blank*
 - Join to domain
+  - Close out all the open programs (i.e., SmartConsole)
   - Open administrative powershell
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
-- Generally, you will still use the local account on `manager`
+- Generally, you will still use the local account on `manager` for the rest of this Lab
   - this gives easy access to the files and configuration you have already built
 
 ## Configure DMZ Servers
 - Configure Apache web server **dmz-apache**
   - Log in at the console
-    - As the default use or the `ansible` user
+    - As the default user or the `ansible` user
   - Configure Static IP address
     - `sudo vi /etc/netplan/01-netcfg.yaml`
     - Paste in the contents of [01-netcfg.yaml](01-netcfg.yaml)
     - `sudo chmod 600 /etc/netplan/01-netcfg.yaml`
     - `sudo netplan apply`
       - It is OK for a warning to display that it was unable to call Open vSwitch: https://ubuntuforums.org/showthread.php?t=2495406
-  - Give permissions to user ansible
-    - `echo "ansible ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-ansible-for-sudo-password"`
+      - Confirm: `ip a`
   - set up ssh key auth
-    - from `manager`
+    - from `manager` WSL shell
       - `ssh-copy-id 192.168.31.11`
   - Update file `inventory`
     - uncomment dmzserver 192.168.31.11
@@ -688,6 +747,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - [ssl.conf.j2](ansible/ssl.conf.j2)
     - [dmz-apache.yml](ansible/dmz-apache.yml)
     - `ansible-playbook dmz-apache.yml`
+      - In testing had to re-run this playbook. The package updates are slow through our lab firewall1, and the first run it gets hash mismatches.
   - Testing
       - From `branch1-1`:
         - https://192.168.31.11
@@ -696,17 +756,15 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
       - From a test machine on build network: http://192.168.101.6
 - Configure IIS web server **dmz-iis**
   - Complete initial setup and set administrator password
-  - Log in for the first time at the console
+  - Select **Required only** and **Accept**
   - Rename server
     - Open administrative powershell
-    - `Rename-Computer -NewName dmz-iis`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName dmz-iis -Restart`
   - Network configuration
     - Log back in
     - Open administrative powershell
     - Set the static IP address and point DNS settings to the domain controller/DNS server
       - `New-NetIPAddress -IPAddress 192.168.31.10 -DefaultGateway 192.168.31.1 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-      - **Yes** allow your PC to be discoverable by other PCs and devices on this network
     - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 10.0.1.10`
   - Join to domain
     - `Add-Computer -DomainName xcpng.lab -restart`
@@ -717,86 +775,66 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
     - Log back in as `AD\Juliette.LaRocco2`
     - Open administrative powershell
     - `Install-WindowsFeature Web-Server -IncludeManagementTools`
+    - `Install-WindowsFeature Web-ASP`
   - Test:
-    - From dmz-iis: http://localhost
-    - From branch1-1:
+    - From `dmz-iis`: http://localhost
+    - From `branch1-1`:
       - http://dmz-iis
       - http://192.168.31.10
       - http://192.168.101.5
-    - From manager: http://192.168.31.10
+    - From `manager`: http://192.168.31.10
     - From a test machine on build network: http://192.168.101.5
-    - You may want to test IIS by using asp.net hello world https://www.guru99.com/asp-net-first-program.html
+    - You can also test IIS by
+      - creating an index.html file in C:\inetpub\wwwroot and repeat the test
+      - Rename the same file to default.asp and repeat the test (exercises the ASP.NET feature)
+    - NOTE More ASP.NET examples at https://www.tutorialspoint.com/asp.net/asp.net_first_example.htm
 
 ## HTTPS Inspection
 - Enable application control and url filtering blades, and create outbound https inspection certificate
   - Log back in to `manager`
   - Download and run branch1-https.yml [branch1-https.yml](ansible/branch1-https.yml)
     - `ansible-playbook -i inventory-api branch1-https.yml`
-- We are using manual solutions (not Ansible) here since Ansible check_point.mgmt doesn't support all the commands until R82
-  - creating https rules, etc not supported until R82
-  - some outbound certificate commands function differently pre-R82
-  - `enable-https-inspection` will be added in the next version
-- Export the certificate using SmartConsole gui
-  - Open the cluster `firewall1`
-  - Click **HTTPS Inspection**
-  - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
-  - Step two > click **Export certificate**
-    - Name it **outbound**
-- Step 3 > check **Enable HTTPS inspection**
-- Click **OK**
-- Click **Publish**
+    - Enables blades, creates outbound inspection certificate and saves public certificate to `certificate.cer`
+- We are using some manual solutions (not Ansible collection, but mgmt_cli) here since Ansible check_point.mgmt doesn't support all the commands
+- If the exported certificate.cer and certificate_public.cer both don't work (same certificate)
+  - Export the certificate using SmartConsole gui
+    - Open the cluster `firewall1`
+    - Click **HTTPS Inspection**
+    - Step one should show completed. If you created with the playbook but it doesn't show in the GUI, you can try to create it from the GUI. However, this did not work on Lab testing.
+    - Step two > click **Export certificate**
+      - Name it **outbound**
+- Step 3 Enable HTTPS inspection
+  - Log back into `manager` and open a WSL shell
+  - Download and run branch1-https-enable.yml [branch1-https-enable.yml](ansible/branch1-https.yml-enable)
+  - `ansible-playbook branch1-https-enable.yml`
 - Distribute the https inspection certificate using GPO on `dc-1`
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
-    - for example, copy the certificate to the \\file-1\it share from `manager`, and pick it up from there from `dc-1`
+    - for example, copy the certificate to the `\\file-1\it` share from `manager`, and pick it up from there from `dc-1`
   - create the GPO using administrative powershell
     - `New-GPO -Name "Distribute Root CA Certficate" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Open Group Policy Management Console (GPMC)
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab
     - Expand Domains: xcpng.lab
+    - Expand xcpng.lab
     - Right-click **Distribute Root CA Certificate** from the tree, then click **Edit**
     - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click **Trusted Root Certification Authorities** and then click **Import**
-      - Import `c:\outbound.cer`
-      - Accept the defaults
-  - Update `Lab_Policy` to enable https inspection
-    - From `manager` open SmartConsole
-    - **SECURITY POLICIES** > Open **Lab_Policy** > **HTTPS Inspection** > **Policy**
-    - Change the default rule **Track** value to **Log**
-  - Add more https bypass rules manually
-    - Not possible with API in R81.20, but available on R82 API
-    - First rule
+      - Import `c:\outbound.cer`, **OK**
+      - Accept the defaults **Next**, **Next**, **Finish**
+  - Update `Lab_Policy` https inspection rules ("Outbound Policy")
+    - Log back into `manager`
+    - Download and run branch1-https-policy.yml [branch1-https-policy.yml](ansible/branch1-https-policy.yml)
+      - `ansible-playbook -i inventory-api branch1-https-policy.yml`
+      - This creates bypass rule by source host
+    - Add second rule ("HTTPS services - recommended bypass" did not show in the API's updatable objects list)
+      - SECURITY_POLICIES > HTTPS Inspetion > Outbound Policy
       - Name: Exceptions for recommended imported services
       - Source:
         - *Any
       - Destination:
         - Import > Updatable Objects >  **HTTPS services - recommended bypass**
-      - Services:
-        - HTTPS default services
-      - Action:
-        - Bypass
-      - Track: Log
-    - Second rule
-      - Name: Exceptions for categories
-      - Source:
-        - *Any
-      - Destination:
-        - Internet
-      - Services:
-        - HTTPS default services
-      - Category/Custom Application:
-        - Financial Services
-        - Health
-      - Action:
-        - Bypass
-      - Track: Log
-    - Third rule (important to allow SMS to download Updatable objects)
-      - Name: Bypass inspection
-      - Sources:
-        - dmz-apache
-        - sms
-      - Destination:
-        - Internet
+        - Make sure you remove "Internet" from the destination column
       - Services:
         - HTTPS default services
       - Action:
@@ -815,8 +853,8 @@ In this step we will import the Check Point ICA certificate and also distribute 
   - Click on the root "O=sms.xcpng.labx3fd5d" (the exact name will vary)
   - Export/Copy to File
   - Save as type: Base64-encoded ASCII, single certificate
-  - Name as you wish
-- Copy the file to `DC-1` (e.g., copy to \\file-1\it\ and access it from there)
+  - Name as you wish (e.g., usercheck.crt)
+- Copy the file to `DC-1` C:\ (e.g., copy to \\file-1\it\ and access it from there)
 - Import the certificate to the GPO for trusted certificates
   - Log in to `DC-1` as administrator juliette.larocco2
   - Open Group Policy Management Console (GPMC)
@@ -826,40 +864,38 @@ In this step we will import the Check Point ICA certificate and also distribute 
     - Right click **Distribute Root CA Certificate** from the tree and click **Edit**
     - In the console tree, open Computer Configuration\Policies\Windows Settings\Security Settings\Public Key Policies
     - Right-click Trusted Root Certification Authorities, and then click Import
-      - By default the certificate you exported is a .der file; select all file types to see the certificate you downloaded
-      - Import the file
+      - Import the file, **OK**, **Next**, **Next**, **Finish**
 - You will now be able to view User Check pages correctly (for blocked site message, etc.)
-  - `gpupdate /force` will trigger an update
-  - closing/re-opening the browser can solve caching issues
-  - logging out and back in may also help
  
 NOTE As this point no HTTPS inspection will occur, until we enable the application control layer, below.
 
 ## Change website categorization to Hold mode
 By default URL categorization occurs in the background. First attempts to a previously unknown URL will succeed until Check Point ThreatCloud decides it should be blocked. For this lab we will configure it to hold (block until the categorization is complete.
-- Back on `manager`, log in to SmartConsole
-- MANAGE & SETTINGS > Blades > Application Control & URL Filtering > Advanced Settings
-- Click **Check Point online web service**
-- Change **Website categorization mode** to **Hold**
-- Click **OK**, **Publish**, and install policy
+
+- Log back in to `manager` and open a WSL shell
+- Download and run branch1-https-advanced.yml [branch1-https-advanced.yml](ansible/branch1-https-advanced.yml)
+  - `ansible-playbook -i inventory-api branch1-https-advanced.yml`
 
 ## Add Application Control layer
 NOTE These changes can likely be done using Ansible and the API. This is not included in this Lab at this time.
-- Open the Access Policy and find the section **General Internet access**
-- Find the rule **General Internet access**
-- Change action from **Accept** to **Inline Layer > New Layer**
+- From `manager` open SmartConsole and click **SECURITY POLICIES**
+- Open the **Lab Policy** and click Access Control > Poliy
+  - If you don't see the Lab_Policy tab, click the `+` icon, and select Lab_Policy from the list
+- Find the section **General Internet access**
+- Find the rule **Web access**
+- Change action from **Accept** to **Inline Layer > New layer**
   - Name: **Internet Control**
   - Blades:
     - **Firewall** (checked)
     - **Applications & URL Filtering** (checked)
-  - <ins>Check</ins> Multiple policies and rules can use this layer
+  - Sharing: <ins>Check</ins> Multiple policies and rules can use this layer
   - Advanced > Implicit Cleanup Action: **Accept**
   - Click **OK**
-- Update the cleanup rule
+- Update the new cleanup sub-rule
   - Rename **Allow remaining traffic**
   - Action: **Accept**
-  - Track: **Log**
-- Add these sub rules above the cleanup rule
+  - Track: **Log**, then enable **Accounting**
+- Add these sub rules <ins>above</ins> the cleanup rule
   - Subrule 1
     - Name: Block bad sites
     - Source: *Any
@@ -894,13 +930,13 @@ NOTE These changes can likely be done using Ansible and the API. This is not inc
       - If available, Unknown Risk
     - Action:
       - Ask
-        - Access Approval
+        - Company Policy
         - Once a day
-        - Per applications
+        - Per application/site
     - Track: Log > Accounting
-- Publish and install Lab_Policy
+- **Publish** and install Lab_Policy
   - This will enable https inspection!
-- Test from branch1-1
+- Test from `branch1-1`
   - Run `gpupdate /force` at a shell to trigger an immediate group policy update (by default periodic refresh every 90 minutes with a randomized offset of up to 30 minutes)
   - Browse to an Internet site like https://github.com and examine the https certificate
     - Edge browser: click the lock next to the URL > Connection is secure
@@ -919,13 +955,16 @@ NOTE These changes can likely be done using Ansible and the API. This is not inc
   - Test confirm that Health and Financial Sites are not inspected
     - https://webmd.com - the certificate will be the original certificate, not from xcpng.lab
     - https://chase.com - the certificate will be the original certificate, not from xcpng.lab
+    - Review the logs in SmartConsole, paying attention to the logs where the action is HTTPS Bypass
+      - Note some deploy.static.akamaitechnologies.com hitting the recommended bypass list
+      - Note that connections to https://192.168.31.11 with the self-signed cert are bypassed, since they match the rule "Internal web access to DMZ", which doesn't have the inline layer with application control and URL filtering enabled
 
 ## Identify Awareness and access roles
 The older "AD Query" method is deprecated (see Microsoft vulnerability CVE-2021-26414 and sk176148), and the recommended method is to implement Identity Awareness by deploying **Identity Collector**. See sk108235.
 
 A good alternative for Lab testing is using **Browser-Based Authentication**. The book **Check Point Firewall Administration R81.10+** by Vladimir Yakovlev pages 453-464 has instructions on configuring this.
 
-Here are the steps for configuring IDC in our Lab. **Please Note** you will need to apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) for the remote firewalls firewall2 and firewall3 to work.
+Here are the steps for configuring IDC in our Lab. **Please Note** you will need to apply [sk26059](https://support.checkpoint.com/results/sk/sk26059) for the remote firewalls firewall2 and firewall3 to work. These steps are included below.
 
 - Configure in SmartConsole on `manager`
   - Create LDAP account unit
@@ -935,9 +974,9 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
         - Profile: Microsoft_AD
         - Domain: xcpng.lab
         - Account Unit usage
-          - CRL retrieval: Not checked
+          - CRL retrieval: Not checked (default)
           - User management: Checked (default)
-          - Activity Directory Query: default not checked
+          - Activity Directory Query: Not checked (default)
       - Servers tab
         - Add
           - Host: dc-1
@@ -986,11 +1025,11 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - Click **OK** to close the firewall cluster settings
     - **Publish** and install Lab_Policy
   - Finish Identity Collector configuration
-    - Log in to IDC-1
+    - Log in to `idc-1`
     - Launch Identity Collector
     - From the left, click **Gateways**
       - Edit **firewall1**
-      - Click **Test** and then click **Trust** under Certificate Info
+      - Click **Trust** under Certificate Info
       - Click **OK**
   - Testing
     - Confirm Identity Sources > `dc-1` is working
@@ -999,15 +1038,44 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
     - From the left menu click **Logins Monitor**
     - Click the small power icon next to the text "Logins Monitor"
     - Log in to `branch1-1` using a domain user account (i.e., `AD\juliette.larocco`)
+      - Just unlocking the screen may not be enough; log out and back in
     - Back in the Identity Collector, click the refresh icon (might be partly hidden behind the red text)
     - The login will show in the top pane and the related machine and user in the bottom pane
     - Confirm identities are passed to the firewalls
       - Log in to firewall1a and firewall1b
       - from expert prompt: `pep show user all`
+      - and then: `pdp monitor all`
     - If not working, go back and re-test the IDC domain "xcpng.lab" and Identity Source "dc-1"
       - if these aren't working, Identity Awareness will not work
-      - recheck: DC-1 windows firewall disabled for domain; IDC-1 allow IDC apps through windows firewall or turn off windows firewall for Domain
-      - Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
+      - recheck: `dc-1` windows firewall disabled for domain; `idc-1` firewall allows IDC apps through windows firewall or turn off windows firewall for Domain
+      - Check logs for logs sourcing from `idc-1` failed to log in to AD; check account unit, try resetting password; check if user adquery exists in AD
+      - Try install database in SmartConsole, then re-push policy
+      - R81.20: Installing WireShark on `dc-1` seemed to mysteriously resolve the issue (!)
+      - R82: haven't found a solution yet
+        - Installing WireShark must be done before promoting to DC (or you must disabled UAC to install after promoting DC)
+          - didn't work
+        - Windows Server 2025 requries LDAP signing
+          - gpmc.msc
+          - Edit default domain controllers policy
+            - Forest > Domains > xcpng.lab > Domain Controllers
+            - Expand Domain Controllerss, right-click Default Domain Controllers Policy > Edit
+            - Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options
+            - In right pane, find and double-click Domain Controller: LDAP server signing requirements Enforcement
+            - Select Define this policy setting checkbox
+            - Select Disabled
+            - Click Apply then OK
+        - Enable Log Implied Rules (GLobal Properties > FireWall)
+          - You will see implied traffic logged source firewall1 10.0.1.2 to dc-1 (10.0.1.10) for ldap (tcp/389) (and a hit on tcp/135 earlier)
+        - Since Check Point's implied rules only allow ldap, not ldaps (636, ldap-ssl) from gateways to `LDAP-Servers`
+          - default action is the gateways will try to use the Account unit with ldaps, fail, and try unencrypted ldap
+          - you can change this behavior in the account unit
+          - you can add a rule in section "Gateways access" to allow firewall1 to dc-1 for ldap-ssl
+        - What finally worked was modify the LDAP Account unit `Microsoft _AD` > Objects Management > Network is secured, establish clear communication
+        - troubleshooting https://support.checkpoint.com/results/sk/sk101369
+          - pdp monitor all
+          - pdp control sync
+          - pdp network registered
+      - Recap: R81.20 with newest IDC worked with this workaround; R82 with the older IDC didn't seem to work with this workaround
   - Create Access role
     - Back on `manager` open SmartConsole
     - Add a subrule above the rule "Allow general categories" which allows medium/low/very low risk applications
@@ -1019,41 +1087,43 @@ Here are the steps for configuring IDC in our Lab. **Please Note** you will need
           - Click "**+**" to add, and search for **support**
           - Click on **Support**
         - Machines: All identified machines (machines identified by a supported authenticated method, i.e. Active Directory)
+          - this is mean to disallow non-domain-joined workstations
         - Remote Access Clients: Leave at Any Client
         - Click **OK**
-    - Destination: **New** > **Other** > **Domain..** > **.ipgiraffe.com** (FQDN)
+    - Destination: **New** > **Other** > **Domain..** > **.ipchicken.com** (FQDN)
     - Services: ***Any**
     - Action: **Accept**
-    - Track: **Log**
-  - Add another subrule just below to deny all access to ipgiraffe.com
+    - Track: **Log** > **Accounting**
+  - Add another subrule just below to deny all access to ipchicken.com
     - Name: **Deny all nonsupport access to sites**
     - Source: ***Any**
-    - Destination **.ipgiraffe.com**
+    - Destination **.ipchicken.com**
     - Services: **Any**
     - Action: **Drop** > **Blocked Message**
     - Track: **Log** > **Accounting**
-  - **Publish** changes and push policy
+  - **Publish** changes and push Lab_Policy
   - Test access, access control, enforcement of user identity works and is logged
     - http://maliciouswebsitetest.com/ should be blocked
-    - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
-    - https://ipgiraffe.com should be blocked when user Lab is logged in on `manager`
+    - https://ipchicken.com should be allowed when Juliette.Larocco is logged in on `branch1-1`
+    - https://ipchicken.com should be blocked when user Lab is logged in on `manager`
+    - curl https://ipchicken.com from dmz-apache is also blocked
 
 # Configure Branch 2
 ## Add branch 2 to Domain Controller
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1` from an administrative powershell
     - branch2-site.ps1 ([branch2-site.ps1](powershell/branch2-site.ps1))
-    - `powershell -ExecutionPolicy Bypass branch2-site.ps1`
+    - `powershell -ExecutionPolicy Bypass .\branch2-site.ps1`
 - Configure DC-1 as DHCP server for branch 2
   - branch2-dhcp.ps1 ([branch2-dhcp.ps1](powershell/branch2-dhcp.ps1))
-  - `powershell -ExecutionPolicy Bypass branch2-dhcp.ps1`
+  - `powershell -ExecutionPolicy Bypass .\branch2-dhcp.ps1`
 
 ## Enable SMS to manage remote gateways
 - Create file on `manager`
   - [branch2-enablesms.yml](ansible/branch2-enablesms.yml)
 - Apply the changes
   - `ansible-playbook -i inventory-api branch2-enablesms.yml`
-- R81.20: Enable "Apply for Security Gateway control connections"
+- R82: Enable "Apply for Security Gateway control connections"
   - Edit `sms` object
   - Under NAT, <ins>check</ins> "Apply for Security Gateway control connections"
   - Click **OK**
@@ -1094,22 +1164,9 @@ Steps:
     - `set interface eth0 ipv4-address 192.168.102.3 mask-length 24`
     - `set static-route default nexthop gateway address 192.168.102.254 on`
     - `save config`
-- Add `manager`'s RSA keys to each firewall's authorized_keys file
-  - Log in to `manager` and open a WSL shell
-    - ssh to firewall1a and firewall1b
-      - `ssh ansible@192.168.102.2`
-      - `ssh ansible@192.168.102.3`
-      - you will be in the default home directory `/home/ansible`
-  - Create new authorized_keys file and add the key
-    - `mkdir .ssh`
-    - `chmod u=rwx,g=,o= ~/.ssh`
-    - `touch ~/.ssh/authorized_keys`
-    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-    - Add the public key from `manager` to the files
-      - `cat > ~/.ssh/authorized_keys`
-        - paste in the key
-        - press Control-D
-    - `exit`
+- Enable ssh key login to `firewall2a` and `firewall2b` from `manager` using WSL shell
+  - `ssh-copy-id 192.168.102.2`
+  - `ssh-copy-id 192.168.102.3`
   - You can now ssh without a password
 - Test Ansible access
   - Exit back to session on `manager`
@@ -1118,7 +1175,7 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on `manager` (configuration files, playbook to create firewalls , and the jinja template)
+- Create files on `manager` (configuration files and playbooks to create firewalls)
   - [firewall2a.yml](ansible/firewall2a.yml)
   - [firewall2a.cfg](ansible/firewall2a.cfg)
   - [firewall2b.yml](ansible/firewall2b.yml)
@@ -1134,7 +1191,7 @@ Steps:
 
 ## Configure cluster and policy
 - Create cluster using API
-  - https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
+https://galaxy.ansible.com/ui/repo/published/check_point/mgmt/content/module/cp_mgmt_simple_cluster/
   - Create file on `manager`
     - [firewall2-cluster.yml](ansible/firewall2-cluster.yml)
   - `ansible-playbook -i inventory-api firewall2-cluster.yml`
@@ -1151,34 +1208,60 @@ Steps:
     - [branch2-push.yml](ansible/branch2-push.yml)
   - `ansible-playbook -i inventory-api branch2-push.yml`
     - This policy permits LAN to use 8.8.8.8 and 8.8.4.4 for DNS for testing
-      - For example, create a Windows 10 workstation on branch2 and set static IP information
+      - For example, create a Windows 11 workstation on branch2 and set static IP information
       - 10.0.2.25/24 DNS 8.8.8.8 and gateway 10.0.2.1
 - Test that ansible can still manage firewall2 cluster members
   - `ansible all -m ping`
 - At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (firewall2a, firewall2b)
-  - `clish`
-  - `installer check-for-updates`
-  - `installer download-and-install [tab]`
-  - select the applicable JHF hotfix bundle by number
-  - Approve the reboot
-  - If fails to check for updates "The administrator did not authorize downloads"
-    - `installer agent disable`
-    - `installer agent enable`
-    - then check for updates again
-    - See https://support.checkpoint.com/results/sk/sk181557
-      - Check using clish: show consent-flags allow-receiving-data
-      - To override and enable:
-        - `set consent-flags allow-receiving-data true`
-        - `save config`
-        - then check for updates again
+  - SmartConsole process for firewall2 cluster
+    - Log in to SmartConsole
+    - Click GATEWAYS & SERVERS
+    - Right-click firewall2 > Actions > Install Hotfix/Jumbo...
+    - Leave it set to recommended jumbo
+    - Click Verify
+      - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.102.2, State=unititialized
+    - Click Install
+      - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
+  - Manual  process for firewall2a and firewall2b
+    - SSH or console to sms
+    - `clish`
+    - `installer check-for-updates`
+    - `installer download-and-install [tab]`
+    - `installer download-and-install <package-number>`
+      - select the applicable JHF hotfix bundle by number
+    - Approve the reboot
+    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorize downloads, not performing update`
+      - `installer agent update`
+      - `installer agent disable`
+      - `installer agent enable`
+      - `installer check-for-updates`
+      - You may have to wait a few minutes for the installer to find the new package and show them in the list
 
 ## VPN
+- New on R82: Default Enhanced Link Selection interfaces are missing from firewall1 and firewall2
+  - firewall1 object
+    - IPSec VPN > Enhanced Link Selection
+    - Interfaces > Add
+      - External Interface: eth1: 192.168.101.1
+      - Next Hop IP Addresses: blank
+      - Static NAT IP Addresss: blank
+      - Redundancy Mode: Active
+      - Priority: blank
+    - Publish changes, push policy **Lab_Policy**
+  - firewall2 object
+    - IPSec VPN > Enhanced Link Selection
+    - Interfaces > Add
+      - External Interface: eth0: 192.168.102.1
+      - Next Hop IP Addresses: blank
+      - Static NAT IP Addresss: blank
+      - Redundancy Mode: Active
+      - Priority: blank
+    - Publish changes, push policy **Lab_Policy_Branches**
 - Create file on `manager`
   - [branch2-vpn.yml](ansible/branch2-vpn.yml)
 - `ansible-playbook -i inventory-api branch2-vpn.yml`
 - Use SmartConsole to edit the community **Branch_Community**
-  - Advanced: Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
+  - Advanced > Check **Disable NAT inside the VPN community** (Both center and satellite gateways)
   - Click **OK**
 - **Publish** changes
 - Push policies Lab_Policy and Lab_Policy_Branches
@@ -1187,18 +1270,19 @@ Steps:
 - Testing
   - Generate some test traffic
     - `ansible all -m ping`
-    - 192.168.102.2 and 192.168.102.3 will fail now (as soon as VPN tunnels come up)
   - DHCP traffic from `branch2-1` will automatically bring up the tunnel
     - Give it a little time, or reboot `branch2-1` from console
   - In SmartConsole open a new Log tab
-  - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
-  - SmartView Monitor will open
-  - From the tree on the left expand **Tunnels** and click **Tunnels on Gateway**
-    - Select **firewall1** to view active tunnels at firewall1
-    - Repeat and select **firewall2** to view active tunnels at firewall2
-    - Click the refresh icon to update the information and see the tunnels come up
-    - Also, from the firewall cluster active member, use `vpn tu`
-- SSH to each firewall and accept the keys
+    - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
+    - SmartView Monitor will open
+    - From the tree on the left expand **Tunnels** and click **Tunnels on Community**
+      - Select **Branch_Community** to view active tunnels
+      - Repeat and select **firewall2** to view active tunnels at firewall2
+      - Click the refresh icon to update the information and see the tunnels come up
+      - Also, from the firewall cluster active member, use `vpn tu`
+        - `vpn tu` opens an interactive menu
+        - `vpn tu tlist` lists all the tunnels at once
+- From `manager` ssh to to firewall2a and firewall2b on their internal IP addresses and accept the keys
   - `ssh 10.0.2.2`
   - `ssh 10.0.2.3`
 - Update `inventory` file
@@ -1207,13 +1291,26 @@ Steps:
 - Retest `ansible all -m ping`
 
 ## Configure branch2-1
-- Log in for the first time at the console
-- Rename workstation
-  - Open administrative powershell
-  - `Rename-Computer -NewName branch2-1`
-  - `Restart-Computer`
+- Log in to `branch2-1` for the first time at the console
+- Open administrative powershell
+  - Confirm IP address via DHCP is working
+    - from commandline: `ipconfig /all`
+  - Rename workstation
+    - `Rename-Computer -NewName branch2-1 -Restart`
+- Test internet access
+  - PROBLEM starting R82 with dropping invalid UDP checksums, breaking DNS lookups and Internet access
+  - Usually a reboot of the firewalls solves the issue
+  - Further steps you can take:
+    - fw ctl set int udp_is_verify_cksum 0
+    - fw ctl get int udp_is_verify_cksum
+    - udp_is_verify_cksum = 0
+    - make it permanent
+      - fw ctl set -f int udp_is_verify_cksum 0
+      - "fwkern.conf" was updated successfully
+      - more /opt/CPsuite-R82/fw1/boot/modules/fwkern.conf
+      - udp_is_verify_cksum=0
 - Join to domain
-  - Open administrative powershell
+  - Log back in and open administrative powershell
   - `Add-Computer -DomainName xcpng.lab -restart`
     - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
     - Password: the password you set
@@ -1224,12 +1321,15 @@ Steps:
   - Try connecting to the file server at `\\file-1`
   - Review logs in SmartConsole
     - Note that the Internet web traffic goes out the branch2 ISP connection
+    - Note that each branch can go out its own Internet connection
+    - Traffic like DNS and access to `file-1` go over the VPN tunnel
 
 ## Enable Application Control and Identity Awareness
+- Log back in to `manager` and open SmartConsole
 - Edit cluster **firewall2**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
-    - AD Query
+    - **AD Query** and **Next**
     - Select an Active Directory: **xcpng.lab**
     - Username: **adquery**
     - Password: **YourStrongPassword123!**
@@ -1237,6 +1337,7 @@ Steps:
       - Failure message: User is not a domain administrator, as such AD Query will not work.
       - Check **Ignore the errors and configure the LDAP account**
       - Login ID: CN=adquery,OU=Automation Accounts,OU=Corp,DC=xcpng,DC=lab
+      - Click **Finish**
     - Click **Identity Awareness** from tree on the left
     - <ins>Check</ins> Identity Collector, and click **Settings**
     - Click the "**+**" and add **idc-1**
@@ -1266,25 +1367,23 @@ Steps:
       - Click **OK**
       - Edit the new gateway and click **Test**
       - Click **Trust** and then click **OK**
-🌱 The following manual changes can likely be done using Ansible and the API. That could be a future effort.
+The following manual changes can likely be done using Ansible and the API. That could be a future effort.
 - Log back in to `manager` and log in to SmartConsole
 - Open policy **Lab_Policy_Branches**
 - Open the Access Policy and find the section **General Internet access**
 - Find the rule **General Internet access**
 - Change action from **Accept** to **Inline Layer > Internet Control**
 - Update **Support** access role
-  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**- 
-    - Click **OK**
+  - Networks: Add **LAN_Networks_NO_NAT**, remove **branch1_lan**
+  - Click **OK**
+
 ## HTTPS inspection
-- Non-ansible/manual solutions here since ansible check_point.mgmt doesn't support all the commands until R82
-  - creating https rules, etc not supported until R82
-  - some outbound certificate commands function differently pre-R82
-  - `enable-https-inspection` will be added in the next version
 - Enable HTTPS inspection on **firewall2**
   - Open the cluster `firewall2`
   - Click on HTTPS Inspection
   - Steps 1 and 2 are already completed
   - Step 3 <ins>check</ins> **Enable HTTPS inspection**
+  - Select **Full Inspection**
   - Click **OK**
 - **Publish** and install policies **Lab_Policy** and **Lab_Policy_Branches**
   - `ansible-playbook -i inventory-api branch1-push.yml`
@@ -1304,15 +1403,20 @@ Steps:
       - Click Certificates and select the Trusted Root Certification Authorities tab
   - If the traffic not intercepted at all
     - add a rule to the HTTPS policy, publish and push, then try again
-  - Test identity access by visiting https://ipgiraffe.com
+  - Test https inspection bypass
+    - https://webmd.com
+    - https://chase.com
+  - Test identity access by visiting https://ipchicken.com
   - Test blocking of bad web sites: http://maliciouswebsitetest.com/
 
 ## Add Identity-Based Management
 - You should see login information passed to all the firewalls: firewall1, firewall2, and soon firewall3
   - Logging in to branch2-1 as juliette.larocco is logged and pushed to firewall1 cluster
-  - `pep show user all`
+  - from firewall expert mode:
+    - `pep show user all`
 - Add an access rule to the **Lab_Policy** and **Lab_Policy_Branches** policies
-  - TIP You can create in one policy and copy/paste it to the other
+  - Log back in to `manager` and open SmartConsole
+  - TIP You can create the rule in one policy and copy/paste it to the other
   - Section: add it to the section **Core Services**
   - Name: **RDP access for Support**
   - Source: **Support** (access role)
@@ -1329,17 +1433,22 @@ Steps:
 - Test
   - From systems where you are logged in from as `AD\juliette.larocco` you should be able to:
     - RDP to `branch1-1` and `branch2-1`(use `AD\juliette.larocco2` for RDP authentication)
-    - Access https://ipgiraffe.com
+      - PROBLEM Windows Server 2025 and Windows 11 seem to have change to Remote Desktop that requires a GPO update
+      - Turning off require NLA on the destination workstation didn't solve the issue.
+    - Access https://ipchicken.com
+  - RDP to a system where the same user is already logged in will fail
+  - If branch2 identities are not working, check if they are showing on the gateways (pep show user all)
+  - Made sure the implied_rules SK fix was applied
 
 # Configure Branch 3
 ## Add branch 3 to Domain Controller
 - Configure Sites and Services Subnets and DNS
   - Run on `dc-1`
     - branch3-site.ps1 ([branch3-site.ps1](powershell/branch3-site.ps1))
-    - `powershell -ExecutionPolicy Bypass branch3-site.ps1`
+    - `powershell -ExecutionPolicy Bypass .\branch3-site.ps1`
 - Configure DC-1 as DHCP server for branch 3
   - branch3-dhcp.ps1 ([branch3-dhcp.ps1](powershell/branch3-dhcp.ps1))
-  - `powershell -ExecutionPolicy Bypass branch3-dhcp.ps1`
+  - `powershell -ExecutionPolicy Bypass .\branch3-dhcp.ps1`
 
 ## Initial Configuration
 Steps:
@@ -1359,22 +1468,10 @@ Steps:
     - `set interface eth0 ipv4-address 192.168.103.3 mask-length 24`
     - `set static-route default nexthop gateway address 192.168.103.254 on`
     - `save config`
-- Add `manager`'s RSA keys to each firewall's authorized_keys file
-  - Log in to `manager` and open a WSL shell
-    - ssh to firewall3a and firewall3b
-      - `ssh ansible@192.168.103.2`
-      - `ssh ansible@192.168.103.3`
-      - you will be in the default home directory `/home/ansible`
-  - Create new authorized_keys file and add the key
-    - `mkdir .ssh`
-    - `chmod u=rwx,g=,o= ~/.ssh`
-    - `touch ~/.ssh/authorized_keys`
-    - `chmod u=rw,g=,o= ~/.ssh/authorized_keys`
-    - Add the public key from `manager` to the files
-      - `cat > ~/.ssh/authorized_keys`
-        - paste in the key
-        - press Control-D
-    - `exit`
+- Back on `manager` at the WSL shell, enable ssh key login to `firewall3a` and `firewall3b`
+  - `ssh-copy-id 192.168.103.2`
+  - `ssh-copy-id 192.168.103.3`
+  - authenticate when prompted
   - You can now ssh without a password
 - Update file `inventory`, uncomment the IPs of firewall3a (192.168.103.2) and firewall2b (192.168.103.3)
 - Test Ansible access
@@ -1382,20 +1479,14 @@ Steps:
     - You are expecting `SUCCESS` and `"ping": "pong"` for both firewalls
 
 ## Configure Gaia
-- Create files on the manager (configuration files, playbooks to create firewalls, and the jinja template)
+- Create files on `manager` (configuration files, playbooks to create firewalls, and the jinja template)
   - [firewall3a.yml](ansible/firewall3a.yml)
   - [firewall3a.cfg](ansible/firewall3a.cfg)
   - [firewall3b.yml](ansible/firewall3b.yml)
   - [firewall3b.cfg](ansible/firewall3b.cfg)
-  - [branch3.j2](ansible/branch3.j2)
 - Run the playbooks to complete the first time wizard (FTW) and reboot
   - `ansible-playbook firewall3a.yml`
   - `ansible-playbook firewall3b.yml`
-- Enable DHCP relay on firewall3a and firewall3b
-  - `clish`
-  - `set bootp interface eth1 on`
-  - `set bootp interface eth1 relay-to 10.0.1.10 on`
-  - `save config`
 - Test
   - You will be able to connect from manager to
     - https://192.168.103.2
@@ -1417,8 +1508,8 @@ Steps:
 - Edit cluster **firewall3**
   - Enable **Application Control** and **URL Filtering** blades
   - Enable **Identity Awareness** blade
-    - AD Query
-    - Select and Active Directory: xcpng.lab
+    - **AD Query** and **Next**
+    - Select an Active Directory: **xcpng.lab**
     - Username: adquery
     - Password: YourStrongPassword123!
     - Click **Connect**
@@ -1440,20 +1531,33 @@ Steps:
       - `ansible-playbook -i inventory-api branch2-push.yml`
 - Test that ansible can still manage firewall3 cluster members
   - `ansible all -m ping`
-  - Once the VPN tunnels are up, you will no longer use the 192.168.3.2 and .3 addresses with ansible; you will need to update `inventory` to use 10.0.3.2 and 10.0.3.3
 - At this point you should be able to install a JHF on the firewalls
-  - SSH or console to each device (sms, firewall3a, firewall3b)
-  - `clish`
-  - `installer check-for-updates`
-  - `installer download-and-install [tab]`
-  - select the applicable JHF hotfix bundle by number
-  - Approve the reboot
-    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorized downloads, not performing update`
+  - SmartConsole process for firewall3 cluster
+    - Log in to SmartConsole
+    - Click GATEWAYS & SERVERS
+    - Right-click firewall3 > Actions > Install Hotfix/Jumbo...
+    - Leave it set to recommended jumbo
+    - Click Verify
+      - In testing, error: Failed to get the Cluster status from: ID=-1, IP=192.168.103.2, State=unititialized
+    - Click Install
+      - Note how the hotfix is gracefully installed on each cluster member without impacting traffic passing through the firewall cluster
+    - CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
+  - Manual  process for firewall3a and fireall3b
+    - SSH or console to sms
+    - `clish`
+    - `installer check-for-updates`
+    - `installer download-and-install [tab]`
+    - `installer download-and-install <package-number>`
+      - select the applicable JHF hotfix bundle by number
+    - Approve the reboot
+    - TIP if you are having trouble on the SMS with `Result: The administrator did not authorize downloads, not performing update`
       - `installer agent update`
       - `installer agent disable`
-      - `installer angent enable`
+      - `installer agent enable`
       - `installer check-for-updates`
-- Configure `idc-1`- for the  new firewall
+      - You may have to wait a few minutes for the installer to find the new package and show them in the list
+
+- Configure `idc-1`- for the  new firewall3 
   - Log in to `idc-1` as `AD\juliette.larocco2`
   - From the ribbon menu click Filters
     - Edit filter **Prod**
@@ -1477,10 +1581,22 @@ Steps:
   - Edit cluster **firewall3**
   - From left tree, click **HTTPS inspection**
   - Check **Enable HTTPS inspection**
+  - Set to **Full inspection**
   - Click **OK**
-  - Publish and install policy **Lab_Policy_Branches**
+  - Publish and install policy **Lab_Policy_Branches** (both firewall2 and firewall3)
+
 ## VPN
-  - Create file on `manager`
+- New on R82: Default Enhanced Link Selection interfaces are missing from firewall1
+  - firewall3 object
+    - IPSec VPN > Enhanced Link Selection
+    - Interfaces > Add
+      - External Interface: eth1: 192.168.103.1
+      - Next Hop IP Addresses: blank
+      - Static NAT IP Addresss: blank
+      - Redundancy Mode: Active
+      - Priority: blank
+    - Publish changes, push policy **Lab_Policy_Branches**
+- Create file on `manager`
     - [branch3-vpn.yml](ansible/branch3-vpn.yml)
   - `ansible-playbook -i inventory-api branch3-vpn.yml`
   - `ansible-playbook -i inventory-api branch3-push.yml`
@@ -1489,15 +1605,21 @@ Steps:
 - Testing
   - Generate some test traffic
     - `ansible all -m ping`
-    - 192.168.103.2 and 192.168.103.3 will fail now (as soon as VPN tunnels come up)
-  - DHCP traffic from `branch3-1` will automatically bring up the tunnel
-    - Give it a little time, or reboot `branch3-1` from console
-  - In SmartConsole open a new Log tab
+    - rebooting branch3-1 also generates DHCP traffic to bring the tunnel up
+- SSH to each firewall and accept the keys
+  - `ssh 10.0.3.2`
+  - `ssh 10.0.3.3`
+- Update `inventory` file
+  - change firewall3a to 10.0.3.2
+  - change firewall3b to 10.0.3.3
+- Retest `ansible all -m ping`
+- DHCP traffic from `branch3-1` will automatically bring up the tunnel
+  - Give it a little time, or reboot `branch3-1` from console
+- In SmartConsole open a new Log tab
   - In the bottom-left under External Apps, click on **Tunnel & User Monitoring**
   - SmartView Monitor will open
-  - From the tree on the left expand **Tunnels** and click **Tunnels on Gateway**
-    - Select **firewall1** to view active tunnels at firewall1
-    - Repeat and select **firewall3** to view active tunnels at firewall3
+  - From the tree on the left expand **Tunnels** and click **Tunnels on Community**
+    - Select **Branch_Community** to view active tunnels for the community
     - Click the refresh icon to update the information and see the tunnels come up
     - Also, from the firewall cluster active member, use `vpn tu`
 - Test ssh access to 10.0.3.2 and 10.0.3.3
@@ -1508,11 +1630,10 @@ Steps:
 - Log in for the first time at the console
   - Rename workstation
     - Open administrative powershell
-    - `Rename-Computer -NewName branch3-1`
-    - `Restart-Computer`
+    - `Rename-Computer -NewName branch3-1 -Restart`
   - Join to domain
     - Log back in and open administrative powershell
-    - `Add-Computer -DomainName xcpng.lab -restart`
+    - `Add-Computer -DomainName xcpng.lab -Restart`
       - User name: `AD\Juliette.LaRocco2` (or, XCPNG.LAB\juliette.larocco2)
       - Password: the password you set
 - Testing
@@ -1539,56 +1660,74 @@ Steps:
   - Auth method: User Identity Propagation
   - User: juliette.larocco2
 - Test access
-  - Test that access to ipgiraffe.com works for `AD\juliette.larocco'
+  - Test that access to ipchicken.com works for `AD\juliette.larocco'
   - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2') from a computer at Branch 1
+  - PROBLEM the firewall allows it but Windows Server 2025/Windows 11 is not allowing the access. Could be GPO issue.
+    - This appears to be a known issue with Server 2025
 
 # Demonstration
 NOTE that the VPN does not allow traffic between Branch 2 and Branch 3
-- Edit VPN community **Branch_Community**
-- Click VPN routing
-- Note the setting **To center only**
-- Change to **To center and other satellites through center** to you want to enable communication between the remote branches (publish and install both policies)
+- To enable `AD\juliette.larocco` to RDP from `branch2-1` to `branch3-1` (and other branch 2<-> branch3 traffic, as long as there is a rule in place)
+  - Edit VPN community **Branch_Community**
+  - Click VPN routing
+  - Note the setting **To center only**
+  - Change to **To center and other satellites through center** to you want to enable communication between the remote branches (publish and install both policies)
 
 Access Demonstration:
 - branch1-1
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
-  - RDP branch2-1 (support users only) ✅
-  - RDP branch3-1 (support users only) ✅
+  - https://192.168.31.11 ✅
+  - https://192.168.101.6 ✅
   - RDP dc-1 (support users only) ✅
+  - RDP file-1 (support users only) ✅
+  - RDP sql-1 (support users only) ✅
+  - RDP dmz-iis should be blocked ✅
+  - RDP branch2-1 (support users only) 🛑 failed due to issues with RDP permissions
+  - RDP branch3-1 (support users only) 🛑 failed due to issues with RDP permissions
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall1 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
-  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
-  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+  - https://ipchicken.com should be allowed when Juliette.Larocco is logged in ✅
+  - https://ipchicken.com should be blocked when local user (non-domain user) is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch1-1 even though user Lab shouldn't work
 - branch2-1
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
-  - RDP branch1-1 (support users only) ✅
-  - RDP branch3-1 (support users only) 🛑 cross-branch requires the change noted above
+  - https://192.168.31.11 ✅
+  - https://192.168.101.6 ✅
+  - RDP dc-1 (support users only) ✅
+  - RDP file-1 (support users only) ✅
+  - RDP sql-1 (support users only) ✅
+  - RDP dmz-iis should be blocked ✅
+  - RDP branch1-1 (support users only) 🛑 failed due to issues with RDP permissions
+  - RDP branch3-1 (support users only) 🛑 cross-branch requires the change noted above 🛑 failed due to issues with RDP permissions
     - traffic between branch2 and branch3 needs to traverse branch1
     - not seeing the traffic hit the "support" rule at branch1
-  - RDP dc-1 (support users only) ✅
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall2 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
-  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
-  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+  - https://ipchicken.com should be allowed when Juliette.Larocco is logged in ✅
+  - https://ipchicken.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch2-1 even though user Lab shouldn't work
 - branch3-1
   - http://192.168.31.10 ✅
   - http://192.168.101.5 ✅
-  - RDP branch1-1 (support users only) ✅
-  - RDP branch2-1 (support users only) 🛑 cross-branch requires the change noted above
+  - https://192.168.31.11 ✅
+  - https://192.168.101.6 ✅
+  - RDP dc-1 (support users only) ✅
+  - RDP file-1 (support users only) ✅
+  - RDP sql-1 (support users only) ✅
+  - RDP dmz-iis should be blocked ✅
+  - RDP branch1-1 (support users only) 🛑 failed due to issues with RDP permissions
+  - RDP branch2-1 (support users only) 🛑 cross-branch requires the change noted above 🛑 failed due to issues with RDP permissions
     - traffic between branch2 and branch3 needs to traverse branch1
     - not seeing the traffic hit the "support" rule at branch1
-  - RDP dc-1 (support users only) ✅
   - `\\file-1\IT` ✅
   - Internet access goes out local firewall3 ✅
   - http://maliciouswebsitetest.com/ should be blocked ✅
-  - https://ipgiraffe.com should be allowed when Juliette.Larocco is logged in ✅
-  - https://ipgiraffe.com should be blocked when local user Lab is logged in
+  - https://ipchicken.com should be allowed when Juliette.Larocco is logged in ✅
+  - https://ipchicken.com should be blocked when local user Lab is logged in
     - NOTE logging out as user Juliette.Larocco didn't immediately break from branch3-1 even though user Lab shouldn't work
 
 Optional example how to set Edge browser home page to http://home
@@ -1627,13 +1766,13 @@ Optional example how to set Edge browser home page to http://home
 - Allow `dc-1` to connect directly to DNS Root Servers (https://www.iana.org/domains/root/servers)
 - Find rules in the policy that are unused, and remove them
 - Remove unused dummy objects, and test if the firewall objects match for the internal LAN IP addresses
-- Remove the icmp-requests service from the Internet access and deploy a new rule in core services
+- Remove the icmp-requests service from the Internet access and deploy a new rule in core services for icmp-requests/ping
 - Spin up a test app on `dmz-iis` that utilizes `sql-1`
 - Test Quic (udp/443) inspection on R82 (see https://community.checkpoint.com/t5/Management/Is-Quic-UDP-443-supported-for-HTTPS-inspection/m-p/223154#M39532
 - Experiment with the Content Awareness blade
   - Enable blade on the cluster objects
   - Edit the **Internet Control** layer and enable **Content Awareness**
-  - Add a rule blocking all DCHP ranges from downloading executable files, then add rule above allowing **support** to download executable files
+  - Add a rule blocking all DHCP ranges from downloading executable files, then add rule above allowing **support** to download executable files
     - Try downloading the Chrome installer from https://chrome.com, then note the user experience: a zero byte file is downloaded
     - Search the logs for: `blade:"Content Awareness"`
   - Note other content that can be detected, from such as "PCI - Credit Card Numbers - 20 or more"

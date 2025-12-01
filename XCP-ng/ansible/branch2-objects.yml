@@ -2,8 +2,7 @@
 - name: Create branch2 objects
   hosts: check_point
   connection: httpapi
-  collections:
-    - check_point.mgmt
+  gather_facts: false
   tasks:
     - name: branch 2 outbound NAT
       check_point.mgmt.cp_mgmt_host:
@@ -19,13 +18,13 @@
         color: dark blue
         comments: branch2 broadcast address
         state: present
-    - name: Branch 2 LAN network
+    - name: branch 2 LAN network
       check_point.mgmt.cp_mgmt_network:
         name: branch2_lan
         subnet: 10.0.2.0
         mask_length: 24
         color: crete blue
-        comments: Branch 2 LAN network
+        comments: branch 2 LAN network
         nat_settings:
           auto_rule: true
           hide_behind: ip-address
@@ -40,7 +39,7 @@
         color: dark blue
         comments: branch3 broadcast address
         state: present
-    - name: Branch 2 LAN DHCP workstations
+    - name: branch 2 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
         name: Branch 2 LAN Workstation DHCP scope
         ip_address_first: 10.0.2.20
@@ -63,5 +62,5 @@
         - dummy_fw3b
         name: remote_branch_firewalls
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:

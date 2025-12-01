@@ -1,7 +1,7 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
 
-📓 This Lab was built using OPNsense-24.1. Soon after 24.7 was released with a complete re-work of the interface. Re-deploying the lab using 
+In this lab we will be using OPNsense 25.7
 
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
@@ -27,7 +27,6 @@ References:
       - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
       - Click **Create network**
     - Renavigate to **Home** > **Hosts** > **xcp-ng-lab1** > **Network**
-    - Under the list of PIFs (physical interfaces), find the new Pentesting interface, click **Status** to  disconnect it from your the eth0 interface
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
@@ -56,9 +55,9 @@ Or, if you created local storage, upload the ISO there.
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **opnsense**
-  - Description: *opnsense pentesting lab firewall*
+  - Description: *opnsense pentesting Lab firewall*
   - CPU: **4 vCPU**
-  - RAM: **2GB**
+  - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB, warnings appear for less than 3GB)
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the OPNsense ISO image you uploaded*
   - First Interface:
@@ -66,7 +65,7 @@ Or, if you created local storage, upload the ISO there.
   - Second Interface: Click **Add interface**
     - Network: from the dropdown select the **Pentesting** network you created earlier
   - Disks: Click **Add disk**
-    - Add **20GB** disk
+    - Add **32GB** disk
   - Click **Show advanced settings**
     - Check **Auto power on**
   - Click **Create**
@@ -85,10 +84,11 @@ Or, if you created local storage, upload the ISO there.
   - much more stable under power failure or hard reboots
 - Accept the disk to install on
   - You need to check the box (use space bar)
-  - Accept erasing the disk
-- Select a root password when prompted
-- Select Complete Install
-- Eject the ISO once the reboot starts (click the icon on Console tab)
+  - **Yes**, accept erasing the disk
+- Select a **Root Password** when prompted
+- Select **Complete Install**
+- Select **Reboot now**
+- Eject the ISO once the reboot starts (click the eject icon on Console tab)
 - Wait for the system to boot
 - Log in as `root` with the selected password (default password is `opnsense`)
 - Option 1) **Assign interfaces**
@@ -121,7 +121,7 @@ Or, if you created local storage, upload the ISO there.
   - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
-  - Select the **win10-lan-ready** or **ubuntu-desktop-lab** template
+  - Select the **win11-lan-ready** or **ubuntu-desktop-lab** template
   - Name: **pentest-workstation**
   - <ins>Change</ins> the Interface to **Pentesting**
   - Click **Create**
@@ -132,24 +132,20 @@ Or, if you created local storage, upload the ISO there.
     - General information
       - Hostname: **pentestfw**
       - Domain: **xcpng.lab**
-      - Primary DNS Server: **8.8.8.8** (we want unfiltered DNS for this network)
-      - Secondary DNS Server: **8.8.4.4**
+      - DNS Servers: **8.8.8.8** and **8.8.4.4** (we want unfiltered DNS for this network)
       - <ins>Uncheck</ins> Override DNS
       - Click **Next**
-    - Time server information
-      - Leave the default time server
-      - Optionally adjust the Timezone
-      - Click **Next**
     - Configure WAN Interface
-      - Review the information, default values are OK
-      - Click **Next**
+      - Type DHCP
+      - <i>Uncheck</i> Block RFC1918 Private Networks since the "WAN" is connected to our lab which uses private RFC1918 address space
+        - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
+        - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
     - Configure LAN Interface
       - Review and click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
     - Click **Reload**
   - Update OPNsense
-    - Log back in
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
     - Read and accept the information provided
@@ -158,22 +154,27 @@ Or, if you created local storage, upload the ISO there.
     - Log back in and check if there are any more updates
   - Install Xen guest utilities
     - System > Firmware > Plugins
-      - os-xen - click "+" to install
-      - Reboot (Power > Reboot > Yes)
+      - Check **Show community plugins**
+      - **os-xen** - click "+" to install
+      - Reboot (**Power** > **Reboot** > **Yes**)
     - In XO, look at the opnsense VM general tab; management agent is now detected
+- Test Internet access from the pentesting network computer to confirm Internet access is still working
 - Configure Firewall Rules
+  - Log back in to OPNsense web GUI
+    - https://192.168.101.254
   - Firewall > Rules
     - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
     - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
-  - Because our "WAN" is on a RFC1918 network
+  - Because our "WAN" is on a RFC1918 network, double check this setting
     - Click Interfaces > WAN
-    - Uncheck Block private networks
-    - Click Save
-    - Click Apply Changes
+    - <i>Uncheck</i> Block private networks
+    - Click **Save**
+    - Click **Apply Changes**
   - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
+  - In a later step we will create rules to further isolate the pentesting network from the Lab network
 
 # Isolate the Pentesting Lab
 It is always best practice to operate in an isolated Pentesting network. If you must access the internet, take precautions:
@@ -186,14 +187,19 @@ Best practice is to stop and finish setting up any parts you want to update over
 Then continue with the following steps to lock things down safely.
 
 ## Disable Internet and DNS
-1. On the OPNsense firewall block all traffic from 192.168.101.0/24 (LAN Net)
-2. Block DNS traffic from 192.168.101.0/24 to the firewall
-    - Why block DNS? DNS is used as a covert channel that operate through DNS to the Internet
+Why are we disabling Internet including DNS access? Because we only want traffic to get to the Internet via Tor. DNS leaks data about your activity and is used as a covert channel that operate through DNS to the Internet.
+
+- Log in to the console of the system on the pentesting network that you are using to configure OPNsense
+- Firewall > Rules LAN
+  - Change the IPv4 rule to be a Block action
+  - Change the IPv6 rule to be a Block action
+  - Click **Apply changes**
+
 ## Configure TOR
 This provides some anonymity, if done correctly.
 - Configure the firewall to transparently proxy Internet traffic over Tor
 - Be careful to <ins>configure DNS correctly</ins> to forward over Tor so your DNS traffic is not leaked
-- You many choose to configure the firewall to instead use a VON service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
+- You many choose to configure the firewall to instead use a VPN service; be mindful of the terms and conditions and that in some cases they will surrender details of your activity to under court order
 
 References:
 - https://docs.opnsense.org/manual/how-tos/tor.html
@@ -203,108 +209,101 @@ References:
 - https://docs.huihoo.com/m0n0wall/opnsense/manual/how-tos/tor.html
 
 Steps:
-- From VM's browser, check the current public IP address, without TOR
-  - http://ipchicken.com
-- Log in to firewall https://192.168.101.254
+- From the pentest network VM's browser log in to OPNsense (https://192.168.101.254)
 - System > Firmware > Plugins
-  - os-OPNproxy - click "+" to install
-    - this doesn't seem to help, but it does seem to replace the old Services > Web Proxy functionality
-    - Services > Squid Web Proxy > Administration
-      - Enable proxy and click Apply
-      - Click Forward proxy
-        - Proxy interfaces: LAN
-        - Check Enable Transparent HTTP proxy
-        - Click Apply
+  - Check Show community plugins
   - os-tor - click "+" to install
 - Refresh the page
-- Click **Services** > **Tor** > **Configuration**
-  - General Tab
-    - Enable: Yes
-    - Listen Interfaces: LAN
-    - Enable Advanced Mode
-      - Check **Enable Transparent Proxy**
-      - Confirm SOCKS port number: 9050
-      - Confirm Control Port: 9051
-      - Confirm Transparent port: 9040
-      - Confirm Transparent DNS port: 9053
-  - Click **Save**
-- **Firewall** > **Rules** > **LAN**
-  - Add rule to top of policy
-    - Action: Pass
+- Click Services > Tor > Configuration > General
+  - Enable: Yes
+  - Listen Interfaces: LAN (only)
+  - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
+  - Enable Advanced Mode
+    - Confirm SOCKS port number: 9050
+    - Confirm Control Port: 9051
+    - Check Enable Transparent Proxy
+    - Confirm Transparent port: 9040
+    - Confirm Transparent DNS port: 9053
+  - Click Save
+- Services > Tor > Configuration > SOCKS Proxy ACL
+    - Add a new ACL
+      - Enable: Yes
+      - Protocol: IPv4
+      - Network: 192.168.101.0/24
+      - Action: Accept
+      - Click Save
+      - Click Reload Service
+  - Firewall > NAT  > Port Forward
+    - Add a rule
+    - Disabled: No
+    - Interface: LAN (only)
+    - TCP/IP Version: IPv4
+    - Protocol: TCP/IP
+    - Source: Advanced > LAN net
+    - Destination: any
+    - Destination port range: DNS to DNS
+    - Redirect target IP: 127.0.0.1
+    - Redirect target port: other: 9053
+    - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
+    - Description: Use Tor for DNS
+    - Click **Save**
+  - Add rule below (at the end)
+    - Disabled: No
+    - Interface: LAN (only)
+    - TCP/IP Version: IPv4
+    - Protocol: TCP
+    - Source: Advanced > LAN net
+    - Destination: any
+    - Destination port range: any to any
+    - Redirect target IP: 127.0.0.1
+    - Redirect target port: other: 9040
+    - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
+    - Description: Use Tor for tcp traffic
+  - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
+  - Click **Apply changes**
+- Firewall > Rules > LAN
+  - Move the automatic rules to the top
+  - First, allow any to 127.0.0.1 port 9053
+  - Next, allow any to 127.0.0.1 port 9040
+  - The last two rules should be block rules
+- Firewall > Rules > WAN
+  - While we are here, we can clean up the logs by NOT logging our lab network mDNS to get logged on the OPNsense firewall
+  - Add rule
+    - Action: Block
+    - Disabled: Unchecked
     - Quick: Checked
-    - Interface: LAN
+    - Disabled: No
+    - Interface: WAN
     - Direction: in
     - TCP/IP Version: IPv4
-    - Protocol: TCP/UDP
-    - Source: LAN net
-    - Destination: This Firewall
-    - Destination port range: From 53 to 53 (DNS)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: Allow DNS to firewall
-    - Click Save
-    - Move the new rule to the top if necessary
-      - Put a Check next to new rule Allow DNS to Firewall
-      - Click the arrow icon to the right of the first rule to move it to the top
-    -  Allow LAN net to This Firewall IP for TCP/IP DNS
-  -  Add a second rule just below it
-      - Action: Block
-      - Quick: Checked
-      - Interface: LAN
-      - Direction: in
-      - TCP/IP Version: IPv4
-      - Protocol: TCP/UDP
-      - Source: LAN net
-      - Destination: any
-      - Destination port range: From 53 to 53 (DNS)
-      - Log: This is not recommended for this Lab, but enable if you wish
-      - Description: Deny unsanctioned DNS
-      - Click Save
-    - Move the new rule below the first rule if necessary
-      - Put a Check next to new rule Deny unsanctioned DNS
-      - Click the arrow icon to the right of the <ins>second</ins> rule to move it to the second position
-    -  Allow LAN net to This Firewall IP for TCP/IP DNS
-  - Click Apply Changes
-- **Firewall** > **NAT** > **Port Forward**
-  - Add rule
-    - Click the "+" to add a rule
-    - Interface: **LAN** (be sure you ONLY select LAN)
-    - TCP/IP Version: **IPv4**
-    - Protocol: **TCP** (TOR rejects UDP packets except for DNS requests)
-    - Source: **LAN net**
-    - Source port range: **any**
-    - Destination: **ANY**
-    - Destination Port: **ANY**
-    - Redirect Target IP: Single Host or Network: **127.0.0.1**
-    - Redirect Target Port: (other) **9040** (this is the Transparent TOR port)
-    - Log: This is not recommended for this Lab, but enable if you wish
-    - Description: **Port forward to Tor**
-    - NAT reflection:
-      - System default ?
-    - Filter rule association:
-      - (default) add associated filter rule, didn't work
-      - trying None
-    - Click **Save**
-    - Click **Apply changes**
+    - Protocol: UDP
+    - Source: any
+    - Destination: Single host or Network: 224.0.0.251
+    - Destination port range: (other) 5353 to (other) 5353
+    - Log: No
+    - Description: Do not log mDNS drops
+    - Click **Save** then click **Apply changes**
 - Reboot the firewall
-  - Power > Reboot > confirm
-- Using your browser connect to https://check.torproject.org
-  - You should see "Congratulations. This browser is configured to use Tor."
-  - Having issues connecting to the Internet?
-    - If may take a moment for the Tor circuits to be build
-      - Services > Tor > Diagnostics > Circuits
-    - Is DNS working from the command line, but you don't have web access?
-      - check the NAT: Port Forward rule <ins>carefully<ins>
-      - check Tor configuration
-    - restart Tor: Lobby > Dashboard > Under services, find the restart button next to tor
+  - Power > Reboot > **Yes**
 
 ### Test TOR access
-- From VM's browser, check the public IP address <ins>with</ins> TOR
+- Using the pentest VM's browser connect to https://check.torproject.org
+  - You should see "Congratulations. This browser is configured to use Tor."
+- From VM's browser, check the public IP address <ins>with</ins> Tor
   - http://ipchicken.com
-- Try updating your VM's OS
+- Try updating your VM's OS using toor (Linux example below)
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
-
-### Confirm privacy
-TCP dump on lab firewall for the OPNsense firewall and port 53. if it's using port 53 it could be leaking DNS lookups. in that case  NAT port 53 TCP/UDP on the interface used for Tor to 127.0.0.1:9053 to prevent DNS leaks.
-
-Now test `ping` commands to the Internet. Are they leaking outside the tunnel?
+- Check for leaks (privacy issues)
+  - on firweall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
+    - `tcpdump -nni vtnet0 port 53`
+  - next check for icmp ping leak by running tcpdump while you test pings to the Internet (i.e., `ping 8.8.8.8`)
+    - `tcpdump -nni vtnet0 icmp`
+  - finally check for udp leaks by running tcpdump and generating QUIC udp/443 traffic
+    - install Chrome
+    - chrome://flags
+    - Search for Experimental QUIC protocol; in the dropdown next to it select Enabled
+    - Click Relaunch at the bottom to restart Chrome
+    - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
+    - `tcpdump -nni vtnet0 proto 17 and port 443`
+- REMEMBER Tor supports tcp only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor

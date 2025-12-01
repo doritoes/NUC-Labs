@@ -15,8 +15,6 @@ How to create a router to our backend "LAN"
     - VLAN: **100**
     - NBD: **No NBD Connection** (NBD = network block device;  XenServer acts as a network block device server and makes VDI snapshots available over NBD connections)
     - Click **Create network**
-- Refresh the page or renavigate to the host's Network tab
-- On the PIF for the Inside network, click on the word "Connected" to change it to Disconnected
 
 NOTE in this lab we will use the following VLAN numbers for "internal" networks, not to be trunked on the host's uplink
 - 100 = inside LAN (192.168.100.0/24)
@@ -24,13 +22,15 @@ NOTE in this lab we will use the following VLAN numbers for "internal" networks,
 - 300 = Check Point Inside (10.1.1.0/24)
 - 400 = Check Point DMZ (192.168.102.0/24)
 - 500 = Check Point Management (192.168.103.0/24)
-- 600 = Check Point Sync (192.168.104.0/24)
+- The Sync network is on a virtual switch with no VLAN (192.0.2.0/24 is the default configuruation)
 
 # Download the ISO
 1. Go to https://vyos.io
 2. Click Rolling Release
-  - the free version is limited to the Rolling Release
-4. Download the most recent image
+    - the free version is limited to the Rolling Release
+3. Download the most recent image
+
+IMPORTANT See [Appendix - Build VyOS IS with VM agents](Appendix_Build_VyOS_ISO_with_VM_agents.md) to build your own ISO with the VM agents installed.
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
@@ -60,6 +60,8 @@ Or, if you created local storage, upload the ISO there.
   - Click **Create**
 - The details for the new VyOS VM are now displayed
   - Did you get a kernel panic in the VyOS VM? Try 2 vCPUs not 1
+
+# Install VyOS
 - Click `Console` tab to access the console command line
 - Login as `vyos`/`vyos`
 - `install image`
@@ -67,7 +69,7 @@ Or, if you created local storage, upload the ISO there.
   - Enter the new password for the `vyos` user
     - Fun fact, it allows you to set the password to `vyos`
 - When done reboot: `reboot`
-- Eject the VyOS iso
+- Eject the VyOS ISO (eject icon)
 - Log back in with your updated password
 - Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
   - `configure`
@@ -81,7 +83,7 @@ Or, if you created local storage, upload the ISO there.
 - You can now configure your router from another device in your Lab; SSH to this IP address
 
 # Configure Router
-IMPORTANT note the version is VyOS 1.5-rolling-2024xxxxxxxx, and the syntax has changed from previous versions you may be familiar with.
+IMPORTANT note the version is 2025-xx.xx0xxxx-rolling-xxxxx, and the syntax has changed from previous versions you may be familiar with.
 - ssh to the router and login as user `vyos` with the password you selected
 - enter the configuration below
 ```
@@ -145,11 +147,11 @@ exit
 ```
 
 # Xen Tools
-The VyOS image comes with vyos-xe-guest-utilities.
+The default VyOS rolling release image no longers comes with vyos-xe-guest-utilities.
 
-Here is how to enable it:
-- `sudo sytemctl start xe-guest-utilities`
-- `sudo sytemctl enable xe-guest-utilties`
-- `sudo sytemctl status xe-guest-utilties`
+See the appendix for instructions to build your own ISO with the agents installed
+- [Appendix_Build_VyOS_ISO_with_VM_agents.md](Appendix_Build_VyOS_ISO_with_VM_agents.md)
 
-If you have a permissions issue, check the permissions on `/etc/systemd/system/xe-guest-utilities.service`
+Testing with the custom ISO, the agent worked out of the box, no steps required
+- General tab: "Management agent 1.0.0-proto-0.4.0 detected"
+- `systemctl status xen-guest-agent`

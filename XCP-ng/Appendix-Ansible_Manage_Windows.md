@@ -4,7 +4,7 @@ References: https://docs.ansible.com/ansible/latest/os_guide/index.html
 Requirements:
 - PowerShell 5.1 or newer
   - $PSVersionTable.PSVersion
-  - Windows Server 2022 has PS 5.1
+  - Windows Server 2025 24H2 has PS 5.1
   - Script to upgrade these: https://github.com/jborean93/ansible-windows/blob/master/scripts/Upgrade-PowerShell.ps1
 - .NET 4.0 or newer
 
@@ -31,7 +31,7 @@ Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed. In th
   - Example Lab_Policy_Branches:
     - Add rule to Core Services section
       - Name: Allow WinRM for Ansible
-      - Source: support
+      - Source: Manager (you would use "support" there, and log in as Juliette.Larocco instead of "Lab")
       - Destination: LAN_Networks_NO_NAT
       - Services:
         - winrm_http_5985
@@ -42,7 +42,7 @@ Allow TCP/5985 and TCP/5986 between the systems in the firewall as needed. In th
 ## Enable WinRM using GPO
 See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/watch?v=M18yDGAd9TU
 - Log in to `the domain controller (`dc-1`)
-- create the GPO using administrative powershell
+- Create the GPO using administrative powershell
   - `New-GPO -Name "Enable WinRM for Ansible Management" | New-GPLink -Target "DC=xcpng,DC=lab"`
 - Open Group Policy Management Console (GPMC)
   - Click **Start**, search for **Group Policy Management** and click on it
@@ -50,7 +50,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
   - Expand Domains: xcpng.lab
   - Right-click **Enable WinRM for Ansible Management** from the tree, then click **Edit**
   - In the console tree, expand Computer Configuration\Policies\Windows Settings\Security Settings\System Services
-  - Find **Windows Remote Service (WS-Managmeent)** and enable automatic startup
+  - Find **Windows Remote Management (WS-Managmeent)** and enable automatic startup
     - <ins>Check</ins> Define this policy setting
     - Select **Automatic**
     - Click **Apply** and then click **OK**
@@ -62,7 +62,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
     - Second failure: Restart the Service
     - Subsequent failure: Restart the Service
     - Restart file counter after: 0 days
-    - Restart service after : 1 minutes
+    - Restart service after: 1 minutes
     - Click **Apply** then click **OK**
   - Go to Computer Configuration -> Policies -> Administrative Templates -> Windows Components -> Windows Remote Management (WinRM) -> WinRM Service
   - Enable **Allow remote server management through WinRM**
@@ -80,18 +80,18 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
       - Enable **Allow Remote Shell Access**
       - Click **Apply** and then click **OK**
 - Enabling https
-  - Sadly as of this writing there is no ay to enable HTTPS using GPO
+  - Sadly as of this writing there is no way to enable HTTPS using GPO
   - There is the command to enable it; you could place it in a login script to enable WinRM and make it only use HTTPS
     - `winrm quickconfig -transport:https`
     - this requires a certificate to already be created
 - Testing
-  - Log in to a workstation (`branch1-1`)
+  - Log in to a workstation (`branch1-1`, `branch2-1`, `branch3-1`)
     - Wait for group policy to roll out, or run `gpupdate /force`
     - To check that WinRM settings on the computer are configured thorugh GPO
       - open administrative shell
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
-  - Log in to a workstation (`branch2-1`)
+  - Log in to a server (`file-1`, `sql-1`, `idc-1`)
     - Wait for group policy to roll out, or run `gpupdate /force`
     - To check that WinRM settings on the computer are configured thorugh GPO
       - open administrative shell
@@ -102,9 +102,8 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
       - open administrative shell
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
-    - Remote access test:
+    - Remote access test from `dc-1`
       - In Lab testing, this only worked on Servers, not workstations. HOWEVER, able to use Ansible playbooks on workstations too
-      - From `dc-1`
         - `Test-WsMan localhost` - works
         - `Test-WsMan file-1` - works
         - `Test-WsMan sql-1` - works
@@ -124,26 +123,37 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
         - `Test-WsMan branch2-1` - fails connection
         - `Test-WsMan branch3-1` - fails connection
         - Test the WinRM point is opened on the remote computer
-    - `Test-NetConnection -ComputerName dc-1 -Port 5985`
-    - Test Remote session 
+          - `Test-NetConnection -ComputerName dc-1 -Port 5985`
+    - Test Remote session
+      - Log in to a server or workstation as AD\juliette.larocco2
       - From privileged powershell
-      - `enter-pssession dc-1`
+        - `enter-pssession dc-1`
+        - it works to servers but not to workstations
 
 ## Playbooks
 - Allow unencrypted WinRM traffic on `dc-1` for testing
   - `Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value true`
+- Enable WinRM listener on workstations (branch1-1, branch2-1, branch3-1)
+  - copy [winrm-https-listener.ps1](powershell/winrm-https-listener.ps1)
+  - `powershell -ExecutionPolicy Bypass .\winrm-https-listener.ps1`
 - Log in to `manager` and open WSL shell
 - Install kerberos
   - `sudo apt install -y krb5-user`
 - Create inventory file [inventory-win](ansible/inventory-win)
 - Get a kerberos ticket
   - `kinit juliette.larocco2@XCPNG.LAB`
+    - domain is ALL CAPITALS
+    - PROBLEM with Windows Server 2025: known issue slow to be fixed [Microsoft has acknowledged that LocalKDC is not yet in General Availability](https://learn.microsoft.com/en-us/answers/questions/2136070/windows-server-2025-kerberos-local-key-distributio)
   - `klist`
 - Test Ansible authentication
   - `ansible -i inventory-win windows -m ping`
 - Create playbook to install Google Chrome
   - [win-install-chrome.yml](ansible/win-install-chrome.yml)
   - `ansible-playbook -i inventory-win win-install-chrome.yml`
+- Create playbook to enable Administrator account and disable local admin account created during installation
+  - Modify `inventory-win` to add host `branch1-1.XCPNG.LAB`
+  - [win-enable-administrator.yml](ansible/win-enable-administrator.yml)
+  - `ansible-playbook -i inventory-win win-enable-administrator.yml`
 - Clean up: `kdestroy`
 
 NOTE Unencrypted management connections are NOT recommended. You can enable self-signed certificates to enable encrypted management connections.
@@ -158,6 +168,6 @@ NOTE Unencrypted management connections are NOT recommended. You can enable self
   - change port to 5986
   - `ansible -i inventory-win all -m win_ping`
 - now run the playbook with the updated `inventory-win` file to install `Google Chrome`
-- `ansible-playbook -i inventory-win win-install-chrome.yml`
+- `ansible-playbook -i inventory-win win-install-chrome.yml`- 
 
-In testing, I was able to run `winrm-https-listener.ps1` on workstations (branch1-1, branch2-1, branch3-1), then add them to the `inventory-win` file, and install Chrome.
+In previous testing with Windows Server 2022, I was able to run `winrm-https-listener.ps1` on workstations (branch1-1, branch2-1, branch3-1), then add them to the `inventory-win` file, and install Chrome. The broken Kerberos on Windows Server 2025 prevents things from working right now.

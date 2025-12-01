@@ -2,11 +2,11 @@
 - name: Create cluster
   hosts: check_point
   connection: httpapi
-  # include_vars: vars.yml # introduced in Ansible 2.11
+  gather_facts: false
   vars_files:
     - vars.yml
   tasks:
-    - name: create cluster firewall1
+    - name: Create cluster firewall1
       check_point.mgmt.cp_mgmt_simple_cluster:
         cluster_mode: cluster-xl-ha
         color: firebrick
@@ -97,7 +97,7 @@
           one_time_password: "{{ sic_pw }}"
         os_name: Gaia
         state: present
-        cluster_version: R81.20
+        cluster_version: R82
         comments: firewall1 cluster for Branch 1
-    - name: publish changes
+    - name: Publish changes
       cp_mgmt_publish:

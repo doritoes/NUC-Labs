@@ -1,8 +1,8 @@
 ---
 - name: Create branch1 objects
   hosts: check_point
+  gather_facts: false
   connection: httpapi
-  # include_vars: vars.yml # introduced in Ansible 2.11
   tasks:
     - name: ISP router
       check_point.mgmt.cp_mgmt_host:
@@ -95,13 +95,13 @@
         color: dark blue
         comments: LLMNR and SSDP
         state: present
-    - name: Branch 1 LAN network
+    - name: branch 1 LAN network
       check_point.mgmt.cp_mgmt_network:
         name: branch1_lan
         subnet: 10.0.1.0
         mask_length: 24
         color: crete blue
-        comments: Branch 1 LAN network
+        comments: branch 1 LAN network
         nat_settings:
           auto_rule: true
           hide_behind: ip-address
@@ -109,13 +109,13 @@
           method: hide
           install_on: firewall1
         state: present
-    - name: Branch 1 DMZ network
+    - name: branch 1 DMZ network
       check_point.mgmt.cp_mgmt_network:
         name: branch1_dmz
         subnet: 192.168.31.0
         mask_length: 24
         color: crete blue
-        comments: Branch 1 DMZ network
+        comments: branch 1 DMZ network
         nat_settings:
           auto_rule: true
           hide_behind: ip-address
@@ -224,13 +224,13 @@
           method: static
           install_on: firewall1
         state: present        
-    - name: Branch 1 LAN DHCP workstations
+    - name: branch 1 LAN DHCP workstations
       check_point.mgmt.cp_mgmt_address_range:
         name: Branch 1 LAN Workstation DHCP scope
         ip_address_first: 10.0.1.20
         ip_address_last: 10.0.1.250
         color: dark blue
-        comments: Branch 1 LAN Workstation DHCP scope
+        comments: branch 1 LAN Workstation DHCP scope
         state: present
     - name: LAN networks group No NAT
       check_point.mgmt.cp_mgmt_group:
@@ -413,25 +413,25 @@
         session_timeout: 0
         state: present
         sync_connections_on_cluster: true
-    - name: add ntp domain time.windows.com
+    - name: Add ntp domain time.windows.com
       check_point.mgmt.cp_mgmt_dns_domain:
         is_sub_domain: false
         name: .time.windows.com
         state: present
-    - name: add ntp domain ntp.checkpoint.com
+    - name: Add ntp domain ntp.checkpoint.com
       check_point.mgmt.cp_mgmt_dns_domain:
         is_sub_domain: false
         name: .ntp.checkpoint.com
         state: present
-    - name: add ntp domain ntp2.checkpoint.com
+    - name: Add ntp domain ntp2.checkpoint.com
       check_point.mgmt.cp_mgmt_dns_domain:
         is_sub_domain: false
         name: .ntp2.checkpoint.com
         state: present
-    - name: add ntp domain ntp.ubuntu.com
+    - name: Add ntp domain ntp.ubuntu.com
       check_point.mgmt.cp_mgmt_dns_domain:
         is_sub_domain: false
         name: .ntp.ubuntu.com
         state: present
-    - name: publish changes
+    - name: Publish changes
       check_point.mgmt.cp_mgmt_publish:

@@ -78,9 +78,12 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
         - This is an NFS mount your NAS or a server - remember your NFS server needs to know the client IP
         - Server: **enter the NAS server IP**
         - NFS version: *default NFS version*
+        - Comma delimited NFS options: hard
         - <ins>Click the magnifying glass</ins> (populate the path dropdown)
-        - Select the path from the dropdown (will auto populate)
+        - Select the path from the dropdown (will auto populate) (e.g., "/volume1/ISO"
         - Click Create
+        - NOTE You may receive a warning that this well erase an existing volume, accept
+        - Check your NAS to see that selecting the option "hard" link created the meta data folder with the UID name, and file inside it.
 
 # Local ISO Repository on XO Server
 We will also demonstrate storing .iso files on the XCP-ng host, which you might want to avoid--it uses up storage on our host.

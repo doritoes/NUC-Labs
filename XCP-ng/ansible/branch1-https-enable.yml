@@ -1,0 +1,22 @@
+---
+- name: Enable branch1 https inspection on firewall1
+  hosts: sms
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Create a session key
+      command: "mgmt_cli -f json login --user 'admin' --password '{{ admin_password }}'"
+      register: session_key
+    - name: Save session key
+      copy:
+        content: "{{ session_key.stdout }}"
+        dest: "/tmp/.session.txt"
+    - name: Enable https inspection on cluster firewall1
+      command: "mgmt_cli -s /tmp/.session.txt -f json set simple-cluster name 'firewall1' enable-https-inspection true"
+    - name: Publish changes
+      command: "mgmt_cli -s /tmp/.session.txt -f json publish"
+    - name: Remove the session key
+      file:
+        path: /tmp/.session.txt
+        state: absent

@@ -20,4 +20,4 @@ Windows VMs booting with UEFI have a fixed display size. You can't change the sc
 - Press **Esc**
 - Select **Reset**
 - Log in to Windows
-  - Check windows Display settings and note the display resolution has changed
+  - Modify Windows Display settings as needed to use the new resolution

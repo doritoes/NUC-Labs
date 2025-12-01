@@ -1,7 +1,9 @@
 # Install XCP-ng
 In this Lab we will use XO to manage the environment. Please be aware that XO Lite exists in beta and is coming in the near future.
 
-References: https://www.youtube.com/watch?v=fuS7tSOxcSo
+References:
+- https://www.youtube.com/watch?v=fuS7tSOxcSo
+- https://www.youtube.com/watch?v=5uU73RQb15I
 
 We will start with a the XOA virtual appliances, then build our own XO installation to replace it
 
@@ -22,19 +24,23 @@ An account is required to register your Xen Orchestra virtual Appliance (XOA), w
 - Accept the EULA
 - Accept the storage
   - LVM is block storage that is faster, but is "thick provisioned"
-  - EXT is file storage that is slower, but is "thin provisioned"
-  - The default is LVM, but choosing EXT means you can "overallocate" storage if you have a small storage drive
+  - EXT is file storage that is slower, but is "thin provisioned",  means you can "overallocate" storage if you have a small storage drive
+  - The default is now EXT
 - Type of source: Local Media
 - Verification: Verify media or don't, it's your choice
 - Select and enter the root password (6+ characters)
+- Choose IPv4 (only) for this Lab
 - Use DHCP wherever possible - use your router to reserve a fixed IP address (much more flexible than a static IP address)
 - Select a hostname (e.g., xcp-ng-lab1)
 - Use DHCP for DNS
 - Select region and city
 - Set NTP to pool.ntp.org (if your router supports NTP options, set can configure the router and XCP-ng to share that information)
-- Install Supplemental Packs: NO
-- Remove the USB stick when prompted
+- Select **Install XCP-ng**
+- Remove the USB stick when prompted and press Enter to reboot
 - Wait as the system reboots
+
+# Review Configuration
+- Log in to the console and review the configuration
 
 Notes:
 - Tested on a NUC 14 with lots of storage
@@ -44,14 +50,14 @@ Notes:
   - thunderbolt nvme 4TB
 - Selecting all the drives during installation caused the system to come up with NO local storage
 - Selecting just the nvme0 4TB installed as expected
-  - To use the additional drxives
+  - To use the additional drives, add later from XO
     - SATA Drive
       - **New** > **Storage**
       - Host: **xcpng-lab1**
       - Name: **SATA Drive** (customize as needed)
       - Description: **Internal SATA 4TB drive**
       - Storage type: **VDI SR** > **ext (local)**
-      - Device: **/dev/sata**
+      - Device: **/dev/sda**
       - Click **Create**
     - Internal second nvme 2TB
       - **New** > **Storage**
