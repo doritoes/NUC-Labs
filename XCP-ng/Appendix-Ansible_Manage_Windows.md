@@ -91,7 +91,7 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
       - open administrative shell
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
-  - Log in to a server (`file-1`, `sql-1`)
+  - Log in to a server (`file-1`, `sql-1`, `idc-1`)
     - Wait for group policy to roll out, or run `gpupdate /force`
     - To check that WinRM settings on the computer are configured thorugh GPO
       - open administrative shell
@@ -102,9 +102,8 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
       - open administrative shell
         - `winrm e winrm/config/listener`
         - `Test-WsMan localhost`
-    - Remote access test:
+    - Remote access test from `dc-1`
       - In Lab testing, this only worked on Servers, not workstations. HOWEVER, able to use Ansible playbooks on workstations too
-      - From `dc-1`
         - `Test-WsMan localhost` - works
         - `Test-WsMan file-1` - works
         - `Test-WsMan sql-1` - works
@@ -124,26 +123,37 @@ See https://woshub.com/enable-winrm-management-gpo/ and https://www.youtube.com/
         - `Test-WsMan branch2-1` - fails connection
         - `Test-WsMan branch3-1` - fails connection
         - Test the WinRM point is opened on the remote computer
-    - `Test-NetConnection -ComputerName dc-1 -Port 5985`
-    - Test Remote session 
+          - `Test-NetConnection -ComputerName dc-1 -Port 5985`
+    - Test Remote session
+      - Log in to a server or workstation as AD\juliette.larocco2
       - From privileged powershell
-      - `enter-pssession dc-1`
+        - `enter-pssession dc-1`
+        - it works to servers but not to workstations
 
 ## Playbooks
 - Allow unencrypted WinRM traffic on `dc-1` for testing
   - `Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value true`
+- Enable WinRM listener on workstations (branch1-1, branch2-1, branch3-1)
+  - copy [winrm-https-listener.ps1](powershell/winrm-https-listener.ps1)
+  - `powershell -ExecutionPolicy Bypass .\winrm-https-listener.ps1`
 - Log in to `manager` and open WSL shell
 - Install kerberos
   - `sudo apt install -y krb5-user`
 - Create inventory file [inventory-win](ansible/inventory-win)
 - Get a kerberos ticket
   - `kinit juliette.larocco2@XCPNG.LAB`
+    - domain is ALL CAPITALS
+    - PROBLEM with Windows Server 2025: known issue slow to be fixed [Microsoft has acknowledged that LocalKDC is not yet in General Availability](https://learn.microsoft.com/en-us/answers/questions/2136070/windows-server-2025-kerberos-local-key-distributio)
   - `klist`
 - Test Ansible authentication
   - `ansible -i inventory-win windows -m ping`
 - Create playbook to install Google Chrome
   - [win-install-chrome.yml](ansible/win-install-chrome.yml)
   - `ansible-playbook -i inventory-win win-install-chrome.yml`
+- Create playbook to enable Administrator account and disable local admin account created during installation
+  - Modify `inventory-win` to add host `branch1-1.XCPNG.LAB`
+  - [win-enable-administrator.yml](ansible/win-enable-administrator.yml)
+  - `ansible-playbook -i inventory-win win-enable-administrator.yml`
 - Clean up: `kdestroy`
 
 NOTE Unencrypted management connections are NOT recommended. You can enable self-signed certificates to enable encrypted management connections.
@@ -158,6 +168,6 @@ NOTE Unencrypted management connections are NOT recommended. You can enable self
   - change port to 5986
   - `ansible -i inventory-win all -m win_ping`
 - now run the playbook with the updated `inventory-win` file to install `Google Chrome`
-- `ansible-playbook -i inventory-win win-install-chrome.yml`
+- `ansible-playbook -i inventory-win win-install-chrome.yml`- 
 
-In testing, I was able to run `winrm-https-listener.ps1` on workstations (branch1-1, branch2-1, branch3-1), then add them to the `inventory-win` file, and install Chrome.
+In previous testing with Windows Server 2022, I was able to run `winrm-https-listener.ps1` on workstations (branch1-1, branch2-1, branch3-1), then add them to the `inventory-win` file, and install Chrome. The broken Kerberos on Windows Server 2025 prevents things from working right now.
