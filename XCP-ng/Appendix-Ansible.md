@@ -4,7 +4,7 @@ This appendix follows the next steps after completing [Appendix - Terraform and 
 Notes:
 - The Linux-based VM templates have the user `ansible` created. SSH with RSA keys still needs to be enabled.
 
-IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully functional. So far it's not working in this  Windows Server 2025/Windows 11 environment. Could be a GPO issue.
+IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully functional. So far it's not working in this  Windows Server 2025/Windows 11 environment. This appears to be an issue with Windows Server 2025.
 - Can RDP from branch1-1 to file-1 as AD\juliette.larocco2, not branch3-1 (for example)
 - Turning off require NLA on the destination workstation didn't solve the issue
 - Run rsop.msc on the target system
@@ -1663,7 +1663,7 @@ Steps:
   - Test that access to ipchicken.com works for `AD\juliette.larocco'
   - Test that `AD\juliette.larocco` can use RDP to access `branch3-1` (authenticate using `AD\juliette.larocco2') from a computer at Branch 1
   - PROBLEM the firewall allows it but Windows Server 2025/Windows 11 is not allowing the access. Could be GPO issue.
-    - Turning off require NLA on the destination workstation didn't solve the issue.
+    - This appears to be a known issue with Server 2025
 
 # Demonstration
 NOTE that the VPN does not allow traffic between Branch 2 and Branch 3
