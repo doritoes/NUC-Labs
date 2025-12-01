@@ -4,7 +4,7 @@ References: https://docs.ansible.com/ansible/latest/os_guide/index.html
 Requirements:
 - PowerShell 5.1 or newer
   - $PSVersionTable.PSVersion
-  - Windows Server 2022 has PS 5.1
+  - Windows Server 2025 has PS 5.1
   - Script to upgrade these: https://github.com/jborean93/ansible-windows/blob/master/scripts/Upgrade-PowerShell.ps1
 - .NET 4.0 or newer
 
