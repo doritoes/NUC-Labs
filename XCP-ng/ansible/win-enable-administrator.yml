@@ -1,0 +1,18 @@
+---
+- name: Enable Administrator disable user Lab
+  hosts: windows
+  tasks:
+  - name: Enable the local administrator account
+    ansible.windows.win_user:
+      name: administrator
+      password: 'YourStrongPassword!'
+      account_disabled: false
+      password_never_expires: true
+      state: present
+  - name: Disable the local administrator account
+    ansible.windows.win_user:
+      name: Lab
+      password: 'YourStrongPassword!'
+      account_disabled: true
+      password_never_expires: false
+      state: present # or absent to remove it
