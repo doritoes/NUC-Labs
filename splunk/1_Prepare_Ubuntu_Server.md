@@ -24,7 +24,7 @@ Do the usual packages updates
 
 
 ## System Tuning
-Run these steps before you install the Splunk .deb package to avoid the "Yellow Warning" banners in the Splunk UI.
+Run these steps before you install the Splunk .deb package to avoid the "Yellow Warning" banners in the Splunk UI. Reboot after the changes are complete.
 
 ### Disable Transparent Huge Pages (THP)
 THP is a Linux memory management feature that causes significant performance "stuttering" for database-like apps like Splunk.
