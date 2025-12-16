@@ -53,11 +53,20 @@ Create a line graph of web traffic over the last 24 hours
 - From the small dropdown change the `Chart` from Column Chart to Line Chart
 
 ### Building the First Dashboard
-search for successful purchases: index=main action=purchase status=200
-Click Save As > Dashboard Panel.
-Name the dashboard "Security Operations Center" and the panel "Successful Sales."
-Encourage them to add a second panel showing "Failed Logins" from Mission 2.
-
+1. Search for successful purchases: `index=main action=purchase status=200 | timechart count`
+2. Click Visualization
+3. From the small dropdown change the `Chart` from Column Chart to Line Chart
+4. In the top search area, click **Save As** > **New Dashboard**
+    - Close the dashboard type informational Window
+    - Dashboard title: **Buttercup Games SOC**
+    - Description: **Monitoring web purchases and security events**
+    - Permissions: **Shared in App** so all users can see it
+    - Dashboard type: **Classic Dashboards** (good for new users in a Lab)
+    - Panel Title: **Successful Purchases Over Time**
+    - Panel Content: Choose Line Chart (Splunk will automatically try to visualize the data if you have a timechart command, but if not, it will default to a table).
+    - Click **Save to Dashboard**, then click **View Dashboard**
+5. Add a second panel showing "Failed Logins"
+    - TODO write this
 
 ### Alerting
 Phase 4: Setting the "SOC" Mindset (Alerting)
