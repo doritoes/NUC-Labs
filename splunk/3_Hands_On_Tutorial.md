@@ -1,0 +1,88 @@
+# Hands-On Tutorial
+Let's had a handle the Splunk basics by starting with the Tutorial. Splunk provides a famous sample dataset that contains fake web server logs (Apache)), secure logs, and vendor data.
+
+## Import the "Buttercup Games" Dataset
+1. Download the files files from [Splunk](https://help.splunk.com/en/splunk-enterprise/get-started/search-tutorial/10.0/part-1-getting-started/what-you-need-for-this-tutorial#id_00ebcad1_5243_445b_b1f1_e3a49fd8c759--en__Download_the_tutorial_data_files)
+    - `tutorialdata.zip`
+    - `Prices.csv.zip`
+2. Upload the data files to Splunk
+    - Log in to Splunk web UI
+    - **Settings** > huge icon **Add Data**
+    - Splunk offers a "tour" if you are curious
+    - Click **Upload**
+    - Select Source: Select the **turorialdata.zip** or draw/drop it then click **Next**
+    - During the "Input Settings" step, select **Segment in path** and enter **1**
+        - This is how Splunk can automatically assign a "Host" name based on folder structure
+    - Click **Review** and review the settings
+    - Click **Submit**
+    - Click **Start Searching**
+      - This automatically opens the search query: `source="tutorialdata.zip:*"`
+
+## Jump in with Hands-On Introduction to Search
+### Basic Search and Drill Down
+Find all events where a purchase failed
+- query: `index=main status=503`
+  - Notice the hundreds of events
+  - Note in the top search area that the time range is set to "All time". If you can't see any result that should be there, check the Time range and set back to **All time** for this Lab.
+- On the left side notice the top item in Interesting Fields: **action**
+  - Click on **action** to view different actions in the logs that had the 503 error
+  - Click Selected: **Yes** and see how the "action" file is populated in the log fields
+- Narrow search
+  - Find a log entry showing "action = purchase", click **purchase**
+  - Click **Add to search""
+- Review the logs
+  - What are the "hosts" in the logs?
+
+### Filtering
+Find all failed login attempts in the secure logs
+- query: `index=main sourcetype=secure* "failed password"`
+- Review the logs returned
+- Click the "V" to expand one of the log entries
+- From the left side, try clicking on **host**, **source**, and **sourcetype**. This gives you and idea where the failed logins are happening
+
+### Basic Statistics: Top Results
+Show me the top 10 IP addresses that are visiting our site
+- query: `index=main | top limit=10 clientip`
+- Note you are on the **Statistics tab**. Click on the **Visualization** tab
+
+### Timecharting:
+Create a line graph of web traffic over the last 24 hours
+- query: `index=main sourcetype=access_combined* | timechart count`
+- Note how the data is returned per date
+- Note you are on the **Statistics tab**. Click on the **Visualization** tab
+- From the small dropdown change the `Chart` from Column Chart to Line Chart
+
+### Building the First Dashboard
+search for successful purchases: index=main action=purchase status=200
+Click Save As > Dashboard Panel.
+Name the dashboard "Security Operations Center" and the panel "Successful Sales."
+Encourage them to add a second panel showing "Failed Logins" from Mission 2.
+
+
+### Alerting
+Phase 4: Setting the "SOC" Mindset (Alerting)
+Since you mentioned developing skills, teach them that a SIEM is "Passive" until you make it "Active."
+
+Exercise: "Create an alert that emails you (or triggers a notification) if more than 5 failed logins occur within 1 minute."
+
+Process: Run the search index=main "failed password", then click Save As > Alert. Set the trigger condition to "Greater than 5" within a "Rolling Window of 1 minute."
+
+
+## Adding Logs
+Installing the "Universal Forwarder" on your other machines so they can start sending their logs to Splunk
+
+OPNsense
+
+pfSense
+
+NAS
+
+## Basic Queries
+
+## Advanced Queries
+
+## Gotchas
+
+## Learning More
+
+## Cleanup and Next Steps
