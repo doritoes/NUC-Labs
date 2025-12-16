@@ -54,7 +54,7 @@ Create a line graph of web traffic over the last 24 hours
 
 ### Building the First Dashboard
 1. Search for successful purchases: `index=main action=purchase status=200 | timechart count`
-2. Click Visualization
+2. Click **Visualization**
 3. From the small dropdown change the `Chart` from Column Chart to Line Chart
 4. In the top search area, click **Save As** > **New Dashboard**
     - Close the dashboard type informational Window
@@ -65,8 +65,14 @@ Create a line graph of web traffic over the last 24 hours
     - Panel Title: **Successful Purchases Over Time**
     - Panel Content: Choose Line Chart (Splunk will automatically try to visualize the data if you have a timechart command, but if not, it will default to a table).
     - Click **Save to Dashboard**, then click **View Dashboard**
-5. Add a second panel showing "Failed Logins"
-    - TODO write this
+5. Search for failed purchases: `index=main action=purchase status=503 | timechart count`
+6. Click **Visualization**
+7. From the small dropdown change the `Chart` from Column Chart to Line Chart
+8. In the top search area, click **Save As** > **Existing Dashboard**
+    - Select existing: Buttercup Games SOC
+    - Panel title: **Unuccessful Purchases Over Time**
+    - Panel Content: Choose Line Chart (Splunk will automatically try to visualize the data if you have a timechart command, but if not, it will default to a table).
+    - Click **Save to Dashboard**, then click **View Dashboard**
 
 ### Alerting
 Phase 4: Setting the "SOC" Mindset (Alerting)
