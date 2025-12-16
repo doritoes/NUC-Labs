@@ -1,14 +1,27 @@
 # Prepare Ubuntu Server
-Install Ubuntu Server 24.04 LTS on the NUC or VM you are using to run Splunk
-
 Requirements:
 - CPU at least 2 to 4 vCPUs
 - RAM: at least 4GB to 8GB
-- 100GB is fine
+- 100GB is fine (Splunk compresses data at roughly a 50% ratio, so that space allows you to ingest hundreds of gigabytes of logs over time)
 
-Splunk compresses data at roughly a 50% ratio, so that space allows you to ingest hundreds of gigabytes of logs over time before you even have to think about "retention policies."
+Install Ubuntu Server 24.04 LTS on the NUC or VM you are using to run Splunk. For this Lab I am running it as a VM and NUC running XCP-ng.
+- Defaults for just about everything
+- At **Storage Configuration** edit the ubuntu-lv mounted as root (/) to be the maximum size (i.e., 96.945G)
+- Credentials
+  - Your name: `splunk`
+  - Your servers name: `splunk`
+  - Pick a username: `lab`
+  - Choose a password: `Splunklab123!`
+- Enable **Install OpenSSH server**
+- Don't install any snaps
 
-Ubuntu 24.04 is a solid host, but it’s "too efficient" out of the box for Splunk. You need to "loosen" the OS restrictions so Splunk can handle thousands of small log files simultaneously.
+## Package Updates
+Do the usual packages updates
+- Log in as `lab`/`Splunklab123!`
+- `ip a`
+  - Find the IP address so you can ssh to the server remotely if you wish
+- `sudo apt update && sudo apt -y upgrade && sudo apt autoremove`
+
 
 ## System Tuning
 Run these steps before you install the Splunk .deb package to avoid the "Yellow Warning" banners in the Splunk UI.
