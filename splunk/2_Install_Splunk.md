@@ -44,7 +44,7 @@ NOTE this is NOT secure!
 Modify to your selected username and password
 1. `sudo /opt/splunk/bin/splunk enable web-ssl -auth <username>:<password>`
 2. `sudo /opt/splunk/bin/splunk restart`
-3. https://<ipaddress>:8000
+3. Log in to `https://<ipaddress>:8000`
 
 Accept the self-signed certificate and log back in.
 
