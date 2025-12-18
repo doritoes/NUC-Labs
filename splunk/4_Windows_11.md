@@ -274,13 +274,3 @@ index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" (Eve
 | table _time, Action, Image, TargetFilename, DestinationIp, CommandLine
 | sort _time
 ~~~
-    
-
-
-
-
-OPNsense
-
-pfSense
-
-NAS
