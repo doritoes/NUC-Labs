@@ -83,7 +83,7 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
     - Increased permissions are required because we are using SysMon
     - **Start** > **Services**
     - Find **SplunkForwarder** and double-click to modify properties
-    - Clikc **Log On** tab and change to **Local System account**
+    - Click **Log On** tab and change to **Local System account**
     - Click **Apply**, **OK**, **OK**
     - Restart the SplunkForwarder service (right-click, **Restart**)
 4. Configure what logs to collect
