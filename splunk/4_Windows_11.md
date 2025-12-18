@@ -79,7 +79,7 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
         - Port: leave empty, default is 9997
         - Click **Next**
     - Click **Install** and then click **Finish**
-3. Update the Splunk Universal Forwarder service to LogOnAs the local system account
+3. Update the Splunk Universal Forwarder service to LogOnAs the **local system account**
     - Increased permissions are required because we are using SysMon
     - **Start** > **Services**
     - Find **SplunkForwarder** and double-click to modify properties
