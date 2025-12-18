@@ -21,7 +21,7 @@ IMPORTANT <ins>Always</ins> use a fixed or static IP for a domain controller.
 # Configure as Domain Controller
 - Open an administrative powershell (modify these examples for your Lab)
   - `Install-WindowsFeature -name AD-Domain-Services -IncludeManagementTools`
-  - `Install-ADDSForest -DomainName xcpng.lab -DomainNetBIOSName AD -InstallDNS`
+  - `Install-ADDSForest -DomainName splunk.lab -DomainNetBIOSName SPLUNK -InstallDNS`
   - Select a password for SafeModeAdministratorPassword (aka DSRM = Directory Services Restore Mode)
   - Confirm configuring server as Domain Controller and rebooting
 - Wait as the settings are applied and the server is rebooted
