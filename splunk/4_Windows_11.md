@@ -34,6 +34,28 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 Set up a Windows 11 test machine
 - Install Google Chrome on it (will be demonstrating with both Chome and Edge)
 
+### Install Sysmon
+Sysmon is a Sysinternal tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Symon now means that when UF is installed, it already has logs to parse.
+
+1. Download Sysmon to the Windows 11 machine
+    - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+2. Extract the .zip file to C:\Tools
+3. Download the config **sysmonconfig-export.xml** from the [SwiftOnSecurity GitHub](https://github.com/SwiftOnSecurity/sysmon-config)
+    - Place the config .xml in the same folder (e.g., C:\Tools)
+4. Open administrative powershell
+    - Navigate to your folder (e.g., C:\Tools)
+    - Run: `.\Sysmon64.exe -i sysmonconfig-export.xml -accepteula`
+        - Installs Sysmon as a service
+        - Uses the SwiftOnSecurity settings to filter out "normal" Windows noise
+    - Confirm/Add to the `inputs.conf` file:
+        - [WinEventLog://Microsoft-Windows-Sysmon/Operational]
+        - disabled = 0
+        - index = main
+        - renderXml = 1
+        - sourcetype = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
+    - If you changed anything,restart the forwarder
+        - `Restart-Service SplunkForwarder`
+        
 ### Install UF for Windows
 1. Download the Windows 64-bit MSI file
     - https://splunk.com/en_us/download/universal-forwarder.html
@@ -56,7 +78,7 @@ Set up a Windows 11 test machine
     - Receiving Indexer (Crucial):
         - Hostname or IP: **the IP address of your Ubuntu Server running splunk**)
             - NOTE if you are running DHCP in your Lab, I recommend you set up a DHCP reservation so the IP address doesn't change
-        - Port: leave empty, defualt is 9997
+        - Port: leave empty, default is 9997
         - Click **Next**
     - Click **Install** and then click **Finish**
 3. Configure what logs to collect
@@ -93,87 +115,93 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
       - If your Windows host name shows up, it is working!
     - `index=_internal host=<WINDOWS_HOSTNAME_HERE>` (usually all lowercase in Splunk)
     - `index=main sourcetype="WinEventLog:Security"`
-5. Test "Insider Threat" Scenario
-    - Local Console
-        - Lock the screen and attempt to log in with a wrong password 3 or 4 times
-            - NOTE Logging in with a PIN doesn't populate the TargetUserName field(!) It will show the Sub_status 0xc0000380 STATUS_SMARTCARD_SILENT_CONTEXT
-        - Log in with the correct password
-        - Open the Splunk search bar
-        - Set the Time Picker to "Last 15 minutes"
-        - Run the following search to find the failures:
-            - `index=main sourcetype="WinEventLog:Security" EventCode=4625`
-        - Note the **Interesting Fields** on the left
-          - Account_Name: The account they tried to hack
-          - Logon_Type: 2 (Interactive) or 7 (Unlock)
-          - IpAddress: empty, missing or 127.0.0.1 for console login
-          - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
-          - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
-    - RDP to Win 11 computer
-        - Try wrong password 3 or 4 times
-        - Log in with the correct password
-        - Open the Splunk search bar
-        - Set the Time Picker to "Last 15 minutes"
-        - Run the following search to find the failures:
-            - `index=main sourcetype="WinEventLog:Security" EventCode=4625`
-        - Note the **Interesting Fields** on the left
-          - Account_Name: The account they tried to hack
-          - Logon_Type: 3 (Network Login) mean NLA negotiated credentials before RDP fully opened; Type 10 is what we classically expected for RDP
-          - Source_Network_Address: the IP address you tried to log in <ins>from</ins>
-          - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
-          - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
+
+### Test "Insider Threat" Scenario
+- Local Console
+  - Lock the screen and attempt to log in with a wrong password 3 or 4 times
+    - NOTE Logging in with a PIN doesn't populate the TargetUserName field(!) It will show the Sub_status 0xc0000380 STATUS_SMARTCARD_SILENT_CONTEXT
+  - Log in with the correct password
+  - Open the Splunk search bar
+  - Set the Time Picker to "Last 15 minutes"
+  - Run the following search to find the failures:
+  - `index=main sourcetype="WinEventLog:Security" EventCode=4625`
+  - Note the **Interesting Fields** on the left
+    - Account_Name: The account they tried to hack
+    - Logon_Type: 2 (Interactive) or 7 (Unlock)
+    - IpAddress: empty, missing or 127.0.0.1 for console login
+    - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
+    - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
+- RDP to Win 11 computer
+    - Try wrong password 3 or 4 times
+    - Log in with the correct password
+    - Open the Splunk search bar
+    - Set the Time Picker to "Last 15 minutes"
+    - Run the following search to find the failures:
+      - `index=main sourcetype="WinEventLog:Security" EventCode=4625`
+      - Note the **Interesting Fields** on the left
+        - Account_Name: The account they tried to hack
+        - Logon_Type: 3 (Network Login) mean NLA negotiated credentials before RDP fully opened; Type 10 is what we classically expected for RDP
+        - Source_Network_Address: the IP address you tried to log in <ins>from</ins>
+        - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
+        - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
       - Use a "friendly" query that uses the Windows Plugin
 ```
 index=main EventCode=4625 
 | table _time, user, src_ip, Logon_Type, status
 ```
 
-6. Confirm Successful Logins
+- Confirm Successful Logins
 ```
 index=main EventCode=4624
 | table _time, user, src_ip, Logon_Type
 ```
 
 NOTE You will see the service accounts like DWM-4 (Desktop Window Manager) and UMDF-4 (User Mode Driver Framework) logging in. Look up what these are used for. It's a fun read.
+### Test "Persisence" Scenario (New User Account)
+- On the Windows 11 machine open an administrative command prompt
+- Create a new user: `net user LabVictim Splunk123! /add"
+- In Splunk search bar
+    - query: `index=main sourcetype="WinEventLog:Security" EventCode=4720`
+- Identify the name of the user that was created and the user that created them
 
-7. Test "Persistence" Scenario (New User Account)
-    - On the Windows 11 maching open an administrative command prompt
-    - Create a new user: `net user LabVictim Splunk123! /add"
-    - In Splunk search bar
-        - query: `index=main sourcetype="WinEventLog:Security" EventCode=4720`
-    - Identify the name of the user that was created and the user that created them
-8. Test "Wiping the Evidence" Scenario (Log Clearing)
-    - This is a Priority 1 alert in any real-world SOC
-    - On Windows 11 machine open and administrative command prompt
-    - Run the command: `wevtutil cl Security`
-    - This clears the Security log (!)
-    - Detect it in Splunk search
+### Test "Wiping the Evidence" Scenario (Log Clearing)
+IMPORTANT This is a Priority 1 alert in any real-world SOC
+- On Windows 11 machine open an administrative command prompt
+- Run the command: `wevtutil cl Security`
+  - This clears the Security log (!)
+- Detect it in Splunk search
 ```
 index=main EventCode=1102
 | table _time, user, host, msg
 ```
-9. Test "PowerShell Execution" Scenario (Living off the Land)
-    - Most modern attacks don't use .exe files anymore, they use PowerShell to run commands directly in memory
-    - On Windows 11 machine: **Start** > **gpedit.msc**
-        - Computer Configuration > Windows Settings > Security Settings > Advanced Audit Policy Configuration > System Audit Policies > Detailed Tracking
-        - In right-hand page double click **Audit Process Creation**
-        - Check both **Succcess** and **Failure**
-        - Click **Apply** then **OK**
-    - **Start** > **gpedit.msc**
-        - Computer Configuration > Administrative Templates > System > Audit Process Creation
-        - Double click **Include command line in process creation events**
-        - Select **Enabled**
-        - Click **Apply** then **OK**
+
+### Test "PowerShell Execution" Scenario (Living Off the Land)
+NOTE Most modern attacks don't use .exe files anymore, they use PowerShell to run commands directly in memory
+
+First we will turn on enhanced logging to track process creating and PowerShell Script Block logging.
+- On Windows 11 machine: **Start** > **gpedit.msc**
+  - Computer Configuration > Windows Settings > Security Settings > Advanced Audit Policy Configuration > System Audit Policies > Detailed Tracking
+  - In right-hand page double click **Audit Process Creation**
+  - Check both **Succcess** and **Failure**
+  - Click **Apply** then **OK**
 - **Start** > **gpedit.msc**
-        - Computer Configuration > Administrative Templates > Windows Components > Windows PowerShell
-        - Double click **Turn On PowerShell Script Block Logging**
-        - Select **Enabled** (don't check "Log invocation start/stop", very verbose)
-        - Click **Apply** then **OK**
-    - From command prompt: **gpupdate /force**
-    - Open PowerShell
-    - Run: notepad.exe "C:\splunk_test.txt"
-    - Run: `Write-Host "Simulating Malware Download" -ForegroundColor Red`
-    - Run: `Get-Service | Where-Object {$_.Status -eq "Stopped"}`
-    - Detect it in Splunk search
+  - Computer Configuration > Administrative Templates > System > Audit Process Creation
+  - Double click **Include command line in process creation events**
+  - Select **Enabled**
+  - Click **Apply** then **OK**
+- **Start** > **gpedit.msc**
+  - Computer Configuration > Administrative Templates > Windows Components > Windows PowerShell
+  - Double click **Turn On PowerShell Script Block Logging**
+  - Select **Enabled** (don't check "Log invocation start/stop", very verbose)
+  - Click **Apply** then **OK**
+- From command prompt: **gpupdate /force**
+
+Now we can test the scenario
+- Open PowerShell
+- Run: notepad.exe "C:\splunk_test.txt"
+- Run: `Write-Host "Simulating Malware Download" -ForegroundColor Red`
+- Run: `Get-Service | Where-Object {$_.Status -eq "Stopped"}`
+- Detect it in Splunk search
 ~~~
 index=main EventCode=4688 process_name!="splunk-powershell.exe"
 | search "powershell.exe"
@@ -190,35 +218,25 @@ index=main EventCode=4104
 | table _time, ScriptBlockText
 ~~~
 
-10. Track browser launch and any funny command line arguments
+### Track Browser Launch (and any funny command line arguments)
+NOTE this only tracks Chrome and Edge.
+- On the Windows 11 machine, open Chrome and Edge, then browse the Internet
+- Search in Splunk
 ~~~
 index=main EventCode=4688 (process_name="chrome.exe" OR process_name="msedge.exe")
 | table _time, user, process_name, CommandLine
 ~~~
 
-11. Installing Sysmon
-    - Download Sysmon to the Windows 11 machine: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
-    - Extract the .zip file to C:\Tools or similar
-    - Download the config **sysmonconfig-export.xml** from the [SwiftOnSecurity GitHub](https://github.com/SwiftOnSecurity/sysmon-config)
-    - Place the config .xml in the same folder (e.g., C:\Tools)
-    - Open administrative powershell
-    - Navigate to your folder (e.g., C:\Tools)
-    - Run: `.\Sysmon64.exe -i sysmonconfig-export.xml -accepteula`
-        - Installs Sysmon as a service
-        - Uses the SwiftOnSecurity settings to filter out "normal" Windows noise
-    - Confirm/Add to the `inputs.conf` file:
-        - [WinEventLog://Microsoft-Windows-Sysmon/Operational]
-        - disabled = 0
-        - index = main
-        - renderXml = 1
-        - sourcetype = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
-    - If you changed anything,restart the forwarder
-        - `Restart-Service SplunkForwarder`
+- Note that no browsing history is shown, only the process creation
 
-12. The "Kill Chain" Lab: Track the Chrome (or Edge) download (Event ID 11)
-    - Login to the Windows 11 machine
-    - Download the installer for 7-Zip (any file will do)
-    - Search in Splunk:
+
+### Test the "Kill Chain" Scenario (Track the download the execution, and forensics)
+
+
+#### Track the Chrome (or Edge) download (Event ID 11)
+- Login to the Windows 11 machine
+- Download the installer for 7-Zip (any file will do)
+- Search in Splunk:
 ~~~
 index=main EventCode=11
 | xmlkv
@@ -233,17 +251,11 @@ index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" Even
 | xmlkv
 | table _time, Image, TargetFilename
 ~~~
-
-    - Download an exe (Event ID 11)
-~~~
-# Simulate a download of the 7-Zip installer
-$url = "https://www.7-zip.org/a/7z2301-x64.exe"
-$dest = "$env:USERPROFILE\Downloads\7z_installer.exe"
-Invoke-WebRequest -Uri $url -OutFile $dest
-~~~
-    
-    - Execute the installer silently via PowerShell (Event ID 1)
-        - Start-Process -FilePath "$env:USERPROFILE\Downloads\7z_installer.exe" -ArgumentList "/S" -Wait
+- Simulate downloading malware by downloading 7-Zip installer from PowerShell
+  - Download an exe (Event ID 11)
+  - `Invoke-WebRequest -Uri "https://www.7-zip.org/a/7z2301-x64.exe" -OutFile "$env:USERPROFILE\Downloads\Project_X_Payload.exe"`
+- Execute the installer silently via PowerShell (Event ID 1)
+  - Start-Process -FilePath "$env:USERPROFILE\Downloads\Project_X_Payload.exe" -ArgumentList "/S" -Wait
     - Search in Splunk
 ~~~
 index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
@@ -252,10 +264,10 @@ index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" Even
 | table _time, User, ParentImage, Image, CommandLine
 ~~~
 
-    - Generate Network Traffic (Event ID 3)
-        - # Force PowerShell to connect to a web server to generate a Network event
-        - Test-NetConnection -ComputerName google.com -Port 443
-    - Grand Finale Search
+- Generate Network Traffic to simulate malware calling home (Event ID 3)
+  - Test-NetConnection -ComputerName google.com -Port 443
+- Grand Finale Search
+~~~
 index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" (EventCode=1 OR EventCode=3 OR EventCode=11)
 | xmlkv
 | eval Action=case(EventCode=1, "EXECUTION", EventCode=3, "NETWORK", EventCode=11, "DOWNLOAD")
