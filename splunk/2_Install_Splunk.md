@@ -1,7 +1,7 @@
 # Install Splunk
 NOTE At the time of writing, the current version is Splunk Enterprise 10.0.2.
 
-Pro Tip: The Dockerd Shortcut
+Pro Tip: The Docker Shortcut
 - there is a secret version: The Splunk Enterprise for Docker image often comes pre-licensed with a 20GB/day trial that is very robust
 - See Appendix - Splunk Docker ([Appendix_Splunk_Docker.md](Appendix_Splunk_Docker.md))
 
