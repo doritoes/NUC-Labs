@@ -64,3 +64,16 @@ NOTE Personal license is not an instant download; it requires a quick "applicati
 7. In your Ubuntu Splunk Web UI (Port 8000), go to **Settings** > **System** > **Licensing** > **Add License** and upload that file (choose and then click **Install**)
 8. Click **Restart Now** when prompted (and confirm)
 9. Log back in
+
+## Solving the "Security risk warning"
+In Lab testing, a 'security risk warning' appears under "Messages":
+- Security risk warning: Found an empty value for 'allowedDomainList' in the alert_actions.conf configuration file. If you do not configure this setting, then users can send email alerts with search results to any domain. You can add values for 'allowedDomainList' either in the alert_actions.conf file or in Server Settings > Email Settings > Email Domains in Splunk Web.
+
+To clear this annoying warning the easiest way:
+- Settings > System > Server Settings > Email Settings
+- **Set Email Domains** to **Allow all**
+- Click **Save**
+- Delete the warning message
+
+This is not safer than the empty custom domains. Setting this to gmail.com to allow gmail.com is also silly.
+- 
