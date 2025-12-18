@@ -14,7 +14,7 @@ This is somewhat awkward for a homelab user. IT requests your "business email" a
 ## Download the Splunk Package
 1. After logging in, click **Trials & Downloads**
 2. Under Splunk Enterprise, click **Start Trial**
-3. Click on the Linux tab
+3. Click on the **Linux** tab
 4. Next to the **.deb** version click **Copy wget link**
     - this is a personal link with a token that expires
 5. Paste this link (really a command) into the server:
@@ -22,7 +22,7 @@ This is somewhat awkward for a homelab user. IT requests your "business email" a
     - NOTE the file is over 1.2GB
 
 ## Install Splunk
-1. Run this commmpand on the server, adjusting for your file name: `sudo dpkg -i splunk-10.0.2-xxxx-linux-amd64.deb`
+1. Run this commmand on the server, adjusting for your file name: `sudo dpkg -i splunk-10.0.2-xxxx-linux-amd64.deb`
 2. First Run: sudo /opt/splunk/bin/splunk start --accept-license
     - It will ask you to create an admin username and password
     - Do not lose these; they are for the web UI (splunkadmin/splunkadmin is fine for this lab)
@@ -36,12 +36,11 @@ This is somewhat awkward for a homelab user. IT requests your "business email" a
 
 ## Test
 1. http://<ipaddress>:8000
+    - NOTE this is NOT secure by default!
 2. Log in with the account you configured
 
-NOTE this is NOT secure by default!
-
 ## Enable HTTPS
-Modify to your selected username and password
+Modify the following command to your selected username and password
 1. `sudo /opt/splunk/bin/splunk enable web-ssl -auth <username>:<password>`
 2. `sudo /opt/splunk/bin/splunk restart`
 3. Log in to `https://<ipaddress>:8000`
@@ -62,4 +61,6 @@ NOTE Personal license is not an instant download; it requires a quick "applicati
     - `Your request is under review. Expect an email in 3–5 business days.`
     - It usually is within a fiew hours
 6. They will email you an .xml file
-7. In your Ubuntu Splunk Web (Port 8000), go to Settings > Licensing > Add License and upload that file
+7. In your Ubuntu Splunk Web UI (Port 8000), go to **Settings** > **System** > **Licensing** > **Add License** and upload that file (choose and then click **Install**)
+8. Click **Restart Now** when prompted (and confirm)
+9. Log back in
