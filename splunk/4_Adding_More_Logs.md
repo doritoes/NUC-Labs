@@ -37,6 +37,8 @@ Set up a Windows 11 test machine and install Google Chrome on it.
     - Accecpt the agreement
     - Use this UniversalForwarder with: **An on-premises Splunk Enterprise instance**
     - Click **Next**
+    - TODO If it if you want to use system account or the virtual splunk forwarder (more secure), use local system account because we will be using sysmon
+    - TODO if this doesn't show up, we have to open Services and change LogOnAs to local system account
     - Create Credentials
         - Create a local admin for the UF (e.g., admin / YourPassword)
         - NOTE This is just for local CLI access on the Windows box
@@ -174,14 +176,74 @@ index=main EventCode=4688 (process_name="chrome.exe" OR process_name="msedge.exe
 | table _time, user, process_name, CommandLine
 ~~~
 
+11. Installing Sysmon
+    - Download Sysmon to the Windows 11 machine: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+    - Extract the .zip file to C:\Tools or similar
+    - Download the config **sysmonconfig-export.xml** from the [SwiftOnSecurity GitHub](https://github.com/SwiftOnSecurity/sysmon-config)
+    - Place the config .xml in the same folder (e.g., C:\Tools)
+    - Open administrative powershell
+    - Navigate to your folder (e.g., C:\Tools)
+    - Run: `.\Sysmon64.exe -i sysmonconfig-export.xml -accepteula`
+        - Installs Sysmon as a service
+        - Uses the SwiftOnSecurity settings to folder out "normal" Windows noise
+    - Confirm/Add to the `inputs.conf` file:
+        - [WinEventLog://Microsoft-Windows-Sysmon/Operational]
+        - disabled = 0
+        - index = main
+        - renderXml = 1
+        - sourcetype = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
+    - If you changed anything,restart the forwarder
+        - `Restart-Service SplunkForwarder`
 
-11. The "Kill Chain" Lab: Track the Chrome download (Event ID 11)
+12. The "Kill Chain" Lab: Track the Chrome (or Edge) download (Event ID 11)
+    - Login to the Windows 11 machine
+    - Download the installer for 7-Zip (any file will do)
+    - Search in Splunk:
+~~~
+index=main EventCode=11
+| xmlkv
+| table _time, Image, TargetFilename
+~~~
 
-need to add instructions to set up sysmon
+    - Image: The process that created the file (e.g., chrome.exe or msedge.exe)
+    - TargetFilehame: Exactly where it landed on the disk
+    - NOTE With additional configuration on the UF, the PowerShell and Sysmon logs will be properly parsed from the XML. It involves dropping your preconfigured folder with `inputs.conf` into `etc/apps/`. Then you should be able to run the query:
+~~~
+index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11
+| xmlkv
+| table _time, Image, TargetFilename
+~~~
 
-Track the PowerShell execution of that download (Event ID 1).
+    - Download an exe (Event ID 11)
+~~~
+# Simulate a download of the 7-Zip installer
+$url = "https://www.7-zip.org/a/7z2301-x64.exe"
+$dest = "$env:USERPROFILE\Downloads\7z_installer.exe"
+Invoke-WebRequest -Uri $url -OutFile $dest
+~~~
+    
+    - Execute the installer silently via PowerShell (Event ID 1)
+        - Start-Process -FilePath "$env:USERPROFILE\Downloads\7z_installer.exe" -ArgumentList "/S" -Wait
+    - Search in Splunk
+~~~
+index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+| xmlkv
+| search ParentImage="*powershell.exe"
+| table _time, User, ParentImage, Image, CommandLine
+~~~
 
-Track the Network connection the malware makes back to its C2 server (Event ID 3).
+    - Generate Network Traffic (Event ID 3)
+        - # Force PowerShell to connect to a web server to generate a Network event
+        - Test-NetConnection -ComputerName google.com -Port 443
+    - Grand Finale Search
+index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" (EventCode=1 OR EventCode=3 OR EventCode=11)
+| xmlkv
+| eval Action=case(EventCode=1, "EXECUTION", EventCode=3, "NETWORK", EventCode=11, "DOWNLOAD")
+| table _time, Action, Image, TargetFilename, DestinationIp, CommandLine
+| sort _time
+~~~
+    
+
 
 
 
