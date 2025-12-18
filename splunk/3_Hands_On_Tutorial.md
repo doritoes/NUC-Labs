@@ -31,7 +31,7 @@ Find all events where a purchase failed
   - Find a log entry showing "action = purchase", click **purchase**
   - Click **Add to search""
 - Review the logs
-  - What are the "hosts" in the logs?
+  - What are the "hosts" in the logs? (try clicking on **host** under Selected Fields)
 
 ### Filtering
 Find all failed login attempts in the secure logs
@@ -57,7 +57,7 @@ Create a line graph of web traffic over the last 24 hours
 2. Click **Visualization**
 3. From the small dropdown change the `Chart` from Column Chart to Line Chart
 4. In the top search area, click **Save As** > **New Dashboard**
-    - Close the dashboard type informational Window
+    - Close the dashboard type informational Window as necessary
     - Dashboard title: **Buttercup Games SOC**
     - Description: **Monitoring web purchases and security events**
     - Permissions: **Shared in App** so all users can see it
@@ -69,7 +69,7 @@ Create a line graph of web traffic over the last 24 hours
 6. Click **Visualization**
 7. From the small dropdown change the `Chart` from Column Chart to Line Chart
 8. In the top search area, click **Save As** > **Existing Dashboard**
-    - Select existing: Buttercup Games SOC
+    - Select existing: **Buttercup Games SOC**
     - Panel title: **Unuccessful Purchases Over Time**
     - Panel Content: Choose Line Chart (Splunk will automatically try to visualize the data if you have a timechart command, but if not, it will default to a table).
     - Click **Save to Dashboard**, then click **View Dashboard**
