@@ -38,3 +38,10 @@ Installing the "Universal Forwarder" on your other machines so they can start se
 ## Learning More
 
 ## Cleanup and Next Steps
+If you installed UF or Sysmon on any machines you won't be reformatting
+- Windows: Uninstall Splunk Universal Forwarder
+- Windows: Uninstall Sysmon
+  - Administrative PowerShell
+  - cd \Tools
+  - .\Sysmon64.exe -u
+  - Manually delete the `sysmonconfig-export.xml` and the Sysmon exe files
