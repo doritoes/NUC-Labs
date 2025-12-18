@@ -4,7 +4,7 @@ Requirements:
 - RAM: at least 4GB to 8GB
 - 100GB is fine (Splunk compresses data at roughly a 50% ratio, so that space allows you to ingest hundreds of gigabytes of logs over time)
 
-Install Ubuntu Server 24.04 LTS on the NUC or VM you are using to run Splunk. For this Lab I am running it as a VM and NUC running XCP-ng.
+Install Ubuntu Server 24.04 LTS on the NUC or VM you are using to run Splunk. For this Lab I am running it as a VM on a NUC running XCP-ng.
 - Defaults for just about everything
 - At **Storage Configuration** edit the ubuntu-lv mounted as root (/) to be the maximum size (i.e., 96.945G)
 - Credentials
