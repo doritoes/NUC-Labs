@@ -65,13 +65,13 @@ Set up a Windows 11 test machine and install Google Chrome on it.
     - UF only reads this file when it starts up
       - Open administrative PowerShell
       - `Restart-Service SplunkForwarder`
-3. Confirming logs arrive
+4. Confirming logs arrive
     - Log in to the Splunk Web UI
     - `| metadata type=hosts`
       - If your Windows host name shows up, it is working!
     - `index=_internal host=<WINDOWS_HOSTNAME_HERE>` (usually all lowercase in Splunk)
     - `index=main sourcetype="WinEventLog:Security"`
-4. Test "Insider Threat" Scenario
+5. Test "Insider Threat" Scenario
     - Local Console
         - Lock the screen and attempt to log in with a wrong password 3 or 4 times
             - NOTE Logging in with a PIN doesn't populate the TargetUserName field(!) It will show the Sub_status 0xc0000380 STATUS_SMARTCARD_SILENT_CONTEXT
@@ -105,12 +105,83 @@ index=main EventCode=4625
 | table _time, user, src_ip, Logon_Type, status
 ```
 
-5. Test "Persistence" Scenario (New User Account)
+6. Confirm Successful Logins
+```
+index=main EventCode=4624
+| table _time, user, src_ip, Logon_Type
+```
+
+NOTE You will see the service accounts like DWM-4 (Desktop Window Manager) and UMDF-4 (User Mode Driver Framework) logging in. Look up what these are used for. It's a fun read.
+
+7. Test "Persistence" Scenario (New User Account)
     - On the Windows 11 maching open an administrative command prompt
     - Create a new user: `net user LabVictim Splunk123! /add"
     - In Splunk search bar
         - query: `index=main sourcetype="WinEventLog:Security" EventCode=4720`
     - Identify the name of the user that was created and the user that created them
+8. Test "Wiping the Evidence" Scenario (Log Clearing)
+    - This is a Priority 1 alert in any real-world SOC
+    - On Windows 11 machine open and administrative command prompt
+    - Run the command: `wevtutil cl Security`
+    - This clears the Security log (!)
+    - Detect it in Splunk search
+```
+index=main EventCode=1102
+| table _time, user, host, msg
+```
+9. Test "PowerShell Execution" Scenario (Living off the Land)
+    - Most modern attacks don't use .exe files anymore, they use PowerShell to run commands directly in memory
+    - On Windows 11 machine: **Start** > **gpedit.msc**
+        - Computer Configuration > Windows Settings > Security Settings > Advanced Audit Policy Configuration > System Audit Policies > Detailed Tracking
+        - In right-hand page double click **Audit Process Creation**
+        - Check both **Succcess** and **Failure**
+        - Click **Apply** then **OK**
+    - **Start** > **gpedit.msc**
+        - Computer Configuration > Administrative Templates > System > Audit Process Creation
+        - Double click **Include command line in process creation events**
+        - Select **Enabled**
+        - Click **Apply** then **OK**
+- **Start** > **gpedit.msc**
+        - Computer Configuration > Administrative Templates > Windows Components > Windows PowerShell
+        - Double click **Turn On PowerShell Script Block Logging**
+        - Select **Enabled** (don't check "Log invocation start/stop", very verbose)
+        - Click **Apply** then **OK**
+    - From command prompt: **gpupdate /force**
+    - Open PowerShell
+    - Run: notepad.exe "C:\splunk_test.txt"
+    - Run: `Write-Host "Simulating Malware Download" -ForegroundColor Red`
+    - Run: `Get-Service | Where-Object {$_.Status -eq "Stopped"}`
+    - Detect it in Splunk search
+~~~
+index=main EventCode=4688 process_name!="splunk-powershell.exe"
+| search "powershell.exe"
+| table _time, user, process_name, New_Process_Name, CommandLine
+~~~
+
+~~~
+index=main EventCode=4104
+~~~
+
+~~~
+index=main EventCode=4104
+| xmlkv
+| table _time, ScriptBlockText
+~~~
+
+10. Track browser launch and any funny command line arguments
+~~~
+index=main EventCode=4688 (process_name="chrome.exe" OR process_name="msedge.exe")
+| table _time, user, process_name, CommandLine
+~~~
+
+
+11. The "Kill Chain" Lab: Track the Chrome download (Event ID 11)
+
+need to add instructions to set up sysmon
+
+Track the PowerShell execution of that download (Event ID 1).
+
+Track the Network connection the malware makes back to its C2 server (Event ID 3).
 
 
 
