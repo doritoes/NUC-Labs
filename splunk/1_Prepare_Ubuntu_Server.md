@@ -44,3 +44,4 @@ Splunk keeps many "buckets" (files) open at once. The default Ubuntu limit (1024
     - `* soft nproc 20480`
     - `* hard nproc 20480`
   - NOTE: The * applies to all users. If you create a specific splunk user later, you can replace the * with splunk.
+2. `sudo reboot`
