@@ -100,9 +100,11 @@ Set up a Windows 11 test machine and install Google Chrome on it.
           - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
           - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
       - Use a "friendly" query that uses the Windows Plugin
-````index=main EventCode=4625 
+```
+index=main EventCode=4625 
 | table _time, user, src_ip, Logon_Type, status
 ```
+
 5. Test "Persistence" Scenario (New User Account)
     - On the Windows 11 maching open an administrative command prompt
     - Create a new user: `net user LabVictim Splunk123! /add"
