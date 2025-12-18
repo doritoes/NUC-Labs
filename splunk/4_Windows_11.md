@@ -190,7 +190,7 @@ First we will turn on enhanced logging to track process creating and PowerShell 
 - On Windows 11 machine: **Start** > **gpedit.msc**
   - Computer Configuration > Windows Settings > Security Settings > Advanced Audit Policy Configuration > System Audit Policies > Detailed Tracking
   - In right-hand page double click **Audit Process Creation**
-  - Check both **Succcess** and **Failure**
+  - Check **Configure the folllowing audit events** and both **Succcess** and **Failure**
   - Click **Apply** then **OK**
 - **Start** > **gpedit.msc**
   - Computer Configuration > Administrative Templates > System > Audit Process Creation
@@ -205,15 +205,17 @@ First we will turn on enhanced logging to track process creating and PowerShell 
 - From command prompt: **gpupdate /force**
 
 Now we can test the scenario
+- Close out all remaining PowerShell Windows
 - Open PowerShell
 - Run: notepad.exe "C:\splunk_test.txt"
+  - It will display an error because the file doesn't exist; close it out
 - Run: `Write-Host "Simulating Malware Download" -ForegroundColor Red`
 - Run: `Get-Service | Where-Object {$_.Status -eq "Stopped"}`
 - Detect it in Splunk search
 ~~~
 index=main EventCode=4688 process_name!="splunk-powershell.exe"
 | search "powershell.exe"
-| table _time, user, process_name, New_Process_Name, CommandLine
+| table _time, user, parent_process_name, New_Process_Name, Process_Command_Line
 ~~~
 
 ~~~
@@ -253,20 +255,21 @@ index=main EventCode=11
 
     - Image: The process that created the file (e.g., chrome.exe or msedge.exe)
     - TargetFilehame: Exactly where it landed on the disk
-    - NOTE With additional configuration on the UF, the PowerShell and Sysmon logs will be properly parsed from the XML. It involves dropping your preconfigured folder with `inputs.conf` into `etc/apps/`. Then you should be able to run the query:
 ~~~
-index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11
+index=main source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11
 | xmlkv
 | table _time, Image, TargetFilename
 ~~~
+
 - Simulate downloading malware by downloading 7-Zip installer from PowerShell
   - Download an exe (Event ID 11)
   - `Invoke-WebRequest -Uri "https://www.7-zip.org/a/7z2301-x64.exe" -OutFile "$env:USERPROFILE\Downloads\Project_X_Payload.exe"`
 - Execute the installer silently via PowerShell (Event ID 1)
   - Start-Process -FilePath "$env:USERPROFILE\Downloads\Project_X_Payload.exe" -ArgumentList "/S" -Wait
-    - Search in Splunk
+  - NOTE you are prompted by UAC to allow the changes. A real attack has methods to disable UAC.
+- Search in Splunk
 ~~~
-index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+index=main source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
 | xmlkv
 | search ParentImage="*powershell.exe"
 | table _time, User, ParentImage, Image, CommandLine
@@ -276,7 +279,7 @@ index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" Even
   - Test-NetConnection -ComputerName google.com -Port 443
 - Grand Finale Search
 ~~~
-index=main sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" (EventCode=1 OR EventCode=3 OR EventCode=11)
+index=main source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" (EventCode=1 OR EventCode=3 OR EventCode=11)
 | xmlkv
 | eval Action=case(EventCode=1, "EXECUTION", EventCode=3, "NETWORK", EventCode=11, "DOWNLOAD")
 | table _time, Action, Image, TargetFilename, DestinationIp, CommandLine
