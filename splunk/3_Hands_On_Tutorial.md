@@ -75,29 +75,24 @@ Create a line graph of web traffic over the last 24 hours
     - Click **Save to Dashboard**, then click **View Dashboard**
 
 ### Alerting
-Phase 4: Setting the "SOC" Mindset (Alerting)
-Since you mentioned developing skills, teach them that a SIEM is "Passive" until you make it "Active."
+Splunk isn't very helpful without alerting. A passive logging system needs to be more active to be valuable.
 
-Exercise: "Create an alert that emails you (or triggers a notification) if more than 5 failed logins occur within 1 minute."
-
-Process: Run the search index=main "failed password", then click Save As > Alert. Set the trigger condition to "Greater than 5" within a "Rolling Window of 1 minute."
-
-
-## Adding Logs
-Installing the "Universal Forwarder" on your other machines so they can start sending their logs to Splunk
-
-OPNsense
-
-pfSense
-
-NAS
-
-## Basic Queries
-
-## Advanced Queries
-
-## Gotchas
-
-## Learning More
-
-## Cleanup and Next Steps
+Create an alert that emails you (or triggers a notification) if more than 5 failed logins occur within 1 minute.
+- query: `index=main "failed password"`
+- Click **Save As** > **Alert**
+  - Title: **Failed Login Alert**
+  - Description: **5 or more failed logins in 1 minute**
+  - Permissions: **Shared in App**
+  - Alert type: **Real-time**
+  - Expires: **1 hour**
+  - Trigger alert when:
+     - **Number of Results**
+     - **Is greater than 4**
+    - in **1 minutes**
+    - Trigger **Once**
+    - Throttle: **15 minutes**
+- Trigger Actions:
+  - **Add action** > **Send email** (and configure as you wish)
+- Click **Save**
+- Click **View Alert**
+- Optionally configure **Settings** > **Server settings** > **Email settings** so the alert emails will work
