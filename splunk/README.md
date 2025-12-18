@@ -11,6 +11,7 @@ Materials:
 - NUC running Ubuntu server or a VM running Ubuntu server
 - USB sticks
   - 1 USB sticks, 8GB or more to load Ubunutu on the NUC
+- Another NUC or VM(s) that we can load with Windows and Ubuntu to configure and test scenarios
 
 # Overview
 ## Preparing the Server
@@ -25,7 +26,12 @@ See https://docs.splunk.com/Documentation/Splunk/latest/SearchTutorial/Getthetut
 Get started with the basics - [Hands On Tutorial](3_Hands_On_Tutorial.md)
 
 ## Adding Logs
-Installing the "Universal Forwarder" on your other machines so they can start sending their logs to Splunk and look into what other logs to feed to Splunk - [Adding More Logs](4_Adding_More_Logs.md)
+Installing the "Universal Forwarder" on your other machines so they can start sending their logs to Splunk and look into what other logs to feed to Splunk
+- [Windows 11](4_Windows_11.md)
+- [Windows Server 2025](5_Windows_Server_2025.md)
+- [Ubuntu_Desktop](6_Ubuntu_Desktop.md)
+- [Ubuntu_Server](7_Ubuntu_Server.md)
+- [Adding More Logs](8_Adding_More_Logs.md)
 
 ## Gotchas
 
