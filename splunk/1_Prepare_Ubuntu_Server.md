@@ -20,7 +20,7 @@ Do the usual packages updates
 - Log in as `lab`/`Splunklab123!`
 - `ip a`
   - Find the IP address so you can ssh to the server remotely if you wish
-- `sudo apt update && sudo apt -y upgrade && sudo apt autoremove`
+- `sudo apt update && sudo apt -y upgrade && sudo apt autoremove -y`
 
 
 ## System Tuning
