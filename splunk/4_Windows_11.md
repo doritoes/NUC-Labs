@@ -11,7 +11,7 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 ### Configure the Splunk Listener
 1. Open port 9997
     - Log into Splunk Web UI
-    - **Settings** > **Forwarding and Receiving**
+    - **Settings** > **Data** > **Forwarding and Receiving**
     - Click **Configure receiving** under "Receive data"
     - Click **New Receiving Port**
         - Enter: **9997** and click **Save**
@@ -66,12 +66,10 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
     - Accecpt the agreement
     - Use this UniversalForwarder with: **An on-premises Splunk Enterprise instance**
     - Click **Next**
-    - TODO If it if you want to use system account or the virtual splunk forwarder (more secure), use local system account because we will be using sysmon
-    - TODO if this doesn't show up, we have to open Services and change LogOnAs to local system account
     - Create Credentials
         - Create a local admin for the UF (e.g., admin / YourPassword)
         - NOTE This is just for local CLI access on the Windows box
-        - Leave **Generate random password** check and click **Next**
+        - Leave **Generate random password** checked and click **Next**
     - Deployment Server:
         - Leave this blank and click **Next**
         - NOTE This is for managing 1,000s of forwarders; we don't need it yet
@@ -81,7 +79,14 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
         - Port: leave empty, default is 9997
         - Click **Next**
     - Click **Install** and then click **Finish**
-3. Configure what logs to collect
+3. Update the Splunk Universal Forwarder service to LogOnAs the local system account
+    - Increased permissions are required because we are using SysMon
+    - **Start** > **Services**
+    - Find **SplunkForwarder** and double-click to modify properties
+    - Clikc **Log On** tab and change to **Local System account**
+    - Click **Apply**, **OK**, **OK**
+    - Restart the SplunkForwarder service (right-click, **Restart**)
+4. Configure what logs to collect
     - Since we used the default settings, we need to tell UF what logs to collect
     - If we had used **Customize** option we would have selected (and later had to modify it anyways)
         - Application
@@ -109,7 +114,7 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
     - UF only reads this file when it starts up
       - Open administrative PowerShell
       - `Restart-Service SplunkForwarder`
-4. Confirming logs arrive
+5. Confirming logs arrive
     - Log in to the Splunk Web UI
     - `| metadata type=hosts`
       - If your Windows host name shows up, it is working!
@@ -124,7 +129,7 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
   - Open the Splunk search bar
   - Set the Time Picker to "Last 15 minutes"
   - Run the following search to find the failures:
-  - `index=main sourcetype="WinEventLog:Security" EventCode=4625`
+  - `index=main source="WinEventLog:Security" EventCode=4625`
   - Note the **Interesting Fields** on the left
     - Account_Name: The account they tried to hack
     - Logon_Type: 2 (Interactive) or 7 (Unlock)
@@ -132,15 +137,16 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
     - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
     - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
 - RDP to Win 11 computer
+    - For example if the local username is "Lab", enter the username ".\lab"
     - Try wrong password 3 or 4 times
     - Log in with the correct password
     - Open the Splunk search bar
     - Set the Time Picker to "Last 15 minutes"
     - Run the following search to find the failures:
-      - `index=main sourcetype="WinEventLog:Security" EventCode=4625`
+      - `index=main source="WinEventLog:Security" EventCode=4625`
       - Note the **Interesting Fields** on the left
         - Account_Name: The account they tried to hack
-        - Logon_Type: 3 (Network Login) mean NLA negotiated credentials before RDP fully opened; Type 10 is what we classically expected for RDP
+        - Logon_Type: 3 (Network Login) means NLA negotiated credentials before RDP fully opened; Type 10 is what we classically expected for RDP
         - Source_Network_Address: the IP address you tried to log in <ins>from</ins>
         - Status: The hex code for why it failed (e.g., 0xc000006d means bad password)
         - Sub_status: 0xC000006A (STATUS_WRONG_PASSWORD)
@@ -157,11 +163,13 @@ index=main EventCode=4624
 ```
 
 NOTE You will see the service accounts like DWM-4 (Desktop Window Manager) and UMDF-4 (User Mode Driver Framework) logging in. Look up what these are used for. It's a fun read.
-### Test "Persisence" Scenario (New User Account)
+
+### Test "Persistence" Scenario (New User Account)
+Imaging the attacker has got into the system. They create another account that they control to attain persistent access.
 - On the Windows 11 machine open an administrative command prompt
 - Create a new user: `net user LabVictim Splunk123! /add"
 - In Splunk search bar
-    - query: `index=main sourcetype="WinEventLog:Security" EventCode=4720`
+    - query: `index=main source="WinEventLog:Security" EventCode=4720`
 - Identify the name of the user that was created and the user that created them
 
 ### Test "Wiping the Evidence" Scenario (Log Clearing)
