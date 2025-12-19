@@ -16,7 +16,7 @@ IMPORTANT <ins>Always</ins> use a fixed or static IP for a domain controller.
 - Set the static IP address and point DNS settings to itself (it's going to be a domain controller).
   - Open an administrative powershell (modify these examples for your Lab)
     - `New-NetIPAddress -IPAddress 192.168.100.10 -DefaultGateway 192.168.100.254 -PrefixLength 24 -InterfaceIndex (Get-NetAdapter).InterfaceIndex`
-    - `Set-DNSClientServerAddress -InterfaceIndex(Get-NetAdapter).InterfaceIncex -ServerAddresses 192.168.100.10`
+    - `Set-DNSClientServerAddress -InterfaceIndex (Get-NetAdapter).InterfaceIndex -ServerAddresses 192.168.100.10`
 
 # Configure as Domain Controller
 - Open an administrative powershell (modify these examples for your Lab)
