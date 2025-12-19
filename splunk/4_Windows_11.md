@@ -63,7 +63,7 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
     - Windows tab > 64-bit > Download Now
     - Accept the terms
 2. Launch the installer named similar to `splunkforwarder-10.0.2-xxxxxx-windows-x64`
-    - Accecpt the agreement
+    - Accept the agreement
     - Use this UniversalForwarder with: **An on-premises Splunk Enterprise instance**
     - Click **Next**
     - Create Credentials
