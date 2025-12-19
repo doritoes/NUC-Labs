@@ -119,7 +119,7 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
     - `| metadata type=hosts`
       - If your Windows host name shows up, it is working!
     - `index=_internal host=<WINDOWS_HOSTNAME_HERE>` (usually all lowercase in Splunk)
-    - `index=main sourcetype="WinEventLog:Security"`
+    - `index=main source="WinEventLog:Security"`
 
 ### Test "Insider Threat" Scenario
 - Local Console
