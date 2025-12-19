@@ -1,0 +1,9 @@
+<Sysmon schemaversion="4.81">
+  <EventFiltering>
+    <RuleGroup name="ProcessCreation" groupRelation="or">
+      <ProcessCreate onmatch="include">
+        <CommandLine condition="contains"> </CommandLine> 
+      </ProcessCreate>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>
