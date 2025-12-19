@@ -94,7 +94,7 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
 ### Optionally, promote it to be a domain controller
 See [Appendix - Windows Domain Controller](Appendix-Windows-DC.md)
 
-Because of a bug in Server 2025, you MUST install software before it is promoted to a DC. Once promoted, it cannot install .msi file.
+Because of a bug in Server 2025, you MUST install software before it is promoted to a DC. Once promoted, it cannot install .msi files.
 
 However, promoting to DC seems to break UF. Catch-22.
 
@@ -108,8 +108,60 @@ In a server environment, attackers often create a local admin account to maintai
   - `net user /add BackupAdmin Password123!`
   - `net localgroup administrators BackupAdmin /add`
 - Splunk search
-  - `index=main source="WinEventLog:Security" EventCode=4720`
-PROBLEM  not showing the logs. the are local but not showing up in Splunk
+  - Added user
+    - `index=main source="WinEventLog:Security" EventCode=4720`
+  - Added user to group
+    - `index=main source="WinEventLog:Security" EventCode=4732`
+  - Add fields
+~~~
+index=main source="WinEventLog:Security" EventCode=4732 
+| table _time, ComputerName, member_dn, user_group
+~~~
+
+~~~
+index=main source="WinEventLog:Security" (EventCode=4720 OR EventCode=4732)
+| selfjoin TargetSid, member_id 
+| table _time, ComputerName, New_Account_Account_Name, user_group
+~~~
+
+### Test "Passsword Reset" Scenario (Event 4724)
+Instead of creating a new user, an attacker might hijack an existing local account (like the built-in Guest or a Support account) by resetting its password.
+
+The Command: net user Guest Password123! /active:yes
+
+The Query:
+
+Splunk SPL
+
+index=main source="WinEventLog:Security" EventCode=4724
+| table _time, TargetUserName, SubjectUserName, ComputerName
+Note: Here, TargetUserName will be the account that was hijacked.
+
+### Test "Guest Group Pivot" Scenario (Event 4732)
+Sometimes attackers don't go straight for the "Administrators" group to avoid immediate detection. They might add a user to the "Remote Desktop Users" or "Power Users" group first.
+
+The Query:
+
+Splunk SPL
+
+index=main source="WinEventLog:Security" EventCode=4732 user_group="Remote Desktop Users"
+| table _time, member_id, user_group
+
+
+### Test "Service Injection" Scenario (Event 4697)
+An attacker can create a malicious service that runs as SYSTEM.
+
+The Command: sc.exe create BackdoorService binPath= "C:\path\to\malware.exe" start= auto
+
+The Query:
+
+Splunk SPL
+
+index=main source="WinEventLog:System" EventCode=7045
+| table _time, Service_Name, Service_Type, Service_Start_Type, Service_Account
+Note: In the Security log, this shows up as Event 4697. This is the ultimate "Backdoor" because it survives reboots and runs with highest privileges.
+
+
 
 
 
