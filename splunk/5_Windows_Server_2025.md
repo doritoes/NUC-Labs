@@ -96,6 +96,12 @@ See [Appendix - Windows Domain Controller](Appendix-Windows-DC.md)
 
 Because of a bug in Server 2025, you MUST install software before it is promoted to a DC. Once promoted, it cannot install .msi file.
 
+However, promoting to DC seems to break UF. Catch-22.
+
+Attempts to add Splunk Forwarder service to be member of Event Log Readers group broke the Splunk Forwarder service entirely.
+
+If you REALLY want to test on a domain controller, use a Server 2022 DC.
+
 ### Test "Backdoor Account" Scenario
 In a server environment, attackers often create a local admin account to maintain persistance
 - On Server 2025 machine
@@ -107,20 +113,5 @@ PROBLEM  not showing the logs. the are local but not showing up in Splunk
 
 
 
-The "Domain Controller Fix" (Group Membership)
-The Splunk Forwarder service needs to be a member of the Event Log Readers group to pull the Security log on a DC.
 
-Open Active Directory Users and Computers (dsa.msc).
-
-Go to the Builtin container.
-
-Double-click Event Log Readers.
-
-Go to the Members tab and click Add.
-
-Click Object Types, check Computers, and click OK.
-
-Type the name of your Server 2025 machine and click OK.
-
-Crucial: You must restart the SplunkForwarder service for this membership change to take effect.
 
