@@ -97,7 +97,6 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
 # 1. Create the directory
 $labPath = "C:\Program Files\SplunkUniversalForwarder\etc\apps\lab\local"
 New-Item -Path $labPath -ItemType Directory -Force
-
 # 2. Set Permissions (Ensures the UF service can read your configs)
 $acl = Get-Acl $labPath
 $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("Users","ReadAndExecute","ContainerInherit,ObjectInherit","None","Allow")
