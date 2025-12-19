@@ -10,10 +10,10 @@ We will be using the Splunk "agent" called the Universal Forwarder (UF)
 NOTE You will need your splunk.com account again to download Splunk plugins and the UF installer
 
 ## Configure Windows Server 2025
-Set up a Windows Server 2025 test machine
+Set up a Windows Server 2025 test machine.
 
 ### Install Sysmon
-Sysmon is a Sysinternal tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Symon now means that when UF is installed, it already has logs to parse.
+Sysmon is a Sysinternal tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Sysmon now means that when UF is installed, it already has logs to parse.
 
 1. Download Sysmon to the Windows Server 2025 machine
     - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
@@ -25,15 +25,7 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
     - Run: `.\Sysmon64.exe -i sysmonconfig-export.xml -accepteula`
         - Installs Sysmon as a service
         - Uses the SwiftOnSecurity settings to filter out "normal" Windows noise
-    - Confirm/Add to the `inputs.conf` file:
-        - [WinEventLog://Microsoft-Windows-Sysmon/Operational]
-        - disabled = 0
-        - index = main
-        - renderXml = 1
-        - sourcetype = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
-    - If you changed anything,restart the forwarder
-        - `Restart-Service SplunkForwarder`
-        
+
 ### Install UF for Windows
 1. Download the Windows 64-bit MSI file
     - https://splunk.com/en_us/download/universal-forwarder.html
@@ -41,13 +33,11 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
     - Windows tab > 64-bit > Download Now
     - Accept the terms
 2. Launch the installer named similar to `splunkforwarder-10.0.2-xxxxxx-windows-x64`
-    - Accecpt the agreement
+    - Accept the agreement
     - Use this UniversalForwarder with: **An on-premises Splunk Enterprise instance**
     - Click **Next**
-    - TODO If it if you want to use system account or the virtual splunk forwarder (more secure), use local system account because we will be using sysmon
-    - TODO if this doesn't show up, we have to open Services and change LogOnAs to local system account
     - Create Credentials
-        - Create a local admin for the UF (e.g., admin / YourPassword)
+        - Create a local admin for the UF (e.g., **admin** / YourPassword)
         - NOTE This is just for local CLI access on the Windows box
         - Leave **Generate random password** check and click **Next**
     - Deployment Server:
@@ -59,6 +49,12 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
         - Port: leave empty, default is 9997
         - Click **Next**
     - Click **Install** and then click **Finish**
+3. Update the Splunk Universal Forwarder service to LogOnAs the local system account. Increased permissions are required because we are using SysMon
+    - **Start** > **Services**
+    - Find **SplunkForwarder** and double-click to modify properties
+    - Click **Log On** tab and change to **Local System account**
+    - Click **Apply**, **OK**, **OK**
+    - Restart the SplunkForwarder service (right-click, Restart)
 3. Configure what logs to collect
     - Since we used the default settings, we need to tell UF what logs to collect
     - If we had used **Customize** option we would have selected (and later had to modify it anyways)
@@ -82,6 +78,7 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
 
     - Open **Notepad** as an **Administrator**
         - Open `C:\Program Files\SplunkUniversalForwarder\etc\apps\lab\local\inputs.conf`
+            - View All Files
         - Paste in the contents of inputs.conf [inputs.conf](inputs.conf)
         - Click **File** > **Save**
     - UF only reads this file when it starts up
@@ -92,6 +89,11 @@ New-Item -Path "$labPath\inputs.conf" -ItemType File -Force
     - `| metadata type=hosts`
       - If your Windows host name shows up, it is working!
     - `index=_internal host=<WINDOWS_HOSTNAME_HERE>` (usually all lowercase in Splunk)
-    - `index=main sourcetype="WinEventLog:Security"`
+    - `index=main source="WinEventLog:Security"`
+
+### Optionally, promote it to be a domain controller
+See [Appendix - Windows Domain Controller](Appendix-Windows-DC.md)
+
+Because of a bug in Server 2025, you MUST install software before it is promoted to a DC. Once promoted, it cannot install .msi file.
 
 ### Test Scenario 1
