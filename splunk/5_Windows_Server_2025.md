@@ -114,7 +114,7 @@ In a server environment, attackers often create a local admin account to maintai
     - `index=main source="WinEventLog:Security" EventCode=4732`
   - Add fields
 ~~~
-index=main source="WinEventLog:Security" EventCode=4732 
+index=main source="WinEventLog:Security" EventCode=4732 index=main source="WinEventLog:Security" EventCode=4724
 | table _time, ComputerName, member_dn, user_group
 ~~~
 
@@ -127,43 +127,104 @@ index=main source="WinEventLog:Security" (EventCode=4720 OR EventCode=4732)
 ### Test "Passsword Reset" Scenario (Event 4724)
 Instead of creating a new user, an attacker might hijack an existing local account (like the built-in Guest or a Support account) by resetting its password.
 
-The Command: net user Guest Password123! /active:yes
-
-The Query:
-
-Splunk SPL
-
+- On Server 2025 machine
+  - `net user Guest Password123! /active:yes`
+- Splunk search
+  - `index=main source="WinEventLog:Security" EventCode=4724`
+~~~
 index=main source="WinEventLog:Security" EventCode=4724
-| table _time, TargetUserName, SubjectUserName, ComputerName
-Note: Here, TargetUserName will be the account that was hijacked.
+| table _time, ComputerName, Subject_Account_Name, Target_Account_Name
+~~~
 
 ### Test "Guest Group Pivot" Scenario (Event 4732)
 Sometimes attackers don't go straight for the "Administrators" group to avoid immediate detection. They might add a user to the "Remote Desktop Users" or "Power Users" group first.
 
-The Query:
-
-Splunk SPL
-
-index=main source="WinEventLog:Security" EventCode=4732 user_group="Remote Desktop Users"
-| table _time, member_id, user_group
-
+- On Server 2025 machine
+  - `net user SupportTech Password123! /add`
+  - `net localgroup "Remote Desktop Users" SupportTech /add`
+  - `net localgroup "Power Users" SupportTech /add`
+- Splunk search
+  - `index=main source="WinEventLog:Security" EventCode=4732`
+~~~
+index=main source="WinEventLog:Security" EventCode=4732
+| table _time, ComputerName, Subject_Account_Name, Group_Name, Member_Security_ID
+~~~
+~~~
+index=main source="WinEventLog:Security" (EventCode=4720 OR EventCode=4732)
+| eval link_sid = coalesce(New_Account_Security_ID, Member_Security_ID)
+| selfjoin link_sid
+| table _time, ComputerName, Subject_Account_Name, New_Account_Account_Name, Group_Name, New_Account_Security_ID, Member_Security_ID
+~~~
 
 ### Test "Service Injection" Scenario (Event 4697)
-An attacker can create a malicious service that runs as SYSTEM.
+An attacker can create a malicious service that runs as SYSTEM. This is the "crown jewels" of local persistence. When you create a service that runs as SYSTEM, it will survive reboots and run with the highest possible privileges on the machine.
+
+NOTE We are going to use the safe calc.exe for our service injection. Since services don't have a "desktop session," you won't actually see the Calculator window pop up on your screen. Still, the process will be created and the event will be logged.
+
+NOTE "Audit Security System Extension" is disabled by default on Server 2025. Enable it to view event 4697
+- `auditpol /set /subcategory:"Security System Extension" /success:enable /failure:enable`
+
+Option 1: PowerShell
+~~~
+# Create a new service named "WindowsHealthUpdater" (sounds legitimate)
+# We point the binPath to calc.exe
+New-Service -Name "WindowsHealthUpdater" `
+            -BinaryPathName "C:\Windows\System32\calc.exe" `
+            -DisplayName "Windows Health Updater" `
+            -StartupType Automatic
+
+# Start the service to trigger the execution logs
+Start-Service -Name "WindowsHealthUpdater"
+# This will fail, since calc.exe doesn't know how to send service messages. Cobalt Strike service.exe files do.
+~~~
+
+To remove:
+~~~
+Stop-Service -Name "WindowsHealthUpdater"
+Remove-Service -Name "WindowsHealthUpdater"
+~~~
+
+Older PowerShell doesn't have remove-service, so use
+~~~
+sc.exe delete "WindowsHealthUpdater"
+~~~
+
+Option 2: SC
+~~~
+sc.exe create "WindowsHealthUpdater" binPath="C:\Windows\System32\calc.exe" DisplayName="Windows Health Updater" start=auto
+~~~
+
+To start/stop/remove:
+~~~
+sc.exe start "WindowsHealthUpdater"
+sc.exe stop "WindowsHealthUpdater"
+sc.exe delete "WindowsHealthUpdater"
+~~~
 
 The Command: sc.exe create BackdoorService binPath= "C:\path\to\malware.exe" start= auto
 
-The Query:
+Splunk searchs
+- Event 4697
+~~~
+index=main source="WinEventLog:Security" EventCode=4697
+| table _time, ComputerName, Service_Name, Service_File_Name, Service_Type, Subject_Account_Name
+~~~
 
-Splunk SPL
-
+- Old reliable Event 7045 records service installations
+~~~
 index=main source="WinEventLog:System" EventCode=7045
-| table _time, Service_Name, Service_Type, Service_Start_Type, Service_Account
-Note: In the Security log, this shows up as Event 4697. This is the ultimate "Backdoor" because it survives reboots and runs with highest privileges.
+| table _time, ComputerName, Service_Name, Service_File_Name, Service_Start_Type, Service_Account
+~~~
 
-
-
-
+- View both 4697 and 7045
+~~~
+index=main source="WinEventLog:*" (EventCode=4697 OR EventCode=7045)
+| eval ServiceName = coalesce(Service_Name, ServiceName)
+| eval ServicePath = coalesce(Service_File_Name, ImagePath, Service_Binary_Path)
+| eval SubmittingAccount = coalesce(Subject_Account_Name, "System/System Log")
+| table _time, ComputerName, EventCode, ServiceName, ServicePath, SubmittingAccount
+| sort - _time
+~~~
 
 
 
