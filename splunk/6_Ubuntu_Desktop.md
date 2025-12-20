@@ -119,7 +119,7 @@ Detecting use of "dangerous" tools and "pipe-to-shell" in Splunk
 4. Create file [sysmon-config.xml](sysmon-config.xml)
 5. Configure on Ubuntu Desktop
     - `sudo sysmon -accepteula -i sysmon-config.xml`
-    - `sudo vi /opt/splunkforwarder/etc/system/local/inputs.conf'
+    - `sudo vi /opt/splunkforwarder/etc/system/local/inputs.conf`
         - New file
             - `[journald://sysmon]`
             - `index = main`
