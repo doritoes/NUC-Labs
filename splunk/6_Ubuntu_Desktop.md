@@ -151,21 +151,46 @@ Detecting use of "dangerous" tools and "pipe-to-shell" in Splunk
 7. Run the command
     - `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh`
 8. Search Splunk
-
-index=main sourcetype=sysmon_linux
-| rex field=_raw "Name=[\"'](?<key>[^\"']+)[\"']>(?<value>[^<]*)"
-| table _time, User, Image, CommandLine, EventID
-
-
+    - Find commands run (processes created)
 ~~~
-index=main sourcetype=sysmon_linux Image="*"
+index=main sourcetype="sysmon:linux" | table _time, User, process, process_path
+~~~
+    - Visualize timeline
+        - `index=main sourcetype="sysmon:linux" EventID=1 | timechart span=1m count`
+        - Click Visualization (switch to Line Chart)
+        - Look for the exact second where the graph goes from a flat line to a huge spike
+    - Narrow the timeframe
+        - `index=main sourcetype="sysmon:linux" EventID=1`
+        - Note you can view the events with a timeline
+        - Drag a box around the spike in events
+        - Click Zoom to Selection
+        - Repeat if you need to zoom in more
+    - For the left bar Interesting Fields examine
+        - ParentImage
+            - "-" is the normal user shell activity
+            - "/usr/bin/bash" is the default user shell on Ubuntu
+            - "/usr/bin/dash" is what Ubuntu uses when you pipe to sh ("| sh")
+            - ParentProcessId, where the most active one happens to be "/usr/bin/dash
+        - ParentUser
+    - `index=main sourcetype="sysmon:linux" EventID=1 ParentImage="/usr/bin/bash"`
+~~~
+index=main sourcetype="sysmon:linux" EventID=1 ParentImage="/usr/bin/bash"
+| sort 0 _time | table _time, Computer, User, ParentImage, process, CommandLine
 ~~~
 
-looking for Image and CommandLine populating in the sidebar
+    - Look through the logs and locate the curl command that downloaded and ran the script
+    
+~~~
+index=main sourcetype="sysmon:linux" | sort 0 _time | table _time, ParentImage, process, CommandLine
+~~~
+    
+    - You can now search for all EventID=1 events on that computer starting from that exact time to see all the actions taken on the computer       
+    - IMPORTANT look at the User! If it changes from the local user to another user or **root** you have a privilege escalation!
+        - add this to the end of your query to look for "root": `| search User=root`
+        - you will see that not all "root" activity is malicious
 
 TIP if you modify sysmon-config.xml, you can re-apply the updated file:
 - sudo sysmon -c sysmon-config.xml
-
 
 #### Auditd
 Auditd was designed for 1990's compliant and in testing was not suited for threat detection.
