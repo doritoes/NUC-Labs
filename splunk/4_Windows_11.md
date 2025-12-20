@@ -27,7 +27,7 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 5. Click **Install**
 6. Enter your <ins>splunk.com</ins> username and password and click **Agree and Install**
 7. Restart Splunk
-    - **Settings** > **Server Controls** > **Restart Splunk**
+    - **Settings** > **System** > **Server Controls** > **Restart Splunk**
     - or command line `sudo /opt/splunk/bin/splunk restart`
 
 ## Configure Windows 11
