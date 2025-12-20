@@ -29,7 +29,7 @@ Find all events where a purchase failed
   - Click Selected: **Yes** and see how the "action" file is populated in the log fields
 - Narrow search
   - Find a log entry showing "action = purchase", click **purchase**
-  - Click **Add to search""
+  - Click **Add to search**
 - Review the logs
   - What are the "hosts" in the logs? (try clicking on **host** under Selected Fields)
 
