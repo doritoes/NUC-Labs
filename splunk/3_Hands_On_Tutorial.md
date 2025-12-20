@@ -45,7 +45,7 @@ Show me the top 10 IP addresses that are visiting our site
 - query: `index=main | top limit=10 clientip`
 - Note you are on the **Statistics tab**. Click on the **Visualization** tab
 
-### Timecharting:
+### Timecharting
 Create a line graph of web traffic over the last 24 hours
 - query: `index=main sourcetype=access_combined* | timechart count`
 - Note how the data is returned per date
