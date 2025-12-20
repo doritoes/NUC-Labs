@@ -1,5 +1,5 @@
 # Hands-On Tutorial
-Let's had a handle the Splunk basics by starting with the Tutorial. Splunk provides a famous sample dataset that contains fake web server logs (Apache)), secure logs, and vendor data.
+Let's had a handle the Splunk basics by starting with the Tutorial. Splunk provides a famous sample dataset that contains fake web server logs (Apache), secure logs, and vendor data.
 
 ## Import the "Buttercup Games" Dataset
 1. Download the files files from [Splunk](https://help.splunk.com/en/splunk-enterprise/get-started/search-tutorial/10.0/part-1-getting-started/what-you-need-for-this-tutorial#id_00ebcad1_5243_445b_b1f1_e3a49fd8c759--en__Download_the_tutorial_data_files)
