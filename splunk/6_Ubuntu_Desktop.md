@@ -19,6 +19,21 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
     - **Settings** > **Server Controls** > **Restart Splunk**
     - or command line `sudo /opt/splunk/bin/splunk restart`
 
+### Install the Splunk Add-On for Sysmon for Linux
+This application is currently Archived.
+
+See links:
+- https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
+- https://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
+
+1. Log in to splunk.com and vist https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
+2. Follow the link to download the file, similar to splunk-add-on-for-sysmon-for-linux_100.tgz
+3. Log in to your Splunk server and go to the home screen
+4. On the left, next to "Find more apps", click **Manage**
+5. Restart Splunk
+    - **Settings** > **Server Controls** > **Restart Splunk**
+    - or command line `sudo /opt/splunk/bin/splunk restart`
+
 ## Configure Ubuntu Deskop
 Set up a Ubuntu Desktop 24.04 LTS test machine
 
@@ -95,21 +110,60 @@ Detecting use of "dangerous" tools and "pipe-to-shell" in Splunk
 - **Sysmon** is also available for Linux (we used this in the Windows Labs)
 
 #### Sysmon for Linux
-1.  Add the Microsoft prod repo
-    - `wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb`
-    - `sudo dpkg -i packages-microsoft-prod.deb`
-    - `sudo apt update`
-2. Install Sysmon for Linux
-    - `sudo apt install sysmonforlinux -y`
-3. Create file [sysmon-config.xml](sysmon-config.xml)
-4. Apply: `sudo sysmon -accepteula -i sysmon-config.xml`
-5. Run the command
-6. Search Splunk
+1.  Register the Microsoft repository key
+    - `curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg`
+    - `echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list`
+2. Update and Install
+    - `sudo apt update && sudo apt install sysmonforlinux -y`
+3. `sudo systemctl status sysmon`
+4. Create file [sysmon-config.xml](sysmon-config.xml)
+5. Configure on Ubuntu Desktop
+    - `sudo sysmon -accepteula -i sysmon-config.xml`
+    - `sudo vi /opt/splunkforwarder/etc/system/local/inputs.conf'
+        - New file
+            - `[journald://sysmon]`
+            - `index = main`
+            - `sourcetype = sysmon:linux`
+6. Configure on Splunk server
+    - `sudo vi /opt/splunk/etc/system/local/props.conf`
+        - New file
+            - `[sysmon:linux]`
+            - `SHOULD_LINEMERGE = false`
+            - `LINE_BREAKER = ([\r\n]+)\<Event`
+            - `TRUNCATE = 0`
+            - `REPORT-sysmon_xml = sysmon_data_extraction
+        - `sudo chown splunk:splunk props.conf`
+    - `sudo vi /opt/splunk/etc/system/local/transforms.conf`
+        - New file
+            - `[sysmon_data_extraction]`
+            - `REGEX = <Data Name="(?P<key>[^"]+)">(?P<value>[^<]*)`
+            - `FORMAT = $1::$2
+        - `sudo chown splunk:splunk transforms.conf`
+    - `sudo /opt/splunk/bin/splunk restart`
+6. In the Splunk Web UI:
+    - Go to **Settings** > **Source types**
+    - Click **New Source Type**
+    - Name: **sysmon_linux**
+    - Indexed Extractions: xml
+    - Save
+7. Run the command
+    - `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh`
+8. Search Splunk
+
+index=main sourcetype=sysmon_linux
+| rex field=_raw "Name=[\"'](?<key>[^\"']+)[\"']>(?<value>[^<]*)"
+| table _time, User, Image, CommandLine, EventID
+
+
 ~~~
-index=main "Linux-Sysmon" EventID=1
-| rex field=_raw "<CommandLine>(?<full_cmd>[^<]+)"
-| table _time, host, full_cmd
+index=main sourcetype=sysmon_linux Image="*"
 ~~~
+
+looking for Image and CommandLine populating in the sidebar
+
+TIP if you modify sysmon-config.xml, you can re-apply the updated file:
+- sudo sysmon -c sysmon-config.xml
+
 
 #### Auditd
 Auditd was designed for 1990's compliant and in testing was not suited for threat detection.
