@@ -219,6 +219,76 @@ index=main "command_monitor"
 ~~~
 
 
-### Test "USB" Scenario
-usb insertion
+### Test "USB Flash Drive" Scenario
+Sysmon for Linux doesn't have a specific "USB Inserted" EventID. To detect a USB flash drive, we look for the mount process or the systemd services that automatically manage removable media.
+
+On Ubuntu, when you plug in a drive, the system immediately runs mount or udisksd. You can catch this using EventID 1 (Process Creation).
+
+This search looks for removable media and includes CD-ROMs:
+~~~
+index=main sourcetype="sysmon:linux" EventID=1 | search (process="*mount*" OR CommandLine="*mount*") | search (CommandLine="*/dev/sr*" OR CommandLine="*/dev/sd*" OR CommandLine="*/media*") | search NOT (CommandLine="*snap*" OR CommandLine="*squashfs*") | table _time, User, process, CommandLine
+~~~
+
+The Process: Look for /usr/bin/mount. This is the OS physically attaching the drive to the file system.
+
+The Command Line: Look for something like /media/ubuntu/USB_NAME. This tells you the Label of the USB drive that was inserted.
+
+The User: If the drive was auto-mounted by the desktop GUI, the User might be ubuntu. If it was a system-level mount, it might be root.
+
+### Test "Rubber Ducky" Scenario
+The user plugs in a USB device that looks like a flash drive but is acutally a USB HID device. HID stands for Human Interface Device. The [Hak5](https://shop.hak5.org/) [Rubber Ducky](https://shop.hak5.org/products/usb-rubber-ducky) and [Bash Bunny](https://shop.hak5.org/products/bash-bunny) are examples of devices that insert malicious commands via the emulated keyboard.
+
+Detecting HID device insertion in the kerel logs:
+- `index=main sourcetype="sysmon:linux" | search "usb" AND "hid" | search "input" OR "registered"`
+- `index=main sourcetype="sysmon:linux" | search "Manufacturer" OR "Product:" | table _time, _raw`
+- `index=main sourcetype="sysmon:linux" | search "idVendor" AND "idProduct" | table _time, _raw`
+
+Here is what USB Device Detection looks like for the Rubber Ducky:
+~~~
+usb 1-1.2: new full-speed USB device number 3 using xhci_hcd
+usb 1-1.2: New USB device found, idVendor=****, idProduct=****
+usb 1-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+usb 1-1.2: Product: USB Keyboard
+usb 1-1.2: Manufacturer: Hak5
+~~~
+
+Here is what HID Driver Attachment looks like for the Rubber Ducky:
+~~~
+usb 1-1.2: config 1 interface 0 altsetting 0 endpoint 0x81 has an invalid bInterval 0, changing to 10
+input: Hak5 USB Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.2/1-1.2:1.0/0003:****:****.0001/input/inputX
+hid-generic ****:****.0001: input,hidrawX: USB HID v1.11 Keyboard [Hak5 USB Keyboard] on usb-0000:00:14.0-1.2/input0
+~~~
+
+### Test "Persistence Backdoor" Scenario
+Attackers want to make sure they stay on the system even after a reboot. Adding a scheduled task/execution....
+
+The Action: A script adds a line to /etc/crontab or a file in /etc/cron.d/ that beacons back to a server every hour.
+
+The "Aha!" Moment: Monitor for EventID 11 (FileCreate) targeting the /etc/cron* directories.
+
+The Search: index=main sourcetype="sysmon:linux" EventID=11 TargetFilename="/etc/cron*"
+
+### Test "Browser Credential Theft" Scenario
+Browser Credential Theft (Data Exfiltration)
+Attackers often target the browser's "Login Data" database to steal saved passwords.
+
+The Action: A process like cp or cat accesses the SQLite database in ~/.config/google-chrome/Default/Login Data.
+
+The "Aha!" Moment: Using EventID 23 (FileDelete) or general process monitoring to see non-browser processes touching the Chrome/Firefox profile folders.
+
+### Test "Malicious Browser Extension" Scenario
+Malicious Browser Extension (Living Off the Browser)
+A subtle scenario where an extension executes system commands.
+
+The Action: An extension uses a "Native Messaging" host to run a bash script on the desktop.
+
+The "Aha!" Moment: In your EventID 1 results, look for ParentImage pointing to the Google Chrome or Firefox binary, but spawning /usr/bin/python or /usr/bin/bash.
+
+### Test "Shared Memory Secret Sniffing" Scenario
+Shared Memory Secret Sniffing (Memory Forensics)
+Linux uses /dev/shm for shared memory. Attackers sometimes use this for "fileless" malware.
+
+The Action: A script creates a hidden executable directly in memory (/dev/shm/.hidden_script) to avoid being caught by traditional disk scans.
+
+The "Aha!" Moment: Watch for EventID 11 or EventID 1 where the path starts with /dev/shm or /tmp.
 
