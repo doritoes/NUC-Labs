@@ -131,8 +131,10 @@ Detecting use of "dangerous" tools and "pipe-to-shell" in Splunk
             - `SHOULD_LINEMERGE = false`
             - `LINE_BREAKER = ([\r\n]+)\<Event`
             - `TRUNCATE = 0`
-            - `REPORT-sysmon_xml = sysmon_data_extraction
+            - `REPORT-sysmon_xml = sysmon_data_extraction`
         - `sudo chown splunk:splunk props.conf`
+        - If the REPORT line isn't working,
+            - `REPORT-manual = sysmon_data_extraction`
     - `sudo vi /opt/splunk/etc/system/local/transforms.conf`
         - New file
             - `[sysmon_data_extraction]`
