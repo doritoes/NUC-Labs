@@ -23,7 +23,7 @@ This is somewhat awkward for a homelab user. IT requests your "business email" a
 
 ## Install Splunk
 1. Run this commmand on the server, adjusting for your file name: `sudo dpkg -i splunk-10.0.2-xxxx-linux-amd64.deb`
-2. First Run: sudo /opt/splunk/bin/splunk start --accept-license
+2. First Run: `sudo /opt/splunk/bin/splunk start --accept-license`
     - It will ask you to create an admin username and password
     - Do not lose these; they are for the web UI (splunkadmin/splunkadmin is fine for this lab)
 3. Post-Installation: Best Practices
@@ -70,10 +70,9 @@ In Lab testing, a 'security risk warning' appears under "Messages":
 - Security risk warning: Found an empty value for 'allowedDomainList' in the alert_actions.conf configuration file. If you do not configure this setting, then users can send email alerts with search results to any domain. You can add values for 'allowedDomainList' either in the alert_actions.conf file or in Server Settings > Email Settings > Email Domains in Splunk Web.
 
 To clear this annoying warning the easiest way:
-- Settings > System > Server Settings > Email Settings
+- **Settings** > **System** > **Server Settings** > **Email Settings**
 - **Set Email Domains** to **Allow all**
 - Click **Save**
 - Delete the warning message
 
 This is not safer than the empty custom domains. Setting this to gmail.com to allow gmail.com is also silly.
-- 
