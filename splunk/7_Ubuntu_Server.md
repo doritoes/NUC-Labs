@@ -16,7 +16,18 @@ Set up a Ubuntu Server 24.04 LTS test machine
 Be default the UFW firewall is disabled/inactive. If you enabled it, you will need to allow TCP/9997.
 - `sudo ufw allow 9997/tcp`
 - `sudo ufw status`
-     
+
+### Sysmon for Linux
+1.  Register the Microsoft repository key
+    - `curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg`
+    - `echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list`
+2. Update and Install
+    - `sudo apt update && sudo apt install sysmonforlinux -y`
+3. `sudo systemctl status sysmon`
+4. Create file [sysmon-config.xml](sysmon-config.xml)
+5. Configure
+    - `sudo sysmon -accepteula -i sysmon-config.xml`
+
 ### Install UF for Unix
 🌱 need to engineer the following steps
 
@@ -38,7 +49,16 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
     - Start with authentication logs and system logs
         - `sudo /opt/splunkforwarder/bin/splunk add monitor /var/log/auth.log`
         - `sudo /opt/splunkforwarder/bin/splunk add monitor /var/log/syslog`
-5. Confirming logs arrive
+    -  Add Sysmon logs
+        - `sudo vi /opt/splunkforwarder/etc/system/local/inputs.conf`
+            - New file
+                - `[journald://sysmon]`
+                - `index = main`
+                - `sourcetype = sysmon:linux`
+5. Grant splunk user permissions to the journal files
+    - `sudo usermod -a -G systemd-journal splunk`
+    - `sudo systemctl restart splunk`
+6. Confirming logs arrive
     - Create test logs on the Ubuntu desktop:
       - `logger hello splunk`
       - `sudo echo "hello splunk"`
@@ -48,6 +68,7 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
     - `index=_internal host=<ubuntu-hostname>` (usually all lowercase in Splunk)
     - `index=main (sourcetype="syslog" OR sourcetype="auth")`
     - `index=main sourcetype="auth"`
+    - `index=main sourcetype="sysmon:linux"`
 ~~~
 index=main host="ubuntu-desktop-lan" sourcetype="auth"
 | table _time, source, _raw
