@@ -71,8 +71,8 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
     - `index=main (sourcetype="syslog" OR sourcetype="auth")`
     - `index=main sourcetype="auth"`
 ~~~
-index=main host="ubuntu-desktop-lan" sourcetype="auth"
-| table _time, source, _raw
+index=main sourcetype="auth"
+| table _time, host, source, _raw
 | sort - _time
 ~~~
 
