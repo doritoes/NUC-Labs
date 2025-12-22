@@ -10,8 +10,8 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 ## Configuring Splunk Server
 We already configured the server plugins in the previous Ubuntu Desktop step.
 
-## Configure Ubuntu Deskop
-Set up a Ubuntu Server 24.04 LTS test machine
+## Configure Ubuntu Server
+Set up a Ubuntu Server 24.04 LTS test machine. Give it 20GB or more space.
 
 Be default the UFW firewall is disabled/inactive. If you enabled it, you will need to allow TCP/9997.
 - `sudo ufw allow 9997/tcp`
@@ -23,19 +23,17 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
     - `echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list`
 2. Update and Install
     - `sudo apt update && sudo apt install sysmonforlinux -y`
-3. `sudo systemctl status sysmon`
-4. Create file [sysmon-config.xml](sysmon-config.xml)
-5. Configure
+3. Create file [sysmon-config.xml](sysmon-config.xml)
+4. Configure
     - `sudo sysmon -accepteula -i sysmon-config.xml`
+5. `sudo systemctl status sysmon`
 
 ### Install UF for Unix
-🌱 need to engineer the following steps
-
 1. Download the .deb file
     - https://splunk.com/en_us/download/universal-forwarder.html
     - You need to log in to splunk.com
-    - Linux tab > 64-bit ( 6.x+ kernel, etc.) **.deb** > Download Now
-        - Or copy the wget link and paste into a command line
+    - Linux tab > 64-bit ( 6.x+ kernel, etc.) **.deb**
+    - Copy the wget link and paste into a command line
 2. Install the package named similar to `splunkforwarder-10.0.2-xxxxxx-linux-amd64.deb`
     - `sudo dpkg -i splunkforwarder-xxxx.deb`
     - `sudo /opt/splunkforwarder/bin/splunk enable boot-start`
