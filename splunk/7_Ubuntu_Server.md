@@ -11,7 +11,7 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 We already configured the server plugins in the previous Ubuntu Desktop step.
 
 ## Configure Ubuntu Server
-Set up a Ubuntu Server 24.04 LTS test machine. Give it 20GB or more space.
+Set up a Ubuntu Server 24.04 LTS test machine. Give it 20GB or more space in the root partition. Usually this mean editing the default 10GB root partition. Enable ssh access to make it easier to configure.
 
 Be default the UFW firewall is disabled/inactive. If you enabled it, you will need to allow TCP/9997.
 - `sudo ufw allow 9997/tcp`
@@ -26,7 +26,7 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
 3. Create file [sysmon-config.xml](sysmon-config.xml)
 4. Configure
     - `sudo sysmon -accepteula -i sysmon-config.xml`
-5. `sudo systemctl status sysmon`
+5. `systemctl status sysmon`
 
 ### Install UF for Unix
 1. Download the .deb file
