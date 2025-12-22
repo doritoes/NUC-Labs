@@ -35,10 +35,12 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
     - Linux tab > 64-bit ( 6.x+ kernel, etc.) **.deb**
     - Copy the wget link and paste into a command line
 2. Install the package named similar to `splunkforwarder-10.0.2-xxxxxx-linux-amd64.deb`
-    - `sudo dpkg -i splunkforwarder-xxxx.deb`
-    - `sudo /opt/splunkforwarder/bin/splunk enable boot-start`
+    - `sudo dpkg -i splunkforwarder-10.0.2-xxxxxx-linux-amd64.deb`
     - `sudo /opt/splunkforwarder/bin/splunk start --accept-license`
         - Create `admin`/`Splunklab123!` credential, used later for UF changes
+    - `sudo /opt/splunkforwarder/bin/splunk stop`
+    - `sudo /opt/splunkforwarder/bin/splunk enable boot-start`
+    - `sudo /opt/splunkforwarder/bin/splunk stop`
 3. Connect Splunk indexer
     - `sudo /opt/splunkforwarder/bin/splunk add forward-server <YOUR_SPLUNK_IP>:9997`
         - enter the `admin`/`Splunklab123!` credentials when prompted
@@ -53,10 +55,8 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
                 - `[journald://sysmon]`
                 - `index = main`
                 - `sourcetype = sysmon:linux`
-5. Grant splunk user permissions to the journal files
-    - `sudo usermod -a -G systemd-journal splunk`
-    - `sudo systemctl restart splunk`
-6. Confirming logs arrive
+    - ` sudo /opt/splunkforwarder/bin/splunk restart`
+5. Confirming logs arrive
     - Create test logs on the Ubuntu desktop:
       - `logger hello splunk`
       - `sudo echo "hello splunk"`
@@ -68,9 +68,76 @@ Be default the UFW firewall is disabled/inactive. If you enabled it, you will ne
     - `index=main sourcetype="auth"`
     - `index=main sourcetype="sysmon:linux"`
 ~~~
-index=main host="ubuntu-desktop-lan" sourcetype="auth"
-| table _time, source, _raw
+index=main sourcetype="auth"
+| table _time, host, source, _raw
 | sort - _time
 ~~~
 
-### Test "1" Scenario
+~~~
+index=main sourcetype="sysmon:linux"
+| table _time, host, User, Image, EventID, _raw
+| sort - _time
+~~~
+
+EventID 1=Process creation, 11=File create, 3=Network connection. (5=process terminated)
+
+## Test "Discovery" Scenario
+Discovery scripts often use binaries that a normal server shouldn't be running frequently (e.g., lscpu, arp, lsmod)
+
+1. Run the command
+    - `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh`
+2. Look at "Rare Binaries"
+~~~
+index=main sourcetype="sysmon:linux" EventID=1
+| stats count, earliest(_time) as first_time, latest(_time) as last_time by Image, host
+| eventstats avg(count) as avg_use, stdev(count) as dev_use
+| where count < (avg_use / 2) OR count == 1
+| table host, Image, count
+~~~
+
+~~~
+index=main sourcetype="sysmon:linux" EventID=1
+| stats count, earliest(_time) as first_time, latest(_time) as last_time, values(ParentImage) as Parent by Image, host
+| eventstats avg(count) as avg_use
+| where count < (avg_use / 2) OR count == 1
+| eval first_time=strftime(first_time, "%H:%M:%S"), last_time=strftime(last_time, "%H:%M:%S")
+| table host, Parent, Image, count, first_time
+| sort + count
+~~~
+
+Challenge: Based on the results of the Rare Binaries table, write a Splunk Alert that triggers if more than 10 'Rare' discovery binaries are executed by the same parent process within a 60-second window.
+
+## Test "Persistence" Scenario
+Attackers love modifying ~/.ssh/authorized_keys because it allows them to log back in as a specific user without needing a password, bypassing many traditional authentication logs.
+
+- Simulate the attacker
+  - `mkdir -p ~/.ssh`
+  - `echo "ssh-rsa AAAAB3Nza1yc2EAAAADAQABAAABgQC6... attacker@evildomain.com" >> ~/.ssh/authorized_keys`
+  - `chmod 600 ~/.ssh/authorized_keys`
+- Splunk search
+~~~
+index=main sourcetype="sysmon:linux" EventID=11
+| search TargetFilename="*/.ssh/authorized_keys*"
+| table _time, host, user, Image, TargetFilename, ProcessId
+| sort - _time
+~~~
+
+~~~
+index=main sourcetype="sysmon:linux" EventID=11
+| table _time, user, Image, TargetFilename
+~~~
+
+Find modifications to sudoers, shadow file, etc.
+~~~
+index=main sourcetype="sysmon:linux" EventID=11 
+| search TargetFilename IN ("/etc/shadow", "/etc/sudoers*", "/etc/passwd", "/etc/gshadow")
+| table _time, host, user, Image, TargetFilename, ProcessId
+| sort - _time
+~~~
+
+~~~
+index=main sourcetype="sysmon:linux" EventID=11
+| search TargetFilename IN ("/etc/shadow", "/etc/sudoers*")
+| where NOT (Image IN ("/usr/sbin/visudo", "/usr/sbin/usermod", "/usr/bin/passwd", "/usr/sbin/useradd"))
+| stats count values(Image) as modifying_tool by host, TargetFilename, user
+~~~
