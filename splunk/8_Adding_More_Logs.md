@@ -98,12 +98,35 @@ Set up TCP syslog to Splunk.
 
 ### On Splunk
 - Install the OPNsense plug-in - https://splunkbase.splunk.com/app/4538
-- Settings > Data Inputs > UDP/TCP and create a listener on port.... 1515?????
+  - Download
+  - Apps > Manage > Install App From File
+  - Browse and select the file
+- Settings > Data Inputs > TCP > Add new
+  - TCP port: 1515
+  - Next
+  - Select Source Type: opnsense
+  - Host: IP
+  - Index: main
+  - Review and Submit
+  - Click **Start Searching**
+- `sudo /opt/splunk/bin/splunk restart`
 
 ### On the firewall
-- Settings > Logging > Remote
-- Enable remote logging and point it to your Splunk IP on port 514 (standard syslog) or a high port like 1515???
-
+- **Settings** > **Logging** > **Remote**
+- Click [**+**] to add
+  - Check **Enabled**
+  - **TCP**
+  - Applications: **firewall** and **dhcpd**
+    - Feel tree to experiment with adding more
+  - Levels: **info**, **notice**, **warn**, **error**, **critical**, **alert**, **emergency**
+    - This list needs to be tuned
+  - Facilities: **kernel messages**, **user-level messages**, **system daemons**, **security/authorization messages** (there are 2 of them), **messages generated internally by syslogd**, **log audit**
+    - This list needs to be tuned
+  - Hostname: IP address of the Splunk server
+  - Port: 1515
+  - Check **rfc5424**
+  - Description: **Log to Splunk**
+- Click **Apply**
 
 ### Search
-
+- `index="main" source="tcp:1515" sourcetype="opnsense"`
