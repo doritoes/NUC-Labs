@@ -19,34 +19,36 @@ NAS:
 Set up UDP syslog to Splunk. I prefer TCP but my version only uses TDP.
 - Pros: Easy to set up; no extra software on the firewall.
 - Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
+
 ### On Splunk
 - Intall the pfSense plug-in - https://splunkbase.splunk.com/app/5613
   - Log in, follow link to https://github.com/barakat-abweh/ta-pfsense
   - git clone https://github.com/barakat-abweh/ta-pfsense.git
   - mv ta-pfsense TA-pfsense
   - tar -cvzf TA-pfsense.tgz TA-pfsense/
-  - In web UI Apps > Manage Apps
-  - Install app from file
-  - Upload the TA-pfsense.tgz you just created
-- Settings > Data > Data Inputs > UDP > **Add new**
-  - Port: 1514
-  - Source name override: *leave blank*
-  - Next
-  - Select Source Type: pfsense
-  - App Context: Search & Reporting
-  - Host: IP (perfect for this Lab)
-  - Index: main (in production, use pfsense)
-  - Review > Submit
+  - In web UI **Apps** > **Manage Apps**
+  - **Install app from file**
+  - Upload the **TA-pfsense.tgz** file you just created
+- `sudo cp /opt/splunk/etc/apps/TA-pfsense/default/inputs.conf /opt/splunk/etc/apps/TA-pfsense/local/inputs.conf`
+- `sudo chmod 644 /opt/splunk/etc/apps/TA-pfsense/local/inputs.conf`
+- `sudo vi /opt/splunk/etc/apps/TA-pfsense/local/inputs.conf`
+  - Modify index from `pfsense` to `main`
+  - Modify connection_host from `dns` to `ip`
+  - Modify disabled from `1` to `0`
+- `sudo /opt/splunk/bin/splunk restart`
 
 ### On the Firewall
 - On some systems it might be at System > Logging > Remote
-- In my lab Status > Syste Logs > Settings
+- In my lab **Status** > **System Logs** > **Settings**
+- Under **General Logging Options**
+  - Note the log message format defaults to BSD (RFC3164, default)
+  - The plug-in requires pfSense to send data in **syslog** (RFC 5424) format
 - Under **Remote Logging Options**
   - Enable (check) **Send log messages to remote syslog server**
     - Source Address: Default (any)
     - IP Protocol: IPv4
-    - Remote log servers: your IP address with port 1514 after it
-      - ex., 192.168.100.50:1514
+    - Remote log servers: your IP address with port 5016 after it
+      - ex., 192.168.100.50:5016
     - Remote Syslog Contents
       - Firewall Events
       - DHCP Events
@@ -56,32 +58,7 @@ Set up UDP syslog to Splunk. I prefer TCP but my version only uses TDP.
 Unfortunately my test pfSense logs aren't fully parsing yet. My version is 2.7.2
 - `index="main" sourcetype="pfsense"`
 
-Trying the fix
-- `sudo mkdir -p /opt/splunk/etc/apps/TA-pfsense/local/`
-- `sudo vi /opt/splunk/etc/apps/TA-pfsense/local/inputs.conf`
-~~~
-[udp://1514]
-index = main
-sourcetype = pfsense
-connection_host = ip
-no_appending_timestamp = true
-~~~
-- sudo /opt/splunk/bin/splunk restart
-
 No success yet.
-
-Plugin uses 5016. try that next?
-
-## OPNsense
-Set up TCP syslog to Splunk.
-- Pros: Easy to set up; no extra software on the firewall.
-- Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
-### On the firewall
-- Settings > Logging > Remote
-- Enable remote logging and point it to your Splunk IP on port 514 (standard syslog) or a high port like 1514
-### On Splunk
-- Settings > Data Inputs > UDP/TCP and create a listener on that same port.
-- Intall the OPNsense plug-in - https://splunkbase.splunk.com/app/4538
 
 ## Synology
 Set up TCP syslog to Splunk.
@@ -92,29 +69,41 @@ NOTE NAS devices can support a lot of different application. Here are a couple u
 - detect brute-force attempts to the managment interface or SMB shares
 - detect renames or modifying of bulk amount of files (ransomewar)
 
-### On the NAS box
-- ? set up remote logging
 ### On Splunk
-- Settings > Data Inputs > UDP/TCP and create a listener on that same port.
 - Install the Synology plug-on - https://splunkbase.splunk.com/app/7316
+  - Download the .tgz file
+  - In Splunk Apps > Manage > Install App From File
+- Settings > Data Inputs > UDP/TCP and create a listener on TCP 1514
+  - Select Source Type: synology:nas:syslog
+  - Method: IP
+  - Index: main
+  - Click **Review** then **Submit**
+
+### On the NAS box
+- Open Log Center > - Log Sending
+- **Enable** (check) Send logs to a syslog server
+- Server: IP address of the Splunk server
+- Port: **1514**
+- Transfer protocol: **TCP**
+- Log format: **IETF (RFC 5424)**
+- Click Apply
+
+### Search
+- `source="tcp:1514" index="main" sourcetype="synology:nas:syslog"`
+
+## OPNsense
+Set up TCP syslog to Splunk.
+- Pros: Easy to set up; no extra software on the firewall.
+- Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
+
+### On Splunk
+- Install the OPNsense plug-in - https://splunkbase.splunk.com/app/4538
+- Settings > Data Inputs > UDP/TCP and create a listener on port.... 1515?????
+
+### On the firewall
+- Settings > Logging > Remote
+- Enable remote logging and point it to your Splunk IP on port 514 (standard syslog) or a high port like 1515???
 
 
+### Search
 
-
-
-
-
-
-
-3. The Specialized Method: Splunk Add-on for pfSense/OPNsense
-To actually understand the logs (parsing the firewall rules, NAT translations, and DHCP leases), you need an Add-on to perform CIM (Common Information Model) mapping.
-
-Recommendation: Use the Splunk Add-on for pfSense (works similarly for OPNsense).
-
-What it does: It takes the "wall of text" from the syslog and breaks it into fields like src_ip, dest_port, and action.
-
-
-
-
-NAS
-https://splunkbase.splunk.com/app/7316
