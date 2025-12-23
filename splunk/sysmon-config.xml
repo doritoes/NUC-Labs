@@ -1,0 +1,17 @@
+<Sysmon schemaversion="4.81">
+  <EventFiltering>
+    <RuleGroup name="ProcessCreation" groupRelation="or">
+      <ProcessCreate onmatch="include">
+        <CommandLine condition="contains"> </CommandLine> 
+      </ProcessCreate>
+    </RuleGroup>
+    <RuleGroup name="FileEvents" groupRelation="or">
+      <FileCreate onmatch="include">
+        <TargetFilename condition="begin with">/home</TargetFilename>
+        <TargetFilename condition="begin with">/etc</TargetFilename>
+        <TargetFilename condition="begin with">/tmp</TargetFilename>
+        <TargetFilename condition="begin with">/var/www</TargetFilename>
+      </FileCreate>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>

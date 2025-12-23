@@ -1,0 +1,23 @@
+version: "3.6"
+
+services:
+  splunk:
+    image: splunk/splunk:latest
+    container_name: splunk-enterprise
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=YourStrongPassword123!
+      - SPLUNK_LICENSE_URI=Free  # Optional: Starts in Free mode immediately
+    ports:
+      - "8000:8000"    # Web UI
+      - "9997:9997"    # Splunk Indexing (from Forwarders)
+      - "8089:8089"    # Management Port (API)
+      - "8088:8088"    # HTTP Event Collector (HEC)
+    volumes:
+      - splunk-var:/opt/splunk/var
+      - splunk-etc:/opt/splunk/etc
+    restart: always
+
+volumes:
+  splunk-var:
+  splunk-etc:

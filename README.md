@@ -10,3 +10,4 @@ This repository is for building and managing a NUC lab using Ansible.
 5. UncleNUC's Lab: XCP-ng Lab ▶️ [Get Started!](XCP-ng/README.md)
 6. UncleNUC's Lab: proxmox Lab ▶️ [Get Started!](proxmox/README.md)
 7. UncleNUC's Lab: Nautobot ▶️ [Get Started!](nautobot/README.md)
+7. UncleNUC's Lab: Splunk ▶️ [Get Started!](splunk/README.md)
