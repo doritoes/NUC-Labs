@@ -11,6 +11,7 @@ Firewalls:
 - OPNsense - https://splunkbase.splunk.com/app/4538
 - pfSense - https://splunkbase.splunk.com/app/5613
 - Unifi - https://splunkbase.splunk.com/app/7494
+
 NAS:
 - Synology - https://splunkbase.splunk.com/app/7316
 
