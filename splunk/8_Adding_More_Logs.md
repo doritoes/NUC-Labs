@@ -130,4 +130,5 @@ Set up TCP syslog to Splunk.
 - Click **Apply**
 
 ### Search
+Unfortunately my test OPNsense logs aren't parsing yet.
 - `index="main" source="tcp:1515" sourcetype="opnsense"`
