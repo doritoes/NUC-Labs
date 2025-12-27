@@ -68,7 +68,7 @@ Set up TCP syslog to Splunk.
 
 NOTE NAS devices can support a lot of different application. Here are a couple use cases.
 - detect brute-force attempts to the management interface or SMB shares
-- detect renames or modifying of bulk amount of files (ransomewar)
+- detect renames or modifying of bulk amount of files (ransomware)
 
 ### On Splunk
 - Install the Synology plug-on - https://splunkbase.splunk.com/app/7316
