@@ -1,5 +1,5 @@
 # Ubuntu Desktop
-Prepare a Ubuntu Deskop system (I spun up another VM running Ubuntu Desktop 24.04 LTS), as we practice configuring things and then work on some common use cases.
+Prepare a Ubuntu Desktop system (I spun up another VM running Ubuntu Desktop 24.04 LTS), as we practice configuring things and then work on some common use cases.
 
 We will be using the Splunk "agent" called the Universal Forwarder (UF)
 - harvests local logs and forward them to the Splunk indexer running on the server
@@ -34,7 +34,7 @@ See links:
     - **Settings** > **Server Controls** > **Restart Splunk**
     - or command line `sudo /opt/splunk/bin/splunk restart`
 
-## Configure Ubuntu Deskop
+## Configure Ubuntu Desktop
 Set up a Ubuntu Desktop 24.04 LTS test machine
 
 Be default the UFW firewall is disabled/inactive. If you enabled it, you will need to allow TCP/9997.
