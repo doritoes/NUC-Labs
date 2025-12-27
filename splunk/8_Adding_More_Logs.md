@@ -22,7 +22,7 @@ Set up UDP syslog to Splunk. I prefer TCP but my version only uses UDP.
 - Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
 
 ### On Splunk
-- Intall the pfSense plug-in - https://splunkbase.splunk.com/app/5613
+- Install the pfSense plug-in - https://splunkbase.splunk.com/app/5613
   - Log in, follow link to https://github.com/barakat-abweh/ta-pfsense
   - git clone https://github.com/barakat-abweh/ta-pfsense.git
   - mv ta-pfsense TA-pfsense
