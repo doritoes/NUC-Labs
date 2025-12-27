@@ -53,7 +53,7 @@ Set up UDP syslog to Splunk. I prefer TCP but my version only uses UDP.
     - Remote Syslog Contents
       - Firewall Events
       - DHCP Events
-      - add additonal log types as you wish
+      - add additional log types as you wish
 
 ### Search
 Unfortunately my test pfSense logs aren't fully parsing yet. My version is 2.7.2
