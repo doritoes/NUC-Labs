@@ -3,7 +3,7 @@ You can add more log sources to Splunk. Firewalls and NAS devices are really use
 
 In the majority of cases you will use the "agentless" approach to configure the device to send syslog (UDP/TCP) directly to Splunk. For production configurations using a Splunk Heavy Forwarder (HF). It's full Splunk Enterprise instance dedicated to collect, parse, filter, and route machine data. It reduces the load on indexers, stores data locally before sending it.
 
-In this lab we will send directly to the Splunk server, which is our head-end and indexer. Options include configuring a Syslog-NG service on the Splunk server to injest from, or syslogging directly to Splunk. We will log directly to Splunk.
+In this lab we will send directly to the Splunk server, which is our head-end and indexer. Options include configuring a Syslog-NG service on the Splunk server to ingest from, or syslogging directly to Splunk. We will log directly to Splunk.
 
 IMPORTANT Sending logs to Splunk isn't useful without a Splunk plug-in to parse the logs to match the common information model (CIM). To actually understand the logs (parsing the firewall rules, NAT translations, and DHCP leases), you need an Add-on to perform CIM (Common Information Model) mapping.
 
