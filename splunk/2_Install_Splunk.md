@@ -6,7 +6,7 @@ Pro Tip: The Docker Shortcut
 - See Appendix - Splunk Docker ([Appendix_Splunk_Docker.md](Appendix_Splunk_Docker.md))
 
 ## Create a Splunk Account
-This is somewhat awkward for a homelab user. IT requests your "business email" address, company name, and job title. It didn't immediatelly choke when I submitted a @gmail address and "Personal" as the company name.
+This is somewhat awkward for a homelab user. IT requests your "business email" address, company name, and job title. It didn't immediately choke when I submitted a @gmail address and "Personal" as the company name.
 1. https://splunk.com
 2. **Login** > **Sign Up**
 3. Click the activation link that is emailed to you
