@@ -18,7 +18,7 @@ This is somewhat awkward for a homelab user. IT requests your "business email" a
 4. Next to the **.deb** version click **Copy wget link**
     - this is a personal link with a token that expires
 5. Paste this link (really a command) into the server:
-    - Simlar to: `wget -O splunk-10.0.2-e2d18b4767e9-linux-amd64.deb "https://download.splunk.com/products/splunk/releases/10.0.2/linux/splunk-10.0.2-xxxx-linux-amd64.deb"`
+    - Similar to: `wget -O splunk-10.0.2-e2d18b4767e9-linux-amd64.deb "https://download.splunk.com/products/splunk/releases/10.0.2/linux/splunk-10.0.2-xxxx-linux-amd64.deb"`
     - NOTE the file is over 1.2GB
 
 ## Install Splunk
