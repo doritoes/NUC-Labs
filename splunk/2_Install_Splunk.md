@@ -22,7 +22,7 @@ This is somewhat awkward for a homelab user. IT requests your "business email" a
     - NOTE the file is over 1.2GB
 
 ## Install Splunk
-1. Run this commmand on the server, adjusting for your file name: `sudo dpkg -i splunk-10.0.2-xxxx-linux-amd64.deb`
+1. Run this command on the server, adjusting for your file name: `sudo dpkg -i splunk-10.0.2-xxxx-linux-amd64.deb`
 2. First Run: `sudo /opt/splunk/bin/splunk start --accept-license`
     - It will ask you to create an admin username and password
     - Do not lose these; they are for the web UI (splunkadmin/splunkadmin is fine for this lab)
