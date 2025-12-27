@@ -26,7 +26,7 @@ See links:
 - https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
 - https://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
 
-1. Log in to splunk.com and vist https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
+1. Log in to splunk.com and visit https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
 2. Follow the link to download the file, similar to splunk-add-on-for-sysmon-for-linux_100.tgz
 3. Log in to your Splunk server and go to the home screen
 4. On the left, next to "Find more apps", click **Manage**
