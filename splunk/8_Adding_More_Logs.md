@@ -67,7 +67,7 @@ Set up TCP syslog to Splunk.
 - Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
 
 NOTE NAS devices can support a lot of different application. Here are a couple use cases.
-- detect brute-force attempts to the managment interface or SMB shares
+- detect brute-force attempts to the management interface or SMB shares
 - detect renames or modifying of bulk amount of files (ransomewar)
 
 ### On Splunk
