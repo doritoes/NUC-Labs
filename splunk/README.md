@@ -13,9 +13,9 @@ Mission:
 Materials:
 - NUC running Ubuntu server or a VM running Ubuntu server
 - USB sticks
-  - 1 USB sticks, 8GB or more to load Ubunutu on the NUC
+  - 1 USB sticks, 8GB or more to load Ubuntu on the NUC
 - Another NUC or VM(s) that we can load with Windows and Ubuntu to configure and test scenarios
-- Optionally add a firweall VM and/or Synology NAS for testing
+- Optionally add a firewall VM and/or Synology NAS for testing
 
 # Overview
 ## Preparing the Server
