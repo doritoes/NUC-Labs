@@ -23,7 +23,7 @@
 - Enter Console: `sudo docker exec -it splunk-enterprise bash`
 
 ## Mapping a Log Folder
-Let's create a local "drop" folder on the Ubunter server. Drop any syslog, CVS, web logs file into this server and it will appear in Splunk seconds later.
+Let's create a local "drop" folder on the Ubuntu server. Drop any syslog, CVS, web logs file into this server and it will appear in Splunk seconds later.
 
 1. Create drop folder
   - `mkdir -p ~/splunk_data/inputs`
