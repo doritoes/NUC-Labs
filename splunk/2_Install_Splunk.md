@@ -59,7 +59,7 @@ NOTE Personal license is not an instant download; it requires a quick "applicati
 4. Register and fill out the questionnaire, accepts the T&C, privacy policy, click **Submit**
 5. Click "Request Developer License
     - `Your request is under review. Expect an email in 3–5 business days.`
-    - It usually is within a fiew hours
+    - It usually is within a few hours
 6. They will email you an .xml file
 7. In your Ubuntu Splunk Web UI (Port 8000), go to **Settings** > **System** > **Licensing** > **Add License** and upload that file (choose and then click **Install**)
 8. Click **Restart Now** when prompted (and confirm)
