@@ -125,10 +125,10 @@ If some agents are not coming on-line, check the node's `/home/ansible/config.js
 ## Configure Agents For Cracking
 - Log in to the Hashtopolis dashboard and view the agents
 - Click **Agents** then **Show agents**
-- Edit each agent *Trust* setting
+- Edit each agent **Trust** setting
   - Click on an agent
   - Click **Show/Hide details**
-  - Next to *Trust** check the box for **Trust agent with secret data**
+  - Next to **Trust** check the box for **Trust agent with secret data**
 
 ## Create Sample md5 Password Hashes
 - Create a list of passwords you want to crack
