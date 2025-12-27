@@ -104,7 +104,7 @@ NOTE that no files are created, the script/tool is piped directly to a shell.
 NOTE Read the output best you can to understand what kind of information this gives the attack to planned their next steam and escalate their privileges.
 
 Detecting use of "dangerous" tools and "pipe-to-shell" in Splunk
-- Linux doesn't log shell commands. The shell is private, and the commands only get written to ~/.bash_history when the logs out. The standard logs never see them.
+- Linux doesn't log shell commands. The shell is private, and the commands only get written to ~/.bash_history when the user logs out. The standard logs never see them.
   - Note only the installation of curl is logged: `index=main "curl"`
 - **Auditd** is the naive Linux way to track this
 - **Sysmon** is also available for Linux (we used this in the Windows Labs)
