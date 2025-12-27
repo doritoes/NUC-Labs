@@ -1,4 +1,3 @@
-#impacket-secretsdump -sam sam -system system LOCAL
 Impacket v0.11.0 - Copyright 2023 Fortra
 
 [*] Target system bootKey: 0x113ea3ca0475e56f19cbbb31a94bc062
