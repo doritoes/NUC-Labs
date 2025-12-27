@@ -17,7 +17,7 @@ NAS:
 
 
 ## pfSense
-Set up UDP syslog to Splunk. I prefer TCP but my version only uses TDP.
+Set up UDP syslog to Splunk. I prefer TCP but my version only uses UDP.
 - Pros: Easy to set up; no extra software on the firewall.
 - Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
 
