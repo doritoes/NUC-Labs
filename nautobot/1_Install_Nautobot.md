@@ -209,7 +209,7 @@ Set up the Nautobot database:
   - NOTE It won't tell you if you forgot to run `nautobot-server collectstatic`
 - Test run a development instance
   - `nautobot-server runserver 0.0.0.0:8080 --insecure`
-  - Point web broswer to the IP address of VM using port 8080
+  - Point web browser to the IP address of VM using port 8080
     - Ex. http://192.168.99.14:8080
     - Log in as `admin`/`nautobot123`
     - Press control-C at the terminal to stop it
@@ -239,7 +239,7 @@ Set up the Nautobot database:
     - `sudo systemctl enable --now nautobot`
   - Test
     - `systemctl status nautobot.service`
-    - Point your broswer to the VM's IP address on port 8001 (attempts to use https will fail)
+    - Point your browser to the VM's IP address on port 8001 (attempts to use https will fail)
       - Example: http://192.168.99.14:8001
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!
