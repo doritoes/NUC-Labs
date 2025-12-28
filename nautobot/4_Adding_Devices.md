@@ -53,7 +53,7 @@ Nautobot's built-in secrets providers:
 
 Other providers: https://github.com/nautobot/nautobot-app-secrets-providers
 
-⚠️ Beware that any App can potentially access your secrets (e.g., display on screen), so only install Apps you trust. Any job can access your secrets and log them to job results. Any Git repo can add new Jobs ot the system. Any user with access to one or more secrets can exploit this to access other secrets.
+⚠️ Beware that any App can potentially access your secrets (e.g., display on screen), so only install Apps you trust. Any job can access your secrets and log them to job results. Any Git repo can add new Jobs to the system. Any user with access to one or more secrets can exploit this to access other secrets.
 
 #### Text File Method
 - Create a text file to contain the secret value
