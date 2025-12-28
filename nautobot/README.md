@@ -21,14 +21,14 @@ Commentary for the Business:
 - Conversely, if you lose that person it could quickly fail
 
 Mission:
-- Install and Deploy Nautobot on Unbuntu server
+- Install and Deploy Nautobot on Ubuntu server
 - Kick the tires on the environment
 - Was not able to get nautobot to work with VyOS or any of the lab gear to test further
 
 Materials:
 - NUC running Ubuntu server or a VM running Ubuntu server
 - USB sticks
-  - 1 USB sticks, 8GB or more to load Ubunutu on the NUC
+  - 1 USB sticks, 8GB or more to load Ubuntu on the NUC
 
 # Overview
 ## Installing and Deploying Nautobot
