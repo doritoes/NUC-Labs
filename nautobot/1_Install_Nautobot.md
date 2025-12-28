@@ -170,7 +170,7 @@ Set up the Nautobot database:
     - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-compiled binaries and faster installation.
   - NOTE You can specific the book version like so: `pip install nautobot==2.1.4`
   - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip install command
-    - `pip install nautobot[all]` - in Lab testing, this failed geeting requirements
+    - `pip install nautobot[all]` - in Lab testing, this failed getting requirements
     - `pip install nautobot[napalm,mysqlclient]`
 - Test
   - `ansible --version`
