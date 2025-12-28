@@ -14,7 +14,7 @@ We have all the devices created, so we start configuring IP address information 
   - Click **Create**
 ### Using Ansible
 1. Copy the playbook [09-rirs.yml](ansible/09-rirs.yml)
-2. Run the playboook `ansible-playbook 09-rirs.yml`
+2. Run the playbook `ansible-playbook 09-rirs.yml`
 
 ## Create a VLAN
 ### Manually
