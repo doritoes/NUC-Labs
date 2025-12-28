@@ -219,7 +219,7 @@ Set up the Nautobot database:
   - `nautobot-server celery worker`
   - Press control-C to stop it
 - Configure WSGI
-  - Django applications run WSGI aplications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
+  - Django applications run WSGI applications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
   - In this test we will not use advanced features such as a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
   - Download [uwsgi.ini](uwsgi.ini) and copy to a new file `$NAUTOBOT_ROOT/uwsgi.ini`
   - Start it
