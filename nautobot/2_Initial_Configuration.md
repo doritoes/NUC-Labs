@@ -1,7 +1,7 @@
 # Initial Configuration
 This corresponds to the latter part of chapters 3 and 10 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
 
-You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creatings things.
+You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creating things.
 
 ## Create API token for CRUD Operations
 - Log in to your nautobot instance
