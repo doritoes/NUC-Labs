@@ -13,7 +13,7 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 Set up a Windows Server 2025 test machine.
 
 ### Install Sysmon
-Sysmon is a Sysinternal tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Sysmon now means that when UF is installed, it already has logs to parse.
+Sysmon is a Sysinternals tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Sysmon now means that when UF is installed, it already has logs to parse.
 
 1. Download Sysmon to the Windows Server 2025 machine
     - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
