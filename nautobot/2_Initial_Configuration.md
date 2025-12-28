@@ -112,7 +112,7 @@ Required fields:
 TIP Import from community library https://github.com/nautobot/devicetype-library
 
 ### Manually
-- From the left menu expance **DEVICES**
+- From the left menu expand **DEVICES**
 - Click **Device Types**
 - Click the <ins>drop down</ins> for Add Device Type
 - Click **Import from JSON/YAML (single record)**
