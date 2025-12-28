@@ -185,7 +185,7 @@ Set up the Nautobot database:
 - Customize `nautobot_config.py`
   - `vi $NAUTOBOT_ROOT/nautobot_config.py`
   - Required Settings
-    - Uncomment (remote the leading" "#") the following parts
+    - Uncomment (remove the leading" "#") the following parts
       - ALLOWED_HOSTS
       - CACHES
       - CONTENT_TYPE_CACHE_TIMEOUT
