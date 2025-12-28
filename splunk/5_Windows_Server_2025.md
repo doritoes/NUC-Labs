@@ -103,7 +103,7 @@ Attempts to add Splunk Forwarder service to be member of Event Log Readers group
 If you REALLY want to test on a domain controller, use a Server 2022 DC.
 
 ### Test "Backdoor Account" Scenario
-In a server environment, attackers often create a local admin account to maintain persistance
+In a server environment, attackers often create a local admin account to maintain persistence
 - On Server 2025 machine
   - `net user /add BackupAdmin Password123!`
   - `net localgroup administrators BackupAdmin /add`
@@ -124,7 +124,7 @@ index=main source="WinEventLog:Security" (EventCode=4720 OR EventCode=4732)
 | table _time, ComputerName, New_Account_Account_Name, user_group
 ~~~
 
-### Test "Passsword Reset" Scenario (Event 4724)
+### Test "Password Reset" Scenario (Event 4724)
 Instead of creating a new user, an attacker might hijack an existing local account (like the built-in Guest or a Support account) by resetting its password.
 
 - On Server 2025 machine
@@ -203,7 +203,7 @@ sc.exe delete "WindowsHealthUpdater"
 
 The Command: sc.exe create BackdoorService binPath= "C:\path\to\malware.exe" start= auto
 
-Splunk searchs
+Splunk searches
 - Event 4697
 ~~~
 index=main source="WinEventLog:Security" EventCode=4697
