@@ -3,7 +3,7 @@
 
 This corresponds to the last pages of chapter 3 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
 
-We have all the reprequisites created, so we start adding devices in the web GUI.
+We have all the prerequisites created, so we start adding devices in the web GUI.
 
 ## Create a Device in UI
 - From the left menu expand **DEVICES**
