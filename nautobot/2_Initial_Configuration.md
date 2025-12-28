@@ -132,7 +132,7 @@ TIP Import from community library https://github.com/nautobot/devicetype-library
   - [Synology DS224+.yaml](device-types/DS224+.yaml)
   - [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml)
     - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-  - [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
+  - [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxmox
   - [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
 
 ### Using Ansible
@@ -152,7 +152,7 @@ Therefore there is a two-step process
       5. [Unifi U7-Pro.yaml](device-types/U7-Pro.yaml)
       6. [Synology DS224+.yaml](device-types/DS224+.yaml)
       7. [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml) - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-      8. [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) - Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
+      8. [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) - Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxmox
       9. [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
       10. Find more at https://github.com/nautobot/devicetype-library/tree/main/device-types
    3. Run the playbook `ansible-playbook 03-device-types.yml`
