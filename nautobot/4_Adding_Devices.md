@@ -31,7 +31,7 @@ We have all the prerequisites created, so we start adding devices in the web GUI
 - Click Run Job Now
 
 ## Import Devices using Ansible and CSV File
-The provided CSV file contais device manufacturers and models. The module networktocode.nautobot.device requires the device_type ID instead.
+The provided CSV file contains device manufacturers and models. The module networktocode.nautobot.device requires the device_type ID instead.
 
 This isn't a problem in our Lab because we use the manufacturer's model number as the device_type.
 
