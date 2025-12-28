@@ -167,7 +167,7 @@ Set up the Nautobot database:
   - `pip install pyyaml`
 - Install Nautobot
   - `pip install nautobot`
-    - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
+    - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-compiled binaries and faster installation.
   - NOTE You can specific the book version like so: `pip install nautobot==2.1.4`
   - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip install command
     - `pip install nautobot[all]` - in Lab testing, this failed geeting requirements
