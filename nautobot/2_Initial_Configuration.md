@@ -18,7 +18,7 @@ You can't create objects without the required fields. So we need to do some pre-
   - echo "export NAUTOBOT_TOKEN=<<tokenvalue>>" | tee -a ~nautobot/.bashrc
 - Add the NAUTOBOT_URL environment variable
   -  echo "export NAUTOBOT_URL=http://localhost:8001" | tee -a ~nautobot/.bashrc
-- Log out and back in, you will have the token stored in the envrironment variable
+- Log out and back in, you will have the token stored in the environment variable
   - or run `source .bashrc`
 
 ## Device Prerequisites
