@@ -6,7 +6,7 @@ There are other ways to quickly deploy Nautobot using Docker or Kubernetes, for 
 - https://github.com/nautobot/nautobot-docker-compose
 - https://github.com/nautobot/helm-charts
 
-This Lab is focused on building an understanding of how the server works, and is based on the [official Nautoboc docs](https://docs.nautobot.com/projects/core/en/stable/installation).
+This Lab is focused on building an understanding of how the server works, and is based on the [official Nautobot docs](https://docs.nautobot.com/projects/core/en/stable/installation).
 
 Want to learn more about nautbot in a hands-on challenge? Check out [100 Days of Nautobot](https://networktocode.com/blog/2025-01-17-100-days-of-nautobot/)
 
