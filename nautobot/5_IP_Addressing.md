@@ -62,7 +62,7 @@ We have all the devices created, so we start configuring IP address information 
     - Optionally add a description
     - Click **Create**
 - GUI Bulk Add
-  - Back in **IP Addreses**, click **Add IP Address** again
+  - Back in **IP Addresses**, click **Add IP Address** again
   - Click the tab **Bulk Create**
   - Note that you can create multiple IP addresses at once using a pattern
     - Example address pattern: **192.168.99.[1-5,252]/32**
