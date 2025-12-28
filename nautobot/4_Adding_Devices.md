@@ -8,7 +8,7 @@ We have all the prerequisites created, so we start adding devices in the web GUI
 ## Create a Device in UI
 - From the left menu expand **DEVICES**
 - Under the DEVICES  section click **Devices**
-- In the center pane click **Add Device** (see also the "**+**) add button in the left menu
+- In the center pane click **Add Device** (see also the "**+**") add button in the left menu
   - Device
     - Name: **LAB-SW1**
     - Role: **Switch L2**
