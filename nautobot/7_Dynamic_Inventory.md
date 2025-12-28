@@ -1,5 +1,5 @@
 # Dynamic Inventory
-Start with a very basic dynamic inventory to esure the inventory and connectivty from Ansible to Nautobot are working.
+Start with a very basic dynamic inventory to ensure the inventory and connectivty from Ansible to Nautobot are working.
 
 See the book p. 435-437
 
