@@ -61,7 +61,7 @@ Sysmon is a Sysinternals tool that can provide a plethora of useful and importan
         - Application
         - Security
         - System
-    - Create the app folder and blank `inputs.conf` file from Adminstrative PowerShell
+    - Create the app folder and blank `inputs.conf` file from Administrative PowerShell
 ~~~
 # 1. Create the directory
 $labPath = "C:\Program Files\SplunkUniversalForwarder\etc\apps\lab\local"
