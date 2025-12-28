@@ -104,7 +104,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 #### Create nautobot system user and set up Python environment
 It is best practice to run Nautobot as a user other than root. This user, `nautobot`, will own files and permissions and services will be configured to run under this account.
 
-A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivdual projects, preventing any interference with system packages or other projects.
+A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to individual projects, preventing any interference with system packages or other projects.
 
 Here we create demonstrate configuring for the user `nautobot` right from the user `nauto`.
 
