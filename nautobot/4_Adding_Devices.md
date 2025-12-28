@@ -168,7 +168,7 @@ PLUGINS_CONFIG = {
   - Click JOBS > Jobs
   - Under Device Onboarding edit the job Sync Devices From Network
   - Check Enabled
-  - Click Udpate
+  - Click Update
 - Run the Job
   - Click the job Sync Devices From Network
   - Enter information about the device in the form
