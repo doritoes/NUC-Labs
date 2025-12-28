@@ -3,7 +3,7 @@ This corresponds to chapter 3 in the book. See https://github.com/PacktPublishin
 
 The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
 
-Nautobot is insecure, using http (no https). The instructions to secure Nautobot with https involved using NGINX as a web server in front of the Nautobox WSGI.
+Nautobot is insecure, using http (no https). The instructions to secure Nautobot with https involved using NGINX as a web server in front of the Nautobot WSGI.
 - https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/http-server/
 - [Appendix - Configuring HTTPS](appendix_https.md)
 
@@ -177,7 +177,7 @@ Set up the Nautobot database:
   - `nautobot-server --version`
 
 ### Configure Nautobot
-- Initialize Nautobox basic configuration will create the `nautobot_config.py` tool.
+- Initialize Nautobot basic configuration will create the `nautobot_config.py` tool.
   - `nautobot-server init`
     - 🗒️ for this Lab, I don't send installation metrics to the developers
 - Test
