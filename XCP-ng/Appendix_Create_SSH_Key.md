@@ -1,5 +1,5 @@
 # Appendix - Create SSH Key
-You will notice in the Labs that when you create a Linux VM you have the opporunity to use an SSH for access instead of a password. This is a very good thing! Never SSH as root with a password. Always use keys.
+You will notice in the Labs that when you create a Linux VM you have the opportunity to use an SSH for access instead of a password. This is a very good thing! Never SSH as root with a password. Always use keys.
 
 So how can you create a key and use it?
 
