@@ -263,7 +263,7 @@ This is how the host system (XCP-ng) is updated. The XOA free version does not a
 - Click **Install pool patches**
   - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
   - Click OK
-  - If you get the warning that an error occured, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing
+  - If you get the warning that an error occurred, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing
 - Reboot the host
   - Click **Home** > **Hosts**
   - Click on `xcp-ng-lab1`
