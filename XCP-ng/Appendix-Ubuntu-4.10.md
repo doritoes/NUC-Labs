@@ -16,7 +16,7 @@ Examining advanced settings:
 Steps:
 - Press ENTER to boot
 - Confirm language, Location, Keyboard
-- Enter the hostame and press enter
+- Enter the hostname and press enter
 - Accept "Erase entire disk"
 - **Yes**, write these changes to disk
 - **Continue** to finish installation
