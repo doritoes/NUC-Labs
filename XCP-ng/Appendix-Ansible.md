@@ -8,7 +8,7 @@ IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully funct
 - Can RDP from branch1-1 to file-1 as AD\juliette.larocco2, not branch3-1 (for example)
 - Turning off require NLA on the destination workstation didn't solve the issue
 - Run rsop.msc on the target system
-  - Computer configuration > Windows Settings > Secruity Settings > Local Policies
+  - Computer configuration > Windows Settings > Security Settings > Local Policies
     - User Rights Assignments > Allow log on through Remote Desktop Services Properties
     - Security Options
 - Review Default Domain Policy
