@@ -11,7 +11,7 @@ Overview of Steps
 2. Set computer permissions
 3. Create a GPO and link to the OUs containing your computers
 4. Configure LAPS GPO settings
-5. Deply and Verify
+5. Deploy and Verify
 
 How to
 1. Update a password in Windows Server Active Directory
