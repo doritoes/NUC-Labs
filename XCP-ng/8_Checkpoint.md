@@ -682,7 +682,7 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
 - Click **OK** for the message *Add member request succeeded, the member's addition is in progress.*
 - Wait patiently for the new member to be configured (including JHF packages)
   - The new gateway's name starts as *Not available* in the web GUI
-  - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an error on one or more sites"
+  - Meanwhile logged into the SmartConsole app, gw1 has an alert "Security Group - There is an error on one or more sites"
 - Lab testing showed the issue is the clone failed
   - see /var/log/lightshot.log file "Lightshot Partition is out of space"
   - during the clone operation there was a device out of space error logged, but all partitions showed space
