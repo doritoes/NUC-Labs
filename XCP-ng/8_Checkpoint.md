@@ -606,7 +606,7 @@ Test from `checkpoint-console`
   - quic (udp/443) is not allowed
   - ICMP ping is not allowed
 
-- Note that the management network is in the "InternalZone" due to the toplogy setting made on interface magg1
+- Note that the management network is in the "InternalZone" due to the topology setting made on interface magg1
 
 # Install Jumbo Hotfix on SMS
 This method is from the command line on `checkpoint-sms`.It is possible to install the jumbo hotfix from the SMS web gui https://192.168.103.4 Software Update > Available Updates
