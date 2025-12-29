@@ -9,7 +9,7 @@ NOTE Microsoft Entra ID process is very different from our Lab AD setup
 Overview of Steps
 1. Extend AD schema
 2. Set computer permissions
-3. Create a GPO and link to the OUs containing your coputers
+3. Create a GPO and link to the OUs containing your computers
 4. Configure LAPS GPO settings
 5. Deply and Verify
 
