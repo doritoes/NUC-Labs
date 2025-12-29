@@ -1,7 +1,7 @@
 # XCP-ng Lab
 The mission in this Lab is to set up a virtual Lab environment hosted on a NUC running XCP-ng. This replaces the previous Lab running on ESXi, which is not longer an option for home labs after the Broadcom acquisition of VMware.
 
-UPDATE This lab is getting a refresh for XCP-ng 8.3 LTS. This is imporant since prior versions did not support a virtual VTPM, which affects Windows 11 and Windows server.
+UPDATE This lab is getting a refresh for XCP-ng 8.3 LTS. This is important since prior versions did not support a virtual VTPM, which affects Windows 11 and Windows server.
 
 Why it's perfect to the lab:
 - Main goal of XCP-ng is to be a fully integrated and dedicated virtualization platform, without requiring any deep Linux or system knowledge
