@@ -63,7 +63,7 @@ Notes:
       - **New** > **Storage**
       - Host: **xcpng-lab1**
       - Name: **Second Internal Drive** (customize as needed)
-      - Decription: **Internal nvme 2TB drive**
+      - Description: **Internal nvme 2TB drive**
       - Storage type: **VDI SR** > **ext (local)**
       - Device: **/dev/nvme1n1**
       - Click **Create**
