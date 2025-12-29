@@ -228,7 +228,7 @@ From the left menu click **Organization** > **METADATA**
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
 - Active
-- Decomissioning
+- Decommissioning
 - Planned
 
 No custom statuses are required for this Lab.
