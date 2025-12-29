@@ -147,7 +147,7 @@ exit
 ```
 
 # Xen Tools
-The default VyOS rolling release image no longers comes with vyos-xe-guest-utilities.
+The default VyOS rolling release image no longer comes with vyos-xe-guest-utilities.
 
 See the appendix for instructions to build your own ISO with the agents installed
 - [Appendix_Build_VyOS_ISO_with_VM_agents.md](Appendix_Build_VyOS_ISO_with_VM_agents.md)
