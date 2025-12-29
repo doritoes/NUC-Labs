@@ -48,7 +48,7 @@ NOTES
 - Log in using the XOA ADMIN ACCOUNT you configured earlier
 - You will need to register the XOA, you will be "reminded" constantly to do this
   - From the XOA menu, XOA > Updates
-  - Registeration:
+  - Registration:
     - enter the username and password you registered with, then click **Register**
     - Optionally, you can click **Start trial** (30 days)
 - Apply Updates
