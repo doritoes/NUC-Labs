@@ -25,7 +25,7 @@ Steps:
 - Click **Express settings**
 - Creating a Microsoft account will fail, click **Create a local account**
 - Enter and username, password, and password "hint", then click **Finish**
-- When installation is complete, eject the installation ISOchom
+- When installation is complete, eject the installation ISO cdrom
 Testing:
 - got IP address from OPNsense firewall OK
 - Internet access works
