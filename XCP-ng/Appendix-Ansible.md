@@ -69,7 +69,7 @@ IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully funct
     - This is how you can access WSL in the future; also found as Ubuntu-24.04 in the start menu
     - Update packages
       - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-      - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passswd lock: Invalid argument*
+      - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passwd lock: Invalid argument*
         - https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/2069555/comments/12
         - Here is a fix
           - `sudo sed -i -e '/systemd-sysusers/s/\.conf$/.conf || true/' /var/lib/dpkg/info/*.postinst`
