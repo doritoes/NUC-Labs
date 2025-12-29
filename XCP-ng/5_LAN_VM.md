@@ -630,7 +630,7 @@ Steps:
       - Post: blank?
       - Connection timeout: ?
       - Username: the username (lab)
-      - Pasword: the password
+      - Password: the password
       - Domain: blank
       - Security mode: NLA (network level authentication)
       - Disable Authentication: leave default = unchecked
