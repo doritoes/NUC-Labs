@@ -13,7 +13,7 @@ Updated Software Versions:
 - Windows Server 2025
 - Check Point R82
 
-NOTE When you are deploying to a different SR than where the template is storaged, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
+NOTE When you are deploying to a different SR than where the template is stored, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
 
 This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB of storage. A reduced version designed for 64GB of RAM might be in the future.
 - 19 VMs
