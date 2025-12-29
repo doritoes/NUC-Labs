@@ -42,7 +42,7 @@ Members of the Domain Admins group already have password query permission by def
 - On `dc-1`
   - from administrative powershell
     - `New-GPO -Name "LAPS Configuration Policy" | New-GPLink -Target "DC=xcpng,DC=lab"`
-  - from group policy managment console
+  - from group policy management console
     - expand forest: xcpng.lab
     - expand domains: xcpng.lab
     - Right click "LAPS Configuration Policy" and click **Edit**
