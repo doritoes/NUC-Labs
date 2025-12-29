@@ -217,7 +217,7 @@ Steps:
 - Click Services > Tor > Configuration > General
   - Enable: Yes
   - Listen Interfaces: LAN (only)
-  - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
+  - Optionally enable Create a log file with Error of Debugging level (WARNING this could cause privacy issues)
   - Enable Advanced Mode
     - Confirm SOCKS port number: 9050
     - Confirm Control Port: 9051
