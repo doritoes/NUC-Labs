@@ -14,7 +14,7 @@ Examining advanced settings:
 - VGA: disabled
 
 Steps:
-- Confirm language, time/currency format, and keybord, then click **Next**
+- Confirm language, time/currency format, and keyboard, then click **Next**
 - Click **Install now**
 - Uncheck Automatically activate Windows when I'm online and **Next**, and **No**
 - Select **Windows Vista Ultimate** check the box, the click **Next**
