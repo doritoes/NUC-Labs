@@ -12,7 +12,7 @@ Things about Proxmox Virtual Environment
 - Uses LVMs
 - Restful API
 - Multi-master for robust handling of failed node/system
-- Full virutalization (KVM)
+- Full virtualization (KVM)
 
 Things about Ceph
 - Ceph is an open source software-defined storage solution designed to address the block, file and object storage needs of modern enterprises
