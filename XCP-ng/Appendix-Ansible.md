@@ -37,7 +37,7 @@ IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully funct
       - will be disabled (or completely removed) after Branch 1 configuration is complete
     - Second one: `branch1mgt`
 - Log in to the console of `manager`
-- Windows 11 has "Windows Terminal " intalled
+- Windows 11 has "Windows Terminal " installed
   - This makes it easy to switch between CMD, Powershell, and WSL shells
     - I recommend you pin Terminal to the taskbar for easy access
   - If you don't have it installed, install from the app store
