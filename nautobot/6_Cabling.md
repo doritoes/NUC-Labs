@@ -26,7 +26,7 @@ For each device:
 1. Download the file [cables.csv](cables.csv)
 cables.csv
 2. Copy the playbook [14-cables.yml](ansible/14-cables.yml)
-3. Run the playboook `ansible-playbook 14-cables.yml`
+3. Run the playbook `ansible-playbook 14-cables.yml`
 
 ## Next Steps
 Next we will try out dynamic inventory.
