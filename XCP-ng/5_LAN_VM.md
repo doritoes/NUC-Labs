@@ -693,7 +693,7 @@ Steps:
 
 To enable HTTPS, enable "Protect Guacamole behind Nginx reverse proxy" during the easy installation script.
 - this enables https on the nginx proxy with a certificate that you can update late
-- you can select a self-signed certifificate or a Let's Encrypt certificate
+- you can select a self-signed certificate or a Let's Encrypt certificate
   - self-signed: tested ✅
   - Let's Encrypt: not tested
     - Yes add Let's Encrypt TLS support to Nginx reverse proxy
