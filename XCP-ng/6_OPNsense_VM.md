@@ -304,6 +304,6 @@ Steps:
     - chrome://flags
     - Search for Experimental QUIC protocol; in the dropdown next to it select Enabled
     - Click Relaunch at the bottom to restart Chrome
-    - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
+    - Browse google.com or other Google web properties to generate QUIC traffic which will be dropped by the firewall
     - `tcpdump -nni vtnet0 proto 17 and port 443`
 - REMEMBER Tor supports tcp only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor
