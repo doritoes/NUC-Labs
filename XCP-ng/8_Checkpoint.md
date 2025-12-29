@@ -468,7 +468,7 @@ Yes, fully configure with one firewall. Will add the second gateway later.
 - Click **New**  > **Gateway**
 - Click **Classic Mode**
   - Cluster Name: **gw1** (best practice: same name as the appliance name)
-  - Cluster IPv4 Address: use the managment IP address 192.168.103.1
+  - Cluster IPv4 Address: use the management IP address 192.168.103.1
   - Comment: **ElasticXL cluster**
     - Click **Communication...**
     - Activation Key: `xcplab123!` and confirm it
