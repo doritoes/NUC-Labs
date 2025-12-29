@@ -10,7 +10,7 @@ References:
 
 # Initial Installation
 - Insert the installation USB
-- Boot from USB (UEFI mode) by powerng on and pressing F10 on the NUC
+- Boot from USB (UEFI mode) by powering on and pressing F10 on the NUC
 - Select the UEFI USB stick image
 - Select Graphical Installation and follow the Wizard
   - Accept EULA
