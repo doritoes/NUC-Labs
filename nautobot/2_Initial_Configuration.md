@@ -191,7 +191,7 @@ requires:
 
 optionally:
 - parent
-- facility (example data center prvider and facility such as Equinix NY7)
+- facility (example data center provider and facility such as Equinix NY7)
 - ASN (BGP ASN number)
 - timezone
 - description
