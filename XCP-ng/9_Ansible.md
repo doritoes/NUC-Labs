@@ -52,7 +52,7 @@ Other states:
 
 Note that "reboot-guest" and "shutdown-guest" will fail if xen tools is not installed on the VM.
 
-More advanced playbook that powers on the `opnsense` firewall, waits for it to come up, then powers on the VMs on the penstesting network. "Waiting for an IP address" requires the xen tools be installed. Replace with the correct IP address and credentials.
+More advanced playbook that powers on the `opnsense` firewall, waits for it to come up, then powers on the VMs on the pentesting network. "Waiting for an IP address" requires the xen tools be installed. Replace with the correct IP address and credentials.
 
 ~~~
 ---
