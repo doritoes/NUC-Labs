@@ -604,7 +604,7 @@ Steps:
     - Optionally install LDAP if you have an LDAP directory server (untested)
     - Optionally install Quick Connect feature (untested)
     - Optionally install History Recorded Storage feature (untested)
-    - Optionally protect Guacamole beind Nginx reverse proxy (untested)
+    - Optionally protect Guacamole behind Nginx reverse proxy (untested)
       - this enables https
     - Optionally redirect http://domain.root:8080 to /guacamole (may break DUO) (untested)
 - Note the location the log files:
