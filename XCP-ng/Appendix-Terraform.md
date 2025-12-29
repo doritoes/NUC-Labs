@@ -36,7 +36,7 @@ Notes:
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
-We are going to install Terrafrom on `ubuntu-xo`.
+We are going to install Terraform on `ubuntu-xo`.
 
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
 
