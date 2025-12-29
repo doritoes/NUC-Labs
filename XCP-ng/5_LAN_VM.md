@@ -175,7 +175,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
-IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+IMPORTANT Windows 10 is officially end of support. However it is still super useful in labs like this.
 
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
