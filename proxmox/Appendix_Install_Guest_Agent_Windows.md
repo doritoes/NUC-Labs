@@ -28,8 +28,8 @@ Lab tested with Windows 10, Windows 11, Server 2022, and Server 2025.
   - Run `qemu-ga-x86_64.msi`
 - Verify service is running
   - From powershell `Get-Service QEMU-GA`
-- Verify from proxymox
+- Verify from proxmox
   - Log in to proxmox web GUI and find the VM's ID (for example, 102)
-  - Log in to proxymox CLI and ping the VM's ID
+  - Log in to proxmox CLI and ping the VM's ID
     - `qm agent 102 ping`
   - No message means it was successful; "QEMU guest agent is not running" means it is failing
