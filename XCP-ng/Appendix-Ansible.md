@@ -811,7 +811,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
     - for example, copy the certificate to the `\\file-1\it` share from `manager`, and pick it up from there from `dc-1`
   - create the GPO using administrative powershell
-    - `New-GPO -Name "Distribute Root CA Certficate" | New-GPLink -Target "DC=xcpng,DC=lab"`
+    - `New-GPO -Name "Distribute Root CA Certificate" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Open Group Policy Management Console (GPMC)
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab
