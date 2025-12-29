@@ -1,7 +1,7 @@
 # Tested Windows 8.1 Installations
 NOTE This is for the pentesting Lab environment.
 
-IMPORTANT Requires an 8.1 licence key
+IMPORTANT Requires an 8.1 license key
 
 ISO: en_windows_vista_sp2_x64_dvd_342267.iso
 - Template: Other install media
