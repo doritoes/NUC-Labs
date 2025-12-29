@@ -67,7 +67,7 @@ NOTES
 - You can enable encryption of the password and lock down who can decrypt it
 - You can force expiration of the LAPS password so it will update sooner
 - You can use power shell to receive passwords and expire them
-- Use Ansbible or powershell to enable local Administrator accounts on all Windows 11 workstations and default the local user we created when we originally built the workstations
+- Use Ansible or powershell to enable local Administrator accounts on all Windows 11 workstations and default the local user we created when we originally built the workstations
 
 Example tasks:
 ```
