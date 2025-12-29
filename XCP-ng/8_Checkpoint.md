@@ -413,7 +413,7 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
   - Select **Security Gateway and/or Security Management** and click **Next**
   - Products
     - Leave **Security Gateway** selected
-    - <ins>Uncheck</ins> Security Mangement
+    - <ins>Uncheck</ins> Security Management
     - Clustering
       - <i>Check</i> Unit is part of a cluster, type: **ElasticXL** (this is the new cluster mechanism; the old one in R81.20 is ClusterXL)
     - Click **Next**
