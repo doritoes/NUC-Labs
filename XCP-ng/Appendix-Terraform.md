@@ -261,7 +261,7 @@ Steps:
     - Reboot the VM from XCP-ng
   - Disable all privacy settings and click Next
   - Your device will have a DESKTOP-xxxxxxx name
-  - If you chose to break the network connectivity insteady of bypassing the account creation
+  - If you chose to break the network connectivity instead of bypassing the account creation
     - Select Set up for personal use (feel free to experiment)
     - Disconnect from the Internet and start over
       - Option 1 - power down the VyOS router for a while
