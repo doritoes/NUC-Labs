@@ -44,7 +44,7 @@ Note the warnings
 - WARNING: You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options.
 - "The enterprise repository is enabled, but there is no active subscription!"
 - proxmox requires you to manually switch to the community repositories
-  - this is intentional, and intended to push users to the "easier" paid subcription model
+  - this is intentional, and intended to push users to the "easier" paid subscription model
 
 From the ProxMox web GUI
 - Click on the device (proxmox-lab) under the Datacenter
