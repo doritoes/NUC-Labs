@@ -30,7 +30,7 @@ Overview:
 - Add a private network for the secured host(s)
   - Home > Hosts > xcp-ng-lab1
   - Network > Manage
-  - Add a newwork
+  - Add a network
     - Interface: *leave blank*
     - Name: L2net
     - Description: Layer 2 bridged network off lab
