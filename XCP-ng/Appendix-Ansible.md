@@ -365,7 +365,7 @@ SmartConsole process for `firewall1` cluster
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
 - Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
 - Click **Advanced network settings**
-- Click Ethernet (unidentified newtork)
+- Click Ethernet (unidentified network)
 - More adapter options: click **Edit**
   - Properties > Internet Protocol Version 4 (TCP/IP/IPv4)
   - Configure default gateway: **192.168.41.1**
