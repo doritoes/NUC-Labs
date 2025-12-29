@@ -15,7 +15,7 @@ Examining advanced settings:
 - Viridian: enabled
 - VGA: disabled
 Steps:
-- Confirm language, time/currency format, and keybord, then click **Next**
+- Confirm language, time/currency format, and keyboard, then click **Next**
 - Click **Install now**
 - Enter a product key and click **Next**
 - Check the box and **Next**
