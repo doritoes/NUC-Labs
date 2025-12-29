@@ -1,4 +1,4 @@
-# Tested Ununtu 4.10 Warty Warthog Installation
+# Tested Ubuntu 4.10 Warty Warthog Installation
 NOTE This is for the pentesting Lab environment.
 
 ISO: warty-release-install-amd64.iso
