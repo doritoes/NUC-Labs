@@ -209,7 +209,7 @@ You may choose to keep the XOA virtual appliance if you have enough CPU cores an
 ## Optionally Reserve IP address for xo-ubuntu
 Now is a good time to create a dhcp reservation for xo-ubuntu for a fixed IP address. This is super helpful, so the IP address does not change.
 
-TIP To tell Ubunutu 24.04 to refesh the IP address, `networkctl renew`
+TIP To tell Ubuntu 24.04 to refesh the IP address, `networkctl renew`
 - `networkctl list`
   - note the link enX0
 - `sudo networkctl renew enX0`
