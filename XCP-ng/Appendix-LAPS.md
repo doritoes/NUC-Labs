@@ -60,7 +60,7 @@ Members of the Domain Admins group already have password query permission by def
   - Click Show password to reveal the randomized password
   - If you try to log in to `branch1-1` console as .\Administrator with this password, you will find the local Administrator account is Disabled
     - The main benefit in this lab is for servers and PCs a local Administrator account
-    - It doesn't take care of other local accounts with administrator rights on the Windows 11 systems (for example I used the user "Lab" to intially set up Windows 11; that account is not affected by LAPS with these settings)
+    - It doesn't take care of other local accounts with administrator rights on the Windows 11 systems (for example I used the user "Lab" to initially set up Windows 11; that account is not affected by LAPS with these settings)
 
 NOTES
 - Over time group policy will update on all the systems
