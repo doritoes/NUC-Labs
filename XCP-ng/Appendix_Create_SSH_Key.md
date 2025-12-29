@@ -16,6 +16,6 @@ Be sure you are logged in as the user you are going to use to connect to the VMs
   - Accept default settings and don't enter a passphrase
 - Get the key
   - `cat ~/.ssh/id_rsa.pub`
-  - It starts with "ssh-rsa" followed by a lot of base64 encoded text finisehd by the username and machine name
+  - It starts with "ssh-rsa" followed by a lot of base64 encoded text followed by the username and machine name
 - Use the key
   - paste it into configurations calling for your SSH key
