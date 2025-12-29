@@ -335,7 +335,7 @@ Steps:
   - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
 
-## Apply Jumbo Hotfixs to SMS and firewalls
+## Apply Jumbo Hotfixes to SMS and firewalls
 At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivty you configured in branch 1.
 
 CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
