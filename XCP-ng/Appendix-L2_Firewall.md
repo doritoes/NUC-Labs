@@ -198,7 +198,7 @@ Overview:
 - Pool **xcp-ng-lab1`
 - Template: choose from **win10-lan-ready**, **win11-lan-ready** or **ubuntu-desktop-lan**
 - Name: **l2test**
-- Decription: testing L2 firewall
+- Description: testing L2 firewall
 - Make sure network is **L2net**
 - If you choose Window 11 template, remember to use Advanced settings to disable adding a VTPM
 - Click **Create**
