@@ -3,7 +3,7 @@ Automation with XCP-ng is centered around Ansible. In this Lab we look at ways t
 
 NOTE If you are looking at using Python, you might be able to adapt https://github.com/Stella-IT/XenGarden/tree/main
 
-NOTE There is no Ansible collection to manuluate XO
+NOTE There is no Ansible collection to manipulate XO
 
 References:
 - https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/
