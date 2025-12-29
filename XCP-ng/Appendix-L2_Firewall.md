@@ -205,7 +205,7 @@ Overview:
 
 # Testing
 - At this point network connectivity is working (ping, nslookup), Internet
-- Create a rule for the LAN interface to block certain traffic (enable loggingfor the rule)
+- Create a rule for the LAN interface to block certain traffic (enable logging for the rule)
   - Place the rule above the allow rule, save and apply changes
 - View the firewall logs
   - Firewall > Log Files > Live View
