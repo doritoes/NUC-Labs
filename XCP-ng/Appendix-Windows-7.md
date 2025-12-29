@@ -14,7 +14,7 @@ Examining advanced settings:
 - VGA: disabled
 
 Steps:
-- Confirm language, time/currency format, and keybord, then click **Next**
+- Confirm language, time/currency format, and keyboard, then click **Next**
 - Click **Install now**
 - Check the box and **Next**
 - Click **Custom (advanced)**
