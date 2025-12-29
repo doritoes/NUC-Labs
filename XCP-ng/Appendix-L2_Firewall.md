@@ -13,7 +13,7 @@ Warnings:
 - Most L2 firewalls cannot do IPS; needs confirmation for OPNsense
 
 Overview:
-- Using OPNsesnse 25.7
+- Using OPNsense 25.7
 - Start from a default installation on a virtual device with 3 interfaces
 - Disable DHCP server on LAN
 - Create a Bridge interface and assign a management IP address to it
