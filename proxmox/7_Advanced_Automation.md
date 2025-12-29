@@ -1,4 +1,4 @@
-# Advanced Automation with proxymox
+# Advanced Automation with proxmox
 Terraform is an open-source infrastructure as code tool that allows you to define and manage your infrastructure as code. This code is a declarative language that is simple to write. In this Lab we will use Terraform to automate the creation of VMs in Proxmox.
 
 Proxmox does not ship with Ansible, but you can install it on the host. This will enable further management of the VMs.
