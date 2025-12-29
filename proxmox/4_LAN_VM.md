@@ -228,7 +228,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - We will use this to configure Windows systems
 
 # Windows 10
-IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+IMPORTANT Windows 10 is officially end of support. However it is still super useful in labs like this.
 
 NOTE When creating a Windows VM, pay attention to the network Model setting
 - VirtIO (paravirtualized) will not be detected by Windows 10 until you install the drivers
