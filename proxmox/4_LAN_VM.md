@@ -563,7 +563,7 @@ Steps:
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated** (up to 110)
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `win11-desk`
     - Click **Clone**
