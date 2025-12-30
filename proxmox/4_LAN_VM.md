@@ -734,7 +734,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
       - Version: **11/2022/2025**
     - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image
   - System tab
-    - No TPM or EFI disk requried
+    - No TPM or EFI disk required
       - Missing TPM means no bitlocker and other capabilities
       - Feel free to experiment
     - SCSI controller: VirtIO SCSI single
