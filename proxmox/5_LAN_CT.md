@@ -93,7 +93,7 @@ As you perform these Lab steps, note the many options available to you
     - By default you cannot ssh as root with a password; use ssh with keys or add another user
   - Follow the first boot configuration wizard
     - Password for MySQL `adminer`: *select a password*
-    - Skip setting up TurknKey Hub services
+    - Skip setting up TurnKey Hub services
     - Skip setting up System Notifications and Critical Security Alerts
     - **Install** security updates and **Reboot**
   - Note links provided for
