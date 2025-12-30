@@ -325,7 +325,7 @@ Steps:
       - Later, when you are logged in, install network drivers from the VirtIO CD
       - Open the Device Manager
       - Select the unknown VirtIO Ethernet adapter, update driver, local matching, browse to CD
-      - Yes allow your PC to be dicoverable
+      - Yes allow your PC to be discoverable
     - Select **Set up for personal use** (feel free to experiment)
     - Click **Offline account** then click **Limited experience**
     - User: **lab**
