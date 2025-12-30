@@ -91,7 +91,7 @@ Installing [OPNsense](5_OPNsense_VM.md) adds a firewall to isolate our pen-testi
 
 🌱 The Tor configuration is currently not working.
 
-OPsense on proxmox can be a challenge because there is no easy way to disable hardware checksum offloading. When proxmox is used to run OPNsense as a border firewall leading to the Internet, the standard approach is to add a NIC and do PCI passthru (to isolate the card from the PROXMOX hypervisor).
+OPNsense on proxmox can be a challenge because there is no easy way to disable hardware checksum offloading. When proxmox is used to run OPNsense as a border firewall leading to the Internet, the standard approach is to add a NIC and do PCI passthru (to isolate the card from the PROXMOX hypervisor).
  
 ## Set Up Pen Testing Lab
 [Set Up Lab](6_Pentesting_Lab.md) will take you into setting up Kali Linux and OpenVAS for the first time
