@@ -224,7 +224,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
 - Download the virtio-win drive ISO
   - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
   - similar to virtio-win-0.1.240.iso
-- Upload to your ISO store with your Windows, Ubunutu ISO images
+- Upload to your ISO store with your Windows, Ubuntu ISO images
   - We will use this to configure Windows systems
 
 # Windows 10
