@@ -261,7 +261,7 @@ Steps:
   - System tab
     - BIOS: OVMF (UEFI)
     - EFI Storage: local-lvm
-    - Queme Agent: Enabled
+    - Quemu Agent: Enabled
   - Disks tab
     - Disk size: **128GB**
     - Cache: **Write back**
