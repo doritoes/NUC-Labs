@@ -158,7 +158,7 @@ Or, if you created local storage, upload the ISO there.
     - **Yes**, allow the PC to be discovered
     - Confirm Internet access is working
 - Initial firewall configuration
-  - From VM's weg browser, log in to firewall https://192.168.101.254
+  - From VM's web browser, log in to firewall https://192.168.101.254
     - Advanced > Continue
     - User `root` and password you selected
   - Follow the Wizard
