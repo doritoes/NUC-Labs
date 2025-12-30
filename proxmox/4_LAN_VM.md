@@ -505,7 +505,7 @@ Steps:
     - If you chose to break the network connectivity instead of bypassing the account creation
       - Select **Set up for personal use** (feel free to experiment)
       - Disconnect from the Internet and start over
-        - Option 1 - power down the voyos router for a while
+        - Option 1 - power down the vyos router for a while
         - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
       - At *Let's connect you to a network*
         - Click **I don't have internet**
