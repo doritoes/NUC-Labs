@@ -87,7 +87,7 @@ An interesting feature of proxmox is its use of [CT (LXC containers)](5_LAN_CT.m
 Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Install OPNsense firewall
-Installing [OPNsense](5_OPNsense_VM.md) adds a firewall to isolate our pen-testing network from the outside. The VMs on this network can only access each other and the Internet (if access to the Interent is enabled).
+Installing [OPNsense](5_OPNsense_VM.md) adds a firewall to isolate our pen-testing network from the outside. The VMs on this network can only access each other and the Internet (if access to the Internet is enabled).
 
 🌱 The Tor configuration is currently not working.
 
