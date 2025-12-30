@@ -240,7 +240,7 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 - Windows Server - recommend VirtIO
 
 NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
-- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- proxmox recommends VirtIO SCSI single, but this requires installing the driver during Windows installation
 - If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
 
 Steps:
@@ -400,7 +400,7 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 - Windows Server - recommend VirtIO
 
 NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
-- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- proxmox recommends VirtIO SCSI single, but this requires installing the driver during Windows installation
 - If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
 
 IMPORTANT If you want to set up using a local account instead of a Microsoft account
