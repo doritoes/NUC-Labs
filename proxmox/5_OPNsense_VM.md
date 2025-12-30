@@ -21,7 +21,7 @@ Add a secured network behind the firewall for our pentesting environment
   - Name: **vmbr2**
   - Autostart: **Checked**
   - Click **Create**
-- Click **Apply Configuration** and the new brige will start (next to Create/Revert in the menu bar)
+- Click **Apply Configuration** and the new bridge will start (next to Create/Revert in the menu bar)
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
