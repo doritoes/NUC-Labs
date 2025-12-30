@@ -101,6 +101,6 @@ As you perform these Lab steps, note the many options available to you
     - Webmin (port 12321)
     - Adminer (port 12322)
     - SSH/SFTP: (port 22)
-- Open Advanced Options and review the available seetings
+- Open Advanced Options and review the available setings
 - Browse the the IP address from a workstation the same network (e.g., `win10-desk` or `desktop-lan`)
   - Try the links on the page
