@@ -6,7 +6,7 @@ Proxmox does not ship with Ansible, but you can install it on the host. This wil
 IMPORTANT proxmox and Terraform have a LOT of gotchas and you will run into a lot of issues trying to use it in production (see https://github.com/Telmate/terraform-provider-proxmox/issues)
 
 NOTES
-- This lab is performned on the proxmox host itself
+- This lab is performed on the proxmox host itself
 - You will need a subscription or have installed the no-subscription repository
 - You have already created a template named **ubuntu-server-lan**, created from a VM you built earlier
 
