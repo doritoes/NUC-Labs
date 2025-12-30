@@ -2,7 +2,7 @@
 Since we cannot log in directly at the console of our NUCs that we built (a feature), it can be challenging to find the IP addresses.
 
 ## Option 1 - Check your Lab Router DHCP Leases
-Your router keeps track of all the devices and their IP addreses. It might even have the name of the device.
+Your router keeps track of all the devices and their IP addresses. It might even have the name of the device.
 
 ## Option 2 - nmap scan from NUC1
 From NUC1, install and run nmap
