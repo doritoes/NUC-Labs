@@ -672,7 +672,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Slide to Enable Remote Desktop then accept the message
   - Install QEMU Guest Agent
     - We already installed the drivers for the required VirtIO devices
-    - From the virtio CD, run guest-agen > quemu-ga-x86_64.msi
+    - From the virtio CD, run guest-agent > quemu-ga-x86_64.msi
     - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
 - Change the hostname to `server2022-lan-ready`
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
