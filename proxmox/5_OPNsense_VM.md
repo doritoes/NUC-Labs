@@ -76,7 +76,7 @@ Or, if you created local storage, upload the ISO there.
   - Memory tab
     - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **4096**MiB = 4GiB
       - in testing we were able to build the firewall using 2GB of RAM despite the installer requiring 3000MiB to copy files
-    - Advanced: <i>disable</i> Balooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
+    - Advanced: <i>disable</i> Ballooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
   - Network tab
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
