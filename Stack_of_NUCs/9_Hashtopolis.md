@@ -327,7 +327,7 @@ python -c 'import crypt,getpass; print(getpass.getpass("Name: ")+":"+crypt.crypt
 - Create a task
   - name: unix
   - hashlist: Unix
-  - worlist: rockyou.txt
+  - wordlist: rockyou.txt
   - priority: 5
   - attack command: `#HL# rockyou.txt`
   - click **Create task**
