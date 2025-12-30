@@ -663,7 +663,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Click Browse my computer for drivers
     - Click Browse
     - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
-    - Click Next and the drver wil be found. Click Clost
+    - Click Next and the driver will be found. Click Clost
   - When prompted about whether to allow the server to be discoverable, choose **Yes**
 - Remove the VirtIO CD ISO
 - Apply Windows Updates (reboots included)
@@ -805,7 +805,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
     - Click Browse my computer for drivers
     - Click Browse
     - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
-    - Click Next and the drver will be found. Click Close
+    - Click Next and the driver will be found. Click Close
   - When prompted about whether to allow the server to be discoverable, choose **Yes**
 - Apply Windows Updates (reboots included)
 - Enable RDP
