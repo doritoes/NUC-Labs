@@ -50,7 +50,7 @@ IMPORTANT:
 - guest tools???
 - how to install community edition so it doesn't keep bombing you will no subscription and errors
 - the proxmox logon on every screen takes you to sales site, not the root menu
-- login TFA = two factor authentciation
+- login TFA = two factor authentication
 - uses noVNC
 - gives direct access to the network guts: Linux Bridge vmbr0
 - certificates: exposes ACME for certificate  management
