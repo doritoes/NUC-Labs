@@ -14,7 +14,7 @@ Using pre-built templates:
 - Expand **Datacenter** > **proxmab-lab**
 - Click **local (proxmox-lab)**
 - Click **CT templates**
-- Cick **Templates**
+- Click **Templates**
 
 ### Ubuntu
 As you perform these Lab steps, note the many options available to you
