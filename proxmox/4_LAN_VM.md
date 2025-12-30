@@ -429,7 +429,7 @@ Steps:
     - Check **Add TPM**
     - Machine: **q35**
     - SCSI Controller: **VirtIO SCSI single**
-    - Check **Qemu Agenmt**
+    - Check **Qemu Agent**
     - TPM Storage: select **local-lvm**
     - EFI Storage: select **local-lvm**
   - Disks tab
