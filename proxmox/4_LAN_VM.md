@@ -594,7 +594,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
       - Version: **11/2022/2025**
     - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image you uploaded
   - System tab
-    - No TPM or EFI disk requried (uncheck)
+    - No TPM or EFI disk required (uncheck)
     - SCSI controller: VirtIO SCSI single
     - Machine: q35
     - Qemu Agent: Checked
