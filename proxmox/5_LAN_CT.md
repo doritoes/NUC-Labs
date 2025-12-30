@@ -91,7 +91,7 @@ As you perform these Lab steps, note the many options available to you
   - Open console; start if not already started
   - Log in as user `root` with the password you selected
     - By default you cannot ssh as root with a password; use ssh with keys or add another user
-  - Follw the first boot configuration wizard
+  - Follow the first boot configuration wizard
     - Password for MySQL `adminer`: *select a password*
     - Skip setting up TurknKey Hub services
     - Skip setting up System Notifications and Critical Security Alerts
