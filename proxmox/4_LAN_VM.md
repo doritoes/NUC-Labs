@@ -108,7 +108,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated*
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `desktop-lan`
     - Click **Clone**
@@ -205,7 +205,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `server-lan`
     - Click **Clone**
