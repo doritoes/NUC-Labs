@@ -49,7 +49,7 @@ Or, if you created local storage, upload the ISO there.
 - From the top ribbon click **Create VM**
   - General tab
     - Node: Auto selects **proxmox-lab**
-    - VM ID: *automatically populated; each resource requries a unique ID* (up to 116)
+    - VM ID: *automatically populated; each resource requires a unique ID* (up to 116)
     - Name: **opnsense**
     - Check Advanced and check **Start at boot**, consider setting start/shutdown order to **1**
   - OS tab (clicking Next takes you to the next tab)
