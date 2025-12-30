@@ -799,7 +799,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
 - Send diagnostic data to Microsoft: **Required only** then **Accept**
 - Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
   - Open the Device Manager
-  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Communications Controller
     - Open the unrecognized device
     - Click Update Driver
     - Click Browse my computer for drivers
