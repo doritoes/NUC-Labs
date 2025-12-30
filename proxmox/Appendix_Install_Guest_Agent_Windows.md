@@ -17,7 +17,7 @@ Lab tested with Windows 10, Windows 11, Server 2022, and Server 2025.
   - When building Windows servers in proxmox, there is an option to automatically mount the virtio CD
 - Open Device Manager
 - Find PCI Simple Communications Controller
-  - If you don't see it, make sure QEMU Guest Agent is enabled in proxy, and power off/on (<i>not just reoot</i>)
+  - If you don't see it, make sure QEMU Guest Agent is enabled in proxy, and power off/on (<i>not just reboot</i>)
   - Right click PCI Simple Communications Controller -> Update Driver
     - Browse my computer for drivers
     - Select the mounted ISO in DRIVE:\vioserial\<OSVERSION>\ where <OSVERSION> is your Windows Version (e.g. 2k12R2 for Windows 2012 R2)
