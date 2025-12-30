@@ -42,4 +42,4 @@ Build the ISO from source inside the container:
     - or without the vm agents
     - `sudo ./build-vyos-image --architecture amd64 --build-by "j.randomhacker@vyos.io" generic`
   - `exit`
-- When the build is successful, the resulting iso can be found inside the build directory similr to vyos-1.5-rolling-202510072128-generic-amd64. On the host fint it in  `~/vyos-build/build`.
+- When the build is successful, the resulting iso can be found inside the build directory similar to vyos-1.5-rolling-202510072128-generic-amd64. On the host find it in  `~/vyos-build/build`.

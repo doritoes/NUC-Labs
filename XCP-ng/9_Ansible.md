@@ -3,7 +3,7 @@ Automation with XCP-ng is centered around Ansible. In this Lab we look at ways t
 
 NOTE If you are looking at using Python, you might be able to adapt https://github.com/Stella-IT/XenGarden/tree/main
 
-NOTE There is no Ansible collection to manuluate XO
+NOTE There is no Ansible collection to manipulate XO
 
 References:
 - https://xen-orchestra.com/blog/virtops3-ansible-with-xen-orchestra/
@@ -52,7 +52,7 @@ Other states:
 
 Note that "reboot-guest" and "shutdown-guest" will fail if xen tools is not installed on the VM.
 
-More advanced playbook that powers on the `opnsense` firewall, waits for it to come up, then powers on the VMs on the penstesting network. "Waiting for an IP address" requires the xen tools be installed. Replace with the correct IP address and credentials.
+More advanced playbook that powers on the `opnsense` firewall, waits for it to come up, then powers on the VMs on the pentesting network. "Waiting for an IP address" requires the xen tools be installed. Replace with the correct IP address and credentials.
 
 ~~~
 ---

@@ -3,12 +3,12 @@
 
 This corresponds to the last pages of chapter 3 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
 
-We have all the reprequisites created, so we start adding devices in the web GUI.
+We have all the prerequisites created, so we start adding devices in the web GUI.
 
 ## Create a Device in UI
 - From the left menu expand **DEVICES**
 - Under the DEVICES  section click **Devices**
-- In the center pane click **Add Device** (see also the "**+**) add button in the left menu
+- In the center pane click **Add Device** (see also the "**+**") add button in the left menu
   - Device
     - Name: **LAB-SW1**
     - Role: **Switch L2**
@@ -31,7 +31,7 @@ We have all the reprequisites created, so we start adding devices in the web GUI
 - Click Run Job Now
 
 ## Import Devices using Ansible and CSV File
-The provided CSV file contais device manufacturers and models. The module networktocode.nautobot.device requires the device_type ID instead.
+The provided CSV file contains device manufacturers and models. The module networktocode.nautobot.device requires the device_type ID instead.
 
 This isn't a problem in our Lab because we use the manufacturer's model number as the device_type.
 
@@ -53,7 +53,7 @@ Nautobot's built-in secrets providers:
 
 Other providers: https://github.com/nautobot/nautobot-app-secrets-providers
 
-⚠️ Beware that any App can potentially access your secrets (e.g., display on screen), so only install Apps you trust. Any job can access your secrets and log them to job results. Any Git repo can add new Jobs ot the system. Any user with access to one or more secrets can exploit this to access other secrets.
+⚠️ Beware that any App can potentially access your secrets (e.g., display on screen), so only install Apps you trust. Any job can access your secrets and log them to job results. Any Git repo can add new Jobs to the system. Any user with access to one or more secrets can exploit this to access other secrets.
 
 #### Text File Method
 - Create a text file to contain the secret value
@@ -168,7 +168,7 @@ PLUGINS_CONFIG = {
   - Click JOBS > Jobs
   - Under Device Onboarding edit the job Sync Devices From Network
   - Check Enabled
-  - Click Udpate
+  - Click Update
 - Run the Job
   - Click the job Sync Devices From Network
   - Enter information about the device in the form

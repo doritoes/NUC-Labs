@@ -1,7 +1,7 @@
 # Tested Windows Server 2003 R2 Installation
 NOTE This is for the pentesting Lab environment.
 
-IMPORTANT Requires an Server 2003 R2 licence key (https://gist.github.com/thepwrtank18/4456b1a4676a26c6ef25b8e8b70e26d7)
+IMPORTANT Requires an Server 2003 R2 license key (https://gist.github.com/thepwrtank18/4456b1a4676a26c6ef25b8e8b70e26d7)
 
 ISO: Windows_Server_2003_R2_Standard_x64_CD1.isovvi
 - Template: Other install media

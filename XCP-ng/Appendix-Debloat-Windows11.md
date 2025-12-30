@@ -10,7 +10,7 @@ Features:
 - Personalization to W10-style context menu, streamline settings for lab
 - File explorer customized for administrator use
 - Taskbar streamlined
-- Start menu diabled phone link and recommended section
+- Start menu disable phone link and recommended section
 - Disable Xbox and fast startup
 - Sysprep mode
 

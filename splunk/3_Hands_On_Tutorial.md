@@ -69,7 +69,7 @@ Create a line graph of web traffic over the last 24 hours
 7. From the small dropdown change the `Chart` from Column Chart to Line Chart
 8. In the top search area, click **Save As** > **Existing Dashboard**
     - Select existing: **Buttercup Games SOC**
-    - Panel title: **Unuccessful Purchases Over Time**
+    - Panel title: **Unsuccessful Purchases Over Time**
     - Panel Content: Choose Line Chart (Splunk will automatically try to visualize the data if you have a timechart command, but if not, it will default to a table).
     - Click **Save to Dashboard**, then click **View Dashboard**
 

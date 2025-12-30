@@ -1,5 +1,5 @@
 # Appendix - Create SSH Key
-You will notice in the Labs that when you create a Linux VM you have the opporunity to use an SSH for access instead of a password. This is a very good thing! Never SSH as root with a password. Always use keys.
+You will notice in the Labs that when you create a Linux VM you have the opportunity to use an SSH for access instead of a password. This is a very good thing! Never SSH as root with a password. Always use keys.
 
 So how can you create a key and use it?
 
@@ -16,6 +16,6 @@ Be sure you are logged in as the user you are going to use to connect to the VMs
   - Accept default settings and don't enter a passphrase
 - Get the key
   - `cat ~/.ssh/id_rsa.pub`
-  - It starts with "ssh-rsa" followed by a lot of base64 encoded text finisehd by the username and machine name
+  - It starts with "ssh-rsa" followed by a lot of base64 encoded text followed by the username and machine name
 - Use the key
   - paste it into configurations calling for your SSH key

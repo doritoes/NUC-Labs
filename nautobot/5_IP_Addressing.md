@@ -14,7 +14,7 @@ We have all the devices created, so we start configuring IP address information 
   - Click **Create**
 ### Using Ansible
 1. Copy the playbook [09-rirs.yml](ansible/09-rirs.yml)
-2. Run the playboook `ansible-playbook 09-rirs.yml`
+2. Run the playbook `ansible-playbook 09-rirs.yml`
 
 ## Create a VLAN
 ### Manually
@@ -27,7 +27,7 @@ We have all the devices created, so we start configuring IP address information 
   - Click **Create**
 ### Using Ansible
 1. Copy the playbook [10-vlans.yml](ansible/10-vlans.yml)
-2. Run the playboook `ansible-playbook 10-vlans.yml`
+2. Run the playbook `ansible-playbook 10-vlans.yml`
 
 ## Create Prefixes
 ### Manually
@@ -48,7 +48,7 @@ We have all the devices created, so we start configuring IP address information 
     - If so, you may decide to add to the **Lab RIR**
 ### Using Ansible
 1. Copy the playbook [11-prefixes.yml](ansible/11-prefixes.yml)
-2. Run the playboook `ansible-playbook 11-prefixes.yml`
+2. Run the playbook `ansible-playbook 11-prefixes.yml`
 
 ## Create IP Addresses with Prefix
 ### Manually
@@ -62,7 +62,7 @@ We have all the devices created, so we start configuring IP address information 
     - Optionally add a description
     - Click **Create**
 - GUI Bulk Add
-  - Back in **IP Addreses**, click **Add IP Address** again
+  - Back in **IP Addresses**, click **Add IP Address** again
   - Click the tab **Bulk Create**
   - Note that you can create multiple IP addresses at once using a pattern
     - Example address pattern: **192.168.99.[1-5,252]/32**
@@ -83,7 +83,7 @@ We have all the devices created, so we start configuring IP address information 
 ### Using Ansible
 1. Download the file [import-ip-addresses.csv](import-ip-addresses.csv)
 2. Copy the playbook [12-ip-addresses.yml](ansible/12-ip-addresses.yml)
-3. Run the playboook `ansible-playbook 12-ip-addresses.yml`
+3. Run the playbook `ansible-playbook 12-ip-addresses.yml`
 
 ## Assign IP Addresses to Devices/Interfaces
 ### Manually
@@ -138,7 +138,7 @@ We have all the devices created, so we start configuring IP address information 
 ### Using Ansible
 1. Download the file [ip-addresses-interfaces.csv](ip-addresses-interfaces.csv)
 2. Copy the playbook [13-ip-addresses-interface.yml](ansible/13-ip-addresses-interface.yml)
-3. Run the playboook `ansible-playbook 13-ip-addresses-interface.yml`
+3. Run the playbook `ansible-playbook 13-ip-addresses-interface.yml`
 
 Manually modify the LAB-Firewall interfaces to your needs.
 

@@ -1,5 +1,5 @@
 # Ubuntu Desktop
-Prepare a Ubuntu Deskop system (I spun up another VM running Ubuntu Desktop 24.04 LTS), as we practice configuring things and then work on some common use cases.
+Prepare a Ubuntu Desktop system (I spun up another VM running Ubuntu Desktop 24.04 LTS), as we practice configuring things and then work on some common use cases.
 
 We will be using the Splunk "agent" called the Universal Forwarder (UF)
 - harvests local logs and forward them to the Splunk indexer running on the server
@@ -26,7 +26,7 @@ See links:
 - https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
 - https://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall
 
-1. Log in to splunk.com and vist https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
+1. Log in to splunk.com and visit https://docs.splunk.com/Documentation/AddOns/released/NixSysmon
 2. Follow the link to download the file, similar to splunk-add-on-for-sysmon-for-linux_100.tgz
 3. Log in to your Splunk server and go to the home screen
 4. On the left, next to "Find more apps", click **Manage**
@@ -34,7 +34,7 @@ See links:
     - **Settings** > **Server Controls** > **Restart Splunk**
     - or command line `sudo /opt/splunk/bin/splunk restart`
 
-## Configure Ubuntu Deskop
+## Configure Ubuntu Desktop
 Set up a Ubuntu Desktop 24.04 LTS test machine
 
 Be default the UFW firewall is disabled/inactive. If you enabled it, you will need to allow TCP/9997.
@@ -104,7 +104,7 @@ NOTE that no files are created, the script/tool is piped directly to a shell.
 NOTE Read the output best you can to understand what kind of information this gives the attack to planned their next steam and escalate their privileges.
 
 Detecting use of "dangerous" tools and "pipe-to-shell" in Splunk
-- Linux doesn't log shell commands. The shell is private, and the commands only get written to ~/.bash_history when the logs out. The standard logs never see them.
+- Linux doesn't log shell commands. The shell is private, and the commands only get written to ~/.bash_history when the user logs out. The standard logs never see them.
   - Note only the installation of curl is logged: `index=main "curl"`
 - **Auditd** is the naive Linux way to track this
 - **Sysmon** is also available for Linux (we used this in the Windows Labs)

@@ -21,7 +21,7 @@ Add a secured network behind the firewall for our pentesting environment
   - Name: **vmbr2**
   - Autostart: **Checked**
   - Click **Create**
-- Click **Apply Configuration** and the new brige will start (next to Create/Revert in the menu bar)
+- Click **Apply Configuration** and the new bridge will start (next to Create/Revert in the menu bar)
 
 # Download the ISO
 1. Go to https://opnsense.org/download/
@@ -49,7 +49,7 @@ Or, if you created local storage, upload the ISO there.
 - From the top ribbon click **Create VM**
   - General tab
     - Node: Auto selects **proxmox-lab**
-    - VM ID: *automatically populated; each resource requries a unique ID* (up to 116)
+    - VM ID: *automatically populated; each resource requires a unique ID* (up to 116)
     - Name: **opnsense**
     - Check Advanced and check **Start at boot**, consider setting start/shutdown order to **1**
   - OS tab (clicking Next takes you to the next tab)
@@ -76,7 +76,7 @@ Or, if you created local storage, upload the ISO there.
   - Memory tab
     - RAM: Recommended is **8192**MiB = 8GiB but for this lab we are using **4096**MiB = 4GiB
       - in testing we were able to build the firewall using 2GB of RAM despite the installer requiring 3000MiB to copy files
-    - Advanced: <i>disable</i> Balooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
+    - Advanced: <i>disable</i> Ballooning Device (requires the VM to have all RAM available to it all the time, but you lose extra monitoring about memory usage)
   - Network tab
     - Bridge: **vmbr0**
     - VLAN Tag: no VLAN
@@ -158,7 +158,7 @@ Or, if you created local storage, upload the ISO there.
     - **Yes**, allow the PC to be discovered
     - Confirm Internet access is working
 - Initial firewall configuration
-  - From VM's weg browser, log in to firewall https://192.168.101.254
+  - From VM's web browser, log in to firewall https://192.168.101.254
     - Advanced > Continue
     - User `root` and password you selected
   - Follow the Wizard
@@ -253,7 +253,7 @@ Steps:
 - Click Services > Tor > Configuration > General
   - Enable: Yes
   - Listen Interfaces: LAN (only)
-  - Optionally enable Create a logfile with Error of Debugging level (WARNING this could cause privacy issues)
+  - Optionally enable Create a log file with Error of Debugging level (WARNING this could cause privacy issues)
   - Enable Advanced Mode
     - Confirm SOCKS port number: 9050
     - Confirm Control Port: 9051
@@ -333,7 +333,7 @@ Steps:
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
 - Check for leaks (privacy issues)
-  - on firweall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
+  - on firewall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
     - `tcpdump -nni vtnet0 port 53`
   - next check for icmp ping leak by running tcpdump while you test pings to the Internet (i.e., `ping 8.8.8.8`)
     - `tcpdump -nni vtnet0 icmp`
@@ -342,6 +342,6 @@ Steps:
     - chrome://flags
     - Search for Experimental QUIC protocol; in the dropdown next to it select Enabled
     - Click Relaunch at the bottom to restart Chrome
-    - Browse google.com or other Google web properites to generate QUIC traffic which will be dropped by the firewall
+    - Browse google.com or other Google web properties to generate QUIC traffic which will be dropped by the firewall
     - `tcpdump -nni vtnet0 proto 17 and port 443`
 - REMEMBER Tor supports TCP only; if you need udp traffic to the Internet from the lab, consider using a VPN instead of Tor

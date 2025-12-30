@@ -10,7 +10,7 @@ References:
 
 # Initial Installation
 - Insert the installation USB
-- Boot from USB (UEFI mode) by powerng on and pressing F10 on the NUC
+- Boot from USB (UEFI mode) by powering on and pressing F10 on the NUC
 - Select the UEFI USB stick image
 - Select Graphical Installation and follow the Wizard
   - Accept EULA
@@ -43,8 +43,8 @@ Reference: https://pve.proxmox.com/wiki/Package_Repositories
 Note the warnings
 - WARNING: You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options.
 - "The enterprise repository is enabled, but there is no active subscription!"
-- proxymox requires you to manually switch to the community repositories
-  - this is intentional, and intended to push users to the "easier" paid subcription model
+- proxmox requires you to manually switch to the community repositories
+  - this is intentional, and intended to push users to the "easier" paid subscription model
 
 From the ProxMox web GUI
 - Click on the device (proxmox-lab) under the Datacenter
@@ -83,7 +83,7 @@ Command Line Steps: (from console or ssh to the IP address and login as root wit
 - `apt update`
 
 ## Updates
-- From the left menu, expand **Datacenter** > **proxymox-lab**
+- From the left menu, expand **Datacenter** > **proxmox-lab**
 - Click **Updates** then click **Refresh**
   - You will be receive errors because there is no paid subscription
 - Click **Upgrade** to open a separate shell window; accept the updates

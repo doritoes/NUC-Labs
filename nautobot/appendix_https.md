@@ -13,7 +13,7 @@ Two files will be created: the public certificate (nautobot.crt) and the private
   - State: New York
   - City: New York
   - Organization name: nautobot lab
-  - Orgainizational unit: lab
+  - Organizational unit: lab
   - Common name: nautobot
   - Email address: n@n.lab
 

@@ -13,7 +13,7 @@ Updated Software Versions:
 - Windows Server 2025
 - Check Point R82
 
-NOTE When you are deploying to a different SR than where the template is storaged, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
+NOTE When you are deploying to a different SR than where the template is stored, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
 
 This appendix outlines building a complete lab designed for testing Check Point security products. It currently requires a <ins>lot</ins> of resources. My host for this Lab has 96GB of RAM, 22 CPUs, and 12TB of storage. A reduced version designed for 64GB of RAM might be in the future.
 - 19 VMs
@@ -36,7 +36,7 @@ Notes:
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
-We are going to install Terrafrom on `ubuntu-xo`.
+We are going to install Terraform on `ubuntu-xo`.
 
 This can be run from another host in your Lab, such as WSL on a Windows desktop. You might eventually move it to the Windows management workstation we will set up later.
 
@@ -392,7 +392,7 @@ Steps:
   - Click **Convert to template** and confirm
 
 ## Create Ubuntu Server 24.04 LTS Template
-IMPORTANT Although not ideal, we are using "Other install media" as the base temmplate. In testing, when we used the base template "Ubuntu Noble Numbat 24.04", Terraform created VMs that failed to find the boot drive.
+IMPORTANT Although not ideal, we are using "Other install media" as the base template. In testing, when we used the base template "Ubuntu Noble Numbat 24.04", Terraform created VMs that failed to find the boot drive.
 
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**

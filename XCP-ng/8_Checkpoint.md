@@ -413,7 +413,7 @@ Here we will configure the first firewall in the cluster, then add to the SMS. L
   - Select **Security Gateway and/or Security Management** and click **Next**
   - Products
     - Leave **Security Gateway** selected
-    - <ins>Uncheck</ins> Security Mangement
+    - <ins>Uncheck</ins> Security Management
     - Clustering
       - <i>Check</i> Unit is part of a cluster, type: **ElasticXL** (this is the new cluster mechanism; the old one in R81.20 is ClusterXL)
     - Click **Next**
@@ -468,7 +468,7 @@ Yes, fully configure with one firewall. Will add the second gateway later.
 - Click **New**  > **Gateway**
 - Click **Classic Mode**
   - Cluster Name: **gw1** (best practice: same name as the appliance name)
-  - Cluster IPv4 Address: use the managment IP address 192.168.103.1
+  - Cluster IPv4 Address: use the management IP address 192.168.103.1
   - Comment: **ElasticXL cluster**
     - Click **Communication...**
     - Activation Key: `xcplab123!` and confirm it
@@ -606,7 +606,7 @@ Test from `checkpoint-console`
   - quic (udp/443) is not allowed
   - ICMP ping is not allowed
 
-- Note that the management network is in the "InternalZone" due to the toplogy setting made on interface magg1
+- Note that the management network is in the "InternalZone" due to the topology setting made on interface magg1
 
 # Install Jumbo Hotfix on SMS
 This method is from the command line on `checkpoint-sms`.It is possible to install the jumbo hotfix from the SMS web gui https://192.168.103.4 Software Update > Available Updates
@@ -682,7 +682,7 @@ NOTE We will be using the WebGUI method to add the second member. There is also 
 - Click **OK** for the message *Add member request succeeded, the member's addition is in progress.*
 - Wait patiently for the new member to be configured (including JHF packages)
   - The new gateway's name starts as *Not available* in the web GUI
-  - Meanwhile logged into the SmartConnsole app, gw1 has an alert "Security Group - There is an error on one or more sites"
+  - Meanwhile logged into the SmartConsole app, gw1 has an alert "Security Group - There is an error on one or more sites"
 - Lab testing showed the issue is the clone failed
   - see /var/log/lightshot.log file "Lightshot Partition is out of space"
   - during the clone operation there was a device out of space error logged, but all partitions showed space

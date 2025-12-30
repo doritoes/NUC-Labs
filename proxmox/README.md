@@ -12,7 +12,7 @@ Things about Proxmox Virtual Environment
 - Uses LVMs
 - Restful API
 - Multi-master for robust handling of failed node/system
-- Full virutalization (KVM)
+- Full virtualization (KVM)
 
 Things about Ceph
 - Ceph is an open source software-defined storage solution designed to address the block, file and object storage needs of modern enterprises
@@ -50,7 +50,7 @@ IMPORTANT:
 - guest tools???
 - how to install community edition so it doesn't keep bombing you will no subscription and errors
 - the proxmox logon on every screen takes you to sales site, not the root menu
-- login TFA = two factor authentciation
+- login TFA = two factor authentication
 - uses noVNC
 - gives direct access to the network guts: Linux Bridge vmbr0
 - certificates: exposes ACME for certificate  management
@@ -87,11 +87,11 @@ An interesting feature of proxmox is its use of [CT (LXC containers)](5_LAN_CT.m
 Next we will [Install VMs](4_LAN_VM.md) on the backend "LAN".
 
 ## Install OPNsense firewall
-Installing [OPNsense](5_OPNsense_VM.md) adds a firewall to isolate our pen-testing network from the outside. The VMs on this network can only access each other and the Internet (if access to the Interent is enabled).
+Installing [OPNsense](5_OPNsense_VM.md) adds a firewall to isolate our pen-testing network from the outside. The VMs on this network can only access each other and the Internet (if access to the Internet is enabled).
 
 🌱 The Tor configuration is currently not working.
 
-OPsense on proxmox can be a challenge because there is no easy way to disable hardware checksum offloading. When proxmox is used to run OPNsense as a border firewall leading to the Internet, the standard approach is to add a NIC and do PCI passthru (to isolate the card from the PROXMOX hypervisor).
+OPNsense on proxmox can be a challenge because there is no easy way to disable hardware checksum offloading. When proxmox is used to run OPNsense as a border firewall leading to the Internet, the standard approach is to add a NIC and do PCI passthru (to isolate the card from the PROXMOX hypervisor).
  
 ## Set Up Pen Testing Lab
 [Set Up Lab](6_Pentesting_Lab.md) will take you into setting up Kali Linux and OpenVAS for the first time

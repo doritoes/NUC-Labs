@@ -13,7 +13,7 @@ NOTE You will need your splunk.com account again to download Splunk plugins and 
 Set up a Windows Server 2025 test machine.
 
 ### Install Sysmon
-Sysmon is a Sysinternal tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Sysmon now means that when UF is installed, it already has logs to parse.
+Sysmon is a Sysinternals tool that can provide a plethora of useful and important logs. We will heavily filter these logs to be able to focus on the important ones. Installing Sysmon now means that when UF is installed, it already has logs to parse.
 
 1. Download Sysmon to the Windows Server 2025 machine
     - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
@@ -61,7 +61,7 @@ Sysmon is a Sysinternal tool that can provide a plethora of useful and important
         - Application
         - Security
         - System
-    - Create the app folder and blank `inputs.conf` file from Adminstrative PowerShell
+    - Create the app folder and blank `inputs.conf` file from Administrative PowerShell
 ~~~
 # 1. Create the directory
 $labPath = "C:\Program Files\SplunkUniversalForwarder\etc\apps\lab\local"
@@ -103,7 +103,7 @@ Attempts to add Splunk Forwarder service to be member of Event Log Readers group
 If you REALLY want to test on a domain controller, use a Server 2022 DC.
 
 ### Test "Backdoor Account" Scenario
-In a server environment, attackers often create a local admin account to maintain persistance
+In a server environment, attackers often create a local admin account to maintain persistence
 - On Server 2025 machine
   - `net user /add BackupAdmin Password123!`
   - `net localgroup administrators BackupAdmin /add`
@@ -124,7 +124,7 @@ index=main source="WinEventLog:Security" (EventCode=4720 OR EventCode=4732)
 | table _time, ComputerName, New_Account_Account_Name, user_group
 ~~~
 
-### Test "Passsword Reset" Scenario (Event 4724)
+### Test "Password Reset" Scenario (Event 4724)
 Instead of creating a new user, an attacker might hijack an existing local account (like the built-in Guest or a Support account) by resetting its password.
 
 - On Server 2025 machine
@@ -203,7 +203,7 @@ sc.exe delete "WindowsHealthUpdater"
 
 The Command: sc.exe create BackdoorService binPath= "C:\path\to\malware.exe" start= auto
 
-Splunk searchs
+Splunk searches
 - Event 4697
 ~~~
 index=main source="WinEventLog:Security" EventCode=4697

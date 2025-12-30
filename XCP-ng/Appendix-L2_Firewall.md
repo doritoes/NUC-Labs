@@ -13,7 +13,7 @@ Warnings:
 - Most L2 firewalls cannot do IPS; needs confirmation for OPNsense
 
 Overview:
-- Using OPNsesnse 25.7
+- Using OPNsense 25.7
 - Start from a default installation on a virtual device with 3 interfaces
 - Disable DHCP server on LAN
 - Create a Bridge interface and assign a management IP address to it
@@ -30,7 +30,7 @@ Overview:
 - Add a private network for the secured host(s)
   - Home > Hosts > xcp-ng-lab1
   - Network > Manage
-  - Add a newwork
+  - Add a network
     - Interface: *leave blank*
     - Name: L2net
     - Description: Layer 2 bridged network off lab
@@ -198,14 +198,14 @@ Overview:
 - Pool **xcp-ng-lab1`
 - Template: choose from **win10-lan-ready**, **win11-lan-ready** or **ubuntu-desktop-lan**
 - Name: **l2test**
-- Decription: testing L2 firewall
+- Description: testing L2 firewall
 - Make sure network is **L2net**
 - If you choose Window 11 template, remember to use Advanced settings to disable adding a VTPM
 - Click **Create**
 
 # Testing
-- At this point network connectivity is working (ping, nsloookup), Internet
-- Create a rule for the LAN interface to block certain traffic (enable loggingfor the rule)
+- At this point network connectivity is working (ping, nslookup), Internet
+- Create a rule for the LAN interface to block certain traffic (enable logging for the rule)
   - Place the rule above the allow rule, save and apply changes
 - View the firewall logs
   - Firewall > Log Files > Live View

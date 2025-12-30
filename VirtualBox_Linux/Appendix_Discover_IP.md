@@ -34,4 +34,4 @@ Example: https://angryip.org/
 - Cons: requires Java on Linux
 
 ## Troubleshooting
-- *Incorrect bridge interface name* - if this is incorrect, you server will not be able to retreive an IP address (via DHCP)
+- *Incorrect bridge interface name* - if this is incorrect, you server will not be able to retrieve an IP address (via DHCP)

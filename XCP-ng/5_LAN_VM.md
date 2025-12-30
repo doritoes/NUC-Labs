@@ -175,7 +175,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - How could you use Templates to quickly roll out a number of servers of the same type?
 
 # Windows 10
-IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+IMPORTANT Windows 10 is officially end of support. However it is still super useful in labs like this.
 
 - From the left menu click **New** > **VM**
   - Select the pool: **xcp-ng-lab1**
@@ -328,7 +328,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
   - Disable all privacy settings and click Next
   - Disable all privacy settings and click Accept
   - Your device will a DESKTOP-xxxxxxx name
-  - If you chose to break the network connectivity insteady of bypassing the account creation
+  - If you chose to break the network connectivity instead of bypassing the account creation
     - Select Set up for personal use (feel free to experiment)
     - Disconnect from the Internet and start over
       - Option 1 - power down the VyOS router for a while
@@ -604,7 +604,7 @@ Steps:
     - Optionally install LDAP if you have an LDAP directory server (untested)
     - Optionally install Quick Connect feature (untested)
     - Optionally install History Recorded Storage feature (untested)
-    - Optionally protect Guacamole beind Nginx reverse proxy (untested)
+    - Optionally protect Guacamole behind Nginx reverse proxy (untested)
       - this enables https
     - Optionally redirect http://domain.root:8080 to /guacamole (may break DUO) (untested)
 - Note the location the log files:
@@ -630,7 +630,7 @@ Steps:
       - Post: blank?
       - Connection timeout: ?
       - Username: the username (lab)
-      - Pasword: the password
+      - Password: the password
       - Domain: blank
       - Security mode: NLA (network level authentication)
       - Disable Authentication: leave default = unchecked
@@ -693,7 +693,7 @@ Steps:
 
 To enable HTTPS, enable "Protect Guacamole behind Nginx reverse proxy" during the easy installation script.
 - this enables https on the nginx proxy with a certificate that you can update late
-- you can select a self-signed certifificate or a Let's Encrypt certificate
+- you can select a self-signed certificate or a Let's Encrypt certificate
   - self-signed: tested ✅
   - Let's Encrypt: not tested
     - Yes add Let's Encrypt TLS support to Nginx reverse proxy

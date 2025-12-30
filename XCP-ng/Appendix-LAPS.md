@@ -9,9 +9,9 @@ NOTE Microsoft Entra ID process is very different from our Lab AD setup
 Overview of Steps
 1. Extend AD schema
 2. Set computer permissions
-3. Create a GPO and link to the OUs containing your coputers
+3. Create a GPO and link to the OUs containing your computers
 4. Configure LAPS GPO settings
-5. Deply and Verify
+5. Deploy and Verify
 
 How to
 1. Update a password in Windows Server Active Directory
@@ -42,7 +42,7 @@ Members of the Domain Admins group already have password query permission by def
 - On `dc-1`
   - from administrative powershell
     - `New-GPO -Name "LAPS Configuration Policy" | New-GPLink -Target "DC=xcpng,DC=lab"`
-  - from group policy managment console
+  - from group policy management console
     - expand forest: xcpng.lab
     - expand domains: xcpng.lab
     - Right click "LAPS Configuration Policy" and click **Edit**
@@ -60,14 +60,14 @@ Members of the Domain Admins group already have password query permission by def
   - Click Show password to reveal the randomized password
   - If you try to log in to `branch1-1` console as .\Administrator with this password, you will find the local Administrator account is Disabled
     - The main benefit in this lab is for servers and PCs a local Administrator account
-    - It doesn't take care of other local accounts with administrator rights on the Windows 11 systems (for example I used the user "Lab" to intially set up Windows 11; that account is not affected by LAPS with these settings)
+    - It doesn't take care of other local accounts with administrator rights on the Windows 11 systems (for example I used the user "Lab" to initially set up Windows 11; that account is not affected by LAPS with these settings)
 
 NOTES
 - Over time group policy will update on all the systems
 - You can enable encryption of the password and lock down who can decrypt it
 - You can force expiration of the LAPS password so it will update sooner
 - You can use power shell to receive passwords and expire them
-- Use Ansbible or powershell to enable local Administrator accounts on all Windows 11 workstations and default the local user we created when we originally built the workstations
+- Use Ansible or powershell to enable local Administrator accounts on all Windows 11 workstations and default the local user we created when we originally built the workstations
 
 Example tasks:
 ```

@@ -5,16 +5,16 @@ Features:
 - <ins>NOT</ins> the same as Docker or Kubernetes containers; LXD extends LXC (Linux Container) with important improvements
   - Docker isolates ONE application in ONE container; allows running multiple isolated applications on a server
   - LXC isolates ONE operating system in ONE container; allows running multiple isolated OS on a server
-  - LXD improves LXC isolation, allows migration server to server while its runnning, improved resoure controls
+  - LXD improves LXC isolation, allows migration server to server while its running, improved resource controls
 - use kernel of the host system that they run on, instead of emulating a full operating system (OS). This means that containers can access resources on the host system directly.
-- pnly Linux distributions can be run in Proxmox Containers
+- only Linux distributions can be run in Proxmox Containers
 - For security reasons, access to host resources needs to be restricted. Therefore, containers run in their own separate namespaces. Additionally some syscalls (user space requests to the Linux kernel) are not allowed within containers.
 
 Using pre-built templates:
 - Expand **Datacenter** > **proxmab-lab**
 - Click **local (proxmox-lab)**
 - Click **CT templates**
-- Cick **Templates**
+- Click **Templates**
 
 ### Ubuntu
 As you perform these Lab steps, note the many options available to you
@@ -91,9 +91,9 @@ As you perform these Lab steps, note the many options available to you
   - Open console; start if not already started
   - Log in as user `root` with the password you selected
     - By default you cannot ssh as root with a password; use ssh with keys or add another user
-  - Follw the first boot configuration wizard
+  - Follow the first boot configuration wizard
     - Password for MySQL `adminer`: *select a password*
-    - Skip setting up TurknKey Hub services
+    - Skip setting up TurnKey Hub services
     - Skip setting up System Notifications and Critical Security Alerts
     - **Install** security updates and **Reboot**
   - Note links provided for
@@ -101,6 +101,6 @@ As you perform these Lab steps, note the many options available to you
     - Webmin (port 12321)
     - Adminer (port 12322)
     - SSH/SFTP: (port 22)
-- Open Advanced Options and review the available seetings
+- Open Advanced Options and review the available setings
 - Browse the the IP address from a workstation the same network (e.g., `win10-desk` or `desktop-lan`)
   - Try the links on the page

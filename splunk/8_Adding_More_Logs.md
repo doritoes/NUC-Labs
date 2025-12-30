@@ -3,7 +3,7 @@ You can add more log sources to Splunk. Firewalls and NAS devices are really use
 
 In the majority of cases you will use the "agentless" approach to configure the device to send syslog (UDP/TCP) directly to Splunk. For production configurations using a Splunk Heavy Forwarder (HF). It's full Splunk Enterprise instance dedicated to collect, parse, filter, and route machine data. It reduces the load on indexers, stores data locally before sending it.
 
-In this lab we will send directly to the Splunk server, which is our head-end and indexer. Options include configuring a Syslog-NG service on the Splunk server to injest from, or syslogging directly to Splunk. We will log directly to Splunk.
+In this lab we will send directly to the Splunk server, which is our head-end and indexer. Options include configuring a Syslog-NG service on the Splunk server to ingest from, or syslogging directly to Splunk. We will log directly to Splunk.
 
 IMPORTANT Sending logs to Splunk isn't useful without a Splunk plug-in to parse the logs to match the common information model (CIM). To actually understand the logs (parsing the firewall rules, NAT translations, and DHCP leases), you need an Add-on to perform CIM (Common Information Model) mapping.
 
@@ -17,12 +17,12 @@ NAS:
 
 
 ## pfSense
-Set up UDP syslog to Splunk. I prefer TCP but my version only uses TDP.
+Set up UDP syslog to Splunk. I prefer TCP but my version only uses UDP.
 - Pros: Easy to set up; no extra software on the firewall.
 - Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
 
 ### On Splunk
-- Intall the pfSense plug-in - https://splunkbase.splunk.com/app/5613
+- Install the pfSense plug-in - https://splunkbase.splunk.com/app/5613
   - Log in, follow link to https://github.com/barakat-abweh/ta-pfsense
   - git clone https://github.com/barakat-abweh/ta-pfsense.git
   - mv ta-pfsense TA-pfsense
@@ -53,7 +53,7 @@ Set up UDP syslog to Splunk. I prefer TCP but my version only uses TDP.
     - Remote Syslog Contents
       - Firewall Events
       - DHCP Events
-      - add additonal log types as you wish
+      - add additional log types as you wish
 
 ### Search
 Unfortunately my test pfSense logs aren't fully parsing yet. My version is 2.7.2
@@ -67,8 +67,8 @@ Set up TCP syslog to Splunk.
 - Cons: UDP is "fire and forget" (logs can be dropped during network congestion); standard syslog isn't encrypted.
 
 NOTE NAS devices can support a lot of different application. Here are a couple use cases.
-- detect brute-force attempts to the managment interface or SMB shares
-- detect renames or modifying of bulk amount of files (ransomewar)
+- detect brute-force attempts to the management interface or SMB shares
+- detect renames or modifying of bulk amount of files (ransomware)
 
 ### On Splunk
 - Install the Synology plug-on - https://splunkbase.splunk.com/app/7316

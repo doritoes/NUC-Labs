@@ -48,7 +48,7 @@ NOTES
 - Log in using the XOA ADMIN ACCOUNT you configured earlier
 - You will need to register the XOA, you will be "reminded" constantly to do this
   - From the XOA menu, XOA > Updates
-  - Registeration:
+  - Registration:
     - enter the username and password you registered with, then click **Register**
     - Optionally, you can click **Start trial** (30 days)
 - Apply Updates
@@ -209,7 +209,7 @@ You may choose to keep the XOA virtual appliance if you have enough CPU cores an
 ## Optionally Reserve IP address for xo-ubuntu
 Now is a good time to create a dhcp reservation for xo-ubuntu for a fixed IP address. This is super helpful, so the IP address does not change.
 
-TIP To tell Ubunutu 24.04 to refesh the IP address, `networkctl renew`
+TIP To tell Ubuntu 24.04 to refresh the IP address, `networkctl renew`
 - `networkctl list`
   - note the link enX0
 - `sudo networkctl renew enX0`
@@ -263,7 +263,7 @@ This is how the host system (XCP-ng) is updated. The XOA free version does not a
 - Click **Install pool patches**
   - note the message "This will automatically restart the toolstack on every host. Running VMs will not be affected. Are you sure you want to continue and install all the patches on this pool?"
   - Click OK
-  - If you get the warning that an error occured, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing
+  - If you get the warning that an error occurred, run "yum install xcp-ng-updater" on the host, it's probably because the is an update process still ongoing
 - Reboot the host
   - Click **Home** > **Hosts**
   - Click on `xcp-ng-lab1`

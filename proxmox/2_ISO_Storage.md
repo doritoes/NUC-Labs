@@ -72,7 +72,7 @@ IMPORTANT This will create a subdirectory "template" and inside that the "iso" d
 - Copy your ISOs inside this "iso" location to be accessible from proxmox
 
 ### NFS
-REMEMBER your NFS server (NAS) may require you to add the proxymox host's IP address to its permissions
+REMEMBER your NFS server (NAS) may require you to add the proxmox host's IP address to its permissions
 - From the left pane click **Datacenter**
 - Click **Storage** and then click **Add** > **NFS**
 - ID: **ISO-NFS**
@@ -89,7 +89,7 @@ IMPORTANT This will create a subdirectory "template" and inside that the "iso" d
 We will also demonstrate storing .iso files on the proxmox host, which you might want to avoid--it uses up storage on our host.
 
 1. Log in to proxmox (e.g., https://192.168.99.205:8006)
-2. From the left menu, expand **Datacenter** > **proxymox-lab** > **local (proxmox-lab)**
+2. From the left menu, expand **Datacenter** > **proxmox-lab** > **local (proxmox-lab)**
 3. Click **ISO Images**
 4. Click **Upload**
 5. Select the ISO file to upload, and click **Upload**

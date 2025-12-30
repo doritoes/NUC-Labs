@@ -108,7 +108,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated*
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `desktop-lan`
     - Click **Clone**
@@ -205,7 +205,7 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `server-lan`
     - Click **Clone**
@@ -224,11 +224,11 @@ NOTE Ubuntu 22.04 Desktop runs on less vCPU and RAM requirements. 1vCPU 2GB RAM,
 - Download the virtio-win drive ISO
   - https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
   - similar to virtio-win-0.1.240.iso
-- Upload to your ISO store with your Windows, Ubunutu ISO images
+- Upload to your ISO store with your Windows, Ubuntu ISO images
   - We will use this to configure Windows systems
 
 # Windows 10
-IMPORTANT Windows 10 is officially end of support. However it is still super userful in labs like this.
+IMPORTANT Windows 10 is officially end of support. However it is still super useful in labs like this.
 
 NOTE When creating a Windows VM, pay attention to the network Model setting
 - VirtIO (paravirtualized) will not be detected by Windows 10 until you install the drivers
@@ -240,7 +240,7 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 - Windows Server - recommend VirtIO
 
 NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
-- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- proxmox recommends VirtIO SCSI single, but this requires installing the driver during Windows installation
 - If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
 
 Steps:
@@ -261,7 +261,7 @@ Steps:
   - System tab
     - BIOS: OVMF (UEFI)
     - EFI Storage: local-lvm
-    - Queme Agent: Enabled
+    - Quemu Agent: Enabled
   - Disks tab
     - Disk size: **128GB**
     - Cache: **Write back**
@@ -325,7 +325,7 @@ Steps:
       - Later, when you are logged in, install network drivers from the VirtIO CD
       - Open the Device Manager
       - Select the unknown VirtIO Ethernet adapter, update driver, local matching, browse to CD
-      - Yes allow your PC to be dicoverable
+      - Yes allow your PC to be discoverable
     - Select **Set up for personal use** (feel free to experiment)
     - Click **Offline account** then click **Limited experience**
     - User: **lab**
@@ -370,7 +370,7 @@ Steps:
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated**
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `win10-desk`
     - Click **Clone**
@@ -400,7 +400,7 @@ NOTE When creating a Windows VM, pay attention to the network Model setting
 - Windows Server - recommend VirtIO
 
 NOTE When creating a Windows VM, pay attention to the SCSI Controller setting
-- proxmox recommends VirtIO SCSI single, but this requries installing the driver during Windows installation
+- proxmox recommends VirtIO SCSI single, but this requires installing the driver during Windows installation
 - If you set the default SCSI controller (LSI 53C895A) you will use a slower emulated IDE drive, which is fine in a lab like this
 
 IMPORTANT If you want to set up using a local account instead of a Microsoft account
@@ -429,7 +429,7 @@ Steps:
     - Check **Add TPM**
     - Machine: **q35**
     - SCSI Controller: **VirtIO SCSI single**
-    - Check **Qemu Agenmt**
+    - Check **Qemu Agent**
     - TPM Storage: select **local-lvm**
     - EFI Storage: select **local-lvm**
   - Disks tab
@@ -502,10 +502,10 @@ Steps:
     - Disable all privacy settings and click **Next**
     - Disable all privacy settings and click **Accept**
     - Your device will a DESKTOP-xxxxxxx name
-    - If you chose to break the network connectivity insteady of bypassing the account creation
+    - If you chose to break the network connectivity instead of bypassing the account creation
       - Select **Set up for personal use** (feel free to experiment)
       - Disconnect from the Internet and start over
-        - Option 1 - power down the voyos router for a while
+        - Option 1 - power down the vyos router for a while
         - Option 2 - edit the VM's network device and check Disconnect for now; uncheck it later
       - At *Let's connect you to a network*
         - Click **I don't have internet**
@@ -563,7 +563,7 @@ Steps:
   - Click More > Clone
     - Target node: **proxmox-lab**
     - VM ID: *automatically populated** (up to 110)
-    - Mode: **Linked Clone** is recommeded (saves space across all the clones)
+    - Mode: **Linked Clone** is recommended (saves space across all the clones)
       - the other option is Full Clone
     - Name: `win11-desk`
     - Click **Clone**
@@ -594,7 +594,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
       - Version: **11/2022/2025**
     - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image you uploaded
   - System tab
-    - No TPM or EFI disk requried (uncheck)
+    - No TPM or EFI disk required (uncheck)
     - SCSI controller: VirtIO SCSI single
     - Machine: q35
     - Qemu Agent: Checked
@@ -657,13 +657,13 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Yes, allow the server to be discovered by other hosts on the network
 - Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
   - Open the Device Manager
-  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Communications Controller
     - Open the unrecognized device
     - Click Update Driver
     - Click Browse my computer for drivers
     - Click Browse
     - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
-    - Click Next and the drver wil be found. Click Clost
+    - Click Next and the driver will be found. Click Close.
   - When prompted about whether to allow the server to be discoverable, choose **Yes**
 - Remove the VirtIO CD ISO
 - Apply Windows Updates (reboots included)
@@ -672,7 +672,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
   - Slide to Enable Remote Desktop then accept the message
   - Install QEMU Guest Agent
     - We already installed the drivers for the required VirtIO devices
-    - From the virtio CD, run guest-agen > quemu-ga-x86_64.msi
+    - From the virtio CD, run guest-agent > quemu-ga-x86_64.msi
     - In proxmox, viewing the VM's summary will show the IP address, confirming it is working
 - Change the hostname to `server2022-lan-ready`
   - From administrative powershell: `Rename-Computer -NewName server2022-lan-ready`
@@ -734,7 +734,7 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
       - Version: **11/2022/2025**
     - Check **Add additional drive for VirtIO drivers** and select the virtio ISO image
   - System tab
-    - No TPM or EFI disk requried
+    - No TPM or EFI disk required
       - Missing TPM means no bitlocker and other capabilities
       - Feel free to experiment
     - SCSI controller: VirtIO SCSI single
@@ -799,13 +799,13 @@ See also https://www.youtube.com/watch?v=XWvXXGL7Yl4
 - Send diagnostic data to Microsoft: **Required only** then **Accept**
 - Install the VirtIO network driver (you can avoid this step by using Intel E1000 in proxmox, but that is really slow for a server)
   - Open the Device Manager
-  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Commuications Controller
+  - Repeat for Ethernet Controller and (while we are here) for PCI Device and PCI Simple Communications Controller
     - Open the unrecognized device
     - Click Update Driver
     - Click Browse my computer for drivers
     - Click Browse
     - Select the CD/DVD drive you have mounted with the virtio ISO (you can mount it right now if you need to)
-    - Click Next and the drver will be found. Click Close
+    - Click Next and the driver will be found. Click Close
   - When prompted about whether to allow the server to be discoverable, choose **Yes**
 - Apply Windows Updates (reboots included)
 - Enable RDP

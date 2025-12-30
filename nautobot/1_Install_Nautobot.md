@@ -3,7 +3,7 @@ This corresponds to chapter 3 in the book. See https://github.com/PacktPublishin
 
 The passwords used in the Lab are weak and are only suitable for Lab use. Use secure authentication in production. In this Lab, I used Nautobot 2.3.12 with Django 4.2.16.
 
-Nautobot is insecure, using http (no https). The instructions to secure Nautobot with https involved using NGINX as a web server in front of the Nautobox WSGI.
+Nautobot is insecure, using http (no https). The instructions to secure Nautobot with https involved using NGINX as a web server in front of the Nautobot WSGI.
 - https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/http-server/
 - [Appendix - Configuring HTTPS](appendix_https.md)
 
@@ -104,7 +104,7 @@ See the tutorial https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 #### Create nautobot system user and set up Python environment
 It is best practice to run Nautobot as a user other than root. This user, `nautobot`, will own files and permissions and services will be configured to run under this account.
 
-A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to indivdual projects, preventing any interference with system packages or other projects.
+A Python virtual environment (virtual env or nenv) is strongly recommended. If you haven't used one yet, you're not alone. But it's not as difficult as you would imagine. This helps created isolated environments tailored to individual projects, preventing any interference with system packages or other projects.
 
 Here we create demonstrate configuring for the user `nautobot` right from the user `nauto`.
 
@@ -167,17 +167,17 @@ Set up the Nautobot database:
   - `pip install pyyaml`
 - Install Nautobot
   - `pip install nautobot`
-    - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-combiled binaries and faster installation.
+    - ⏲️ Allow a couple minutes for it to install. Using wheel means pre-compiled binaries and faster installation.
   - NOTE You can specific the book version like so: `pip install nautobot==2.1.4`
   - NOTE You can install additional features (MySQL, LDAP, NAPALM, remote_storage, SSO, etc.) by modifying the pip install command
-    - `pip install nautobot[all]` - in Lab testing, this failed geeting requirements
+    - `pip install nautobot[all]` - in Lab testing, this failed getting requirements
     - `pip install nautobot[napalm,mysqlclient]`
 - Test
   - `ansible --version`
   - `nautobot-server --version`
 
 ### Configure Nautobot
-- Initialize Nautobox basic configuration will create the `nautobot_config.py` tool.
+- Initialize Nautobot basic configuration will create the `nautobot_config.py` tool.
   - `nautobot-server init`
     - 🗒️ for this Lab, I don't send installation metrics to the developers
 - Test
@@ -185,7 +185,7 @@ Set up the Nautobot database:
 - Customize `nautobot_config.py`
   - `vi $NAUTOBOT_ROOT/nautobot_config.py`
   - Required Settings
-    - Uncomment (remote the leading" "#") the following parts
+    - Uncomment (remove the leading" "#") the following parts
       - ALLOWED_HOSTS
       - CACHES
       - CONTENT_TYPE_CACHE_TIMEOUT
@@ -209,7 +209,7 @@ Set up the Nautobot database:
   - NOTE It won't tell you if you forgot to run `nautobot-server collectstatic`
 - Test run a development instance
   - `nautobot-server runserver 0.0.0.0:8080 --insecure`
-  - Point web broswer to the IP address of VM using port 8080
+  - Point web browser to the IP address of VM using port 8080
     - Ex. http://192.168.99.14:8080
     - Log in as `admin`/`nautobot123`
     - Press control-C at the terminal to stop it
@@ -219,7 +219,7 @@ Set up the Nautobot database:
   - `nautobot-server celery worker`
   - Press control-C to stop it
 - Configure WSGI
-  - Django applications run WSGI aplications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
+  - Django applications run WSGI applications behind HTTP server. Nanobot has uWSGI by default. For production builds, consider a more fully featured option.
   - In this test we will not use advanced features such as a reverse proxy; therefore we will use `http` mode instead of `socket` and port 8001
   - Download [uwsgi.ini](uwsgi.ini) and copy to a new file `$NAUTOBOT_ROOT/uwsgi.ini`
   - Start it
@@ -239,7 +239,7 @@ Set up the Nautobot database:
     - `sudo systemctl enable --now nautobot`
   - Test
     - `systemctl status nautobot.service`
-    - Point your broswer to the VM's IP address on port 8001 (attempts to use https will fail)
+    - Point your browser to the VM's IP address on port 8001 (attempts to use https will fail)
       - Example: http://192.168.99.14:8001
   - Configure Nautobot workers as Linux service
     - IMPORTANT This method uses credentials stored in plain text, NOT suitable for production!

@@ -1,7 +1,7 @@
 # Tested Windows 8.1 Installations
 NOTE This is for the pentesting Lab environment.
 
-IMPORTANT Requires an 8.1 licence key
+IMPORTANT Requires an 8.1 license key
 
 ISO: en_windows_vista_sp2_x64_dvd_342267.iso
 - Template: Other install media
@@ -15,7 +15,7 @@ Examining advanced settings:
 - Viridian: enabled
 - VGA: disabled
 Steps:
-- Confirm language, time/currency format, and keybord, then click **Next**
+- Confirm language, time/currency format, and keyboard, then click **Next**
 - Click **Install now**
 - Enter a product key and click **Next**
 - Check the box and **Next**
@@ -25,7 +25,7 @@ Steps:
 - Click **Express settings**
 - Creating a Microsoft account will fail, click **Create a local account**
 - Enter and username, password, and password "hint", then click **Finish**
-- When installation is complete, eject the installation ISOchom
+- When installation is complete, eject the installation ISO cdrom
 Testing:
 - got IP address from OPNsense firewall OK
 - Internet access works

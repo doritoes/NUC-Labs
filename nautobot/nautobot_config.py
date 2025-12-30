@@ -95,7 +95,7 @@ SECRET_KEY = os.getenv("NAUTOBOT_SECRET_KEY", "wxvrouuoc0d&amp;3#%*5-ppnke&amp;8
 # If running Nautobot under a single domain, you may not need to set this variable;
 # if running on multiple domains, you *may* need to set this variable to more or less the same as ALLOWED_HOSTS above.
 # You also want to set this variable if you are facing CSRF validation issues such as
-# 'CSRF failure has occured' or 'Origin checking failed - https://subdomain.example.com does not match any trusted origins.'
+# 'CSRF failure has occurred' or 'Origin checking failed - https://subdomain.example.com does not match any trusted origins.'
 # https://docs.djangoproject.com/en/stable/ref/settings/#csrf-trusted-origins
 #
 # CSRF_TRUSTED_ORIGINS = []

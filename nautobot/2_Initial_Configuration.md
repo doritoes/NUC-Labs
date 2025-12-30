@@ -1,7 +1,7 @@
 # Initial Configuration
 This corresponds to the latter part of chapters 3 and 10 in the book. See https://github.com/PacktPublishing/Network-Automation-with-Nautobot
 
-You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creatings things.
+You can't create objects without the required fields. So we need to do some pre-work to get things set up before we start creating things.
 
 ## Create API token for CRUD Operations
 - Log in to your nautobot instance
@@ -18,7 +18,7 @@ You can't create objects without the required fields. So we need to do some pre-
   - echo "export NAUTOBOT_TOKEN=<<tokenvalue>>" | tee -a ~nautobot/.bashrc
 - Add the NAUTOBOT_URL environment variable
   -  echo "export NAUTOBOT_URL=http://localhost:8001" | tee -a ~nautobot/.bashrc
-- Log out and back in, you will have the token stored in the envrironment variable
+- Log out and back in, you will have the token stored in the environment variable
   - or run `source .bashrc`
 
 ## Device Prerequisites
@@ -58,7 +58,7 @@ Some common roles you might have in your home lab are provided. Import these.
 ### Using Ansible
 1. Copy the playbook [01-roles.yml](ansible/01-roles.yml)
 2. Copy the prepared CSV file [roles.csv](roles.csv)
-3. Run the playboook `ansible-playbook 01-roles.yml`
+3. Run the playbook `ansible-playbook 01-roles.yml`
 
 ## Manufacturers
 Represents the name of a device's manufacturer. Used in Device Types.
@@ -86,7 +86,7 @@ Examples follow:
 ### Using Ansible
 1. Copy the playbook [02-manufacturers.yml](ansible/02-manufacturers.yml)
 2. Copy the prepared CSV file [manufacturers.csv](manufacturers.csv) or create your own (see above)
-3. Run the playboook `ansible-playbook 02-manufacturers.yml`
+3. Run the playbook `ansible-playbook 02-manufacturers.yml`
 
 ## Device Families
 Represents a group of related device types. Optionally used in Device Types.
@@ -112,7 +112,7 @@ Required fields:
 TIP Import from community library https://github.com/nautobot/devicetype-library
 
 ### Manually
-- From the left menu expance **DEVICES**
+- From the left menu expand **DEVICES**
 - Click **Device Types**
 - Click the <ins>drop down</ins> for Add Device Type
 - Click **Import from JSON/YAML (single record)**
@@ -132,7 +132,7 @@ TIP Import from community library https://github.com/nautobot/devicetype-library
   - [Synology DS224+.yaml](device-types/DS224+.yaml)
   - [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml)
     - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-  - [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
+  - [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxmox
   - [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
 
 ### Using Ansible
@@ -152,10 +152,10 @@ Therefore there is a two-step process
       5. [Unifi U7-Pro.yaml](device-types/U7-Pro.yaml)
       6. [Synology DS224+.yaml](device-types/DS224+.yaml)
       7. [Qotom Q555G6-S05.yaml](device-types/Q555G6-S05.yaml) - Qotom-Q555G6-S05 Qotom Mini PC Intel Core i5 7200U Industrial Micro PC Barebone System Dual Core Desktop Small Computer with 6 Gigabit Ethernet NIC; used as firewall running pfSense
-      8. [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) - Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxymox
+      8. [NUC10i7FNH1.yaml](device-types/NUC10i7FNH1.yaml) - Intel NUC NUC10i7FNH1 Intel Core i7-10710U - running proxmox
       9. [NUC14RVH.yaml](device-types/NUC14RVH.yaml) Asus NUC NUC14RVH - 🌱 added ASUS manufacturer to manufacturers.csv - running XCP-ng
       10. Find more at https://github.com/nautobot/devicetype-library/tree/main/device-types
-   3. Run the playboook `ansible-playbook 03-device-types.yml`
+   3. Run the playbook `ansible-playbook 03-device-types.yml`
 2. Create a CSV file, extracting the data from the yaml files and preparing it for Ansible device_interface_template
    1. Copy the Python script [scrape-device-types-interfaces.py](scrape-device-types-interfaces.py)
    2. Run the script `python3 scrape-device-types-interfaces.py`
@@ -164,7 +164,7 @@ Therefore there is a two-step process
       - creates a CSV file ready for Ansible
 3. Add the interfaces to the devicetypes
    1. Copy the playbook [04-device-types-interfaces.yml](ansible/04-device-types-interfaces.yml)
-   2. Run the playboook `ansible-playbook 04-device-types-interfaces.yml`
+   2. Run the playbook `ansible-playbook 04-device-types-interfaces.yml`
 
 ## Location Types
 ### Manually
@@ -176,7 +176,7 @@ From the left menu click **Organization** > **Location Types**
 
 ### Using Ansible
 1. Copy the playbook [05-location-types.yml](ansible/05-location-types.yml)
-2. Run the playboook `ansible-playbook 05-location-types.yml`
+2. Run the playbook `ansible-playbook 05-location-types.yml`
 
 ## Locations
 Represents the site where the device is installed. Some examples:
@@ -191,7 +191,7 @@ requires:
 
 optionally:
 - parent
-- facility (example data center prvider and facility such as Equinix NY7)
+- facility (example data center provider and facility such as Equinix NY7)
 - ASN (BGP ASN number)
 - timezone
 - description
@@ -207,7 +207,7 @@ From the left menu click **Organization** > **Locations**
 
 ### Using Ansible
 1. Copy the playbook [06-locations.yml](ansible/06-locations.yml)
-2. Run the playboook `ansible-playbook 05-locations.yml`
+2. Run the playbook `ansible-playbook 05-locations.yml`
 
 ## Tags
 Create tag for management interfaces.
@@ -223,12 +223,12 @@ From the left menu click **Organization** > **METADATA**
 
 #### Using Ansible
 1. Copy the playbook [07-tags.yml](ansible/07-tags.yml)
-2. Run the playboook `ansible-playbook 07-tags.yml`
+2. Run the playbook `ansible-playbook 07-tags.yml`
 
 ## Statuses
 Represents the status of a device. Comes with prepopulated list and you can add your own. Examples follow:
 - Active
-- Decomissioning
+- Decommissioning
 - Planned
 
 No custom statuses are required for this Lab.

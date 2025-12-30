@@ -8,7 +8,7 @@ IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully funct
 - Can RDP from branch1-1 to file-1 as AD\juliette.larocco2, not branch3-1 (for example)
 - Turning off require NLA on the destination workstation didn't solve the issue
 - Run rsop.msc on the target system
-  - Computer configuration > Windows Settings > Secruity Settings > Local Policies
+  - Computer configuration > Windows Settings > Security Settings > Local Policies
     - User Rights Assignments > Allow log on through Remote Desktop Services Properties
     - Security Options
 - Review Default Domain Policy
@@ -37,7 +37,7 @@ IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully funct
       - will be disabled (or completely removed) after Branch 1 configuration is complete
     - Second one: `branch1mgt`
 - Log in to the console of `manager`
-- Windows 11 has "Windows Terminal " intalled
+- Windows 11 has "Windows Terminal " installed
   - This makes it easy to switch between CMD, Powershell, and WSL shells
     - I recommend you pin Terminal to the taskbar for easy access
   - If you don't have it installed, install from the app store
@@ -69,7 +69,7 @@ IMPORTANT In the R81.20 version of this Lab, RDP to workstations was fully funct
     - This is how you can access WSL in the future; also found as Ubuntu-24.04 in the start menu
     - Update packages
       - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
-      - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passswd lock: Invalid argument*
+      - NOTE WSL 1 has the issue of throwing the error *Failed to take /etc/passwd lock: Invalid argument*
         - https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/2069555/comments/12
         - Here is a fix
           - `sudo sed -i -e '/systemd-sysusers/s/\.conf$/.conf || true/' /var/lib/dpkg/info/*.postinst`
@@ -335,8 +335,8 @@ Steps:
   - [branch1-push.yml](ansible/branch1-push.yml)
     - `ansible-playbook -i inventory-api branch1-push.yml`
 
-## Apply Jumbo Hotfixs to SMS and firewalls
-At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivty you configured in branch 1.
+## Apply Jumbo Hotfixes to SMS and firewalls
+At this point you should be able to install a JHF on the SMS and on the firewalls. This will used the Internet connectivity you configured in branch 1.
 
 CLI process for `sms` (also works on firewalls, but we are going to use SmartConsole to upgrade firewalls)
   - SSH or console to sms
@@ -365,7 +365,7 @@ SmartConsole process for `firewall1` cluster
 Disable lab-connected interface on `manager`, leaving sole connection via Branch 1 Management network
 - Click **Start** > **Settings** > **Network & Internet** > **Ethernet**
 - Click **Advanced network settings**
-- Click Ethernet (unidentified newtork)
+- Click Ethernet (unidentified network)
 - More adapter options: click **Edit**
   - Properties > Internet Protocol Version 4 (TCP/IP/IPv4)
   - Configure default gateway: **192.168.41.1**
@@ -811,7 +811,7 @@ Disable lab-connected interface on `manager`, leaving sole connection via Branch
   - copy the .cer file to `dc-1` at `c:\certificate.cer`
     - for example, copy the certificate to the `\\file-1\it` share from `manager`, and pick it up from there from `dc-1`
   - create the GPO using administrative powershell
-    - `New-GPO -Name "Distribute Root CA Certficate" | New-GPLink -Target "DC=xcpng,DC=lab"`
+    - `New-GPO -Name "Distribute Root CA Certificate" | New-GPLink -Target "DC=xcpng,DC=lab"`
   - Open Group Policy Management Console (GPMC)
     - Click **Start**, search for **Group Policy Management** and click on it
     - Expand Forest: xcpng.lab

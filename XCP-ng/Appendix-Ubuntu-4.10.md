@@ -1,4 +1,4 @@
-# Tested Ununtu 4.10 Warty Warthog Installation
+# Tested Ubuntu 4.10 Warty Warthog Installation
 NOTE This is for the pentesting Lab environment.
 
 ISO: warty-release-install-amd64.iso
@@ -16,7 +16,7 @@ Examining advanced settings:
 Steps:
 - Press ENTER to boot
 - Confirm language, Location, Keyboard
-- Enter the hostame and press enter
+- Enter the hostname and press enter
 - Accept "Erase entire disk"
 - **Yes**, write these changes to disk
 - **Continue** to finish installation
