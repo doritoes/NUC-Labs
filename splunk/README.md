@@ -42,10 +42,6 @@ Installing the "Universal Forwarder" on your other machines so they can start se
 - [Ubuntu_Server](7_Ubuntu_Server.md)
 - [Adding More Logs](8_Adding_More_Logs.md)
 
-## Gotchas
-
-## Learning More
-
 ## Cleanup and Next Steps
 If you installed UF or Sysmon on any machines you won't be reformatting
 - Windows: Uninstall Splunk Universal Forwarder
