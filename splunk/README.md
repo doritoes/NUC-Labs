@@ -1,6 +1,11 @@
 # Splunk Lab
 The mission in this Lab is to build a home Splunk instance and practice working with it.
 
+📰 Microsoft has moved Sysmon from an optional download to a native, built-in capability in the March 2026 Patch Tuesday update (KB5079473). Starting with Windows 11 Build 26200.8037, Sysmon is now part of the Windows "in-box" feature set.
+
+- Zero-Inbound Deployment: No more managing standalone drivers. Enable it instantly with: Enable-WindowsOptionalFeature -Online -FeatureName Sysmon
+- Microsoft warns that you must uninstall any existing standalone Sysinternals Sysmon version before enabling the new native feature to avoid conflicts
+
 Mission:
 - Install and Deploy Splunk on Ubuntu server
 - Kick the tires on the environment
