@@ -74,7 +74,7 @@ IMPORTANT NOTES
         - Click **Create network**
 
 # Download the ISO and SmartConsole Client
-For this lab we are using [R820](https://support.checkpoint.com/results/sk/sk181127)
+For this lab we are using [R82](https://support.checkpoint.com/results/sk/sk181127)
 - Download Check Point R82 Gaia Fresh Install iso
   - https://support.checkpoint.com/results/download/135012
 - Download Check Point R82 SmartConsole package
