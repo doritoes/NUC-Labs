@@ -11,7 +11,7 @@ Updated Software Versions:
 - Terraform 1.13.5
 - Windows 11
 - Windows Server 2025
-- Check Point R82
+- Check Point R82.10
 
 NOTE When you are deploying to a different SR than where the template is stored, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
 
