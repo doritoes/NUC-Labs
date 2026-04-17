@@ -32,7 +32,7 @@ Notes:
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 - The are known issues with Identity Awareness
-  - The Identity Collector current version R82/R2.10 is not easily available; you need a paid support account with Check Point
+  - The Identity Collector current version R82 is not easily available (no R82.10 version as of this writing); you need a paid support account with Check Point
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
