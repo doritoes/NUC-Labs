@@ -32,7 +32,7 @@ Notes:
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 - The are known issues with Identity Awareness
-  - The Identity Collector current version R82 is not easily available; you need a paid support account with Check Point
+  - The Identity Collector current version R82/R2.10 is not easily available; you need a paid support account with Check Point
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
@@ -120,13 +120,14 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **Check Point R82 template**
+  - Description: **Check Point R82.10 template**
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
     - SMS requires more; we will increase this later
   - Topology: *Default behavior*
-  - Install: ISO/DVD: *Select the Check Point R82 Gaia ISO image you uploaded to an ISO store*
+  - Install: ISO/DVD: *Select the Check Point R82.10 Gaia ISO image you uploaded to an ISO store*
+    - https://sc1.checkpoint.com/documents/Jumbo_HFA/R82.10_SC/Content/R82.10/R82.10-Downloads.htm
   - Interfaces:
     - Network: from the dropdown select the **pool-wide network associated with eth0**
   - Disks: Click **Add disk**
@@ -162,7 +163,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - user `admin` and the password you configured
 - `set hostname CPTEMPLATE`
 - Set up ansible user
-  - Reference [link](https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
+  - Reference [link](https://sc1.checkpoint.com/documents/R82.10/WebAdminGuides/EN/CP_R82.10_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
   - `add user ansible uid 0 homedir /home/ansible`
   - `set user ansible password`
   - `add rba user ansible roles adminRole`
