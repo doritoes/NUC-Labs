@@ -8,7 +8,7 @@ Updated Software Versions:
 - Ubuntu 24.04
 - XO commit fa020 and later
 - Ansible core 2.16.3
-- Terraform 1.13.5
+- Terraform 1.14.9
 - Windows 11
 - Windows Server 2025
 - Check Point R82.10
