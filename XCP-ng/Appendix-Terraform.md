@@ -12,6 +12,7 @@ Updated Software Versions:
 - Windows 11
 - Windows Server 2025
 - Check Point R82.10
+- XenServer VM Tools 10.0.0-1
 
 NOTE When you are deploying to a different SR than where the template is stored, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
 
@@ -190,19 +191,19 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
     - Username: admin
     - Password: the password you selected
     - Accept the warnings
-    - Drag file (i.e., LinuxGuestTools-8.4.0-1.tar.gz) file to the Check Point device's `/home/admin` folder
+    - Drag file (i.e., LinuxGuestTools-10.0.0-1.tar.gz) file to the Check Point device's `/home/admin` folder
     - Close WinSCP
   - From XO with console the Check Point template device
     - Revert to clish shell
       - `chsh -s /etc/cli.sh admin`
     - Install guest tools
-      - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
-      - `cd LinuxGuestTools-8.4.0-1`
+      - `tar xzvf LinuxGuestTools-10.0.0-1.tar.gz`
+      - `cd LinuxGuestTools-10.0.0-1`
       - `./install.sh -d rhel -m el8`
       - press `y`
       - `cd ..`
-      - `rm LinuxGuestTools-8.4.0-1.tar.gz`
-      - `rm -rf LinuxGuestTools-8.4.0-1`
+      - `rm LinuxGuestTools-10.0.0-1.tar.gz`
+      - `rm -rf LinuxGuestTools-10.0.0-1`
     - `halt`
 - Convert `checkpoint-template` to template
   - Click the **Advanced** tab
