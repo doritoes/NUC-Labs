@@ -114,6 +114,10 @@ sudo apt update && sudo apt install -y terraform
   - Click **Convert to template** and confirm
 
 ## Create Check Point firewall Template
+⚠️ Starting R82.10 Issues with the installer not being able to find the hard drive have been a real problem.
+- Tried UEFI instead of BIOS (worked once but couldn't reproduce)
+- Tried UEFI Serial vs VGA
+
 Here we will create a basic Check Point template suitable for an SMS or gateway (firewall).
 - Log in to XO and create a Check Point firewall
 - From the left menu click **New** > **VM**
