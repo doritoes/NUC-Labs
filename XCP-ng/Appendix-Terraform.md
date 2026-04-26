@@ -132,7 +132,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
     - SMS requires more; we will increase this later
   - Topology: *Default behavior*
   - Install: ISO/DVD: *Select the Check Point R82.10 Gaia ISO image you uploaded to an ISO store*
-    - https://sc1.checkpoint.com/documents/Jumbo_HFA/R82.10_SC/Content/R82.10/R82.10-Downloads.htm
+    - https://support.checkpoint.com/results/download/140658
   - Interfaces:
     - Network: from the dropdown select the **pool-wide network associated with eth0**
   - Disks: Click **Add disk**
