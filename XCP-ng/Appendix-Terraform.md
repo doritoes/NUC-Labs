@@ -12,7 +12,7 @@ Updated Software Versions:
 - Windows 11
 - Windows Server 2025
 - Check Point R82.10
-- XenServer VM Tools 10.0.0-1
+- XenServer VM Tools for Linux 10.0.0-1
 
 NOTE When you are deploying to a different SR than where the template is stored, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
 
