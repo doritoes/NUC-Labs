@@ -3,6 +3,11 @@ References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
 IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R81.20, and Windows 10/Server 2022. Updating to latest versions.
 
+MAJOR issues with R82.10.
+- R81.20 was based on RHEL 7.9 (kernel 3.10.0-1160)
+- R82 is based on RHEL 8.6 (kernel 4.18.0-372.9.1)
+- R82.10 is based on RHEL 9.4 (kernel 5.14.0-427.13.1)
+
 Updated Software Versions:
 - XCP-ng 8.3
 - Ubuntu 24.04
