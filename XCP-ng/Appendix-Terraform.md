@@ -3,15 +3,21 @@ References: https://github.com/vatesfr/terraform-provider-xenorchestra
 
 IMPORTANT This Lab was originally built using XCP-ng 8.2, Check Point R81.20, and Windows 10/Server 2022. Updating to latest versions.
 
+MAJOR issues with R82.10.
+- R81.20 was based on RHEL 7.9 (kernel 3.10.0-1160)
+- R82 is based on RHEL 8.6 (kernel 4.18.0-372.9.1)
+- R82.10 is based on RHEL 9.4 (kernel 5.14.0-427.13.1)
+
 Updated Software Versions:
 - XCP-ng 8.3
 - Ubuntu 24.04
 - XO commit fa020 and later
 - Ansible core 2.16.3
-- Terraform 1.13.5
+- Terraform 1.14.9
 - Windows 11
 - Windows Server 2025
-- Check Point R82
+- Check Point R82.10
+- XenServer VM Tools for Linux 10.0.0-1
 
 NOTE When you are deploying to a different SR than where the template is stored, a storage migration is triggered. You are limited to 3 concurrent storage migrations. When deploying, and it reaches this limit, it will error out. Wait a minute(s) and deploy again.
 
@@ -32,7 +38,7 @@ Notes:
   - re-created the templates form "Other installation media" fixed the problem
   - Vates recommends avoiding using "Other installation media" for performance reasons; perhaps they will find a solution to this issue
 - The are known issues with Identity Awareness
-  - The Identity Collector current version R82 is not easily available; you need a paid support account with Check Point
+  - The Identity Collector current version R82 is not easily available (no R82.10 version as of this writing); you need a paid support account with Check Point
   - You need to apply https://support.checkpoint.com/results/sk/sk26059
 
 # Install Terraform
@@ -114,19 +120,24 @@ sudo apt update && sudo apt install -y terraform
   - Click **Convert to template** and confirm
 
 ## Create Check Point firewall Template
+⚠️ Starting R82.10 Issues with the installer not being able to find the hard drive have been a real problem.
+- Tried UEFI instead of BIOS (worked once but couldn't reproduce)
+- Tried UEFI Serial vs VGA
+
 Here we will create a basic Check Point template suitable for an SMS or gateway (firewall).
 - Log in to XO and create a Check Point firewall
 - From the left menu click **New** > **VM**
   - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **checkpoint-template**
-  - Description: **Check Point R82 template**
+  - Description: **Check Point R82.10 template**
   - CPU: **4 vCPU**
     - A standalone gateway might run ok with 2 cores in some cases
   - RAM: **4GB**
     - SMS requires more; we will increase this later
   - Topology: *Default behavior*
-  - Install: ISO/DVD: *Select the Check Point R82 Gaia ISO image you uploaded to an ISO store*
+  - Install: ISO/DVD: *Select the Check Point R82.10 Gaia ISO image you uploaded to an ISO store*
+    - https://support.checkpoint.com/results/download/140658
   - Interfaces:
     - Network: from the dropdown select the **pool-wide network associated with eth0**
   - Disks: Click **Add disk**
@@ -162,7 +173,7 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
   - user `admin` and the password you configured
 - `set hostname CPTEMPLATE`
 - Set up ansible user
-  - Reference [link](https://sc1.checkpoint.com/documents/R81.20/WebAdminGuides/EN/CP_R81.20_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
+  - Reference [link](https://sc1.checkpoint.com/documents/R82.10/WebAdminGuides/EN/CP_R82.10_Gaia_AdminGuide/Content/Topics-GAG/Configuring-SSH-Authentication-with-RSA-Key-Files.htm)
   - `add user ansible uid 0 homedir /home/ansible`
   - `set user ansible password`
   - `add rba user ansible roles adminRole`
@@ -185,19 +196,19 @@ Here we will create a basic Check Point template suitable for an SMS or gateway 
     - Username: admin
     - Password: the password you selected
     - Accept the warnings
-    - Drag file (i.e., LinuxGuestTools-8.4.0-1.tar.gz) file to the Check Point device's `/home/admin` folder
+    - Drag file (i.e., LinuxGuestTools-10.0.0-1.tar.gz) file to the Check Point device's `/home/admin` folder
     - Close WinSCP
   - From XO with console the Check Point template device
     - Revert to clish shell
       - `chsh -s /etc/cli.sh admin`
     - Install guest tools
-      - `tar xzvf LinuxGuestTools-8.4.0-1.tar.gz`
-      - `cd LinuxGuestTools-8.4.0-1`
+      - `tar xzvf LinuxGuestTools-10.0.0-1.tar.gz`
+      - `cd LinuxGuestTools-10.0.0-1`
       - `./install.sh -d rhel -m el8`
       - press `y`
       - `cd ..`
-      - `rm LinuxGuestTools-8.4.0-1.tar.gz`
-      - `rm -rf LinuxGuestTools-8.4.0-1`
+      - `rm LinuxGuestTools-10.0.0-1.tar.gz`
+      - `rm -rf LinuxGuestTools-10.0.0-1`
     - `halt`
 - Convert `checkpoint-template` to template
   - Click the **Advanced** tab
