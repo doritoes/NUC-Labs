@@ -13,22 +13,12 @@ NOTES
 - Point your browser to the IP address of the NUC
   - Example: https://192.168.1.100
 - Login to "XO-Lite" (Xen Orchestra Lite) with the root password you set earlier
-- Under management tools, click Quick Deploy under Xen Orchestra
-- Login with the root password you set earlier
-- This is the basic access you get without deploying Xen Orchestrator
-- Direct your browser to
-  - https://vates.tech/deploy
-  - This deploys Xen Orchestra 5 (Xen Orchestrator Appliance = XOA)
-- Click **Got it, let's go!**
-- Enter primary host information
-  - Primary host: *IP address of the host, xcp-ng-lab1*
-  - Login: **root**
-  - Password: *enter the password you set earlier*
-  - Click **Continue**
-- Configure storage and network
-  - Default storage and DHCP for the lab
-  - Click **Continue**
-- Create accounts
+- Click the "Deploy XOA" button in the top right
+  - Storage: select **Local storage** from the dropdown
+  - Network: Pool-wide network 0
+    - Static IP
+    - XOA IP address: IP address and subnet mast for the XOA VM, example 192.168.1.101 255.255.255.0, and the gateway IP example 192.168.1.254
+    - DNS: 8.8.8.8 or and IP address you prefer
   - XOA ADMIN ACCOUNT
     - Login: `admin`
     - Password: `labboss`
@@ -37,9 +27,8 @@ NOTES
     - Password: `labboss`
  - Click **Deploy**
  - Wait *patiently* as the XOA deployment completes (10-15 minutes... well in my testing much longer 20-30 minutes))
-   - downloads XOA image
+   - downloads/imports XOA image
    - VM deployed
-   - TIP log in to the host's web portal again, and scroll to the bottom to watch the progress of these tasks (it give you and estimated completing time which is helpful)
   - When *XOA deployment successful!* is displayed
   - Click **Access XOA** to be redirected to the IP address of the XOA
   - TIP take this opportunity so set up a fixed IP address for the XOA for ease of use, then restart the XOA server
