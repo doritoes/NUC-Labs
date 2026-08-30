@@ -31,7 +31,6 @@ NOTES
    - VM deployed
   - When *XOA deployment successful!* is displayed
   - Click **Access XOA** to be redirected to the IP address of the XOA
-  - TIP take this opportunity so set up a fixed IP address for the XOA for ease of use, then restart the XOA server
 
 ## Log In, Register, and Apply Updates to XOA
 - Log in using the XOA ADMIN ACCOUNT you configured earlier
@@ -44,13 +43,24 @@ NOTES
   - From the left menu Click XOA > Updates
   - If an upgrade is available, click **Upgrade** and wait for the upgrade to complete
     - If it remains Disconnected for too long, try clicking Refresh to re-connect
+- If the host is not shown (it used to be in earlier versions):
+  - Click Home > Add server
+  - Address: example, 192.168.1.1:443
+  - Username admin with the password
 - This is a good time to add those additions SSD's for  more VDI storage
   - New > Storage
+    - Host: xcpng-lab1
+    - Name: SATA Drive (customize as needed)
+    - Description: Internal SATA 4TB drive
+    - Storage type: VDI SR > ext (local)
+    - Device: /dev/sda
+    - Image format: vhd, qcow2
+    - Click Create (and approve erasing the disk)
 
 IMPORTANT XOA does not allow you to apply patches to the pool devices (the host) unless you start the trial or pay. Therefore we are going to build our own XO Server which will allow to apply patches to hosts.
 
 # Build Your Own XO Server on XCP-ng
-The default XOA VM was created on Debian 12, 2 vCPUs, 2GB RAM, 20GB storage, 1 interface. We will build our own XO server using Ubuntu 24.04 right on this host.
+The default XOA VM was created on Debian 12, 2 vCPUs, 4GB RAM, 20GB storage, 1 interface. We will build our own XO server using Ubuntu 24.04 right on this host.
 
 NOTE You can also build set up your XO server elsewhere, such as a VM on your Lab laptop
 
