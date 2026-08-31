@@ -102,13 +102,13 @@ Steps:
   - Click **Create**
 - In the VM's Disks tab edit the disk size to 20GB
 - Power on the VM
-- Confirm the disk size was updated
-  - `df -h`
 - Apply updates for 24.04
   - Open the VM's Console (click the Console tab)
   - Log in as `ubuntu`/`changeme`
   - You will be prompted to change your password
   - `sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y`
+- Confirm the disk size was updated
+  - `df -h`
 - Remove vm-tools
   - `sudo apt remove -y open-vm-tools`
   - `sudo rm -r /etc/vmware-tools`
@@ -122,7 +122,6 @@ Steps:
   - Confirm it has changed: `hostnamectl`
 - Reboot
   - `reboot`
-- Rename the VM from XCP-ng to `xo-ubuntu`
 - Confirm the XEN guest agent is working (we are using the image from the Hub)
   - View the VM's general tab
   - Look for "Management agent 1.0.0-proto-0.4.0 detected"
