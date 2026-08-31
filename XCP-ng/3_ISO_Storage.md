@@ -9,17 +9,19 @@ Your have some options here. If you have a NAS, you can share a folder and optio
 ## Copy ISOs to File Share
 As of this writing, here the templates in XO, and links to ISOs. And yes, if your OS doesn't have a template you will choose "Other Install Media".
 - AlmaLinux - https://almalinux.org/get-almalinux/
-  - AlmaLinux 8 and 9
+  - AlmaLinux 10, 9, 8
   - Be aware there are 3 types of ISO
 - CentOS - https://www.centos.org/download/
   - CentOS Linux 7 EOL: 2024-06-30
   - CentOS Linux 8 EOL: 2021-12-31
   - CentOS Stream 8 EOL: 2024-05-31
   - CentOS Stream 9 EOL: 2027-05-31
+  - CentOS Stream 10 EOL: 2030-05-31
 - CoreOS - https://fedoraproject.org/coreos/download?stream=stable
   - Fedora CoreOS has 3 release streams; use Stable Live DVD iso
 - Debian - https://www.debian.org/download - https://www.debian.org/CD/ - https://www.debian.org/releases/
   - Debian 12 Cloud-init (Hub)
+  - Debian Trixie 13.6
   - Debian Bookworm 12
   - Debian Bullseye 11
   - Debian Stretch 9.0
@@ -32,12 +34,12 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
   - Kali Purple Linux
 - NeoKylin Linux Server 7 - based on RHEL
 - Oracle Linux - https://yum.oracle.com/oracle-linux-isos.html
-- Oracle Linux 7, 8, 9
+- Oracle Linux 7, 8, 9, 10
 - Red Hat Enterprise Linux (RHEL) - 
   - Need to start a trial or have subscription to access the download page
   - Red Hat Enterprise Linux 8 and 9
 - Rocky Linux - https://rockylinux.org/download
-  - Rocky Linux 8, 9
+  - Rocky Linux 8, 9, 10
   - open source Linux designed to be compatible with RHEL
 - SUSE Enterprise Linux - https://www.suse.com/products/
 - Scientific Linux 7
@@ -47,6 +49,8 @@ As of this writing, here the templates in XO, and links to ISOs. And yes, if you
   - Ubuntu Bionic Beaver 18.04
   - Ubuntu Focal Fossa 20.04
   - Ubuntu Jammy Jellyfish 22.04
+  - Ubuntu Noble Numbat 24.04
+  - Ubuntu Resolute Raccoon 26.04
   - Ubuntu Xenial Xerus 16.04
   - Back to 14.04 is available for pentesting purposes (target)
 - Windows
