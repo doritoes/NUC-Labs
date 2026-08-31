@@ -88,7 +88,7 @@ Steps:
   - Name: **XO-Ubuntu**
   - Description: **XO on Ubuntu**
   - vCPU's: 2 (default, same as VOA)
-  - RAM: 2GB (default, same as VOA)
+  - RAM: 4GB (default, same as VOA)
   - Disks:  20GB
     - You cannot change the disk size right now; we will increase it shortly
   - Under Install settings select **Custom config**
