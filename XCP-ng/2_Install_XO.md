@@ -89,6 +89,7 @@ Steps:
   - Description: **XO on Ubuntu**
   - vCPU's: 2 (default, same as VOA)
   - RAM: 4GB (default, same as VOA)
+    - NOTE 4GB is required to build from the sources; believe it is possible to run on 2GB after that is done
   - Disks:  20GB
     - You cannot change the disk size right now; we will increase it shortly
   - Under Install settings select **Custom config**
@@ -155,9 +156,6 @@ Steps
     - Common Name: xo
     - Email address: x@x.x
 9. `sudo ./xo-install.sh`
-    - If you have less than 3GB of memory you need to accept the warning:
-      - WARNING: you have less than 3GB of RAM in your system. Installation might run out of memory.
-      - In my testing this did not break the installation; it's possible to increase the VM's RAM if desired
     - Choose option 1 to kick off install
     - Wait for it to complete (updates are much faster; the first installation takes time)
     - IMPORTANT If the build fails, reboot the VM and try again
@@ -172,6 +170,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select "2. U
 3. Log in
     - user: admin@admin.net
     - pass: admin
+4. Click XO-5 to open a usable web GUI
 4. Add new user to replace admin@admin.net
     - Settings > Users > Create
       - Name: admin
@@ -246,6 +245,8 @@ IMPORTANT Note how long it can take for the host and then the guest to come up. 
   - Reboot Server
   - Press F8 to confirm
 
+NOTE In lab testing, some of the settings were missing when I rebooted. The credentials were back to admin@admin.net/admin and I had to reconnect the server. But the XO server came back up automatically.
+
 ## Log Back In and Confirm
 - Point browser to the XO IP
   - Example: https://192.168.1.103
@@ -266,4 +267,5 @@ This is how the host system (XCP-ng) is updated. The XOA free version does not a
   - Click **Home** > **Hosts**
   - Click on `xcp-ng-lab1`
   - Click the **Console** tab
+  - Enter the password to log in
   - `reboot`
