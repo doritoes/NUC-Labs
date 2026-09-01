@@ -73,14 +73,13 @@ Or, if you created local storage, upload the ISO there.
 - When done reboot: `reboot`
 - Eject the VyOS ISO (eject icon)
 - Log back in with your updated password
-- Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
+- Bind hardware MAC IDs
   - `show interfaces` (to show the assigned MAC addresses)
   - `configure`
-  - `set interfaces ethernet eth0 address dhcp`
-  - `set interfaces ethernet eth0 hw-id <tab>`
   - `set interfaces ethernet eth0 hw-id <MAC address of eth0>`
-  - `set interfaces ethernet eth1 hw-id <tab>`
-  - `set interfaces ethernet eth1 hw-id <MAC address of eth0>`
+  - `set interfaces ethernet eth1 hw-id <MAC address of eth1>`
+- Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
+  - `set interfaces ethernet eth0 address dhcp`
   - `set service ssh`
   - `commit`
   - `save`
