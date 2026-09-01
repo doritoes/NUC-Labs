@@ -78,6 +78,7 @@ Or, if you created local storage, upload the ISO there.
   - `configure`
   - `set interfaces ethernet eth0 hw-id <MAC address of eth0>`
   - `set interfaces ethernet eth1 hw-id <MAC address of eth1>`
+  - `commit`
 - Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
   - `set interfaces ethernet eth0 address dhcp`
   - `set service ssh`
