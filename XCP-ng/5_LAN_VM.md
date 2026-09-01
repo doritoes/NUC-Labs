@@ -261,19 +261,19 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Optionally create another VM from each template and experiment
 
 # Windows 11
-IMPORTANT Windows 11 will not install without a TPM
-
-IMPORTANT If you want to set up using a local account instead of a Microsoft account
-- Disconnect Internet during setup
-- https://www.elevenforum.com/t/clean-install-windows-11.99/
-- The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
-- This worked for Windows 11 Home or Pro
-  - add second keyboard layout screen
-    - Shift-F10
-    - start ms-cxh:localonly
-    - follow the Wizard
-    - If the screen is black, wait a few minutes and reboot
-    - Follow up with the skipping second keyboard layout
+IMPORTANT Notes
+- Windows 11 will not install without a TPM (XCP-ng supports using a virtual TPM)
+- If you want to set up using a local account instead of a Microsoft account
+  - Disconnect Internet during setup
+  - https://www.elevenforum.com/t/clean-install-windows-11.99/
+  - The alternate method provided (Shift-F10 and enter OOBE\BYPASSNRO) didn't work in Lab testing
+  - This worked for Windows 11 Home or Pro
+    - add second keyboard layout screen
+      - Shift-F10
+      - start ms-cxh:localonly
+      - follow the Wizard
+      - If the screen is black, wait a few minutes and reboot
+      - Follow up with the skipping second keyboard layout
 
 - From the left menu click New > VM
   - Select the pool **xcp-ng-lab1**
@@ -281,7 +281,7 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
   - Name: **win11-lan**
   - Description: **Windows 11 on LAN network**
   - CPU: **2 vCPU**
-  - RAM: **4GB**
+  - RAM: **4GB** (default is 8GB)
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows 11 iso you uploaded*
   - Interfaces: select **Inside** from the dropdown
@@ -290,16 +290,16 @@ IMPORTANT If you want to set up using a local account instead of a Microsoft acc
 - The details for the new VM are now displayed
 - Click **Console** tab
   - If you get prompted to press any key to boot from the CD or DVD, do so
-  - Confirm Language, formats, and keyboard then Next
-  - Select **Install Windows 11**, check the box, then click **Next**
+  - Confirm Language, formats, and keyboard then **Next**
+  - Click **Install now**
   - Activate Windows: Click **I don't have a product key**
   - Select the OS to install: **Windows 11 Pro** (feel free to experiment)
   - WARNING You might get the error: This PC can't run Windows 11
     - "This PC doesn't meet the minimum requirements to install this version of Windows. For more information, visit https://aka.ms/WindowsSysReq"
     - Possible culprits: "Enable TPM 2.0 on your PC" (XCP-ng lists this as VTPM, virtual TPM)
-  - Click **Accept**
+  - Check the box and click **Next**
+  - Click **Custom: Install Windows only (advanced)**
   - Accept the installation on Drive 0, click **Next**
-  - Click **Install**
   - Wait while the system powers reboots and gradually installs
 - When the system boots to "Let's start with region. Is this right?"
   - Eject the installation ISO
