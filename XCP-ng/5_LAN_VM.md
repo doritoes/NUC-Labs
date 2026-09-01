@@ -207,7 +207,8 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
     - type this exactly, spacing matters (some add /f to force the shutdown)
 - Click **Advanced** tab > **Convert to template**
 - Re-create the VM from the template
-  - New > VM
+  - **New** > **VM**
+  - Select the pool: **xcp-ng-lab1**
   - Template: win10-lan
   - Name: Rename the VM from **win10-lan** to **win10-lan-ready**
   - Description: *leave the same*
@@ -233,7 +234,8 @@ IMPORTANT Windows 10 is officially end of support. However it is still super use
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Click VM Tools
+    - XenServer VM Tools for Windows 9.6.0 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
       - Installation requires a reboot
     - Optionally, in XO, click the Advanced tab
