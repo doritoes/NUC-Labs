@@ -1,6 +1,8 @@
 # Install VyOS router
 How to create a router to our backend "LAN"
 
+NOTE Changes in modern rolling releases (1.4+ / 1.5) adopted a strict early-boot hardware binding scheme (udev / vyos-netprobe). When you commit an interface change like set interfaces ethernet eth0 address dhcp, VyOS dynamically registers eth0 in /config/config.boot. If it doesn't explicitly save an associated hw-id, the next boot's naming pass marks eth0 as orphaned/unbound.
+
 # Configure Networking
 - Log in to XO
 - From the left menu click **Home** > **Hosts**
@@ -72,8 +74,13 @@ Or, if you created local storage, upload the ISO there.
 - Eject the VyOS ISO (eject icon)
 - Log back in with your updated password
 - Configure your router's "Internet" connection (your Lab network via the host's ethernet interface)
+  - `show interfaces` (to show the assigned MAC addresses)
   - `configure`
   - `set interfaces ethernet eth0 address dhcp`
+  - `set interfaces ethernet eth0 hw-id <tab>`
+  - `set interfaces ethernet eth0 hw-id <MAC address of eth0>`
+  - `set interfaces ethernet eth1 hw-id <tab>`
+  - `set interfaces ethernet eth1 hw-id <MAC address of eth0>`
   - `set service ssh`
   - `commit`
   - `save`
