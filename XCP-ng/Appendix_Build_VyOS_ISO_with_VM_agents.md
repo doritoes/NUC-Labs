@@ -11,7 +11,7 @@ Install docker
   - `sh get-docker.sh`
 
 Build the container that hosts the build environment:
-- `git clone -b current --single-branch https://github.com/vyos/vyos-build`
+- `git clone -b rolling --single-branch https://github.com/vyos/vyos-build`
 - `cd vyos-build`
 - add data/build-flavors/vmagents.toml
 ```
@@ -32,10 +32,10 @@ packages = [
 ```
 - build container
   - `cd ~/vyos-build`
-  - `sudo docker build -t vyos/vyos-build:current docker`
+  - `sudo docker build -t vyos/vyos-build:rolling docker`
 
 Build the ISO from source inside the container:
-- `sudo docker run --rm -it --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:current bash`
+- `sudo docker run --rm -it --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:rolling bash`
   - `cd /vyos`
   - `sudo make clean`
   - `sudo ./build-vyos-image --architecture amd64 --build-by "j.randomhacker@vyos.io" vmagents`
