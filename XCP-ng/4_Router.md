@@ -83,7 +83,7 @@ Or, if you created local storage, upload the ISO there.
 - You can now configure your router from another device in your Lab; SSH to this IP address
 
 # Configure Router
-IMPORTANT note the version is 2025-xx.xx0xxxx-rolling-xxxxx, and the syntax has changed from previous versions you may be familiar with.
+Configure the router to route and NAT.
 - ssh to the router and login as user `vyos` with the password you selected
 - enter the configuration below
 ```
