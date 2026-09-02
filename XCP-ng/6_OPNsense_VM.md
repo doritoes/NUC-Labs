@@ -1,7 +1,7 @@
 # Install OPNsense firewall
 OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
 
-In this lab we will be using OPNsense 25.7
+In this lab we will be using OPNsense 26.7
 
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
@@ -34,12 +34,12 @@ References:
     - Image type: dvd
     - Mirror: select a mirror close to you geographically
     - Click Download
-      - the file is a .bz file
+      - the file is a .bz file (480MB+)
       - for our lab purposes, we do not need to validate the image
 2. Unpack the image
     - Unix-like: `bzip2 -d OPNsense-<filename>.bz2`
     - Windows: use [7-zip](https://www.7-zip.org/)
-    - resulting file will be a .iso file
+    - resulting file will be a .iso file (over 2GB)
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
@@ -52,10 +52,10 @@ Or, if you created local storage, upload the ISO there.
 
 # Create OPNsense VM
 - From the left menu click **New** > **VM**
-  - Select the pool **xcgp-ng-lab1**
+  - Select the pool **xcp-ng-lab1**
   - Template: **Other install media**
   - Name: **opnsense**
-  - Description: *opnsense pentesting Lab firewall*
+  - Description: **opnsense pentesting Lab firewall**
   - CPU: **4 vCPU**
   - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB, warnings appear for less than 3GB)
   - Topology: *Default behavior*
