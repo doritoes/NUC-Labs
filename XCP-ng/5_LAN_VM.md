@@ -348,7 +348,8 @@ IMPORTANT Notes
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Click VM Tools
+    - XenServer VM Tools for Windows 9.6.0 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
@@ -376,6 +377,8 @@ IMPORTANT Notes
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
 
+NOTE Windows Server 2022 reaches the end of its mainstream support on October 13, 2026. True EOL is October 14, 20131.
+
 - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Template: **Windows Server 2022 (64-bit)**
@@ -385,7 +388,7 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
   - RAM: **2GB**
   - Topology: Default behavior
   - Install: ISO/DVD: *Select the Windows Server 2022 evaluation iso you uploaded*
-  - Interfaces: select *Inside* from the dropdown
+  - Interfaces: select **Inside** from the dropdown
   - Disks: **40GB** (default 32GB)
   - Click **Create**
 - The details for the new VM are now displayed
@@ -415,7 +418,8 @@ This is a bare-bones server with limited resources. Have seen Server 2019 run on
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Click VM Tools
+    - XenServer VM Tools for Windows 9.6.0 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy, and accept the reboot
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
@@ -504,7 +508,8 @@ This is a bare-bones server with limited resources
 - Install Guest Tools
   - The Windows tools are not included on the guest-tools.iso
   - Download from https://www.xenserver.com/downloads
-    - XenServer VM Tools for Windows 9.4.2 > Download XenServer VM Tools for Windows
+    - Click VM Tools
+    - XenServer VM Tools for Windows 9.6.0 > Download XenServer VM Tools for Windows
     - Download MSI and install manually, or install later using group policy, and accept the reboot
     - In XO, click the Advanced tab
       - If you have <ins>NOT</ins> installed xcp-ng tools, you can enable **Manage Citrix PV drivers via Windows Update**
