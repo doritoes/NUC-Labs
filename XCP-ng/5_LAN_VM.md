@@ -619,7 +619,7 @@ Steps:
 - Note the location the log files:
   - /var/log/syslog or /var/log/tomcat9/CATALINA-*
 - Once Guacamole is setup, you can access it from web browser
-  - Address: http://<ipaddress>:8080/guacamole/
+  - Address: `http://<ipaddress>:8080/guacamole/`
   - username: guacadmin
   - password: guacadmin
 - Test from another VM in the Lab (Ubuntu Desktop or Windows 10)
