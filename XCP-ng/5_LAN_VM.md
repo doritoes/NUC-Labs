@@ -327,6 +327,7 @@ IMPORTANT Notes
     - See also: `reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f`
     - Follow prompts to add a local user, password, and security options
     - This ends at a blank screen. Reboot the VM.
+    - NOTE In recent testing this didn't work as expected as the second keyboard screen, works at the screen where it askes you to enter the online account. In this scenario, open Privacy settings and disable the behaviors
   - Disable all privacy settings and click Next
   - Disable all privacy settings and click Accept
   - Your device will a DESKTOP-xxxxxxx name
@@ -364,12 +365,13 @@ IMPORTANT Notes
   - From administrative powershell: `Rename-Computer -NewName win11-lan-ready`
 - Shut down the Windows VM
   - `stop-computer`
-- Convert win11-lan-ready to a template
+- Convert `win11-lan-ready` to a template
 - Questions to ponder:
   - What are the differences between the two templates?
   - Does this affect the Activation required timers?
 - Optionally create another VM from each template and experiment
   - How could you use Templates to quickly roll out a number of servers of the same type?
+  - Can you use [Sysprep](Appendix-Sysprep-Windows11.md) to facilitate the user out of the box experience?
 
 # Windows 2022 Server
 This is a bare-bones server with limited resources. Have seen Server 2019 run on 1GB RAM.
