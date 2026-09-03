@@ -170,17 +170,17 @@ Or, if you created local storage, upload the ISO there.
   - Log back in to OPNsense web GUI
     - https://192.168.101.254
   - Firewall > Rules
-    - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
+    - Expand "Automatically generate rules" and "Interface rules
   - Firewall > NAT
-    - This allows you to view the default NAT rule under Outbound
+    - Click Source NAT and expand "Automatically generated rules" to view the default outbound NAT rule
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
   - Because our "WAN" is on a RFC1918 network, double check this setting
-    - Click Interfaces > WAN
+    - Click **Interfaces** > **WAN**
     - <i>Uncheck</i> Block private networks
     - Click **Save**
     - Click **Apply Changes**
-  - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
+  - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply**
   - In a later step we will create rules to further isolate the pentesting network from the Lab network
 
 # Isolate the Pentesting Lab
