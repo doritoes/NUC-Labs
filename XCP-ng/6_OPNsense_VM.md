@@ -97,7 +97,7 @@ Or, if you created local storage, upload the ISO there.
   - WAN interface: **xn0**
   - LAN interface: **xn1**
   - Optional (OPT1): *just press enter*
-  - Confirm
+  - Confirm: **y**
 - Option 2) **Set interface IP address**
   - Configure **LAN**
     - DHCP: **No**
@@ -118,7 +118,7 @@ Or, if you created local storage, upload the ISO there.
     - Generate a new self-signed web GUI certificate: **No**
     - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
-  - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
+  - Ubuntu Desktop or Windows 11 is perfect; a Kali Linux system is also perfect (use the standard Debian or Ubuntu template, 2-4vCPU with 4GB RAM and 50GB storage)
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Select the **win11-lan-ready** or **ubuntu-desktop-lab** template
@@ -136,15 +136,22 @@ Or, if you created local storage, upload the ISO there.
       - <ins>Uncheck</ins> Override DNS
       - Click **Next**
     - Configure WAN Interface
-      - Type DHCP
+      - Type: **DHCP**
       - <i>Uncheck</i> Block RFC1918 Private Networks since the "WAN" is connected to our lab which uses private RFC1918 address space
         - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
         - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
+      - Click **Next**
     - Configure LAN Interface
       - Review and click **Next**
+    - Deployment type
+      - <ins>Uncheck</ins> Optimize for Multiwan
+      - Leave automatic DHCP/DNS registration checked
+      - Leave Optimize for IPsec unchecked
+      - Click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
-    - Click **Reload**
+    - Click **Apply**
+    - Click **Power** > **Reboot** > **Yes**
   - Update OPNsense
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
