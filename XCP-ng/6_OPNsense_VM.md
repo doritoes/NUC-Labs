@@ -1,9 +1,10 @@
 # Install OPNsense firewall
-OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
+OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.
+In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
 
-In this lab we will be using OPNsense 26.7
-
-IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
+IMPORTANT NOTES
+- In this lab we will be using OPNsense **25.7** due to the breaking changes in 26.7 (and it's a royal mess)
+- Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
 References:
 - https://www.youtube.com/watch?v=KecQ4AZ-RBo
@@ -34,12 +35,12 @@ References:
     - Image type: dvd
     - Mirror: select a mirror close to you geographically
     - Click Download
-      - the file is a .bz file (480MB+)
+      - the file is a .bz file
       - for our lab purposes, we do not need to validate the image
 2. Unpack the image
     - Unix-like: `bzip2 -d OPNsense-<filename>.bz2`
     - Windows: use [7-zip](https://www.7-zip.org/)
-    - resulting file will be a .iso file (over 2GB)
+    - resulting file will be a .iso file
 
 # Upload the ISO
 If you linked storage to a file share, copy the file there.
@@ -52,10 +53,10 @@ Or, if you created local storage, upload the ISO there.
 
 # Create OPNsense VM
 - From the left menu click **New** > **VM**
-  - Select the pool **xcp-ng-lab1**
+  - Select the pool **xcgp-ng-lab1**
   - Template: **Other install media**
   - Name: **opnsense**
-  - Description: **opnsense pentesting Lab firewall**
+  - Description: *opnsense pentesting Lab firewall*
   - CPU: **4 vCPU**
   - RAM: **4GB** (recommended is 8GB, but for this lab we are using 4GB, warnings appear for less than 3GB)
   - Topology: *Default behavior*
@@ -97,7 +98,7 @@ Or, if you created local storage, upload the ISO there.
   - WAN interface: **xn0**
   - LAN interface: **xn1**
   - Optional (OPT1): *just press enter*
-  - Confirm: **y**
+  - Confirm
 - Option 2) **Set interface IP address**
   - Configure **LAN**
     - DHCP: **No**
@@ -118,7 +119,7 @@ Or, if you created local storage, upload the ISO there.
     - Generate a new self-signed web GUI certificate: **No**
     - Restore web GUI access defaults: **No**
 - Create a VM on the Pentesting network
-  - Ubuntu Desktop or Windows 11 is perfect; a Kali Linux system is also perfect (use the standard Debian or Ubuntu template, 2-4vCPU with 4GB RAM and 50GB storage)
+  - Ubuntu Desktop or Windows 10 is perfect; a Kali Linux system is also perfect
   - From the left menu click **New** > **VM**
   - Select the pool **xcp-ng-lab1**
   - Select the **win11-lan-ready** or **ubuntu-desktop-lab** template
@@ -136,22 +137,15 @@ Or, if you created local storage, upload the ISO there.
       - <ins>Uncheck</ins> Override DNS
       - Click **Next**
     - Configure WAN Interface
-      - Type: **DHCP**
+      - Type DHCP
       - <i>Uncheck</i> Block RFC1918 Private Networks since the "WAN" is connected to our lab which uses private RFC1918 address space
         - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
         - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) are blocked on the WAN
-      - Click **Next**
     - Configure LAN Interface
       - Review and click **Next**
-    - Deployment type
-      - <ins>Uncheck</ins> Optimize for Multiwan
-      - Leave automatic DHCP/DNS registration checked
-      - Leave Optimize for IPsec unchecked
-      - Click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
-    - Click **Apply**
-    - Click **Power** > **Reboot** > **Yes**
+    - Click **Reload**
   - Update OPNsense
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
@@ -170,17 +164,17 @@ Or, if you created local storage, upload the ISO there.
   - Log back in to OPNsense web GUI
     - https://192.168.101.254
   - Firewall > Rules
-    - Expand "Automatically generate rules" and "Interface rules
+    - Clicking the interface (LAN, WAN, Loopback) or "Floating" allows you to view the default rules
   - Firewall > NAT
-    - Click Source NAT and expand "Automatically generated rules" to view the default outbound NAT rule
+    - This allows you to view the default NAT rule under Outbound
   - The default WAN settings will prevent the Pentesting network from accessing anything but the Internet
     - Explanation: By default RFC1918 networks (including 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16)
   - Because our "WAN" is on a RFC1918 network, double check this setting
-    - Click **Interfaces** > **WAN**
+    - Click Interfaces > WAN
     - <i>Uncheck</i> Block private networks
     - Click **Save**
     - Click **Apply Changes**
-  - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply**
+  - Optionally change the IPv6 allow rule(s) from Pass to Block, then click **Apply Changes**
   - In a later step we will create rules to further isolate the pentesting network from the Lab network
 
 # Isolate the Pentesting Lab
