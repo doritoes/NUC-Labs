@@ -1,7 +1,9 @@
 # Install OPNsense firewall
 OPNsense community edition is selected for the pentesting lab, mainly for its proven ability to secure handle all Internet traffic via Tor. Compared to pfSense, it is more user friendly and includes plugins for Xen tools and Tor.In contrast, pfSense CE is community based but pfSense+ is closed source. Downloading even the free community edition requires going though the Netgate Store.
 
-In this lab we will be using OPNsense 25.7
+In this lab we will be using OPNsense 26.7
+
+WARNING 26.7 seems to have broken TOR. 25.7 was the working legacy version.
 
 IMPORTANT Be sure to <ins>disable TX checksumming</ins> on the network interfaces connected to the firewall as noted below.
 
@@ -219,11 +221,12 @@ Steps:
   - Listen Interfaces: LAN (only)
   - Optionally enable Create a log file with Error of Debugging level (WARNING this could cause privacy issues)
   - Enable Advanced Mode
-    - Confirm SOCKS port number: 9050
-    - Confirm Control Port: 9051
-    - Check Enable Transparent Proxy
-    - Confirm Transparent port: 9040
-    - Confirm Transparent DNS port: 9053
+    - The following settings seem to have disappeared the this version of OPNsense
+      - Confirm SOCKS port number: 9050
+      - Confirm Control Port: 9051
+      - Check Enable Transparent Proxy
+      - Confirm Transparent port: 9040
+      - Confirm Transparent DNS port: 9053
   - Click Save
 - Services > Tor > Configuration > SOCKS Proxy ACL
     - Add a new ACL
@@ -233,7 +236,7 @@ Steps:
       - Action: Accept
       - Click Save
       - Click Reload Service
-  - Firewall > NAT  > Port Forward
+  - Firewall > NAT  > Port Forward (NO LONGER EXISTS)
     - Add a rule
     - Disabled: No
     - Interface: LAN (only)
