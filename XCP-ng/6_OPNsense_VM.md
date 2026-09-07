@@ -190,10 +190,10 @@ Then continue with the following steps to lock things down safely.
 Why are we disabling Internet including DNS access? Because we only want traffic to get to the Internet via Tor. DNS leaks data about your activity and is used as a covert channel that operate through DNS to the Internet.
 
 - Log in to the console of the system on the pentesting network that you are using to configure OPNsense
-- Firewall > Rules LAN
-  - Change the IPv4 rule to be a Block action
-  - Change the IPv6 rule to be a Block action
-  - Click **Apply changes**
+- Firewall > Rules > Expand interfaces rules
+  - Change the LAN IPv4 rule to be a Block action
+  - Change the LAN IPv6 rule to be a Block action
+  - Click **Apply**
 
 ## Configure TOR
 This provides some anonymity, if done correctly.
