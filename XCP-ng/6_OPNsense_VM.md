@@ -145,10 +145,12 @@ Or, if you created local storage, upload the ISO there.
       - Review and click **Next**
     - Set Root Password
       - Click **Next** to keep the existing password
-    - Click **Reload**
+    - Click **Apply**/**Reload**
   - Update OPNsense
     - Click **System** > **Firmware** > **Status**
     - Click **Check for Updates**
+    - 25.7 will give you a message of something missing. Go back to status and try again.
+    - It is OK to go to 25.7.x (e.g., 25.7.11); don't go to 26.7
     - Read and accept the information provided
     - Scroll to the bottom of the Updates tab and click **Update** then accept the update and reboot
     - Wait for updates and the reboot to complete
@@ -239,7 +241,7 @@ Steps:
     - Disabled: No
     - Interface: LAN (only)
     - TCP/IP Version: IPv4
-    - Protocol: TCP/IP
+    - Protocol: TCP/UDP
     - Source: Advanced > LAN net
     - Destination: any
     - Destination port range: DNS to DNS
@@ -260,13 +262,15 @@ Steps:
     - Redirect target port: other: 9040
     - Log: only enable logging for troubleshooting; this takes up extra space on the firewall
     - Description: Use Tor for tcp traffic
+    - Click **Save**
   - NOTE that Tor is TCP only except for DNS; you should block other UDP ports on the firewall, especially QUIC (udp/443) and udp/80
   - Click **Apply changes**
 - Firewall > Rules > LAN
   - Move the automatic rules to the top
-  - First, allow any to 127.0.0.1 port 9053
-  - Next, allow any to 127.0.0.1 port 9040
+  - First, allow source any TCP/UDP to destination single host/IP 127.0.0.1 port 9053
+  - Next, allow any TCP to destination single host/IP to 127.0.0.1 port 9040
   - The last two rules should be block rules
+  - Click **Apply changes**
 - Firewall > Rules > WAN
   - While we are here, we can clean up the logs by NOT logging our lab network mDNS to get logged on the OPNsense firewall
   - Add rule
@@ -292,14 +296,14 @@ Steps:
   - You should see "Congratulations. This browser is configured to use Tor."
 - From VM's browser, check the public IP address <ins>with</ins> Tor
   - http://ipchicken.com
-- Try updating your VM's OS using toor (Linux example below)
+- Try updating your VM's OS using Tor (Linux example below)
   - `sudo apt update && sudo apt upgrade -y`
   - Note that everything is slower over Tor
 - Check for leaks (privacy issues)
   - on firewall, do a tcpdump to check for any DNS queries going out while you browser the internet and do nslookups
-    - `tcpdump -nni vtnet0 port 53`
+    - `tcpdump -nni xn0 port 53`
   - next check for icmp ping leak by running tcpdump while you test pings to the Internet (i.e., `ping 8.8.8.8`)
-    - `tcpdump -nni vtnet0 icmp`
+    - `tcpdump -nni xn0 icmp`
   - finally check for udp leaks by running tcpdump and generating QUIC udp/443 traffic
     - install Chrome
     - chrome://flags
