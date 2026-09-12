@@ -128,6 +128,7 @@ Steps:
   - Look for "Management agent 1.0.0-proto-0.4.0 detected"
   - To manually install:
     - `sudo apt install xe-guest-agent`
+    - `sudo apt install xe-guest-utilities`
 
 ## Install Xen Orchestra (XO) on the Ubuntu Server
 Reference: https://www.youtube.com/watch?v=fuS7tSOxcSo
