@@ -177,6 +177,7 @@ NOTE To update the XO server, run the same xo-install.sh script and select "2. U
       - Name: admin
       - Permissions: Admin
       - Select a password
+      - Click **Create**
     - Click Sign out then sign in as the new user `admin`
     - Remove user admin@admin.net
 5. Add the XCP-ng host ("server")
